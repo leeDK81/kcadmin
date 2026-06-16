@@ -1,0 +1,2121 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Knowledge Core 기획서 v1.6.1</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#FAFAF8;--surface:#FFF;--alt:#F5F4F0;--text:#1A1A18;--ts:#6B6B65;--tt:#9C9C94;--accent:#1A3A6B;--accent2:#2B5797;--accent-l:#E8F0FE;--teal:#0F6E56;--teal-l:#E1F5EE;--coral:#D85A30;--coral-l:#FAECE7;--purple:#534AB7;--purple-l:#EEEDFE;--amber:#BA7517;--amber-l:#FAEEDA;--red:#A32D2D;--red-l:#FCEBEB;--border:#E5E4E0;--border-s:#D0CFC9}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text);line-height:1.85;font-size:15px;-webkit-font-smoothing:antialiased}
+.container{max-width:880px;margin:0 auto;padding:60px 32px 120px}
+code{font-family:'JetBrains Mono',monospace;font-size:13px;background:var(--alt);padding:2px 6px;border-radius:4px;color:var(--accent)}
+/* Header */
+.doc-header{text-align:center;padding:0 0 48px;border-bottom:2px solid var(--accent);margin-bottom:48px}
+.doc-header .badge{display:inline-block;background:var(--accent);color:#fff;font-size:11px;font-weight:700;padding:4px 14px;border-radius:20px;letter-spacing:1px;margin-bottom:16px}
+.doc-header h1{font-size:32px;font-weight:900;color:var(--accent);margin-bottom:4px;letter-spacing:-1px}
+.doc-header .sub{font-size:15px;color:var(--accent2);font-weight:500;margin-bottom:16px}
+.doc-header .meta{font-size:12px;color:var(--tt)}
+/* Sections */
+h2{font-size:22px;font-weight:800;color:var(--accent);margin:56px 0 20px;padding-bottom:10px;border-bottom:2px solid var(--accent2);display:inline-block}
+h3{font-size:17px;font-weight:700;color:var(--text);margin:28px 0 12px}
+h4{font-size:15px;font-weight:600;color:var(--accent2);margin:20px 0 8px}
+p{margin-bottom:13px}
+/* Boxes */
+.info{background:var(--accent-l);border-left:3px solid var(--accent2);padding:14px 18px;border-radius:0 8px 8px 0;margin:16px 0;font-size:14px}
+.info strong{color:var(--accent)}
+.warn{background:var(--amber-l);border-left:3px solid var(--amber);padding:14px 18px;border-radius:0 8px 8px 0;margin:16px 0;font-size:14px}
+.danger{background:var(--red-l);border-left:3px solid var(--red);padding:14px 18px;border-radius:0 8px 8px 0;margin:16px 0;font-size:14px}
+.success{background:var(--teal-l);border-left:3px solid var(--teal);padding:14px 18px;border-radius:0 8px 8px 0;margin:16px 0;font-size:14px}
+.note{background:var(--alt);border:1px solid var(--border);border-radius:8px;padding:14px 18px;margin:14px 0;font-size:13px;color:var(--ts)}
+.version-tag{display:inline-block;font-size:10px;font-weight:700;color:#92400e;background:#fef3c7;padding:2px 8px;border-radius:8px;margin-left:6px;vertical-align:middle}
+/* Tables */
+table{width:100%;border-collapse:separate;border-spacing:0;border-radius:8px;overflow:hidden;border:1px solid var(--border);margin:16px 0;font-size:13px}
+th{background:var(--accent);color:#fff;padding:10px 14px;text-align:left;font-weight:500;font-size:12px}
+td{padding:10px 14px;border-bottom:1px solid var(--border);vertical-align:top}
+tr:last-child td{border-bottom:none}
+tr:nth-child(even) td{background:var(--alt)}
+/* SVG */
+svg text{font-family:'Noto Sans KR',sans-serif}
+.diagram{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:28px 20px;margin:20px 0;overflow-x:auto}
+.diagram .dt{font-size:13px;font-weight:700;color:var(--accent);text-align:center;margin-bottom:20px}
+/* Lists */
+ul,ol{margin:8px 0 14px 20px;font-size:14px}
+li{margin-bottom:6px}
+/* Badge */
+.badge-sm{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600}
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- HEADER -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="doc-header">
+  <div class="badge">INTERNAL</div>
+  <h1>Knowledge Core 기획서</h1>
+  <div class="sub">AI 기반 보험 지식 아키텍처 구축 계획<br>기존 보닥 진단엔진 UX 효율의 KC 이관 · GA 시장 디지털 트윈 · Clark/Lois 독립 웹뷰 전략</div>
+  <div class="meta">아이지넷 플랫폼사업본부 · v1.6.1 · 2026.04<br>본 문서는 KC 프로젝트의 stand-alone 마스터 스펙이다. PRD 작성·외부 검토·구현 설계의 단일 진실원으로 참조한다.</div>
+</div>
+
+<div class="info" style="margin-top:24px">
+  <strong>본 문서의 위치 안내</strong><br>
+  • 본 v1.6.1은 KC 프로젝트의 마스터 스펙으로, PRD 작성 및 외부 부서 검토 시 단일 진실원이다.<br>
+  • Delta BRD v0.5~v0.8은 v1.4 → v1.5/v1.6 통합 작업의 과도기 산출물로서 v1.6 출시와 함께 deprecate되었다. 본 문서가 그 모든 결정을 흡수하였으며, Delta BRD는 과거 의사결정 추적 목적으로만 참고한다.<br>
+  • 결정 보류 이슈(D-01~D-10)는 본 문서 §16(Open Issues 부록)에서 살아있는 형태로 추적된다.<br>
+  • 변경 이력은 본 문서 마지막의 Document History 박스 참조. 본 문서는 클린본이며, v1.5부터 클린 재제작 정책을 영구 채택하였다.
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- 1장. 기획 배경 및 비전 -->
+<!-- ═══════════════════════════════════════════ -->
+<h2>1. 기획 배경 및 비전</h2>
+
+<h3>1-1. 문제 정의: 왜 지금 Knowledge Core가 필요한가</h3>
+<p>본 문서에서 반복적으로 사용되는 <strong>AIO(AI Optimization)</strong>는 검색엔진 최적화(SEO)의 AI 시대 확장 개념이다. 사용자가 생성형 AI에게 질문했을 때, AI가 특정 지식 소스를 참조·인용하여 답변을 생성하도록, 해당 지식 소스의 권위와 구조를 사전에 확보하는 전략을 말한다. 즉, AIO를 선점한다는 것은 "생성형 AI가 우리의 지식을 인용하게 만드는 것"을 의미한다.</p>
+
+<h4>① 외부 위협: 생성형 AI에 의한 리드 파이프라인 잠식</h4>
+<p>bodoc의 현재 수익 모델은 명확한 순차적 흐름에 기반한다. 사용자가 보험 정보를 탐색하기 위해 bodoc 앱에 유입하고, Clark의 AI 진단을 통해 보장 공백을 인식한 뒤, 보닥플래너와 연결되어 리드가 생성된다. 즉, "보험 정보 탐색 수요"가 이 파이프라인의 출발점이다.</p>
+<p>그러나 ChatGPT, Gemini 등 범용 생성형 AI가 이 출발점을 잠식하기 시작했다. 사용자들은 이제 "암 보험 어떻게 고르지?", "내 보험료가 적정한가?"와 같은 질문을 bodoc 앱이 아닌 ChatGPT에 먼저 물어볼 수 있다. 이 추세가 가속화되면, bodoc 앱으로의 유입 자체가 감소하고, 리드 파이프라인의 입구가 구조적으로 좁아지게 된다.</p>
+<p>이것이 Knowledge Core가 해결해야 할 첫 번째 문제이다. AIO를 통해 bodoc이 보험 도메인의 권위 있는 지식 소스로 선점되면, 생성형 AI가 bodoc의 지식을 참조·인용하게 되고, 이는 리드 파이프라인의 새로운 입구가 된다. 그러나 AIO 선점을 위해서는 AI가 참조할 수 있는 체계적인 지식 구조가 선행되어야 한다.</p>
+
+<h4>② 내부 대응 과제: 규제산업에서의 AI 출력 품질 문제</h4>
+<p>외부 위협에 대응하여 생성형 AI를 우리가 직접 활용하더라도, 보험산업은 금융소비자보호법과 보험업법의 규제를 받는 산업이다. Clark AI가 부정확한 보험 정보를 출력하면 법적 리스크가 발생하고, 사용자 신뢰를 잃게 된다. 이는 단순한 기술적 오류가 아니라, 사업 신뢰도 자체를 훼손하는 문제이다.</p>
+<p>이 문제의 근본 원인은 기존 RAG(Retrieval-Augmented Generation, 검색 증강 생성) 방식의 청킹 구조에 있다. 청킹(Chunking)이란 AI가 참조할 문서를 일정 단위로 분할하는 과정인데, 기존 방식은 문서를 글자 수나 단락 단위로 기계적으로 자르기 때문에 의미 경계가 모호해진다. 예를 들어, "암 진단금"이라는 하나의 개념이 여러 청크에 분산되면, Clark AI는 불완전한 정보를 조합하여 답변을 생성하게 되고, 이것이 할루시네이션(사실과 다른 정보 생성)으로 이어진다.</p>
+<p>따라서 생성형 AI를 보험산업에 안전하게 적용하려면, AI가 참조하는 지식의 의미 경계를 사전에 통제할 수 있는 지식 구조가 필요하다. 이것이 두 번째 문제이다.</p>
+
+<h4>③ 전제조건 부재: 도메인 지식의 비체계성</h4>
+<p>①의 AIO 선점과 ②의 AI 출력 품질 통제, 이 두 과제를 해결하려면 공통적으로 하나의 전제조건이 필요하다: <strong>체계화된 보험 도메인 지식 구조</strong>.</p>
+<p>현재 bodoc의 보험 도메인 지식은 담당자 개인의 경험과 문서에 흩어져 있다. 이 상태로는 AIO용 콘텐츠로 활용할 수도 없고, Clark AI의 RAG 지식 베이스로 투입할 수도 없으며, 신규 입사자 교육에도 활용할 수 없다.</p>
+<p>정리하면, 문제의 구조는 다음과 같다: 외부 위협(①)에 대응하려면 AI를 활용해야 하지만, AI 활용에는 품질 통제 문제(②)가 있고, 이 모든 것의 전제조건인 체계적 지식 구조(③)가 부재한 상황이다. Knowledge Core는 이 세 문제를 하나의 카드 체계로 동시에 해결하기 위한 프로젝트이다.</p>
+
+<table>
+  <thead><tr><th>구분</th><th>문제 영역</th><th>핵심 내용</th></tr></thead>
+  <tbody>
+    <tr><td><strong>① 외부 위협</strong></td><td>리드 파이프라인 잠식</td><td>범용 생성형 AI가 보험 정보 탐색 채널을 대체하면서, bodoc 앱으로의 유입 자체가 감소하고 리드 파이프라인의 입구가 구조적으로 좁아지는 위협.</td></tr>
+    <tr><td><strong>② 내부 과제</strong></td><td>AI 출력 품질 문제</td><td>규제산업에서 할루시네이션은 법적 리스크. 기존 RAG 청킹의 의미 경계 모호성이 근본 원인.</td></tr>
+    <tr><td><strong>③ 전제조건</strong></td><td>지식 구조 부재</td><td>도메인 지식이 체계화되지 않으면 AIO 선점(① 대응)도, AI 품질 통제(② 대응)도, 사내 교육도 불가.</td></tr>
+    <tr><td colspan="3"><em>관계: ① 외부 위협 → ② 대응 시 AI 품질 문제 → ③ 근본 전제조건 부재 → KC로 동시 해결</em></td></tr>
+  </tbody>
+</table>
+
+<h3>1-2. 해결 방향: Knowledge Core의 접근법</h3>
+<p>Knowledge Core(KC)는 보험 도메인 지식을 7종의 카드 체계로 구조화하여, AI의 출력을 통제하고 보험산업에 특화된 지식 아키텍처를 구축하는 프로젝트이다.</p>
+
+<h4>핵심 원칙</h4>
+<ul>
+  <li><strong>KC 카드 단위 = 청크 단위:</strong> 기존 RAG의 문제였던 의미 경계 모호성을 원천적으로 해결한다. 예를 들어 "보험료"라는 Concept 카드가 "보장을 유지하기 위해 지불해야 하는 비용"이라고 정의하면, AI는 사용자가 "보험비가 얼마야?"라고 물어도 "월납보험료"로 의미를 정확히 매칭할 수 있다.</li>
+  <li><strong>링크 구조에 의한 출력 통제:</strong> 카드 간 참조 관계(Concept → Risk-type → Rule → Evidence → Policy)로 LLM이 동일 의미 경계(Meaning Layer) 내에서만 출력을 생성하도록 강제한다.</li>
+  <li><strong>One Source, Triple Use:</strong> 하나의 KC 카드 체계가 AIO 콘텐츠(외부 권위 확보), Clark AI RAG 지식 베이스(진단 품질 향상), 사내 도메인 교육(신규 입사자 온보딩 등)을 동시에 해결한다.</li>
+</ul>
+
+<h3>1-3. 최종 비전: 보험 도메인 특화 AI 아키텍처로의 로드맵</h3>
+<p>Knowledge Core는 단순한 지식 정리 프로젝트가 아니다. 최종적으로 축적된 지식을 기반으로 아이지넷만의 보험 도메인 특화 AI 모델을 구축하는 것이 목표이다.</p>
+
+<table>
+  <thead><tr><th>단계</th><th>목표</th><th>주요 산출물</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Phase 1</strong></td><td>KC 카드 체계 구축 및 KC Admin 개발</td><td>7종 KC 카드 스키마 설계 및 초기 데이터 입력, KC Admin MVP 개발(CRUD, 승인 워크플로우), Public/Internal 노출 정책 적용</td></tr>
+    <tr><td><strong>Phase 1.5</strong></td><td>Clark/Lois 독립 웹뷰 출시</td><td>Clark/Lois 독립 웹뷰 + KC 연동 + FC 리드 전달, 전환율 A/B 비교</td></tr>
+    <tr><td><strong>Phase 2</strong></td><td>Graph RAG + Agent 기반 자동 배정</td><td>edge table + Agent 상태 + aGCR 스코어링 엔진 + Graph RAG</td></tr>
+    <tr><td><strong>Phase 3</strong></td><td>디지털 트윈 시뮬레이션</td><td>축적된 KC + Case + Agent 데이터 기반 시장 예측, 디지털 트윈 엔진</td></tr>
+  </tbody>
+</table>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- 2장. KC 카드 체계 상세 설계 -->
+<!-- ═══════════════════════════════════════════ -->
+<h2>2. KC 카드 체계 상세 설계</h2>
+<p>Knowledge Core는 총 7종의 카드로 구성된다. 각 카드는 보험 도메인 지식의 서로 다른 계층을 담당하며, 카드 간 참조 관계를 통해 AI의 출력이 동일한 의미 경계 내에서 생성되도록 통제한다.</p>
+
+<h3>2-1. KC 카드 체계의 설계 원리: 온톨로지 기반 AI 아키텍처</h3>
+
+<h4>온톨로지(Ontology)란 무엇인가</h4>
+<p>온톨로지는 쉽게 말하면 "어떤 도메인을 구조적으로 정의한 지식 체계"이다. 더 실무적으로 표현하면, 개념(Concept) + 관계(Relation) + 규칙(Rule)을 명확하게 정의한 지식 구조 모델이다.</p>
+
+<table>
+  <thead><tr><th>구분</th><th>일반 데이터</th><th>온톨로지</th></tr></thead>
+  <tbody>
+    <tr><td><strong>예시</strong></td><td>암 진단금 = 2,000만 원</td><td>암 진단금 &lt; 기준 → 암 보장 부족 → 상담 필요</td></tr>
+    <tr><td><strong>특성</strong></td><td>데이터 자체로는 의미가 없음</td><td>데이터 → 의미 → 판단으로 확장 가능</td></tr>
+  </tbody>
+</table>
+
+<h4>LLM의 한계와 온톨로지의 필요성</h4>
+<p>Clark AI의 기반이 되는 LLM(Large Language Model)은 본질적으로 패턴 생성 엔진이다. 설명을 잘하지만, 정확한 판단, 일관된 기준 유지, 도메인 규칙 준수는 보장하지 못한다. 보험 도메인에서 LLM만으로 AI를 운영하면, 판단 기준이 흔들린다.</p>
+
+<table>
+  <thead><tr><th>역할</th><th>담당</th><th>비유</th></tr></thead>
+  <tbody>
+    <tr><td>리스크 정의 / 판단 기준</td><td>온톨로지 (KC 카드)</td><td>판단하는 뇌</td></tr>
+    <tr><td>설명 생성 / 대화 UX</td><td>LLM (Clark AI)</td><td>말하는 입</td></tr>
+  </tbody>
+</table>
+
+<h4>KC 카드 체계 = 보험 도메인 온톨로지</h4>
+<table>
+  <thead><tr><th>온톨로지 요소</th><th>KC 카드 대응</th><th>역할</th></tr></thead>
+  <tbody>
+    <tr><td>개념 (Concept)</td><td>Concept 카드</td><td>보험 용어와 개념을 정의</td></tr>
+    <tr><td>관계 (Relation)</td><td>카드 간 참조 링크</td><td>개념 간 의미 관계를 정의</td></tr>
+    <tr><td>규칙 (Rule)</td><td>Rule 카드 + Evidence 카드</td><td>판단 기준과 근거를 정의</td></tr>
+    <tr><td>제약 (Constraint)</td><td>Policy 카드</td><td>출력 범위의 규제적 제약을 정의</td></tr>
+  </tbody>
+</table>
+
+<div class="info"><strong>전략적 의미:</strong> LLM은 교체 가능하지만, 온톨로지는 교체 불가능한 플랫폼 자산이다. Clark을 한 문장으로 정의하면: "온톨로지 기반 보험 진단 엔진 + LLM 인터페이스"이다.</div>
+
+<h3>2-2. 카드별 정의</h3>
+
+<h4>① Concept 카드 (메타 정의 계층)</h4>
+<p>Concept 카드는 KC 체계의 최상위 계층으로, 보험 및 보장 구조에 대한 기본 개념과 용어를 정의한다. AIO 백서의 도입부이자 Clark AI의 AI 진단 철학의 근거가 되며, 사용자의 질문 의도를 AI가 정확히 이해하는 데 핵심적인 역할을 한다.</p>
+<p>예를 들어, "보험료"를 "보장을 유지하기 위해 지불해야 하는 비용으로, 월납보험료라고도 하며 일상적으로는 보험비라고도 불린다"라고 정의하면, Clark AI는 사용자가 "내 보험비가 얼마야?"라고 물어도 "월납보험료는 얼마입니까?"로 의미를 정확히 매칭할 수 있다.</p>
+
+<div class="v13-new" style="border-left:4px solid #9b59b6; padding-left:16px; margin:16px 0; background:#faf5ff;">
+<h4>Concept 카드 이원 구조 (Standalone / Linked)</h4>
+<p>모든 Concept 카드가 Risk-type에 직접 연결되어야 하는 것은 아니다. "보험이란 무엇인가?"처럼 특정 Risk-type에 매핑되지 않는 메타 개념도 KC 체계에 필요하며, Risk-type이 사전에 세팅되지 않은 상태에서도 Concept 카드를 먼저 생성할 수 있어야 한다. 이를 위해 Concept 카드를 두 가지 연결 유형으로 구분한다.</p>
+<table>
+  <thead><tr><th>연결 유형</th><th>정의</th><th>Risk-type 연결</th><th>Clark 활용</th><th>예시</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Standalone</strong> (독립형)</td><td>Risk-type에 연결되지 않는 독립 개념 카드</td><td>없음 (optional)</td><td>일반 대화 응답, 용어 설명, AIO 콘텐츠, 사내 교육</td><td>보험의 본질, 보험료, AI 진단이란, 보험 리모델링의 의미</td></tr>
+    <tr><td><strong>Linked</strong> (연결형)</td><td>1개 이상의 Risk-type에 연결된 개념 카드</td><td>1:N 또는 N:M</td><td>AI 진단 체이닝의 의미 매칭 계층으로 참여</td><td>보장 공백 탐지, 암 보장, 심혈관질환 보장, 질병코드의 이해</td></tr>
+  </tbody>
+</table>
+<p>KC Admin에서 Concept 카드 생성 시 Risk-type 연결 필드는 <strong>선택 사항(optional)</strong>으로 설정한다. 연결 여부에 따라 Standalone/Linked가 자동 태깅되며, 카드 라이브러리에서 연결 유형별 필터링이 가능하다.</p>
+</div>
+
+<div class="v13-new" style="border-left:4px solid #9b59b6; padding-left:16px; margin:16px 0; background:#faf5ff;">
+<h4>Concept 카드 동의어 매핑 필드</h4>
+<p>Concept 카드에는 <strong>synonyms(동의어)</strong> 배열 필드를 추가한다. 이 필드는 Clark AI가 사용자의 질문 의도를 정확히 매칭하는 데 직접 활용된다. 예: "보험료" 카드의 synonyms = ["보험비", "월납보험료", "월 보험료", "보험 납입금"]. 또한 기존 카드 편집기 필드로 한 줄 정의(25자 이내), 왜 중요한가(3가지), 대표 오해(2가지), 보닥 진단 기준 링크를 포함한다.</p>
+</div>
+
+<table>
+  <thead><tr><th>분류</th><th>예시 항목</th></tr></thead>
+  <tbody>
+    <tr><td>보험의 목적 정의</td><td>리스크 이전 도구, 현금 흐름 방어 장치, 생애주기 위험 대응 등</td></tr>
+    <tr><td>보장 구조 분석의 목적</td><td>보장 공백 탐지, 과잉/비효용 탐지, 장기 비용 리스크 탐지 등</td></tr>
+    <tr><td>보장 카테고리 분류</td><td>실손, 3대 중요 질병(암/뇌/심장), 사망, 후유장해, 간병/치매, 수술/입원, 기타 특약 등</td></tr>
+  </tbody>
+</table>
+
+<div class="v13-new" style="border-left:4px solid #9b59b6; padding-left:16px; margin:16px 0; background:#faf5ff;">
+<h4>Concept 카드 초기 입력 리스트 (Phase 1 대상 27종)</h4>
+<p>6개 분류에 걸쳐 총 27종의 Concept 카드를 정의하였다. 이 중 P0(최우선) 16종은 Phase 1 초기에, P1(중요) 11종은 Phase 1 중반 이후에 입력한다. Standalone 12종, Linked 15종이다. 상세 리스트는 별도 스프레드시트(KC_Concept_Cards_v2.xlsx) 참조.</p>
+<table>
+  <thead><tr><th>분류</th><th>카드 수</th><th>연결 유형</th><th>대표 카드 예시</th></tr></thead>
+  <tbody>
+    <tr><td>A. 보험의 목적 정의</td><td>4</td><td>전체 Standalone</td><td>보험의 본질, 현금 흐름 방어 장치, 생애주기 위험 대응, 가족 보장 설계</td></tr>
+    <tr><td>B. 보장 구조 분석</td><td>4</td><td>3 Linked + 1 Standalone</td><td>보장 공백 탐지, 과잉/비효용 탐지, 장기 비용 리스크, 보험 리모델링의 의미</td></tr>
+    <tr><td>C. 보장 카테고리</td><td>9</td><td>7 Linked + 2 Standalone</td><td>실손의료보험, 암 보장, 심혈관질환 보장, 뇌혈관질환 보장, 간병/치매 보장</td></tr>
+    <tr><td>D. 상품 구조 이해</td><td>5</td><td>2 Linked + 3 Standalone</td><td>보험료(월납보험료), 갱신형 vs 비갱신형, 질병코드의 이해</td></tr>
+    <tr><td>E. 데이터 해석</td><td>2</td><td>1 Linked + 1 Standalone</td><td>보험 마이데이터, 유지/조정/해지 판정</td></tr>
+    <tr><td>F. 보닥 서비스 고유</td><td>3</td><td>전체 Standalone</td><td>AI 진단이란, 보험 설계사의 역할, 미청구 보험금</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="v13-new" style="border-left:4px solid #9b59b6; padding-left:16px; margin:16px 0; background:#faf5ff;">
+<h4>Concept 카드 작성·검수 워크플로우</h4>
+<table>
+  <thead><tr><th>단계</th><th>담당자</th><th>역할</th></tr></thead>
+  <tbody>
+    <tr><td>① 초안 작성 + KC Admin 입력</td><td>고객경험팀장</td><td>카드 정의 문안, 동의어 매핑, Clark 활용 시나리오 작성. 카드 ID 부여, Standalone/Linked 분류. KC Admin 입력 및 구조적 정합성(체이닝, 연결 관계) 검증. 필요 시 보조 인력 배정 가능.</td></tr>
+    <tr><td>② 도메인 검수</td><td>도메인 검수자 (더파트너스 소속, 설계사 출신)</td><td>"현장에서 실제로 통하는 말인가" 검증. 용어 정확성, 설계사 납득성, 기준값 현실성, Risk-type 연결 타당성 확인. 검수 과정의 현장 피드백은 Phase 2 aGCR 기초 데이터로 축적. 자회사(더파트너스) 소속이므로 KC Admin에서 External Reviewer 권한 별도 부여 필요.</td></tr>
+    <tr><td>③ 규제 검수 (해당 카드만)</td><td>준법감시인</td><td>법적 정의가 포함된 카드 대상: 실손의료보험, 심혈관질환 보장, 뇌혈관질환 보장, 질병코드의 이해, 보험 마이데이터 (총 5종). 금융소비자보호법, 보험업법, 개인정보보호법(마이데이터) 정합성 확인.</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h4>② Risk-type 카드 (보장 구조 정의 계층)</h4>
+<p>Risk-type 카드는 보험을 상품이 아닌 "구조"로 정의하고, 사용자의 보장 상태에서 발생할 수 있는 위험 유형을 분류한다. Clark AI가 사용자의 보험 데이터를 AI 진단한 후, 해당 사용자가 어떤 위험 유형에 해당하는지를 판단하는 기준이 된다.</p>
+<p>각 Risk-type에는 <strong>리드 스코어</strong>가 배정되어, 보험 설계사가 선호하는 위험 유형에 가점을 부여하는 배정 최적화에도 활용된다. Risk-type은 담당자가 KC Admin을 통해 추가할 수 있다.</p>
+
+<table>
+  <thead><tr><th style="width:50px">ID</th><th>위험 유형</th><th>설명</th></tr></thead>
+  <tbody>
+    <tr><td><strong>T01</strong></td><td>무보장형</td><td>실손보험을 포함한 기초적인 보장이 없는 경우</td></tr>
+    <tr><td><strong>T02</strong></td><td>암투병생활비 부족형</td><td>암진단금 부족으로 암 발병 시 치료 지속이 어려워지는 경우</td></tr>
+    <tr><td><strong>T03</strong></td><td>심혈관질환보장 협소형</td><td>협심증 보장은 있으나 허혈성 심장질환 보장이 없는 등 좁은 질병코드 상의 보장만 있는 경우</td></tr>
+    <tr><td><strong>T04</strong></td><td>뇌혈관질환보장 협소형</td><td>뇌출혈 보장은 있으나 뇌졸중 보장이 없는 등 좁은 질병코드 상의 보장만 있는 경우</td></tr>
+    <tr><td><strong>T05</strong></td><td>노후돌봄보장 공백형</td><td>간병/치매 보험 등 장수리스크 보장이 없는 경우</td></tr>
+    <tr><td><strong>T06</strong></td><td>납입여력부족 우려형</td><td>갱신형 보험료가 과다하여 장기적으로 보장 유지가 어려운 경우</td></tr>
+    <tr><td><strong>T07</strong></td><td>비용 대비 보장 비효율형</td><td>동일 보장이 여러 상품에서 중복 가입되거나 과다 보장을 받고 있는 경우</td></tr>
+    <tr><td><strong>T08</strong></td><td>생애주기 적합도 저조형</td><td>부양가족이 있는 주소득원임에도 조기 사망 리스크 대비와 노후 자금 마련이 모두 부재한 경우</td></tr>
+  </tbody>
+</table>
+<div class="note">※ 위 유형은 초기 설계 기준이며, 담당자가 KC Admin을 통해 새로운 Risk-type을 추가할 수 있다. 본 표가 Risk-type ID/명칭의 단일 진실원이며, 다른 챕터(§3-6, §3-7 등)는 본 표의 ID와 명칭을 일치 사용한다.</div>
+
+<h4>③ Rule 카드 (리스크 평가 계층)</h4>
+<p>Rule 카드는 "보닥만의 판단 기준"을 구축하는 카드로, Clark AI의 AI 진단 핵심 로직이다. 각 Risk-type에 대해 "어떤 조건일 때 해당 위험 유형으로 판단하는가"의 구체적인 기준값을 정의한다. 담당자가 KC Admin에서 마이데이터 규격 및 질병코드를 혼합하여 기준을 설정한다.</p>
+
+<div class="danger"><strong>Rule-Evidence 연결 필수화:</strong> Rule 카드에 Evidence 카드가 1개 이상 연결되지 않으면 "Draft" 상태로 유지되며, Clark/Lois가 참조할 수 없습니다. Evidence가 연결되고 검수(준법감시인 확인)가 완료된 Rule만 "Active" 상태로 전환되어 AI가 활용할 수 있습니다. 이를 통해 근거 없는 판단 기준이 고객에게 노출되는 것을 원천 차단합니다.</div>
+
+<table>
+  <thead><tr><th>대상 Risk-type</th><th>Rule 예시</th></tr></thead>
+  <tbody>
+    <tr><td>암투병생활비 부족형</td><td>40대 남성 암 진단금 5천만 원 미만 → "공백" 문제 경고<br>뇌출혈 보장 보유, 뇌졸중 보장 미보유 → "구조" 문제 경고</td></tr>
+    <tr><td>납입여력부족 우려형</td><td>갱신형 담보 비율 70% 이상 → "납입 여력" 문제 경고<br>60세 이후 보험료 증가 예상치 계산</td></tr>
+    <tr><td>비용 대비 보장 비효율형</td><td>월 보험료 대비 주요 질병 보장 비율 분석<br>동일 연령 평균 대비 비교(보닥 서버 내 마이데이터 통계 활용)</td></tr>
+  </tbody>
+</table>
+
+<h4>④ Evidence 카드 (Rule 설정의 근거 계층)</h4>
+<p>Evidence 카드는 Rule 카드와 별도의 독립 카드로, Rule을 설정할 때 참조하는 데이터 근거의 출처와 활용 방법을 정의한다. 또한 Clark AI가 사용자에게 특정 Risk-type에 해당하는 이유를 설명할 때도 참조된다.</p>
+
+<div class="v13-new" style="border-left:4px solid #9b59b6; padding-left:16px; margin:16px 0; background:#faf5ff;">
+<h4>Evidence 유형 4분류</h4>
+<p>Evidence 카드는 근거 데이터의 출처에 따라 4가지 유형으로 분류한다. KC Admin 카드 편집기에서 유형을 선택하면 자동 태깅된다.</p>
+<table>
+  <thead><tr><th>유형</th><th>정의</th><th>예시</th></tr></thead>
+  <tbody>
+    <tr><td><strong>마이데이터 기반</strong></td><td>보험 마이데이터 API에서 조회한 담보코드·금액·갱신 상태 등의 데이터를 근거로 활용</td><td>A4200(암진단) 담보 금액 3,000만 원 미만 고객 비율</td></tr>
+    <tr><td><strong>보닥 통계 기반</strong></td><td>보닥 서버 내 마이데이터 통계(동일 연령 평균 비교 등)를 근거로 활용</td><td>40대 남성 평균 암 진단금 대비 현재 보유 금액 비교</td></tr>
+    <tr><td><strong>질병코드 기반</strong></td><td>KCD 질병분류코드와 ICIS 담보코드 간 보장 범위 매핑을 근거로 활용</td><td>뇌출혈(I60-I62) vs 뇌졸중(I60-I64) 질병코드 범위 차이</td></tr>
+    <tr><td><strong>프롬에이지 기반</strong></td><td>메디에이지(Mediage) 프롬에이지(Fromage) API에서 수신한 건강검진 데이터 기반 질병·암·사망 위험도를 근거로 활용. 대사나이(생체나이) 건강지표에 기반하며, 국제 SCI 학술지 논문 7편 이상으로 검증된 의학적 위험도 분석 결과이다.</td><td>심혈관 질병위험도 동년배 상위 20%, 대사나이 실제 나이 대비 +5세 <span style="font-size:11px;color:#6B6B65;">(※ 카드 내부 데이터 예시. 사용자 출력 시에는 §13-5-1에 따라 등급명까지만 노출)</span></td></tr>
+  </tbody>
+</table>
+<div class="warn" style="margin-top:12px;">
+  <strong>⚠ 민감정보 취급 주의:</strong> 프롬에이지 기반 Evidence는 건강검진 데이터(민감정보)를 근거로 하므로, Evidence 카드 내부에서만 참조되고 Amplitude 등 해외 서버에는 원본 수치를 전송하지 않는다. 또한 사용자 출력 표기에는 §13-5-1의 수치 노출 기준에 따라 percentile·원점수 형태가 아닌 3단계 등급명(고/중/저)까지만 노출된다. 상세 원칙은 §3-8 및 §13-5 참조.
+</div>
+</div>
+<p><strong>현재 활용 가능한 Evidence 유형:</strong></p>
+<ul>
+  <li><strong>마이데이터(보험자기신용정보):</strong> 한국신용정보원 ICIS 데이터 또는 보험가입증권 이미지 등을 통해 수집된 사용자의 보험 계약 정보</li>
+  <li><strong>보닥 서버 내 마이데이터 통계 정보:</strong> 보닥 사용자 전체의 보장 통계를 기반으로 한 연령별/성별 평균 비교 데이터</li>
+  <li><strong>질병코드:</strong> 보장 범위의 넓고 좁음을 판단하는 기준 (예: 뇌출혈 vs 뇌졸중 질병코드 범위 차이)</li>
+  <li><strong>프롬에이지(Fromage):</strong> 메디에이지 프롬에이지 API에서 수신한 대사나이·질병위험도·암위험도·사망위험도. 3개년 건강검진 데이터 기반. Phase 1.5(Clark/Lois 출시)에서 연동 예정. 민감정보이므로 보닥 서버 DB에만 저장하고, Clark/Lois AI 진단 시 KC를 통해 참조하는 구조</li>
+</ul>
+
+<h4>⑤ Playbook 카드 (개입 우선순위 계층)</h4>
+<p>Playbook 카드는 Clark AI가 인간 설계사의 개입 시점을 판단하여 리드를 전환·배정하는 방법을 정의한다. 총 세 가지 레이어로 구성된다.</p>
+<table>
+  <thead><tr><th>레이어</th><th>역할</th></tr></thead>
+  <tbody>
+    <tr><td>리드 전환 레이어</td><td>"이제 어떻게 해야 해?", "보험 추천해줘" 등의 발화가 감지되면 보닥플래너에게 리드를 전환한다.</td></tr>
+    <tr><td>리드 스코어링 레이어</td><td>Risk-type 스코어 + 상담 희망 유형 스코어를 합산하여 총 리드 스코어를 산출한다.</td></tr>
+    <tr><td>배정 최적화 레이어</td><td>리드 스코어에 따라 First Connect를 통해 성적 우수 설계사에 리드를 배정하고, 미 컨택 시 회수 및 차순위 재배정한다.</td></tr>
+  </tbody>
+</table>
+
+<h4>⑥ Policy 카드 (최종 출력 통제 계층)</h4>
+<p>Policy 카드는 Clark AI의 최종 출력을 규제 범위 내에서 통제하는 안전장치이다. Clark AI가 생성한 답변이 금융소비자보호법, 보험업법, 기타 보험산업 내 AI 관련 규제 사항에 저촉되지 않는지를 검증하는 레이어이다. 내부 법무검토 문서도 Policy 카드에 포함된다.</p>
+
+<div class="info"><strong>Clark 채널 법적 준수 사항:</strong> Policy 카드로 관리해야 할 Clark 채널의 법적 준수 사항은 보닥 플랫폼 구조 정의서(Clark B2C 채널)에 상세 정의되어 있다. 주요 항목: 전송요구권(정보제공기관·수신기관·대상정보 직접 선택), 전송요구 철회(즉시 처리 의무), 열람권(저장된 본인 개인신용정보 조회), 제3자 제공 현황 열람, 동의 이력 불변 저장·철회 시 즉시 삭제, 연령 제한(14세 미만 가입 차단/19세 미만 정보활용 제한), 미접속자 보호(6개월 전송 중단/1년 자동 삭제), 제3자 정보 제공(금융보안원 안심 제공 시스템 경유 의무), 이익 제공 제한(가입 유도 목적 3만원 초과 금지). 이 항목들을 Policy 카드로 구조화하여 Clark AI 출력 통제에 활용한다.</div>
+
+<h4>⑦ Case 카드 (피드백 루프 계층, +1종)</h4>
+<p>Case 카드는 Clark AI와 사용자 간 대화에서 리드 전환에 성공한 케이스를 축적하는 카드이다. 축적될수록 Clark AI의 AI 진단 품질이 개선되며, 우수 케이스는 보험 설계사에게도 노출하여 상담 품질 개선에 활용한다.</p>
+<p><strong>생성 방식:</strong> Clark AI가 리드 전환 성공으로 판단한 케이스를 자동으로 태깅하고, 작성자와 도메인 검수자가 최종 저장 여부를 결정하는 반자동 방식으로 운영한다.</p>
+<p><strong>노출 정책:</strong> 원본 대화 데이터(개인정보 포함)와 패턴화된 성공 시나리오 요약본을 분리하여 관리한다. 원본은 Internal, 요약본은 설계사 교육용 및 Clark AI 학습용으로 활용한다.</p>
+
+<h3>2-3. 카드 간 참조 흐름</h3>
+<p>KC 카드는 독립적으로 존재하지 않고, 카드 간 참조 관계를 통해 하나의 의미 경계(Meaning Layer)를 형성한다. 이 참조 구조가 Clark AI의 출력을 통제하는 핵심 메커니즘이다.</p>
+
+<div class="v13-new" style="border-left:4px solid #9b59b6; padding-left:16px; margin:16px 0; background:#faf5ff;">
+<p><strong>Standalone Concept의 체이닝 예외</strong></p>
+<p>2-2절에서 정의한 Standalone Concept 카드는 아래 메인 체이닝에 참여하지 않는다. Standalone Concept은 Clark AI의 일반 대화 응답, AIO 콘텐츠, 사내 교육에서 독립적으로 참조되며, Risk-type과의 연결 없이 단독으로 의미를 제공한다. 반면 Linked Concept은 메인 체이닝의 첫 번째 계층으로서, 사용자의 질문 의도를 파악한 후 해당 Risk-type으로 진입하는 역할을 수행한다.</p>
+</div>
+
+<h4>메인 참조 흐름 — 결정 흐름과 설명 흐름의 분리</h4>
+
+<p>KC 카드 체계의 메인 흐름은 두 가지 관점으로 구분된다. 둘은 동일한 카드들을 사용하지만, 동작 시점과 방향이 다르다. 신규 엔지니어가 구현 시 혼동이 없도록 본 절은 두 흐름을 분리하여 표기한다.</p>
+
+<h4>① 결정 흐름 (Internal Logic)</h4>
+
+<p>사용자 데이터를 받아 KC 시스템이 내부적으로 Risk-type을 판정하고 응답 컨텐츠를 결정하는 흐름. 시스템 입장에서의 처리 순서이다.</p>
+
+<table>
+  <thead><tr><th>순서</th><th>처리</th><th>관여 카드</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td>사용자 발화 의도 매칭</td><td>Concept (Linked) — 발화의 용어를 KC 의미 공간으로 매핑</td></tr>
+    <tr><td>2</td><td>사용자 데이터 + Rule 평가 → Risk-type 판정</td><td>Rule (조건 빌더 평가) → Risk-type 라벨 산출. Rule이 Evidence를 참조하여 평가의 정확성 확보</td></tr>
+    <tr><td>3</td><td>판정된 Risk-type에 대응되는 응답 컨텐츠 조립</td><td>Risk-type · Rule (경고 메시지) · Evidence (근거 데이터)</td></tr>
+    <tr><td>4</td><td>응답 출력 전 규제 검증</td><td>Policy — 출력이 규제 범위를 벗어나지 않는지 검증</td></tr>
+  </tbody>
+</table>
+
+<div class="note">결정 흐름의 핵심: <strong>Rule 평가가 Risk-type 판정에 선행한다.</strong> 즉 "어떤 Risk-type에 속하는가"는 Rule 카드의 조건절을 사용자 데이터에 적용한 평가 결과로 결정된다. Risk-type 카드는 그 결과를 분류하여 명명하는 라벨 역할이다.</div>
+
+<h4>② 설명 흐름 (User-facing Narrative)</h4>
+
+<p>판정 결과를 사용자에게 자연어로 설명할 때의 논리적 순서. 카드 간 의미 의존성을 따라 사용자가 이해하기 좋은 순서로 제시된다.</p>
+
+<table>
+  <thead><tr><th>순서</th><th>카드</th><th>설명 역할</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td>Concept</td><td>사용자의 질문 의도를 이해하고 용어를 정확히 매칭</td></tr>
+    <tr><td>2</td><td>Risk-type</td><td>판정된 위험 유형을 사용자에게 제시 (예: "납입여력부족 우려형에 해당합니다")</td></tr>
+    <tr><td>3</td><td>Rule</td><td>그 판정의 구체적 기준값을 근거로 제시 (예: "갱신형 비중 76% 기준")</td></tr>
+    <tr><td>4</td><td>Evidence</td><td>그 기준값의 데이터 근거를 인용하여 당위성 설명 (예: "동년배 평균 대비")</td></tr>
+    <tr><td>5</td><td>Policy</td><td>출력 검증 (사용자에게는 보이지 않는 백엔드 단계)</td></tr>
+  </tbody>
+</table>
+
+<div class="note">설명 흐름의 핵심: <strong>"Concept → Risk-type → Rule → Evidence → Policy"는 사용자 응답의 자연어 구조 순서이다.</strong> 결정 시점이 아닌 출력 시점의 논리이다.</div>
+
+<h4>병렬 및 피드백 흐름</h4>
+<p>Playbook 카드는 위 메인 흐름과 병렬로 동작한다. Clark AI가 Risk-type을 진단한 후, 사용자의 발화에서 리드 전환 시그널을 감지하면 Playbook을 참조하여 리드 스코어링 → 배정 최적화를 수행한다.</p>
+<p>Case 카드는 전체 흐름의 결과물로서, 성공 케이스가 축적되면 Clark AI의 AI 진단 품질을 개선하는 피드백 루프를 형성한다.</p>
+
+<h3>2-4. 공개범위 정책 (Public / Baseline / Internal)</h3>
+<p>KC 카드는 카드 유형에 따라 세 단계의 공개범위로 구분된다.</p>
+<table>
+  <thead><tr><th>공개범위</th><th>정의</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Public</strong></td><td>외부 노출 대상. AIO 콘텐츠로 활용되어 생성형 AI가 참조·인용할 수 있는 권위 있는 지식 소스로 활용된다.</td></tr>
+    <tr><td><strong>Baseline</strong></td><td>부분 외부 노출. 판단 철학과 기준선은 외부에 노출하되, 구체적인 기준값과 참조 데이터 규격 필드명은 비노출.</td></tr>
+    <tr><td><strong>Internal</strong></td><td>완전 비노출. 내부 운영용으로만 사용되며, 외부에는 어떤 형태로도 노출되지 않는다.</td></tr>
+  </tbody>
+</table>
+<table>
+  <thead><tr><th>카드 유형</th><th>공개범위</th><th>사유</th></tr></thead>
+  <tbody>
+    <tr><td>Concept</td><td>Public</td><td>AIO 백서의 도입부로 활용, 외부 권위 확보 대상</td></tr>
+    <tr><td>Risk-type</td><td>Public</td><td>보장 구조의 위험 유형 분류 자체는 공개하여 전문성 확보</td></tr>
+    <tr><td>Rule</td><td>Baseline</td><td>판단 철학과 기준선은 Public, 구체적 기준값과 데이터 규격은 Internal</td></tr>
+    <tr><td>Evidence</td><td>Internal</td><td>마이데이터 규격, 통계 정보 등 전략적 데이터로 외부 비노출</td></tr>
+    <tr><td>Playbook</td><td>Internal</td><td>리드 전환/배정 로직은 영업 핵심 전략으로 외부 비노출</td></tr>
+    <tr><td>Policy</td><td>Internal</td><td>내부 법무검토 문서 및 규제 대응 전략 포함</td></tr>
+    <tr><td>Case</td><td>분리 관리</td><td>원본(개인정보 포함): Internal, 패턴화된 요약본: 설계사 교육/AI 학습용</td></tr>
+  </tbody>
+</table>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- 3장. KC Admin 기능 정의 -->
+<!-- ═══════════════════════════════════════════ -->
+<h2>3. KC Admin 기능 정의</h2>
+<p>KC Admin은 KC 카드 체계를 생성·관리·승인하는 어드민 시스템이다. UI 상세 설계는 별도 문서(KC Admin UI 설계서 v1.2.1)에서 다룬다.</p>
+
+<h3>3-1. 역할 및 권한 정의</h3>
+
+<p>KC Admin은 카드 작성·검수·승인의 3단계 역할 분리를 기본 구조로 한다. 각 역할은 직책으로 정의되며, 인사이동 시 직책 승계자가 동일 역할을 수행한다(인물 고정 지정이 아님).</p>
+
+<table>
+  <thead><tr><th>역할</th><th>담당 직책</th><th>소속</th><th>권한 범위</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><strong>작성자</strong></td>
+      <td>고객경험팀장</td>
+      <td>아이지넷 플랫폼사업본부 고객경험팀</td>
+      <td>전체 카드 유형의 CRUD, Risk-type 추가, Rule 기준값 설정, Evidence 등록, Case 카드 최종 저장 요청, 검수 요청 발행. 필요 시 보조 인력 배정 가능.</td>
+    </tr>
+    <tr>
+      <td><strong>검수자 (도메인)</strong></td>
+      <td>도메인 검수자</td>
+      <td>더파트너스 (자회사 GA, External Reviewer 권한 그룹)</td>
+      <td>CONCEPT·RULE·EVIDENCE·PLAYBOOK·CASE 카드의 도메인 검수(현장 통용성·용어 정확성·기준값 현실성). 담당자가 생성·수정한 카드의 승인/반려, Case 카드 최종 저장 승인. Internal Pack 카드 열람/검수 가능, 직접 생성/수정 불가. 모든 카드 조회(Read) 가능.</td>
+    </tr>
+    <tr>
+      <td><strong>검수자 (규제)</strong></td>
+      <td>준법감시인</td>
+      <td>아이지넷 컴플라이언스</td>
+      <td>Policy 카드의 최종 승인 권한(규제 준수 검증, Policy 체크리스트 11항목 기반). Rule 카드 중 규제 관련 항목의 검토 및 승인. 모든 카드 조회 가능, 직접 생성/수정 불가.</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="info">
+  <strong>External Reviewer 권한 그룹:</strong> 도메인 검수자는 자회사(더파트너스) 소속이므로, KC Admin 역할 체계에서 별도의 External Reviewer 권한 그룹으로 분류된다. Internal Pack 카드의 열람/검수는 허용하되 생성/수정 권한은 제한한다.
+</div>
+
+<h3>3-2. 카드 CRUD 기능</h3>
+<table>
+  <thead><tr><th>카드 유형</th><th>주요 입력 항목</th><th>특이 사항</th></tr></thead>
+  <tbody>
+    <tr><td>Concept</td><td>용어명, 정의 설명, 유사어/일상어, 하위 분류</td><td>유사어 등록으로 AI 의미 매칭 정확도 향상</td></tr>
+    <tr><td>Risk-type</td><td>위험 유형명, 설명, 리드 스코어 배정값</td><td>담당자가 새로운 Risk-type을 추가 가능</td></tr>
+    <tr><td>Rule</td><td>대상 Risk-type, 판단 조건, 기준값, 경고 메시지, 연결 Evidence (필수)</td><td>마이데이터 규격 및 질병코드 혼합 설정. <strong>Evidence 1개 이상 연결 필수</strong></td></tr>
+    <tr><td>Evidence</td><td>데이터 출처, 활용 방법, 유형(마이데이터/보닥통계/질병코드), 연결된 Rule</td><td>Rule 카드와 참조 링크로 연결</td></tr>
+    <tr><td>Playbook</td><td>레이어별 설정(전환/스코어링/배정)</td><td>발화 키워드, 스코어 산출 공식 설정</td></tr>
+    <tr><td>Policy</td><td>규제 문서명, 적용 범위, 핵심 조항, 준수 체크리스트</td><td>준법감시인 최종 승인 필수</td></tr>
+    <tr><td>Case</td><td>대화 요약, Risk-type, 전환 결과, 성공 요인</td><td>AI 자동 태깅 → 담당자/검수자 최종 승인</td></tr>
+  </tbody>
+</table>
+<p><strong>공통 기능:</strong> 모든 카드에는 버전 이력 관리(수정 이력 추적), Public/Baseline/Internal 공개범위 설정, 카드 간 참조 링크 설정 기능이 공통으로 적용된다.</p>
+
+<h3>3-3. 승인 워크플로우</h3>
+
+<h4>일반 카드 승인 플로우 (Concept, Risk-type, Evidence, Playbook)</h4>
+<table>
+  <thead><tr><th>단계</th><th>상태</th><th>수행자</th><th>설명</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td>작성 중</td><td>작성자</td><td>카드를 생성하거나 수정한다. 임시 저장 가능.</td></tr>
+    <tr><td>2</td><td>검수 요청</td><td>작성자 → 도메인 검수자</td><td>작성 완료 후 검수자에게 검수를 요청한다.</td></tr>
+    <tr><td>3</td><td>검수 완료</td><td>도메인 검수자</td><td>검수자가 내용을 확인하고 승인 또는 반려(사유 기재)한다.</td></tr>
+    <tr><td>4</td><td>적용 완료</td><td>시스템</td><td>승인된 카드가 Clark AI의 RAG 지식 베이스에 반영된다.</td></tr>
+  </tbody>
+</table>
+
+<h4>Rule 카드 승인 플로우</h4>
+<table>
+  <thead><tr><th>단계</th><th>상태</th><th>수행자</th><th>설명</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td>작성 중</td><td>작성자</td><td>Rule 카드를 생성하거나 수정한다.</td></tr>
+    <tr><td>2</td><td>Evidence 연결</td><td>작성자</td><td><strong>Evidence 카드 1개 이상 연결 필수.</strong> 미연결 시 검수 요청 불가 (Draft 유지).</td></tr>
+    <tr><td>3</td><td>검수 요청</td><td>작성자 → 도메인 검수자</td><td>Evidence 연결 확인 후 상태 → In Review.</td></tr>
+    <tr><td>4</td><td>검수 완료</td><td>도메인 검수자</td><td>검수자가 Evidence 적합성 확인 후 승인/반려. <strong>Evidence 미연결 Rule은 승인 불가.</strong></td></tr>
+    <tr><td>5</td><td>적용 완료</td><td>시스템</td><td>승인된 카드가 Clark AI RAG 지식 베이스에 반영 (Evidence 포함).</td></tr>
+  </tbody>
+</table>
+
+<h4>Policy 카드 승인 플로우 (규제 검토 포함)</h4>
+<table>
+  <thead><tr><th>단계</th><th>상태</th><th>수행자</th><th>설명</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td>작성 중</td><td>작성자</td><td>Policy 카드를 생성하거나 수정한다.</td></tr>
+    <tr><td>2</td><td>검수 요청</td><td>작성자 → 도메인 검수자</td><td>검수자가 내용을 1차 확인한다.</td></tr>
+    <tr><td>3</td><td>법무 검토</td><td>도메인 검수자 → 준법감시인</td><td>준법감시인이 규제 준수 여부를 검토하고 최종 승인 또는 반려한다.</td></tr>
+    <tr><td>4</td><td>적용 완료</td><td>시스템</td><td>준법감시인 승인 후 Clark AI 출력 통제 레이어에 반영된다.</td></tr>
+  </tbody>
+</table>
+
+<h3>3-4. Case 카드 반자동 생성 플로우</h3>
+<table>
+  <thead><tr><th>단계</th><th>상태</th><th>수행자</th><th>설명</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td>자동 태깅</td><td>Clark AI</td><td>리드 전환 성공으로 판단된 대화를 자동으로 태깅하고, 대화 요약·해당 Risk-type·전환 결과·성공 요인을 추출한다.</td></tr>
+    <tr><td>2</td><td>검토 대기</td><td>작성자</td><td>KC Admin의 Case 후보 목록에서 태깅된 케이스를 확인하고, 저장 요청 또는 폐기한다.</td></tr>
+    <tr><td>3</td><td>검수 승인</td><td>도메인 검수자</td><td>검수자가 최종 확인 후 승인한다. 승인 시 개인정보 제거된 요약본이 자동 생성된다.</td></tr>
+    <tr><td>4</td><td>저장 완료</td><td>시스템</td><td>원본(Internal)과 요약본(설계사 교육/AI 학습용)이 분리 저장된다.</td></tr>
+  </tbody>
+</table>
+<div class="note">※ 폐기 케이스 처리: 작성자가 폐기한 케이스는 즉시 삭제되지 않고, 30일간 보관 후 자동 삭제된다. 이 기간 내 복원이 가능하다.</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- 4장. 확장 아키텍처 -->
+<!-- ═══════════════════════════════════════════ -->
+
+<div class="v13-new" style="border-left:4px solid #9b59b6; padding-left:16px; margin:16px 0; background:#faf5ff;">
+<h3>3-5. 마이데이터 담보코드 참조 체계</h3>
+
+<p>Rule 카드의 조건 빌더에서 마이데이터 기반 조건을 정확히 설정하려면, 보험신용정보관리규약(ICIS)에 정의된 담보코드를 참조할 수 있어야 한다. KC Admin에 담보코드 테이블을 내장하여, 조건 설정 시 코드를 직접 선택할 수 있게 한다.</p>
+
+<h4>코드 체계</h4>
+<table>
+  <thead><tr><th>구분</th><th>코드 범위</th><th>예시</th><th>용도</th></tr></thead>
+  <tbody>
+    <tr><td><strong>인보험 담보코드</strong></td><td>A1100~A9999</td><td>A4200(암진단), A4102(뇌출혈진단), A4104(급성심근경색진단), A4105(허혈성심장질환진단)</td><td>Rule 조건에서 고객의 보유/미보유 담보를 판별하는 기준</td></tr>
+    <tr><td><strong>보장내용코드</strong></td><td>100~963</td><td>100(상해), 200(질병), 400(암), 500(사망)</td><td>보장 카테고리별 분류 및 보장 범위 분석</td></tr>
+  </tbody>
+</table>
+<p>출처: 보험신용정보관리규약 (제2025-10차 신용정보집중관리위원회) 개정안 · 별표2 코드표</p>
+
+<h4>KC Admin 내 담보코드 테이블 기능</h4>
+<table>
+  <thead><tr><th>기능</th><th>설명</th></tr></thead>
+  <tbody>
+    <tr><td>코드 조회</td><td>카테고리별 필터링(사망, 후유장해, 진단, 수술, 입원, 통원, 간병/기타 등)</td></tr>
+    <tr><td>리스크 유형 연결 표시</td><td>각 담보코드가 어떤 Risk-type과 연결되는지 시각적 표시 (초기 T01~T08, KC Admin에서 추가 가능)</td></tr>
+    <tr><td>카드 연결 표시</td><td>해당 코드를 참조하는 CONCEPT, RULE, EVIDENCE, PLAYBOOK, CASE, Policy 카드 목록 표시</td></tr>
+    <tr><td>조건 빌더 연동</td><td>Rule 카드 조건 설정 시 coverage_code 필드에서 담보코드 테이블을 직접 참조하여 선택</td></tr>
+  </tbody>
+</table>
+
+<h4>마이데이터 필드 규격</h4>
+<p>Rule 카드 조건 빌더에서 사용할 수 있는 마이데이터 필드는 다음과 같다.</p>
+<table>
+  <thead><tr><th>필드명</th><th>설명</th><th>타입</th></tr></thead>
+  <tbody>
+    <tr><td>coverage_code</td><td>담보코드 (ICIS 인보험 담보코드)</td><td>code</td></tr>
+    <tr><td>coverage_amt</td><td>담보금액 (원)</td><td>number</td></tr>
+    <tr><td>coverage_name</td><td>담보명</td><td>text</td></tr>
+    <tr><td>renewal_status</td><td>갱신 여부</td><td>boolean</td></tr>
+    <tr><td>insu_type</td><td>보험 종류</td><td>code</td></tr>
+    <tr><td>start_date</td><td>보험 시작일</td><td>date</td></tr>
+    <tr><td>end_date</td><td>보험 종료일</td><td>date</td></tr>
+  </tbody>
+</table>
+<p>연산자: IN, NOT_IN, EQ, LT, GT, GTE, LTE를 지원하며, 여러 조건을 AND로 결합하여 리스크 유형 판정 조건을 구성한다.</p>
+</div>
+
+<div class="v13-new" style="border-left:4px solid #9b59b6; padding-left:16px; margin:16px 0; background:#faf5ff;">
+<h3>3-6. Amplitude 유저 속성 조건 연동</h3>
+
+<p>마이데이터만으로는 고객의 행동 패턴이나 보닥 앱 내 진단 결과를 조건에 활용할 수 없다. 보닥이 기존에 운용 중인 Amplitude 텍소노미(227+ 이벤트)의 유저 속성을 Rule 카드 조건 빌더에서 참조할 수 있게 하여, 마이데이터(보유 보험 데이터) + Amplitude(행동/진단 데이터)를 결합한 리스크 유형 판정을 가능하게 한다.</p>
+
+<h4>조건 빌더에서 활용 가능한 Amplitude 유저 속성</h4>
+<table>
+  <thead><tr><th>속성명</th><th>설명</th><th>활용 예시</th></tr></thead>
+  <tbody>
+    <tr><td>cancer_risk_rating</td><td>건강 리스크 등급 (보닥 앱 내 진단 결과)</td><td>T02 암투병생활비 부족형 조건: 고위험 등급</td></tr>
+    <tr><td>risk_of_stroke</td><td>뇌졸중 위험 등급</td><td>T04 뇌혈관질환보장 협소형 조건: 위험 이상</td></tr>
+    <tr><td>risk_of_myocardial</td><td>심근경색 위험 등급</td><td>T03 심혈관질환보장 협소형 조건</td></tr>
+    <tr><td>bodoc_score</td><td>보닥 진단 점수 (0~100)</td><td>T07 비용 대비 보장 비효율형 조건: 50점 미만</td></tr>
+    <tr><td>join_renewal_insurance</td><td>갱신형 보험 비중 (비율)</td><td>T06 납입여력부족 우려형 조건: 70% 이상</td></tr>
+    <tr><td>whole_insurance_filter</td><td>종신보험 보유 여부</td><td>T07 비용 대비 보장 비효율형 조건: 종신보험 가입</td></tr>
+    <tr><td>age</td><td>만 나이</td><td>T06 조건: 만 40세 이상</td></tr>
+    <tr><td>publish_status</td><td>상담 배정 상태</td><td>리드 중복 배정 방지</td></tr>
+    <tr><td>total_paid_premium</td><td>총 납입보험료</td><td>비용 효율성 분석</td></tr>
+    <tr><td>diagnosis_price</td><td>진단-가격 점수</td><td>보험료 적정성 판단</td></tr>
+    <tr><td>diagnosis_warranty</td><td>진단-보장 점수</td><td>보장 충분성 판단</td></tr>
+    <tr><td>diagnosis_coverage</td><td>진단-보장범위 점수</td><td>보장 범위 적정성 판단</td></tr>
+    <tr><td>join_non_renewal_insurance</td><td>비갱신형 보험 수</td><td>보험 구성 분석</td></tr>
+  </tbody>
+</table>
+<p>조건 구성 시 source 필드에서 MYDATA 또는 AMPLITUDE를 선택한 후, 해당 소스의 필드와 연산자를 지정한다. 마이데이터 조건과 Amplitude 조건을 AND로 결합하여 복합 판정이 가능하다.</p>
+
+<div class="warn" style="margin-top:12px;">
+  <strong>⚠ 민감정보 적재 제한:</strong> Amplitude는 미국 서버 기반 SaaS이므로, 건강검진 데이터·질병위험도·암위험도 등 개인정보보호법상 민감정보에 해당하는 건강정보는 User Property/Event Property로 적재할 수 없다. 프롬에이지 연동으로 추가되는 건강정보는 보닥 서버 DB(국내)에만 저장하고, Amplitude에는 추상화된 세그먼트 등급만 전송한다. 상세 원칙 및 구조는 §3-8 참조.
+</div>
+</div>
+
+<div class="v13-new" style="border-left:4px solid #9b59b6; padding-left:16px; margin:16px 0; background:#faf5ff;">
+<h3>3-7. 리스크 유형 조건 드라이런 검증</h3>
+
+<p>Rule 카드의 조건을 설정한 후, 실제 고객 프로필 데이터에 대해 조건 충족 여부를 즉시 검증하는 드라이런(Dry-run) 기능을 KC Admin에 내장한다. 이를 통해 조건 설정의 품질을 높이고, 과도하게 넓거나 좁은 조건을 사전에 발견할 수 있다.</p>
+
+<h4>드라이런 프로세스</h4>
+<table>
+  <thead><tr><th>단계</th><th>설명</th></tr></thead>
+  <tbody>
+    <tr><td>1. 리스크 유형 선택</td><td>등록된 리스크 유형 중 검증할 유형 선택 (초기 T01~T08, KC Admin에서 추가 가능)</td></tr>
+    <tr><td>2. 시뮬레이션 고객 선택</td><td>미리 등록된 시뮬레이션 고객 프로필 중 선택 (마이데이터 담보코드 + 금액 + Amplitude 속성 포함)</td></tr>
+    <tr><td>3. 조건 대조 실행</td><td>선택 고객의 데이터를 리스크 유형 조건과 대조. 모든 조건 만족 시 "만족", 하나라도 미충족 시 "비만족"</td></tr>
+    <tr><td>4. 조건별 결과 표시</td><td>각 조건의 충족/미충족 여부를 개별 표시하여, 어떤 조건에서 걸리는지 식별</td></tr>
+  </tbody>
+</table>
+<p>시뮬레이션 고객 프로필은 KC Admin에서 관리하며, 실제 보닥 앱 고객의 비식별 데이터를 기반으로 구성한다. 초기에는 3~5명의 대표 프로필(예: 45세 남성/38세 여성/55세 남성)로 시작하고, Rule 카드 입력이 진행되면서 프로필을 추가한다.</p>
+</div>
+
+<div class="v13-new" style="border-left:4px solid #e74c3c; padding-left:16px; margin:16px 0; background:#fef2f2;">
+<h3>3-8. Fromage 통합 시 민감정보 처리 원칙</h3>
+
+<div class="info">
+  <strong>위치 안내:</strong> 본 절은 KC가 Fromage(Mediage) 외부 데이터를 통합할 때 준수해야 하는 민감정보 처리 원칙을 다룬다. Fromage 통합 자체의 비즈니스 목적(차별적 개인화)과 R3 상품별 의견 제시(기존 보닥 진단엔진 UX 효율의 KC 이관)의 본질적 위치는 11장 본문에서 다룬다. 본 절은 KC Admin 운영 관점에서의 민감정보 거버넌스 규약에 한정한다.
+</div>
+
+<h4>3-8-1. 배경: 왜 이 절차가 필요한가</h4>
+<p>Fromage(Mediage) API 통합으로 건강검진 데이터(3개년 건강검진 정보, 대사나이, 질병위험도, 암위험도, 사망위험도)가 KC 시스템 내부로 들어오게 된다. 이 데이터를 KC Admin 환경에서 다룰 때, 민감정보의 처리·저장·국외이전 관련 법적 요건(개인정보보호법 제23조·제28조의8)을 준수해야 한다.</p>
+<p>특히 Amplitude는 미국 서버 기반 SaaS이므로 민감정보를 User Property/Event Property로 전송하면 국외이전 요건(정보주체 별도 동의 + 개인정보보호위원회 기준)을 충족해야 한다. 보닥 사용자 전원 동의 확보는 현실적으로 어렵고, 미준수 시 법적 리스크가 발생한다. 본 절은 이를 회피하기 위한 KC 시스템 내 데이터 흐름 설계를 정의한다.</p>
+
+<div class="danger">
+  <strong>핵심 구분 — 보험 분석 vs 건강정보</strong><br>
+  "이 고객은 암 보장이 부족하다" (보험 보장 분석 결과) → 민감정보 아님<br>
+  "이 고객의 암 위험도는 동년배 대비 +19.6%이다" (건강검진 기반 의학적 판정) → 민감정보 해당
+</div>
+
+<h4>3-8-2. 해결 방안: 국내 서버 기반 분석 레이어 분리</h4>
+<p>프롬에이지 API에서 수신하는 건강정보 원본은 <strong>보닥 서버 DB(국내)</strong>에만 저장하고, Amplitude에는 민감정보가 제거된 <strong>추상화된 세그먼트 라벨</strong>만 전송한다.</p>
+
+<table>
+  <thead><tr><th>원칙</th><th>내용</th></tr></thead>
+  <tbody>
+    <tr><td><strong>원칙 1: 건강정보 원본은 국내만</strong></td><td>프롬에이지 API 응답(대사나이, 질병위험도, 암위험도, 건강검진 원본)은 보닥 서버 DB에만 저장. 해외 서버 전송 금지.</td></tr>
+    <tr><td><strong>원칙 2: Amplitude에는 등급만</strong></td><td>서버에서 건강정보를 세그먼트 등급으로 변환(예: high/medium/low) 후, 등급 라벨만 Amplitude User Property로 전송.</td></tr>
+    <tr><td><strong>원칙 3: 역추적 불가능한 수준</strong></td><td>등급 라벨만으로는 개인의 건강 상태를 특정할 수 없는 추상화 수준을 유지. 3단계(상/중/하) 이하 권장.</td></tr>
+  </tbody>
+</table>
+
+<h4>3-8-3. Amplitude에 전송 가능한 건강 세그먼트 속성</h4>
+<table>
+  <thead><tr><th>속성명</th><th>값 예시</th><th>산출 기준</th><th>민감정보 해당</th></tr></thead>
+  <tbody>
+    <tr><td><code>health_risk_segment</code></td><td>high / medium / low</td><td>프롬에이지 종합 위험도 기반 3구간 분류</td><td>✕ 비해당</td></tr>
+    <tr><td><code>metabolic_age_gap</code></td><td>above / normal / below</td><td>대사나이 - 실제나이 갭의 방향 (수치 없이)</td><td>✕ 비해당</td></tr>
+    <tr><td><code>health_data_linked</code></td><td>true / false</td><td>프롬에이지 건강검진 데이터 연동 여부</td><td>✕ 비해당</td></tr>
+    <tr><td><code>fromage_report_viewed</code></td><td>true / false</td><td>건강 리포트 조회 여부 (행동 이벤트)</td><td>✕ 비해당</td></tr>
+  </tbody>
+</table>
+
+<h4>3-8-4. Amplitude 적재 금지 데이터</h4>
+<table>
+  <thead><tr><th>데이터 항목</th><th>출처</th><th>Amplitude 적재</th></tr></thead>
+  <tbody>
+    <tr><td>대사나이 수치 (복부비만나이, 혈당나이, 혈압나이, 동맥경화나이)</td><td>프롬에이지 API</td><td style="color:#A32D2D;font-weight:700;">✕ 금지</td></tr>
+    <tr><td>질병 위험도 수치 (비만, 고지혈증, 당뇨병, 고혈압, 심장병, 뇌졸중, 치매)</td><td>프롬에이지 API</td><td style="color:#A32D2D;font-weight:700;">✕ 금지</td></tr>
+    <tr><td>암 위험도 수치 (종합 + 개별 7종 암)</td><td>프롬에이지 API</td><td style="color:#A32D2D;font-weight:700;">✕ 금지</td></tr>
+    <tr><td>사망 위험도 수치</td><td>프롬에이지 API</td><td style="color:#A32D2D;font-weight:700;">✕ 금지</td></tr>
+    <tr><td>3개년 건강검진 원본 데이터</td><td>프롬에이지 API</td><td style="color:#A32D2D;font-weight:700;">✕ 금지</td></tr>
+  </tbody>
+</table>
+
+<h4>3-8-5. 데이터 흐름 구조</h4>
+<p>기존 Amplitude → Braze 파이프라인은 유지된다. 변경점은 건강정보 원본이 Amplitude로 직행하는 대신, 보닥 서버에서 등급으로 변환된 후 전송되는 것뿐이다.</p>
+
+<div class="diagram">
+<div class="dt">건강정보 데이터 흐름 (국내 서버 분석 레이어 분리)</div>
+<svg viewBox="0 0 780 230" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+  <defs>
+    <marker id="arr14" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#1A3A6B"/></marker>
+    <marker id="arr14r" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#A32D2D"/></marker>
+    <marker id="arr14g" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#0F6E56"/></marker>
+    <marker id="arr14p" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#534AB7"/></marker>
+  </defs>
+
+  <!-- 프롬에이지 API -->
+  <rect x="10" y="15" width="130" height="48" rx="8" fill="#E1F5EE" stroke="#0F6E56" stroke-width="1.5"/>
+  <text x="75" y="36" text-anchor="middle" font-size="11" font-weight="600" fill="#0F6E56">프롬에이지 API</text>
+  <text x="75" y="51" text-anchor="middle" font-size="9" fill="#6B6B65">건강검진 · 위험도</text>
+
+  <!-- → 보닥 서버 -->
+  <line x1="140" y1="39" x2="195" y2="39" stroke="#A32D2D" stroke-width="1.5" marker-end="url(#arr14r)"/>
+  <text x="167" y="32" text-anchor="middle" font-size="8" fill="#A32D2D" font-weight="600">민감정보</text>
+
+  <!-- 보닥 서버 DB -->
+  <rect x="195" y="8" width="180" height="62" rx="8" fill="#FCEBEB" stroke="#A32D2D" stroke-width="2" stroke-dasharray="5,3"/>
+  <text x="285" y="28" text-anchor="middle" font-size="10" font-weight="700" fill="#A32D2D">🔒 보닥 서버 DB (국내)</text>
+  <text x="285" y="43" text-anchor="middle" font-size="9" fill="#6B6B65">건강정보 원본 저장</text>
+  <text x="285" y="57" text-anchor="middle" font-size="9" fill="#6B6B65">→ 세그먼트 등급 산출</text>
+
+  <!-- → Amplitude (등급만) -->
+  <line x1="375" y1="39" x2="430" y2="39" stroke="#0F6E56" stroke-width="1.5" marker-end="url(#arr14g)"/>
+  <text x="402" y="32" text-anchor="middle" font-size="8" fill="#0F6E56" font-weight="600">등급만</text>
+
+  <!-- Amplitude -->
+  <rect x="430" y="15" width="120" height="48" rx="8" fill="#E8F0FE" stroke="#1A3A6B" stroke-width="1.5"/>
+  <text x="490" y="36" text-anchor="middle" font-size="11" font-weight="600" fill="#1A3A6B">Amplitude</text>
+  <text x="490" y="51" text-anchor="middle" font-size="9" fill="#6B6B65">high / med / low</text>
+
+  <!-- → Braze -->
+  <line x1="550" y1="39" x2="590" y2="39" stroke="#1A3A6B" stroke-width="1.5" marker-end="url(#arr14)"/>
+
+  <!-- Braze -->
+  <rect x="590" y="15" width="100" height="48" rx="8" fill="#E1F5EE" stroke="#0F6E56" stroke-width="1.5"/>
+  <text x="640" y="36" text-anchor="middle" font-size="11" font-weight="600" fill="#0F6E56">Braze</text>
+  <text x="640" y="51" text-anchor="middle" font-size="9" fill="#6B6B65">코호트 싱크</text>
+
+  <!-- → 인앱 메시지 -->
+  <line x1="690" y1="39" x2="720" y2="39" stroke="#0F6E56" stroke-width="1.5" marker-end="url(#arr14g)"/>
+  <text x="750" y="36" text-anchor="middle" font-size="10" font-weight="600" fill="#6B6B65">인앱</text>
+  <text x="750" y="49" text-anchor="middle" font-size="10" font-weight="600" fill="#6B6B65">메시지</text>
+
+  <!-- 보닥 서버 → KC Evidence -->
+  <line x1="285" y1="70" x2="285" y2="110" stroke="#A32D2D" stroke-width="1.5" marker-end="url(#arr14r)"/>
+  <text x="310" y="95" font-size="8" fill="#A32D2D" font-weight="600">원본 참조</text>
+
+  <!-- KC Evidence -->
+  <rect x="195" y="110" width="180" height="45" rx="8" fill="#EEEDFE" stroke="#534AB7" stroke-width="1.5"/>
+  <text x="285" y="130" text-anchor="middle" font-size="10" font-weight="600" fill="#534AB7">KC Evidence 카드</text>
+  <text x="285" y="145" text-anchor="middle" font-size="9" fill="#6B6B65">프롬에이지 유형 Evidence</text>
+
+  <!-- → Clark/Lois -->
+  <line x1="285" y1="155" x2="285" y2="185" stroke="#534AB7" stroke-width="1.5" marker-end="url(#arr14p)"/>
+
+  <!-- Clark/Lois -->
+  <rect x="195" y="185" width="180" height="40" rx="8" fill="#E8F0FE" stroke="#1A3A6B" stroke-width="1.5"/>
+  <text x="285" y="202" text-anchor="middle" font-size="10" font-weight="600" fill="#1A3A6B">Clark / Lois AI 진단</text>
+  <text x="285" y="217" text-anchor="middle" font-size="9" fill="#6B6B65">"심혈관 위험도가 높은 편입니다"</text>
+
+  <!-- 범례 -->
+  <rect x="510" y="110" width="180" height="55" rx="6" fill="#FAFAF8" stroke="#E5E4E0"/>
+  <line x1="520" y1="127" x2="548" y2="127" stroke="#A32D2D" stroke-width="2" stroke-dasharray="5,3"/>
+  <text x="555" y="131" font-size="9" fill="#6B6B65">민감정보 (국내만)</text>
+  <line x1="520" y1="147" x2="548" y2="147" stroke="#0F6E56" stroke-width="2"/>
+  <text x="555" y="151" font-size="9" fill="#6B6B65">비민감 등급 (해외 OK)</text>
+</svg>
+</div>
+
+<h4>3-8-6. 기존 경계 속성 처리</h4>
+<p>현재 Amplitude에 적재 중인 <code>cancer_risk_rating</code>, <code>risk_of_stroke</code>, <code>risk_of_myocardial</code>은 보닥 앱 내부 로직으로 산출한 보험 보장 관점 리스크 등급이므로, 현 상태에서는 민감정보에 해당하지 않을 가능성이 높다. 그러나 프롬에이지 연동 이후 이 값들의 산출 기반이 건강검진 데이터로 변경될 경우 민감정보에 해당할 수 있으므로, <strong>정보보호실과 사전 협의가 필요하다.</strong></p>
+
+<h4>3-8-7. 정보보호실 사전 협의 항목</h4>
+<table>
+  <thead><tr><th>#</th><th>협의 항목</th><th>시점</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td>기존 Amplitude 속성 <code>cancer_risk_rating</code>, <code>risk_of_stroke</code>, <code>risk_of_myocardial</code>의 민감정보 해당 여부 확인</td><td>Phase 1</td></tr>
+    <tr><td>2</td><td>추상화된 건강 세그먼트 등급(high/medium/low)의 Amplitude 적재가 민감정보 국외이전에 비해당하는지 확인</td><td>Phase 1</td></tr>
+    <tr><td>3</td><td>프롬에이지 API 수신 건강정보의 보닥 서버 DB 저장 시 필요한 안전조치(암호화, 접근제어 등) 기준</td><td>Phase 1.5 착수 전</td></tr>
+    <tr><td>4</td><td>건강정보 연동 동의 절차: 프롬에이지 데이터 수신을 위한 고객 동의 화면 문구 및 법적 요건</td><td>Phase 1.5 착수 전</td></tr>
+    <tr><td>5</td><td>프롬프트 스냅샷 로그 및 CI 식별자 처리 정책 — §11-8의 감사가능성 로그(사용자 보유 상품 리스트, Fromage 3단계 등급, 대화 맥락, CI 해시 가명 포함)의 보관 기간·접근 권한·저장 위치(국내 서버 여부)·삭제 주기 + CI 가명화 알고리즘·재식별 방지 조치·키 관리 기준 확정. 결과에 따라 CI "포함 / 미포함 / 가명 포함" 중 최종 선택이 변경될 수 있다.</td><td>Phase 1.5 착수 전</td></tr>
+  </tbody>
+</table>
+
+<div class="note" style="margin-top:8px;font-size:13px;">
+※ <strong>본 섹션과 §16의 역할 분리:</strong> 본 §3-8-7은 정보보호실과의 <strong>절차적 협의 항목</strong>(완료되면 해소되는 행동 항목)을 추적한다. §16 부록은 <strong>결정 보류 이슈</strong>(해소되어도 추적 기록이 남는 지표 기반 항목)를 추적한다. 두 섹션의 항목은 성격이 다르므로 혼용하지 않는다. 본문에서 정보보호실 협의 항목을 참조할 때는 §3-8-7만, 결정 보류 이슈를 참조할 때는 §16만 사용한다.
+</div>
+</div>
+
+<h2>4. 확장 아키텍처: KC 온톨로지 → 디지털 트윈 → 리드 최적화</h2>
+<p>KC 온톨로지를 기반으로, 보험 GA 시장의 디지털 트윈을 구현하고 리드 배정을 최적화하는 4계층 확장 아키텍처를 정의한다.</p>
+
+<h3>4-1. 4계층 구조 개요</h3>
+<table>
+  <thead><tr><th>레이어</th><th>명칭</th><th>역할</th><th>핵심 구성요소</th></tr></thead>
+  <tbody>
+    <tr><td>L1</td><td>KC 온톨로지</td><td>보험 도메인 지식 체계 (7종 카드)</td><td>Concept, Risk-type, Rule, Evidence, Playbook, Policy, Case</td></tr>
+    <tr><td>L2</td><td>Graph RAG</td><td>관계 기반 해석 엔진 (multi-hop 추론)</td><td>Graph DB, Embedding (pgvector), Multi-hop Query</td></tr>
+    <tr><td>L3</td><td>Digital Twin</td><td>보험 시장 시뮬레이션 (Agent 간 상호작용)</td><td>Customer, Planner, Product, Carrier, Channel Agent</td></tr>
+    <tr><td>L4</td><td>Lead Optimization</td><td>aGCR 스코어링 및 배정 최적화 실행</td><td>aGCR Scoring, Allocation Engine, ROI Feedback</td></tr>
+  </tbody>
+</table>
+
+<div class="diagram">
+  <div class="dt">4계층 아키텍처 — "4층짜리 건물" (각 층은 아래 층 없이는 동작하지 않음)</div>
+  <svg width="100%" viewBox="0 0 680 380">
+    <!-- L4 -->
+    <rect x="40" y="20" width="600" height="64" rx="10" fill="#FAECE7" stroke="#F0997B" stroke-width="0.5"/>
+    <text x="60" y="40" font-size="22" font-weight="800" fill="#D85A30" opacity="0.3">4</text>
+    <text x="90" y="42" font-size="14" font-weight="700" fill="#D85A30">Lead Optimization Playbook</text>
+    <text x="90" y="62" font-size="11" fill="#9C6040">aGCR 스코어링 → 설계사 매칭 → 배정 실행. "누구에게 배정할지" 결정하는 실행 계층.</text>
+    <!-- 화살표 L4←L3 -->
+    <text x="340" y="100" text-anchor="middle" font-size="11" fill="#9C9C94">↑ 시뮬레이션 결과 소비</text>
+    <!-- L3 -->
+    <rect x="40" y="110" width="600" height="64" rx="10" fill="#E1F5EE" stroke="#5DCAA5" stroke-width="0.5"/>
+    <text x="60" y="130" font-size="22" font-weight="800" fill="#0F6E56" opacity="0.3">3</text>
+    <text x="90" y="132" font-size="14" font-weight="700" fill="#0F6E56">Digital Twin — 보험 시장 시뮬레이션</text>
+    <text x="90" y="152" font-size="11" fill="#3D7A6A">Customer · Planner · Product · Carrier · Channel 5개 Agent의 상호작용을 시뮬레이션.</text>
+    <!-- 화살표 L3←L2 -->
+    <text x="340" y="190" text-anchor="middle" font-size="11" fill="#9C9C94">↑ 그래프 탐색 요청</text>
+    <!-- L2 -->
+    <rect x="40" y="200" width="600" height="64" rx="10" fill="#E6F1FB" stroke="#85B7EB" stroke-width="0.5"/>
+    <text x="60" y="220" font-size="22" font-weight="800" fill="#185FA5" opacity="0.3">2</text>
+    <text x="90" y="222" font-size="14" font-weight="700" fill="#185FA5">Graph RAG — 관계 기반 해석 엔진</text>
+    <text x="90" y="242" font-size="11" fill="#4A7BA8">"비슷한 문장 찾기"가 아니라 "의미 관계를 따라가며 추론". multi-hop 복합 조건 탐색.</text>
+    <!-- 화살표 L2←L1 -->
+    <text x="340" y="280" text-anchor="middle" font-size="11" fill="#9C9C94">↑ 온톨로지 스키마 참조</text>
+    <!-- L1 -->
+    <rect x="40" y="290" width="600" height="64" rx="10" fill="#EEEDFE" stroke="#AFA9EC" stroke-width="0.5"/>
+    <text x="60" y="310" font-size="22" font-weight="800" fill="#534AB7" opacity="0.3">1</text>
+    <text x="90" y="312" font-size="14" font-weight="700" fill="#534AB7">KC 온톨로지 — 보험 도메인 지식 체계</text>
+    <text x="90" y="332" font-size="11" fill="#6E63C8">7종 카드 체계. Concept → Risk-type → Rule → Evidence → Policy 체이닝. 건물의 기초.</text>
+  </svg>
+</div>
+<div class="note">1층(KC)이 없으면 AI가 아무 기준 없이 답변한다. 2층(Graph RAG)이 없으면 복합 조건을 추론할 수 없다. 3층(Digital Twin)이 없으면 시장을 시뮬레이션할 수 없다. 4층(Playbook)이 없으면 실제 배정이 실행되지 않는다. 각 층은 아래 층 없이는 동작하지 않는다.</div>
+
+<h3>4-2. 레이어 간 관계</h3>
+<ul>
+  <li><strong>L1 → L2:</strong> KC 카드의 참조 링크 구조가 Graph DB의 온톨로지 스키마로 전환</li>
+  <li><strong>L2 → L3:</strong> Digital Twin Agent들이 Graph RAG에게 관계 탐색 요청</li>
+  <li><strong>L3 → L4:</strong> 시뮬레이션 결과를 Playbook이 소비하여 배정 실행</li>
+  <li><strong>Case 피드백 루프:</strong> L4 리드 전환 결과 → Case 카드 축적 → L1 KC 온톨로지 개선</li>
+</ul>
+
+<h3>4-3. 디지털 트윈 구현 7단계 프로세스</h3>
+<p>GA 보험시장에서의 디지털 트윈은 "사람의 의사결정"이 핵심 변수이므로, 제조업과 달리 확률적 모델로 설계해야 한다. "만약 이 리드를 이 설계사에게 배정하면 어떻게 될까?"를 시뮬레이션하는 것이 핵심이다.</p>
+
+<table>
+  <thead><tr><th>단계</th><th>활동</th><th>구분</th></tr></thead>
+  <tbody>
+    <tr><td><strong>1</strong></td><td><strong>구성요소 식별</strong> — 시장에 누가/무엇이 있는가 (5개 Agent 정의)</td><td rowspan="3">설계</td></tr>
+    <tr><td><strong>2</strong></td><td><strong>상태 정의</strong> — 각 요소를 어떤 변수로 기술하는가</td></tr>
+    <tr><td><strong>3</strong></td><td><strong>상호작용 모델링</strong> — 요소들이 만나면 무슨 일이 벌어지는가</td></tr>
+    <tr><td><strong>4</strong></td><td><strong>시간 축 설계</strong> — 동기화 주기와 시뮬레이션 범위</td><td rowspan="2">구현</td></tr>
+    <tr><td><strong>5</strong></td><td><strong>데이터 파이프라인</strong> — 수집·갱신·피드백</td></tr>
+    <tr><td><strong>6</strong></td><td><strong>의사결정 연결</strong> — 시뮬레이션 결과의 활용</td><td rowspan="2">운용</td></tr>
+    <tr><td><strong>7</strong></td><td><strong>검증과 보정</strong> — 트윈의 현실 반영도 확인 (7의 결과가 2~3을 수정하는 순환 구조)</td></tr>
+  </tbody>
+</table>
+
+<div class="warn"><strong>핵심 판단:</strong> Phase 2에서는 시뮬레이션 레벨 2(배치 최적화)까지만 목표로 잡고, 레벨 3(시장 동태 시뮬레이션)은 Case 500건 이상 축적 후(Phase 3)에 도입한다.</div>
+
+<h3>4-4. Graph RAG 개념 정의</h3>
+<p>Graph RAG는 "그래프 DB를 쓰는 RAG"가 아니라, <strong>"연결된 지식 체계(온톨로지) 위에서 관계 탐색을 통해 AI에게 맥락을 제공하는 시스템"</strong>이다.</p>
+<ul>
+  <li><strong>일반 RAG (pgvector):</strong> 유사도 검색(similarity search) → 독립적 텍스트 조각 목록. 관련 정보를 넓게 찾지만, 필요한 카드가 누락될 수 있다.</li>
+  <li><strong>Graph RAG:</strong> 관계 탐색(graph traversal) → 연결된 경로(path). Concept → Rule → Evidence → Playbook을 관계를 따라 빠짐없이 가져온다.</li>
+</ul>
+<p><strong>구현 순서:</strong> 온톨로지 설계(개념과 관계 정의) → 그래프 DB에 스키마 구현 → Graph RAG 엔진 구축(질문을 그래프 탐색 쿼리로 변환).</p>
+<p><strong>bodoc 맥락에서의 적용:</strong> KC Admin의 카드 체계가 온톨로지 역할을 하고, DIAGNOSED_BY 같은 엣지가 지식 노드와 인스턴스 노드를 연결한다. Clark이 고객에게 진단 결과를 설명할 때 Graph RAG가 KC의 지식 그래프를 탐색해서 필요한 지식을 가져오는 구조이다.</p>
+
+<h3>4-5. 3대 저장소 분리 원칙</h3>
+<p>KC 아키텍처에서 데이터는 세 가지 저장소에 분리되어야 한다. 혼재하면 UI 목적 충돌, 데이터 볼륨/갱신 주기 불일치, 권한 체계 혼선이 발생한다.</p>
+<table>
+  <thead><tr><th>저장소</th><th>저장 대상</th><th>비유</th><th>특성</th></tr></thead>
+  <tbody>
+    <tr><td><strong>KC Admin</strong></td><td>도메인 규칙, 기준값, 카드</td><td>사전(Dictionary)</td><td>수십~수백 장, 주/월 변경, 사람 검수</td></tr>
+    <tr><td><strong>Agent 상태</strong></td><td>개별 인스턴스의 현재 상태</td><td>환자 차트(Medical Record)</td><td>수천~수만 건, 분~시간 변경, 시스템 자동</td></tr>
+    <tr><td><strong>서버 DB</strong></td><td>원시 트랜잭션 데이터</td><td>업무 장부(Ledger)</td><td>사건의 원본 기록, 해석 없이 저장</td></tr>
+  </tbody>
+</table>
+
+<div class="diagram">
+  <div class="dt">KC Admin · Agent 상태 · 서버 DB · AI 엔진 관계도</div>
+  <svg width="100%" viewBox="0 0 680 620">
+      <defs>
+        <marker id="a1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+      </defs>
+      <rect x="40" y="25" width="600" height="52" rx="10" fill="#F1EFE8" stroke="#B4B2A9" stroke-width="0.5"/>
+      <text x="340" y="46" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="500" fill="#1A1A18">현실 세계</text>
+      <text x="340" y="64" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#5F5E5A">고객 행동 · 설계사 활동 · 계약 발생 · 시장 이벤트</text>
+      <line x1="340" y1="77" x2="340" y2="110" stroke="#888780" stroke-width="0.8" marker-end="url(#a1)"/>
+      <text x="350" y="98" font-size="11" fill="#5F5E5A">원시 데이터 수집</text>
+      <rect x="40" y="114" width="600" height="70" rx="10" fill="#E6F1FB" stroke="#85B7EB" stroke-width="0.5"/>
+      <text x="340" y="138" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="500" fill="#1A1A18">서버 DB (트랜잭션 저장소)</text>
+      <text x="340" y="156" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#5F5E5A">사실의 기록: 고객 정보 · 계약 이력 · Clark 로그 · 배정 이력</text>
+      <path d="M170 184 L170 230 L220 230" fill="none" stroke="#888780" stroke-width="0.8" marker-end="url(#a1)"/>
+      <text x="128" y="212" font-size="11" fill="#5F5E5A">원시 데이터</text>
+      <rect x="220" y="210" width="240" height="70" rx="10" fill="#FAECE7" stroke="#F0997B" stroke-width="0.5"/>
+      <text x="340" y="234" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="500" fill="#1A1A18">AI 엔진</text>
+      <text x="340" y="252" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#5F5E5A">판단을 내리는 두뇌</text>
+      <text x="340" y="268" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#5F5E5A">Clark · 스코어링 · 배정 최적화</text>
+      <path d="M120 380 L120 250 L218 250" fill="none" stroke="#0F6E56" stroke-width="0.8" marker-end="url(#a1)"/>
+      <text x="60" y="320" font-size="11" fill="#5F5E5A">규칙·기준값 참조</text>
+      <path d="M462 250 L560 250 L560 380" fill="none" stroke="#D85A30" stroke-width="0.8" marker-end="url(#a1)"/>
+      <text x="570" y="320" font-size="11" fill="#5F5E5A">해석된 상태 기록</text>
+      <rect x="40" y="370" width="240" height="86" rx="10" fill="#E1F5EE" stroke="#5DCAA5" stroke-width="0.5"/>
+      <text x="160" y="392" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="500" fill="#1A1A18">KC Admin (지식 저장소)</text>
+      <text x="160" y="410" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#5F5E5A">판단의 규칙</text>
+      <rect x="55" y="424" width="72" height="22" rx="4" fill="#9FE1CB" stroke="#5DCAA5" stroke-width="0.5"/>
+      <text x="91" y="435" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#085041">Rule</text>
+      <rect x="135" y="424" width="72" height="22" rx="4" fill="#9FE1CB" stroke="#5DCAA5" stroke-width="0.5"/>
+      <text x="171" y="435" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#085041">Evidence</text>
+      <rect x="400" y="370" width="240" height="86" rx="10" fill="#EEEDFE" stroke="#AFA9EC" stroke-width="0.5"/>
+      <text x="520" y="392" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="500" fill="#1A1A18">Agent 상태 (트윈 저장소)</text>
+      <text x="520" y="410" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#5F5E5A">시뮬레이션의 재료</text>
+      <rect x="415" y="424" width="80" height="22" rx="4" fill="#CECBF6" stroke="#AFA9EC" stroke-width="0.5"/>
+      <text x="455" y="435" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#3C3489">Customer</text>
+      <rect x="505" y="424" width="80" height="22" rx="4" fill="#CECBF6" stroke="#AFA9EC" stroke-width="0.5"/>
+      <text x="545" y="435" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#3C3489">Planner</text>
+      <path d="M520 456 L520 504 L340 504 L340 282" fill="none" stroke="#534AB7" stroke-width="0.8" stroke-dasharray="4 3" marker-end="url(#a1)"/>
+      <text x="436" y="520" font-size="11" fill="#5F5E5A">상태 변화 → AI 트리거</text>
+      <path d="M160 456 L160 554 L520 554 L520 504" fill="none" stroke="#888780" stroke-width="0.8" stroke-dasharray="4 3"/>
+      <text x="340" y="570" text-anchor="middle" font-size="11" fill="#5F5E5A">Case 피드백: 전환 결과 → 지식 보정</text>
+      <text x="40" y="600" font-size="13" font-weight="500" fill="#1A1A18">범례</text>
+      <line x1="80" y1="596" x2="110" y2="596" stroke="#888780" stroke-width="0.8" marker-end="url(#a1)"/>
+      <text x="116" y="600" font-size="11" fill="#5F5E5A">데이터 흐름</text>
+      <line x1="220" y1="596" x2="250" y2="596" stroke="#888780" stroke-width="0.8" stroke-dasharray="4 3" marker-end="url(#a1)"/>
+      <text x="256" y="600" font-size="11" fill="#5F5E5A">피드백 루프</text>
+  </svg>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- 5장. Agent 관계 그래프 스키마 -->
+<!-- ═══════════════════════════════════════════ -->
+<h2>5. Agent 관계 그래프 스키마</h2>
+<p>GA 시장의 디지털 트윈을 구성하는 5개 Entity 노드와 8개 Edge를 정의한다.</p>
+
+<h3>5-0. Agent 정의와 AI와의 관계</h3>
+<p>Agent는 Agent-Based Modeling(ABM)의 개념으로, "자기 자신의 상태를 가지고 있고, 규칙에 따라 행동하며, 다른 Agent와 상호작용하는 독립적 데이터 객체"를 뜻한다. <strong>Agent 자체는 AI가 아니지만, Agent의 행동 규칙을 결정하거나 Agent 간 상호작용을 최적화하는 데 AI가 쓰인다.</strong></p>
+
+<h4>AI와 Agent의 3가지 상호작용 패턴</h4>
+<ul>
+  <li><strong>패턴 1:</strong> AI가 Agent의 상태를 생성·갱신한다 — Clark이 대화를 분석해서 Customer Agent의 coverage_gap_score, intent_signal 등에 값을 기록</li>
+  <li><strong>패턴 2:</strong> AI가 Agent 간 상호작용의 결과를 결정한다 — 스코어링 엔진이 Customer Agent와 Planner Agent의 상태를 동시에 읽고 AllocationScore를 산출. 핵심 원칙: AI는 Agent에 대해 read-only 접근만 하고, 상태 변경은 별도의 이벤트 핸들러가 담당</li>
+  <li><strong>패턴 3:</strong> Agent의 상태 변화가 AI의 행동을 트리거한다 — Customer Agent의 intent_signal이 0.75를 넘으면 리드 전환 이벤트 발생 → 스코어링 AI 호출</li>
+</ul>
+
+<h4>설계 시 반드시 지켜야 할 세 가지 경계</h4>
+<ol>
+  <li>AI와 Agent의 책임을 섞지 않는다 (Agent는 상태 저장, AI는 판단)</li>
+  <li>AI의 판단 근거를 항상 추적 가능하게 만든다</li>
+  <li>AI의 개입 없이도 Agent 그래프가 마지막 스냅샷으로 유효하도록 설계한다</li>
+</ol>
+
+<h3>5-1. Entity 노드</h3>
+<table>
+  <thead><tr><th>Entity</th><th>유형</th><th>주요 속성</th><th>설명</th></tr></thead>
+  <tbody>
+    <tr><td>Customer</td><td>Dynamic</td><td>age, life_stage, risk_profile, intent_signal, engagement_score, emotion_state</td><td>보험 상담 대상 고객. 생애주기/Clark 진단에 따라 상태 변화</td></tr>
+    <tr><td>Planner</td><td>Dynamic</td><td>response_speed, matching_accuracy, closing_rate, specialty, capacity, skill_score</td><td>보닥플래너/GA 설계사. 성과 누적 → Skill 갱신</td></tr>
+    <tr><td>Product</td><td>Static</td><td>coverage_type, premium_structure, disease_code_scope, commission_rate, ltv_estimate</td><td>보험 상품. KC Evidence 카드에서 참조</td></tr>
+    <tr><td>Carrier</td><td>Semi-static</td><td>insurer_id, commission_table, contract_terms</td><td>보험사. 계약 갱신 주기에 따라 변동</td></tr>
+    <tr><td>Channel</td><td>Semi-static</td><td>ga_id, planner_pool, lead_allocation_policy</td><td>GA 또는 bodoc. 배정 정책 정의</td></tr>
+  </tbody>
+</table>
+
+<h3>5-2. Edge(관계) 정의</h3>
+<table>
+  <thead><tr><th>Edge명</th><th>방향</th><th>속성</th><th>설명</th></tr></thead>
+  <tbody>
+    <tr><td>DIAGNOSED_BY</td><td>Customer → KC Risk-type</td><td>diagnosis_result, confidence</td><td>KC 온톨로지 브릿지</td></tr>
+    <tr><td>GENERATED_LEAD</td><td>Customer → Planner (via Clark)</td><td>risk_type, intent, source</td><td>Clark 진단 후 리드 생성</td></tr>
+    <tr><td>ASSIGNED_TO</td><td>Customer → Planner</td><td>lead_score, assignment_method</td><td>설계사 배정 (자동/선택/회전)</td></tr>
+    <tr><td>PROPOSED</td><td>Planner → Product</td><td>proposal_date, accepted, reason</td><td>상품 제안 및 결과</td></tr>
+    <tr><td>SUBSCRIBED</td><td>Customer → Product</td><td>start_date, premium, status</td><td>보험 가입 계약</td></tr>
+    <tr><td>BELONGS_TO</td><td>Planner → Channel</td><td>join_date, status, tier</td><td>설계사 GA 소속</td></tr>
+    <tr><td>MANUFACTURED_BY</td><td>Product → Carrier</td><td>product_code, version</td><td>보험사 상품 제조</td></tr>
+    <tr><td>CONTRACTED</td><td>Carrier → Channel</td><td>commission_rate, exclusive, period</td><td>위탁 판매 계약</td></tr>
+  </tbody>
+</table>
+
+<h3>5-3. 리드 생명주기 체이닝</h3>
+<p><strong>DIAGNOSED_BY → GENERATED_LEAD → ASSIGNED_TO → PROPOSED → SUBSCRIBED</strong></p>
+<p>각 Edge의 속성(lead_score, accepted, reason 등)이 aGCR 계산의 입력값이 된다.</p>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- 6장. aGCR 스코어링 -->
+<!-- ═══════════════════════════════════════════ -->
+<h2>6. aGCR 스코어링 공식 및 현실성 검증</h2>
+
+<h3>6-1. aGCR 공식 정의</h3>
+<p><code>aGCR = (P_retain × LTV × Margin × P_convert) / Cost_lead</code></p>
+<p>핵심 질문: "이 계약은 지금 팔아도 되는 계약인가?"</p>
+
+<h3>6-2. 변수별 데이터 소스 매핑 및 현실성 검증</h3>
+<p>리드 단계에서는 상품이 미확정이므로, P_retain/LTV/Margin은 "추정(v0) → 확정(v1)" 2단계 계산 구조로 설계한다.</p>
+<table>
+  <thead><tr><th>변수</th><th>상태</th><th>리드 단계 추정 방법</th><th>확정 시점</th><th>현재 상태</th></tr></thead>
+  <tbody>
+    <tr><td>P_convert</td><td>—</td><td>intent(0.4) + engagement(0.35) + risk_urgency(0.25)</td><td>리드 생성 시</td><td>즉시 가능</td></tr>
+    <tr><td>P_retain</td><td>v0→v1</td><td>마이데이터 갱신형 비율 + Risk-type별 전환 패턴 통계</td><td>PROPOSED 시</td><td>proxy 시작</td></tr>
+    <tr><td>LTV</td><td>v0→v1</td><td>현재 월납 보험료(마이데이터) × Risk-type별 리모델링 변동률</td><td>PROPOSED 시</td><td>proxy 시작</td></tr>
+    <tr><td>Margin</td><td>v0→v1</td><td>Risk-type별 평균 수수료율</td><td>PROPOSED 시</td><td>proxy 시작</td></tr>
+    <tr><td>Cost_lead</td><td>—</td><td>광고 채널별 CPA(설치) ÷ 설치→리드 전환율</td><td>리드 생성 시</td><td>즉시 가능</td></tr>
+  </tbody>
+</table>
+
+<h3>6-3. PlannerFitScore (설계사 적합도)</h3>
+<p><code>PlannerFitScore = (response × 0.3 + matching × 0.4 + closing × 0.3) × capacity_factor</code></p>
+<table>
+  <thead><tr><th>변수</th><th>산출 방법</th><th>데이터 소스</th><th>현재 상태</th></tr></thead>
+  <tbody>
+    <tr><td>response</td><td>30분 이내=1.0, 1시간=0.8, 3시간=0.5</td><td>첫 컨택 시점 (자동 기록)</td><td>즉시 가능</td></tr>
+    <tr><td>matching</td><td>Risk-type별 체결건수 / 배정건수</td><td>Clark 진단-체결 연결 필요</td><td>인프라 과제</td></tr>
+    <tr><td>closing</td><td>전체 체결건수 / 배정건수 (90일)</td><td>보닥 CRM</td><td>즉시 가능</td></tr>
+    <tr><td>capacity</td><td>1 - (활성 리드 / 최대 처리량)</td><td>배정 이력 + 14일 규칙 proxy</td><td>proxy 시작</td></tr>
+  </tbody>
+</table>
+
+<h3>6-4. AllocationScore 및 배정 규칙</h3>
+<p><code>AllocationScore = aGCR × PlannerFitScore</code></p>
+<table>
+  <thead><tr><th>리드 유형</th><th>배정 기준</th><th>비고</th></tr></thead>
+  <tbody>
+    <tr><td>무료 리드</td><td>aGCR 분자값 × PlannerFitScore (절대 가치)</td><td>Cost=0이므로 aGCR 발산 방지</td></tr>
+    <tr><td>유상 리드</td><td>aGCR (ROI) × PlannerFitScore</td><td>설계사 = 투자자 관점</td></tr>
+    <tr><td>고위험 리드</td><td>matching 0.4→0.6, response 0.3→0.2, closing 0.3→0.2</td><td>Risk-type 전문성 우선</td></tr>
+  </tbody>
+</table>
+
+<h3>6-5. aGCR 자기 보정 장치</h3>
+<p>PROPOSED 시점에서 추정 aGCR(v0)을 확정 aGCR(v1)으로 갱신하고, 차이율 30% 이상 시 담당자에게 알림을 발송하여 추정 모델을 점검한다.</p>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- 7장. Playbook / Rule / Evidence 예시 -->
+<!-- ═══════════════════════════════════════════ -->
+<h2>7. Playbook / Rule / Evidence 카드 예시</h2>
+<p>aGCR 리드 스코어링 배정을 실제 KC Admin에 입력할 때의 카드 작성 예시이다.</p>
+
+<h3>7-1. Playbook 카드 3장</h3>
+
+<h4>PLAYBOOK.LEAD.CONVERT.V1 — 리드 전환 레이어</h4>
+<table>
+  <thead><tr><th>우선순위</th><th>발화 패턴</th><th>intent_weight</th></tr></thead>
+  <tbody>
+    <tr><td>P1 (즉시 전환)</td><td>"보험 추천해줘", "가입하고 싶어"</td><td>0.95</td></tr>
+    <tr><td>P2 (전환 제안)</td><td>"어떻게 해야 해?", "이대로 괜찮아?"</td><td>0.75</td></tr>
+    <tr><td>P3 (잠재 전환)</td><td>"더 알아보고 싶어", "상담 가능해?"</td><td>0.55</td></tr>
+    <tr><td>P0 (비전환)</td><td>위 패턴 미감지</td><td>0.15</td></tr>
+  </tbody>
+</table>
+
+<h4>PLAYBOOK.LEAD.SCORING.V1 — 스코어링 레이어</h4>
+<p>aGCR 공식의 각 변수를 어디서 가져오고 어떻게 계산하는지 정의한다. 6-2절의 변수별 매핑과 현실성 검증 결과가 이 카드의 내용이 된다.</p>
+
+<h4>PLAYBOOK.LEAD.ALLOCATION.V1 — 배정 최적화 레이어</h4>
+<p>AllocationScore = aGCR × PlannerFitScore로 최종 배정 점수를 산출하고, 배정 규칙 분기(무료/유상/고위험), 미수락 시 재배정 로직, aGCR 갱신 트리거를 정의한다.</p>
+
+<h3>7-2. Rule 카드 2장</h3>
+<h4>RULE.LEAD.CONVERT_THRESHOLD.V1 — 리드 전환 임계값</h4>
+<p>공개범위: Baseline. 판단 철학("고객이 충분한 정보를 바탕으로 상담 의사를 표현한 경우에만 연결")은 Public, 구체적 기준값(intent_weight 0.75)은 Internal.</p>
+<p>조건 빌더: 기본 전환(intent ≥ 0.75), 복합 전환(intent ≥ 0.55 AND coverage_gap ≥ 60), 무보장형 긴급(active_policy == 0 AND intent ≥ 0.40).</p>
+
+<h4>RULE.PLANNER.ELIGIBILITY.V1 — 설계사 배정 자격 요건</h4>
+<p>자격 요건: capacity_factor ≥ 0.2 AND closing_rate ≥ 0.10 AND avg_response_speed ≤ 180분 AND planner_status == active.</p>
+<p>특수 규칙: 신규 설계사(이력 10건 미만) 체결율 면제 대신 주 3건 제한. 고위험 리드는 체결율 0.20 이상 요구. 72시간 미컨택 3회 이상 시 자격 일시 정지(7일).</p>
+
+<h3>7-3. Evidence 카드 2장</h3>
+<h4>EVIDENCE.MYDATA.RENEWAL_RATIO.V1 — 갱신형 담보 비율</h4>
+<p>데이터 출처: 한국신용정보원 ICIS. 갱신형 담보 비율 = 갱신형 보험료 합계 / 전체 보험료 합계.</p>
+<table>
+  <thead><tr><th>갱신형 비율</th><th>P_retain(v0)</th><th>해석</th></tr></thead>
+  <tbody>
+    <tr><td>70% 이상</td><td>0.55</td><td>리모델링 가능성 높음</td></tr>
+    <tr><td>30% ~ 70%</td><td>0.72</td><td>혼합 구조, 부분 전환</td></tr>
+    <tr><td>30% 미만</td><td>0.85</td><td>현재 구조 유지 가능</td></tr>
+  </tbody>
+</table>
+
+<h4>EVIDENCE.MYDATA.COVERAGE_GAP.V1 — 보장 공백 종합 스코어</h4>
+<p>7개 카테고리별 공백 점수의 가중 합산: 실손(0.20), 암(0.20), 뇌(0.15), 심장(0.15), 사망(0.10), 후유장해(0.10), 간병/치매(0.10).</p>
+<p>데이터 출처: ICIS 마이데이터 + 보닥 서버 통계(연령/성별 평균 비교).</p>
+
+<div class="note">※ 상기 카드의 실제 KC Admin 입력 화면 예시(조건 빌더 GUI, Baseline 공개범위 Public/Internal 분리 표시, 카드 헤더/뱃지/연결 카드 표현 등)는 별도 공유자료 <strong>「KC 기반 리드 최적화 Playbook 공유자료」</strong>를 참조하십시오.</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- 8장. KC Admin으로 AI 통제 가능 범위 -->
+<!-- ═══════════════════════════════════════════ -->
+<h2>8. KC Admin으로 AI 통제 가능 범위</h2>
+<p>엔진이 한번 만들어지면, KC Admin의 카드 수정만으로 Clark과 배정 엔진의 동작이 바뀐다. 단, 전제조건이 있다.</p>
+
+<h3>8-1. 카드 수정만으로 통제 가능한 영역</h3>
+<ul>
+  <li>기준값 변경: "암진단금 부족 기준을 5천만 원에서 7천만 원으로" → Rule 카드 수정</li>
+  <li>가중치 튜닝: "matching 0.4 → 0.5, response 0.3 → 0.2" → Playbook 카드 수정</li>
+  <li>전환 키워드 추가: "보험료 줄일 수 있어?"를 P2 발화로 등록</li>
+  <li>Risk-type 신규 추가: "치아보장 공백형" 정의 → Clark이 새 유형 진단 시작</li>
+  <li>규제 대응: Policy 카드 추가 + Playbook Margin 고정값 처리</li>
+  <li>Clark 멘트 변경: Rule 카드의 경고 메시지 수정</li>
+</ul>
+
+<h3>8-2. 기술연구소 코드 개발이 필요한 영역</h3>
+<ul>
+  <li>새로운 변수 추가: PlannerFitScore에 고객 만족도 변수 추가 → 엔진 코드 개발</li>
+  <li>데이터 파이프라인 신규: Clark 진단-체결 데이터 연결 → matching 변수 활성화 전제조건</li>
+  <li>새로운 이벤트 수집: 앰플리튜드 택소노미 이벤트 추가</li>
+  <li>Graph DB 전환: KC 카드 참조 링크를 실제 그래프로 전환</li>
+</ul>
+
+<h3>8-3. 실제 운용 시나리오</h3>
+<p>이 시스템이 동작하면, 일상적인 비즈니스 판단이 다음과 같이 바뀐다.</p>
+
+<h4>시나리오 1: "암보험 리드 체결율이 떨어지고 있다"</h4>
+<ol>
+  <li>Case 카드에서 암투병생활비 부족형 실패 케이스 분석</li>
+  <li>원인 파악: 전환 시점이 너무 빨라 고객 준비 부족</li>
+  <li>Rule 카드 수정: 암투병생활비 부족형의 전환 임계값 0.75 → 0.85 상향</li>
+  <li>검수자 승인</li>
+  <li>Clark이 암 관련 상담에서 좀 더 충분한 정보를 제공한 후 전환</li>
+</ol>
+<div class="success"><strong>코드 변경: 없음.</strong> 기술연구소 일정과 무관하게 즉시 실행 가능.</div>
+
+<h4>시나리오 2: "특정 설계사가 리드를 받아놓고 연락을 안 한다"</h4>
+<ol>
+  <li>Evidence에서 해당 설계사 response_speed 확인: 평균 240분</li>
+  <li>Rule 카드 자격 요건 확인: 180분 초과 → 미충족</li>
+  <li>시스템이 자동으로 해당 설계사를 배정 대상에서 제외</li>
+  <li>더 엄격하게 하고 싶으면? Rule 카드에서 180분 → 120분으로 수정 + 검수 승인</li>
+</ol>
+<div class="success"><strong>코드 변경: 없음.</strong></div>
+
+<h4>시나리오 3: "2027년 1200% 룰 시행"</h4>
+<ol>
+  <li>Policy 카드에 1200% 룰 규제 추가, 준법감시인 승인</li>
+  <li>Playbook 스코어링 카드에서 Margin 변수를 고정값으로 수정</li>
+  <li>aGCR에서 Margin 변별력 소멸 → P_retain × LTV × P_convert가 핵심이 됨</li>
+</ol>
+<div class="success"><strong>코드 변경: 없음.</strong> 규제 변화에 카드 수정만으로 대응.</div>
+
+<h3>8-4. 전략적 의미</h3>
+<p>Playbook/Rule/Evidence 카드가 <strong>레시피북</strong>이고, Scoring/Allocation Engine이 <strong>요리사</strong>이다. 레시피를 바꾸는 건 플랫폼사업본부가 KC Admin에서 하고, 주방(엔진)을 새로 만드는 건 기술연구소가 한다.</p>
+<p>LLM은 교체 가능하지만, KC 카드에 담긴 aGCR 공식, Risk-type별 스코어, 배정 규칙, 전환 키워드 — 이것들이 아이지넷만의 고유 자산이 된다.</p>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- 9장. First Connect 연동 아키텍처 -->
+<!-- ═══════════════════════════════════════════ -->
+<h2>9. First Connect 연동 아키텍처</h2>
+
+<h3>9-1. 배정 구조: B-2 모델 (반위임 구조)</h3>
+<p>배정의 "결정"은 AI 엔진 + KC Admin이, "실행"은 First Connect가 담당한다. 규칙의 원본은 KC Admin에만 있고, First Connect에는 복잡한 배정 규칙이 불필요하다.</p>
+
+<h3>9-2. 더파트너스 vs 제휴 GA 이원 구조</h3>
+<table>
+  <thead><tr><th>구분</th><th>더파트너스 (내부)</th><th>제휴 GA (외부)</th></tr></thead>
+  <tbody>
+    <tr><td>AI 엔진 출력물</td><td>리드 + aGCR + 추천 설계사 리스트 [1,2,3순위]</td><td>리드 + aGCR + 배정 가이드만 (추천 없음)</td></tr>
+    <tr><td>피드백 데이터</td><td>수락/통화시도(안심번호)/체결(후행매칭)</td><td>배정 여부/체결 여부 (GA 보고 의존)</td></tr>
+    <tr><td>Agent 구축 단위</td><td>설계사 단위 (Planner Agent)</td><td>GA 단위 (Channel Agent)</td></tr>
+    <tr><td>배정 최적화 시점</td><td>Phase 1.5부터 부분 정밀 배정</td><td>Phase 1.5는 리드 품질 최적화만</td></tr>
+  </tbody>
+</table>
+
+<div class="diagram">
+  <div class="dt">더파트너스 / 제휴 GA 이원 서비스 플로우 (B-2 모델, 추적 제약 반영)</div>
+  <svg width="100%" viewBox="0 0 680 880">
+      <defs>
+        <marker id="a2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+      </defs>
+      <text x="40" y="24" font-size="11" fill="#5F5E5A">고객 접점</text>
+      <rect x="40" y="32" width="280" height="56" rx="8" fill="#E1F5EE" stroke="#5DCAA5" stroke-width="0.5"/>
+      <text x="180" y="52" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="500" fill="#1A1A18">보닥 앱</text>
+      <text x="180" y="72" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#5F5E5A">퍼포먼스 마케팅 → 앱 설치 → 리드</text>
+      <rect x="340" y="32" width="300" height="56" rx="8" fill="#E1F5EE" stroke="#5DCAA5" stroke-width="0.5"/>
+      <text x="490" y="52" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="500" fill="#1A1A18">Clark AI (임베디드 웹뷰)</text>
+      <text x="490" y="72" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#5F5E5A">헬스케어 플랫폼 등에 임베디드</text>
+      <line x1="180" y1="88" x2="180" y2="118" stroke="#0F6E56" stroke-width="0.8" marker-end="url(#a2)"/>
+      <line x1="490" y1="88" x2="490" y2="118" stroke="#0F6E56" stroke-width="0.8" marker-end="url(#a2)"/>
+      <text x="40" y="114" font-size="11" fill="#5F5E5A">결정 레이어</text>
+      <rect x="40" y="122" width="600" height="56" rx="10" fill="#FAECE7" stroke="#F0997B" stroke-width="0.5"/>
+      <text x="340" y="142" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="500" fill="#1A1A18">AI 엔진 (KC Admin 규칙 참조)</text>
+      <text x="340" y="162" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#5F5E5A">aGCR 산출 · 리드 유형 판별 · 채널 라우팅</text>
+      <line x1="200" y1="178" x2="200" y2="222" stroke="#D85A30" stroke-width="0.8" marker-end="url(#a2)"/>
+      <line x1="480" y1="178" x2="480" y2="222" stroke="#D85A30" stroke-width="0.8" marker-end="url(#a2)"/>
+      <text x="340" y="208" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="500" fill="#1A1A18">채널 분기</text>
+      <rect x="40" y="226" width="280" height="500" rx="12" fill="none" stroke="#0F6E56" stroke-width="0.5" stroke-dasharray="5 3" opacity="0.5"/>
+      <text x="180" y="244" text-anchor="middle" font-size="11" fill="#5F5E5A">내부: 더파트너스 (보닥플래너)</text>
+      <rect x="56" y="256" width="248" height="44" rx="7" fill="#E1F5EE" stroke="#5DCAA5" stroke-width="0.5"/>
+      <text x="180" y="272" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="500" fill="#1A1A18">FC 내부용 전송</text>
+      <text x="180" y="290" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#5F5E5A">리드 + aGCR + 추천 설계사 리스트</text>
+      <line x1="180" y1="300" x2="180" y2="318" stroke="#0F6E56" stroke-width="0.6" marker-end="url(#a2)"/>
+      <rect x="56" y="322" width="248" height="36" rx="7" fill="#E1F5EE" stroke="#5DCAA5" stroke-width="0.5"/>
+      <text x="180" y="340" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="500" fill="#1A1A18">FC 배정 → 보닥플래너</text>
+      <line x1="180" y1="358" x2="180" y2="376" stroke="#0F6E56" stroke-width="0.6" marker-end="url(#a2)"/>
+      <rect x="56" y="380" width="248" height="96" rx="7" fill="#E1F5EE" stroke="#5DCAA5" stroke-width="0.5"/>
+      <text x="180" y="398" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="500" fill="#1A1A18">추적 가능 범위</text>
+      <text x="180" y="416" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#5F5E5A">안심번호 통화 시도 (O)</text>
+      <text x="180" y="432" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#5F5E5A">개인폰 상담/제안 (X)</text>
+      <text x="180" y="452" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#5F5E5A">계약 체결: 앰플리튜드 후행 매칭</text>
+      <text x="180" y="468" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#5F5E5A">고객 정보 기반 계약 통합</text>
+      <line x1="180" y1="476" x2="180" y2="494" stroke="#0F6E56" stroke-width="0.6" marker-end="url(#a2)"/>
+      <rect x="56" y="498" width="248" height="56" rx="7" fill="#E1F5EE" stroke="#5DCAA5" stroke-width="0.5"/>
+      <text x="180" y="516" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="500" fill="#1A1A18">Planner Agent 구축</text>
+      <text x="180" y="534" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#5F5E5A">response(O) · closing(후행 O)</text>
+      <text x="180" y="548" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#5F5E5A">matching · capacity (제한적)</text>
+      <rect x="56" y="572" width="248" height="56" rx="7" fill="#E1F5EE" stroke="#5DCAA5" stroke-width="0.5"/>
+      <text x="180" y="592" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#085041">Phase 1: 부분 정밀 배정 가능</text>
+      <text x="180" y="610" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#085041">→ aGCR 시스템의 실험장·증명 무대</text>
+      <rect x="360" y="226" width="280" height="500" rx="12" fill="none" stroke="#534AB7" stroke-width="0.5" stroke-dasharray="5 3" opacity="0.5"/>
+      <text x="500" y="244" text-anchor="middle" font-size="11" fill="#5F5E5A">외부: 제휴 GA</text>
+      <rect x="376" y="256" width="248" height="44" rx="7" fill="#EEEDFE" stroke="#AFA9EC" stroke-width="0.5"/>
+      <text x="500" y="272" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="500" fill="#1A1A18">FC 외부용 전송</text>
+      <text x="500" y="290" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#5F5E5A">리드 + aGCR + 배정 가이드만</text>
+      <line x1="500" y1="300" x2="500" y2="318" stroke="#534AB7" stroke-width="0.6" marker-end="url(#a2)"/>
+      <rect x="376" y="322" width="248" height="36" rx="7" fill="#EEEDFE" stroke="#AFA9EC" stroke-width="0.5"/>
+      <text x="500" y="340" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="500" fill="#1A1A18">FC 배정 → GA 소속 설계사</text>
+      <line x1="500" y1="358" x2="500" y2="376" stroke="#534AB7" stroke-width="0.6" marker-end="url(#a2)"/>
+      <rect x="376" y="380" width="248" height="96" rx="7" fill="#EEEDFE" stroke="#AFA9EC" stroke-width="0.5"/>
+      <text x="500" y="398" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="500" fill="#1A1A18">추적 가능 범위</text>
+      <text x="500" y="416" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#5F5E5A">리드 배정 여부 (O)</text>
+      <text x="500" y="432" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#5F5E5A">컨택/상담/제안 (X)</text>
+      <text x="500" y="452" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#5F5E5A">체결 여부: GA 보고 의존</text>
+      <text x="500" y="468" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#5F5E5A">설계사 상세 미제공</text>
+      <line x1="500" y1="476" x2="500" y2="494" stroke="#534AB7" stroke-width="0.6" marker-end="url(#a2)"/>
+      <rect x="376" y="498" width="248" height="56" rx="7" fill="#EEEDFE" stroke="#AFA9EC" stroke-width="0.5"/>
+      <text x="500" y="516" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="500" fill="#1A1A18">Agent 구축: GA 단위만 가능</text>
+      <text x="500" y="534" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#5F5E5A">설계사별 불가 → Channel Agent</text>
+      <text x="500" y="548" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#5F5E5A">GA별 전환율 수준만 파악</text>
+      <rect x="376" y="572" width="248" height="56" rx="7" fill="#EEEDFE" stroke="#AFA9EC" stroke-width="0.5"/>
+      <text x="500" y="592" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#3C3489">Phase 1: 리드 품질 최적화만 가능</text>
+      <text x="500" y="610" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#3C3489">→ Case 500건 후 배정 가이드 정밀화</text>
+      <path d="M180 628 L180 660 L340 660" fill="none" stroke="#0F6E56" stroke-width="0.8" marker-end="url(#a2)"/>
+      <path d="M500 628 L500 660 L342 660" fill="none" stroke="#534AB7" stroke-width="0.8" marker-end="url(#a2)"/>
+      <rect x="120" y="674" width="440" height="36" rx="7" fill="#F1EFE8" stroke="#D3D1C7" stroke-width="0.5"/>
+      <text x="340" y="692" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#5F5E5A">앰플리튜드: 고객 정보 기반 계약 후행 매칭 → Agent 갱신 → KC 보정</text>
+      <path d="M340 710 L340 738 L40 738 L40 150 L54 150" fill="none" stroke="#888780" stroke-width="0.8" stroke-dasharray="4 3" marker-end="url(#a2)"/>
+      <text x="48" y="450" font-size="11" fill="#5F5E5A">피드백 루프</text>
+      <text x="40" y="770" font-size="13" font-weight="500" fill="#1A1A18">범례</text>
+      <rect x="80" y="760" width="12" height="12" rx="3" fill="#E1F5EE" stroke="#5DCAA5" stroke-width="0.5"/>
+      <text x="98" y="771" font-size="11" fill="#5F5E5A">내부 (더파트너스)</text>
+      <rect x="220" y="760" width="12" height="12" rx="3" fill="#EEEDFE" stroke="#AFA9EC" stroke-width="0.5"/>
+      <text x="238" y="771" font-size="11" fill="#5F5E5A">외부 (제휴 GA)</text>
+      <rect x="370" y="760" width="12" height="12" rx="3" fill="#FAECE7" stroke="#F0997B" stroke-width="0.5"/>
+      <text x="388" y="771" font-size="11" fill="#5F5E5A">AI · 결정</text>
+      <line x1="460" y1="766" x2="490" y2="766" stroke="#888780" stroke-width="0.8" stroke-dasharray="4 3"/>
+      <text x="498" y="771" font-size="11" fill="#5F5E5A">피드백</text>
+      <text x="80" y="794" font-size="11" fill="#5F5E5A">* 설계사 추천 리스트는 내부 채널에만 적용</text>
+  </svg>
+</div>
+
+<h3>9-3. First Connect 최소 API 스펙</h3>
+<table>
+  <thead><tr><th>기능</th><th>설명</th></tr></thead>
+  <tbody>
+    <tr><td>리드 수신 API</td><td>AI 엔진이 보내는 리드 + 메타데이터(aGCR, Risk-type, 추천 리스트 또는 배정 가이드)를 받는 엔드포인트</td></tr>
+    <tr><td>우선순위 기반 순차 배정</td><td>내부: 1순위 → 타임아웃 → 2순위. 외부: 배정 가이드 참고 자체 매칭</td></tr>
+    <tr><td>설계사 워크스페이스</td><td>리드 확인, 고객 정보 열람, Rule/Playbook 정보 조회, 컨택트 기록</td></tr>
+    <tr><td>결과 콜백 API</td><td>수락/미수락/통화시도/체결 이벤트를 bodoc 서버로 전송 (피드백 루프 필수)</td></tr>
+  </tbody>
+</table>
+
+<h3>9-4. 데이터 추적 현실과 Planner Agent 구축 전략</h3>
+<p>안심번호 트래킹을 통해 보닥플래너의 통화 시도까지는 추적이 되지만, 개인 핸드폰을 통한 고객 상담 및 제안 과정은 추적이 불가능하다. 계약 체결 정보는 앰플리튜드를 통해 고객 정보 기반으로 후행 매칭하는 구조다.</p>
+<table>
+  <thead><tr><th>변수</th><th>더파트너스</th><th>제휴 GA</th></tr></thead>
+  <tbody>
+    <tr><td>response_speed</td><td>즉시 가능 (안심번호 첫 통화 시도 시간)</td><td>불가 (설계사 단위 미파악)</td></tr>
+    <tr><td>closing_rate</td><td>후행 가능 (앰플리튜드 후행 매칭, 수일~수주 시차)</td><td>GA 단위만 (GA 보고 의존)</td></tr>
+    <tr><td>matching_accuracy</td><td>축적 후 (closing 축적 → Risk-type별 분해)</td><td>불가</td></tr>
+    <tr><td>capacity</td><td>proxy (14일 경과 = 종료 추정)</td><td>불가</td></tr>
+  </tbody>
+</table>
+
+<div class="warn"><strong>현실적 결론:</strong> 더파트너스에서도 Phase 1.5에서는 response + closing(후행)만으로 동작하는 <strong>경량 PlannerFitScore</strong>로 시작한다. 제휴 GA에서는 설계사 단위가 아닌 GA 단위의 Channel Agent로 전환율을 축적한다. 상담 과정 추적 보강(FC에 상담 완료 버튼 추가 등)은 Phase 2 과제다.</div>
+
+<h3>9-5. FC 연동 Phase별 구체적 실행</h3>
+<table>
+  <thead><tr><th>Phase</th><th>FC 연동 실행 내용</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Phase 1.5</strong></td><td>AI 엔진이 리드 스코어(aGCR) + 배정 가이드를 산출하여 FC에 전송하는 파이프라인 구축. 더파트너스 경로에서는 추천 설계사 리스트까지 포함, 제휴 GA 경로에서는 배정 가이드만 포함. FC에서 배정 결과(수락/통화시도/체결)를 콜백으로 받아 서버 DB에 축적 시작 — 이것이 Planner Agent의 씨앗 데이터가 된다.</td></tr>
+    <tr><td><strong>Phase 2</strong></td><td>축적된 성과 데이터로 설계사별 Planner Agent 구축. 안심번호 통화 시도 + 앰플리튜드 후행 매칭 데이터를 결합하여 response_speed, closing_rate 산출. Agent 모니터링 대시보드를 KC Admin에 탭 추가. 제휴 GA와의 계약에 설계사 정보 공유 조건 협상 병행 — 더파트너스에서의 전환율 향상 실증 데이터를 협상 근거로 활용.</td></tr>
+    <tr><td><strong>Phase 3</strong></td><td>Graph DB 전면 도입 및 Graph RAG 엔진 구축. 디지털 트윈 레벨 3(시장 동태 시뮬레이션) 도입. Case 피드백 루프의 자동 보정 파이프라인 구축.</td></tr>
+  </tbody>
+</table>
+
+<div class="info"><strong>전략적 의미:</strong> 더파트너스가 aGCR 시스템의 실험장이자 증명 무대가 된다. 내부에서 "AI 기반 배정이 전환율을 X% 높인다"를 실증하고, 그 데이터를 근거로 제휴 GA에 설계사 정보 공유를 제안할 수 있다.</div>
+
+<h3>9-6. CRM 플랫폼 연동 구조 참조</h3>
+<p>FC를 통해 전달된 리드는 CRM 플랫폼(보닥 플랫폼 구조 정의서 — 영역 2)에서 소비된다. KC 기획서의 범위는 AI 진단 → 리드 생성 → FC 전달까지이며, CRM 이후의 상담 업무 흐름은 CRM 플랫폼 영역에서 정의한다. 두 영역의 데이터 접점은 단 한 곳 — 사용자가 상담 신청 후 제3자 정보 제공 동의를 완료하는 시점이다.</p>
+<table>
+  <thead><tr><th>CRM 채널</th><th>역할</th><th>KC 연동 접점</th></tr></thead>
+  <tbody>
+    <tr><td><strong>CRM (GA/원수사용)</strong></td><td>상담 신청 사용자의 정보를 수신하고 실제 보험 상담 업무를 진행하는 영업 지원 도구. 배정 고객 관리, DB 배정 관리, 직원/설계사 관리, 보안 브라우저 기반 접근 통제 포함.</td><td>FC로부터 리드 + aGCR + Risk-type + Playbook 메타데이터 수신. 상담 결과 콜백(수락/통화시도/체결)을 bodoc 서버로 전송 — Planner Agent 씨앗 데이터.</td></tr>
+    <tr><td><strong>CRM 어드민 (내부 운영팀)</strong></td><td>GA·원수사 계정 관리, DB 배분 규칙 설정, 파트너 C/S 및 정산을 처리하는 내부 운영 도구.</td><td>DB 배분 규칙이 KC Admin의 Playbook 배정 최적화 레이어와 정합성을 유지해야 함.</td></tr>
+  </tbody>
+</table>
+<div class="note">※ CRM 플랫폼의 상세 채널별 기능 정의(인증·보안, 배정 설정, 조직 관리, 법적 준수 사항, SaaS 보안 솔루션 등)는 별도 문서 「보닥 플랫폼 구조 정의서」를 참조.</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- 10장. Clark/Lois 독립 웹뷰 전략 + Phase 재구분 + 타임라인 -->
+<!-- ═══════════════════════════════════════════ -->
+<h2>10. Clark/Lois 독립 웹뷰 전략 및 Phase 재구분</h2>
+
+<h3>10-1. 전략: 보닥 유지 + Clark/Lois 분리</h3>
+<p>보닥 앱의 기존 보장 분석 엔진(유지/조정/해지 판정)은 현행 유지하고, KC 기반의 AI 진단 서비스를 Clark/Lois라는 별도 채널로 출시한다.</p>
+<ul>
+  <li><strong>정치적 리스크 제로:</strong> 기존 엔진의 주도권 문제를 회피</li>
+  <li><strong>전환율 A/B 비교:</strong> 보닥 경유 리드 vs Clark/Lois 경유 리드를 오염 없이 비교</li>
+  <li><strong>파트너 확장 즉시 가능:</strong> 독립 웹뷰이므로 헬스케어/핀테크 앱에 임베디드 가능</li>
+</ul>
+
+<h3>10-2. Clark/Lois 고객 흐름</h3>
+<ol>
+  <li>진입 → 바로 대화 시작 (인증 없이)</li>
+  <li>사전 질문 카드로 관심 영역 파악</li>
+  <li>보험 현황 조회 유도 → 카카오 로그인 (1차: 계정 연동 + 이름/연락처 확보)</li>
+  <li>본인인증 (2차: CI 확보) → 마이데이터 연동으로 가입 보험 자동 조회</li>
+  <li>KC 기반 AI 진단 (Rule + Evidence 참조)</li>
+  <li> <strong>건강정보 연결 유도</strong> → 대화 맥락에서 "더 정밀한 진단을 위해 건강검진 데이터가 필요합니다" 안내 → 고객 동의 시 프롬에이지 API 연동 → 건강검진 기반 위험도 수신 → Evidence(프롬에이지 유형) 참조한 정밀 진단 결과 제공</li>
+  <li>상담 의향 확인 → 연락처 수집 → 리드 전환</li>
+  <li>FC로 리드 + aGCR + Risk-type + Playbook 메타데이터 전달</li>
+</ol>
+<div class="info">
+  <strong>건강정보 연결 유도의 전략적 배경:</strong> 현재 보닥 앱에서 건강정보 연결은 별도 "건강" 탭에서 이루어지며 전환율이 10% 내외로 낮다. Clark/Lois는 대화형 AI 진단 과정에서 보장 리스크 진단의 맥락 속에서 자연스럽게 건강정보 연결을 유도할 수 있어 전환율 향상이 기대된다. 건강정보가 연결된 고객에게는 프롬에이지 기반 Evidence를 참조한 정밀 진단을 제공하고, 미연결 고객에게는 마이데이터+질병코드 기반 기본 진단을 제공하는 이원 흐름을 운용한다.
+</div>
+
+<h3>10-3. Phase 재구분 (검증 가설 기반)</h3>
+<table>
+  <thead><tr><th>Phase</th><th>검증 가설</th><th>핵심 구축물</th><th>인프라</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Phase 1</strong></td><td>KC 지식 체계가 실제 운용 가능한가</td><td>KC Admin MVP 프로덕션 + 카드 입력</td><td>기존 PostgreSQL+pgvector (비용 ₩0)</td></tr>
+    <tr><td><strong>Phase 1.5</strong></td><td>KC 기반 AI 진단이 전환율을 높이는가</td><td>Clark/Lois 독립 웹뷰 + KC 연동 + FC 리드 전달 + 프롬에이지 API 연동(건강정보 기반 정밀 진단)</td><td>웹뷰 서버 추가</td></tr>
+    <tr><td><strong>Phase 2</strong></td><td>Agent 기반 자동 배정이 더 효율적인가</td><td>edge table + Agent 상태 + aGCR + Graph RAG</td><td>기존 DB에 테이블 추가</td></tr>
+    <tr><td><strong>Phase 3</strong></td><td>시뮬레이션으로 시장을 예측할 수 있는가</td><td>디지털 트윈 시뮬레이션 엔진</td><td>Graph DB 전환 검토</td></tr>
+  </tbody>
+</table>
+
+<h3>10-4. Phase 1/1.5 타임라인 (약 16~18주)</h3>
+<table>
+  <thead><tr><th>주차</th><th>활동</th></tr></thead>
+  <tbody>
+    <tr><td>0~1주</td><td>Phase 1 착수: API 스펙 합의 + 백엔드/프론트 병렬 시작</td></tr>
+    <tr><td>1~4주</td><td>KC Admin 핵심 화면 개발 (01~05번) + Clark/Lois UX 설계 시작</td></tr>
+    <tr><td>4~7주</td><td>KC Admin 나머지 화면 (06~08번) + 카드 입력 시작</td></tr>
+    <tr><td>6~8주</td><td>Clark/Lois UX 설계 완료 + Phase 1.5 백엔드/프론트/AI 착수</td></tr>
+    <tr><td>8~14주</td><td>Phase 1.5 개발 + 카드 입력 계속</td></tr>
+    <tr><td>14~16주</td><td>FC 연동 + A/B 추적 구축 + 테스트</td></tr>
+    <tr><td>16~18주</td><td>Clark/Lois 출시 + 전환율 데이터 수집 시작</td></tr>
+  </tbody>
+</table>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- 11장. 상품별 의견 제시 구조 — 기존 보닥 진단엔진 UX 효율의 KC 이관 (R3) -->
+<!-- ═══════════════════════════════════════════ -->
+<h2>11. 상품별 의견 제시 구조 — 기존 보닥 진단엔진 UX 효율의 KC 이관</h2>
+
+<div class="info">
+<strong>본 장의 위치:</strong> 본 장은 KC가 보호하고 이관해야 하는 가장 핵심적인 비즈니스 가치 — 기존 보닥 진단엔진의 행동 트리거형 UX(상품별 유지/조정/해지 의견)의 마케팅 효과 — 를 KC 카드 체계 위에서 어떻게 재구현하는지를 정의한다. Fromage 통합은 이 본질 기능 위에 얹는 차별적 개인화 도구이며, 본 장의 11-7에서 다룬다.
+</div>
+
+<div class="note">
+<strong>R-넘버링 참조 가이드:</strong> 본 문서의 §11~§14는 KC 프로젝트 초기 Delta BRD에서 도입된 요구사항 그룹 명명(R-넘버링)에 대응한다. 본 문서 내 cross-reference 편의를 위해 다음 매핑을 유지한다:<br>
+• <strong>R3</strong> = §11 상품별 의견 제시 구조<br>
+• <strong>R6</strong> = §12 종합 보장점수의 KC 이관<br>
+• <strong>R7</strong> = §13 면책 문구 표준<br>
+• <strong>R5</strong> = 어휘 정책 (본 문서 외부 문서로 관리, §11-2 ④ 및 §13-5-3 참조)<br>
+R-넘버링의 하위 항목(R3-1, R3-2, R3-5 등)은 Delta BRD의 세부 요구사항 ID였으며, v1.6 통합 과정에서 본 문서의 해당 챕터 본문에 직접 흡수되어 별도 ID로 유지되지 않는다.
+</div>
+
+<h3>11-1. 도입 배경 — 기존 진단엔진의 마케팅 유효성</h3>
+<p>현재 bodoc 운영 중인 보험진단 엔진은 마이데이터 담보코드 기반의 룰 엔진을 사용하여 상품별 <strong>유지/조정/해지</strong> 의견을 제시한다. 이 행동 트리거형 출력은 사용자에게 즉시 행동 가능한 구체적 결과를 전달하며, 보닥플래너 상담 전환·CRM 후속 액션의 핵심 동력이 되어왔다.</p>
+
+<p>이 마케팅 유효성을 정량적으로 뒷받침하는 실데이터는 다음과 같다.</p>
+
+<div class="success">
+<strong>Braze 캔버스 실데이터 (2026.03.23 ~ 04.22, 30일):</strong><br>
+유지/조정/해지 진단 결과 기반 CRM 메시지 <strong>수신군</strong>(n=1,639)의 30초 이상 유효통화 성공률: <strong>32.5%</strong><br>
+미열람 <strong>미수신군</strong>(n=32,245)의 동일 지표: <strong>27.3%</strong><br>
+절대 차이: <strong>+5.2%p</strong> (상대 향상 약 19%)<br>
+<em>출처: Braze "상담신청유도 캔버스" 퍼블리시 로그</em>
+</div>
+
+<p>이 데이터는 본 장의 R3(상품별 의견 제시) 요구사항이 KC에 이관되어야 하는 이유의 베이스라인 근거이다. KC가 출범하면서 이 행동 트리거 기능이 약화되거나 소실되면, KC 자체의 구조적 우위(7카드 온톨로지, 감사가능성)가 마케팅 효과 측면에서 기존 엔진에 미치지 못하게 된다.</p>
+
+<div class="note">
+<strong>해석상 주의 — 선택 편향 가능성:</strong> 본 데이터는 "수신군 vs 미수신군"의 관찰 비교이며 인과관계를 입증하는 통제 실험(RCT)은 아니다. 메시지를 열람할 정도의 보험 관여도가 높은 사용자가 원래 유효통화율도 더 높을 가능성이 존재한다. KC 런칭 후 Phase 1.5에서 통제 실험으로 인과성을 보다 엄밀하게 재검증할 필요가 있다.
+</div>
+
+<h4>11-1-1. Phase 1.5 정량 목표 (PRD 단계 확정 대상)</h4>
+
+<p>R3 구현의 효과 측정을 위한 정량 목표는 다음 영역에서 설정된다. 구체 수치는 Phase 1.5 런칭 전 베이스라인 측정으로 확정하되, 방향성과 하한 기준은 다음과 같이 제시한다. <code>[TBD]</code> 표시는 PRD 단계에서 플랫폼사업본부장 승인으로 확정하는 항목이다.</p>
+
+<table>
+  <thead><tr><th>지표</th><th>방향</th><th>비고</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>기존 엔진 대비 전환율</td>
+      <td>Clark/Lois 기반 FC 리드 전환율이 기존 보닥 엔진 기반 대비 <strong>최소 동등 이상</strong> <code>[TBD: 하한선]</code></td>
+      <td>기존 엔진이 베이스라인이므로 그 이하로 내려가면 안 되는 하한 조건. 11-1의 Braze 베이스라인이 비교 기준점.</td>
+    </tr>
+    <tr>
+      <td>고도화 진단 상대 전환율</td>
+      <td>Fromage 측정 완료자의 FC 리드 전환율이 미측정자 대비 <strong>+<code>[TBD]</code>% 이상 높아야 함</strong></td>
+      <td>11-7의 Fromage 통합을 통한 차별적 개인화 효과 검증 지표.</td>
+    </tr>
+    <tr>
+      <td>Fromage 측정 완료율</td>
+      <td>Clark 플로우에서 Fromage 측정 유도 단계 도달자 중 측정 완료 비율 <code>[TBD: 예: 15–30% 범위]</code></td>
+      <td>유도 UX 최적화의 핵심 지표.</td>
+    </tr>
+    <tr>
+      <td>FC 리드 품질 (aGCR)</td>
+      <td>KC 기반 리드의 aGCR 평균값이 기존 엔진 기반 리드 대비 <strong>향상</strong></td>
+      <td>구체 수치는 6-1의 aGCR 공식 정의를 따르며, 베이스라인 측정 후 확정.</td>
+    </tr>
+    <tr>
+      <td>Risk-type 판정 커버리지</td>
+      <td>Risk-type 판정 불가율(unknown) <strong>감소</strong></td>
+      <td>이 지표는 Fromage 효과가 아닌 담보코드 룰 이관 품질(Phase 1 선결)과 Rule 카드 조건 피트의 완성도를 측정.</td>
+    </tr>
+    <tr>
+      <td>어휘 정책 위반율</td>
+      <td>Clark 응답 중 L2 필터에서 차단된 위반율 <strong>0에 수렴</strong></td>
+      <td>4-Layer 방어의 출력 통제 효과 검증.</td>
+    </tr>
+    <tr>
+      <td>"검토" 라벨 후속 행동률</td>
+      <td>"검토" 라벨 사용자의 FC 리드 전환율 <strong>모니터링</strong></td>
+      <td>14-5의 기능 범위 축소 리스크 모니터링 지표. "보강" 대비 현저히 낮으면 14-5-3의 재검토 트리거 발동.</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="note">※ <code>[TBD]</code> 항목은 Phase 1.5 착수 전 플랫폼사업본부장 승인으로 확정한다. 해당 수치는 PRD 부록의 정량 목표 테이블에서 단일 진실원으로 관리된다.</div>
+
+<h3>11-2. KC의 보수적 판정 원칙</h3>
+
+<p>KC가 이 기능을 단순 복제하지 않고 <strong>보수적으로 재구현</strong>하는 이유는, 기존 엔진 운영 중 발생한 품질보증 리스크(설계사·AI 판정 충돌로 인한 불완전판매 의심) 때문이다. 특히 자회사 GA(더파트너스) 및 B2B 리드 공급 파트너사 생태계에서는, AI 진단이 설계사가 판매한 상품을 "조정/해지" 판정할 경우 "아이지넷이 스스로의 판매를 부정하는" 구조적 긴장이 발생한다.</p>
+
+<p>이를 구조적으로 완화하기 위해 KC는 다음 4가지 원칙을 채택한다.</p>
+
+<table>
+  <thead><tr><th>원칙</th><th>구체 내용</th></tr></thead>
+  <tbody>
+    <tr><td><strong>① 부정 판정 회피</strong></td><td>KC의 상품별 의견 출력 라벨을 <strong>유지/보강/검토</strong> 3단계로 재정의. 기존 엔진의 "해지" 직접 판정은 KC에서 제거.</td></tr>
+    <tr><td><strong>② 담보 공백 중심 메시지</strong></td><td>"보강"은 보유 상품의 수정이 아닌 <strong>담보 공백 영역에 대한 신규 검토 권유</strong>로 해석 범위 고정. 보유 상품을 부정하지 않는 메시지 프레임.</td></tr>
+    <tr><td><strong>③ 맥락 한계 투명화</strong></td><td>모든 상품별 의견 출력에 면책 문구 상시 노출(13장 R7). KC가 고객의 전체 맥락을 완전히 반영하지 못한다는 점을 명시하고, 최종 판단은 상담을 통해 수행하도록 안내.</td></tr>
+    <tr><td><strong>④ 의미 기반 어휘 통제</strong></td><td>표면 어휘뿐 아니라 의미상 해지·부적합을 함축하는 표현도 금지. 어휘 정책 문서로 별도 관리.</td></tr>
+  </tbody>
+</table>
+
+<p>이 원칙들은 기존 엔진의 "해지 의견" 기능을 의도적으로 제거하는 결정을 포함한다. 즉 KC는 기존 엔진의 기능을 완전 대체하는 것이 아니라, <strong>품질보증 리스크가 있는 기능을 제거한 보수적 재구현</strong>이다. 이 범위 축소가 일으킬 수 있는 사업적 영향은 14장의 분기별 모니터링 대상이며, 필요 시 별도 정책 결정으로 재검토된다.</p>
+
+<h4>11-2-1. R3 재구현의 두 차원: "판정 근거 구체성" vs "판정 라벨 범위"</h4>
+
+<p>R3 재구현은 두 차원을 분리하여 관리한다. 이 이원화는 11-2의 보수적 판정 원칙과 사용자 가치 제공을 동시에 달성하기 위함이다.</p>
+
+<table>
+  <thead><tr><th>차원</th><th>방향</th><th>구체 내용</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><strong>판정 근거의 구체성</strong></td>
+      <td style="color:#0F6E56;font-weight:700">동등 이상 — 기존 엔진 대비 강화</td>
+      <td>담보 카테고리별 Evidence 주입 깊이·Rule 카드 조건 정밀도·경고 메시지 상세도는 기존 엔진 대비 동등 이상. Fromage 측정 완료 시 개인 위협 정보가 추가 결합되어 고도화 분기에서 차별화됨.</td>
+    </tr>
+    <tr>
+      <td><strong>판정 라벨 범위 및 지칭 대상</strong></td>
+      <td style="color:#A32D2D;font-weight:700">의도적 축소 — 보수적 판정 원칙 준수</td>
+      <td>11-3의 3단계 라벨(유지/보강/검토)과 §13-5-2의 상품명 미언급 원칙에 따라 의도적으로 축소. 기존 엔진의 "해지" 직접 판정 및 상품명 직접 지칭 기능은 제거됨.</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="note">즉 R3는 <strong>"판정 근거는 더 탄탄하게, 판정 라벨은 더 보수적으로"</strong> 재구현하는 설계이다. 이 이원화 인식이 R3 구현 전반(11-3 라벨 체계, 11-4 Rule 카드 확장, 11-7 Fromage 통합, §13-5 출력 표기)을 일관되게 관통한다.</div>
+
+<h3>11-3. 3단계 라벨 체계: 유지 / 보강 / 검토</h3>
+
+<p>R3는 Rule 카드 평가 결과를 다음 3단계 라벨 중 하나로 산출한다. 각 라벨의 정의·해석 범위·UX 적용 원칙은 다음과 같다.</p>
+
+<table>
+  <thead><tr><th>라벨</th><th>정의</th><th>적용 원칙</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><strong>유지</strong></td>
+      <td>현재 보유 담보 조합이 적절하다는 긍정 판정.</td>
+      <td>긍정 메시지. 사용자에게 안심감 전달. UX에서 별도의 추가 행동 유도 없음.</td>
+    </tr>
+    <tr>
+      <td><strong>보강</strong></td>
+      <td>담보 <strong>공백 영역</strong>에 대한 신규 검토 권유. 보유 상품 자체를 수정하라는 의미가 아니라, 공백을 새로 채우라는 방향의 권유.</td>
+      <td>특정 상품·설계사 연결을 직접 안내하지 않음(보험업법상 보험모집 행위 회피). 구체 행동은 상담 플로우(FC) 통해서만 연결. 어휘 정책에서 컴플라이언스 검토 필수 항목으로 관리.</td>
+    </tr>
+    <tr>
+      <td><strong>검토</strong></td>
+      <td>전문가 상담이 필요한 중립적 판정.</td>
+      <td>해지·조정 의미 함축 금지. UX에서는 "검토 라벨 → FC 리드 전환 경로 우선 배치"로 운영하여, 검토의 실질적 행동이 상담 신청임을 명확히 표현.</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="warn">
+  <strong>"해지" 라벨의 의도적 제거:</strong> 기존 엔진이 사용하던 "해지" 직접 판정은 KC에서 제거된다. 명백 부적합 보유·중복 가입 사용자에 대한 행동 트리거 공백이 발생할 수 있으나, 이는 위 11-2의 보수적 판정 원칙에 따른 의도적 범위 축소이다. 이 사용자층에 대한 대응은 상담 시나리오(설계사 매개) 단계에서 수행하며, 사업적 영향 모니터링은 14장 참조.
+</div>
+
+<h3>11-4. Rule 카드 확장 필드</h3>
+
+<p>R3 구현을 위해 §7-2의 Rule 카드("조건 빌더 + 경고 메시지" 구성)에 다음 2개 필드를 추가한다. 기존 필드는 변경하지 않으며, 추가 필드는 null 허용으로 하위 호환을 확보한다. 기존 Rule 카드(예: <code>RULE.LEAD.CONVERT_THRESHOLD.V1</code> 등)는 영향받지 않는다.</p>
+
+<table>
+  <thead><tr><th>신규 필드</th><th>타입</th><th>역할</th></tr></thead>
+  <tbody>
+    <tr><td><code>output_label</code></td><td>enum: 유지 / 보강 / 검토</td><td>Rule 평가가 산출하는 라벨. R3의 핵심 출력.</td></tr>
+    <tr><td><code>coverage_category</code></td><td>string</td><td>담보 카테고리 식별자(예: cancer, disability, longterm_care 등). 의견 메시지의 지칭 대상.</td></tr>
+  </tbody>
+</table>
+
+<div class="info">
+  <strong>Fromage 등급별 메시지 분기 — Evidence 카드를 통한 처리:</strong> Fromage 등급에 따른 메시지 강도 차등화는 별도의 <code>fromage_variant</code> 같은 Rule 카드 필드로 사전에 정의해두지 않는다. 대신 <strong>Evidence 카드(§2-2 ④의 4번째 유형, Fromage 기반)</strong>가 사용자별 등급 데이터를 보유하고, Rule 카드가 이를 참조하여 LLM 프롬프트 조립 시 등급에 따라 자연스럽게 강조 차등화가 이루어지는 방식이다. 상세는 11-7 참조.
+</div>
+
+<h3>11-5. 입도 원칙</h3>
+
+<p>Rule 카드의 입도는 <strong>Risk-type × 담보 카테고리</strong> 조합 단위로 확장한다. 기존 Rule 카드의 "조건 빌더" 구조는 그대로 유지된다.</p>
+
+<table>
+  <thead><tr><th>매핑 방향</th><th>원칙</th><th>예시</th></tr></thead>
+  <tbody>
+    <tr><td><strong>1조합 1Rule (지향)</strong></td><td>기본 원칙. 조합 단위 1:1 매핑이 가독성·관리 부담 측면에서 최적.</td><td>(T02 암투병생활비 부족형, cancer) → RULE.COVERAGE.CANCER.GAP.V1</td></tr>
+    <tr><td><strong>N:1 (허용)</strong></td><td>여러 조합이 하나의 Rule로 통합 가능한 경우. 조건 복잡도가 비슷한 경우에 한해 허용.</td><td>(노후돌봄보장 공백형, longterm_care) + (생애주기 적합도 저조형, longterm_care) → RULE.COVERAGE.LONGTERM_CARE.GAP.V1</td></tr>
+    <tr><td><strong>1:N (지양)</strong></td><td>한 조합을 여러 Rule로 분할. 진단 시 결과 충돌 위험.</td><td>(권장하지 않음)</td></tr>
+  </tbody>
+</table>
+
+<p>구체적 매핑 판단은 PRD 단계에서 제품기획실장이 확정한다. 카드 ID 네임스페이스(RULE.COVERAGE.* 형식 등)도 PRD에서 함께 정의한다.</p>
+
+<h3>11-6. 거버넌스 — 카드 라이프사이클</h3>
+
+<p>R3 구현을 위한 Rule 카드의 라이프사이클은 <strong>혼합 모델</strong>로 운영하되, §3-1의 카드 승인 플로우(작성자 → 도메인 검수자 → 준법감시인)를 준수한다.</p>
+
+<table>
+  <thead><tr><th>단계</th><th>주체</th><th>역할</th></tr></thead>
+  <tbody>
+    <tr><td>① 룰 이관 및 담보코드 경계 정의</td><td>기술연구소 백엔드팀</td><td>기존 엔진 룰을 재분석하여 Rule 카드 초안 작성. 담보코드 조합 조건·판정 라벨 매핑의 의학적·계약적 근거 검증.</td></tr>
+    <tr><td>② 카드 입력 및 구조 정합성</td><td>작성자 (고객경험팀장)</td><td>초안을 KC Admin에 입력. Standalone/Linked 분류, Rule-Evidence 체이닝, 카드 ID 부여.</td></tr>
+    <tr><td>③ 도메인 검수</td><td>도메인 검수자<br><span style="font-size:11px;color:var(--ts)">(더파트너스 소속)</span></td><td>현장 통용성 검증 — 용어 정확성, 설계사 납득성, 기준값 현실성.</td></tr>
+    <tr><td>④ 규제 검수 (조건부)</td><td>준법감시인</td><td>§3-1의 규제 검수 대상 카드(법적 정의 포함 5종)에 한정 적용. R3 확장 Rule 카드의 적용 범위 여부는 Phase 1 착수 시 컴플라이언스 협의로 확정 (§16 D-10 참조). 범위 외라도 "보강" 라벨의 보험모집 법리 경계 검토를 위한 별도 자문은 수행.</td></tr>
+    <tr><td>⑤ KC Admin 내 파라미터 조정</td><td>제품기획실</td><td>경고 메시지 문구·Risk-type × 담보 카테고리 우선순위 조정 등 마케팅 파라미터 단독 수행 가능. 단 담보코드 조합 조건 자체의 변경은 ①로 재진입 필수.</td></tr>
+  </tbody>
+</table>
+
+<h3>11-7. Fromage 통합을 통한 차별적 개인화</h3>
+
+<div class="info">
+  <strong>본 절의 위치:</strong> 11-1~11-6에서 정의한 R3는 Fromage 통합 여부와 독립적으로 동작하는 완전 기능이다. 본 11-7은 그 위에 Fromage 등급을 결합하여 차별적 개인화를 추가하는 메커니즘을 정의한다. Fromage 미연동 상태에서도 R3는 동작하므로, Phase 1 선도입과 Phase 1.5 본격 가동을 분리할 수 있다.
+</div>
+
+<h4>11-7-1. Fromage 데이터의 카드 위치 — Evidence 4번째 유형</h4>
+
+<p>Fromage 등급은 §2-2 ④에 정의된 <strong>Evidence 카드의 4번째 유형(Fromage 기반)</strong>에 저장된다. 즉 Fromage는 Rule 카드 자체를 분기시키는 입력이 아니라, Rule이 참조하는 <strong>근거 데이터</strong>로 동작한다.</p>
+
+<div class="success">
+<strong>설계 근거:</strong> Evidence 카드는 본 문서가 정의한 "정량적 근거 데이터" 위치이며, Fromage 등급(고/중/저)이 이 카테고리에 정확히 부합한다. Fromage를 Rule 카드의 사전 정의된 variant 필드로 저장하면 Rule 카드 운영 부담이 커지고 §2-2의 카드 책임 분리 원칙과도 어긋난다. Evidence 카드 강화 방식이 §2-2의 카드 정의와 자연스럽게 정합된다.
+</div>
+
+<h4>11-7-2. Fromage 등급 체계 — 3단계 표준화</h4>
+
+<p>Fromage 원데이터(대사나이, 질병위험도, 암위험도, 사망위험도)는 KC 내부에서 그대로 사용하지 않고, §3-8에 따라 <strong>3단계 표준화 세그먼트</strong>(high / medium / low)로 추상화하여 유통한다.</p>
+
+<ul>
+  <li><strong>외부 유통 표준 (Amplitude 등):</strong> 3단계 등급. <code>health_risk_segment</code>, <code>metabolic_age_gap</code> 속성에 매핑되어 송신. 상세는 §3-8-3.</li>
+  <li><strong>서버 내부 세분화 (예비):</strong> 판정 정밀도 향상을 위해 보닥 서버 내부 DB에서는 원점수 → 5단계(매우고/고/중/저/매우저) → 3단계의 2차 매핑 구조를 둘 수 있다. 5단계 값은 외부 유통 금지, KC 카드 참조에도 사용하지 않는 예비값으로만 보관. (※ 5단계 보관의 §3-8 정합성은 Phase 1.5 착수 전 정보보호실 협의로 확정)</li>
+  <li><strong>Rule 카드 조건절 활용:</strong> Rule 카드 조건절은 Fromage 등급을 조건 일부로 포함할 수 있다. 예: <code>IF 암보장금액 &lt; 3,000만원 AND 암위험도_등급 == '고' THEN T02_암투병생활비_부족형_우선순위 = HIGH</code>. 단 "암위험도_등급" 같은 개별 지표는 §3-8-3에 정의된 외부 유통 속성(<code>health_risk_segment</code> 등)이 아닌 보닥 서버 내부 전용 평가 필드이며, Amplitude로는 통합 세그먼트만 전송된다 (§3-8-7 협의 항목 1 참조).</li>
+</ul>
+
+<h4>11-7-3. 메시지 강도 차등화 메커니즘</h4>
+
+<p>동일 Risk-type(예: T05 노후돌봄보장 공백형)이라도 Fromage 등급에 따라 Clark 응답의 메시지 강도가 차등화된다. 이 차등화는 <strong>Rule 카드의 사전 정의된 variant 필드가 아니라</strong>, 다음 흐름으로 자연스럽게 이루어진다.</p>
+
+<ol>
+  <li><strong>Evidence 카드 조회:</strong> 해당 사용자의 Fromage 등급 Evidence(예: <code>EVID.HEALTH.CANCER_RISK.V1</code> — 내부 데이터: 이 사용자의 암 위험도 등급 = '고')가 Rule 평가 시 참조된다. ※ Evidence 카드 내부의 정량적 위치 정보(percentile, 원점수 등)는 서버 내부에서만 보관·평가에 활용되며, 사용자 출력으로는 §13-5의 출력 표기 표준에 따라 등급명까지만 노출된다.</li>
+  <li><strong>프롬프트 조립:</strong> Rule 카드의 경고 메시지 템플릿과 Evidence의 <strong>등급명</strong>이 함께 LLM 프롬프트에 주입된다. 이때 LLM은 등급 정보를 자연스럽게 인용하여 메시지 강조 수준을 조정하되, §13-5의 수치 노출 기준을 위반하지 않아야 한다.</li>
+  <li><strong>출력 차등화 결과:</strong>
+    <div class="note">
+      <strong>예시 비교:</strong><br>
+      Fromage 미연동: "암 담보 보강을 검토해보시길 권합니다."<br>
+      Fromage 등급 '고' 결합: "개인 암 위험도가 높은 편이라는 점을 감안하면, 암 담보 보강을 우선적으로 검토하시길 권합니다."<br>
+      <span style="color:#A32D2D">금지 예시 — "동년배 상위 20%에 해당하는…"</span> (§3-8-1의 민감정보 정의 위반 + §13-5-1의 수치 노출 기준 위반)
+    </div>
+  </li>
+  <li><strong>4-Layer 방어 통과:</strong> 이 자연어 차등화는 사전 정의된 variant가 아니므로 LLM 자유도가 높다. 따라서 §4-2의 4-Layer 방어 + aGCR/PlannerFitScore 검증을 반드시 통과해야 한다. 특히 L2 키워드/패턴 필터에서 percentile·동년배 비교 수치 등 §13-5-1 위반 표현을 차단한다. 위반 시 재생성 또는 안전 응답으로 교체.</li>
+</ol>
+
+<h4>11-7-4. KC Admin 매핑 테이블 관리</h4>
+
+<p>Fromage 원점수 → 5단계 → 3단계의 매핑 테이블은 KC Admin에서 제품기획실이 관리하되, 다음 범위 제한을 적용한다.</p>
+
+<ul>
+  <li>경계값(원점수 → 5단계, 5단계 → 3단계)은 의학적 근거(Mediage 제공 임상 기준 또는 의료 자문 결과)에 따라 초기 설정. 변경 시에도 동일한 의학적 근거 범위를 벗어나지 않아야 한다.</li>
+  <li>제품기획실이 직접 조정 가능한 범위는 라벨 표기·마케팅 라운딩 기준 등 의학적 경계를 변경하지 않는 마케팅 파라미터로 한정.</li>
+  <li>의학적 경계값 변경이 필요한 경우 의료 자문 또는 Mediage 협의 기록을 첨부한 승인 프로세스를 거친다.</li>
+  <li>매핑 테이블 변경 시 변경 이력과 승인자 기록 필수. Fromage 지표별로 독립적인 매핑 설정 가능.</li>
+</ul>
+
+<h3>11-8. 감사가능성</h3>
+
+<p>R3로 생성된 모든 상품별 의견은 사후 감사 가능해야 한다. 이를 위해 다음을 로그에 기록한다.</p>
+
+<ul>
+  <li>사용된 Rule 카드 ID + Evidence 카드 ID (표준 ID 체계 <code>DOMAIN.SUB.DETAIL.V1</code> (§7 참조))</li>
+  <li>담보코드 매핑 결과</li>
+  <li>프롬프트 스냅샷</li>
+  <li>생성 결과 텍스트</li>
+  <li>CI 식별자(해시 가명처리 후 포함, §3-8-7 협의 항목 5)</li>
+</ul>
+
+<p>로그의 보관 기간·접근 권한·저장 위치는 정보보호실과 협의하여 확정한다.</p>
+
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- 12장. 종합 보장점수 KC 이관 (R6) -->
+<!-- ═══════════════════════════════════════════ -->
+<h2>12. 종합 보장점수의 KC 이관</h2>
+
+<h3>12-1. 이관 배경</h3>
+<p>기존 bodoc 앱 진단탭에서 표기되는 <strong>종합 보장점수</strong>(0~100점 단일 지표)를 KC 내부로 이관하여 Clark/Lois에서도 제공한다. 사용자 경험 연속성 관점에서 점수 지표 자체는 유지하되, 산정 기반은 KC Rule/Evidence 카드 위에 재구현한다.</p>
+
+<div class="warn">
+<strong>이관 과도기의 점수 괴리:</strong> Phase 1.5 런칭 시점에는 기존 bodoc 앱의 점수와 KC 기반 점수 사이에 수치 괴리가 발생할 가능성이 있다. 같은 고객이 두 채널에서 다른 점수를 경험하면 사용자 경험 연속성이 오히려 훼손될 수 있으므로, 괴리 허용 범위(±N점)와 수렴 일정은 PRD에서 확정한다.
+</div>
+
+<h3>12-2. 점수 산정 방식</h3>
+<p>점수 산정은 KC Rule 카드 평가 결과를 집계하는 방식으로 구성한다. 구체 산정 로직·가중치·범위는 PRD에서 제품기획실장이 확정하며, 본 기획서는 요구사항 수준만 정의한다.</p>
+
+<h3>12-3. 양방향 균형 원칙</h3>
+
+<p>점수 산정은 양방향 균형 원칙을 준수한다. 단방향 보수화는 오히려 다른 방향의 왜곡을 낳으므로 두 방향 모두 경계한다.</p>
+
+<table>
+  <thead><tr><th>방향</th><th>위험</th><th>대응</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><strong>하한 방향 왜곡</strong></td>
+      <td>설계사가 판매한 상품이 반영된 점수가 부당하게 낮게 산정 → 간접적으로 판매 부적합을 시사하는 결과.</td>
+      <td>11-2의 보수적 판정 원칙의 연장. 점수 산정 시 보유 상품의 긍정 기여분을 과소평가하지 않도록 가중치 검증.</td>
+    </tr>
+    <tr>
+      <td><strong>상한 방향 왜곡</strong></td>
+      <td>보장 충분 판정(고득점)이 과도하게 용이하게 나와 상담 수요를 구조적으로 억제.</td>
+      <td>전환율 목표 달성을 위해 점수가 적당히 분포되어야 한다는 마케팅 요구사항을 산정 로직에 반영.</td>
+    </tr>
+    <tr>
+      <td><strong>분포 관리</strong></td>
+      <td>특정 점수대(예: 90점대) 또는 라벨(예: "유지" 비율)이 비정상적 쏠림.</td>
+      <td>런칭 후 점수 분포(중앙값·분산·"유지" 라벨 비율 등)를 분기별 모니터링. 임계 분포 이탈 시 산정 로직 재조정.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>12-4. 점수와 개별 의견의 층위 차이</h3>
+
+<p>종합 보장점수와 11장 R3의 개별 상품별 의견은 <strong>완전히 일치해야 하는 것은 아니다</strong>. 두 지표는 서로 다른 층위의 정보이기 때문이다.</p>
+
+<ul>
+  <li><strong>종합 점수:</strong> 보장 구조의 종합 지표(집계된 상태). 보유 보험 전체에 대한 단일 수치.</li>
+  <li><strong>개별 의견(유지/보강/검토):</strong> 담보 카테고리별 액션 제안(Rule 기반). 각 영역별 권유 방향.</li>
+</ul>
+
+<p>다만 극단적 모순(예: 점수 95점인데 모든 카테고리가 "검토")이 발생할 경우, UI에서 해석 가이드 문구를 함께 노출하여 사용자 혼란을 방지한다. 구체 가이드 문구는 PRD에서 확정.</p>
+
+<h3>12-5. 면책 문구 적용</h3>
+<p>점수 표시 시에도 13장 R7의 면책 문구 원칙이 적용된다. 점수 단독으로는 판정으로 해석되지 않도록 맥락 문구를 함께 노출한다. 즉 "62점"이라는 숫자만 단독으로 노출되는 UX는 금지.</p>
+
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- 13장. 면책 문구 표준 (R7) -->
+<!-- ═══════════════════════════════════════════ -->
+<h2>13. 면책 문구 표준</h2>
+
+<h3>13-1. 상시 노출 원칙</h3>
+<p>Clark/Lois의 모든 상품별 의견 출력(유지/보강/검토 전체) 및 종합 보장점수 표기에 면책 문구를 <strong>상시 노출</strong>한다.</p>
+
+<div class="warn">
+<strong>특정 판정에만 붙이지 않는 이유:</strong> 만약 "보강" 또는 "검토" 같은 특정 판정에만 면책 문구를 붙이면, 사용자가 "이 판정만 불확실하고, 다른 판정(유지)은 확정적"으로 오해할 여지가 있다. 따라서 모든 출력에 동일 원칙을 적용한다.
+</div>
+
+<h3>13-2. 핵심 메시지 요소</h3>
+
+<p>면책 문구의 핵심 메시지 요소는 다음 3가지이다. 구체 문안·노출 위치·글자 크기 등 UX 세부 사양은 PRD에서 제품기획실장이 확정하되, 컴플라이언스 검수를 거친다.</p>
+
+<table>
+  <thead><tr><th>요소</th><th>메시지 핵심</th><th>의도</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><strong>① 진단 근거 한계</strong></td>
+      <td>본 진단은 마이데이터와 건강정보에 기반하며, 재무 상황·가족력·선호도 등 고객의 전체 맥락을 완전히 반영하지 못합니다.</td>
+      <td>KC가 가진 데이터의 범위를 명시. AI 진단의 본질적 한계 투명화.</td>
+    </tr>
+    <tr>
+      <td><strong>② 전문가 상담 권장</strong></td>
+      <td>최종 판단은 전문가(보닥플래너 또는 설계사) 상담을 통해 수행하시길 권장합니다.</td>
+      <td>최종 행동을 KC가 결정하지 않음을 명시. 상담 플로우(FC)와 자연스럽게 연결.</td>
+    </tr>
+    <tr>
+      <td><strong>③ 판매 적정성 비판단</strong></td>
+      <td>가입 당시 개별 상황에 대한 평가가 아니며, 판매 적정성에 대한 판단이 아닙니다.</td>
+      <td>설계사 판매 행위에 대한 사후 부정적 판정으로 해석되지 않도록 명시. 11-2 보수적 판정 원칙·14장 품질보증 리스크 대응과 직결.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>13-3. 다층 안전망에서의 위치</h3>
+
+<p>면책 문구는 법적 면책의 완결 장치가 아니다. §11-2의 보수적 판정 원칙 · §11-2 ④의 의미 기반 어휘 통제(어휘 정책 문서 참조) · §11-3의 3단계 라벨 등과 함께 다층적으로 작동한다. 어느 하나에 의존하지 않는 설계이다.</p>
+
+<table>
+  <thead><tr><th>층</th><th>장치</th><th>역할</th></tr></thead>
+  <tbody>
+    <tr><td>1층 (구조)</td><td>11-3 3단계 라벨</td><td>"해지" 직접 판정 자체를 제거하여 부정 판정 회피.</td></tr>
+    <tr><td>2층 (어휘)</td><td>어휘 정책 + 의미 함축 금지</td><td>표면 어휘뿐 아니라 의미상 해지 함축까지 차단. L3 의미 경계 단계에서 감지.</td></tr>
+    <tr><td>3층 (투명화)</td><td>13장 R7 면책 문구</td><td>맥락 한계 명시. 사용자에게 진단의 본질을 알림.</td></tr>
+    <tr><td>4층 (출력 표기)</td><td>13-5 출력 표기 표준</td><td>수치 노출 기준 + 상품명 미언급 원칙으로 출력 자체의 표현 형태 통제.</td></tr>
+    <tr><td>5층 (검증)</td><td>4-Layer 방어 + aGCR 감점</td><td>응답 단위로 정책 위반 여부 자동 검증. 위반 시 재생성/안전 응답.</td></tr>
+  </tbody>
+</table>
+
+<h3>13-4. PRD 단계의 컴플라이언스 검수</h3>
+
+<p>면책 문구의 구체 문안·노출 위치·글자 크기 등 UX 세부 사양은 PRD에서 제품기획실장이 확정하되, 다음을 반드시 거친다:</p>
+
+<ul>
+  <li><strong>준법감시인 검수</strong> — 13-2의 핵심 메시지 3요소가 모두 포함되었는지, 개별 문안이 보험업법·금융소비자보호법상 부적절한 함의를 가지지 않는지 검토. 특히 "보강" 라벨에 대한 면책 문안은 보험모집 행위 경계 설정 검토 필수.</li>
+  <li><strong>법무 자문 (선택)</strong> — 법적 면책의 완결성에 의존하지 않는 설계이지만, 핵심 문안에 대한 외부 법무 의견을 구할 수 있다.</li>
+  <li><strong>UX 가독성 검증</strong> — 면책 문구가 너무 작거나 숨겨지면 상시 노출 원칙(13-1)이 형해화된다. 사용자가 자연스럽게 인지할 수 있는 위치·크기 확정.</li>
+</ul>
+
+<h3>13-5. 출력 표기 표준 (수치 노출 기준 · 상품명 미언급 원칙)</h3>
+
+<div class="info">
+  <strong>본 절의 위치:</strong> 본 절은 §13의 면책 문구와 같은 결의 출력 통제 규약으로, KC가 사용자에게 노출하는 표현 형태 자체에 대한 정책이다. §13-1~13-3이 면책 문구의 노출 원칙이라면, 본 절은 응답 본문(상품별 의견·종합 보장점수 등)의 표기 한계를 정의한다. §11-7-3의 메시지 차등화 메커니즘과 §3-8의 민감정보 처리 원칙이 본 절을 통해 사용자 출력으로 연결된다.
+</div>
+
+<h4>13-5-1. 수치 노출 기준</h4>
+
+<p>Fromage 등급 등 의학적 위험도 정보는 사용자 응답에서 <strong>3단계 등급명(고/중/저) 수준까지만</strong> 노출한다. 다음 형태의 표기는 모든 사용자 응답에서 금지된다.</p>
+
+<table>
+  <thead><tr><th>표기 유형</th><th>예시</th><th>처리</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>Percentile / 동년배 비교 수치</td>
+      <td>"동년배 상위 20%", "또래 평균 대비 +19%"</td>
+      <td style="color:#A32D2D;font-weight:700">금지 — §3-8-1의 민감정보 정의 위반</td>
+    </tr>
+    <tr>
+      <td>원점수 / 원지표 직접 인용</td>
+      <td>"대사나이 47세", "암위험도 점수 78점"</td>
+      <td style="color:#A32D2D;font-weight:700">금지 — Fromage 원데이터의 사용자 노출 금지</td>
+    </tr>
+    <tr>
+      <td>5단계 세분화 등급</td>
+      <td>"매우 높음", "고위험"</td>
+      <td style="color:#BA7517;font-weight:700">조건부 — 3단계 등급명 매핑 후만 사용 가능</td>
+    </tr>
+    <tr>
+      <td>3단계 등급명</td>
+      <td>"높은 편입니다", "중간 정도"</td>
+      <td style="color:#0F6E56;font-weight:700">허용 — 본 정책의 표준 노출 형태</td>
+    </tr>
+    <tr>
+      <td>등급 없는 일반 표현</td>
+      <td>"검토를 권합니다", "상담을 권합니다"</td>
+      <td style="color:#0F6E56;font-weight:700">허용 — 등급 정보 없이도 가능한 표현</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="warn">
+  <strong>의학적 판정 발화 회피:</strong> 본 기준의 핵심 의도는 (a) §3-8-1이 민감정보로 분류한 표현 형태를 사용자 출력에서도 차단하는 것, (b) 보험업법상 의료 자문 행위로 해석될 수 있는 직접적 의학 판정 발화를 AI가 수행하지 않는 것이다. 등급명도 "높은 편입니다" 같은 자연어 완화 표현으로 발화하며, 의학적 단언으로 해석되지 않도록 한다.
+</div>
+
+<h4>13-5-2. 상품명 미언급 원칙</h4>
+
+<p>Clark/Lois의 상품별 의견 출력은 모든 라벨(유지/보강/검토)에서 <strong>구체 상품명을 언급하지 않는다</strong>. 담보 카테고리 수준에서만 기술한다.</p>
+
+<table>
+  <thead><tr><th>표현 형태</th><th>예시</th><th>처리</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>담보 카테고리 수준</td>
+      <td>"암 담보 보강을 검토하시길 권합니다", "실손 담보는 적절합니다"</td>
+      <td style="color:#0F6E56;font-weight:700">허용</td>
+    </tr>
+    <tr>
+      <td>구체 상품명 언급</td>
+      <td>"XX암보험 해지를 권합니다", "OO실손 추가 가입을 권합니다"</td>
+      <td style="color:#A32D2D;font-weight:700">금지 — 보험모집 행위 경계 위반 가능성</td>
+    </tr>
+    <tr>
+      <td>보유 상품의 식별 표시</td>
+      <td>"보유하신 A생명 암보험을…", "C생명 종합건강보험의…"</td>
+      <td style="color:#BA7517;font-weight:700">조건부 — 진단 결과 표시(보유 보험 리스트)에서는 허용, 의견 본문에서는 금지</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="info">
+  <strong>본 원칙의 R3 전체 차원 적용:</strong> 본 원칙은 §11-3의 "보강" 라벨에만 한정되지 않으며, R3 전체 차원(유지·보강·검토 모두)에 적용된다. "유지" 라벨에서도 "OO상품은 유지하시면 됩니다"가 아닌 "이 담보는 적절합니다"로 표현한다.
+</div>
+
+<h4>13-5-3. 어휘 정책 문서와의 관계</h4>
+
+<p>본 §13-5는 출력 표기에 대한 마스터 스펙 수준의 원칙을 정의한다. 구체 어휘 항목·금지어 리스트·회색 지대 어휘의 허용 맥락 등 운영 디테일은 별도 어휘 정책 문서(준법감시인 검수 대상)에서 관리한다. 어휘 정책 문서와 본 절이 충돌하는 경우 본 절이 우선한다.</p>
+
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- 14장. 품질보증 리스크 대응 체계 -->
+<!-- ═══════════════════════════════════════════ -->
+<h2>14. 품질보증 리스크 대응 체계</h2>
+
+<h3>14-1. 리스크 정의</h3>
+<p>설계사(자회사 GA 더파트너스 및 B2B 파트너사 소속)가 판매한 상품이 KC 진단 결과와 충돌하여 고객이 불완전판매를 제기할 가능성을 말한다. 과거 기존 엔진 운영 중에도 발생한 사례가 있으며, KC 런칭 시에도 동일 리스크가 존재한다.</p>
+
+<h3>14-2. 4중 대응 구조</h3>
+
+<table>
+  <thead><tr><th>대응 단계</th><th>장치</th><th>역할</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><strong>1차 — 구조적 제거</strong></td>
+      <td>11-3의 3단계 라벨 (유지/보강/검토)</td>
+      <td>"해지" 직접 판정을 제거. "보강"의 담보 공백 범위 고정으로 보유 상품에 대한 부정 판정 자체를 구조적으로 차단.</td>
+    </tr>
+    <tr>
+      <td><strong>2차 — 어휘·의미 통제</strong></td>
+      <td>어휘 정책의 의미 함축 금지</td>
+      <td>표면 어휘를 바꾸어도 해지·부적합을 시사하는 표현 일괄 차단. L3 의미 경계 단계에서 감지.</td>
+    </tr>
+    <tr>
+      <td><strong>3차 — 투명성</strong></td>
+      <td>13장 R7 면책 문구 상시 노출</td>
+      <td>KC의 맥락 한계 명시. "가입 당시 판매 적정성에 대한 판단이 아니다" 문구 포함.</td>
+    </tr>
+    <tr>
+      <td><strong>4차 — 모니터링</strong></td>
+      <td>설계사-AI 판정 충돌 사례 분기별 수집·리뷰</td>
+      <td>1~3차로 차단되지 않은 잔여 충돌을 사후 감지. 수집 경로·임계치는 14-3에서 구체화.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>14-3. 충돌 사례 수집 — 3채널 구조</h3>
+
+<table>
+  <thead><tr><th>채널</th><th>경로</th><th>구축 상태</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><strong>채널 A — 더파트너스 내부 품질보증 채널</strong></td>
+      <td>자회사 GA 소속 설계사의 품질보증 이슈를 내부 채널로 수집. 기존 더파트너스 QA 프로세스에 KC 판정 충돌 태그 추가.</td>
+      <td>기존 QA 프로세스 활용. 태그 추가만 필요.</td>
+    </tr>
+    <tr>
+      <td><strong>채널 B — 고객 CS 태그</strong></td>
+      <td>CS 문의 티켓에 "AI 진단과 설계사 조언 불일치" 전용 태그 신설. CS 팀 상담원 가이드 포함.</td>
+      <td>CS 시스템 태그 신설 필요.</td>
+    </tr>
+    <tr>
+      <td><strong>채널 C — B2B 파트너 피드백 루프</strong></td>
+      <td>현재 B2B 파트너사(신한라이프·라이나·흥국·원파이낸셜·굿리치 등)와의 민원 수집은 비공식 채널로 운영 중이며, 체계적 피드백 루프 부재. <strong>Phase 1.5 착수 전 공식 채널 구축이 선결 조건</strong>.</td>
+      <td>신규 구축 필요. 분기 리뷰 미팅에 품질보증 이슈 항목 추가, 전용 양식·수집 주기 등 제휴 담당자 협의 확정.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>14-4. 임계치 운영 모드</h3>
+
+<p>분기별 사례 수집 → 임계치 평가 → 대응 결정의 운영 사이클을 다음과 같이 구성한다.</p>
+
+<table>
+  <thead><tr><th>운영 단계</th><th>처리</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><strong>① 초기 관찰 모드</strong></td>
+      <td>Phase 1.5 런칭 후 <strong>최소 2개 분기</strong>는 베이스라인 수집 목적의 관찰 모드로 운영. 임계치 자동 트리거 없이 수집 데이터의 분포·추이만 확인.</td>
+    </tr>
+    <tr>
+      <td><strong>② 임계치 정의</strong></td>
+      <td>베이스라인 수집 후 다음 중 하나 또는 복합 지표로 확정: (1) 분기당 충돌 사례 절대 수, (2) Clark/Lois 진단 건수 대비 충돌 비율, (3) 충돌의 심각도 가중 합계. 최종 지표·수치는 PRD에서 확정.</td>
+    </tr>
+    <tr>
+      <td><strong>③ 임계치 초과 시 처리</strong></td>
+      <td>분기 리뷰에서 충돌 원인 분석 결과에 따라 다음 중 적합한 대응 또는 조합을 선택:<br>
+        • <strong>(a) Rule 카드 조건 조정</strong> — 판정 로직 자체에 문제가 있는 경우<br>
+        • <strong>(b) 어휘 정책 보강</strong> — 의미 함축 차단이 부족한 경우<br>
+        • <strong>(c) 정책 단위 재검토</strong> — (a)(b)로 해소되지 않는 구조적 이슈에 한함. 11-2 보수적 판정 원칙의 재정의를 포함하는 의사결정.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>14-5. 기능 범위 축소 리스크 (정식 등록)</h3>
+
+<div class="warn">
+  <strong>본 절의 위치:</strong> 14-1~14-4의 품질보증 리스크는 "AI가 잘못된 판정을 하는 위험"이지만, 본 14-5는 그 정반대 방향의 리스크 — "보수적 판정 원칙으로 인해 AI가 마땅히 해야 할 안내를 못 하는 위험" — 을 정식 등록한다. 두 리스크는 서로 트레이드오프 관계이므로 한 곳에 함께 추적되어야 한다.
+</div>
+
+<h4>14-5-1. 리스크 정의</h4>
+
+<p>11-2의 보수적 판정 원칙(특히 "해지" 직접 판정 제거 + R3 전체 차원 상품명 미언급)으로 인해, 명백 부적합 보유·중복 가입 사용자에 대한 행동 트리거가 공백 상태가 된다. 이 사용자층은 KC에서 "검토" 라벨을 받지만, §13-5-2의 상품명 미언급 원칙과 §11-2 ④의 의미 함축 금지가 해지·정리 시사를 차단하므로 실제 상담 전환 강도가 약할 수 있다. 결과적으로 Clark/Lois가 기존 bodoc 앱 대비 이 사용자층에 대해 낮은 가치를 제공할 가능성이 있다.</p>
+
+<h4>14-5-2. 다층 대응</h4>
+
+<table>
+  <thead><tr><th>대응 단계</th><th>장치</th><th>역할</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><strong>1차 (UX 경로 강화)</strong></td>
+      <td>"검토" 라벨 우선 핸드오프</td>
+      <td>"검토" 라벨이 사용자에게 노출될 때 FC 리드 전환 경로를 우선 배치. 즉 "검토"의 실질적 행동이 상담 신청이라는 점을 UX에서 명확히 표현. 구체 UX는 PRD에서 확정.</td>
+    </tr>
+    <tr>
+      <td><strong>2차 (상담 시나리오)</strong></td>
+      <td>설계사 매개 프로세스</td>
+      <td>FC 리드 전환 후 설계사 상담에서 중복 가입·부적합 보유 확인 시 해지 안내가 적절히 이루어지도록 상담 시나리오 및 플래너 가이드 설계. KC의 구조적 제거와 상담의 인간 판단을 분리하는 설계이다.</td>
+    </tr>
+    <tr>
+      <td><strong>3차 (분포 모니터링)</strong></td>
+      <td>14-3 채널과 통합</td>
+      <td>14-3의 3채널 수집에서 "검토 라벨 사용자의 후속 행동률" 별도 지표로 추적. 분기별 리뷰에서 이 사용자층의 전환율·만족도가 다른 사용자층 대비 현저히 낮을 경우 14-5-3의 재검토 트리거 발동.</td>
+    </tr>
+    <tr>
+      <td><strong>4차 (베이스라인 비교)</strong></td>
+      <td>기존 엔진 대비 비교</td>
+      <td>Phase 1.5 런칭 후 기존 보닥 엔진 대비 동일 사용자층의 전환율 비교. 베이스라인은 11-1의 Braze 실데이터 (수신군 32.5% vs 미수신군 27.3%, +5.2%p 절대 차이).</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4>14-5-3. 재검토 트리거</h4>
+
+<p>다음 중 하나가 충족되면 11-2 보수적 판정 원칙의 재검토를 분기 리뷰 안건으로 상정한다:</p>
+
+<ul>
+  <li>"검토" 라벨 사용자의 FC 리드 전환율이 "보강" 라벨 사용자 대비 N% 이상 낮은 상태가 2개 분기 이상 지속</li>
+  <li>14-3 채널 A/B에서 "AI 진단이 너무 모호하다", "구체적 안내가 필요하다"는 정성 피드백이 임계치 초과 누적</li>
+  <li>Phase 1.5 베이스라인 대비 Clark/Lois의 종합 전환율이 기존 엔진 베이스라인 이하로 낮아진 상태가 2개 분기 이상 지속</li>
+</ul>
+
+<p>재검토 결과에 따라 (a) 11-3 라벨 체계 세분화 (예: "보강(우선)", "보강(추가검토)" 등 보강 라벨 내부 분화), (b) §13-5-2 상품명 미언급 원칙의 일부 완화 (특정 카테고리의 보유 상품 식별 표시 허용), (c) 재검토 후 변경 없음 — 중 적합한 결정을 채택한다. 재검토 자체는 §16의 D-02("해지 의견" 기능 제거의 사업적 영향)로 트래킹된다.</p>
+
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- 15장. 기대 효과 및 향후 과제 -->
+<!-- ═══════════════════════════════════════════ -->
+<h2>15. 기대 효과 및 향후 과제</h2>
+
+<h3>15-1. Phase별 기대 효과</h3>
+<table>
+  <thead><tr><th>Phase</th><th>효과 영역</th><th>상세 내용</th></tr></thead>
+  <tbody>
+    <tr><td rowspan="4"><strong>Phase 1</strong></td><td>도메인 지식 체계화</td><td>흩어져 있던 보험 도메인 지식이 7종 카드로 구조화</td></tr>
+    <tr><td>AIO 선점 기반 확보</td><td>Public 카드가 AIO 콘텐츠로 활용 가능</td></tr>
+    <tr><td>운영 프로세스 표준화</td><td>KC Admin의 역할 분리와 승인 워크플로우로 품질 관리 체계화</td></tr>
+    <tr><td>사내 교육 효율화</td><td>KC 카드가 신규 입사자 온보딩 자료로 즉시 활용</td></tr>
+    <tr><td rowspan="4"><strong>Phase 2</strong></td><td>AI 진단 품질 향상</td><td>온톨로지 기반 판단으로 할루시네이션 감소, 진단 정확도 20~30% 향상 기대</td></tr>
+    <tr><td>리드 전환율 개선</td><td>Playbook 기반 체계적 리드 전환으로 전환율 개선</td></tr>
+    <tr><td>배정 효율성 향상</td><td>리드 스코어링으로 우수 설계사 우선 배정</td></tr>
+    <tr><td>규제 리스크 감소</td><td>Policy 카드 기반 출력 통제로 법적 리스크 관리</td></tr>
+    <tr><td rowspan="3"><strong>Phase 3</strong></td><td>도메인 특화 AI 모델</td><td>KC + Case 기반 파인튜닝으로 범용 LLM 대비 압도적 진단 정확도</td></tr>
+    <tr><td>AI 오케스트레이션</td><td>AI 진단 → 스코어링 → 배정 → 상담 가이드 전 과정 AI 기반 운영</td></tr>
+    <tr><td>경쟁 우위 확보</td><td>온톨로지(교체 불가 자산) + 파인튜닝 모델의 결합으로 구조적 경쟁 우위</td></tr>
+  </tbody>
+</table>
+
+<h3>15-2. 데이터 인프라 과제 (기술연구소 협의 필요)</h3>
+<table>
+  <thead><tr><th>과제</th><th>영향 변수</th><th>우선순위</th><th>시점</th></tr></thead>
+  <tbody>
+    <tr><td>Clark 진단 결과 — 체결 데이터 연결 파이프라인</td><td>matching_accuracy</td><td>높음</td><td>Phase 2 초기</td></tr>
+    <tr><td>앰플리튜드 택소노미 이벤트 추가 정의</td><td>engagement</td><td>중간</td><td>Phase 1 병행</td></tr>
+    <tr><td>설계사 상담 완료/미컨택 상태 기록 기능</td><td>capacity_factor</td><td>중간</td><td>Phase 2</td></tr>
+    <tr><td>FC 결과 콜백 API 구현</td><td>전체 피드백 루프</td><td>높음</td><td>Phase 1.5</td></tr>
+    <tr><td>안심번호 + 앰플리튜드 후행 매칭 파이프라인</td><td>closing_rate</td><td>높음</td><td>Phase 1.5</td></tr>
+    <tr><td>프롬에이지 API 연동 및 건강정보 국내 서버 저장 파이프라인</td><td>Evidence(프롬에이지 유형)</td><td>높음</td><td>Phase 1.5</td></tr>
+    <tr><td>건강정보 세그먼트 등급 산출 → Amplitude 전송 파이프라인</td><td>health_risk_segment</td><td>중간</td><td>Phase 1.5</td></tr>
+    <tr><td>정보보호실 협의: 민감정보 국외이전 해당 여부 확인 (기존 속성 3종 + 신규 등급 속성)</td><td>법적 리스크</td><td>높음</td><td>Phase 1 (사전)</td></tr>
+  </tbody>
+</table>
+
+<h3>15-3. 마무리</h3>
+<p>Knowledge Core는 bodoc의 사업 존속 위협에 대한 선제적 대응이자, 아이지넷의 장기적 경쟁력을 확보하기 위한 전략적 프로젝트이다.</p>
+<p>KC 카드 체계는 단순한 지식 정리가 아니라, 경쟁사가 복제할 수 없는 보험 도메인 온톨로지이며, 이것이 LLM이 교체되더라도 유지되는 아이지넷의 핵심 플랫폼 자산이다.</p>
+
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- 16장. Open Issues 부록 (Delta BRD §10.4 흡수) -->
+<!-- ═══════════════════════════════════════════ -->
+<h2>16. Open Issues 부록 — 결정 보류 이슈 트래커</h2>
+
+<div class="info">
+  <strong>본 부록의 위치:</strong> 본 부록은 v1.6 마스터 스펙 본문에서 의도적으로 결정을 보류한 이슈들을 살아있는 형태로 추적한다. 보류는 판단 회피가 아니라, 본 문서 범위에서 다루기에 적절치 않거나 추가 검토·관찰 데이터가 필요하다고 판단된 항목이다. 본 부록은 PRD 작성·정보보호실 협의·컴플라이언스 검수·런칭 후 모니터링의 살아있는 reference로 사용된다.
+</div>
+
+<div class="note">
+  <strong>참조 가이드 — 본 부록과 §3-8-7의 성격 차이:</strong> 본 문서에는 "살아있는 추적"을 하는 두 종류의 섹션이 있으며, 성격이 다르므로 혼용하지 않는다.<br><br>
+  • <strong>§3-8-7 정보보호실 사전 협의 항목 (절차적 checklist)</strong> — 완료되면 해소되는 <strong>행동 항목</strong>. 시점이 Phase 1 또는 Phase 1.5 착수 전으로 명확히 정해져 있다. 본문에서 정보보호실 관련 협의 항목을 참조할 때는 §3-8-7 항목 번호를 사용한다. (예: "§3-8-7 협의 항목 1")<br>
+  • <strong>§16 결정 보류 이슈 (D-XX, 추적성 기록)</strong> — 해소되어도 기록이 남는 <strong>지표 기반 추적 항목</strong>. 트리거 조건이 지표·시점·관찰 데이터 기반이라 시기가 다양하다. 본문에서 결정 보류 이슈를 참조할 때는 §16의 D-XX 번호를 사용한다. (예: "§16 D-02")<br>
+  • <strong>§13-4 PRD 단계 컴플라이언스 검수</strong> — 법적 자문 성격의 절차적 항목. 본문에서 컴플라이언스 검수 관련 참조는 §13-4를 사용한다.<br><br>
+  본문 작성 시 혼용 금지 — 정보보호실 절차적 협의를 §16 D-XX로, 결정 보류 이슈를 §3-8-7 항목 N으로 잘못 참조하지 않도록 주의한다.
+</div>
+
+<div class="warn">
+  <strong>본 부록의 운영 규칙:</strong> (1) 신규 결정 보류 이슈 발생 시 ID를 증가시켜 본 표에 추가한다. (2) 이슈 해소 시 해당 행을 삭제하지 않고 유지하되, "현 상태" 컬럼에 "해소" 표시와 해소 문서 참조·해소 일자를 추가한다. (3) "현 상태" 컬럼은 분기별로 갱신하며, 마지막 갱신일을 함께 기록한다. (4) Document History와 본 부록은 별개이며, 본 부록의 변경은 Document History에 기록되지 않는다 (운영 부담 회피).
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th style="width:60px">ID</th>
+      <th style="width:200px">이슈 제목</th>
+      <th>배경 및 보류 사유</th>
+      <th>재검토 트리거</th>
+      <th style="width:130px">현 상태<br><span style="font-weight:400;font-size:10px">(최종 갱신일)</span></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>D-01</strong></td>
+      <td>설계사 판매 기록 연동 (옵션 C)</td>
+      <td>최근 설계사 경로로 신규 가입된 상품(특히 더파트너스·B2B 파트너사 판매분)에 대해 KC 판정 강도를 낮추거나 "검토" 판정에서 제외하는 로직.<br><br><em>보류 사유:</em> (1) 기술 구현 복잡도 높음, (2) "자회사 판매분만 봐준다"로 해석될 수 있어 이중 잣대·윤리 이슈 존재, (3) 컴플라이언스 검토 없이 본 문서에 반영하면 오히려 문서 자체가 리스크가 됨.</td>
+      <td>§14의 4차 모니터링에서 품질보증 충돌 사례가 임계치 초과 시 트리거 (§14-4 ③ 참조). 재검토 시 준법감시인 필수 참여.</td>
+      <td>미착수<br><span style="font-size:10px;color:var(--ts)">(2026-04)</span></td>
+    </tr>
+    <tr>
+      <td><strong>D-02</strong></td>
+      <td>"해지 의견" 기능 제거의 사업적 영향</td>
+      <td>기존 엔진의 "해지" 직접 판정 기능은 KC에서 의도적으로 제거(§11-3). 중복 가입·부적합 보유에 대한 정리 권유 기능이 사라짐.<br><br><em>보류 사유:</em> 현재는 품질보증 리스크 완화가 우선이지만, 런칭 후 "정리가 필요한 고객"에 대한 서비스 공백이 문제가 될 수 있음.</td>
+      <td>Phase 1.5 런칭 후 분기별 사용자 만족도·전환율 지표 검토. 베이스라인: §11-1의 Braze 캔버스 실데이터 (수신군 32.5% vs 미수신군 27.3%, +5.2%p). 대안 검토 시 설계사 매개 프로세스(상담 연결) 우선 고려. §14-5의 기능 범위 축소 리스크 다층 대응과 연동.</td>
+      <td>관찰 대기<br><span style="font-size:10px;color:var(--ts)">(Phase 1.5 런칭 후 활성)</span></td>
+    </tr>
+    <tr>
+      <td><strong>D-03</strong></td>
+      <td>Fromage 측정 방식 확정</td>
+      <td>Fromage 측정이 공공 건강검진 API 연계인지, 자가입력인지, 외부 앱 이동 후 복귀인지 확정되지 않음.<br><br><em>보류 사유:</em> 본 문서는 비즈니스/설계 요구사항 수준이며, 구체 데이터 수집 방식은 기술 협의 대상.</td>
+      <td>Phase 1.5 착수 전 PRD 및 Fromage 기술 협의에서 확정 필수.</td>
+      <td>협의 예정<br><span style="font-size:10px;color:var(--ts)">(Phase 1.5 착수 전)</span></td>
+    </tr>
+    <tr>
+      <td><strong>D-04</strong></td>
+      <td>정량 목표 [TBD] 수치 확정</td>
+      <td>§11-1-1 정량 목표의 [TBD] 수치들 (전환율 하한선, 고도화 진단 상대 향상률, Fromage 측정 완료율 초기 목표, aGCR 향상 목표 등).<br><br><em>보류 사유:</em> 베이스라인 데이터 확보 전이며, Phase 1.5 착수 시점에 기존 엔진 성과 지표를 재확인해야 함.</td>
+      <td>Phase 1.5 착수 전 플랫폼사업본부장 승인으로 확정. PRD 부록의 정량 목표 테이블에서 단일 진실원으로 관리.</td>
+      <td>협의 예정<br><span style="font-size:10px;color:var(--ts)">(Phase 1.5 착수 전)</span></td>
+    </tr>
+    <tr>
+      <td><strong>D-05</strong></td>
+      <td>보장점수 괴리 허용 범위 (±N점)</td>
+      <td>§12-1에서 이관 과도기에 기존 bodoc 앱 점수와 KC 기반 점수의 수치 괴리 가능성을 인정. 허용 범위와 수렴 일정 미정.<br><br><em>보류 사유:</em> PRD 단계의 산정 로직 설계와 연동되므로 본 문서에서 미리 수치를 고정하지 않음.</td>
+      <td>PRD에서 ±N점 확정. Phase 1.5 착수 전 두 채널 점수 샘플 비교로 실측 검증.</td>
+      <td>PRD 위임<br><span style="font-size:10px;color:var(--ts)">(2026-04)</span></td>
+    </tr>
+    <tr>
+      <td><strong>D-06</strong></td>
+      <td>§14 모니터링 임계치 수치 확정</td>
+      <td>§14-4에 따라 Phase 1.5 런칭 후 최소 2개 분기는 관찰 모드로 운영하며, 그 후 임계치 수치를 확정.<br><br><em>보류 사유:</em> 베이스라인 충돌 사례 분포 확보 전 임의 수치 고정은 오작동 위험. 관찰 모드 데이터가 있어야 합리적 임계치 설정 가능.</td>
+      <td>관찰 모드 2개 분기 종료 시점에 임계치 확정 미팅. 기술연구소·플랫폼사업본부·준법감시인 공동 참여.</td>
+      <td>관찰 대기<br><span style="font-size:10px;color:var(--ts)">(Phase 1.5 런칭 후 활성)</span></td>
+    </tr>
+    <tr>
+      <td><strong>D-07</strong></td>
+      <td>전환율 비교 방법론</td>
+      <td>§11-1-1의 "기존 엔진 대비 최소 동등 이상" 측정 기준에서, bodoc 앱과 Clark/Lois의 진입 채널 차이로 단순 비교가 apples-to-oranges가 될 가능성.<br><br><em>보류 사유:</em> 비교 방법론 선택(동일 채널 A/B, 이종 채널 가중 비교, 기간 분할 비교 등)은 기술연구소 검토 필요.</td>
+      <td>Phase 1.5 착수 전 확정. 기술연구소·플랫폼사업본부 공동 승인.</td>
+      <td>협의 예정<br><span style="font-size:10px;color:var(--ts)">(Phase 1.5 착수 전)</span></td>
+    </tr>
+    <tr>
+      <td><strong>D-08</strong></td>
+      <td>Rule 카드 필드 확장 방식</td>
+      <td>§11-4에서 Rule 카드에 output_label·coverage_category 2개 필드 추가를 정의. §7의 Rule 카드 스키마를 직접 변경할지, 별도 Extension 테이블로 분리할지 확정 필요.<br><br><em>보류 사유:</em> 기존 Rule 카드(<code>RULE.LEAD.CONVERT_THRESHOLD.V1</code> 등)의 구조에 영향을 줄 수 있어 기술적 검토 필요. ※ Fromage variant 필드는 §11-7-1에 따라 채택하지 않음 (Evidence 카드 강화 방식으로 결정).</td>
+      <td>Phase 1 착수 시 기술연구소 ↔ 작성자(고객경험팀장) 공동 검토. 결과에 따라 KC Admin 스펙 영향 가능.</td>
+      <td>협의 예정<br><span style="font-size:10px;color:var(--ts)">(Phase 1 착수 시)</span></td>
+    </tr>
+    <tr>
+      <td><strong>D-09</strong></td>
+      <td>신규 Rule 카드 ID 네임스페이스</td>
+      <td>v1.6으로 추가되는 Rule 카드(담보코드 기반 R3 판정용)의 ID 네임스페이스를 기존 <code>RULE.LEAD.*</code> / <code>RULE.PLANNER.*</code>와 구분할 필요. 예: <code>RULE.COVERAGE.CANCER.V1</code>, <code>RULE.COVERAGE.LONGTERM_CARE.V1</code> 등.<br><br><em>보류 사유:</em> §7 예시를 따르되, 기존 카드와 ID 중복이 없는지 검증 필요.</td>
+      <td>작성자(고객경험팀장)가 KC Admin 입력 단계에서 ID 체계 최종 확정. 기존 카드 목록 대조 필수.</td>
+      <td>입력 단계 처리<br><span style="font-size:10px;color:var(--ts)">(Phase 1 입력 시)</span></td>
+    </tr>
+    <tr>
+      <td><strong>D-10</strong></td>
+      <td>R3 확장 카드의 규제 검수 대상 여부</td>
+      <td>§3-1의 규제 검수는 "법적 정의가 포함된 카드" 5종(실손의료보험, 심혈관질환 보장, 뇌혈관질환 보장, 질병코드의 이해, 보험 마이데이터)에만 해당. R3로 확장되는 Rule 카드(유지/보강/검토 라벨 + 담보 카테고리별 판정)가 이 5종 범위에 포함되는지, 아니면 신규 대상으로 추가되는지 확인 필요.</td>
+      <td>Phase 1 착수 시 제품기획실장이 준법감시인과 범위 협의. 결과는 §11-6 거버넌스 플로우의 ④ 단계에 반영. 범위 외로 결정되더라도 "보강" 라벨의 보험모집 법리 경계 검토를 위한 별도 자문은 수행.</td>
+      <td>협의 예정<br><span style="font-size:10px;color:var(--ts)">(Phase 1 착수 시)</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="success" style="margin-top:16px">
+  <strong>현 상태 컬럼 분류 정의:</strong><br>
+  • <strong>미착수</strong> — 재검토 트리거 미발동, 향후 모니터링 대상<br>
+  • <strong>관찰 대기</strong> — Phase 1.5 런칭 후 데이터 수집을 통해 활성화될 예정<br>
+  • <strong>협의 예정</strong> — 특정 시점(Phase 1 또는 Phase 1.5 착수 전)에 협의 예정<br>
+  • <strong>PRD 위임</strong> — PRD 단계에서 결정될 예정<br>
+  • <strong>입력 단계 처리</strong> — KC Admin 카드 입력 시점에 처리<br>
+  • <strong>해소</strong> — 결정 완료, 해소 문서 참조 명시
+</div>
+
+<div class="note" style="margin-top:12px">
+※ 본 부록은 Delta BRD v0.5~v0.8 §10.4의 결정 보류 이슈 트래커를 v1.6 마스터 스펙으로 흡수한 것이다. Delta BRD는 v1.6 출시와 함께 deprecate되었으며, 이후 결정 보류 이슈의 추적은 본 부록에서만 수행된다.
+</div>
+
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- DOCUMENT HISTORY -->
+<!-- ═══════════════════════════════════════════ -->
+
+<div class="note" style="margin-top:32px">
+<strong>Document History</strong><br><br>
+
+<strong>v1.6.1 (2026.04, 현 버전) — v1.6 Hotfix</strong><br>
+
+본 버전은 v1.6에 대한 외부 하네스 검증에서 발견된 cross-reference 오류 3건과 잔존 v1.x 마커 5건을 해소한 hotfix이다. 구조 변경 없이 정확성·일관성만 복구한 패치이다.<br><br>
+
+<table style="margin-top:8px">
+  <thead><tr><th>분류</th><th>영향 섹션</th><th>변경 요지</th></tr></thead>
+  <tbody>
+    <tr><td><strong>P0 · Cross-ref 오류</strong></td><td>§14-5-3</td><td>재검토 트래킹 참조를 잘못 가리킨 "§16 D-09(보수적 판정 원칙의 사업적 영향 모니터링)"를 실재하는 "§16 D-02("해지 의견" 기능 제거의 사업적 영향)"로 수정. D-09는 실제로 "신규 Rule 카드 ID 네임스페이스"를 다룸.</td></tr>
+    <tr><td><strong>P0 · Cross-ref 오류</strong></td><td>§11-7-2</td><td>"암위험도_등급" 필드 출처 참조를 잘못된 "§16 D-04"에서 실재하는 "§3-8-7 협의 항목 1"로 수정. D-04는 실제로 "정량 목표 [TBD] 수치 확정"을 다룸.</td></tr>
+    <tr><td><strong>P0 · 누락 추가</strong></td><td>§3-8-7</td><td>협의 항목 5(프롬프트 스냅샷 로그 및 CI 식별자 처리 정책) 추가. §11-8이 참조 중이었으나 §3-8-7에 미등록 상태였음. Delta BRD §5.5 항목 5를 흡수.</td></tr>
+    <tr><td><strong>P0 · 클린본 일관성</strong></td><td>§11-4 / §11-5 / §11-7-1 / §16 D-08</td><td>v1.6에서 "12건 일괄 제거"로 보고되었으나 실제 잔존한 v1.x 자연어 마커 5건 추가 제거. "v1.4의 Rule 카드" / "v1.4 원본" / "v1.4 기존" / "v1.4의 카드 책임 분리" 표현들을 §7-2, §2-2, §7 등 현재 문서 내 참조로 교체.</td></tr>
+    <tr><td><strong>P0 · 약어 정의</strong></td><td>§11 도입부 신설</td><td>R-넘버링 참조 가이드 추가. R3=§11, R6=§12, R7=§13, R5=외부 어휘 정책 매핑 명시. 본문 R3 17회 / R6 2회 / R7 5회 사용되나 이전 버전까지 정의 부재였던 부분 보완.</td></tr>
+    <tr><td><strong>P1 · 예시 정합성</strong></td><td>§11-5</td><td>1조합 1Rule 예시 "(납입여력부족 우려형, cancer)"를 의미 정합성이 있는 "(T02 암투병생활비 부족형, cancer)"로 교체. T02가 명백히 cancer 관련 Risk-type이므로 1:1 매핑이 자연스러움. v1.5부터 이월되었던 이슈.</td></tr>
+    <tr><td><strong>P1 · 구조적 leak 차단</strong></td><td>§16 도입부 / §3-8-7</td><td>§3-8-7 정보보호실 협의 항목(절차적 checklist)과 §16 결정 보류 이슈(지표 기반 추적)의 <strong>성격 차이</strong>를 각 섹션 도입부에 명시. 본문 작성 시 혼용 금지를 구조적으로 차단 (D-XX와 §3-8-7 항목 N의 잘못된 혼용이 이번 cross-ref 오류의 근본 원인이었음).</td></tr>
+  </tbody>
+</table>
+
+<br>
+
+<strong>v1.6 (2026.04) — Stand-alone 마스터 스펙 확립</strong><br>
+
+v1.5에 대한 외부 하네스 검증 결과를 반영하여 stand-alone 마스터 스펙 자리를 확립한 패치. Delta BRD v0.5~v0.8은 본 버전 출시와 함께 deprecate되었으며, 본 문서가 그 모든 결정을 흡수하였다.<br><br>
+
+<table style="margin-top:8px">
+  <thead><tr><th>분류</th><th>영향 섹션</th><th>변경 요지</th></tr></thead>
+  <tbody>
+    <tr><td><strong>P0 · 신뢰성</strong></td><td>전 본문</td><td>v1.5 잔존 v1.x 마커 본문 제거. 클린 재제작 정책 본문 일관성 확보 (※ v1.6.1에서 5건 추가 발견 후 재처리).</td></tr>
+    <tr><td><strong>P0 · 정확성</strong></td><td>§13-3</td><td>"보수적 판정 원칙(2.4)" 잘못된 cross-reference를 "11-2의 보수적 판정 원칙"으로 수정.</td></tr>
+    <tr><td><strong>P0 · 일관성</strong></td><td>§2-2 ② / §3-6 / §3-7</td><td>Risk-type 명칭/개수 통일. §2-2 8종을 단일 진실원으로 두고 §3-6/§3-7의 T01~T05 표기를 §2-2 명칭에 일치시킴 + T-ID 명시 부여.</td></tr>
+    <tr><td><strong>P0 · 정책 위반 차단</strong></td><td>§11-7-3 / §13-5 신설</td><td>§11-7-3 예시의 "동년배 상위 20%" percentile 노출 표현 제거. §13-5 "출력 표기 표준" 챕터 신설로 수치 노출 기준·상품명 미언급 원칙을 정책으로 명문화.</td></tr>
+    <tr><td><strong>P0 · 가독성</strong></td><td>§2-3</td><td>메인 참조 흐름의 결정 순서 vs 설명 순서 분리 표기.</td></tr>
+    <tr><td><strong>P1 · 통합 누락 보완</strong></td><td>§11-2 / §13-5 / §14</td><td>Delta BRD 안전장치 흡수: R3-2 판정 근거 구체성 vs 판정 라벨 범위 이원화 / R3-5 상품명 미언급 원칙 R3 전체 차원 격상 / §9.7 기능 범위 축소 리스크 정식 등록.</td></tr>
+    <tr><td><strong>P1 · 정량 목표</strong></td><td>§11 / §15-2</td><td>Delta BRD §3.2의 정량 목표를 placeholder로 명시. 실제 수치는 PRD에서 Phase 1.5 착수 전 확정.</td></tr>
+    <tr><td><strong>P1 · 표 통합</strong></td><td>§3-1</td><td>두 개 역할 표 병존 해소. 단일 표로 통합. 개인 배경 정보 제거.</td></tr>
+    <tr><td><strong>P1 · 필드 출처 명시</strong></td><td>§11-7-2</td><td>Rule 조건 예시 필드의 출처 명시 (※ v1.6.1에서 참조 대상 수정).</td></tr>
+    <tr><td><strong>신규</strong></td><td>§16 부록</td><td>Open Issues 트래커 부록 신설. Delta BRD §10.4의 결정 보류 이슈 D-01~D-10을 v1.6 본문에 흡수.</td></tr>
+  </tbody>
+</table>
+
+<br>
+
+<strong>v1.5 (2026.04) — 클린 재제작 1차본 + Delta BRD 흡수</strong><br>
+
+이전 버전(v1.0~v1.4+)에서 누적되었던 개정 마커와 버전 주석을 제거하고, 본문은 현재 시점의 설계 상태만을 서술. 본문 내 인명 표기를 모두 직책 표기로 전환. 신규 4개 장(11~14장: R3·R6·R7·9.5) 추가. 기존 §3-8 절은 위치 그대로 유지하되 제목/도입부를 "Fromage 통합 시 민감정보 처리 원칙"으로 프레이밍 교정. 본 v1.5에서 채택한 클린 재제작 정책은 v1.6 이후로도 영구 유지되며, 직전 버전 파일은 별도 백업 디렉토리에 보존된다.<br><br>
+
+<strong>이전 버전 누적 요약 (v1.0 ~ v1.4+)</strong><br>
+v1.0 — 1~3장 초안 (기획 배경, KC 카드 체계, KC Admin 기능 정의), 11장(현 15장) 기대 효과.<br>
+v1.1 — 4~8장 신규 (4계층 확장 아키텍처, Agent 관계 그래프, aGCR 스코어링, 카드 예시, AI 통제 범위).<br>
+v1.2 — Concept 용어 통일, 카드 명칭 규칙 정비, Rule-Evidence 연결 필수화, 디지털 트윈 7단계 프로세스, Graph RAG 정의, 3대 저장소 분리, 9장 First Connect 연동·10장 Clark/Lois 전략 신규.<br>
+v1.3 — KC Admin MVP 검증 결과 반영. Concept 카드 이원 구조(Standalone/Linked) 도입, Evidence 3유형 분류, 역할 상세화, 마이데이터 담보코드 참조 체계(3-5), Amplitude 유저 속성 조건 연동(3-6), 리스크 유형 조건 드라이런 검증(3-7).<br>
+v1.4 — Fromage(Mediage) 건강정보 연동 반영. Evidence 4번째 유형(Fromage 기반) 추가, Amplitude 건강정보 적재 제한 원칙, 민감정보 처리 원칙(3-8 신규), Clark/Lois 고객 흐름에 건강정보 연결 유도 단계.<br>
+v1.4+ — 보닥 플랫폼 구조 정의서와의 상호 대조 반영. "6+1종" → "7종" 카드 체계 용어 통일, Policy 카드에 Clark 법적 준수 사항 참조, CRM 플랫폼 연동 구조 참조(9-6) 신규.<br><br>
+
+<em>※ 클린 재제작 정책 운영 안내: 본 문서는 v1.5부터 클린 재제작 정책을 영구 채택하였다. 매 버전 본문은 현재 시점 설계 상태만 서술하며, 변경 이력은 본 Document History 박스에 누적 기록된다. 직전 버전 파일은 별도 백업 디렉토리에 보존되어 과거 시점 추적이 가능하다.</em>
+</div>
+
+</div>
+</body>
+</html>

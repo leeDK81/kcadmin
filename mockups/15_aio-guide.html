@@ -1,0 +1,347 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AIO 가이드 — KC Admin</title>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<style>
+:root {
+  --status-draft:#9C9C94; --status-review:#BA7517; --status-active:#0F6E56; --status-approved:#1A4A9A; --status-paused:#7A4A00; --status-rejected:#A32D2D;
+  --step-active:#1A3A6B; --sidebar-w:220px; --bg-page:#F4F4F5; --bg-card:#FFFFFF;
+  --text-primary:#171719; --text-secondary:#70737C; --text-hint:#989BA2;
+  --border:#E1E2E4; --radius:8px; --shadow:0px 2px 4px -2px rgba(23,23,23,.06),0px 4px 6px -1px rgba(23,23,23,.06);
+  --card-risk:#C94B1A; --card-evidence:#1A7A4A; --card-concept:#1A4A9A;
+  --card-rule:#9A1A1A; --card-policy:#5A5A55; --card-playbook:#6B4A9A;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg-page);color:var(--text-primary);min-width:1280px;font-size:15px;line-height:1.5}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:var(--sidebar-w);background:#1A1A18;flex-shrink:0;padding:20px 0;position:sticky;top:0;height:100vh;overflow-y:auto}
+.sidebar-logo{padding:0 16px 20px;font-size:16px;font-weight:700;color:#fff;border-bottom:1px solid #333;margin-bottom:12px}
+.sidebar a,.nav-locked{display:flex;align-items:center;gap:8px;padding:8px 16px;color:#C8C8C4;text-decoration:none;font-size:14px;transition:background .15s}
+.sidebar a:hover{background:rgba(255,255,255,.08);color:#fff}
+.sidebar a.active{background:rgba(255,255,255,.15);color:#fff;font-weight:600;border-left:3px solid #5A8AE0}
+.nav-divider{border-top:1px solid #333;margin:8px 0}
+.nav-section{padding:16px 16px 4px;font-size:11px;color:#666;text-transform:uppercase;letter-spacing:.08em}
+.nav-locked{color:#555!important;cursor:not-allowed}
+.main{flex:1;padding:32px;overflow-y:auto}
+.page-header{margin-bottom:16px}
+.page-header h1{font-size:24px;font-weight:700;margin-bottom:4px}
+.page-header p{color:var(--text-secondary);font-size:14px}
+.guide-box{background:#EEF4FF;border:1px solid #C0D0F0;border-radius:var(--radius);padding:14px 18px;margin-bottom:20px;font-size:14px;color:var(--text-secondary);line-height:1.6}
+.section{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:20px;box-shadow:var(--shadow)}
+.section-title{font-size:16px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.section-sub{font-size:14px;font-weight:700;margin:18px 0 8px;color:var(--text-primary)}
+.spec-table{width:100%;border-collapse:collapse;font-size:14px;margin-bottom:4px}
+.spec-table th{background:#F0F0EC;padding:8px 12px;text-align:left;font-size:13px;font-weight:700;color:var(--text-secondary);border-bottom:2px solid var(--border);white-space:nowrap}
+.spec-table td{padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.55}
+.spec-table tr:last-child td{border-bottom:none}
+.spec-table tr:hover td{background:#FAFAF8}
+.card-tag{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:4px;font-size:12px;font-weight:700;white-space:nowrap}
+.ct-concept{background:rgba(26,74,154,.1);color:var(--card-concept)}
+.ct-evidence{background:rgba(26,122,74,.1);color:var(--card-evidence)}
+.ct-policy{background:rgba(90,90,85,.1);color:var(--card-policy)}
+.ct-risk{background:rgba(201,75,26,.1);color:var(--card-risk)}
+.ct-rule{background:rgba(154,26,26,.1);color:var(--card-rule)}
+.note-box{background:#FFF9EC;border:1px solid #F0D880;border-radius:6px;padding:12px 16px;font-size:13px;color:#7A5A00;margin-top:12px;line-height:1.6}
+.caution-box{background:#FFF0ED;border:1px solid #F0B0A0;border-radius:6px;padding:12px 16px;font-size:13px;color:#A32D2D;margin-top:12px;line-height:1.6}
+.ok-box{background:#F0FAF5;border:1px solid #A0D8C0;border-radius:6px;padding:12px 16px;font-size:13px;color:#0A5A40;margin-top:12px;line-height:1.6}
+/* 메커니즘 카드 */
+.mech-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:4px}
+.mech-card{background:#F8F8F6;border:1px solid var(--border);border-radius:8px;padding:18px}
+.mech-num{font-size:12px;font-weight:700;color:var(--text-hint);letter-spacing:.08em;margin-bottom:6px}
+.mech-title{font-size:15px;font-weight:700;margin-bottom:8px}
+.mech-desc{font-size:13px;color:var(--text-secondary);line-height:1.65}
+.mech-tag{display:inline-block;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:700;margin-top:8px}
+.tag-slow{background:#F4F0FF;color:#6A3A9A}
+.tag-realtime{background:#D4EAE0;color:#0F6E56}
+.tag-new{background:#EEF4FF;color:#1A3A6B}
+/* 흐름 다이어그램 */
+.flow-row{display:flex;align-items:center;gap:8px;margin:12px 0}
+.flow-step{background:#EEF4FF;border:1px solid #C0D0F0;border-radius:6px;padding:8px 14px;font-size:13px;font-weight:600;color:var(--step-active);white-space:nowrap}
+.flow-step.green{background:#D4EAE0;border-color:#7ABCAA;color:#0F6E56}
+.flow-step.gray{background:#F4F4F2;border-color:var(--border);color:var(--text-secondary)}
+.flow-arrow{color:#C0C0B8;font-size:14px;flex-shrink:0}
+/* 코드 블록 */
+.code-block{background:#1A1A18;border-radius:6px;padding:14px 18px;font-family:'Courier New',monospace;font-size:13px;color:#D0D0C8;line-height:1.7;margin:12px 0;overflow-x:auto}
+.code-block .c-key{color:#7ABCAA}
+.code-block .c-str{color:#F0C060}
+.code-block .c-comment{color:#666}
+.code-block .c-tag{color:#9ABCF0}
+/* 공개범위 배지 */
+.scope-public{background:rgba(26,74,154,.12);color:var(--card-concept);padding:2px 8px;border-radius:4px;font-size:12px;font-weight:700}
+.scope-baseline{background:rgba(186,117,23,.12);color:#BA7517;padding:2px 8px;border-radius:4px;font-size:12px;font-weight:700}
+.scope-internal{background:rgba(90,90,85,.12);color:#5A5A55;padding:2px 8px;border-radius:4px;font-size:12px;font-weight:700}
+/* 채널 배지 */
+.ch-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:4px;font-size:12px;font-weight:700;white-space:nowrap}
+.ch-google{background:#FEF0ED;color:#C94B1A}
+.ch-perplexity{background:#EEF4FF;color:#1A3A6B}
+.ch-chatgpt{background:#D4EAE0;color:#0F6E56}
+.ch-train{background:#F4F0FF;color:#6A3A9A}
+</style>
+</head>
+<body>
+<div class="layout">
+<nav class="sidebar">
+  <div class="sidebar-logo">⚡ KC Admin</div>
+  <a href="01_guide.html"><i class="fa-solid fa-clipboard-list fa-fw"></i> 업무 가이드</a>
+  <a href="02_dashboard.html"><i class="fa-solid fa-chart-bar fa-fw"></i> 대시보드</a>
+  <div class="nav-divider"></div>
+  <a href="03_card-library.html"><i class="fa-solid fa-folder-open fa-fw"></i> 카드 라이브러리</a>
+  <a href="04_risk-type-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-circle-exclamation fa-fw" style="font-size:11px;color:#C94B1A"></i> ① Risk-type</a>
+  <a href="05_evidence-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-database fa-fw" style="font-size:11px;color:#1A7A4A"></i> ② Evidence</a>
+  <a href="06_concept-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-lightbulb fa-fw" style="font-size:11px;color:#1A4A9A"></i> ③ Concept</a>
+  <a href="07_rule-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-scale-balanced fa-fw" style="font-size:11px;color:#9A1A1A"></i> ④ Rule</a>
+  <a href="08_policy-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-file-shield fa-fw" style="font-size:11px;color:#5A5A55"></i> ⑤ Policy</a>
+  <a href="16_playbook-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-handshake fa-fw" style="font-size:11px;color:#9A70D0"></i> ⑥ Playbook</a>
+  <span class="nav-locked" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-lock fa-fw" style="font-size:11px"></i> ⑦ Case 🔒</span>
+  <div class="nav-divider"></div>
+  <a href="10_chain-visualizer.html"><i class="fa-solid fa-link fa-fw"></i> 카드 연결 현황</a>
+  <div class="nav-divider"></div>
+  <a href="09_review-workflow.html"><i class="fa-solid fa-circle-check fa-fw"></i> 검수·승인</a>
+  <a href="11_dry-run.html"><i class="fa-solid fa-flask fa-fw"></i> 사전 테스트</a>
+  <div class="nav-divider"></div>
+  <a href="13_answer-logic.html"><i class="fa-solid fa-diagram-project fa-fw"></i> AI 답변 로직·예시</a>
+  <a href="17_system-data-guide.html"><i class="fa-solid fa-network-wired fa-fw"></i> 데이터 연결 구조</a>
+  <a href="15_aio-guide.html" class="active"><i class="fa-solid fa-globe fa-fw"></i> AIO 가이드</a>
+  <a href="00_design-system.html"><i class="fa-solid fa-palette fa-fw"></i> 디자인 시스템</a>
+  <a href="12_coverage-code-table.html"><i class="fa-solid fa-table-list fa-fw"></i> 담보코드</a>
+</nav>
+
+<main class="main">
+  <div class="page-header">
+    <h1>AIO 가이드</h1>
+    <p>외부 AI 시스템이 Clark KC 카드 콘텐츠를 참조하는 방식 — 개발자·운영자 공통 문서</p>
+  </div>
+
+  <div class="guide-box">
+    <strong>AIO(AI Indexing Optimization)</strong>는 SEO가 검색엔진에 콘텐츠를 노출하는 것처럼, <strong>AI 시스템(Google AI Overviews, Perplexity, ChatGPT 등)이 Clark의 KC 카드 콘텐츠를 참조·인용하도록</strong> 최적화하는 전략입니다.<br>
+    KC 카드 중 <strong>공개범위가 "고객 공개"인 카드만 AIO 색인 대상</strong>입니다(Risk-type·Concept). Evidence·Rule·Policy·Playbook은 공개범위가 "내부 전용"이므로 AIO 색인에서 자동 제외됩니다.
+  </div>
+
+  <!-- ① AIO란 무엇인가 -->
+  <div class="section">
+    <div class="section-title"><i class="fa-solid fa-circle-question fa-fw" style="color:var(--step-active)"></i> AIO란? — 운영자를 위한 설명</div>
+    <p style="font-size:14px;color:var(--text-secondary);margin-bottom:16px;line-height:1.7">
+      사용자가 "암보험 얼마나 있어야 해?"를 Google이나 ChatGPT에 물었을 때, Clark의 KC 카드에 등록된 정보가 AI 답변에 인용될 수 있습니다.<br>
+      이를 위해서는 KC 카드 콘텐츠가 <strong>공개 URL로 게시</strong>되고, <strong>AI가 이해할 수 있는 구조</strong>로 마크업되어 있어야 합니다.
+    </p>
+
+    <div class="flow-row">
+      <div class="flow-step">KC 카드 라이브 전환<br><span style="font-size:12px;font-weight:400">(고객 공개 유형만)</span></div>
+      <div class="flow-arrow"><i class="fa-solid fa-angle-right"></i></div>
+      <div class="flow-step">Clark 앱 퍼블리시 파이프라인<br><span style="font-size:12px;font-weight:400">FAQ 페이지 자동 생성</span></div>
+      <div class="flow-arrow"><i class="fa-solid fa-angle-right"></i></div>
+      <div class="flow-step">Schema.org 마크업<br><span style="font-size:12px;font-weight:400">구조화 데이터 포함</span></div>
+      <div class="flow-arrow"><i class="fa-solid fa-angle-right"></i></div>
+      <div class="flow-step green">AI 시스템 인용<br><span style="font-size:12px;font-weight:400">Google AI Overviews 등</span></div>
+    </div>
+
+    <div class="note-box">
+      <strong>운영자 관점 핵심:</strong> Risk-type·Concept 카드(공개범위: 고객 공개)를 라이브 전환하면 → 개발팀의 퍼블리시 파이프라인이 자동으로 외부 노출 처리합니다. 운영자가 별도로 할 일은 <strong>Policy 출력 제한</strong>을 정확히 설정하는 것입니다.
+    </div>
+  </div>
+
+  <!-- ② AI 참조 메커니즘 3가지 -->
+  <div class="section">
+    <div class="section-title"><i class="fa-solid fa-network-wired fa-fw" style="color:var(--step-active)"></i> AI가 콘텐츠를 참조하는 3가지 방식</div>
+
+    <div class="mech-grid">
+      <div class="mech-card">
+        <div class="mech-num">메커니즘 1</div>
+        <div class="mech-title"><i class="fa-solid fa-spider fa-fw"></i> 웹 크롤링 → 학습 데이터</div>
+        <div class="mech-desc">
+          ChatGPT, Claude 등 LLM이 학습할 때 공개 인터넷을 크롤링합니다. 공개 URL로 접근 가능한 KC 카드 콘텐츠는 다음 모델 버전 학습에 포함될 수 있습니다.<br><br>
+          <strong>허용 설정:</strong> <code>robots.txt</code>에서 GPTBot, ClaudeBot, Google-Extended 크롤러를 허용해야 합니다.
+        </div>
+        <div class="mech-tag tag-slow">⏱ 시차 있음 — 다음 학습 때 반영</div>
+      </div>
+
+      <div class="mech-card">
+        <div class="mech-num">메커니즘 2</div>
+        <div class="mech-title"><i class="fa-solid fa-bolt fa-fw"></i> 실시간 RAG</div>
+        <div class="mech-desc">
+          Google AI Overviews, Perplexity, ChatGPT 검색 모드는 질문이 들어오면 <strong>실시간으로 웹 검색 후 콘텐츠를 참조</strong>해 답변을 생성합니다.<br><br>
+          <strong>핵심:</strong> Schema.org 구조화 데이터(FAQ, HowTo)가 있으면 AI가 콘텐츠 의미를 더 정확히 파악해 인용 가능성이 높아집니다.
+        </div>
+        <div class="mech-tag tag-realtime">⚡ 즉시 반영 — 가장 중요</div>
+      </div>
+
+      <div class="mech-card">
+        <div class="mech-num">메커니즘 3</div>
+        <div class="mech-title"><i class="fa-solid fa-file-lines fa-fw"></i> llms.txt</div>
+        <div class="mech-desc">
+          <code>robots.txt</code>의 AI 버전입니다. 사이트 루트에 <code>/llms.txt</code> 파일을 두면 LLM 크롤러에게 "이 페이지들을 참조하세요"라고 안내할 수 있습니다.<br><br>
+          <strong>빠르게 도입 가능:</strong> 파일 하나로 모든 주요 AI 크롤러에게 Clark의 핵심 보험 정보 페이지를 안내합니다.
+        </div>
+        <div class="mech-tag tag-new">🆕 새로운 표준 — 도입 권장</div>
+      </div>
+    </div>
+
+    <div class="section-sub">AI 채널별 작동 방식</div>
+    <table class="spec-table">
+      <thead><tr><th style="width:160px">AI 채널</th><th style="width:120px">방식</th><th>Schema.org 효과</th><th style="width:160px">주요 크롤러</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="ch-badge ch-google">Google AI Overviews</span></td>
+          <td>실시간 RAG</td>
+          <td>FAQPage 스키마 인식 → 답변에 직접 인용 가능성 높음</td>
+          <td><code>Googlebot</code>, <code>Google-Extended</code></td>
+        </tr>
+        <tr>
+          <td><span class="ch-badge ch-perplexity">Perplexity</span></td>
+          <td>실시간 RAG</td>
+          <td>구조화 콘텐츠 우선 인용. 출처 URL 표시</td>
+          <td><code>PerplexityBot</code></td>
+        </tr>
+        <tr>
+          <td><span class="ch-badge ch-chatgpt">ChatGPT 검색</span></td>
+          <td>실시간 RAG</td>
+          <td>검색 결과 상위 노출 + 답변 인용</td>
+          <td><code>GPTBot</code>, <code>ChatGPT-User</code></td>
+        </tr>
+        <tr>
+          <td><span class="ch-badge ch-train">모델 학습</span></td>
+          <td>크롤링</td>
+          <td>직접 효과 없음 — 텍스트 품질이 중요</td>
+          <td><code>GPTBot</code>, <code>ClaudeBot</code> 등</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ③ KC 카드 → AIO 활용 필드 연결 -->
+  <div class="section">
+    <div class="section-title"><i class="fa-solid fa-arrows-left-right fa-fw" style="color:var(--step-active)"></i> KC 카드 → AIO 활용 필드 연결</div>
+    <p style="font-size:14px;color:var(--text-secondary);margin-bottom:14px">AIO 색인 대상인 고객 공개 카드(Concept·Risk-type)의 필드별 활용 방식을 정의합니다.</p>
+
+    <table class="spec-table">
+      <thead>
+        <tr>
+          <th style="width:110px">카드 유형</th>
+          <th style="width:160px">필드</th>
+          <th>AIO 활용</th>
+          <th style="width:80px">노출 여부</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td rowspan="2"><span class="card-tag ct-concept">Concept</span></td>
+          <td><code style="font-size:13px">term</code> (용어명)</td>
+          <td>FAQ 질문 키워드. "암보험이란?", "실손보험이란?" 형태로 질문 구성</td>
+          <td style="text-align:center;color:#0F6E56;font-weight:700">노출</td>
+        </tr>
+        <tr>
+          <td><code style="font-size:13px">definition</code> (한 줄 정의)</td>
+          <td>FAQ 답변 리드 문장. 간결한 정의로 AI 인용 가능성 높음</td>
+          <td style="text-align:center;color:#0F6E56;font-weight:700">노출</td>
+        </tr>
+        <tr style="border-top:2px solid var(--border)">
+          <td rowspan="2"><span class="card-tag ct-risk">Risk-type</span></td>
+          <td><code style="font-size:13px">name</code> (유형명)</td>
+          <td>답변 제목. "암투병생활비 부족형이란?" 형태의 질문 생성</td>
+          <td style="text-align:center;color:#0F6E56;font-weight:700">노출</td>
+        </tr>
+        <tr>
+          <td><code style="font-size:13px">description</code> (설명)</td>
+          <td>FAQ 답변 본문. 위험 유형의 정의와 의미 설명</td>
+          <td style="text-align:center;color:#0F6E56;font-weight:700">노출</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="caution-box" style="margin-top:12px">
+      <strong>주의 — 프롬에이지 Evidence:</strong> 건강검진 기반 데이터(암위험도, 대사나이 등)가 포함된 Evidence 카드는 공개범위가 <strong>내부 전용으로 자동 고정</strong>됩니다. 민감정보 처리 원칙(§3-8)에 따라 원본 수치는 어떤 경로로도 외부 노출되지 않도록 구현해야 합니다.
+    </div>
+  </div>
+
+  <!-- ④ Schema.org 구현 가이드 -->
+  <div class="section">
+    <div class="section-title"><i class="fa-solid fa-code fa-fw" style="color:var(--step-active)"></i> Schema.org 구현 가이드 — 개발자용</div>
+    <p style="font-size:14px;color:var(--text-secondary);margin-bottom:14px">
+      KC 카드 퍼블리시 파이프라인에서 아래 JSON-LD를 자동 생성해 각 FAQ 페이지 <code>&lt;head&gt;</code>에 삽입합니다.
+    </p>
+
+    <div class="section-sub">FAQPage 스키마 — Concept + Risk-type 카드 조합</div>
+    <div class="code-block">
+<span class="c-tag">&lt;script type="application/ld+json"&gt;</span>
+{
+  <span class="c-key">"@context"</span>: <span class="c-str">"https://schema.org"</span>,
+  <span class="c-key">"@type"</span>: <span class="c-str">"FAQPage"</span>,
+  <span class="c-key">"mainEntity"</span>: [
+    {
+      <span class="c-key">"@type"</span>: <span class="c-str">"Question"</span>,
+      <span class="c-key">"name"</span>: <span class="c-str">"암보험 진단금은 얼마가 적당한가요?"</span>,  <span class="c-comment">← Concept.term + synonyms 기반 자동 생성</span>
+      <span class="c-key">"acceptedAnswer"</span>: {
+        <span class="c-key">"@type"</span>: <span class="c-str">"Answer"</span>,
+        <span class="c-key">"text"</span>: <span class="c-str">"암투병생활비 부족형은 암 진단 후 치료·생활비 부담이 높아지는 위험 유형입니다. 40대 기준 진단금 5,000만원 이상을 권장합니다."</span>
+        <span class="c-comment">← Risk-type.description + Evidence.usageNote 조합</span>
+      }
+    }
+  ]
+}
+<span class="c-tag">&lt;/script&gt;</span>
+    </div>
+
+    <div class="section-sub">robots.txt — AI 크롤러 허용 설정</div>
+    <div class="code-block">
+<span class="c-comment"># 허용: Google AI (AI Overviews)</span>
+User-agent: Google-Extended
+Allow: /
+
+<span class="c-comment"># 허용: OpenAI</span>
+User-agent: GPTBot
+Allow: /
+
+<span class="c-comment"># 허용: Anthropic Claude</span>
+User-agent: ClaudeBot
+Allow: /
+
+<span class="c-comment"># 허용: Perplexity</span>
+User-agent: PerplexityBot
+Allow: /
+
+<span class="c-comment"># 차단: 학습 데이터 수집 전용 크롤러 (선택적)</span>
+<span class="c-comment"># User-agent: CCBot</span>
+<span class="c-comment"># Disallow: /</span>
+    </div>
+  </div>
+
+  <!-- ⑤ llms.txt -->
+  <div class="section">
+    <div class="section-title"><i class="fa-solid fa-file-lines fa-fw" style="color:var(--step-active)"></i> llms.txt 설정 가이드 — 개발자용</div>
+    <p style="font-size:14px;color:var(--text-secondary);margin-bottom:14px">
+      사이트 루트(<code>clark.ai/llms.txt</code>)에 배치합니다. KC 카드 "고객 공개" 콘텐츠 페이지 목록(Risk-type·Concept)을 AI 크롤러에게 직접 안내합니다.
+    </p>
+    <div class="code-block">
+<span class="c-comment"># Clark AI — 보험 정보 가이드</span>
+
+&gt; Clark은 보장 분석 기반 AI 보험 진단 서비스입니다.
+&gt; KC 카드 온톨로지를 활용해 사용자 맞춤 보험 분석을 제공합니다.
+
+<span class="c-comment">## 보험 용어 정의 (Concept 카드)</span>
+- [암보험이란?](https://clark.ai/guide/concept/cancer-insurance)
+- [실손보험이란?](https://clark.ai/guide/concept/indemnity-insurance)
+- [갱신형 vs 비갱신형](https://clark.ai/guide/concept/renewal-type)
+
+<span class="c-comment">## 위험 유형 안내 (Risk-type 카드)</span>
+- [암투병생활비 부족형](https://clark.ai/guide/risk/cancer-living-cost)
+- [납입여력부족 우려형](https://clark.ai/guide/risk/premium-burden)
+
+<span class="c-comment">## 이용 약관 및 면책</span>
+- [AI 진단 이용약관](https://clark.ai/terms)
+- [개인정보 처리방침](https://clark.ai/privacy)
+    </div>
+    <div class="note-box">
+      KC 카드가 라이브 전환되고 공개범위가 "고객 공개"이면(Risk-type·Concept), 퍼블리시 파이프라인이 <code>llms.txt</code>에 해당 카드 항목을 <strong>자동 추가</strong>합니다. 운영자가 직접 편집할 필요 없습니다.
+    </div>
+    <div class="ok-box" style="margin-top:8px">
+      <strong>AIO 효과 측정:</strong> Google Search Console에서 "AI Overviews" 노출 수를 확인하세요. Perplexity, ChatGPT에서 "clark 암보험" 등 키워드 검색 시 Clark 출처가 인용되는지 정기적으로 점검하는 것을 권장합니다.
+    </div>
+  </div>
+
+</main>
+</div>
+</body>
+</html>

@@ -1,0 +1,507 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1280">
+<title>카드 연결 현황 — KC Admin</title>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root {
+  --card-risk:#C94B1A; --card-evidence:#1A7A4A; --card-concept:#1A4A9A; --card-rule:#9A1A1A; --card-policy:#5A5A55;
+  --status-draft:#9C9C94; --status-review:#BA7517; --status-active:#0F6E56; --status-approved:#1A4A9A; --status-paused:#7A4A00; --status-rejected:#A32D2D;
+  --step-active:#1A3A6B;
+  --sidebar-w:220px; --bg-page:#F4F4F5; --bg-card:#FFFFFF;
+  --text-primary:#171719; --text-secondary:#70737C; --text-hint:#989BA2;
+  --border:#E1E2E4; --radius:8px; --shadow:0px 2px 4px -2px rgba(23,23,23,.06),0px 4px 6px -1px rgba(23,23,23,.06);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg-page);color:var(--text-primary);min-width:1280px;font-size:15px;line-height:1.5}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:var(--sidebar-w);background:#1A1A18;flex-shrink:0;padding:20px 0;position:sticky;top:0;height:100vh;overflow-y:auto}
+.sidebar-logo{padding:0 16px 20px;font-size:16px;font-weight:700;color:#fff;border-bottom:1px solid #333;margin-bottom:12px}
+.sidebar a,.nav-locked{display:flex;align-items:center;gap:8px;padding:8px 16px;color:#C8C8C4;text-decoration:none;font-size:14px;transition:background .15s}
+.sidebar a:hover{background:rgba(255,255,255,.08);color:#fff}
+.sidebar a.active{background:rgba(255,255,255,.15);color:#fff;font-weight:600;border-left:3px solid #5A8AE0}
+.nav-section{padding:16px 16px 4px;font-size:11px;color:#666;text-transform:uppercase;letter-spacing:.08em}
+.nav-divider{border-top:1px solid #333;margin:8px 0}
+.nav-locked{color:#555!important;cursor:not-allowed}
+.main{flex:1;padding:32px;overflow-y:auto}
+.page-header{margin-bottom:20px}
+.page-header h1{font-size:24px;font-weight:700;margin-bottom:6px}
+.page-header p{color:var(--text-secondary)}
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);margin-bottom:16px}
+.section-title{font-size:17px;font-weight:700;margin:0 0 16px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+/* Guide box */
+.guide-box{background:#EEF4FF;border:1px solid #C0D0F0;border-radius:var(--radius);padding:16px 20px;margin-bottom:20px}
+.guide-box h3{font-size:16px;font-weight:700;margin-bottom:8px}
+.guide-box ul{list-style:none;padding:0}
+.guide-box ul li{font-size:14px;color:var(--text-secondary);line-height:1.7;padding-left:4px}
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;font-size:13px;font-weight:600;white-space:nowrap}
+.badge-active{background:rgba(15,110,86,.15);color:var(--status-active)}
+.badge-review{background:rgba(186,117,23,.15);color:var(--status-review)}
+.badge-draft{background:rgba(156,156,148,.15);color:var(--status-draft)}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:6px;font-size:14px;font-weight:600;cursor:pointer;border:none;font-family:inherit;transition:opacity .15s}
+.btn:hover{opacity:.85}
+.btn-secondary{background:var(--bg-card);color:var(--text-primary);border:1px solid var(--border)}
+.toast{position:fixed;bottom:24px;right:24px;background:#1A1A18;color:#fff;padding:12px 20px;border-radius:8px;font-size:14px;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none}
+.toast.show{opacity:1}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;padding:10px 12px;font-size:13px;font-weight:600;color:var(--text-secondary);border-bottom:2px solid var(--border);background:#F8F8F6}
+td{padding:10px 12px;font-size:14px;border-bottom:1px solid var(--border)}
+tr:hover td{background:#FAFAF8}
+/* Filter bar */
+.filter-bar{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.tab-btn{padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:#fff;font-size:14px;font-weight:600;cursor:pointer;transition:all .15s;font-family:inherit}
+.tab-btn:hover{background:var(--bg-page)}
+.tab-btn.active{background:var(--step-active);color:#fff;border-color:var(--step-active)}
+.toggle-label{display:flex;align-items:center;gap:6px;font-size:14px;cursor:pointer;margin-left:auto}
+.toggle-label input{width:16px;height:16px;cursor:pointer}
+/* Chain graph */
+.chain-graph{position:relative;overflow:hidden;padding:24px 16px}
+.chain-columns{display:flex;gap:0;align-items:flex-start;justify-content:space-between;position:relative}
+.chain-col{display:flex;flex-direction:column;gap:12px;width:180px;flex-shrink:0}
+.col-header{text-align:center;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:6px 12px;border-radius:6px;margin-bottom:8px}
+.col-concept .col-header{background:rgba(26,74,154,.1);color:var(--card-concept)}
+.col-risk .col-header{background:rgba(201,75,26,.1);color:var(--card-risk)}
+.col-rule .col-header{background:rgba(154,26,26,.1);color:var(--card-rule)}
+.col-evidence .col-header{background:rgba(26,122,74,.1);color:var(--card-evidence)}
+.col-policy .col-header{background:rgba(90,90,85,.1);color:var(--card-policy)}
+/* Node styles */
+.chain-node{padding:10px 12px;border-radius:8px;cursor:pointer;border:2px solid transparent;text-align:center;min-width:140px;max-width:160px;transition:transform 0.15s,box-shadow 0.15s;position:relative;z-index:2}
+.chain-node:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.15)}
+.node-id{font-size:12px;font-weight:700;font-family:monospace;opacity:.7;margin-bottom:2px}
+.node-name{font-size:13px;font-weight:600;line-height:1.3;margin-bottom:4px}
+.node-badge{font-size:11px;padding:1px 6px;border-radius:3px;font-weight:600}
+/* Node types */
+.node-concept{background:rgba(26,74,154,.08);border-color:var(--card-concept);color:var(--card-concept)}
+.node-risk{background:rgba(201,75,26,.08);border-color:var(--card-risk);color:var(--card-risk)}
+.node-rule{background:rgba(154,26,26,.08);border-color:var(--card-rule);color:var(--card-rule)}
+.node-evidence{background:rgba(26,122,74,.08);border-color:var(--card-evidence);color:var(--card-evidence)}
+.node-policy{background:rgba(90,90,85,.08);border-color:var(--card-policy);color:var(--card-policy)}
+/* Dim / warning states */
+.node-draft{opacity:.5}
+.node-warn-border{border-style:dashed!important;border-color:#C94B1A!important}
+.node-draft-border{border-style:dashed!important;border-color:var(--status-review)!important;opacity:.7}
+/* Unconnected warning below node */
+.unconnected-warning{font-size:12px;color:#C94B1A;background:rgba(201,75,26,.1);border:1px solid rgba(201,75,26,.3);border-radius:4px;padding:4px 8px;margin-top:6px;text-align:center;line-height:1.4}
+/* SVG overlay */
+.svg-overlay{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1}
+.chain-col{z-index:2}
+/* Legend */
+.graph-legend{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;padding:12px 16px;border-top:1px solid var(--border);margin-top:8px}
+.legend-item{display:flex;align-items:center;gap:6px;color:var(--text-secondary)}
+.legend-line{width:28px;height:2px;flex-shrink:0}
+.legend-solid{background:var(--status-active)}
+.legend-dashed{background:none;border-top:2px dashed var(--status-review)}
+.legend-dotted{background:none;border-top:2px dotted #C94B1A}
+/* Routing table */
+.cell-ok{color:var(--status-active);font-weight:600}
+.cell-warn{color:var(--status-review);font-weight:600}
+.cell-err{color:var(--status-approved:#1A4A9A; --status-paused:#7A4A00; --status-rejected);font-weight:600}
+.routing-badge-kc{background:rgba(15,110,86,.15);color:var(--status-active);padding:2px 8px;border-radius:4px;font-size:13px;font-weight:600}
+.routing-badge-gen{background:rgba(156,156,148,.15);color:var(--status-draft);padding:2px 8px;border-radius:4px;font-size:13px;font-weight:600}
+.routing-badge-wait{background:rgba(186,117,23,.15);color:var(--status-review);padding:2px 8px;border-radius:4px;font-size:13px;font-weight:600}
+</style>
+</head>
+<body>
+<div class="layout">
+<nav class="sidebar">
+  <div class="sidebar-logo">⚡ KC Admin</div>
+  <a href="01_guide.html"><i class="fa-solid fa-clipboard-list fa-fw"></i> 업무 가이드</a>
+  <a href="02_dashboard.html"><i class="fa-solid fa-chart-bar fa-fw"></i> 대시보드</a>
+  <div class="nav-divider"></div>
+  <a href="03_card-library.html"><i class="fa-solid fa-folder-open fa-fw"></i> 카드 라이브러리</a>
+  <a href="04_risk-type-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-circle-exclamation fa-fw" style="font-size:11px;color:#C94B1A"></i> ① Risk-type</a>
+  <a href="05_evidence-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-database fa-fw" style="font-size:11px;color:#1A7A4A"></i> ② Evidence</a>
+  <a href="06_concept-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-lightbulb fa-fw" style="font-size:11px;color:#1A4A9A"></i> ③ Concept</a>
+  <a href="07_rule-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-scale-balanced fa-fw" style="font-size:11px;color:#9A1A1A"></i> ④ Rule</a>
+  <a href="08_policy-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-file-shield fa-fw" style="font-size:11px;color:#5A5A55"></i> ⑤ Policy</a>
+  <a href="16_playbook-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-handshake fa-fw" style="font-size:11px;color:#9A70D0"></i> ⑥ Playbook</a>
+  <span class="nav-locked" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-lock fa-fw" style="font-size:11px"></i> ⑦ Case 🔒</span>
+  <div class="nav-divider"></div>
+  <a href="10_chain-visualizer.html" class="active"><i class="fa-solid fa-link fa-fw"></i> 카드 연결 현황</a>
+  <div class="nav-divider"></div>
+  <a href="09_review-workflow.html"><i class="fa-solid fa-circle-check fa-fw"></i> 검수·승인</a>
+  <a href="11_dry-run.html"><i class="fa-solid fa-flask fa-fw"></i> 사전 테스트</a>
+    <div class="nav-section">참조 문서</div>
+  <a href="13_answer-logic.html"><i class="fa-solid fa-diagram-project fa-fw"></i> AI 답변 로직·예시</a>
+  <a href="17_system-data-guide.html"><i class="fa-solid fa-network-wired fa-fw"></i> 데이터 연결 구조</a>
+  <a href="15_aio-guide.html"><i class="fa-solid fa-globe fa-fw"></i> AIO 가이드</a>
+  <div class="nav-divider"></div>
+  <a href="00_design-system.html"><i class="fa-solid fa-palette fa-fw"></i> 디자인 시스템</a>
+  <a href="12_coverage-code-table.html"><i class="fa-solid fa-table-list fa-fw"></i> 담보코드</a>
+</nav>
+<main class="main">
+  <div class="page-header">
+    <h1>🔗 카드 연결 현황</h1>
+    <p>카드 연결 구조와 KC 답변 준비 현황을 확인합니다</p>
+  </div>
+
+  <!-- 처음 방문자 안내 -->
+  <div class="guide-box">
+    <h3>💡 카드 연결 현황 읽는 법</h3>
+    <ul>
+      <li>• <strong>왼쪽 → 오른쪽:</strong> 사용자 질문 → KC 기반 답변까지의 연결 흐름</li>
+      <li>• <strong>초록 실선:</strong> 라이브 연결 (정상)&nbsp;&nbsp;|&nbsp;&nbsp;<strong>주황 파선:</strong> 승인요청&nbsp;&nbsp;|&nbsp;&nbsp;<strong>빨간 점선:</strong> 미연결 (주의)</li>
+      <li>• 노드 클릭 시 해당 카드 편집기로 이동합니다</li>
+      <li>• KC 기반 답변 가능 조건: Concept ✅ + Rule ✅ + Evidence ✅ + Policy ✅ 모두 라이브</li>
+    </ul>
+  </div>
+
+  <!-- Filter bar -->
+  <div class="card" style="padding:16px 20px;margin-bottom:16px">
+    <div class="filter-bar">
+      <span style="font-size:14px;font-weight:600;color:var(--text-secondary)">Risk-type:</span>
+      <button class="tab-btn active" data-filter="all">전체</button>
+      <button class="tab-btn" data-filter="T01">T01</button>
+      <button class="tab-btn" data-filter="T02">T02</button>
+      <button class="tab-btn" data-filter="T03">T03</button>
+      <button class="tab-btn" data-filter="T04">T04</button>
+      <button class="tab-btn" data-filter="T05">T05</button>
+      <button class="tab-btn" data-filter="T06">T06</button>
+      <button class="tab-btn" data-filter="T07">T07</button>
+      <button class="tab-btn" data-filter="T08">T08</button>
+      <label class="toggle-label">
+        <input type="checkbox" id="unlinkedOnly"> 미연결 카드만 보기
+      </label>
+    </div>
+  </div>
+
+  <!-- Chain Graph -->
+  <div class="card" style="padding:0;overflow:hidden">
+    <div style="padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+      <span class="section-title" style="margin:0;border:none;padding:0">카드 연결 구조</span>
+      <span style="font-size:13px;color:var(--text-secondary)">노드 클릭 시 편집기로 이동</span>
+    </div>
+    <div class="chain-graph" id="chainGraph">
+      <div class="chain-columns" id="chainColumns">
+        <svg class="svg-overlay" id="svgOverlay" xmlns="http://www.w3.org/2000/svg"></svg>
+
+        <!-- Col 1: Concept -->
+        <div class="chain-col col-concept" id="col-concept">
+          <div class="col-header"><i class="fa fa-lightbulb"></i> Concept</div>
+          <div class="chain-node node-concept" data-id="CON001" data-type="concept" onclick="goEditor('concept')" title="CON001 암 보장">
+            <div class="node-id">CON001</div>
+            <div class="node-name">암 보장</div>
+            <span class="badge badge-active" style="font-size:11px;padding:1px 6px">라이브</span>
+          </div>
+          <div class="chain-node node-concept" data-id="CON002" data-type="concept" onclick="goEditor('concept')" title="CON002 심장 보장">
+            <div class="node-id">CON002</div>
+            <div class="node-name">심장 보장</div>
+            <span class="badge badge-active" style="font-size:11px;padding:1px 6px">라이브</span>
+          </div>
+          <div class="chain-node node-concept node-draft-border" data-id="CON003" data-type="concept" onclick="goEditor('concept')" title="CON003 뇌혈관 보장">
+            <div class="node-id">CON003</div>
+            <div class="node-name">뇌혈관 보장</div>
+            <span class="badge badge-draft" style="font-size:11px;padding:1px 6px">임시저장</span>
+            <div style="font-size:11px;margin-top:4px;color:var(--status-review)"><i class="fa fa-triangle-exclamation"></i> Rule 미등록 ⚠</div>
+          </div>
+        </div>
+
+        <!-- Col 2: Risk-type -->
+        <div class="chain-col col-risk" id="col-risk">
+          <div class="col-header"><i class="fa fa-shield-halved"></i> Risk-type</div>
+          <div class="chain-node node-risk" data-id="T01" data-type="risk" onclick="goEditor('risk')" title="T01 무보장형">
+            <div class="node-id">T01</div>
+            <div class="node-name">무보장형</div>
+            <span class="badge badge-active" style="font-size:11px;padding:1px 6px">라이브</span>
+          </div>
+          <div class="chain-node node-risk" data-id="T02" data-type="risk" onclick="goEditor('risk')" title="T02 암투병생활비 부족형">
+            <div class="node-id">T02</div>
+            <div class="node-name">암투병생활비 부족형</div>
+            <span class="badge badge-active" style="font-size:11px;padding:1px 6px">라이브</span>
+          </div>
+          <div class="chain-node node-risk" data-id="T03" data-type="risk" onclick="goEditor('risk')" title="T03 심혈관질환보장 협소형">
+            <div class="node-id">T03</div>
+            <div class="node-name">심혈관질환보장 협소형</div>
+            <span class="badge badge-review" style="font-size:11px;padding:1px 6px">승인요청</span>
+          </div>
+          <div class="chain-node node-risk" data-id="T04" data-type="risk" onclick="goEditor('risk')" title="T04 뇌혈관질환보장 협소형">
+            <div class="node-id">T04</div>
+            <div class="node-name">뇌혈관질환보장 협소형</div>
+            <span class="badge badge-active" style="font-size:11px;padding:1px 6px">라이브</span>
+          </div>
+          <div class="chain-node node-risk node-draft" data-id="T05" data-type="risk" onclick="goEditor('risk')" title="T05 노후돌봄보장 공백형">
+            <div class="node-id">T05</div>
+            <div class="node-name">노후돌봄보장 공백형</div>
+            <span class="badge badge-draft" style="font-size:11px;padding:1px 6px">임시저장</span>
+          </div>
+          <div class="chain-node node-risk node-draft" data-id="T06" data-type="risk" onclick="goEditor('risk')" title="T06 납입여력부족 우려형">
+            <div class="node-id">T06</div>
+            <div class="node-name">납입여력부족 우려형</div>
+            <span class="badge badge-draft" style="font-size:11px;padding:1px 6px">임시저장</span>
+          </div>
+          <div class="chain-node node-risk node-draft" data-id="T07" data-type="risk" onclick="goEditor('risk')" title="T07 비용 대비 보장 비효율형">
+            <div class="node-id">T07</div>
+            <div class="node-name">비용 대비 보장 비효율형</div>
+            <span class="badge badge-draft" style="font-size:11px;padding:1px 6px">임시저장</span>
+          </div>
+          <div class="chain-node node-risk node-draft" data-id="T08" data-type="risk" onclick="goEditor('risk')" title="T08 생애주기 적합도 저조형">
+            <div class="node-id">T08</div>
+            <div class="node-name">생애주기 적합도 저조형</div>
+            <span class="badge badge-draft" style="font-size:11px;padding:1px 6px">임시저장</span>
+          </div>
+        </div>
+
+        <!-- Col 3: Rule -->
+        <div class="chain-col col-rule" id="col-rule">
+          <div class="col-header"><i class="fa fa-code-branch"></i> Rule</div>
+          <div class="chain-node node-rule" data-id="RU001" data-type="rule" onclick="goEditor('rule')" title="RU001 암진단금 미보유 또는 소액">
+            <div class="node-id">RU001</div>
+            <div class="node-name">암진단금 미보유 또는 소액</div>
+            <span class="badge badge-active" style="font-size:11px;padding:1px 6px">라이브</span>
+          </div>
+          <div class="chain-node node-rule" data-id="RU002" data-type="rule" onclick="goEditor('rule')" title="RU002 심혈관 주요 담보 부재">
+            <div class="node-id">RU002</div>
+            <div class="node-name">심혈관 주요 담보 부재</div>
+            <span class="badge badge-review" style="font-size:11px;padding:1px 6px">승인요청</span>
+          </div>
+          <div class="chain-node node-rule node-draft" data-id="RU003" data-type="rule" onclick="goEditor('rule')" title="RU003 보닥 앱 진단점수 임계치 초과">
+            <div class="node-id">RU003</div>
+            <div class="node-name">보닥 앱 진단점수 임계치 초과</div>
+            <span class="badge badge-draft" style="font-size:11px;padding:1px 6px">임시저장</span>
+          </div>
+        </div>
+
+        <!-- Col 4: Evidence -->
+        <div class="chain-col col-evidence" id="col-evidence">
+          <div class="col-header"><i class="fa fa-database"></i> Evidence</div>
+          <div class="chain-node node-evidence" data-id="EV001" data-type="evidence" onclick="goEditor('evidence')" title="EV001 보닥 암진단 담보 미보유율 통계">
+            <div class="node-id">EV001</div>
+            <div class="node-name">보닥 암진단 담보 미보유율 통계</div>
+            <span class="badge badge-active" style="font-size:11px;padding:1px 6px">라이브</span>
+          </div>
+          <div class="chain-node node-evidence" data-id="EV002" data-type="evidence" onclick="goEditor('evidence')" title="EV002 보닥 40대 암보장 평균 분석">
+            <div class="node-id">EV002</div>
+            <div class="node-name">보닥 40대 암보장 평균 분석</div>
+            <span class="badge badge-active" style="font-size:11px;padding:1px 6px">라이브</span>
+          </div>
+          <div class="chain-node node-evidence" data-id="EV003" data-type="evidence" onclick="goEditor('evidence')" title="EV003 보닥 뇌심혈관 담보 미보유율">
+            <div class="node-id">EV003</div>
+            <div class="node-name">보닥 뇌심혈관 담보 미보유율</div>
+            <span class="badge badge-active" style="font-size:11px;padding:1px 6px">라이브</span>
+          </div>
+          <div>
+            <div class="chain-node node-evidence node-warn-border" data-id="EV004" data-type="evidence" onclick="goEditor('evidence')" title="EV004 프롬에이지 암위험도 등급 분포">
+              <div class="node-id">EV004</div>
+              <div class="node-name">프롬에이지 암위험도 등급 분포</div>
+              <span class="badge badge-draft" style="font-size:11px;padding:1px 6px">임시저장</span>
+            </div>
+            <div class="unconnected-warning">⚠ Rule 미연결 — 연결 후 재승인 필요</div>
+          </div>
+          <div class="chain-node node-evidence" data-id="EV005" data-type="evidence" onclick="goEditor('evidence')" title="EV005 40대 남성 심혈관 담보 보유율">
+            <div class="node-id">EV005</div>
+            <div class="node-name">40대 남성 심혈관 담보 보유율</div>
+            <span class="badge badge-active" style="font-size:11px;padding:1px 6px">라이브</span>
+          </div>
+        </div>
+
+        <!-- Col 5: Policy -->
+        <div class="chain-col col-policy" id="col-policy">
+          <div class="col-header"><i class="fa fa-gavel"></i> Policy</div>
+          <div class="chain-node node-policy" data-id="POL001" data-type="policy" onclick="goEditor('policy')" title="POL001 금융소비자보호법 §19">
+            <div class="node-id">POL001</div>
+            <div class="node-name">금융소비자보호법 §19</div>
+            <span class="badge badge-active" style="font-size:11px;padding:1px 6px">라이브</span>
+          </div>
+          <div class="chain-node node-policy node-draft" data-id="POL002" data-type="policy" onclick="goEditor('policy')" title="POL002 보험업법 고지 기준">
+            <div class="node-id">POL002</div>
+            <div class="node-name">보험업법 고지 기준</div>
+            <span class="badge badge-draft" style="font-size:11px;padding:1px 6px">임시저장</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Legend -->
+      <div class="graph-legend">
+        <div class="legend-item"><div class="legend-line legend-solid"></div> 라이브 연결</div>
+        <div class="legend-item"><div class="legend-line legend-dashed"></div> 검수중 연결</div>
+        <div class="legend-item"><div class="legend-line legend-dotted"></div> 미연결 경고</div>
+        <div class="legend-item" style="margin-left:auto;color:var(--text-hint)"><i class="fa fa-hand-pointer" style="font-size:12px"></i> 클릭 시 편집기 이동</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Routing completeness table -->
+  <div class="card">
+    <div class="section-title">KC 답변 준비 현황 — Risk-type별</div>
+    <table id="routingTable">
+      <thead>
+        <tr>
+          <th style="width:200px">Risk-type</th>
+          <th>Concept 연결</th>
+          <th>Rule 상태</th>
+          <th>Evidence</th>
+          <th>답변 가능 여부</th>
+        </tr>
+      </thead>
+      <tbody id="routingBody"></tbody>
+    </table>
+  </div>
+</main>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const ROUTING_DATA = [
+  {id:'T01',name:'무보장형',concept:'❌ 없음',conceptClass:'cell-err',rule:'❌ 없음',ruleClass:'cell-err',evidence:'-',routing:'생성형만',routingType:'gen'},
+  {id:'T02',name:'암투병생활비 부족형',concept:'✅ CON001 암 보장',conceptClass:'cell-ok',rule:'✅ RU001 암진단금 미보유 또는 소액 (라이브)',ruleClass:'cell-ok',evidence:'EV001 보닥 암진단, EV002 보닥 40대 분석',routing:'KC 기반 가능',routingType:'kc'},
+  {id:'T03',name:'심혈관질환보장 협소형',concept:'✅ CON002 심장 보장',conceptClass:'cell-ok',rule:'⏳ RU002 심혈관 주요 담보 부재 (검수중)',ruleClass:'cell-warn',evidence:'EV003 보닥 뇌심혈관, EV005 40대 남성 심혈관',routing:'검수 완료 후',routingType:'wait'},
+  {id:'T04',name:'뇌혈관질환보장 협소형',concept:'⚠ CON003 뇌혈관 보장 (임시저장)',conceptClass:'cell-warn',rule:'❌ 없음',ruleClass:'cell-err',evidence:'-',routing:'생성형만',routingType:'gen'},
+  {id:'T05',name:'노후돌봄보장 공백형',concept:'❌',conceptClass:'cell-err',rule:'❌',ruleClass:'cell-err',evidence:'-',routing:'생성형만',routingType:'gen'},
+  {id:'T06',name:'납입여력부족 우려형',concept:'❌',conceptClass:'cell-err',rule:'❌',ruleClass:'cell-err',evidence:'-',routing:'생성형만',routingType:'gen'},
+  {id:'T07',name:'비용 대비 보장 비효율형',concept:'❌',conceptClass:'cell-err',rule:'❌',ruleClass:'cell-err',evidence:'-',routing:'생성형만',routingType:'gen'},
+  {id:'T08',name:'생애주기 적합도 저조형',concept:'❌',conceptClass:'cell-err',rule:'❌',ruleClass:'cell-err',evidence:'-',routing:'생성형만',routingType:'gen'}
+];
+
+function renderRoutingTable(filter) {
+  const tbody = document.getElementById('routingBody');
+  const rows = filter === 'all' ? ROUTING_DATA : ROUTING_DATA.filter(r => r.id === filter);
+  tbody.innerHTML = rows.map(r => {
+    const badge = r.routingType === 'kc'
+      ? `<span class="routing-badge-kc">✅ KC 기반 가능</span>`
+      : r.routingType === 'wait'
+      ? `<span class="routing-badge-wait">⏳ ${r.routing}</span>`
+      : `<span class="routing-badge-gen">⚠ ${r.routing}</span>`;
+    return `<tr>
+      <td><strong style="font-family:monospace">${r.id}</strong> ${r.name}</td>
+      <td class="${r.conceptClass}">${r.concept}</td>
+      <td class="${r.ruleClass}">${r.rule}</td>
+      <td style="color:var(--text-secondary);font-size:13px">${r.evidence}</td>
+      <td>${badge}</td>
+    </tr>`;
+  }).join('');
+}
+
+let currentFilter = 'all';
+renderRoutingTable('all');
+
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentFilter = btn.dataset.filter;
+    applyFilters();
+  });
+});
+
+document.getElementById('unlinkedOnly').addEventListener('change', function() {
+  applyFilters();
+});
+
+function applyFilters() {
+  const unlinkedOnly = document.getElementById('unlinkedOnly').checked;
+  const filter = currentFilter;
+  renderRoutingTable(filter);
+
+  const nodes = document.querySelectorAll('.chain-node');
+  const CHAIN_MAP = {
+    T01: [],
+    T02: ['CON001','T02','RU001','RU003','EV001','EV002','POL001'],
+    T03: ['CON002','T03','RU002','EV003','EV005','POL001'],
+    T04: ['CON003','T04'],
+    T05: ['T05'], T06: ['T06'], T07: ['T07'], T08: ['T08']
+  };
+  const UNLINKED = ['EV004','CON003'];
+
+  nodes.forEach(node => {
+    const id = node.dataset.id;
+    let show = true;
+    if (filter !== 'all') {
+      const chain = CHAIN_MAP[filter] || [];
+      show = chain.includes(id) || id === filter;
+    }
+    if (unlinkedOnly) { show = UNLINKED.includes(id); }
+    node.style.opacity = show ? '1' : '0.2';
+    node.style.pointerEvents = show ? 'auto' : 'none';
+    // Also handle the unconnected-warning wrapper div
+    const wrapper = node.closest('div:not(.chain-col):not(.chain-columns)');
+    if (wrapper && wrapper !== node && wrapper.querySelector('.unconnected-warning')) {
+      wrapper.style.opacity = show ? '1' : '0.2';
+    }
+  });
+
+  drawLines();
+}
+
+function goEditor(type) {
+  const MAP = { concept:'06_concept-list.html', risk:'04_risk-type-list.html', rule:'07_rule-list.html', evidence:'05_evidence-list.html', policy:'08_policy-list.html' };
+  showToast(`${MAP[type]} 편집기로 이동합니다`);
+  setTimeout(() => { window.location.href = MAP[type]; }, 600);
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+function getNodeCenter(nodeId) {
+  const node = document.querySelector(`[data-id="${nodeId}"]`);
+  if (!node) return null;
+  const graph = document.getElementById('chainGraph');
+  const gRect = graph.getBoundingClientRect();
+  const nRect = node.getBoundingClientRect();
+  return {
+    x: nRect.left - gRect.left + nRect.width / 2,
+    y: nRect.top - gRect.top + nRect.height / 2,
+    rightX: nRect.right - gRect.left,
+    leftX: nRect.left - gRect.left
+  };
+}
+
+function drawLines() {
+  const svg = document.getElementById('svgOverlay');
+  const graph = document.getElementById('chainGraph');
+  svg.setAttribute('width', graph.offsetWidth);
+  svg.setAttribute('height', graph.offsetHeight);
+  svg.innerHTML = '';
+
+  const CONNECTIONS = [
+    {from:'CON001',to:'T02',style:'solid',color:'#1A4A9A'},
+    {from:'CON002',to:'T03',style:'solid',color:'#1A4A9A'},
+    {from:'CON003',to:'T04',style:'dashed',color:'#BA7517'},
+    {from:'T02',to:'RU001',style:'solid',color:'#C94B1A'},
+    {from:'T02',to:'RU003',style:'dashed',color:'#C94B1A'},
+    {from:'T03',to:'RU002',style:'dashed',color:'#C94B1A'},
+    {from:'RU001',to:'EV001',style:'solid',color:'#9A1A1A'},
+    {from:'RU001',to:'EV002',style:'solid',color:'#9A1A1A'},
+    {from:'RU002',to:'EV003',style:'dashed',color:'#9A1A1A'},
+    {from:'RU002',to:'EV005',style:'dashed',color:'#9A1A1A'}
+  ];
+
+  CONNECTIONS.forEach(conn => {
+    const from = getNodeCenter(conn.from);
+    const to = getNodeCenter(conn.to);
+    if (!from || !to) return;
+
+    const fromNode = document.querySelector(`[data-id="${conn.from}"]`);
+    const toNode = document.querySelector(`[data-id="${conn.to}"]`);
+    if (fromNode && (parseFloat(fromNode.style.opacity) < 0.5)) return;
+    if (toNode && (parseFloat(toNode.style.opacity) < 0.5)) return;
+
+    const line = document.createElementNS('http://www.w3.org/2000/svg','line');
+    line.setAttribute('x1', from.rightX);
+    line.setAttribute('y1', from.y);
+    line.setAttribute('x2', to.leftX);
+    line.setAttribute('y2', to.y);
+    line.setAttribute('stroke-width', '2');
+    line.setAttribute('stroke', conn.color);
+
+    if (conn.style === 'dashed') {
+      line.setAttribute('stroke-dasharray', '5,4');
+    } else if (conn.style === 'dotted') {
+      line.setAttribute('stroke-dasharray', '2,3');
+    }
+    line.setAttribute('opacity', '0.6');
+    svg.appendChild(line);
+  });
+}
+
+window.addEventListener('load', () => { setTimeout(drawLines, 100); });
+window.addEventListener('resize', drawLines);
+</script>
+</body>
+</html>

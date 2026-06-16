@@ -1,0 +1,504 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1280">
+<title>사전 테스트 — KC Admin</title>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root {
+  --card-risk:#C94B1A; --card-evidence:#1A7A4A; --card-concept:#1A4A9A; --card-rule:#9A1A1A; --card-policy:#5A5A55;
+  --card-playbook:#6B4A9A; --card-case:#D0CFC9;
+  --status-draft:#9C9C94; --status-review:#BA7517; --status-active:#0F6E56; --status-approved:#1A4A9A; --status-paused:#7A4A00; --status-rejected:#A32D2D;
+  --scope-public:#1A4A9A; --scope-baseline:#BA7517; --scope-internal:#5A5A55;
+  --route-kc:#0F6E56; --route-gen:#6B6B65; --route-path:#1A3A6B;
+  --step-done:#0F6E56; --step-active:#1A3A6B; --step-pending:#D0CFC9;
+  --sidebar-w:220px; --bg-page:#F4F4F5; --bg-card:#FFFFFF;
+  --text-primary:#171719; --text-secondary:#70737C; --text-hint:#989BA2;
+  --border:#E1E2E4; --radius:8px; --shadow:0px 2px 4px -2px rgba(23,23,23,.06),0px 4px 6px -1px rgba(23,23,23,.06);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg-page);color:var(--text-primary);min-width:1280px;font-size:15px;line-height:1.5}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:var(--sidebar-w);background:#1A1A18;flex-shrink:0;padding:20px 0;position:sticky;top:0;height:100vh;overflow-y:auto}
+.sidebar-logo{padding:0 16px 20px;font-size:16px;font-weight:700;color:#fff;border-bottom:1px solid #333;margin-bottom:12px}
+.sidebar a,.nav-locked{display:flex;align-items:center;gap:8px;padding:8px 16px;color:#C8C8C4;text-decoration:none;font-size:14px;transition:background .15s}
+.sidebar a:hover{background:rgba(255,255,255,.08);color:#fff}
+.sidebar a.active{background:rgba(255,255,255,.15);color:#fff;font-weight:600;border-left:3px solid #5A8AE0}
+.nav-section{padding:16px 16px 4px;font-size:11px;color:#666;text-transform:uppercase;letter-spacing:.08em}
+.nav-divider{border-top:1px solid #333;margin:8px 0}
+.nav-locked{color:#555!important;cursor:not-allowed}
+.main{flex:1;padding:32px;overflow-y:auto}
+.page-header{margin-bottom:28px}
+.page-header h1{font-size:24px;font-weight:700;margin-bottom:6px}
+.page-header p{color:var(--text-secondary)}
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);margin-bottom:16px}
+.section-title{font-size:17px;font-weight:700;margin:0 0 16px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.guide-box{background:#EEF4FF;border:1px solid #C0D0F0;border-radius:var(--radius);padding:16px 20px;margin-bottom:24px}
+.guide-box h3{font-size:17px;font-weight:700;margin-bottom:6px}
+.guide-box p{font-size:14px;color:var(--text-secondary);line-height:1.6;margin-top:6px}
+.guide-box .guide-first-use{font-size:14px;color:#1A3A6B;background:#D8E8FF;border:1px solid #A8C0F0;border-radius:6px;padding:10px 14px;margin-top:10px;line-height:1.6}
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;font-size:13px;font-weight:600;white-space:nowrap}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:6px;font-size:14px;font-weight:600;cursor:pointer;border:none;font-family:inherit;transition:opacity .15s}
+.btn:hover{opacity:.85}
+.btn-primary{background:var(--step-active);color:#fff}
+.btn-secondary{background:var(--bg-card);color:var(--text-primary);border:1px solid var(--border)}
+.btn-sm{padding:5px 10px;font-size:13px}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:14px;font-weight:600;margin-bottom:4px}
+.field-hint{display:block;font-size:13px;color:var(--text-hint);font-weight:400;margin-top:2px;line-height:1.4}
+.form-control{width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-family:inherit;background:#fff;color:var(--text-primary)}
+.form-control:focus{outline:none;border-color:var(--step-active);box-shadow:0 0 0 2px rgba(26,58,107,.12)}
+textarea.form-control{resize:vertical;min-height:80px}
+.banner-info{background:#EEF4FF;border:1px solid #C0D0F0;color:#1A3A6B;padding:12px 16px;border-radius:var(--radius);margin-bottom:16px;font-size:14px;line-height:1.6}
+.empty-state{text-align:center;padding:48px 24px;color:var(--text-secondary)}
+.empty-state .empty-icon{font-size:40px;margin-bottom:12px}
+.empty-state p{margin-bottom:8px;font-size:15px}
+.empty-state .empty-sub{font-size:13px;color:var(--text-hint);margin-bottom:20px}
+.toast{position:fixed;bottom:24px;right:24px;background:#1A1A18;color:#fff;padding:12px 20px;border-radius:8px;font-size:14px;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none}
+.toast.show{opacity:1}
+.two-col{display:grid;grid-template-columns:1fr 420px;gap:20px}
+
+/* Profile detail box */
+.profile-detail{background:#F8F8F6;border:1px solid var(--border);border-radius:6px;padding:12px 16px;margin-top:12px}
+.profile-detail-title{font-size:13px;font-weight:700;color:var(--text-secondary);margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em}
+.profile-row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border);font-size:13px}
+.profile-row:last-child{border:none}
+.profile-key{color:var(--text-secondary);font-weight:600}
+.profile-val{color:var(--text-primary);text-align:right;max-width:220px}
+.profile-risk-tag{display:inline-block;background:rgba(201,75,26,.1);color:var(--card-risk);border:1px solid rgba(201,75,26,.25);border-radius:4px;padding:2px 8px;font-size:13px;font-weight:600;margin-top:6px}
+.profile-no-risk-tag{display:inline-block;background:rgba(156,156,148,.1);color:var(--status-draft);border:1px solid var(--border);border-radius:4px;padding:2px 8px;font-size:13px;font-weight:600;margin-top:6px}
+
+/* Evaluation steps */
+.eval-steps{display:flex;flex-direction:column;gap:0}
+.eval-step{border:1px solid var(--border);border-radius:6px;margin-bottom:8px;overflow:hidden}
+.eval-step-header{padding:10px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;background:#F8F8F6;user-select:none}
+.eval-step-header:hover{background:#F0F0EE}
+.eval-step-num{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;color:#fff}
+.step-icon-ok{background:var(--status-active)}
+.step-icon-warn{background:var(--status-review)}
+.step-icon-err{background:var(--status-approved:#1A4A9A; --status-paused:#7A4A00; --status-rejected)}
+.eval-step-title{font-size:14px;font-weight:600;flex:1}
+.eval-step-result{font-size:13px;font-weight:600}
+.eval-step-body{padding:12px 14px;background:#fff;border-top:1px solid var(--border);font-size:14px}
+.eval-detail-row{padding:6px 0;border-bottom:1px solid #F0F0EE;display:flex;flex-direction:column;gap:3px}
+.eval-detail-row:last-child{border:none}
+.eval-label{font-size:13px;color:var(--text-secondary)}
+.eval-check{display:flex;align-items:flex-start;gap:6px;font-size:14px;line-height:1.5}
+.eval-ok{color:var(--status-active)}
+.eval-warn{color:var(--status-review)}
+.eval-err{color:var(--status-approved:#1A4A9A; --status-paused:#7A4A00; --status-rejected)}
+
+/* Result box */
+.result-final{border-radius:8px;padding:20px;margin-top:16px;text-align:center}
+.result-kc{background:rgba(15,110,86,.08);border:2px solid var(--status-active)}
+.result-gen{background:#F8F8F6;border:2px solid var(--status-draft)}
+.result-icon{font-size:32px;margin-bottom:8px}
+.result-title{font-size:20px;font-weight:700;margin-bottom:6px}
+.result-desc{font-size:14px;color:var(--text-secondary);line-height:1.6}
+.result-mock-note{font-size:13px;color:var(--text-hint);background:#F4F4F2;border:1px solid var(--border);border-radius:6px;padding:8px 12px;margin-top:12px;text-align:left;line-height:1.5}
+
+/* Routing badge */
+.routing-badge-kc{background:rgba(15,110,86,.15);color:var(--status-active);padding:4px 12px;border-radius:20px;font-size:14px;font-weight:700}
+.routing-badge-gen{background:rgba(156,156,148,.15);color:var(--status-draft);padding:4px 12px;border-radius:20px;font-size:14px;font-weight:700}
+
+/* Spin animation */
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.spinning{animation:spin .6s linear infinite}
+</style>
+</head>
+<body>
+<div class="layout">
+<nav class="sidebar">
+  <div class="sidebar-logo">⚡ KC Admin</div>
+  <a href="01_guide.html"><i class="fa-solid fa-clipboard-list fa-fw"></i> 업무 가이드</a>
+  <a href="02_dashboard.html"><i class="fa-solid fa-chart-bar fa-fw"></i> 대시보드</a>
+  <div class="nav-divider"></div>
+  <a href="03_card-library.html"><i class="fa-solid fa-folder-open fa-fw"></i> 카드 라이브러리</a>
+  <a href="04_risk-type-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-circle-exclamation fa-fw" style="font-size:11px;color:#C94B1A"></i> ① Risk-type</a>
+  <a href="05_evidence-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-database fa-fw" style="font-size:11px;color:#1A7A4A"></i> ② Evidence</a>
+  <a href="06_concept-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-lightbulb fa-fw" style="font-size:11px;color:#1A4A9A"></i> ③ Concept</a>
+  <a href="07_rule-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-scale-balanced fa-fw" style="font-size:11px;color:#9A1A1A"></i> ④ Rule</a>
+  <a href="08_policy-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-file-shield fa-fw" style="font-size:11px;color:#5A5A55"></i> ⑤ Policy</a>
+  <a href="16_playbook-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-handshake fa-fw" style="font-size:11px;color:#9A70D0"></i> ⑥ Playbook</a>
+  <span class="nav-locked" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-lock fa-fw" style="font-size:11px"></i> ⑦ Case 🔒</span>
+  <div class="nav-divider"></div>
+  <a href="10_chain-visualizer.html"><i class="fa-solid fa-link fa-fw"></i> 카드 연결 현황</a>
+  <div class="nav-divider"></div>
+  <a href="09_review-workflow.html"><i class="fa-solid fa-circle-check fa-fw"></i> 검수·승인</a>
+  <a href="11_dry-run.html" class="active"><i class="fa-solid fa-flask fa-fw"></i> 사전 테스트</a>
+    <div class="nav-section">참조 문서</div>
+  <a href="13_answer-logic.html"><i class="fa-solid fa-diagram-project fa-fw"></i> AI 답변 로직·예시</a>
+  <a href="17_system-data-guide.html"><i class="fa-solid fa-network-wired fa-fw"></i> 데이터 연결 구조</a>
+  <a href="15_aio-guide.html"><i class="fa-solid fa-globe fa-fw"></i> AIO 가이드</a>
+  <div class="nav-divider"></div>
+  <a href="00_design-system.html"><i class="fa-solid fa-palette fa-fw"></i> 디자인 시스템</a>
+  <a href="12_coverage-code-table.html"><i class="fa-solid fa-table-list fa-fw"></i> 담보코드</a>
+</nav>
+<main class="main">
+  <div class="page-header">
+    <h1>🧪 사전 테스트 (가상 고객 검증)</h1>
+    <p>실제 조건을 테스트하여 Clark AI 예상 AI 답변 경로를 미리 확인합니다</p>
+  </div>
+
+  <div class="guide-box">
+    <h3>사전 테스트 사용법</h3>
+    <p>가상 고객 프로필을 선택하고 질문을 입력하면, KC 카드 조건이 어떻게 평가되는지, 예상 답변 경로(KC 기반 vs 일반 답변)를 미리 확인합니다.</p>
+    <div class="guide-first-use">📌 사전 테스트는 실제 데이터를 사용하지 않습니다. 가상 프로필로 Rule 조건이 올바르게 설정되었는지, KC 기반 답변이 가능한지를 사전에 확인하는 테스트 도구입니다.</div>
+  </div>
+
+  <div class="two-col">
+    <!-- LEFT: Settings -->
+    <div>
+      <div class="card">
+        <div class="section-title">사전 테스트 설정</div>
+
+        <div class="form-group">
+          <label>질문 입력 <span style="color:var(--status-approved:#1A4A9A; --status-paused:#7A4A00; --status-rejected)">*</span></label>
+          <textarea class="form-control" id="questionInput" placeholder="예: 암보험 얼마나 필요해? / 심장보험 충분한가요?"></textarea>
+          <span class="field-hint">실제 사용자가 Clark AI에게 할 법한 질문을 입력하세요</span>
+        </div>
+
+        <div class="form-group">
+          <label>고객 프로필 선택</label>
+          <select class="form-control" id="profileSelect" onchange="onProfileChange()">
+            <option value="">-- 프로필 선택 --</option>
+            <option value="A">고객 A — 45세 남성 | 암진단금 미보유 (T02 암투병생활비 부족형 해당 예상)</option>
+            <option value="B">고객 B — 38세 여성 | 심장 담보 소액 보유 (T03 심혈관질환보장 협소형 해당 예상)</option>
+            <option value="C">고객 C — 52세 남성 | 주요 담보 완비 (Risk-type 미해당 예상)</option>
+          </select>
+          <span class="field-hint">테스트 고객 프로필입니다. 실제 상담과 동일한 조건으로 미리 확인합니다</span>
+        </div>
+
+        <div id="profileDetail" style="display:none">
+          <div class="profile-detail">
+            <div class="profile-detail-title"><i class="fa fa-user-circle"></i> 프로필 상세</div>
+            <div id="profileRows"></div>
+            <div id="profileRiskTag" style="margin-top:6px"></div>
+          </div>
+        </div>
+
+        <div style="margin-top:20px">
+          <button class="btn btn-primary" id="runBtn" onclick="runDryRun()">
+            <i class="fa fa-play"></i> 사전 테스트 실행
+          </button>
+          <button class="btn btn-secondary" style="margin-left:8px" onclick="resetAll()">
+            <i class="fa fa-rotate-left"></i> 초기화
+          </button>
+        </div>
+      </div>
+
+      <!-- Preset questions -->
+      <div class="card" style="padding:14px 20px">
+        <div style="font-size:14px;font-weight:600;margin-bottom:8px;color:var(--text-secondary)">빠른 질문 예시</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <button class="btn btn-secondary btn-sm" onclick="setQuestion('암보험 얼마나 필요해?')">암보험 얼마나 필요해?</button>
+          <button class="btn btn-secondary btn-sm" onclick="setQuestion('심장보험 충분한가요?')">심장보험 충분한가요?</button>
+          <button class="btn btn-secondary btn-sm" onclick="setQuestion('내 보험 괜찮나요?')">내 보험 괜찮나요?</button>
+          <button class="btn btn-secondary btn-sm" onclick="setQuestion('암 치료비 준비됐나요?')">암 치료비 준비됐나요?</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Result -->
+    <div>
+      <div class="card" style="min-height:500px" id="resultCard">
+        <div class="section-title" id="resultTitle">사전 테스트 결과</div>
+
+        <!-- Placeholder -->
+        <div class="empty-state" id="emptyState">
+          <div class="empty-icon">🧪</div>
+          <p>설정 후 사전 테스트를 실행하세요</p>
+          <div class="empty-sub">질문과 프로필을 선택하고 실행 버튼을 눌러주세요</div>
+        </div>
+
+        <!-- Loading -->
+        <div id="loadingState" style="display:none;text-align:center;padding:60px 24px;color:var(--text-secondary)">
+          <i class="fa fa-gear fa-2x spinning" style="margin-bottom:16px;display:block;color:var(--step-active)"></i>
+          <p>조건 평가 중...</p>
+        </div>
+
+        <!-- Result -->
+        <div id="resultContent" style="display:none">
+          <div id="routingHeader" style="margin-bottom:16px;display:flex;align-items:center;gap:10px">
+            <span style="font-size:14px;font-weight:600">예상 답변 경로:</span>
+            <span id="routingBadge"></span>
+          </div>
+
+          <div class="eval-steps" id="evalSteps"></div>
+
+          <div id="finalResult" class="result-final"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const PROFILES = {
+  A: {
+    label: '고객 A — 45세 남성 | 암진단금 미보유',
+    riskPrediction: 'T02 암투병생활비 부족형',
+    hasRisk: true,
+    rows: [
+      {key:'담보코드', val:'A4100 (암진단금 미보유)'},
+      {key:'나이', val:'45세 (프로파일)'},
+      {key:'암위험도 등급', val:'위험 (프롬에이지)'},
+      {key:'담보금액', val:'10,000,000원 (소액)'}
+    ]
+  },
+  B: {
+    label: '고객 B — 38세 여성 | 심장 담보 소액 보유',
+    riskPrediction: 'T03 심혈관질환보장 협소형',
+    hasRisk: true,
+    rows: [
+      {key:'담보코드', val:'A4200 (암진단금 보유)'},
+      {key:'담보금액', val:'20,000,000원 (심장 소액)'},
+      {key:'나이', val:'38세 (프로파일)'},
+      {key:'암위험도 등급', val:'주의 (프롬에이지)'}
+    ]
+  },
+  C: {
+    label: '고객 C — 52세 남성 | 주요 담보 완비',
+    riskPrediction: null,
+    hasRisk: false,
+    rows: [
+      {key:'담보코드', val:'A4200, A4202, A4300 모두 보유'},
+      {key:'담보금액', val:'50,000,000원 이상'},
+      {key:'나이', val:'52세 (프로파일)'},
+      {key:'암위험도 등급', val:'양호 (프롬에이지)'}
+    ]
+  }
+};
+
+const MOCK_NOTE = '이 결과는 테스트 데이터 기반 사전 확인입니다. 실제 Clark AI 답변은 실제 고객 데이터로 평가됩니다.';
+
+const RESULTS = {
+  A: {
+    routing: 'kc',
+    steps: [
+      {
+        num:'①',
+        title:'Concept 동의어 매칭',
+        icon:'ok',
+        resultText:'매칭 성공',
+        details:[
+          {ok:true, text:'"암보험" → CON001 암 보장 매칭됨'},
+          {ok:true, text:'→ T02 암투병생활비 부족형 판정 프로세스 시작'}
+        ]
+      },
+      {
+        num:'②',
+        title:'Risk-type 판정',
+        icon:'ok',
+        resultText:'T02 판정',
+        details:[
+          {ok:true, text:'T02 암투병생활비 부족형 판정'},
+          {ok:true, text:'상태: 라이브 — 조건 평가 진행'}
+        ]
+      },
+      {
+        num:'③',
+        title:'Rule 조건 평가',
+        icon:'ok',
+        resultText:'2개 충족',
+        details:[
+          {ok:true, text:'RU001 암진단금 미보유:'},
+          {ok:true, text:'조건: coverage_code NOT_IN [A4200]'},
+          {ok:true, text:'고객 A 보유 코드: A4100 → 조건 충족 (암진단금 미보유)'},
+          {ok:true, text:'RU003 프롬에이지 암위험도 위험 등급:'},
+          {ok:true, text:'조건: cancer_risk 등급 = 위험'},
+          {ok:true, text:'고객 A 암위험도: 위험 → 조건 충족'}
+        ]
+      },
+      {
+        num:'④',
+        title:'Evidence 참조',
+        icon:'ok',
+        resultText:'2개 참조',
+        details:[
+          {ok:true, text:'EV001 보닥 암진단 담보 미보유율 통계 참조됨'},
+          {ok:true, text:'EV002 보닥 40대 암보장 평균 분석 참조됨'}
+        ]
+      },
+      {
+        num:'⑤',
+        title:'Policy 검증',
+        icon:'ok',
+        resultText:'통과',
+        details:[
+          {ok:true, text:'POL001 금융소비자보호법 §19 위험성 설명 의무 검증 통과'}
+        ]
+      }
+    ],
+    finalType: 'kc',
+    finalTitle: '✅ KC 기반 답변 제공 가능 (T02 암투병생활비 부족형 기준)',
+    finalDesc: '암진단금 미보유 조건 충족 및 프롬에이지 암위험도 위험 등급 확인. T02 암투병생활비 부족형 기준 KC 기반 정확한 답변을 제공합니다.'
+  },
+  C: {
+    routing: 'gen',
+    steps: [
+      {
+        num:'①',
+        title:'Concept 동의어 매칭',
+        icon:'ok',
+        resultText:'매칭 성공',
+        details:[
+          {ok:true, text:'"암보험" → CON001 암 보장 매칭됨'},
+          {ok:true, text:'→ T02 암투병생활비 부족형 판정 프로세스 시작'}
+        ]
+      },
+      {
+        num:'②',
+        title:'Risk-type 판정',
+        icon:'ok',
+        resultText:'T02 시도',
+        details:[
+          {ok:true, text:'T02 암투병생활비 부족형 판정 시도'}
+        ]
+      },
+      {
+        num:'③',
+        title:'Rule 조건 평가',
+        icon:'warn',
+        resultText:'미충족',
+        details:[
+          {ok:false, text:'RU001 암진단금 미보유:'},
+          {ok:false, text:'조건: coverage_code NOT_IN [A4200]'},
+          {ok:false, text:'고객 C 보유 코드: A4200 포함 → 조건 미충족 (암진단금 보유 중)'},
+          {ok:null, text:'→ Rule 조건 미충족으로 일반 생성형 답변으로 전환'}
+        ]
+      },
+      {
+        num:'④',
+        title:'답변 경로 결정',
+        icon:'warn',
+        resultText:'생성형 전환',
+        details:[
+          {ok:null, text:'Rule 조건 미충족 → KC 기반 답변 제공 불가'},
+          {ok:null, text:'일반 생성형 LLM으로 전환'}
+        ]
+      }
+    ],
+    finalType: 'gen',
+    finalTitle: '⚠ 일반 생성형 답변 (Rule 조건 미충족)',
+    finalDesc: '고객 C는 암진단금(A4200)을 이미 보유 중입니다. KC 기반 위험 진단 조건에 해당하지 않아 일반 생성형 답변으로 처리됩니다.'
+  }
+};
+
+function onProfileChange() {
+  const val = document.getElementById('profileSelect').value;
+  const detail = document.getElementById('profileDetail');
+  const rows = document.getElementById('profileRows');
+  const riskTag = document.getElementById('profileRiskTag');
+  if (!val || !PROFILES[val]) { detail.style.display = 'none'; return; }
+  const p = PROFILES[val];
+  rows.innerHTML = p.rows.map(r =>
+    `<div class="profile-row"><span class="profile-key">${r.key}</span><span class="profile-val">${r.val}</span></div>`
+  ).join('');
+  if (p.hasRisk) {
+    riskTag.innerHTML = `<span class="profile-risk-tag"><i class="fa fa-triangle-exclamation"></i> 예상 Risk-type: ${p.riskPrediction}</span>`;
+  } else {
+    riskTag.innerHTML = `<span class="profile-no-risk-tag"><i class="fa fa-circle-check"></i> 해당 Risk-type 없음 (생성형 답변 예상)</span>`;
+  }
+  detail.style.display = 'block';
+}
+
+function setQuestion(q) {
+  document.getElementById('questionInput').value = q;
+}
+
+function resetAll() {
+  document.getElementById('questionInput').value = '';
+  document.getElementById('profileSelect').value = '';
+  document.getElementById('profileDetail').style.display = 'none';
+  document.getElementById('emptyState').style.display = 'block';
+  document.getElementById('loadingState').style.display = 'none';
+  document.getElementById('resultContent').style.display = 'none';
+  document.getElementById('resultTitle').textContent = '사전 테스트 결과';
+}
+
+function runDryRun() {
+  const q = document.getElementById('questionInput').value.trim();
+  const profile = document.getElementById('profileSelect').value;
+  if (!q) { showToast('질문을 입력해 주세요'); return; }
+  if (!profile) { showToast('고객 프로필을 선택해 주세요'); return; }
+
+  document.getElementById('emptyState').style.display = 'none';
+  document.getElementById('resultContent').style.display = 'none';
+  document.getElementById('loadingState').style.display = 'block';
+
+  setTimeout(() => {
+    document.getElementById('loadingState').style.display = 'none';
+    renderResult(profile, q);
+  }, 900);
+}
+
+function renderResult(profile, question) {
+  let resultKey = profile;
+  if (profile === 'B') resultKey = 'C';
+  const data = RESULTS[resultKey] || RESULTS['C'];
+
+  // Routing badge
+  const badge = data.routing === 'kc'
+    ? '<span class="routing-badge-kc">✅ KC 기반 답변</span>'
+    : '<span class="routing-badge-gen">⚠ 일반 생성형 답변</span>';
+  document.getElementById('routingBadge').innerHTML = badge;
+
+  // Steps
+  const stepsHtml = data.steps.map((step) => {
+    const iconClass = step.icon === 'ok' ? 'step-icon-ok' : step.icon === 'warn' ? 'step-icon-warn' : 'step-icon-err';
+    const iconChar = step.icon === 'ok' ? '✓' : step.icon === 'warn' ? '!' : '✗';
+    const detailsHtml = step.details.map(d => {
+      const cls = d.ok === true ? 'eval-ok' : d.ok === false ? 'eval-err' : 'eval-warn';
+      const icon = d.ok === true ? '✅' : d.ok === false ? '❌' : '→';
+      return `<div class="eval-check ${cls}">${icon} ${d.text}</div>`;
+    }).join('');
+    return `
+      <div class="eval-step">
+        <div class="eval-step-header" onclick="toggleStep(this)">
+          <div class="eval-step-num ${iconClass}">${iconChar}</div>
+          <div class="eval-step-title">${step.num} ${step.title}</div>
+          <div class="eval-step-result" style="color:${step.icon==='ok'?'var(--status-active)':step.icon==='warn'?'var(--status-review)':'var(--status-approved:#1A4A9A; --status-paused:#7A4A00; --status-rejected)'}">${step.resultText}</div>
+          <i class="fa fa-chevron-down" style="font-size:12px;color:var(--text-hint);margin-left:6px;transition:transform .2s"></i>
+        </div>
+        <div class="eval-step-body">${detailsHtml}</div>
+      </div>`;
+  }).join('');
+  document.getElementById('evalSteps').innerHTML = stepsHtml;
+
+  // Final result
+  const finalCls = data.finalType === 'kc' ? 'result-kc' : 'result-gen';
+  const finalColor = data.finalType === 'kc' ? 'var(--status-active)' : 'var(--status-draft)';
+  document.getElementById('finalResult').className = `result-final ${finalCls}`;
+  document.getElementById('finalResult').innerHTML = `
+    <div class="result-title" style="color:${finalColor}">${data.finalTitle}</div>
+    <div class="result-desc">${data.finalDesc}</div>
+    <div style="margin-top:12px;font-size:13px;color:var(--text-hint)">질문: "${question}" | 프로필: ${PROFILES[profile].label.split('|')[0].trim()}</div>
+    <div class="result-mock-note"><i class="fa fa-circle-info"></i> ${MOCK_NOTE}</div>`;
+
+  document.getElementById('resultContent').style.display = 'block';
+  document.getElementById('resultTitle').textContent = '사전 테스트 결과';
+  showToast('사전 테스트 완료');
+}
+
+function toggleStep(header) {
+  const body = header.nextElementSibling;
+  const arrow = header.querySelector('.fa-chevron-down');
+  const isOpen = body.style.display !== 'none' && body.style.display !== '';
+  body.style.display = isOpen ? 'none' : 'block';
+  if (arrow) arrow.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+</script>
+</body>
+</html>

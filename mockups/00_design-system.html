@@ -1,0 +1,412 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=1280">
+<title>KC Admin – 디자인 시스템</title>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<style>
+:root {
+  --card-risk:#C94B1A; --card-evidence:#1A7A4A; --card-concept:#1A4A9A; --card-rule:#9A1A1A; --card-policy:#5A5A55;
+  --card-playbook:#6B4A9A; --card-case:#D0CFC9;
+  --status-draft:#9C9C94; --status-review:#BA7517; --status-approved:#1A4A9A; --status-active:#0F6E56; --status-paused:#7A4A00; --status-rejected:#A32D2D;
+  --scope-public:#1A4A9A; --scope-baseline:#BA7517; --scope-internal:#5A5A55;
+  --route-kc:#0F6E56; --route-gen:#6B6B65; --route-path:#1A3A6B;
+  --step-done:#0F6E56; --step-active:#1A3A6B; --step-pending:#D0CFC9;
+  --sidebar-w:220px; --bg-page:#F4F4F5; --bg-card:#FFFFFF;
+  --text-primary:#171719; --text-secondary:#70737C; --text-hint:#989BA2;
+  --border:#E1E2E4; --radius:8px; --shadow:0px 2px 4px -2px rgba(23,23,23,.06),0px 4px 6px -1px rgba(23,23,23,.06);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg-page);color:var(--text-primary);min-width:1280px;font-size:15px;line-height:1.5}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:var(--sidebar-w);background:#1A1A18;flex-shrink:0;padding:20px 0;position:sticky;top:0;height:100vh;overflow-y:auto}
+.sidebar-logo{padding:0 16px 20px;font-size:16px;font-weight:700;color:#fff;border-bottom:1px solid #333;margin-bottom:12px}
+.sidebar a,.nav-locked{display:flex;align-items:center;gap:8px;padding:8px 16px;color:#C8C8C4;text-decoration:none;font-size:14px;transition:background .15s}
+.sidebar a:hover{background:rgba(255,255,255,.08);color:#fff}
+.sidebar a.active{background:rgba(255,255,255,.15);color:#fff;font-weight:600;border-left:3px solid #5A8AE0}
+.nav-section{padding:16px 16px 4px;font-size:11px;color:#666;text-transform:uppercase;letter-spacing:.08em}
+.nav-divider{border-top:1px solid #333;margin:8px 0}
+.nav-locked{color:#555!important;cursor:not-allowed}
+.main{flex:1;padding:32px;overflow-y:auto}
+.page-header{margin-bottom:28px}
+.page-header h1{font-size:24px;font-weight:700;margin-bottom:6px}
+.page-header p{color:var(--text-secondary)}
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);margin-bottom:16px}
+.section-title{font-size:17px;font-weight:700;margin:0 0 16px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.guide-box{background:#EEF4FF;border:1px solid #C0D0F0;border-radius:var(--radius);padding:16px 20px;margin-bottom:24px}
+.step-badge{display:inline-block;background:var(--step-active);color:#fff;padding:2px 10px;border-radius:20px;font-size:13px;font-weight:600;margin-bottom:8px}
+.routing-role{display:inline-block;background:#D4EAE0;color:var(--route-kc);padding:2px 10px;border-radius:4px;font-size:13px;font-weight:600;margin-left:8px}
+.guide-box h3{font-size:17px;font-weight:700;margin-bottom:6px}
+.guide-box p{font-size:14px;color:var(--text-secondary);line-height:1.6;margin-top:6px}
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;font-size:13px;font-weight:600;white-space:nowrap}
+.badge-risk{background:rgba(201,75,26,.12);color:var(--card-risk)}.badge-evidence{background:rgba(26,122,74,.12);color:var(--card-evidence)}.badge-concept{background:rgba(26,74,154,.12);color:var(--card-concept)}.badge-rule{background:rgba(154,26,26,.12);color:var(--card-rule)}.badge-policy{background:rgba(90,90,85,.12);color:var(--card-policy)}.badge-playbook{background:rgba(107,74,154,.12);color:var(--card-playbook)}.badge-locked{background:rgba(208,207,201,.3);color:#999}
+.badge-draft{background:rgba(156,156,148,.15);color:var(--status-draft)}.badge-review{background:rgba(186,117,23,.15);color:var(--status-review)}.badge-approved{background:rgba(26,74,154,.15);color:var(--status-approved)}.badge-active{background:rgba(15,110,86,.15);color:var(--status-active)}.badge-paused{background:rgba(122,74,0,.15);color:var(--status-paused)}.badge-rejected{background:rgba(163,45,45,.15);color:var(--status-rejected)}
+.badge-public{background:rgba(26,74,154,.12);color:var(--scope-public)}.badge-baseline{background:rgba(186,117,23,.12);color:var(--scope-baseline)}.badge-internal{background:rgba(90,90,85,.12);color:var(--scope-internal)}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:6px;font-size:14px;font-weight:600;cursor:pointer;border:none;font-family:inherit;transition:opacity .15s}
+.btn:hover{opacity:.85}.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn-primary{background:var(--step-active);color:#fff}.btn-secondary{background:var(--bg-card);color:var(--text-primary);border:1px solid var(--border)}.btn-danger{background:var(--status-rejected);color:#fff}.btn-success{background:var(--status-active);color:#fff}.btn-sm{padding:5px 10px;font-size:13px}.btn-warn{background:var(--status-review);color:#fff}
+.banner{padding:12px 16px;border-radius:var(--radius);margin-bottom:12px;font-size:14px;line-height:1.6}
+.banner-warn{background:#FFF3D4;border:1px solid #F0C040;color:#8A5A00}.banner-error{background:#FFF0F0;border:1px solid #F0C0C0;color:#8A0000}.banner-info{background:#EEF4FF;border:1px solid #C0D0F0;color:#1A3A6B}.banner-success{background:#EDFAF4;border:1px solid #A0D8C0;color:#0A5A3C}
+.empty-state{text-align:center;padding:48px 24px;color:var(--text-secondary)}
+.empty-state .empty-icon{font-size:40px;margin-bottom:12px}
+.empty-state p{margin-bottom:8px;font-size:15px}.empty-state .empty-sub{font-size:13px;color:var(--text-hint);margin-bottom:20px}
+.toast{position:fixed;bottom:24px;right:24px;background:#1A1A18;color:#fff;padding:12px 20px;border-radius:8px;font-size:14px;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none}
+.toast.show{opacity:1}
+.step-bar{display:flex;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:4px}
+.step-item{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:600}
+.step-num{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
+.step-done .step-num{background:var(--step-done);color:#fff}.step-active .step-num{background:var(--step-active);color:#fff}.step-pending .step-num{background:var(--step-pending);color:var(--text-hint)}
+.step-done .step-label{color:var(--step-done)}.step-active .step-label{color:var(--step-active)}.step-pending .step-label{color:var(--text-hint)}
+.step-arrow{margin:0 6px;color:var(--border)}
+/* Design system specific */
+.swatch-row{display:flex;flex-wrap:wrap;gap:16px;margin-top:8px}
+.swatch{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:90px}
+.swatch-box{width:48px;height:48px;border-radius:6px;border:1px solid rgba(0,0,0,.1)}
+.swatch-var{font-size:12px;color:var(--text-hint);text-align:center;font-family:monospace}
+.swatch-hex{font-size:12px;color:var(--text-secondary);font-weight:600}
+.swatch-name{font-size:13px;font-weight:600;text-align:center}
+.badge-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:8px}
+.btn-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:8px}
+.screen-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:8px}
+.screen-link{display:block;padding:10px 12px;background:var(--bg-page);border:1px solid var(--border);border-radius:6px;text-decoration:none;color:var(--text-primary);font-size:14px;transition:border-color .15s,box-shadow .15s}
+.screen-link:hover{border-color:var(--step-active);box-shadow:var(--shadow)}
+.screen-link .screen-num{font-size:12px;color:var(--text-hint);margin-bottom:2px}
+.screen-link .screen-name{font-weight:600}
+.sub-section{margin-top:16px;padding-top:12px;border-top:1px solid var(--border)}
+.sub-section-label{font-size:13px;font-weight:600;color:var(--text-secondary);margin-bottom:8px}
+</style>
+</head>
+<body>
+<div class="layout">
+<nav class="sidebar">
+  <div class="sidebar-logo">⚡ KC Admin</div>
+  <a href="01_guide.html"><i class="fa-solid fa-clipboard-list fa-fw"></i> 업무 가이드</a>
+  <a href="02_dashboard.html"><i class="fa-solid fa-chart-bar fa-fw"></i> 대시보드</a>
+  <div class="nav-divider"></div>
+  <a href="03_card-library.html"><i class="fa-solid fa-folder-open fa-fw"></i> 카드 라이브러리</a>
+  <a href="04_risk-type-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-circle-exclamation fa-fw" style="font-size:11px;color:#C94B1A"></i> ① Risk-type</a>
+  <a href="05_evidence-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-database fa-fw" style="font-size:11px;color:#1A7A4A"></i> ② Evidence</a>
+  <a href="06_concept-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-lightbulb fa-fw" style="font-size:11px;color:#1A4A9A"></i> ③ Concept</a>
+  <a href="07_rule-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-scale-balanced fa-fw" style="font-size:11px;color:#9A1A1A"></i> ④ Rule</a>
+  <a href="08_policy-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-file-shield fa-fw" style="font-size:11px;color:#5A5A55"></i> ⑤ Policy</a>
+  <a href="16_playbook-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-handshake fa-fw" style="font-size:11px;color:#9A70D0"></i> ⑥ Playbook</a>
+  <span class="nav-locked" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-lock fa-fw" style="font-size:11px"></i> ⑦ Case 🔒</span>
+  <div class="nav-divider"></div>
+  <a href="10_chain-visualizer.html"><i class="fa-solid fa-link fa-fw"></i> 카드 연결 현황</a>
+  <div class="nav-divider"></div>
+  <a href="09_review-workflow.html"><i class="fa-solid fa-circle-check fa-fw"></i> 검수·승인</a>
+  <a href="11_dry-run.html"><i class="fa-solid fa-flask fa-fw"></i> 사전 테스트</a>
+    <div class="nav-section">참조 문서</div>
+  <a href="13_answer-logic.html"><i class="fa-solid fa-diagram-project fa-fw"></i> AI 답변 로직·예시</a>
+  <a href="17_system-data-guide.html"><i class="fa-solid fa-network-wired fa-fw"></i> 데이터 연결 구조</a>
+  <a href="15_aio-guide.html"><i class="fa-solid fa-globe fa-fw"></i> AIO 가이드</a>
+  <div class="nav-divider"></div>
+  <a href="00_design-system.html" class="active"><i class="fa-solid fa-palette fa-fw"></i> 디자인 시스템</a>
+  <a href="12_coverage-code-table.html"><i class="fa-solid fa-table-list fa-fw"></i> 담보코드</a>
+</nav>
+<main class="main">
+  <div class="page-header">
+    <h1>KC Admin 디자인 시스템</h1>
+    <p>모든 목업 파일에서 사용하는 CSS 변수·컴포넌트의 시각적 레퍼런스입니다. 새 화면 제작 시 이 페이지를 기준으로 삼으세요.</p>
+  </div>
+
+  <!-- 카드 유형 색상 -->
+  <div class="card">
+    <div class="section-title">카드 유형 색상</div>
+    <div class="sub-section-label">Phase 1 (활성)</div>
+    <div class="swatch-row">
+      <div class="swatch"><div class="swatch-box" style="background:#C94B1A"></div><div class="swatch-var">--card-risk</div><div class="swatch-hex">#C94B1A</div><div class="swatch-name">Risk-type</div></div>
+      <div class="swatch"><div class="swatch-box" style="background:#1A7A4A"></div><div class="swatch-var">--card-evidence</div><div class="swatch-hex">#1A7A4A</div><div class="swatch-name">Evidence</div></div>
+      <div class="swatch"><div class="swatch-box" style="background:#1A4A9A"></div><div class="swatch-var">--card-concept</div><div class="swatch-hex">#1A4A9A</div><div class="swatch-name">Concept</div></div>
+      <div class="swatch"><div class="swatch-box" style="background:#9A1A1A"></div><div class="swatch-var">--card-rule</div><div class="swatch-hex">#9A1A1A</div><div class="swatch-name">Rule</div></div>
+      <div class="swatch"><div class="swatch-box" style="background:#5A5A55"></div><div class="swatch-var">--card-policy</div><div class="swatch-hex">#5A5A55</div><div class="swatch-name">Policy</div></div>
+    </div>
+    <div class="sub-section">
+      <div class="sub-section-label">Phase 1 MVP (활성)</div>
+      <div class="swatch-row">
+        <div class="swatch"><div class="swatch-box" style="background:#6B4A9A"></div><div class="swatch-var">--card-playbook</div><div class="swatch-hex">#6B4A9A</div><div class="swatch-name">Playbook</div></div>
+      </div>
+    </div>
+    <div class="sub-section">
+      <div class="sub-section-label">Phase 1.5 이후 (잠김)</div>
+      <div class="swatch-row">
+        <div class="swatch"><div class="swatch-box" style="background:#D0CFC9;border:1px solid #bbb"></div><div class="swatch-var">--card-case</div><div class="swatch-hex">#D0CFC9</div><div class="swatch-name">Case 🔒</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 상태 & 공개범위 색상 -->
+  <div class="card">
+    <div class="section-title">상태 &amp; 공개범위 색상</div>
+    <div class="sub-section-label">카드 상태 (Status)</div>
+    <div class="swatch-row">
+      <div class="swatch"><div class="swatch-box" style="background:#9C9C94"></div><div class="swatch-var">--status-draft</div><div class="swatch-hex">#9C9C94</div><div class="swatch-name">임시저장</div></div>
+      <div class="swatch"><div class="swatch-box" style="background:#BA7517"></div><div class="swatch-var">--status-review</div><div class="swatch-hex">#BA7517</div><div class="swatch-name">승인요청</div></div>
+      <div class="swatch"><div class="swatch-box" style="background:#1A4A9A"></div><div class="swatch-var">--status-approved</div><div class="swatch-hex">#1A4A9A</div><div class="swatch-name">승인완료</div></div>
+      <div class="swatch"><div class="swatch-box" style="background:#0F6E56"></div><div class="swatch-var">--status-active</div><div class="swatch-hex">#0F6E56</div><div class="swatch-name">라이브</div></div>
+      <div class="swatch"><div class="swatch-box" style="background:#7A4A00"></div><div class="swatch-var">--status-paused</div><div class="swatch-hex">#7A4A00</div><div class="swatch-name">일시중지</div></div>
+      <div class="swatch"><div class="swatch-box" style="background:#A32D2D"></div><div class="swatch-var">--status-rejected</div><div class="swatch-hex">#A32D2D</div><div class="swatch-name">반려</div></div>
+    </div>
+    <div class="sub-section">
+      <div class="sub-section-label">공개범위 (Output Mode)</div>
+      <div class="swatch-row">
+        <div class="swatch"><div class="swatch-box" style="background:#1A4A9A"></div><div class="swatch-var">--scope-public</div><div class="swatch-hex">#1A4A9A</div><div class="swatch-name">고객 공개</div></div>
+        <div class="swatch"><div class="swatch-box" style="background:#BA7517"></div><div class="swatch-var">--scope-baseline</div><div class="swatch-hex">#BA7517</div><div class="swatch-name">공통 기준</div></div>
+        <div class="swatch"><div class="swatch-box" style="background:#5A5A55"></div><div class="swatch-var">--scope-internal</div><div class="swatch-hex">#5A5A55</div><div class="swatch-name">내부 전용</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 배지 -->
+  <div class="card">
+    <div class="section-title">배지 컴포넌트</div>
+    <div class="sub-section-label">카드 유형 배지</div>
+    <div class="badge-row">
+      <span class="badge badge-risk">Risk-type</span>
+      <span class="badge badge-evidence">Evidence</span>
+      <span class="badge badge-concept">Concept</span>
+      <span class="badge badge-rule">Rule</span>
+      <span class="badge badge-policy">Policy</span>
+      <span class="badge badge-playbook">Playbook</span>
+      <span class="badge badge-locked">Case 🔒</span>
+    </div>
+    <div class="sub-section">
+      <div class="sub-section-label">상태 배지</div>
+      <div class="badge-row">
+        <span class="badge badge-draft">📝 임시저장</span>
+        <span class="badge badge-review">⏳ 승인요청</span>
+        <span class="badge badge-approved">✔ 승인완료</span>
+        <span class="badge badge-active">🟢 라이브</span>
+        <span class="badge badge-paused">⏸ 일시중지</span>
+        <span class="badge badge-rejected">❌ 반려</span>
+      </div>
+    </div>
+    <div class="sub-section">
+      <div class="sub-section-label">공개범위 배지</div>
+      <div class="badge-row">
+        <span class="badge badge-public">고객 공개</span>
+        <span class="badge badge-baseline">공통 기준</span>
+        <span class="badge badge-internal">내부 전용</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 목록 페이지 헤더 & 필터바 표준 -->
+  <div class="card">
+    <div class="section-title">목록 페이지 헤더 &amp; 필터바 표준</div>
+    <div class="sub-section-label">구조: .page-header → .guide-box → .filter-bar</div>
+    <div style="background:#F4F4F5;border-radius:8px;padding:16px;margin-bottom:12px">
+      <div style="margin-bottom:12px">
+        <div style="font-size:22px;font-weight:700;margin-bottom:3px">① Risk-type 카드 목록</div>
+        <div style="font-size:14px;color:#5A5A55">Clark AI의 리스크 유형 분류 기준 카드</div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;background:#fff;border-radius:6px;padding:8px 12px">
+        <div style="display:flex;gap:4px">
+          <button class="btn btn-primary btn-sm">전체</button>
+          <button class="btn btn-secondary btn-sm">🟢 라이브</button>
+          <button class="btn btn-secondary btn-sm">⏳ 승인요청</button>
+          <button class="btn btn-secondary btn-sm">✔ 승인완료</button>
+          <button class="btn btn-secondary btn-sm">📝 임시저장</button>
+          <button class="btn btn-secondary btn-sm">⏸ 일시중지</button>
+        </div>
+        <button class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> 신규 등록</button>
+      </div>
+    </div>
+    <div class="sub-section-label" style="margin-top:8px">5단계 상태 모델 (카드 관리 &amp; 카드 연결 공통)</div>
+    <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:6px">
+      <span style="display:inline-flex;align-items:center;padding:4px 10px;border-radius:4px;font-size:13px;font-weight:600;background:#F0F0EE;color:#9C9C94">📝 임시저장</span>
+      <i class="fa fa-arrow-right" style="color:#D0CFC9;font-size:12px"></i>
+      <span style="display:inline-flex;align-items:center;padding:4px 10px;border-radius:4px;font-size:13px;font-weight:600;background:#FFF3D4;color:#BA7517">⏳ 승인요청</span>
+      <i class="fa fa-arrow-right" style="color:#D0CFC9;font-size:12px"></i>
+      <span style="display:inline-flex;align-items:center;padding:4px 10px;border-radius:4px;font-size:13px;font-weight:600;background:#D8E4FF;color:#1A4A9A">✔ 승인완료</span>
+      <i class="fa fa-arrow-right" style="color:#D0CFC9;font-size:12px"></i>
+      <span style="display:inline-flex;align-items:center;padding:4px 10px;border-radius:4px;font-size:13px;font-weight:600;background:#D4EAE0;color:#0F6E56">🟢 라이브</span>
+      <span style="padding:2px 8px;color:#5A5A55;font-size:13px">↔</span>
+      <span style="display:inline-flex;align-items:center;padding:4px 10px;border-radius:4px;font-size:13px;font-weight:600;background:#FFE8CC;color:#7A4A00">⏸ 일시중지</span>
+    </div>
+  </div>
+
+  <!-- 버튼 -->
+  <div class="card">
+    <div class="section-title">버튼 컴포넌트</div>
+    <div class="btn-row">
+      <button class="btn btn-primary"><i class="fa fa-plus"></i> Primary</button>
+      <button class="btn btn-secondary"><i class="fa fa-pen"></i> Secondary</button>
+      <button class="btn btn-success"><i class="fa fa-check"></i> Success</button>
+      <button class="btn btn-danger"><i class="fa fa-trash"></i> Danger</button>
+      <button class="btn btn-warn"><i class="fa fa-clock"></i> Warning</button>
+      <button class="btn btn-primary btn-sm">Small</button>
+      <button class="btn btn-secondary btn-sm">Small 2nd</button>
+      <button class="btn btn-primary" disabled>Disabled</button>
+    </div>
+  </div>
+
+  <!-- Guide Box -->
+  <div class="card">
+    <div class="section-title">안내 박스 (Guide Box)</div>
+    <div class="guide-box">
+      <span class="step-badge">Step 3 / 5</span>
+      <span class="routing-role">KC 운영자</span>
+      <h3>Rule 조건 설정</h3>
+      <p>Risk-type과 Evidence가 등록된 후 Rule을 작성할 수 있습니다. 조건식은 마이데이터 · 프롬에이지 · 프로파일 세 소스에서 가져옵니다. 논리 연산자(AND/OR)로 복합 조건을 구성하세요.</p>
+    </div>
+  </div>
+
+  <!-- 배너 -->
+  <div class="card">
+    <div class="section-title">경고 배너</div>
+    <div class="banner banner-info"><strong>안내:</strong> Concept 카드가 없으면 해당 질문은 일반 생성형 AI 경로로 처리됩니다.</div>
+    <div class="banner banner-warn"><strong>주의:</strong> Policy 카드는 저장 전 준법감시인 1차 검토가 필요합니다.</div>
+    <div class="banner banner-error"><strong>오류:</strong> Rule 저장 실패 – Evidence 카드가 연결되지 않았습니다.</div>
+    <div class="banner banner-success"><strong>완료:</strong> 카드가 라이브 상태로 전환되어 Clark AI에 반영되었습니다.</div>
+  </div>
+
+  <!-- Empty State -->
+  <div class="card">
+    <div class="section-title">빈 상태 (Empty State)</div>
+    <div class="empty-state">
+      <div class="empty-icon">📭</div>
+      <p>등록된 카드가 없습니다</p>
+      <p class="empty-sub">첫 번째 Risk-type 카드를 등록하여 KC 기반 답변을 시작하세요.</p>
+      <button class="btn btn-primary"><i class="fa fa-plus"></i> 카드 등록하기</button>
+    </div>
+  </div>
+
+  <!-- Step Bar -->
+  <div class="card">
+    <div class="section-title">등록 순서 스텝 바</div>
+    <div class="step-bar">
+      <div class="step-item step-done"><div class="step-num"><i class="fa fa-check" style="font-size:11px"></i></div><span class="step-label">① Risk-type</span></div>
+      <span class="step-arrow">→</span>
+      <div class="step-item step-active"><div class="step-num">2</div><span class="step-label">② Evidence</span></div>
+      <span class="step-arrow">→</span>
+      <div class="step-item step-pending"><div class="step-num">3</div><span class="step-label">③ Concept</span></div>
+      <span class="step-arrow">→</span>
+      <div class="step-item step-pending"><div class="step-num">4</div><span class="step-label">④ Rule</span></div>
+      <span class="step-arrow">→</span>
+      <div class="step-item step-pending"><div class="step-num">5</div><span class="step-label">⑤ Policy</span></div>
+    </div>
+    <p style="font-size:13px;color:var(--text-hint);margin-top:8px">완료: 녹색 | 현재: 남색 | 대기: 회색</p>
+  </div>
+
+  <!-- 화면 목록 -->
+  <div class="card">
+    <div class="section-title">화면 목록 (23개) — 카드 관리는 목록→편집기 2단계</div>
+    <div class="screen-grid">
+      <a href="00_design-system.html" class="screen-link"><div class="screen-num">00</div><div class="screen-name">🎨 디자인 시스템</div></a>
+      <a href="01_guide.html" class="screen-link"><div class="screen-num">01</div><div class="screen-name">📋 업무 가이드</div></a>
+      <a href="02_dashboard.html" class="screen-link"><div class="screen-num">02</div><div class="screen-name">📊 대시보드</div></a>
+      <a href="03_card-library.html" class="screen-link"><div class="screen-num">03</div><div class="screen-name">📂 카드 라이브러리</div></a>
+      <a href="04_risk-type-list.html" class="screen-link"><div class="screen-num">04</div><div class="screen-name">① Risk-type 목록</div></a>
+      <a href="04_card-editor-risk-type.html" class="screen-link"><div class="screen-num">04e</div><div class="screen-name">① Risk-type 편집기</div></a>
+      <a href="05_evidence-list.html" class="screen-link"><div class="screen-num">05</div><div class="screen-name">② Evidence 목록</div></a>
+      <a href="05_card-editor-evidence.html" class="screen-link"><div class="screen-num">05e</div><div class="screen-name">② Evidence 편집기</div></a>
+      <a href="06_concept-list.html" class="screen-link"><div class="screen-num">06</div><div class="screen-name">③ Concept 목록</div></a>
+      <a href="06_card-editor-concept.html" class="screen-link"><div class="screen-num">06e</div><div class="screen-name">③ Concept 편집기</div></a>
+      <a href="07_rule-list.html" class="screen-link"><div class="screen-num">07</div><div class="screen-name">④ Rule 목록</div></a>
+      <a href="07_card-editor-rule.html" class="screen-link"><div class="screen-num">07e</div><div class="screen-name">④ Rule 편집기</div></a>
+      <a href="08_policy-list.html" class="screen-link"><div class="screen-num">08</div><div class="screen-name">⑤ Policy 목록</div></a>
+      <a href="08_card-editor-policy.html" class="screen-link"><div class="screen-num">08e</div><div class="screen-name">⑤ Policy 편집기</div></a>
+      <a href="09_review-workflow.html" class="screen-link"><div class="screen-num">09</div><div class="screen-name">✅ 검수·승인</div></a>
+      <a href="10_chain-visualizer.html" class="screen-link"><div class="screen-num">10</div><div class="screen-name">🔗 카드 연결 현황</div></a>
+      <a href="11_dry-run.html" class="screen-link"><div class="screen-num">11</div><div class="screen-name">🧪 사전 테스트</div></a>
+      <a href="12_coverage-code-table.html" class="screen-link"><div class="screen-num">12</div><div class="screen-name">📋 담보코드</div></a>
+      <a href="13_answer-logic.html" class="screen-link"><div class="screen-num">13</div><div class="screen-name">🔀 AI 답변 로직·예시</div></a>
+      <a href="13_answer-logic.html" class="screen-link"><div class="screen-num">14</div><div class="screen-name">↪ 13으로 통합</div></a>
+      <a href="15_aio-guide.html" class="screen-link"><div class="screen-num">15</div><div class="screen-name">🌐 AIO 가이드</div></a>
+      <a href="16_playbook-list.html" class="screen-link"><div class="screen-num">16</div><div class="screen-name">⑥ Playbook 목록</div></a>
+      <a href="16_card-editor-playbook.html" class="screen-link"><div class="screen-num">16e</div><div class="screen-name">⑥ Playbook 편집기</div></a>
+    </div>
+  </div>
+
+  <!-- Montage 디자인 토큰 -->
+  <div class="card">
+    <div class="section-title">Montage 디자인 토큰 — 기반 시스템</div>
+    <div class="sub-section-label" style="margin-bottom:12px">출처: <a href="https://github.com/wanteddev/montage-web" target="_blank" style="color:var(--card-concept)">wanteddev/montage-web</a> · KC Admin 고유 색상(카드 유형·상태·공개범위)은 별도 관리</div>
+
+    <!-- 타이포그래피 -->
+    <div style="margin-bottom:20px">
+      <div class="sub-section-label">타이포그래피 — Pretendard Variable</div>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-top:8px;background:#F4F4F5;border-radius:8px;padding:16px">
+        <div style="font-size:24px;font-weight:700;line-height:1.3;letter-spacing:-.025em">Heading 1 — 24px / 700 / -0.025em</div>
+        <div style="font-size:20px;font-weight:700;line-height:1.3;letter-spacing:-.025em">Heading 2 — 20px / 700 / -0.025em</div>
+        <div style="font-size:17px;font-weight:700;line-height:1.4;letter-spacing:-.015em">Heading 3 — 17px / 700 / -0.015em</div>
+        <div style="font-size:15px;font-weight:600;line-height:1.5;letter-spacing:-.014em">Body Semibold — 15px / 600 / -0.014em</div>
+        <div style="font-size:15px;font-weight:400;line-height:1.5;letter-spacing:-.014em">Body Regular — 15px / 400 / -0.014em</div>
+        <div style="font-size:14px;font-weight:400;line-height:1.5;letter-spacing:-.007em;color:var(--text-secondary)">Caption — 14px / 400 / -0.007em · text-secondary</div>
+        <div style="font-size:13px;font-weight:400;line-height:1.4;letter-spacing:0em;color:var(--text-hint)">Label/Hint — 13px / 400 / 0em · text-hint</div>
+        <div style="font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-secondary)">NAV SECTION — 12px / 600 / 0.08em uppercase</div>
+      </div>
+    </div>
+
+    <!-- 색상 Neutral 팔레트 -->
+    <div style="margin-bottom:20px">
+      <div class="sub-section-label">Neutral 팔레트 (Montage 기반 → KC Admin CSS 변수 연결)</div>
+      <div class="swatch-row" style="margin-top:8px">
+        <div class="swatch"><div class="swatch-box" style="background:#171719"></div><div class="swatch-var">--text-primary</div><div class="swatch-hex">#171719</div><div class="swatch-name">neutral-10</div></div>
+        <div class="swatch"><div class="swatch-box" style="background:#70737C"></div><div class="swatch-var">--text-secondary</div><div class="swatch-hex">#70737C</div><div class="swatch-name">neutral-50</div></div>
+        <div class="swatch"><div class="swatch-box" style="background:#989BA2"></div><div class="swatch-var">--text-hint</div><div class="swatch-hex">#989BA2</div><div class="swatch-name">neutral-70</div></div>
+        <div class="swatch"><div class="swatch-box" style="background:#E1E2E4;border:1px solid #D0D1D3"></div><div class="swatch-var">--border</div><div class="swatch-hex">#E1E2E4</div><div class="swatch-name">line-solid</div></div>
+        <div class="swatch"><div class="swatch-box" style="background:#F4F4F5;border:1px solid #E1E2E4"></div><div class="swatch-var">--bg-page</div><div class="swatch-hex">#F4F4F5</div><div class="swatch-name">neutral-98</div></div>
+        <div class="swatch"><div class="swatch-box" style="background:#FFFFFF;border:1px solid #E1E2E4"></div><div class="swatch-var">--bg-card</div><div class="swatch-hex">#FFFFFF</div><div class="swatch-name">white</div></div>
+      </div>
+    </div>
+
+    <!-- 간격 & 모서리 -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px">
+      <div>
+        <div class="sub-section-label">Spacing — 4px 기반 스케일</div>
+        <div style="display:flex;flex-direction:column;gap:6px;margin-top:8px">
+          <div style="display:flex;align-items:center;gap:12px;font-size:14px"><div style="width:4px;height:16px;background:var(--card-concept);border-radius:2px"></div><span style="font-family:monospace;font-size:13px;color:var(--text-hint);width:40px">4px</span><span>최소 간격 (아이콘↔텍스트)</span></div>
+          <div style="display:flex;align-items:center;gap:12px;font-size:14px"><div style="width:8px;height:16px;background:var(--card-concept);border-radius:2px"></div><span style="font-family:monospace;font-size:13px;color:var(--text-hint);width:40px">8px</span><span>관련 요소 간 기본 간격</span></div>
+          <div style="display:flex;align-items:center;gap:12px;font-size:14px"><div style="width:12px;height:16px;background:var(--card-concept);border-radius:2px"></div><span style="font-family:monospace;font-size:13px;color:var(--text-hint);width:40px">12px</span><span>섹션 내부 여백</span></div>
+          <div style="display:flex;align-items:center;gap:12px;font-size:14px"><div style="width:16px;height:16px;background:var(--card-concept);border-radius:2px"></div><span style="font-family:monospace;font-size:13px;color:var(--text-hint);width:40px">16px</span><span>카드 패딩, 폼 그룹</span></div>
+          <div style="display:flex;align-items:center;gap:12px;font-size:14px"><div style="width:20px;height:16px;background:var(--card-concept);border-radius:2px"></div><span style="font-family:monospace;font-size:13px;color:var(--text-hint);width:40px">20px</span><span>카드 패딩 (기본 .card)</span></div>
+          <div style="display:flex;align-items:center;gap:12px;font-size:14px"><div style="width:24px;height:16px;background:var(--card-concept);border-radius:2px"></div><span style="font-family:monospace;font-size:13px;color:var(--text-hint);width:40px">24px</span><span>섹션 구분 간격</span></div>
+          <div style="display:flex;align-items:center;gap:12px;font-size:14px"><div style="width:32px;height:16px;background:var(--card-concept);border-radius:2px"></div><span style="font-family:monospace;font-size:13px;color:var(--text-hint);width:40px">32px</span><span>페이지 패딩 (.main)</span></div>
+        </div>
+      </div>
+      <div>
+        <div class="sub-section-label">Border Radius 스케일</div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
+          <div style="display:flex;align-items:center;gap:12px;font-size:14px"><div style="width:48px;height:28px;background:var(--border);border-radius:3px"></div><span style="font-family:monospace;font-size:13px;color:var(--text-hint);width:32px">3px</span><span>xs — 작은 칩·태그</span></div>
+          <div style="display:flex;align-items:center;gap:12px;font-size:14px"><div style="width:48px;height:28px;background:var(--border);border-radius:5px"></div><span style="font-family:monospace;font-size:13px;color:var(--text-hint);width:32px">5px</span><span>sm — 배지·인풋</span></div>
+          <div style="display:flex;align-items:center;gap:12px;font-size:14px"><div style="width:48px;height:28px;background:var(--border);border-radius:8px"></div><span style="font-family:monospace;font-size:13px;color:var(--text-hint);width:32px">8px</span><span>md — 카드·배너 <code style="font-size:12px;background:#EEF">--radius</code></span></div>
+          <div style="display:flex;align-items:center;gap:12px;font-size:14px"><div style="width:48px;height:28px;background:var(--border);border-radius:12px"></div><span style="font-family:monospace;font-size:13px;color:var(--text-hint);width:32px">12px</span><span>xl — 모달·드롭다운</span></div>
+          <div style="display:flex;align-items:center;gap:12px;font-size:14px"><div style="width:48px;height:28px;background:var(--border);border-radius:9999px"></div><span style="font-family:monospace;font-size:13px;color:var(--text-hint);width:32px">full</span><span>full — step 번호·아바타</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 그림자 -->
+    <div>
+      <div class="sub-section-label">Shadow 스케일</div>
+      <div style="display:flex;gap:20px;margin-top:12px;flex-wrap:wrap">
+        <div style="text-align:center">
+          <div style="width:120px;height:60px;background:#fff;border-radius:8px;box-shadow:0px 1px 2px -1px rgba(23,23,23,.1);margin-bottom:8px"></div>
+          <div style="font-size:12px;font-family:monospace;color:var(--text-hint)">shadow-sm</div>
+          <div style="font-size:12px;color:var(--text-secondary)">버튼·태그 hover</div>
+        </div>
+        <div style="text-align:center">
+          <div style="width:120px;height:60px;background:#fff;border-radius:8px;box-shadow:0px 2px 4px -2px rgba(23,23,23,.06),0px 4px 6px -1px rgba(23,23,23,.06);margin-bottom:8px"></div>
+          <div style="font-size:12px;font-family:monospace;color:var(--text-hint)">shadow (기본)</div>
+          <div style="font-size:12px;color:var(--text-secondary)">카드·편집기 패널</div>
+        </div>
+        <div style="text-align:center">
+          <div style="width:120px;height:60px;background:#fff;border-radius:8px;box-shadow:0px 4px 6px -2px rgba(23,23,23,.07),0px 10px 15px -3px rgba(23,23,23,.07);margin-bottom:8px"></div>
+          <div style="font-size:12px;font-family:monospace;color:var(--text-hint)">shadow-lg</div>
+          <div style="font-size:12px;color:var(--text-secondary)">모달·드롭다운</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)}
+document.querySelectorAll('.btn').forEach(b=>b.addEventListener('click',()=>showToast('버튼 클릭됨')));
+</script>
+</body>
+</html>

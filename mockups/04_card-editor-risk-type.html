@@ -1,0 +1,306 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1280">
+<title>Risk-type 카드 편집 | KC Admin</title>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<style>
+:root {
+  --card-risk:#C94B1A; --card-evidence:#1A7A4A; --card-concept:#1A4A9A; --card-rule:#9A1A1A; --card-policy:#5A5A55;
+  --card-playbook:#6B4A9A; --card-case:#D0CFC9;
+  --status-draft:#9C9C94; --status-review:#BA7517; --status-active:#0F6E56; --status-approved:#1A4A9A; --status-paused:#7A4A00; --status-rejected:#A32D2D;
+  --scope-public:#1A4A9A; --scope-baseline:#BA7517; --scope-internal:#5A5A55;
+  --route-kc:#0F6E56; --route-gen:#6B6B65; --route-path:#1A3A6B;
+  --step-done:#0F6E56; --step-active:#1A3A6B; --step-pending:#D0CFC9;
+  --sidebar-w:220px; --bg-page:#F4F4F5; --bg-card:#FFFFFF;
+  --text-primary:#171719; --text-secondary:#70737C; --text-hint:#989BA2;
+  --border:#E1E2E4; --radius:8px; --shadow:0px 2px 4px -2px rgba(23,23,23,.06),0px 4px 6px -1px rgba(23,23,23,.06);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg-page);color:var(--text-primary);min-width:1280px;font-size:15px;line-height:1.5}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:var(--sidebar-w);background:#1A1A18;flex-shrink:0;padding:20px 0;position:sticky;top:0;height:100vh;overflow-y:auto}
+.sidebar-logo{padding:0 16px 20px;font-size:16px;font-weight:700;color:#fff;border-bottom:1px solid #333;margin-bottom:12px}
+.sidebar a,.nav-locked{display:flex;align-items:center;gap:8px;padding:8px 16px;color:#C8C8C4;text-decoration:none;font-size:14px;transition:background .15s}
+.sidebar a:hover{background:rgba(255,255,255,.08);color:#fff}
+.sidebar a.active{background:rgba(255,255,255,.15);color:#fff;font-weight:600;border-left:3px solid #5A8AE0}
+.nav-section{padding:16px 16px 4px;font-size:11px;color:#666;text-transform:uppercase;letter-spacing:.08em}
+.nav-divider{border-top:1px solid #333;margin:8px 0}
+.nav-locked{color:#555!important;cursor:not-allowed}
+.main{flex:1;padding:32px;overflow-y:auto}
+.page-header{margin-bottom:28px}
+.page-header h1{font-size:24px;font-weight:700;margin-bottom:6px}
+.page-header p{color:var(--text-secondary)}
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);margin-bottom:16px}
+.section-title{font-size:17px;font-weight:700;margin:0 0 16px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.guide-box{background:#EEF4FF;border:1px solid #C0D0F0;border-radius:var(--radius);padding:16px 20px;margin-bottom:24px}
+.step-badge{display:inline-block;background:var(--step-active);color:#fff;padding:2px 10px;border-radius:20px;font-size:13px;font-weight:600;margin-bottom:8px}
+.routing-role{display:inline-block;background:#D4EAE0;color:var(--route-kc);padding:2px 10px;border-radius:4px;font-size:13px;font-weight:600;margin-left:8px}
+.guide-box h3{font-size:17px;font-weight:700;margin-bottom:6px}
+.guide-box p{font-size:14px;color:var(--text-secondary);line-height:1.6;margin-top:6px}
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;font-size:13px;font-weight:600;white-space:nowrap}
+.badge-risk{background:rgba(201,75,26,.12);color:var(--card-risk)}.badge-evidence{background:rgba(26,122,74,.12);color:var(--card-evidence)}.badge-concept{background:rgba(26,74,154,.12);color:var(--card-concept)}.badge-rule{background:rgba(154,26,26,.12);color:var(--card-rule)}.badge-policy{background:rgba(90,90,85,.12);color:var(--card-policy)}.badge-locked{background:rgba(208,207,201,.3);color:#999}
+.badge-draft{background:rgba(156,156,148,.15);color:var(--status-draft)}.badge-review{background:rgba(186,117,23,.15);color:var(--status-review)}.badge-active{background:rgba(15,110,86,.15);color:var(--status-active)}.badge-rejected{background:rgba(163,45,45,.15);color:var(--status-approved:#1A4A9A; --status-paused:#7A4A00; --status-rejected)}
+.badge-public{background:rgba(26,74,154,.12);color:var(--scope-public)}.badge-baseline{background:rgba(186,117,23,.12);color:var(--scope-baseline)}.badge-internal{background:rgba(90,90,85,.12);color:var(--scope-internal)}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:6px;font-size:14px;font-weight:600;cursor:pointer;border:none;font-family:inherit;transition:opacity .15s}
+.btn:hover{opacity:.85}.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn-primary{background:var(--step-active);color:#fff}.btn-secondary{background:var(--bg-card);color:var(--text-primary);border:1px solid var(--border)}.btn-danger{background:var(--status-approved:#1A4A9A; --status-paused:#7A4A00; --status-rejected);color:#fff}.btn-success{background:var(--status-active);color:#fff}.btn-sm{padding:5px 10px;font-size:13px}.btn-warn{background:var(--status-review);color:#fff}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:14px;font-weight:600;margin-bottom:4px}
+.field-hint{display:block;font-size:13px;color:var(--text-hint);font-weight:400;margin-top:2px;line-height:1.4}
+.form-control{width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-family:inherit;background:#fff;color:var(--text-primary)}
+.form-control:focus{outline:none;border-color:var(--step-active);box-shadow:0 0 0 2px rgba(26,58,107,.12)}
+textarea.form-control{resize:vertical;min-height:80px}
+.banner{padding:12px 16px;border-radius:var(--radius);margin-bottom:16px;font-size:14px;line-height:1.6}
+.banner-warn{background:#FFF3D4;border:1px solid #F0C040;color:#8A5A00}.banner-error{background:#FFF0F0;border:1px solid #F0C0C0;color:#8A0000}.banner-info{background:#EEF4FF;border:1px solid #C0D0F0;color:#1A3A6B}.banner-success{background:#EDFAF4;border:1px solid #A0D8C0;color:#0A5A3C}
+.empty-state{text-align:center;padding:48px 24px;color:var(--text-secondary)}
+.toast{position:fixed;bottom:24px;right:24px;background:#1A1A18;color:#fff;padding:12px 20px;border-radius:8px;font-size:14px;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none}
+.toast.show{opacity:1}
+.two-col{display:grid;grid-template-columns:1fr 320px;gap:20px}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;padding:10px 12px;font-size:13px;font-weight:600;color:var(--text-secondary);border-bottom:2px solid var(--border);background:#F8F8F6}
+td{padding:10px 12px;font-size:14px;border-bottom:1px solid var(--border)}
+tr:hover td{background:#FAFAF8}
+tr.clickable{cursor:pointer}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.card-header-left{display:flex;align-items:center;gap:10px}
+.card-header-title{font-size:16px;font-weight:700}
+.card-header-actions{display:flex;gap:8px}
+.list-item{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s}
+.list-item:last-child{border-bottom:none}
+.list-item:hover{background:#FAFAF8;margin:0 -8px;padding:8px 8px;border-radius:4px}
+.list-item-name{flex:1;font-size:14px}
+.next-step-box{background:#F4F9F4;border:1px solid #B0D8C0;border-radius:var(--radius);padding:14px 16px;margin-top:16px}
+.next-step-box p{font-size:14px;color:var(--text-secondary);margin-bottom:10px}
+.status-guide{margin-top:16px}
+.status-guide-item{padding:10px 14px;border-radius:6px;font-size:14px;line-height:1.5}
+.status-draft-guide{background:#FFF9EC;border:1px solid #F0D880;color:#7A5A00}
+.action-bar{display:flex;gap:8px;justify-content:flex-end}
+.status-guidance{display:flex;align-items:flex-start;gap:8px;padding:10px 14px;background:#FFF9EC;border:1px solid #F0D880;border-radius:6px;margin-top:10px;font-size:13px;color:#7A5A00;line-height:1.5}
+.status-guidance i{margin-top:1px;flex-shrink:0}
+.status-review-guide{background:#FFF8EC;border:1px solid #F0D890;color:#7A5200}
+.status-active-guide{background:#EDFAF4;border:1px solid #A0D8C0;color:#0A5A3C}
+.wf-tracker{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;margin-bottom:16px;box-shadow:var(--shadow)}
+.wf-title{font-size:15px;font-weight:700;margin-bottom:12px}
+.wf-step{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
+.wf-step:last-child{border-bottom:none}
+.wf-num{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px}
+.wf-num-on{background:var(--step-active);color:#fff}.wf-num-off{background:var(--step-pending);color:#888}
+.wf-body{flex:1}
+.wf-label{font-size:14px;font-weight:600}.wf-label-on{color:var(--step-active)}.wf-label-off{color:var(--text-hint)}
+.wf-tag{background:var(--step-active);color:#fff;font-size:11px;padding:1px 6px;border-radius:10px;margin-left:4px;vertical-align:middle;display:inline}
+.wf-hint{font-size:13px;color:var(--text-hint);margin-top:2px}
+.sum-box{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;box-shadow:var(--shadow)}
+.sum-title{font-size:15px;font-weight:700;margin-bottom:10px}
+.sum-total{font-size:24px;font-weight:700;color:var(--text-primary);margin-bottom:2px}
+.sum-label{font-size:13px;color:var(--text-secondary);margin-bottom:8px}
+.sum-stats{font-size:13px;color:var(--text-secondary);margin-bottom:10px}
+.sum-active{color:var(--status-active);font-weight:600}.sum-review{color:var(--status-review);font-weight:600}.sum-draft{color:var(--status-draft)}
+.sum-link{font-size:13px;color:var(--step-active);text-decoration:none;font-weight:600}
+.sum-link:hover{text-decoration:underline}
+.rel-box{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;box-shadow:var(--shadow)}
+.rel-title{font-size:15px;font-weight:700;margin-bottom:10px;color:var(--text-primary)}
+.rel-chain{font-size:14px;background:#F0F4FF;border:1px solid #D0DAFA;border-radius:6px;padding:8px 12px;margin-bottom:10px;color:var(--text-primary);letter-spacing:.02em}
+.rel-chain strong{color:var(--step-active)}
+.rel-list{padding-left:16px;font-size:13px;color:var(--text-secondary);line-height:1.9;margin-bottom:12px}
+.rel-back{font-size:13px;color:var(--step-active);text-decoration:none;font-weight:600;display:inline-flex;align-items:center;gap:4px}
+.rel-back:hover{text-decoration:underline}
+.rel-connected{margin:10px 0 12px}
+.rel-connected-label{font-size:12px;font-weight:700;color:var(--text-secondary);letter-spacing:.04em;margin-bottom:6px;display:block}
+.rel-item{display:flex;align-items:center;gap:6px;padding:6px 10px;background:#F8F8F6;border:1px solid var(--border);border-radius:6px;margin-bottom:4px;font-size:13px}
+.rel-item-name{flex:1;font-weight:600;color:var(--text-primary)}
+.rel-item-status{font-size:11px;padding:1px 6px;flex-shrink:0}
+.rel-item-edit{color:var(--step-active);text-decoration:none;font-weight:600;font-size:12px;white-space:nowrap;flex-shrink:0}
+.rel-item-edit:hover{text-decoration:underline}
+.rel-empty{font-size:13px;color:var(--text-hint);padding:6px 0;line-height:1.6}
+.rel-divider{height:1px;background:var(--border);margin:12px 0}
+
+.breadcrumb{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-hint);margin-bottom:16px}
+.breadcrumb a{color:var(--step-active);text-decoration:none;font-weight:600}
+.breadcrumb a:hover{text-decoration:underline}
+.breadcrumb-sep{color:var(--border)}
+</style>
+</head>
+<body>
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-logo">⚡ KC Admin</div>
+    <a href="01_guide.html"><i class="fa-solid fa-clipboard-list fa-fw"></i> 업무 가이드</a>
+    <a href="02_dashboard.html"><i class="fa-solid fa-chart-bar fa-fw"></i> 대시보드</a>
+    <div class="nav-divider"></div>
+    <a href="03_card-library.html"><i class="fa-solid fa-folder-open fa-fw"></i> 카드 라이브러리</a>
+    <a href="04_risk-type-list.html" class="active" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-circle-exclamation fa-fw" style="font-size:11px;color:#C94B1A"></i> ① Risk-type</a>
+    <a href="05_evidence-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-database fa-fw" style="font-size:11px;color:#1A7A4A"></i> ② Evidence</a>
+    <a href="06_concept-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-lightbulb fa-fw" style="font-size:11px;color:#1A4A9A"></i> ③ Concept</a>
+    <a href="07_rule-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-scale-balanced fa-fw" style="font-size:11px;color:#9A1A1A"></i> ④ Rule</a>
+    <a href="08_policy-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-file-shield fa-fw" style="font-size:11px;color:#5A5A55"></i> ⑤ Policy</a>
+    <a href="16_playbook-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-handshake fa-fw" style="font-size:11px;color:#9A70D0"></i> ⑥ Playbook</a>
+    <span class="nav-locked" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-lock fa-fw" style="font-size:11px"></i> ⑦ Case 🔒</span>
+    <div class="nav-divider"></div>
+    <a href="10_chain-visualizer.html"><i class="fa-solid fa-link fa-fw"></i> 카드 연결 현황</a>
+  <div class="nav-divider"></div>
+  <a href="09_review-workflow.html"><i class="fa-solid fa-circle-check fa-fw"></i> 검수·승인</a>
+    <a href="11_dry-run.html"><i class="fa-solid fa-flask fa-fw"></i> 사전 테스트</a>
+      <div class="nav-section">참조 문서</div>
+  <a href="13_answer-logic.html"><i class="fa-solid fa-diagram-project fa-fw"></i> AI 답변 로직·예시</a>
+  <a href="17_system-data-guide.html"><i class="fa-solid fa-network-wired fa-fw"></i> 데이터 연결 구조</a>
+  <a href="15_aio-guide.html"><i class="fa-solid fa-globe fa-fw"></i> AIO 가이드</a>
+  <div class="nav-divider"></div>
+  <a href="00_design-system.html"><i class="fa-solid fa-palette fa-fw"></i> 디자인 시스템</a>
+  <a href="12_coverage-code-table.html"><i class="fa-solid fa-table-list fa-fw"></i> 담보코드</a>
+  </nav>
+
+  <main class="main">
+      <nav class="breadcrumb">
+    <a href="04_risk-type-list.html"><i class="fa fa-arrow-left"></i> ① Risk-type 목록</a>
+    <span class="breadcrumb-sep">›</span>
+    <span>신규 등록 / 편집</span>
+  </nav>
+<div class="page-header">
+      <h1>Risk-type 카드 편집</h1>
+      <p>Clark AI 진단 유형 분류 기준을 정의합니다 · <a href="01_guide.html" style="color:var(--step-active);font-size:13px;text-decoration:none">업무 가이드 보기 →</a></p>
+    </div>
+
+    <div class="guide-box">
+      <div>
+        <span class="step-badge">등록 순서 ①/5</span>
+        <span class="routing-role">AI 답변 역할: 유형 분류 기준</span>
+      </div>
+      <h3>Risk-type 카드</h3>
+      <p>모든 KC 카드의 연결 기준점입니다. Clark AI가 진단 결과를 분류하는 유형입니다. Risk-type을 먼저 정의해야 Evidence·Concept·Rule을 연결할 수 있습니다.</p>
+      <p>다음 단계: Risk-type 등록·라이브 후 → ② Evidence 카드를 등록하세요. 이후 ③ Concept 카드에서 이 Risk-type을 연결합니다.</p>
+    </div>
+
+    <div class="two-col">
+      <!-- LEFT: Editor -->
+      <div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-header-left">
+              <span class="card-header-title">새 Risk-type 카드</span>
+              <span class="badge badge-draft">임시저장</span>
+            </div>
+            </div>
+
+          <div class="form-group">
+            <label>카드 ID <span style="color:var(--text-hint);font-weight:400;font-size:13px">(자동 생성)</span>
+              <span class="field-hint">저장 시 자동 부여됩니다. 다른 카드가 이 코드로 연결합니다</span>
+            </label>
+            <input class="form-control" type="text" value="T09 (저장 시 자동 부여)" disabled style="background:#F4F4F2;color:var(--text-hint);font-family:monospace;font-size:13px;width:240px">
+          </div>
+
+          <div class="form-group">
+            <label for="riskName">위험 유형명 <span style="color:var(--card-risk)">*</span>
+              <span class="field-hint">Clark AI가 사용자에게 진단 결과를 설명할 때 사용하는 이름입니다</span>
+            </label>
+            <input class="form-control" id="riskName" type="text" value="실손보장 공백형" placeholder="예: 실손보장 공백형">
+          </div>
+
+          <div class="form-group">
+            <label for="riskDesc">설명 <span style="color:var(--card-risk)">*</span>
+              <span class="field-hint">Clark AI가 진단 이유를 설명할 때 참조하는 내용입니다</span>
+            </label>
+            <textarea class="form-control" id="riskDesc" rows="4" placeholder="이 위험 유형에 해당하는 고객의 특징과 보장 공백 상황을 설명하세요">실손의료보험이 없거나 보장 범위가 협소하여 입원·통원 의료비 지출 시 자기부담 비율이 높은 유형입니다. 비급여 항목 급증으로 실질 보장 공백이 발생하는 고객군입니다.</textarea>
+          </div>
+
+          <div class="form-group" style="opacity:.45;pointer-events:none">
+            <label for="leadScore">리드 스코어 (0–100)
+              <span style="display:inline-flex;align-items:center;gap:4px;background:#F0D0A0;color:#7A4A00;border:1px solid #E0B060;border-radius:4px;padding:1px 7px;font-size:12px;font-weight:700;margin-left:6px"><i class="fa-solid fa-lock" style="font-size:9px"></i> Phase 1.5 이후</span>
+            </label>
+            <input class="form-control" id="leadScore" type="number" min="0" max="100" value="75" disabled style="width:120px;background:#F4F4F2;cursor:not-allowed">
+          </div>
+
+          <div class="action-bar" style="padding-top:8px;border-top:1px solid var(--border);margin-top:8px">
+            <button class="btn btn-secondary" onclick="saveDraft()"><i class="fa-regular fa-floppy-disk"></i> 임시저장</button>
+            <button class="btn btn-primary" onclick="requestReview()"><i class="fa-solid fa-paper-plane"></i> 검수 요청</button>
+          </div>
+
+          <div class="status-guidance">
+            <i class="fa-solid fa-circle-info fa-fw"></i>
+            <span><strong>현재 상태: 임시저장</strong> — 위험 유형명·설명을 입력한 후 [검수 요청]을 클릭하세요.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Workflow Tracker + Summary -->
+      <div>
+        <div class="wf-tracker">
+  <div class="wf-title">이 카드의 작업 흐름</div>
+  <div class="wf-step">
+    <div class="wf-num wf-num-on">①</div>
+    <div class="wf-body">
+      <div class="wf-label wf-label-on">내용 입력 <span class="wf-tag">현재</span></div>
+      <div class="wf-hint">위험 유형명·설명을 입력하세요</div>
+    </div>
+  </div>
+  <div class="wf-step">
+    <div class="wf-num wf-num-off">②</div>
+    <div class="wf-body">
+      <div class="wf-label wf-label-off">검수 요청</div>
+      <div class="wf-hint">[검수 요청] 클릭 → 도메인 검수자에게 전달</div>
+    </div>
+  </div>
+  <div class="wf-step">
+    <div class="wf-num wf-num-off">③</div>
+    <div class="wf-body">
+      <div class="wf-label wf-label-off">승인완료</div>
+      <div class="wf-hint">검수자 승인 후 승인완료 상태 · <a href="09_review-workflow.html" style="font-size:12px;color:var(--step-active)">검수·승인 화면 →</a></div>
+    </div>
+  </div>
+  <div class="wf-step">
+    <div class="wf-num wf-num-off">④</div>
+    <div class="wf-body">
+      <div class="wf-label wf-label-off">라이브</div>
+      <div class="wf-hint">Clark AI가 이 Risk-type으로 진단을 시작합니다 · <a href="10_chain-visualizer.html" style="font-size:12px;color:var(--step-active)">카드 연결 현황 →</a></div>
+    </div>
+  </div>
+</div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const MOCK_DATA = {
+  riskTypes:[
+    {id:'T01',name:'무보장형',leadScore:90,status:'active'},
+    {id:'T02',name:'암투병생활비 부족형',leadScore:85,status:'active'},
+    {id:'T03',name:'심혈관질환보장 협소형',leadScore:80,status:'review'},
+    {id:'T04',name:'뇌혈관질환보장 협소형',leadScore:75,status:'active'},
+    {id:'T05',name:'노후돌봄보장 공백형',leadScore:70,status:'draft'},
+    {id:'T06',name:'납입여력부족 우려형',leadScore:65,status:'draft'},
+    {id:'T07',name:'비용 대비 보장 비효율형',leadScore:60,status:'draft'},
+    {id:'T08',name:'생애주기 적합도 저조형',leadScore:55,status:'draft'},
+    {id:'T09',name:'단기납 만기 후 공백형',leadScore:72,status:'approved'},
+    {id:'T10',name:'고액 보험료 유지 부담형',leadScore:0,status:'paused'}
+  ]
+};
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+function saveDraft() {
+  showToast('임시 저장되었습니다');
+}
+
+function requestReview() {
+  const name = document.getElementById('riskName').value.trim();
+  const desc = document.getElementById('riskDesc').value.trim();
+  if (!name) { showToast('위험 유형명을 입력하세요'); return; }
+  if (!desc) { showToast('설명을 입력하세요'); return; }
+  showToast('검수 요청이 접수되었습니다');
+}
+
+
+
+</script>
+</body>
+</html>

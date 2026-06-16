@@ -1,0 +1,377 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>검수·승인 — KC Admin</title>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<style>
+:root {
+  --card-risk:#C94B1A; --card-evidence:#1A7A4A; --card-concept:#1A4A9A; --card-rule:#9A1A1A; --card-policy:#5A5A55;
+  --status-draft:#9C9C94; --status-review:#BA7517; --status-active:#0F6E56;
+  --status-approved:#1A4A9A; --status-paused:#7A4A00; --status-rejected:#A32D2D;
+  --step-active:#1A3A6B; --sidebar-w:220px; --bg-page:#F4F4F5; --bg-card:#FFFFFF;
+  --text-primary:#171719; --text-secondary:#70737C; --text-hint:#989BA2;
+  --border:#E1E2E4; --radius:8px; --shadow:0px 2px 4px -2px rgba(23,23,23,.06),0px 4px 6px -1px rgba(23,23,23,.06);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg-page);color:var(--text-primary);min-width:1280px;font-size:15px;line-height:1.5}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:var(--sidebar-w);background:#1A1A18;flex-shrink:0;padding:20px 0;position:sticky;top:0;height:100vh;overflow-y:auto}
+.sidebar-logo{padding:0 16px 20px;font-size:16px;font-weight:700;color:#fff;border-bottom:1px solid #333;margin-bottom:12px}
+.sidebar a,.nav-locked{display:flex;align-items:center;gap:8px;padding:8px 16px;color:#C8C8C4;text-decoration:none;font-size:14px;transition:background .15s}
+.sidebar a:hover{background:rgba(255,255,255,.08);color:#fff}
+.sidebar a.active{background:rgba(255,255,255,.15);color:#fff;font-weight:600;border-left:3px solid #5A8AE0}
+.nav-divider{border-top:1px solid #333;margin:8px 0}
+.nav-locked{color:#555!important;cursor:not-allowed}
+.main{flex:1;padding:32px;overflow-y:auto}
+/* page header */
+.page-header{margin-bottom:20px}
+.page-header h1{font-size:24px;font-weight:700;margin-bottom:4px}
+.page-header p{color:var(--text-secondary);font-size:14px}
+/* guide box */
+.guide-box{background:#EEF4FF;border:1px solid #C0D0F0;border-radius:var(--radius);padding:14px 18px;margin-bottom:20px;font-size:14px;color:var(--text-secondary);line-height:1.6}
+.guide-box strong{color:var(--text-primary)}
+/* permission note */
+.perm-note{display:inline-flex;align-items:center;gap:6px;background:#F4F0FF;border:1px solid #D0C0F0;border-radius:6px;padding:6px 12px;font-size:13px;color:#5A3A8A;margin-bottom:20px}
+/* filter bar */
+.filter-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.filter-tabs{display:flex;gap:4px}
+.filter-tab{padding:6px 14px;border-radius:6px;font-size:14px;font-weight:600;cursor:pointer;border:none;background:transparent;color:var(--text-secondary);font-family:inherit;transition:background .15s}
+.filter-tab.active{background:var(--step-active);color:#fff}
+.filter-tab:hover:not(.active){background:#F0F0EC}
+/* table */
+.list-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
+.list-table{width:100%;border-collapse:collapse}
+.list-table th{background:#F0F0EC;padding:10px 14px;text-align:left;font-size:13px;font-weight:700;color:var(--text-secondary);border-bottom:1px solid var(--border)}
+.list-table td{padding:11px 14px;border-bottom:1px solid var(--border);font-size:14px;vertical-align:middle}
+.list-table tr:last-child td{border-bottom:none}
+.list-table tr.pending:hover td{background:#FAFAF8;cursor:default}
+.list-table tr.done td{background:#FCFCFB}
+/* card id + name */
+.cell-code{font-size:12px;font-weight:700;color:var(--text-hint);margin-bottom:2px}
+.cell-name{font-weight:600}
+/* badges */
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;font-size:13px;font-weight:600;white-space:nowrap}
+.badge-rule{background:rgba(154,26,26,.12);color:var(--card-rule)}
+.badge-policy{background:rgba(90,90,85,.12);color:var(--card-policy)}
+.badge-evidence{background:rgba(26,122,74,.12);color:var(--card-evidence)}
+.badge-concept{background:rgba(26,74,154,.12);color:var(--card-concept)}
+.badge-risk{background:rgba(201,75,26,.1);color:var(--card-risk)}
+.badge-conn-cr{background:rgba(26,74,154,.1);color:#1A4A9A;font-size:12px}
+.badge-conn-pr{background:rgba(90,90,85,.1);color:#5A5A55;font-size:12px}
+.badge-review{background:rgba(186,117,23,.15);color:var(--status-review)}
+.badge-approved{background:rgba(26,74,154,.15);color:var(--status-approved)}
+.badge-active{background:rgba(15,110,86,.15);color:var(--status-active)}
+.badge-rejected{background:rgba(163,45,45,.12);color:var(--status-rejected)}
+/* compliance tag */
+.compliance-tag{display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--card-policy);font-weight:600;background:rgba(90,90,85,.08);padding:2px 7px;border-radius:4px;margin-left:4px}
+/* conn info cell */
+.conn-info{font-size:13px}
+.conn-pair{display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin-top:4px}
+/* action buttons */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:6px;font-size:14px;font-weight:600;cursor:pointer;border:none;font-family:inherit;transition:opacity .15s;text-decoration:none}
+.btn-sm{padding:5px 10px;font-size:13px}
+.btn:hover{opacity:.85}.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn-primary{background:var(--step-active);color:#fff}
+.btn-secondary{background:var(--bg-card);color:var(--text-primary);border:1px solid var(--border)}
+.btn-success{background:var(--status-active);color:#fff}
+.btn-danger{background:var(--status-rejected);color:#fff}
+.action-group{display:flex;gap:6px;align-items:center;flex-wrap:nowrap;white-space:nowrap}
+/* done date */
+.done-date{font-size:13px;color:var(--text-hint)}
+.done-date.approved{color:var(--status-approved)}
+.done-date.rejected{color:var(--status-rejected)}
+/* empty state */
+.empty-state{padding:40px;text-align:center;color:var(--text-hint);font-size:14px}
+.empty-state i{display:block;font-size:24px;margin-bottom:10px;color:#D0D0C8}
+/* toast */
+.toast{position:fixed;bottom:24px;right:24px;background:#1A1A18;color:#fff;padding:12px 20px;border-radius:8px;font-size:14px;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none}
+.toast.show{opacity:1}
+/* modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:none;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:#fff;border-radius:var(--radius);padding:24px;width:460px;box-shadow:0 8px 32px rgba(0,0,0,.18)}
+.modal h3{font-size:16px;font-weight:700;margin-bottom:12px}
+.modal-meta{font-size:14px;color:var(--text-secondary);background:#F8F8F6;border-radius:6px;padding:10px 14px;margin-bottom:14px;line-height:1.6}
+.modal textarea{width:100%;padding:10px;border:1px solid var(--border);border-radius:6px;font-family:inherit;font-size:14px;resize:vertical;min-height:90px;margin-bottom:16px}
+.modal textarea:focus{outline:none;border-color:var(--step-active)}
+.modal-actions{display:flex;gap:8px;justify-content:flex-end}
+</style>
+</head>
+<body>
+<div class="layout">
+<nav class="sidebar">
+  <div class="sidebar-logo">⚡ KC Admin</div>
+  <a href="01_guide.html"><i class="fa-solid fa-clipboard-list fa-fw"></i> 업무 가이드</a>
+  <a href="02_dashboard.html"><i class="fa-solid fa-chart-bar fa-fw"></i> 대시보드</a>
+  <div class="nav-divider"></div>
+  <a href="03_card-library.html"><i class="fa-solid fa-folder-open fa-fw"></i> 카드 라이브러리</a>
+  <a href="04_risk-type-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-circle-exclamation fa-fw" style="font-size:11px;color:#C94B1A"></i> ① Risk-type</a>
+  <a href="05_evidence-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-database fa-fw" style="font-size:11px;color:#1A7A4A"></i> ② Evidence</a>
+  <a href="06_concept-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-lightbulb fa-fw" style="font-size:11px;color:#1A4A9A"></i> ③ Concept</a>
+  <a href="07_rule-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-scale-balanced fa-fw" style="font-size:11px;color:#9A1A1A"></i> ④ Rule</a>
+  <a href="08_policy-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-file-shield fa-fw" style="font-size:11px;color:#5A5A55"></i> ⑤ Policy</a>
+  <a href="16_playbook-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-handshake fa-fw" style="font-size:11px;color:#9A70D0"></i> ⑥ Playbook</a>
+  <span class="nav-locked" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-lock fa-fw" style="font-size:11px"></i> ⑦ Case 🔒</span>
+  <div class="nav-divider"></div>
+  <a href="10_chain-visualizer.html"><i class="fa-solid fa-link fa-fw"></i> 카드 연결 현황</a>
+  <div class="nav-divider"></div>
+  <a href="09_review-workflow.html" class="active"><i class="fa-solid fa-circle-check fa-fw"></i> 검수·승인</a>
+  <a href="11_dry-run.html"><i class="fa-solid fa-flask fa-fw"></i> 사전 테스트</a>
+    <div class="nav-section">참조 문서</div>
+  <a href="13_answer-logic.html"><i class="fa-solid fa-diagram-project fa-fw"></i> AI 답변 로직·예시</a>
+  <a href="17_system-data-guide.html"><i class="fa-solid fa-network-wired fa-fw"></i> 데이터 연결 구조</a>
+  <a href="15_aio-guide.html"><i class="fa-solid fa-globe fa-fw"></i> AIO 가이드</a>
+  <div class="nav-divider"></div>
+  <a href="00_design-system.html"><i class="fa-solid fa-palette fa-fw"></i> 디자인 시스템</a>
+  <a href="12_coverage-code-table.html"><i class="fa-solid fa-table-list fa-fw"></i> 담보코드</a>
+</nav>
+<main class="main">
+  <div class="page-header">
+    <h1>검수·승인</h1>
+    <p>승인 요청된 카드를 검토하고 승인 또는 반려 처리합니다. 카드 내용과 연결 정보를 한 번에 확인합니다.</p>
+  </div>
+
+  <div class="perm-note">
+    <i class="fa-solid fa-shield-halved"></i>
+    이 메뉴는 <strong>도메인 검수자 · 준법감시인</strong> 권한에게만 표시됩니다
+  </div>
+
+  <div class="guide-box">
+    <strong>검수 절차:</strong> 작성자가 카드 편집기에서 승인요청 → 상세 보기로 카드 내용 및 연결 정보 확인 → 승인완료 또는 반려 처리.
+    반려 시 사유를 입력하면 작성자에게 전달됩니다.<br>
+    <strong style="color:var(--card-policy)">Policy 카드</strong>는 도메인 검수 후 <strong>준법감시인 추가 승인</strong>이 필요합니다.
+    연결 정보가 있는 카드는 내용과 연결을 함께 검수합니다.
+  </div>
+
+  <div class="filter-bar">
+    <div class="filter-tabs">
+      <button class="filter-tab active" onclick="filterData('all',this)">전체 <span id="cnt-all"></span></button>
+      <button class="filter-tab" onclick="filterData('pending',this)">⏳ 검수 대기 <span id="cnt-pending"></span></button>
+      <button class="filter-tab" onclick="filterData('done',this)">✔ 처리 완료 <span id="cnt-done"></span></button>
+    </div>
+  </div>
+
+  <div class="list-card">
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th style="width:220px">카드 ID · 명칭</th>
+          <th style="width:100px">유형</th>
+          <th>연결 정보</th>
+          <th style="width:100px">승인요청일</th>
+          <th style="width:110px">상태</th>
+          <th style="width:100px">처리일</th>
+          <th style="width:240px">액션</th>
+        </tr>
+      </thead>
+      <tbody id="review-tbody"></tbody>
+    </table>
+  </div>
+</main>
+</div>
+
+<!-- Reject Modal -->
+<div class="modal-overlay" id="rejectModal">
+  <div class="modal">
+    <h3><i class="fa fa-times-circle" style="color:var(--status-rejected)"></i> 반려 사유 입력</h3>
+    <div class="modal-meta" id="rejectMeta"></div>
+    <textarea id="rejectReason" placeholder="반려 사유를 구체적으로 작성해 주세요. 작성자에게 전달됩니다."></textarea>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeModal()">취소</button>
+      <button class="btn btn-danger" onclick="confirmReject()"><i class="fa fa-times"></i> 반려 처리</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ── 통합 검수 데이터 (카드 내용 + 연결 정보) ── */
+const PENDING_DATA = [
+  {
+    id:'RU001', name:'암진단금 미보유 또는 소액', type:'rule', typeLabel:'Rule',
+    reqDate:'2026-05-12', state:'pending', doneDate:'',
+    href:'07_card-editor-rule.html', conn:null
+  },
+  {
+    id:'RU002', name:'뇌혈관 보장 범위 협소', type:'rule', typeLabel:'Rule',
+    reqDate:'2026-05-13', state:'pending', doneDate:'',
+    href:'07_card-editor-rule.html', conn:null
+  },
+  {
+    id:'CO003', name:'암진단 위험군', type:'concept', typeLabel:'Concept',
+    reqDate:'2026-05-14', state:'pending', doneDate:'',
+    href:'06_card-editor-concept.html',
+    conn:{
+      badgeClass:'badge-conn-cr', label:'Concept → Risk-type',
+      from:{color:'var(--card-concept)', text:'CO003 암진단 위험군'},
+      to:{color:'var(--card-risk)', text:'T02 암투병생활비 부족형'}
+    }
+  },
+  {
+    id:'POL002', name:'보험업법 보험료 산출 관련 고지', type:'policy', typeLabel:'Policy',
+    reqDate:'2026-05-13', state:'pending', doneDate:'',
+    href:'08_card-editor-policy.html', compliance:true,
+    conn:{
+      badgeClass:'badge-conn-pr', label:'Policy → Rule',
+      from:{color:'var(--card-policy)', text:'POL002 보험업법 고지'},
+      to:{color:'var(--card-rule)', text:'RU003 심혈관 보장 미흡'}
+    }
+  },
+  {
+    id:'EV001', name:'보닥 암진단 담보 미보유율 통계', type:'evidence', typeLabel:'Evidence',
+    reqDate:'2026-05-08', state:'approved', doneDate:'2026-05-10',
+    href:'05_card-editor-evidence.html', conn:null
+  },
+  {
+    id:'CO001', name:'암보험 필요성 인지', type:'concept', typeLabel:'Concept',
+    reqDate:'2026-05-07', state:'approved', doneDate:'2026-05-09',
+    href:'06_card-editor-concept.html',
+    conn:{
+      badgeClass:'badge-conn-cr', label:'Concept → Risk-type',
+      from:{color:'var(--card-concept)', text:'CO001 암보험 필요성 인지'},
+      to:{color:'var(--card-risk)', text:'T01 암진단 보장 공백형'}
+    }
+  },
+  {
+    id:'POL001', name:'금융소비자보호법 §19', type:'policy', typeLabel:'Policy',
+    reqDate:'2026-05-09', state:'approved', doneDate:'2026-05-11',
+    href:'08_card-editor-policy.html', compliance:true,
+    conn:{
+      badgeClass:'badge-conn-pr', label:'Policy → Rule',
+      from:{color:'var(--card-policy)', text:'POL001 금융소비자보호법 §19'},
+      to:{color:'var(--card-rule)', text:'RU001 암진단금 미보유 또는 소액'}
+    }
+  },
+  {
+    id:'EV003', name:'보닥 뇌심혈관 담보 미보유율', type:'evidence', typeLabel:'Evidence',
+    reqDate:'2026-05-06', state:'rejected', doneDate:'2026-05-08',
+    href:'05_card-editor-evidence.html', conn:null
+  },
+];
+
+const TYPE_BADGE = {
+  rule:'badge-rule', policy:'badge-policy', evidence:'badge-evidence',
+  concept:'badge-concept', risk:'badge-risk'
+};
+
+let rejectCtx = null;
+
+function renderData(filter) {
+  var rows = filter === 'all' ? PENDING_DATA
+    : filter === 'pending' ? PENDING_DATA.filter(function(d){return d.state==='pending';})
+    : PENDING_DATA.filter(function(d){return d.state!=='pending';});
+
+  var pendingCnt = PENDING_DATA.filter(function(d){return d.state==='pending';}).length;
+  var doneCnt    = PENDING_DATA.filter(function(d){return d.state!=='pending';}).length;
+  document.getElementById('cnt-all').textContent     = PENDING_DATA.length;
+  document.getElementById('cnt-pending').textContent = pendingCnt;
+  document.getElementById('cnt-done').textContent    = doneCnt;
+
+  var tbody = document.getElementById('review-tbody');
+  if (!rows.length) {
+    tbody.innerHTML = '<tr><td colspan="7" class="empty-state"><i class="fa fa-inbox"></i>해당 항목이 없습니다</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = rows.map(function(d) {
+    /* 상태 배지 */
+    var stateBadge = d.state === 'pending'
+      ? '<span class="badge badge-review">⏳ 승인요청</span>'
+      : d.state === 'approved'
+        ? '<span class="badge badge-approved">✔ 승인완료</span>'
+        : '<span class="badge badge-rejected">✕ 반려</span>';
+
+    /* 처리일 */
+    var doneCell = d.state === 'pending'
+      ? '<span style="color:var(--text-hint)">—</span>'
+      : d.state === 'approved'
+        ? '<span class="done-date approved">' + d.doneDate + '</span>'
+        : '<span class="done-date rejected">' + d.doneDate + '</span>';
+
+    /* 준법감시인 태그 */
+    var compTag = d.compliance
+      ? '<span class="compliance-tag"><i class="fa fa-gavel"></i>준법감시인</span>' : '';
+
+    /* 연결 정보 셀 */
+    var connCell;
+    if (d.conn) {
+      connCell = '<div class="conn-info">'
+        + '<span class="badge ' + d.conn.badgeClass + '">' + d.conn.label + '</span>'
+        + '<div class="conn-pair">'
+        + '<span style="color:' + d.conn.from.color + ';font-weight:600">' + d.conn.from.text + '</span>'
+        + '<i class="fa fa-arrow-right" style="color:var(--text-hint);font-size:11px"></i>'
+        + '<span style="color:' + d.conn.to.color + ';font-weight:600">' + d.conn.to.text + '</span>'
+        + '</div></div>';
+    } else {
+      connCell = '<span style="color:var(--text-hint)">—</span>';
+    }
+
+    /* 액션 */
+    var actions = d.state === 'pending'
+      ? '<div class="action-group">'
+          + '<a href="' + d.href + '" class="btn btn-sm btn-secondary"><i class="fa fa-eye"></i> 상세 보기</a>'
+          + '<button class="btn btn-sm btn-success" onclick="doApprove(\'' + d.id + '\',\'' + d.name.replace(/'/g, "\\'") + '\')"><i class="fa fa-check"></i> 승인</button>'
+          + '<button class="btn btn-sm btn-danger"  onclick="openReject(\'' + d.id + '\',\'' + d.name.replace(/'/g, "\\'") + '\')"><i class="fa fa-times"></i> 반려</button>'
+          + '</div>'
+      : '<a href="' + d.href + '" class="btn btn-sm btn-secondary"><i class="fa fa-eye"></i> 상세 보기</a>';
+
+    return '<tr class="' + (d.state === 'pending' ? 'pending' : 'done') + '">'
+      + '<td><div class="cell-code">' + d.id + '</div><div class="cell-name">' + d.name + compTag + '</div></td>'
+      + '<td><span class="badge ' + TYPE_BADGE[d.type] + '">' + d.typeLabel + '</span></td>'
+      + '<td>' + connCell + '</td>'
+      + '<td style="color:var(--text-secondary)">' + d.reqDate + '</td>'
+      + '<td>' + stateBadge + '</td>'
+      + '<td>' + doneCell + '</td>'
+      + '<td>' + actions + '</td>'
+      + '</tr>';
+  }).join('');
+}
+
+function filterData(f, btn) {
+  document.querySelectorAll('.filter-tab').forEach(function(t){t.classList.remove('active');});
+  btn.classList.add('active');
+  renderData(f);
+}
+
+function doApprove(id, name) {
+  showToast(id + ' — 승인 처리되었습니다.');
+}
+
+function openReject(id, name) {
+  rejectCtx = {id: id, name: name};
+  document.getElementById('rejectReason').value = '';
+  document.getElementById('rejectReason').style.borderColor = '';
+  document.getElementById('rejectMeta').textContent = id + ' ' + name;
+  document.getElementById('rejectModal').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('rejectModal').classList.remove('open');
+  rejectCtx = null;
+}
+
+function confirmReject() {
+  var reason = document.getElementById('rejectReason').value.trim();
+  if (!reason) { document.getElementById('rejectReason').style.borderColor = 'var(--status-rejected)'; return; }
+  closeModal();
+  showToast('반려 처리되었습니다. 작성자에게 사유가 전달됩니다.');
+}
+
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); }, 2800);
+}
+
+document.getElementById('rejectModal').addEventListener('click', function(e){
+  if (e.target === this) closeModal();
+});
+
+renderData('all');
+</script>
+</body>
+</html>
