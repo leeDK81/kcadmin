@@ -1,0 +1,1154 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=1280">
+<title>KC Admin v2 — 카드 연결</title>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<style>
+:root {
+  --card-risk:#C94B1A;--card-evidence:#1A7A4A;--card-concept:#1A4A9A;
+  --card-rule:#9A1A1A;--card-policy:#5A5A55;--card-playbook:#6B4A9A;
+  --status-active:#0F6E56;--status-approved:#1A4A9A;--status-review:#BA7517;--status-draft:#9C9C94;--status-rejected:#A32D2D;
+  --sidebar-w:220px;--panel-w:480px;
+  --bg-page:#F4F4F5;--bg-card:#FFFFFF;
+  --text-primary:#171719;--text-secondary:#70737C;--text-hint:#989BA2;
+  --border:#E1E2E4;--radius:8px;
+  --shadow:0 2px 4px -2px rgba(23,23,23,.06),0 4px 6px -1px rgba(23,23,23,.06);
+  --shadow-md:0 4px 12px -2px rgba(23,23,23,.1),0 8px 20px -4px rgba(23,23,23,.07);
+  --step-active:#1A3A6B;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;background:var(--bg-page);color:var(--text-primary);min-width:1280px;font-size:15px;line-height:1.5;overflow:hidden;height:100vh}
+
+/* ── Layout ── */
+.layout{display:flex;height:100vh;overflow:hidden}
+.sidebar{width:var(--sidebar-w);background:#1A1A18;flex-shrink:0;padding:20px 0;height:100vh;overflow-y:auto;z-index:100}
+.sidebar-logo{padding:0 16px 20px;font-size:16px;font-weight:700;color:#fff;border-bottom:1px solid #333;margin-bottom:12px}
+.sidebar a,.nav-locked{display:flex;align-items:center;gap:8px;padding:8px 16px;color:#C8C8C4;text-decoration:none;font-size:14px;transition:background .15s}
+.sidebar a:hover{background:rgba(255,255,255,.08);color:#fff}
+.sidebar a.active{background:rgba(255,255,255,.15);color:#fff;font-weight:600;border-left:3px solid #5A8AE0}
+.nav-section{padding:16px 16px 4px;font-size:11px;color:#666;text-transform:uppercase;letter-spacing:.08em}
+.nav-divider{border-top:1px solid #333;margin:8px 0}
+.nav-locked{color:#555!important;cursor:not-allowed}
+
+/* ── Workspace ── */
+.workspace{flex:1;display:flex;flex-direction:column;height:100vh;overflow:hidden}
+
+/* ── Toolbar ── */
+.toolbar{background:var(--bg-card);border-bottom:1px solid var(--border);padding:0 16px;display:flex;align-items:center;gap:10px;flex-shrink:0;height:48px;z-index:50}
+.toolbar-title{font-size:14px;font-weight:700;color:var(--text-primary);white-space:nowrap}
+.tb-divider{width:1px;height:22px;background:var(--border);flex-shrink:0}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;border:none;font-family:inherit;transition:all .15s;line-height:1;white-space:nowrap;text-decoration:none;color:inherit}
+.btn:hover{opacity:.85}
+.btn-primary{background:var(--step-active);color:#fff}
+.btn-secondary{background:var(--bg-card);color:var(--text-primary);border:1px solid var(--border)}
+.btn-sm{padding:5px 10px;font-size:12px}
+.focal-chip{display:none;align-items:center;gap:7px;padding:3px 8px 3px 10px;border-radius:6px;font-size:12px;font-weight:700;color:#fff}
+.focal-chip.visible{display:inline-flex}
+.focal-chip-x{width:18px;height:18px;border-radius:3px;border:none;background:rgba(255,255,255,.25);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:10px;transition:background .15s}
+.focal-chip-x:hover{background:rgba(255,255,255,.45)}
+
+/* ── Picker panel ── */
+.picker-panel{background:var(--bg-card);border-bottom:2px solid var(--border);flex-shrink:0;display:flex;flex-direction:column;height:204px}
+.picker-label-row{padding:8px 16px 0;display:flex;align-items:center;gap:8px;flex-shrink:0}
+.picker-label{font-size:11px;font-weight:700;color:var(--text-hint);letter-spacing:.07em;text-transform:uppercase}
+.picker-hint{font-size:11px;color:var(--text-hint);margin-left:4px}
+.picker-cols{flex:1;display:flex;overflow-x:auto;padding:8px 16px 12px;gap:8px;min-height:0}
+
+.pk-col{min-width:155px;flex:1;display:flex;flex-direction:column;background:var(--bg-page);border-radius:8px;border:1px solid var(--border);overflow:hidden}
+.pk-col-hd{padding:7px 10px;display:flex;align-items:center;gap:5px;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border-bottom:1px solid var(--border);background:rgba(0,0,0,.02);flex-shrink:0}
+.pk-col-hd i{font-size:9px;opacity:.8}
+.pk-count{margin-left:auto;background:rgba(0,0,0,.08);border-radius:8px;padding:1px 6px;font-size:10px;font-weight:700;color:var(--text-secondary)}
+.pk-body{flex:1;overflow-y:auto;padding:4px}
+.pk-card{display:flex;align-items:center;gap:5px;padding:5px 7px;border-radius:5px;cursor:pointer;transition:all .12s;border:1.5px solid transparent;margin-bottom:2px}
+.pk-card:hover{background:rgba(0,0,0,.04)}
+.pk-card.pk-selected{border-color:currentColor;background:rgba(26,58,107,.06)}
+.pk-card-id{font-size:10px;font-family:monospace;color:var(--text-hint);flex-shrink:0;min-width:38px}
+.pk-card-title{font-size:12px;font-weight:600;color:var(--text-primary);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.3}
+.pk-card-status{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.pk-card-status.active{background:var(--status-active)}
+.pk-card-status.approved{background:var(--status-approved)}
+.pk-card-status.review{background:var(--status-review)}
+
+/* ── Grid section ── */
+.grid-section{flex:1;overflow:auto;background:var(--bg-page);display:flex;flex-direction:column}
+
+/* Empty state */
+.grid-empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--text-hint);padding:40px}
+.grid-empty-icon{font-size:44px;opacity:.35}
+.grid-empty-title{font-size:16px;font-weight:700;color:var(--text-secondary)}
+.grid-empty-sub{font-size:13px;color:var(--text-hint);text-align:center;line-height:1.6}
+
+/* Grid header */
+.grid-header{padding:14px 20px 12px;border-bottom:1px solid var(--border);background:var(--bg-card);display:flex;align-items:center;gap:12px;flex-shrink:0}
+.grid-focal-label{font-size:14px;font-weight:700}
+.grid-focal-badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;background:rgba(26,58,107,.1);color:var(--step-active)}
+.grid-stats{display:flex;gap:10px;margin-left:auto;align-items:center}
+.grid-stat-chip{display:flex;align-items:center;gap:4px;padding:3px 9px;border-radius:12px;font-size:11px;font-weight:700;background:var(--bg-page);border:1px solid var(--border)}
+
+/* Grid columns container */
+.grid-cols{display:flex;align-items:stretch;flex:1;padding:16px 24px;gap:40px;position:relative}
+
+/* Each column */
+.gc-col{flex:1;min-width:164px;display:flex;flex-direction:column;gap:8px}
+.gc-col.na-col{opacity:.4;pointer-events:none}
+.gc-col-hd{display:flex;align-items:center;gap:5px;padding:6px 10px;background:#fff;border:1px solid var(--border);border-radius:8px;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;flex-shrink:0;white-space:nowrap}
+.gc-col-hd i{font-size:9px}
+.gc-col-body{flex:1;display:flex;flex-direction:column;gap:10px}
+
+/* Section within column */
+.gc-section{display:flex;flex-direction:column;gap:4px}
+.gc-section-hd{font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:4px 8px;border-radius:5px;display:flex;align-items:center;gap:5px;margin-bottom:1px}
+.gc-section-hd.sh-connected{color:var(--status-active);background:rgba(15,110,86,.06)}
+.gc-section-hd.sh-available{color:var(--step-active);background:rgba(26,58,107,.07)}
+.gc-section-hd .dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.gc-section-hd .dot.connected{background:var(--status-active)}
+.gc-section-hd .dot.available{background:var(--step-active)}
+
+/* Focal card (the selected card itself) */
+.gc-focal{border-radius:10px;border:2.5px solid var(--step-active);background:#fff;padding:10px 11px;box-shadow:0 0 0 4px rgba(26,58,107,.1),var(--shadow-md)}
+.gc-focal-badge{display:inline-flex;align-items:center;gap:4px;font-size:9px;font-weight:700;color:var(--step-active);background:rgba(26,58,107,.1);padding:1px 6px;border-radius:3px;margin-bottom:5px}
+.gc-focal-type{font-size:9px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;margin-bottom:3px}
+.gc-focal-id{font-size:10px;font-family:monospace;color:var(--text-hint)}
+.gc-focal-title{font-size:12px;font-weight:700;line-height:1.3;color:var(--text-primary);margin-top:3px}
+.gc-focal-meta{font-size:10px;color:var(--text-secondary);line-height:1.4;margin-top:3px}
+
+/* Connected card */
+.gc-card{border-radius:8px;border:2px solid;background:#fff;padding:9px 10px;transition:all .15s;position:relative}
+.gc-card.gc-connected{cursor:pointer}
+.gc-card.gc-connected:hover{transform:translateY(-1px);box-shadow:var(--shadow-md)}
+.gc-card.gc-available{border-style:solid!important;border-width:1.5px!important;background:rgba(26,74,154,.04)}
+.gc-card.gc-available:hover{background:rgba(26,74,154,.08);transform:translateY(-1px)}
+.gc-card-header{display:flex;align-items:center;gap:5px;margin-bottom:3px}
+.gc-card-type{font-size:9px;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+.gc-card-id{font-size:10px;font-family:monospace;color:var(--text-hint);margin-left:auto}
+.gc-card-title{font-size:12px;font-weight:700;line-height:1.3;color:var(--text-primary);margin-bottom:5px}
+.gc-card-meta{font-size:10px;color:var(--text-secondary);line-height:1.35;margin-bottom:6px}
+.gc-card-cluster{font-size:9px;font-weight:700;color:var(--text-hint);background:rgba(0,0,0,.04);padding:1px 5px;border-radius:3px;display:inline-block;margin-bottom:5px}
+.gc-card-actions{display:flex;gap:4px;flex-wrap:wrap}
+.gc-btn{display:inline-flex;align-items:center;gap:3px;padding:3px 8px;border-radius:4px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s;border:1px solid}
+.gc-btn-disconnect{border-color:rgba(163,45,45,.2);background:rgba(163,45,45,.04);color:#A32D2D}
+.gc-btn-disconnect:hover{background:#A32D2D;color:#fff;border-color:#A32D2D}
+.gc-btn-connect{border-color:var(--step-active);background:var(--step-active);color:#fff;width:100%;justify-content:center;padding:5px 10px}
+.gc-btn-connect:hover{background:#0F2A52;border-color:#0F2A52}
+.gc-btn-explore{border-color:var(--border);background:var(--bg-page);color:var(--text-secondary)}
+.gc-btn-explore:hover{background:var(--bg-page);color:var(--text-primary)}
+.gc-status-badge{font-size:9px;font-weight:700;padding:1px 6px;border-radius:3px;flex-shrink:0;margin-left:auto}
+.gc-badge-live{background:rgba(15,110,86,.1);color:var(--status-active)}
+.gc-badge-approved{background:rgba(26,74,154,.12);color:var(--status-approved)}
+.gc-badge-review{background:rgba(184,119,34,.1);color:var(--status-review)}
+.gc-badge-pending{background:rgba(26,74,154,.08);color:var(--status-approved);border:1px dashed var(--status-approved)}
+
+/* N/A placeholder */
+.gc-na{display:flex;align-items:center;justify-content:center;min-height:60px;border-radius:8px;border:1.5px dashed var(--border);font-size:11px;color:var(--text-hint);text-align:center;padding:12px}
+
+/* Connect confirm modal */
+.modal-backdrop{position:fixed;inset:0;background:rgba(23,23,23,.45);z-index:2000;display:none;align-items:center;justify-content:center}
+.modal-backdrop.open{display:flex}
+.modal-box{background:#fff;border-radius:12px;padding:28px;width:460px;box-shadow:0 20px 60px rgba(23,23,23,.2)}
+.modal-box h3{font-size:16px;font-weight:700;margin-bottom:6px}
+.modal-box p{font-size:13px;color:var(--text-secondary);margin-bottom:18px;line-height:1.6}
+.modal-conn-row{display:flex;align-items:center;gap:10px;background:var(--bg-page);border:1px solid var(--border);border-radius:8px;padding:12px 14px;margin-bottom:20px}
+.modal-conn-card{flex:1;font-size:13px}
+.modal-conn-card .mc-type{font-size:9px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;display:block;margin-bottom:2px}
+.modal-conn-card .mc-id{font-family:monospace;font-size:11px;color:var(--text-hint)}
+.modal-conn-card .mc-title{font-weight:700;font-size:13px;display:block}
+.modal-conn-arrow{color:var(--text-hint);font-size:14px;flex-shrink:0}
+.modal-actions{display:flex;gap:8px;justify-content:flex-end}
+
+/* Toast */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1A1A18;color:#fff;padding:10px 22px;border-radius:8px;font-size:13px;font-weight:500;z-index:9999;opacity:0;transition:opacity .25s;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1}
+.toast.success{background:#0A5A3C}.toast.warn{background:#7A3A00}
+.gc-review-badge{font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;background:rgba(184,119,34,.15);color:#B87722;margin-left:4px}
+
+/* ── Deploy action bar ── */
+.deploy-bar{display:flex;align-items:center;gap:6px;margin-left:auto}
+.pending-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:5px;font-size:11px;font-weight:700;background:rgba(26,74,154,.1);color:var(--status-approved);border:1px solid rgba(26,74,154,.25);white-space:nowrap}
+
+/* Slide panel */
+.slide-panel{position:fixed;top:0;right:calc(-1 * var(--panel-w) - 20px);width:var(--panel-w);height:100vh;background:#fff;box-shadow:-4px 0 32px rgba(0,0,0,.14);z-index:300;transition:right .3s cubic-bezier(.25,.46,.45,.94);display:flex;flex-direction:column}
+.slide-panel.open{right:0}
+.panel-hd{padding:18px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-shrink:0}
+.panel-title{font-size:16px;font-weight:700;flex:1}
+.panel-close{width:30px;height:30px;border-radius:6px;border:1px solid var(--border);background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text-secondary);font-size:14px}
+.panel-close:hover{background:var(--bg-page)}
+.panel-bd{flex:1;overflow-y:auto;padding:20px}
+.panel-ft{padding:14px 20px;border-top:1px solid var(--border);display:flex;gap:8px;flex-shrink:0}
+.form-group{margin-bottom:16px}
+.form-label{display:block;font-size:13px;font-weight:600;margin-bottom:5px}
+.chip{display:inline-flex;align-items:center;background:var(--bg-page);border:1px solid var(--border);border-radius:4px;padding:2px 8px;font-size:12px;font-weight:600;margin:2px}
+
+/* ── Panel tabs ── */
+.panel-tabs{display:flex;border-bottom:2px solid var(--border);flex-shrink:0}
+.panel-tab{flex:1;padding:10px 12px;font-size:13px;font-weight:600;border:none;background:none;cursor:pointer;color:var(--text-secondary);border-bottom:2.5px solid transparent;margin-bottom:-2px;transition:all .15s;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:5px}
+.panel-tab.active{color:var(--step-active);border-bottom-color:var(--step-active)}
+.panel-tab:hover:not(.active){background:var(--bg-page);color:var(--text-primary)}
+
+/* ── Test panel ── */
+.test-chain-flow{display:flex;align-items:flex-start;gap:6px;flex-wrap:wrap;padding:10px 12px;background:var(--bg-page);border-radius:8px;margin-bottom:16px}
+.test-chain-group{display:flex;flex-direction:column;gap:4px;align-items:center}
+.test-chain-badge{display:inline-flex;align-items:center;gap:3px;padding:3px 8px;border-radius:4px;font-size:10px;font-weight:700;white-space:nowrap}
+.test-chain-arrow{color:#C8C8C4;font-size:16px;flex-shrink:0;padding-top:4px}
+.test-query{width:100%;padding:9px 11px;border:1.5px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit;resize:vertical;min-height:68px;outline:none;line-height:1.55;color:var(--text-primary)}
+.test-query:focus{border-color:var(--step-active);box-shadow:0 0 0 3px rgba(26,58,107,.08)}
+.test-result-wrap{background:var(--bg-page);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-top:12px}
+.test-result-hd{padding:8px 12px;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-secondary);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:6px;background:#fff}
+.test-result-body{padding:14px;font-size:13px;line-height:1.8;color:var(--text-primary)}
+.test-used-cards{padding:8px 12px;border-top:1px solid var(--border);display:flex;gap:4px;flex-wrap:wrap;align-items:center;background:#fff}
+.test-used-chip{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700;border:1px solid}
+</style>
+</head>
+<body>
+<div class="layout">
+
+<!-- Sidebar -->
+<nav class="sidebar">
+  <div class="sidebar-logo">&#9889; KC Admin <span style="font-size:10px;background:#5A8AE0;color:#fff;padding:1px 6px;border-radius:3px;margin-left:4px;font-weight:600">v2</span></div>
+  <a href="02_dashboard.html"><i class="fa-solid fa-chart-bar fa-fw"></i> 대시보드</a>
+  <div class="nav-divider"></div>
+  <a href="03_card-library.html"><i class="fa-solid fa-folder-open fa-fw"></i> ① 카드 등록</a>
+  <a href="04_risk-type-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-circle-exclamation fa-fw" style="font-size:11px;color:#C94B1A"></i> Risk-type</a>
+  <a href="05_evidence-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-database fa-fw" style="font-size:11px;color:#1A7A4A"></i> Evidence</a>
+  <a href="06_concept-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-lightbulb fa-fw" style="font-size:11px;color:#1A4A9A"></i> Concept</a>
+  <a href="07_rule-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-scale-balanced fa-fw" style="font-size:11px;color:#9A1A1A"></i> Rule</a>
+  <a href="08_policy-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-file-shield fa-fw" style="font-size:11px;color:#5A5A55"></i> Policy</a>
+  <a href="16_playbook-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-handshake fa-fw" style="font-size:11px;color:#9A70D0"></i> Playbook</a>
+  <span class="nav-locked" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-lock fa-fw" style="font-size:11px"></i> Case &#128274;</span>
+  <a href="09_review-workflow.html"><i class="fa-solid fa-circle-check fa-fw"></i> ② 검수·승인</a>
+  <a href="00_canvas-main.html" class="active"><i class="fa-solid fa-diagram-project fa-fw"></i> ③ 연결</a>
+  <a href="11_dry-run.html"><i class="fa-solid fa-flask fa-fw"></i> ④ 사전 테스트</a>
+  <a href="18_system-settings.html"><i class="fa-solid fa-sliders fa-fw"></i> 시스템 설정</a>
+  <div class="nav-divider"></div>
+  <a href="13_answer-logic.html"><i class="fa-solid fa-diagram-project fa-fw"></i> AI 답변 로직</a>
+  <a href="14_answer-logic-guide.html"><i class="fa-solid fa-book-open fa-fw"></i> AI 답변 생성 예시</a>
+  <a href="17_system-data-guide.html"><i class="fa-solid fa-network-wired fa-fw"></i> 데이터 연결 구조</a>
+  <a href="15_aio-guide.html"><i class="fa-solid fa-globe fa-fw"></i> AIO 가이드</a>
+  <a href="12_coverage-code-table.html"><i class="fa-solid fa-table-list fa-fw"></i> 담보코드</a>
+  <div class="nav-divider"></div>
+  <a href="01_guide.html"><i class="fa-solid fa-clipboard-list fa-fw"></i> 업무 가이드</a>
+  <a href="00_design-system.html"><i class="fa-solid fa-palette fa-fw"></i> 디자인 시스템</a>
+</nav>
+
+<!-- Workspace -->
+<div class="workspace">
+
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <span class="toolbar-title"><i class="fa-solid fa-diagram-project" style="color:var(--step-active)"></i> 카드 연결</span>
+    <div class="tb-divider"></div>
+    <span style="font-size:12px;color:var(--text-secondary)">카드를 선택해 연결을 확인·수정합니다</span>
+    <!-- Focal chip appears when card selected -->
+    <div class="focal-chip" id="focalChip">
+      <span id="focalChipLabel" style="font-size:12px;font-weight:700"></span>
+      <button class="focal-chip-x" onclick="clearSelection()" title="선택 해제"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="deploy-bar">
+      <span class="pending-badge" id="pendingBadge" style="display:none">
+        <i class="fa-solid fa-circle-dot" style="font-size:9px"></i>
+        <span id="pendingCount">0</span>개 준비 연결
+      </span>
+      <a href="11_dry-run.html" class="btn btn-secondary btn-sm"><i class="fa-solid fa-flask" style="font-size:10px"></i> 사전 테스트</a>
+    </div>
+  </div>
+
+  <!-- ① Card Picker -->
+  <div class="picker-panel">
+    <div class="picker-label-row">
+      <span class="picker-label">① 카드 선택</span>
+      <span class="picker-hint">— 카드를 클릭하면 연결 현황이 아래에 표시됩니다</span>
+    </div>
+    <div class="picker-cols" id="pickerCols"></div>
+  </div>
+
+  <!-- ② Connection Grid -->
+  <div class="grid-section" id="gridSection">
+
+    <!-- Empty state -->
+    <div class="grid-empty" id="gridEmpty">
+      <div class="grid-empty-icon"><i class="fa-solid fa-diagram-project"></i></div>
+      <div class="grid-empty-title">위에서 카드를 선택하세요</div>
+      <div class="grid-empty-sub">카드를 선택하면 해당 카드의 연결 현황과<br>연결 가능한 카드 목록이 표시됩니다</div>
+    </div>
+
+    <!-- Grid content (hidden until card selected) -->
+    <div id="gridContent" style="display:none;flex-direction:column;flex:1">
+      <div class="grid-header" id="gridHeader"></div>
+      <div class="grid-cols" id="gridCols"></div>
+    </div>
+
+  </div>
+
+</div><!-- workspace -->
+</div><!-- layout -->
+
+<!-- Connect/Disconnect modal -->
+<div class="modal-backdrop" id="actionModal">
+  <div class="modal-box">
+    <h3 id="modalTitle">연결 추가</h3>
+    <p id="modalDesc"></p>
+    <div class="modal-conn-row">
+      <div class="modal-conn-card" id="modalFrom"></div>
+      <div class="modal-conn-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+      <div class="modal-conn-card" id="modalTo"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeModal()">취소</button>
+      <button class="btn btn-primary" id="modalConfirmBtn" onclick="confirmAction()"></button>
+    </div>
+  </div>
+</div>
+
+<!-- Slide panel -->
+<div class="slide-panel" id="slidePanel">
+  <div class="panel-hd">
+    <span class="panel-title" id="panelTitle">카드 정보</span>
+    <button class="panel-close" onclick="closePanel()"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+  <div class="panel-tabs">
+    <button class="panel-tab active" id="tabInfo" onclick="switchPanelTab('info')">
+      <i class="fa-solid fa-circle-info" style="font-size:11px"></i> 카드 정보
+    </button>
+    <button class="panel-tab" id="tabTest" onclick="switchPanelTab('test')">
+      <i class="fa-solid fa-flask" style="font-size:11px"></i> 답변 테스트
+    </button>
+  </div>
+  <div class="panel-bd" id="panelBody"></div>
+  <div class="panel-ft" id="panelFooter"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================================================
+// DATA
+// ============================================================
+const CARDS = [
+  {id:'CN001',type:'concept',  status:'active', cluster:'T01',title:'암보험 보장 내용',        meta:'동의어 12개 · Risk: RT01',             scope:'public'},
+  {id:'CN002',type:'concept',  status:'active', cluster:'T01',title:'암 진단비 얼마나 받나요', meta:'동의어 8개 · Risk: RT01',              scope:'public'},
+  {id:'RT01', type:'risk',     status:'active', cluster:'T01',title:'암·종양',                 meta:'KCD: C00–D48 · 고위험 4종 포함',       scope:'public'},
+  {id:'RU001',type:'rule',     status:'active', cluster:'T01',title:'암 진단비 산정 기준',     meta:'마이데이터+심평원 · +프로파일',         scope:'baseline'},
+  {id:'EV001',type:'evidence', status:'active', cluster:'T01',title:'암 평균 입원 진료비',     meta:'심평원 (HIRA) 2024 · 기준값: 386만원', scope:'internal'},
+  {id:'EV002',type:'evidence', status:'active', cluster:'T01',title:'암 5년 생존율',           meta:'건보공단 (NHIS) 2023 · 기준값: 71.5%', scope:'internal'},
+  {id:'EV005',type:'evidence', status:'active', cluster:'T01',title:'65세↑ 간병보험 미가입률', meta:'금감원 (FSS) 2024 · 기준값: 68.3%',    scope:'internal'},
+  {id:'PO001',type:'policy',   status:'active', cluster:'T01',title:'암 보장 면책 고지',       meta:'금소법 17조 · 준법감시인 승인완료',     scope:'internal'},
+  {id:'PB001',type:'playbook', status:'active', cluster:'T01',title:'암 진단 상담 CTA',        meta:'키워드 5개 · 💬 상담연결',              scope:'internal'},
+  {id:'CN003',type:'concept',  status:'active', cluster:'T02',title:'뇌졸중 보험 보장',        meta:'동의어 9개 · Risk: RT02',              scope:'public'},
+  {id:'CN004',type:'concept',  status:'approved', cluster:'T02',title:'뇌경색 치료비 보장',      meta:'동의어 6개 · Risk: RT02',              scope:'public'},
+  {id:'CN005',type:'concept',  status:'active', cluster:'T02',title:'중대질병 보험 범위',       meta:'동의어 15개 · Risk: RT01·RT02',         scope:'public'},
+  {id:'RT02', type:'risk',     status:'active', cluster:'T02',title:'뇌혈관질환',              meta:'KCD: I60–I69 · 뇌졸중·뇌경색',         scope:'public'},
+  {id:'RU002',type:'rule',     status:'active', cluster:'T02',title:'뇌혈관 보장 판정',        meta:'마이데이터+심평원 · +프로파일',         scope:'baseline'},
+  {id:'EV003',type:'evidence', status:'active', cluster:'T02',title:'뇌졸중 평균 입원 진료비', meta:'심평원 (HIRA) 2024 · 기준값: 512만원', scope:'internal'},
+  {id:'EV004',type:'evidence', status:'active', cluster:'T02',title:'고혈압 유병률',            meta:'심평원 (HIRA) 2024 · 기준값: 28.3%', scope:'internal'},
+  {id:'PO002',type:'policy',   status:'active', cluster:'T02',title:'뇌혈관 면책 고지',        meta:'준법감시인 최종 승인 완료 · 연결 대기', scope:'internal'},
+];
+
+const EDGES = [
+  {from:'CN001',to:'RT01', status:'active'},
+  {from:'CN002',to:'RT01', status:'active'},
+  {from:'RT01', to:'RU001',status:'active'},
+  {from:'RU001',to:'EV001',status:'active'},
+  {from:'RU001',to:'EV002',status:'active'},
+  {from:'RU001',to:'EV005',status:'active'},
+  {from:'RU001',to:'PO001',status:'active'},
+  {from:'CN003',to:'RT02', status:'active'},
+  {from:'CN004',to:'RT02', status:'pending'},
+  {from:'RT02', to:'RU002',status:'active'},
+  {from:'RU002',to:'EV003',status:'active'},
+  {from:'RU002',to:'EV004',status:'active'},
+  {from:'RU002',to:'EV005',status:'active'},
+  {from:'RU002',to:'PO002',status:'active'},
+  {from:'CN005',to:'RT01', status:'active'},
+  {from:'CN005',to:'RT02', status:'active'},
+];
+
+// Which types can each type connect TO (outgoing)
+const CONNECT_RULES = {
+  concept:  ['risk'],
+  risk:     ['rule'],
+  rule:     ['evidence','policy'],
+  policy:   [],
+  evidence: [],
+  playbook: [],
+};
+
+// ============================================================
+// CONSTANTS
+// ============================================================
+const TYPE_NAMES  = {risk:'RISK-TYPE',evidence:'EVIDENCE',concept:'CONCEPT',rule:'RULE',policy:'POLICY',playbook:'PLAYBOOK'};
+const TYPE_COLORS = {risk:'#C94B1A',evidence:'#1A7A4A',concept:'#1A4A9A',rule:'#9A1A1A',policy:'#5A5A55',playbook:'#6B4A9A'};
+const TYPE_ICONS  = {risk:'fa-circle-exclamation',evidence:'fa-database',concept:'fa-lightbulb',rule:'fa-scale-balanced',policy:'fa-file-shield',playbook:'fa-handshake'};
+const SCOPE_NAMES = {public:'고객공개',internal:'내부전용',baseline:'공통기준'};
+const EDITOR_MAP  = {risk:'04_card-editor-risk-type.html',evidence:'05_card-editor-evidence.html',concept:'06_card-editor-concept.html',rule:'07_card-editor-rule.html',policy:'08_card-editor-policy.html',playbook:'16_card-editor-playbook.html'};
+
+// Column groups for the grid
+const GRID_COLS = [
+  {key:'concept',  types:['concept'],           label:'CONCEPT',          icon:'fa-lightbulb'},
+  {key:'risk',     types:['risk'],              label:'RISK-TYPE',         icon:'fa-circle-exclamation'},
+  {key:'rule',     types:['rule'],              label:'RULE',              icon:'fa-scale-balanced'},
+  {key:'evpol',   types:['evidence','policy'],  label:'EVIDENCE · POLICY', icon:'fa-database'},
+  {key:'playbook', types:['playbook'],           label:'PLAYBOOK',          icon:'fa-handshake'},
+];
+
+// Picker columns — Evidence+Policy 합침 (Rule 아웃풋이 동일)
+const PICKER_COLS = [
+  {types:['concept'],           label:'CONCEPT',           icon:'fa-lightbulb',          color:'#1A4A9A'},
+  {types:['risk'],              label:'RISK-TYPE',          icon:'fa-circle-exclamation', color:'#C94B1A'},
+  {types:['rule'],              label:'RULE',               icon:'fa-scale-balanced',     color:'#9A1A1A'},
+  {types:['evidence','policy'], label:'EVIDENCE · POLICY',  icon:'fa-database',           color:'#1A7A4A'},
+  {types:['playbook'],          label:'PLAYBOOK',            icon:'fa-handshake',          color:'#6B4A9A'},
+];
+
+// ============================================================
+// STATE
+// ============================================================
+let selectedCardId = null;
+let pendingAction  = null;
+let panelCardId    = null;
+let panelTab       = 'info';
+
+// ============================================================
+// HELPERS
+// ============================================================
+function ACTIVE_CARDS() { return CARDS.filter(c => c.status === 'active'); }
+function ALL_PICKER_CARDS() { return CARDS.filter(c => c.status !== 'draft'); }
+
+function edgeExists(fromId, toId) {
+  return EDGES.some(e => e.from === fromId && e.to === toId);
+}
+
+function getEdge(fromId, toId) {
+  return EDGES.find(e => e.from === fromId && e.to === toId);
+}
+
+// Bidirectional BFS from cardId → returns Set of all connected card IDs
+function computeChain(cardId) {
+  const visited = new Set([cardId]);
+  const queue = [cardId];
+  while (queue.length) {
+    const id = queue.shift();
+    EDGES.forEach(e => {
+      if (e.from === id && !visited.has(e.to))   { visited.add(e.to);   queue.push(e.to); }
+      if (e.to   === id && !visited.has(e.from)) { visited.add(e.from); queue.push(e.from); }
+    });
+  }
+  return visited;
+}
+
+// 체인 연결 엣지 탐색 — 포컬 카드와의 직접 엣지를 우선 반환
+function findChainEdge(cardId, chainSet, focalId) {
+  if (focalId) {
+    const direct = EDGES.find(e =>
+      (e.from === cardId && e.to   === focalId) ||
+      (e.to   === cardId && e.from === focalId)
+    );
+    if (direct) return direct;
+  }
+  return EDGES.find(e =>
+    (e.from === cardId && chainSet.has(e.to)) ||
+    (e.to   === cardId && chainSet.has(e.from))
+  ) || null;
+}
+
+// 선택된 카드(focalCard)와 직접 연결 가능한지만 체크 (체인 경유 X)
+function findDirectTarget(card, focalCard) {
+  if (CONNECT_RULES[focalCard.type]?.includes(card.type) && !edgeExists(focalCard.id, card.id)) {
+    return {from: focalCard.id, to: card.id};
+  }
+  if (CONNECT_RULES[card.type]?.includes(focalCard.type) && !edgeExists(card.id, focalCard.id)) {
+    return {from: card.id, to: focalCard.id};
+  }
+  return null;
+}
+
+// ============================================================
+// INIT
+// ============================================================
+function init() {
+  renderPicker();
+}
+
+// ============================================================
+// RENDER PICKER
+// ============================================================
+function renderPicker() {
+  const pickerEl = document.getElementById('pickerCols');
+  const pickerCards = ALL_PICKER_CARDS();
+
+  pickerEl.innerHTML = PICKER_COLS.map(col => {
+    const cards = pickerCards.filter(c => col.types.includes(c.type));
+    const color = col.color;
+
+    return '<div class="pk-col">' +
+      '<div class="pk-col-hd" style="color:' + color + '">' +
+        '<i class="fa-solid ' + col.icon + '"></i>' + col.label +
+        '<span class="pk-count">' + cards.length + '</span>' +
+      '</div>' +
+      '<div class="pk-body">' +
+        (cards.length === 0
+          ? '<div style="padding:8px;font-size:11px;color:var(--text-hint);text-align:center">등록된 카드 없음</div>'
+          : cards.map(c => pickerCardHTML(c)).join('')
+        ) +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function pickerCardHTML(card) {
+  const isSelected = card.id === selectedCardId;
+  const color = TYPE_COLORS[card.type];
+  const statusDot = card.status === 'active'
+    ? '<span class="pk-card-status active" title="라이브"></span>'
+    : card.status === 'approved'
+      ? '<span class="pk-card-status approved" title="승인완료"></span>'
+      : '<span class="pk-card-status review" title="승인요청"></span>';
+
+  const statusLabel = card.status === 'review'
+    ? '<span style="font-size:9px;color:var(--status-review);font-weight:700;flex-shrink:0">승인요청</span>'
+    : card.status === 'approved'
+      ? '<span style="font-size:9px;color:var(--status-approved);font-weight:700;flex-shrink:0">승인완료</span>'
+      : '';
+
+  return '<div class="pk-card' + (isSelected ? ' pk-selected' : '') + '"' +
+    (isSelected ? ' style="border-color:' + color + ';background:' + hexToRgba(color, 0.06) + '"' : '') +
+    ' onclick="selectCard(\'' + card.id + '\')">' +
+    statusDot +
+    '<span class="pk-card-id">' + card.id + '</span>' +
+    '<span class="pk-card-title">' + card.title + '</span>' +
+    statusLabel +
+  '</div>';
+}
+
+function hexToRgba(hex, alpha) {
+  const r = parseInt(hex.slice(1,3),16), g = parseInt(hex.slice(3,5),16), b = parseInt(hex.slice(5,7),16);
+  return 'rgba(' + r + ',' + g + ',' + b + ',' + alpha + ')';
+}
+
+// ============================================================
+// SELECT CARD
+// ============================================================
+function selectCard(id) {
+  selectedCardId = id;
+  renderPicker(); // refresh highlight
+  renderGrid();
+  requestAnimationFrame(drawLines);
+
+  const card = CARDS.find(c => c.id === id);
+  // Toolbar focal chip
+  const chip = document.getElementById('focalChip');
+  chip.style.background = TYPE_COLORS[card.type];
+  chip.classList.add('visible');
+  document.getElementById('focalChipLabel').textContent = card.id + ' · ' + card.title;
+}
+
+function clearSelection() {
+  selectedCardId = null;
+  renderPicker();
+  document.getElementById('focalChip').classList.remove('visible');
+  document.getElementById('gridEmpty').style.display = 'flex';
+  document.getElementById('gridContent').style.display = 'none';
+  const old = document.getElementById('connectionSvg');
+  if (old) old.remove();
+}
+
+// ============================================================
+// RENDER GRID — 전체 체인 기반
+// ============================================================
+function renderGrid() {
+  if (!selectedCardId) return;
+
+  const focalCard    = CARDS.find(c => c.id === selectedCardId);
+  const visibleCards = CARDS.filter(c => c.status !== 'draft'); // active + approved + review (draft 제외)
+  const chain        = computeChain(selectedCardId);
+
+  document.getElementById('gridEmpty').style.display = 'none';
+  document.getElementById('gridContent').style.display = 'flex';
+
+  const chainSize    = chain.size - 1; // 포컬 제외
+  // 직접 연결 가능 카드 수 (포컬과 타입 규칙이 맞고 아직 미연결)
+  const availableCount = visibleCards.filter(c =>
+    !chain.has(c.id) && c.type !== focalCard.type && findDirectTarget(c, focalCard)
+  ).length;
+
+  document.getElementById('gridHeader').innerHTML =
+    '<i class="fa-solid ' + TYPE_ICONS[focalCard.type] + '" style="color:' + TYPE_COLORS[focalCard.type] + ';font-size:15px"></i>' +
+    '<span class="grid-focal-label" style="color:' + TYPE_COLORS[focalCard.type] + '">' + focalCard.title + '</span>' +
+    '<span class="grid-focal-badge"><i class="fa-solid fa-fw fa-tag" style="font-size:9px"></i>' + focalCard.id + ' · ' + TYPE_NAMES[focalCard.type] + ' · ' + focalCard.cluster + '</span>' +
+    '<div class="grid-stats">' +
+      (chainSize > 0
+        ? '<div class="grid-stat-chip"><span style="color:var(--status-active);font-size:10px">●</span> 체인 ' + chainSize + '개 연결됨</div>'
+        : '<div class="grid-stat-chip" style="color:#C94B1A"><i class="fa-solid fa-triangle-exclamation" style="font-size:10px"></i> 연결 없음</div>') +
+      (availableCount > 0
+        ? '<div class="grid-stat-chip" style="color:var(--step-active)"><i class="fa-solid fa-circle-plus" style="font-size:10px"></i> 연결 가능 ' + availableCount + '개</div>'
+        : '') +
+      '<button class="btn btn-secondary btn-sm" onclick="openTest(\'' + focalCard.id + '\')"><i class="fa-solid fa-flask"></i> 답변 테스트</button>' +
+      '<a href="' + EDITOR_MAP[focalCard.type] + '" class="btn btn-secondary btn-sm" style="text-decoration:none"><i class="fa-solid fa-pen-to-square"></i> 카드 편집</a>' +
+    '</div>';
+
+  const colsEl = document.getElementById('gridCols');
+  colsEl.innerHTML = '';
+
+  GRID_COLS.forEach(col => {
+    const isFocalCol = col.types.includes(focalCard.type);
+    const color      = TYPE_COLORS[col.types[0]];
+
+    const colEl  = document.createElement('div');
+    colEl.className = 'gc-col';
+
+    colEl.innerHTML = '<div class="gc-col-hd" style="color:' + color + '">' +
+      '<i class="fa-solid ' + col.icon + '"></i>' + col.label + '</div>';
+
+    const bodyEl = document.createElement('div');
+    bodyEl.className = 'gc-col-body';
+
+    if (isFocalCol) {
+      // 선택된 카드 자체
+      bodyEl.innerHTML = focalCardHTML(focalCard);
+    } else {
+      // 이 컬럼의 카드(active+review): 체인 속한 것 / 포컬과 직접 연결 가능한 것 구분
+      const colCards  = visibleCards.filter(c => col.types.includes(c.type));
+      const inChain   = colCards.filter(c => chain.has(c.id));
+      const available = colCards.filter(c => !chain.has(c.id) && findDirectTarget(c, focalCard) && c.cluster === focalCard.cluster);
+
+      if (inChain.length) {
+        bodyEl.innerHTML += sectionHTML('연결됨', 'connected', inChain.length);
+        inChain.forEach(c => { bodyEl.innerHTML += chainCardHTML(c, chain, selectedCardId); });
+      }
+      if (available.length) {
+        bodyEl.innerHTML += sectionHTML('연결 가능', 'available', available.length);
+        available.forEach(c => { bodyEl.innerHTML += availableCardHTML(c, focalCard); });
+      }
+      if (!inChain.length && !available.length) {
+        bodyEl.innerHTML = '<div class="gc-na">해당 없음</div>';
+        colEl.classList.add('na-col');
+      }
+    }
+
+    colEl.appendChild(bodyEl);
+    colsEl.appendChild(colEl);
+  });
+}
+
+function sectionHTML(label, type, count) {
+  const cls  = type === 'connected' ? 'sh-connected' : 'sh-available';
+  const icon = type === 'connected'
+    ? '<i class="fa-solid fa-link" style="font-size:9px"></i>'
+    : '<i class="fa-solid fa-circle-plus" style="font-size:10px"></i>';
+  return '<div class="gc-section-hd ' + cls + '">' + icon + ' ' + label +
+    ' <span style="font-weight:400;opacity:.7">(' + count + ')</span></div>';
+}
+
+function focalCardHTML(card) {
+  const color = TYPE_COLORS[card.type];
+  return '<div class="gc-focal" data-card-id="' + card.id + '">' +
+    '<div class="gc-focal-badge"><i class="fa-solid fa-star" style="font-size:9px"></i> 선택된 카드</div>' +
+    '<div class="gc-focal-type" style="color:' + color + '">' + TYPE_NAMES[card.type] + '</div>' +
+    '<div class="gc-focal-id">' + card.id + ' · ' + card.cluster + '</div>' +
+    '<div class="gc-focal-title">' + card.title + '</div>' +
+    '<div class="gc-focal-meta">' + card.meta.replace(/·/g,'<br>·') + '</div>' +
+    '<div style="margin-top:8px;display:flex;gap:4px">' +
+      '<button class="gc-btn gc-btn-explore" onclick="viewCard(\'' + card.id + '\')" style="font-size:11px">' +
+        '<i class="fa-solid fa-eye" style="font-size:9px"></i> 상세 보기</button>' +
+      '<a href="' + EDITOR_MAP[card.type] + '" class="gc-btn gc-btn-explore" style="text-decoration:none;font-size:11px">' +
+        '<i class="fa-solid fa-pen-to-square" style="font-size:9px"></i> 편집</a>' +
+    '</div>' +
+  '</div>';
+}
+
+// 체인에 속한 카드 — 연결 경로 + 제거 버튼
+function chainCardHTML(card, chainSet, focalId) {
+  const color  = TYPE_COLORS[card.type];
+  const cedge  = findChainEdge(card.id, chainSet, focalId);
+  const fromId = cedge ? cedge.from : null;
+  const toId   = cedge ? cedge.to   : null;
+
+  const isCross      = false; // crossCluster 엣지 타입 폐기 — active/pending 2종만 사용
+  const isReviewEdge = cedge && cedge.status === 'review';
+
+  // 경유 카드 표시 (포컬 카드 제외 체인 내 연결선)
+  const viaCard = cedge
+    ? CARDS.find(c => c.id === (cedge.from === card.id ? cedge.to : cedge.from))
+    : null;
+  const viaLabel = viaCard
+    ? '<div style="font-size:9px;color:var(--text-hint);margin-bottom:4px;display:flex;align-items:center;gap:4px">' +
+        (cedge.from === card.id ? '→ ' : '← ') + viaCard.id +
+        (isReviewEdge ? '<span class="gc-review-badge">연결 검수중</span>' : '') +
+      '</div>'
+    : '';
+
+  const sBadge = card.status === 'active'
+    ? '<span class="gc-status-badge gc-badge-live">라이브</span>'
+    : card.status === 'approved'
+      ? '<span class="gc-status-badge gc-badge-approved">승인완료</span>'
+      : '<span class="gc-status-badge gc-badge-review">승인요청</span>';
+
+  return '<div class="gc-card gc-connected" data-card-id="' + card.id + '" style="border-color:' + color + '" onclick="selectCard(\'' + card.id + '\')">' +
+    '<div class="gc-card-header">' +
+      '<span class="gc-card-type" style="color:' + color + '">' + TYPE_NAMES[card.type] + '</span>' +
+      (isCross ? '<span style="font-size:9px;font-weight:700;color:#7A4AC9;background:#F0EAFC;padding:1px 5px;border-radius:3px;margin-left:3px">크로스</span>' : '') +
+      '<span class="gc-card-id">' + card.id + '</span>' +
+      sBadge +
+    '</div>' +
+    viaLabel +
+    '<div class="gc-card-title">' + card.title + '</div>' +
+    '<span class="gc-card-cluster">' + card.cluster + '</span>' +
+    '<div class="gc-card-actions">' +
+      '<button class="gc-btn gc-btn-explore" onclick="event.stopPropagation();selectCard(\'' + card.id + '\')">' +
+        '<i class="fa-solid fa-expand" style="font-size:9px"></i> 탐색</button>' +
+      (fromId && toId
+        ? '<button class="gc-btn gc-btn-disconnect" onclick="event.stopPropagation();openDisconnect(\'' + fromId + '\',\'' + toId + '\')">' +
+            '<i class="fa-solid fa-xmark" style="font-size:9px"></i> 연결 제거</button>'
+        : '') +
+    '</div>' +
+  '</div>';
+}
+
+// 연결 가능한 카드 — 포컬 카드와 직접 연결 가능한 것만
+function availableCardHTML(card, focalCard) {
+  const color  = TYPE_COLORS[card.type];
+  const target = findDirectTarget(card, focalCard);
+  if (!target) return '';
+
+  const isOutgoing = target.from === focalCard.id; // 포컬 → 이 카드
+  const dirArrow   = isOutgoing
+    ? focalCard.id + ' <span style="color:var(--step-active)">→</span> ' + card.id
+    : card.id + ' <span style="color:var(--step-active)">→</span> ' + focalCard.id;
+  const dirLabel   = '<div style="font-size:9px;font-weight:600;color:var(--step-active);margin-bottom:5px">' +
+    dirArrow + '</div>';
+
+  const sBadge = card.status === 'active'
+    ? '<span class="gc-status-badge gc-badge-live">라이브</span>'
+    : card.status === 'approved'
+      ? '<span class="gc-status-badge gc-badge-approved">승인완료</span>'
+      : '<span class="gc-status-badge gc-badge-review">승인요청</span>';
+
+  return '<div class="gc-card gc-available" style="border-color:' + hexToRgba(color, 0.5) + '">' +
+    '<div class="gc-card-header">' +
+      '<span class="gc-card-type" style="color:' + color + '">' + TYPE_NAMES[card.type] + '</span>' +
+      '<span class="gc-card-id">' + card.id + '</span>' +
+      sBadge +
+    '</div>' +
+    dirLabel +
+    '<div class="gc-card-title">' + card.title + '</div>' +
+    '<span class="gc-card-cluster">' + card.cluster + '</span>' +
+    '<div class="gc-card-actions" style="margin-top:6px">' +
+      '<button class="gc-btn gc-btn-connect" onclick="openConnect(\'' + target.from + '\',\'' + target.to + '\')">' +
+        '<i class="fa-solid fa-link" style="font-size:9px"></i> 연결 추가</button>' +
+    '</div>' +
+  '</div>';
+}
+
+// ============================================================
+// MODAL: connect / disconnect
+// ============================================================
+function openConnect(fromId, toId) {
+  pendingAction = {type:'connect', fromId, toId};
+  const fromCard = CARDS.find(c => c.id === fromId);
+  const toCard   = CARDS.find(c => c.id === toId);
+
+  const hasPending = fromCard.status === 'approved' || toCard.status === 'approved';
+  document.getElementById('modalTitle').textContent = hasPending ? '준비 연결 추가' : '연결 추가';
+  document.getElementById('modalDesc').textContent = hasPending
+    ? '승인완료 카드를 연결합니다. 캔버스에 준비 연결(점선)로 표시되며, 라이브 전환 후 KC Engine에 반영됩니다.'
+    : '아래 두 카드를 연결합니다. 확인 후 캔버스 및 KC Engine에 즉시 반영됩니다.';
+  renderModalCards(fromCard, toCard);
+  document.getElementById('modalConfirmBtn').innerHTML = '<i class="fa-solid fa-plus"></i> 연결 추가';
+  document.getElementById('modalConfirmBtn').className = 'btn btn-primary';
+  document.getElementById('actionModal').classList.add('open');
+}
+
+function openDisconnect(fromId, toId) {
+  pendingAction = {type:'disconnect', fromId, toId};
+  const fromCard = CARDS.find(c => c.id === fromId);
+  const toCard   = CARDS.find(c => c.id === toId);
+
+  document.getElementById('modalTitle').textContent = '연결 제거';
+  document.getElementById('modalDesc').textContent = '이 연결을 제거합니다. AI 답변 체인에서 즉시 제외됩니다.';
+  renderModalCards(fromCard, toCard);
+  document.getElementById('modalConfirmBtn').innerHTML = '<i class="fa-solid fa-xmark"></i> 연결 제거';
+  document.getElementById('modalConfirmBtn').className = 'btn btn-primary' ;
+  document.getElementById('modalConfirmBtn').style.background = '#A32D2D';
+  document.getElementById('actionModal').classList.add('open');
+}
+
+function renderModalCards(fromCard, toCard) {
+  document.getElementById('modalFrom').innerHTML =
+    '<span class="mc-type" style="color:' + TYPE_COLORS[fromCard.type] + '">' + TYPE_NAMES[fromCard.type] + '</span>' +
+    '<span class="mc-id">' + fromCard.id + ' · ' + fromCard.cluster + '</span>' +
+    '<span class="mc-title">' + fromCard.title + '</span>';
+  document.getElementById('modalTo').innerHTML =
+    '<span class="mc-type" style="color:' + TYPE_COLORS[toCard.type] + '">' + TYPE_NAMES[toCard.type] + '</span>' +
+    '<span class="mc-id">' + toCard.id + ' · ' + toCard.cluster + '</span>' +
+    '<span class="mc-title">' + toCard.title + '</span>';
+}
+
+function closeModal() {
+  document.getElementById('actionModal').classList.remove('open');
+  document.getElementById('modalConfirmBtn').style.background = '';
+  pendingAction = null;
+}
+
+function confirmAction() {
+  if (!pendingAction) return;
+
+  if (pendingAction.type === 'connect') {
+    if (!edgeExists(pendingAction.fromId, pendingAction.toId)) {
+      const fromCard   = CARDS.find(c => c.id === pendingAction.fromId);
+      const toCard     = CARDS.find(c => c.id === pendingAction.toId);
+      const edgeStatus = (fromCard.status === 'approved' || toCard.status === 'approved') ? 'pending' : 'active';
+      EDGES.push({from: pendingAction.fromId, to: pendingAction.toId, status: edgeStatus});
+    }
+    showToast('✅ 연결이 추가되었습니다', 'success');
+  } else {
+    const idx = EDGES.findIndex(e => e.from === pendingAction.fromId && e.to === pendingAction.toId);
+    if (idx !== -1) EDGES.splice(idx, 1);
+    showToast('연결이 제거되었습니다', '');
+  }
+
+  closeModal();
+  renderGrid();
+  renderPicker();
+  requestAnimationFrame(drawLines);
+  updateDeployBar();
+}
+
+// ============================================================
+// DEPLOY BAR
+// ============================================================
+function getPendingEdges() {
+  return EDGES.filter(e => e.status === 'pending');
+}
+
+function updateDeployBar() {
+  const pending = getPendingEdges();
+  const badge   = document.getElementById('pendingBadge');
+  const count   = document.getElementById('pendingCount');
+  if (!badge) return;
+  if (pending.length > 0) {
+    badge.style.display = 'inline-flex';
+    count.textContent   = pending.length;
+  } else {
+    badge.style.display = 'none';
+  }
+}
+
+// ============================================================
+// CARD DETAIL PANEL — 카드 정보 / 답변 테스트 탭
+// ============================================================
+const TEST_QUERIES = {
+  'CN001':'암보험 보장 내용이 어떻게 되나요?',
+  'CN002':'암 진단비 얼마나 받을 수 있나요?',
+  'CN003':'뇌졸중 보험 어떻게 보장되나요?',
+  'CN004':'뇌경색 치료비 보장 알려주세요',
+  'CN005':'중대질병 보험 범위가 어떻게 되나요?',
+  'RT01' :'암 진단 후 보험금 청구 가능한가요?',
+  'RT02' :'뇌혈관 질환 보험 어떻게 적용되나요?',
+  'RU001':'암 진단비 산정 기준을 알려주세요',
+  'RU002':'뇌혈관 보장 판정 기준이 어떻게 되나요?',
+  'EV001':'암 평균 입원 진료비가 어떻게 되나요?',
+  'EV002':'암 5년 생존율 통계 알려주세요',
+  'EV003':'뇌졸중 입원 치료비 평균이 궁금해요',
+  'EV004':'고혈압 유병률 얼마나 되나요?',
+  'EV005':'65세 이상 간병보험 미가입률이요?',
+  'PO001':'암 보험 면책 조건이 어떻게 되나요?',
+  'PO002':'뇌혈관 면책 고지 내용 알려주세요',
+  'PB001':'암 진단 후 상담 연결은 어떻게 하나요?',
+};
+
+function openPanel(id, tab) {
+  panelCardId = id;
+  switchPanelTab(tab || 'info');
+  document.getElementById('slidePanel').classList.add('open');
+}
+
+function viewCard(id) { openPanel(id, 'info'); }
+function openTest(id)  { openPanel(id, 'test'); }
+
+function switchPanelTab(tab) {
+  panelTab = tab;
+  document.getElementById('tabInfo').classList.toggle('active', tab === 'info');
+  document.getElementById('tabTest').classList.toggle('active', tab === 'test');
+  if (tab === 'info') renderPanelInfo();
+  else                renderPanelTest();
+}
+
+function renderPanelInfo() {
+  const card = CARDS.find(c => c.id === panelCardId);
+  if (!card) return;
+
+  const incoming = EDGES.filter(e => e.to   === card.id).map(e => CARDS.find(c => c.id === e.from)).filter(Boolean);
+  const outgoing = EDGES.filter(e => e.from === card.id).map(e => CARDS.find(c => c.id === e.to)).filter(Boolean);
+
+  document.getElementById('panelTitle').innerHTML =
+    '<i class="fa-solid ' + TYPE_ICONS[card.type] + '" style="color:' + TYPE_COLORS[card.type] + ';margin-right:6px"></i>' + card.title;
+
+  let html =
+    '<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:10px 12px;background:var(--bg-page);border-radius:8px;margin-bottom:16px">' +
+      '<span style="font-size:11px;font-weight:700;color:' + TYPE_COLORS[card.type] + '">' + TYPE_NAMES[card.type] + '</span>' +
+      '<code style="font-size:11px;background:#f0f0ec;padding:1px 6px;border-radius:3px">' + card.id + '</code>' +
+      '<span style="font-size:11px;color:var(--text-hint)">' + card.cluster + '</span>' +
+      '<span style="font-size:11px;color:var(--text-hint);margin-left:auto">' + (SCOPE_NAMES[card.scope]||card.scope) + '</span>' +
+    '</div>';
+
+  html += '<div class="form-group"><label class="form-label" style="font-size:11px;color:var(--text-secondary)">카드명</label>' +
+    '<div style="padding:8px 10px;background:var(--bg-page);border:1px solid var(--border);border-radius:6px;font-size:13px;font-weight:600">' + card.title + '</div></div>';
+
+  html += '<div class="form-group"><label class="form-label" style="font-size:11px;color:var(--text-secondary)">메타 정보</label>' +
+    '<div style="padding:8px 10px;background:var(--bg-page);border:1px solid var(--border);border-radius:6px;font-size:12px;line-height:1.7">' + card.meta.split(' · ').join('<br>') + '</div></div>';
+
+  if (incoming.length) {
+    html += '<div class="form-group"><label class="form-label" style="font-size:11px;color:var(--text-secondary)">← 수신 연결 (' + incoming.length + ')</label><div style="display:flex;flex-wrap:wrap;gap:4px">' +
+      incoming.map(c => '<span class="chip" style="color:' + TYPE_COLORS[c.type] + ';border-color:' + hexToRgba(TYPE_COLORS[c.type], 0.3) + ';cursor:pointer" onclick="selectCard(\'' + c.id + '\');closePanel()">' +
+        c.id + ' · ' + c.title + '</span>').join('') + '</div></div>';
+  }
+  if (outgoing.length) {
+    html += '<div class="form-group"><label class="form-label" style="font-size:11px;color:var(--text-secondary)">→ 발신 연결 (' + outgoing.length + ')</label><div style="display:flex;flex-wrap:wrap;gap:4px">' +
+      outgoing.map(c => '<span class="chip" style="color:' + TYPE_COLORS[c.type] + ';border-color:' + hexToRgba(TYPE_COLORS[c.type], 0.3) + ';cursor:pointer" onclick="selectCard(\'' + c.id + '\');closePanel()">' +
+        c.id + ' · ' + c.title + '</span>').join('') + '</div></div>';
+  }
+
+  document.getElementById('panelBody').innerHTML = html;
+  document.getElementById('panelFooter').innerHTML =
+    '<button class="btn btn-secondary" onclick="closePanel()">닫기</button>' +
+    '<button class="btn btn-secondary" onclick="switchPanelTab(\'test\')"><i class="fa-solid fa-flask"></i> 답변 테스트</button>' +
+    '<a href="' + EDITOR_MAP[card.type] + '" class="btn btn-primary" style="text-decoration:none;display:inline-flex;align-items:center;gap:6px">' +
+    '<i class="fa-solid fa-pen-to-square"></i> 편집기에서 수정</a>';
+}
+
+function renderPanelTest() {
+  const card = CARDS.find(c => c.id === panelCardId);
+  if (!card) return;
+  const chain = computeChain(card.id);
+
+  document.getElementById('panelTitle').innerHTML =
+    '<i class="fa-solid fa-flask" style="color:var(--step-active);margin-right:6px"></i>답변 테스트';
+
+  // 체인 플로우 — 타입 순서대로 그룹화
+  const TYPE_ORDER = ['concept','risk','rule','evidence','policy','playbook'];
+  const chainCards = CARDS.filter(c => chain.has(c.id));
+  const groups = TYPE_ORDER.map(t => chainCards.filter(c => c.type === t)).filter(g => g.length);
+
+  let chainHTML = '<div class="test-chain-flow">';
+  groups.forEach((group, gi) => {
+    if (gi > 0) chainHTML += '<span class="test-chain-arrow">→</span>';
+    chainHTML += '<div class="test-chain-group">';
+    group.forEach(c => {
+      const color = TYPE_COLORS[c.type];
+      const isFocal = c.id === panelCardId;
+      chainHTML +=
+        '<span class="test-chain-badge" style="' +
+          'background:' + hexToRgba(color, isFocal ? 0.18 : 0.08) + ';' +
+          'color:' + color + ';' +
+          (isFocal ? 'outline:1.5px solid ' + color + ';' : '') +
+        '">' +
+          '<i class="fa-solid ' + TYPE_ICONS[c.type] + '" style="font-size:8px"></i>' + c.id +
+        '</span>';
+    });
+    chainHTML += '</div>';
+  });
+  chainHTML += '</div>';
+
+  const preset = TEST_QUERIES[card.id] || card.title + '에 대해 알려주세요';
+
+  document.getElementById('panelBody').innerHTML =
+    chainHTML +
+    '<div class="form-group">' +
+      '<label class="form-label" style="font-size:11px;color:var(--text-secondary)">테스트 쿼리</label>' +
+      '<textarea class="test-query" id="testQueryInput">' + preset + '</textarea>' +
+    '</div>' +
+    '<div id="testResultArea"></div>';
+
+  document.getElementById('panelFooter').innerHTML =
+    '<button class="btn btn-secondary" onclick="switchPanelTab(\'info\')"><i class="fa-solid fa-arrow-left" style="font-size:11px"></i> 카드 정보</button>' +
+    '<button class="btn btn-primary" style="flex:1;justify-content:center" onclick="runTest(\'' + card.id + '\')"><i class="fa-solid fa-play" style="font-size:11px"></i> 테스트 실행</button>';
+}
+
+function runTest(cardId) {
+  const card = CARDS.find(c => c.id === cardId);
+  if (!card) return;
+  const chain  = computeChain(cardId);
+  const inChain = CARDS.filter(c => chain.has(c.id));
+  const evCards = inChain.filter(c => c.type === 'evidence');
+  const poCards = inChain.filter(c => c.type === 'policy');
+  const ruCards = inChain.filter(c => c.type === 'rule');
+
+  const area = document.getElementById('testResultArea');
+  area.innerHTML =
+    '<div style="padding:20px;text-align:center;color:var(--text-hint);font-size:13px">' +
+    '<i class="fa-solid fa-spinner fa-spin" style="margin-right:6px"></i>AI 답변 생성 중...</div>';
+
+  setTimeout(() => {
+    let lines = [];
+
+    // 서두 — 클러스터 기반
+    if (chain.has('RT01') && chain.has('RT02')) {
+      lines.push('중대질병(암·뇌혈관) 보장 범위에 대해 안내드립니다.');
+    } else if (chain.has('RT01')) {
+      lines.push('암·종양 관련 보장에 대해 안내드립니다.');
+    } else if (chain.has('RT02')) {
+      lines.push('뇌혈관 질환 관련 보장에 대해 안내드립니다.');
+    } else {
+      lines.push(card.title + '에 대해 안내드립니다.');
+    }
+
+    // 근거 통계 (Evidence 카드)
+    if (evCards.length) {
+      lines.push('');
+      lines.push('<strong style="font-size:11px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.05em">참고 통계</strong>');
+      evCards.forEach(ev => {
+        const parts = ev.meta.split(' · ');
+        lines.push('• <strong>' + ev.title + '</strong> — ' + parts[1] +
+          ' <span style="font-size:11px;color:var(--text-hint)">(' + parts[0] + ')</span>');
+      });
+    }
+
+    // 유의사항 (Policy 카드)
+    if (poCards.length) {
+      lines.push('');
+      lines.push('<strong style="font-size:11px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.05em">⚠ 유의사항</strong>');
+      poCards.forEach(po => {
+        lines.push('• ' + po.title +
+          ' <span style="font-size:11px;color:var(--text-hint)">(' + po.meta.split(' · ')[0] + ')</span>');
+      });
+    }
+
+    // 사용 카드 칩
+    const usedCards = [...ruCards, ...evCards, ...poCards];
+    const usedChips = usedCards.map(c => {
+      const color = TYPE_COLORS[c.type];
+      return '<span class="test-used-chip" style="color:' + color + ';border-color:' + hexToRgba(color, 0.3) + ';background:' + hexToRgba(color, 0.06) + '">' +
+        '<i class="fa-solid ' + TYPE_ICONS[c.type] + '" style="font-size:8px"></i>' + c.id +
+      '</span>';
+    }).join('');
+
+    area.innerHTML =
+      '<div class="test-result-wrap">' +
+        '<div class="test-result-hd"><i class="fa-solid fa-robot" style="color:var(--step-active)"></i> AI 답변 테스트 결과</div>' +
+        '<div class="test-result-body">' + lines.join('<br>') + '</div>' +
+        '<div class="test-used-cards">' +
+          '<span style="font-size:10px;color:var(--text-hint);font-weight:700;margin-right:4px;flex-shrink:0">적용 카드</span>' +
+          usedChips +
+        '</div>' +
+      '</div>';
+  }, 700);
+}
+
+function closePanel() {
+  document.getElementById('slidePanel').classList.remove('open');
+}
+
+// ============================================================
+// DRAW LINES — SVG overlay on grid-cols
+// ============================================================
+function drawLines() {
+  const gridCols = document.getElementById('gridCols');
+  const old = document.getElementById('connectionSvg');
+  if (old) old.remove();
+  if (!selectedCardId) return;
+
+  const chain = computeChain(selectedCardId);
+  const containerRect = gridCols.getBoundingClientRect();
+
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.id = 'connectionSvg';
+  svg.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:10;overflow:visible';
+
+  // Arrowhead markers
+  const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+  const markerDefs = [
+    {id:'arr-active',  color:'#0F6E56'},
+    {id:'arr-pending', color:'#1A4A9A'},
+    {id:'arr-cross',   color:'#7A4AC9'},
+  ];
+  markerDefs.forEach(m => {
+    const marker = document.createElementNS('http://www.w3.org/2000/svg', 'marker');
+    marker.setAttribute('id', m.id);
+    marker.setAttribute('markerWidth', '7');
+    marker.setAttribute('markerHeight', '7');
+    marker.setAttribute('refX', '5');
+    marker.setAttribute('refY', '3.5');
+    marker.setAttribute('orient', 'auto');
+    const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    p.setAttribute('d', 'M0,0.5 L0,6.5 L6,3.5 Z');
+    p.setAttribute('fill', m.color);
+    marker.appendChild(p);
+    defs.appendChild(marker);
+  });
+  svg.appendChild(defs);
+
+  // Draw each edge whose both endpoints are in the current chain
+  EDGES.forEach(edge => {
+    if (!chain.has(edge.from) || !chain.has(edge.to)) return;
+
+    const fromEl = gridCols.querySelector('[data-card-id="' + edge.from + '"]');
+    const toEl   = gridCols.querySelector('[data-card-id="' + edge.to   + '"]');
+    if (!fromEl || !toEl) return;
+
+    const fr = fromEl.getBoundingClientRect();
+    const tr = toEl.getBoundingClientRect();
+
+    // Positions relative to gridCols top-left
+    const x1 = fr.right  - containerRect.left + 4;
+    const y1 = fr.top + fr.height / 2 - containerRect.top;
+    const x2 = tr.left   - containerRect.left - 4;
+    const y2 = tr.top + tr.height / 2 - containerRect.top;
+
+    const color    = edge.status === 'active' ? '#0F6E56' : '#1A4A9A';
+    const markerId = edge.status === 'active' ? 'arr-active' : 'arr-pending';
+    const dash     = edge.status === 'pending' ? '6,4' : 'none';
+
+    // Focal-card edges are slightly bolder
+    const isFocal   = edge.from === selectedCardId || edge.to === selectedCardId;
+    const strokeW   = '2';
+    const opacity   = isFocal ? '0.9' : '0.55';
+
+    // Orthogonal routing: right → vertical → right (L-shape)
+    const midX = x1 + (x2 - x1) * 0.5;
+    let d;
+    if (Math.abs(y1 - y2) < 3) {
+      d = 'M' + x1 + ',' + y1 + ' L' + x2 + ',' + y2;
+    } else {
+      d = 'M' + x1 + ',' + y1 +
+          ' L' + midX + ',' + y1 +
+          ' L' + midX + ',' + y2 +
+          ' L' + x2   + ',' + y2;
+    }
+
+    const pathEl = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    pathEl.setAttribute('d', d);
+    pathEl.setAttribute('fill', 'none');
+    pathEl.setAttribute('stroke', color);
+    pathEl.setAttribute('stroke-width', strokeW);
+    pathEl.setAttribute('stroke-dasharray', dash);
+    pathEl.setAttribute('marker-end', 'url(#' + markerId + ')');
+    pathEl.setAttribute('opacity', opacity);
+    svg.appendChild(pathEl);
+  });
+
+  gridCols.appendChild(svg);
+}
+
+// ============================================================
+// TOAST
+// ============================================================
+function showToast(msg, type) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast ' + (type||'');
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('show'), 2600);
+}
+
+// ============================================================
+// MODAL BACKDROP CLICK
+// ============================================================
+document.addEventListener('DOMContentLoaded', function() {
+  init();
+  updateDeployBar();
+  document.getElementById('actionModal').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
+});
+</script>
+</body>
+</html>

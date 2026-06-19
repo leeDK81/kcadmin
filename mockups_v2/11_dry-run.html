@@ -1,0 +1,1118 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1280">
+<title>사전 테스트 — KC Admin</title>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root {
+  --status-review:#BA7517; --status-active:#0F6E56; --status-approved:#1A4A9A; --status-draft:#9C9C94;
+  --step-active:#1A3A6B;
+  --sidebar-w:220px; --bg-page:#F4F4F5; --bg-card:#FFFFFF;
+  --text-primary:#171719; --text-secondary:#70737C; --text-hint:#989BA2;
+  --border:#E1E2E4; --radius:8px;
+  --shadow:0px 2px 4px -2px rgba(23,23,23,.06),0px 4px 6px -1px rgba(23,23,23,.06);
+  --col-concept:#1A4A9A; --col-risk:#C94B1A; --col-rule:#9A1A1A;
+  --col-evidence:#1A7A4A; --col-policy:#5A5A55; --col-playbook:#6B4A9A;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;background:var(--bg-page);color:var(--text-primary);min-width:1280px;font-size:15px;line-height:1.5}
+.layout{display:flex;min-height:100vh}
+
+/* ── Sidebar ── */
+.sidebar{width:var(--sidebar-w);background:#1A1A18;flex-shrink:0;padding:20px 0;position:sticky;top:0;height:100vh;overflow-y:auto}
+.sidebar-logo{padding:0 16px 20px;font-size:16px;font-weight:700;color:#fff;border-bottom:1px solid #333;margin-bottom:12px}
+.sidebar a,.nav-locked{display:flex;align-items:center;gap:8px;padding:8px 16px;color:#C8C8C4;text-decoration:none;font-size:14px;transition:background .15s}
+.sidebar a:hover{background:rgba(255,255,255,.08);color:#fff}
+.sidebar a.active{background:rgba(255,255,255,.15);color:#fff;font-weight:600;border-left:3px solid #5A8AE0}
+.nav-divider{border-top:1px solid #333;margin:8px 0}
+.nav-locked{color:#555!important;cursor:not-allowed}
+
+/* ── Layout ── */
+.main{flex:1;padding:32px;overflow-y:auto}
+.page-header{margin-bottom:24px}
+.page-header h1{font-size:22px;font-weight:700;margin-bottom:4px}
+.page-header p{color:var(--text-secondary);font-size:14px}
+.two-col{display:grid;grid-template-columns:1fr 500px;gap:20px;align-items:start}
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);margin-bottom:16px}
+.section-title{font-size:16px;font-weight:700;margin:0 0 16px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+
+/* ── Form ── */
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:14px;font-weight:600;margin-bottom:5px}
+.field-hint{display:block;font-size:12px;color:var(--text-hint);margin-top:3px;line-height:1.4}
+.form-control{width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-family:inherit;background:#fff;color:var(--text-primary)}
+.form-control:focus{outline:none;border-color:var(--step-active);box-shadow:0 0 0 2px rgba(26,58,107,.1)}
+textarea.form-control{resize:vertical;min-height:80px}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:6px;font-size:14px;font-weight:600;cursor:pointer;border:none;font-family:inherit;transition:opacity .15s}
+.btn:hover{opacity:.85}
+.btn-primary{background:var(--step-active);color:#fff}
+.btn-secondary{background:var(--bg-card);color:var(--text-primary);border:1px solid var(--border)}
+.btn-sm{padding:5px 10px;font-size:13px}
+.btn-deploy{background:#1A3A6B;color:#fff;border:none}
+.btn-deploy:hover{background:#122B52;opacity:1}
+
+/* ── Profile detail ── */
+.guide-box{background:#EEF4FF;border:1px solid #C0D0F0;border-radius:var(--radius);padding:14px 18px;margin-bottom:20px;font-size:13px;line-height:1.6;color:#1A3A6B}
+.profile-detail{background:#F8F8F6;border:1px solid var(--border);border-radius:6px;padding:12px 14px;margin-top:10px}
+.profile-row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #EBEBEB;font-size:13px}
+.profile-row:last-child{border:none}
+.profile-key{color:var(--text-secondary);font-weight:600}
+.profile-val{color:var(--text-primary)}
+.profile-risk-tag{display:inline-flex;align-items:center;gap:5px;background:rgba(201,75,26,.08);color:#C94B1A;border:1px solid rgba(201,75,26,.2);border-radius:4px;padding:3px 10px;font-size:12px;font-weight:700;margin-top:8px}
+.profile-ok-tag{display:inline-flex;align-items:center;gap:5px;background:rgba(156,156,148,.08);color:var(--status-draft);border:1px solid var(--border);border-radius:4px;padding:3px 10px;font-size:12px;font-weight:700;margin-top:8px}
+
+/* ── Quick questions ── */
+.quick-q-label{font-size:12px;font-weight:700;color:var(--text-secondary);margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em}
+
+/* ── Card entry ── */
+.syn-chip{display:inline-block;background:#EEF4FF;border:1px solid #C0D0F0;color:#1A3A6B;border-radius:4px;padding:2px 8px;font-size:12px;margin:2px 2px 2px 0;white-space:nowrap}
+.focus-step-badge{display:inline-flex;align-items:center;padding:1px 6px;border-radius:3px;font-size:10px;font-weight:700;background:rgba(186,117,23,.12);color:var(--status-review);margin-left:7px;vertical-align:middle}
+.upstream-note{background:#F4F7FF;border:1px solid #D0DCFF;border-radius:5px;padding:8px 12px;margin-bottom:8px;font-size:12px;color:#1A3A6B;line-height:1.5}
+
+/* ── Empty / Loading ── */
+.empty-state{text-align:center;padding:52px 24px;color:var(--text-secondary)}
+.empty-icon{font-size:36px;margin-bottom:12px;opacity:.4}
+.empty-sub{font-size:13px;color:var(--text-hint);margin-top:6px}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.spinning{animation:spin .7s linear infinite}
+
+/* ── Routing header ── */
+.routing-header{display:flex;align-items:center;gap:10px;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--border)}
+.routing-badge-kc{display:inline-flex;align-items:center;gap:5px;background:rgba(15,110,86,.1);color:var(--status-active);padding:4px 12px;border-radius:20px;font-size:13px;font-weight:700}
+.routing-badge-gen{display:inline-flex;align-items:center;gap:5px;background:rgba(156,156,148,.12);color:var(--status-draft);padding:4px 12px;border-radius:20px;font-size:13px;font-weight:700}
+
+/* ── AI Answer Preview ── */
+.answer-preview{background:#F4F7FF;border:1px solid #D0DCFF;border-radius:10px;padding:18px;margin-bottom:18px}
+.answer-preview-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.answer-preview-label{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#4A5A8A}
+.agent-row{display:flex;align-items:center;gap:9px;margin-bottom:10px}
+.agent-avatar{width:32px;height:32px;border-radius:50%;background:var(--step-active);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0}
+.agent-name{font-size:13px;font-weight:700;color:var(--text-primary)}
+.agent-route-kc{display:inline-flex;align-items:center;gap:3px;padding:1px 7px;border-radius:8px;font-size:10px;font-weight:700;background:rgba(15,110,86,.12);color:var(--status-active);margin-left:5px}
+.agent-route-gen{display:inline-flex;align-items:center;gap:3px;padding:1px 7px;border-radius:8px;font-size:10px;font-weight:700;background:rgba(156,156,148,.15);color:#70737C;margin-left:5px}
+.chat-bubble{background:#fff;border:1px solid #D8E2FF;border-radius:4px 14px 14px 14px;padding:16px 18px;font-size:14px;line-height:1.85;color:var(--text-primary);box-shadow:0 2px 10px rgba(26,58,107,.07)}
+.chat-bubble p{margin-bottom:10px}
+.chat-bubble p:last-child{margin-bottom:0}
+.chat-policy{background:#FFFBF0;border-left:3px solid #BA7517;padding:9px 13px;border-radius:0 7px 7px 0;margin-top:12px;font-size:13px;color:#7A4400;line-height:1.65}
+.card-tag{display:inline-flex;align-items:center;padding:1px 6px;border-radius:3px;font-size:10px;font-weight:700;vertical-align:middle;margin-left:3px;line-height:16px;cursor:default}
+.tag-concept{background:rgba(26,74,154,.1);color:var(--col-concept)}
+.tag-risk{background:rgba(201,75,26,.1);color:var(--col-risk)}
+.tag-rule{background:rgba(154,26,26,.1);color:var(--col-rule)}
+.tag-evidence{background:rgba(26,122,74,.1);color:var(--col-evidence)}
+.tag-policy{background:rgba(90,90,85,.12);color:var(--col-policy)}
+.used-cards-row{display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-top:12px;padding-top:10px;border-top:1px solid #D0DCFF}
+.used-card-chip{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700}
+.no-kc-note{font-size:12px;color:var(--text-hint);margin-top:10px;padding:8px 12px;background:#F8F8F6;border-radius:6px;text-align:center}
+
+/* ── Chain eval section ── */
+.chain-eval-hd{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text-secondary);margin-bottom:10px;display:flex;align-items:center;gap:5px}
+.eval-steps{display:flex;flex-direction:column;gap:0;margin-bottom:14px}
+.eval-step{border:1px solid var(--border);border-radius:6px;margin-bottom:6px;overflow:hidden}
+.eval-step-header{padding:9px 13px;display:flex;align-items:center;gap:10px;cursor:pointer;background:#F8F8F6;user-select:none}
+.eval-step-header:hover{background:#F0F0EE}
+.eval-step-num{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;color:#fff}
+.step-ok{background:var(--status-active)}
+.step-warn{background:var(--status-review)}
+.step-err{background:#A32D2D}
+.eval-step-title{font-size:13px;font-weight:600;flex:1}
+.eval-step-result{font-size:12px;font-weight:700}
+.eval-step-body{padding:10px 13px;background:#fff;border-top:1px solid var(--border);font-size:13px;line-height:1.6}
+.eval-check{display:flex;align-items:flex-start;gap:5px;padding:2px 0;line-height:1.5}
+.eval-ok{color:var(--status-active)}
+.eval-warn{color:var(--status-review)}
+.eval-err{color:#A32D2D}
+.eval-neutral{color:var(--text-secondary)}
+.source-label{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.05em;color:var(--text-hint);text-transform:uppercase;background:#F0F0EC;border-radius:3px;padding:1px 6px;margin:5px 0 2px}
+
+/* ── Final / Deploy ── */
+.result-final{border-radius:8px;padding:16px 18px;margin-bottom:0}
+.result-kc{background:rgba(15,110,86,.06);border:1.5px solid rgba(15,110,86,.3)}
+.result-gen{background:#F8F8F6;border:1.5px solid var(--border)}
+.result-title{font-size:15px;font-weight:700;margin-bottom:5px}
+.result-desc{font-size:13px;color:var(--text-secondary);line-height:1.6}
+.result-meta{font-size:12px;color:var(--text-hint);margin-top:8px}
+.result-note{font-size:12px;color:var(--text-hint);background:#F4F4F2;border:1px solid var(--border);border-radius:6px;padding:8px 12px;margin-top:10px;line-height:1.5}
+.deploy-section{margin-top:14px;padding-top:14px;border-top:2px solid var(--border)}
+.deploy-section-ok{border-top-color:#0F6E56}
+
+/* ── Deploy Modal ── */
+.deploy-modal-backdrop{position:fixed;inset:0;background:rgba(23,23,23,.5);z-index:2000;display:flex;align-items:center;justify-content:center}
+.deploy-modal{background:#fff;border-radius:12px;padding:28px;width:460px;box-shadow:0 20px 60px -10px rgba(23,23,23,.25)}
+.deploy-modal h2{font-size:17px;font-weight:700;margin-bottom:6px}
+.deploy-modal p{font-size:13px;color:var(--text-secondary);line-height:1.6;margin-bottom:16px}
+.deploy-diff{background:#F4F4F5;border-radius:8px;padding:14px 16px;font-size:12px;color:var(--text-secondary);line-height:1.8;margin-bottom:18px;border:1px solid var(--border)}
+.diff-add{color:#0F6E56}.diff-mod{color:#BA7517}
+.deploy-modal-actions{display:flex;gap:8px;justify-content:flex-end}
+
+/* ── Toast ── */
+.toast{position:fixed;bottom:24px;right:24px;background:#1A1A18;color:#fff;padding:10px 18px;border-radius:8px;font-size:13px;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1}
+</style>
+</head>
+<body>
+<div class="layout">
+<nav class="sidebar">
+  <div class="sidebar-logo">&#9889; KC Admin <span style="font-size:10px;background:#5A8AE0;color:#fff;padding:1px 6px;border-radius:3px;margin-left:4px;font-weight:600">v2</span></div>
+  <a href="02_dashboard.html"><i class="fa-solid fa-chart-bar fa-fw"></i> 대시보드</a>
+  <div class="nav-divider"></div>
+  <a href="03_card-library.html"><i class="fa-solid fa-folder-open fa-fw"></i> ① 카드 등록</a>
+  <a href="04_risk-type-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-circle-exclamation fa-fw" style="font-size:11px;color:#C94B1A"></i> Risk-type</a>
+  <a href="05_evidence-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-database fa-fw" style="font-size:11px;color:#1A7A4A"></i> Evidence</a>
+  <a href="06_concept-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-lightbulb fa-fw" style="font-size:11px;color:#1A4A9A"></i> Concept</a>
+  <a href="07_rule-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-scale-balanced fa-fw" style="font-size:11px;color:#9A1A1A"></i> Rule</a>
+  <a href="08_policy-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-file-shield fa-fw" style="font-size:11px;color:#5A5A55"></i> Policy</a>
+  <a href="16_playbook-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-handshake fa-fw" style="font-size:11px;color:#9A70D0"></i> Playbook</a>
+  <span class="nav-locked" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-lock fa-fw" style="font-size:11px"></i> Case &#128274;</span>
+  <a href="09_review-workflow.html"><i class="fa-solid fa-circle-check fa-fw"></i> ② 검수·승인</a>
+  <a href="00_canvas-main.html"><i class="fa-solid fa-diagram-project fa-fw"></i> ③ 연결</a>
+  <a href="11_dry-run.html" class="active"><i class="fa-solid fa-flask fa-fw"></i> ④ 사전 테스트</a>
+  <a href="18_system-settings.html"><i class="fa-solid fa-sliders fa-fw"></i> 시스템 설정</a>
+  <div class="nav-divider"></div>
+  <a href="13_answer-logic.html"><i class="fa-solid fa-diagram-project fa-fw"></i> AI 답변 로직</a>
+  <a href="14_answer-logic-guide.html"><i class="fa-solid fa-book-open fa-fw"></i> AI 답변 생성 예시</a>
+  <a href="17_system-data-guide.html"><i class="fa-solid fa-network-wired fa-fw"></i> 데이터 연결 구조</a>
+  <a href="15_aio-guide.html"><i class="fa-solid fa-globe fa-fw"></i> AIO 가이드</a>
+  <a href="12_coverage-code-table.html"><i class="fa-solid fa-table-list fa-fw"></i> 담보코드</a>
+  <div class="nav-divider"></div>
+  <a href="01_guide.html"><i class="fa-solid fa-clipboard-list fa-fw"></i> 업무 가이드</a>
+  <a href="00_design-system.html"><i class="fa-solid fa-palette fa-fw"></i> 디자인 시스템</a>
+</nav>
+
+<main class="main">
+  <div class="page-header">
+    <h1><i class="fa-solid fa-flask" style="color:var(--step-active);margin-right:8px"></i>사전 테스트</h1>
+    <p>가상 고객 프로필과 질문을 입력해 실제 사용자가 받는 AI 답변을 미리 확인하고, 카드 체인이 올바르게 작동하는지 검증합니다.</p>
+  </div>
+
+  <div class="guide-box">
+    <i class="fa-solid fa-circle-info" style="margin-right:5px"></i>
+    <strong>배포 결정 도구</strong> — <strong>① 카테고리 → ② 카드</strong> 순서로 선택하세요. 체인 카드(Concept~Policy)는 질문 기반 AI 답변 체인을 검증하고, Playbook은 상담 시나리오 기반 트리거 조건을 확인합니다. 테스트 통과 시 이 페이지에서 바로 배포를 요청하세요.
+  </div>
+
+  <div class="two-col">
+    <!-- LEFT: 설정 -->
+    <div>
+      <div class="card">
+        <div class="section-title">테스트 설정</div>
+
+        <!-- ① 카드 카테고리 -->
+        <div class="form-group">
+          <label>① 카드 카테고리</label>
+          <select class="form-control" id="categorySelect" onchange="onCategoryChange()">
+            <option value="">-- 카테고리 선택 --</option>
+            <option value="concept">Concept — AI 답변 진입점</option>
+            <option value="risk">Risk-type — 위험군 분류</option>
+            <option value="rule">Rule — 조건 판정</option>
+            <option value="evidence">Evidence — 통계 참조</option>
+            <option value="policy">Policy — 유의사항</option>
+            <option value="playbook">Playbook — 상담 플로우</option>
+          </select>
+        </div>
+
+        <!-- ② 테스트 대상 카드 -->
+        <div class="form-group" id="cardSelectGroup" style="display:none">
+          <label>② 테스트 대상 카드 <span style="font-weight:400;color:var(--text-hint)">— 준비 연결(★) 있는 카드</span></label>
+          <select class="form-control" id="cardSelect" onchange="onCardChange()">
+            <option value="">-- 카드 선택 --</option>
+          </select>
+          <div id="cardDetail" style="display:none;margin-top:10px"></div>
+        </div>
+
+        <!-- ③ 고객 프로필 -->
+        <div class="form-group" id="profileGroup" style="display:none">
+          <label>③ 고객 프로필 선택</label>
+          <select class="form-control" id="profileSelect" onchange="onProfileChange()">
+            <option value="">-- 프로필 선택 --</option>
+            <option value="A">고객 A — 45세 남성 | 암 진단금 미보유 (T01 암 클러스터)</option>
+            <option value="B">고객 B — 55세 남성 | 뇌혈관 담보 미보유 (T02 뇌혈관 클러스터)</option>
+            <option value="C">고객 C — 52세 남성 | 주요 담보 완비 (KC 미해당 예상)</option>
+          </select>
+          <div id="profileDetail" style="display:none;margin-top:10px">
+            <div class="profile-detail">
+              <div id="profileRows"></div>
+              <div id="profileRiskTag"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ④ 체인 카드: 질문 입력 -->
+        <div class="form-group" id="chainInputGroup" style="display:none">
+          <label>④ 질문 입력</label>
+          <textarea class="form-control" id="questionInput" placeholder="예: 암 치료비 준비됐나요? / 뇌졸중 보험 있어야 하나요?"></textarea>
+          <span class="field-hint">Concept 카드 선택 시 동의어 기반 질문이 자동 제안됩니다</span>
+        </div>
+
+        <!-- ④ Playbook: 시나리오 선택 -->
+        <div class="form-group" id="playbookInputGroup" style="display:none">
+          <label>④ 상담 시나리오 선택</label>
+          <select class="form-control" id="scenarioSelect">
+            <option value="">-- 시나리오 선택 --</option>
+          </select>
+          <span class="field-hint">Playbook이 활성화될 상담 상황을 선택하세요</span>
+        </div>
+
+        <div id="runBtns" style="display:none;gap:8px">
+          <button class="btn btn-primary" onclick="runDryRun()">
+            <i class="fa-solid fa-play"></i> 테스트 실행
+          </button>
+          <button class="btn btn-secondary" onclick="resetAll()">
+            <i class="fa-solid fa-rotate-left"></i> 초기화
+          </button>
+        </div>
+      </div>
+
+      <div class="card" id="quickQCard" style="display:none;padding:16px 20px">
+        <div class="quick-q-label">빠른 질문 예시</div>
+        <div id="quickQButtons" style="display:flex;flex-wrap:wrap;gap:7px">
+          <button class="btn btn-secondary btn-sm" onclick="setQ('암 치료비 준비됐나요?')">암 치료비 준비됐나요?</button>
+          <button class="btn btn-secondary btn-sm" onclick="setQ('암보험 얼마나 필요해?')">암보험 얼마나 필요해?</button>
+          <button class="btn btn-secondary btn-sm" onclick="setQ('뇌졸중 보험 있어야 하나요?')">뇌졸중 보험 있어야 하나요?</button>
+          <button class="btn btn-secondary btn-sm" onclick="setQ('내 보험 보장이 충분한가요?')">내 보험 보장이 충분한가요?</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: 결과 -->
+    <div>
+      <div class="card" id="resultCard" style="min-height:480px">
+        <div class="section-title" id="resultTitle">사전 테스트 결과</div>
+
+        <!-- Empty -->
+        <div class="empty-state" id="emptyState">
+          <div class="empty-icon"><i class="fa-solid fa-flask"></i></div>
+          <p style="font-size:15px;font-weight:600">카드를 선택하고<br>테스트를 실행해 보세요</p>
+          <div class="empty-sub">실제 사용자가 받는 AI 답변을 미리 확인할 수 있습니다</div>
+        </div>
+
+        <!-- Loading -->
+        <div id="loadingState" style="display:none;text-align:center;padding:60px 24px;color:var(--text-secondary)">
+          <i class="fa-solid fa-gear fa-2x spinning" style="margin-bottom:16px;display:block;color:var(--step-active)"></i>
+          <p style="font-size:14px">카드 체인 평가 중...</p>
+        </div>
+
+        <!-- Result -->
+        <div id="resultContent" style="display:none">
+
+          <!-- 라우팅 경로 -->
+          <div class="routing-header">
+            <span style="font-size:13px;font-weight:600;color:var(--text-secondary)">답변 경로</span>
+            <span id="routingBadge"></span>
+          </div>
+
+          <!-- ① AI 답변 미리보기 -->
+          <div id="aiAnswerSection"></div>
+
+          <!-- ② 카드 체인 평가 -->
+          <div class="chain-eval-hd" id="chainEvalHd">
+            <i class="fa-solid fa-link" style="font-size:10px"></i> 카드 체인 평가
+          </div>
+          <div class="eval-steps" id="evalSteps"></div>
+
+          <!-- 최종 결과 -->
+          <div id="finalResult" class="result-final"></div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+</div>
+
+<!-- Deploy Modal -->
+<div class="deploy-modal-backdrop" id="deployModalBackdrop" style="display:none" onclick="closeDeployModal(event)">
+  <div class="deploy-modal" onclick="event.stopPropagation()">
+    <h2><i class="fa-solid fa-rocket" style="color:#1A3A6B;margin-right:6px"></i>배포 요청</h2>
+    <p>현재 캔버스의 승인된 카드와 연결 구조를 라이브에 반영합니다.<br>배포 후 AI 상담 챗봇이 새 구조로 응답합니다.</p>
+    <div class="deploy-diff">
+      <div style="margin-bottom:6px;font-weight:700;color:#171719">변경 요약 — 라이브 v3 대비</div>
+      <div class="diff-add">+ 카드 추가 2건 &nbsp;·&nbsp; CN005 중대질병 보험 범위, EV004 고혈압 유병률</div>
+      <div class="diff-mod">~ 연결 추가 2건 &nbsp;·&nbsp; RU002 → EV004, RU002 → PO002</div>
+    </div>
+    <div class="deploy-modal-actions">
+      <button class="btn btn-secondary" onclick="closeDeployModal()">취소</button>
+      <button class="btn btn-deploy" onclick="confirmDeploy()"><i class="fa-solid fa-rocket"></i> 배포 실행</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================================================
+// 준비 연결(pending edge) 있는 카드 — 테스트 대상
+// ============================================================
+const ALL_PENDING = {
+  CN004: {
+    id:'CN004', type:'concept', typeLabel:'Concept', title:'뇌경색 치료비 보장',
+    pendingEdge:'CN004 → RT02',
+    upstreamConceptId:'CN004', focusStep:0, focusStepLabel:'① Concept 동의어 매칭',
+    cluster:'T02', profile:'B', resultKey:'B',
+    synonyms:['뇌경색 치료비','뇌경색 보장','뇌경색 보험','뇌경색 치료비 보장 알려줘'],
+    queries:['뇌경색 치료비 보장 알려주세요','뇌경색 보험 어떻게 되나요?'],
+  },
+  RT03: {
+    id:'RT03', type:'risk', typeLabel:'Risk-type', title:'심혈관질환 클러스터',
+    pendingEdge:'CN003 → RT03',
+    upstreamConceptId:'CN003', focusStep:1, focusStepLabel:'② Risk-type 판정',
+    cluster:'T02', profile:'B', resultKey:'B',
+    synonyms:['뇌졸중 보험','심혈관 보험','심장 질환 보험'],
+    queries:['심혈관질환 보험 있어야 하나요?','심장 보험 보장이 어떻게 되나요?'],
+  },
+  RU003: {
+    id:'RU003', type:'rule', typeLabel:'Rule', title:'심혈관 보장 판정 기준',
+    pendingEdge:'RT03 → RU003',
+    upstreamConceptId:'CN003', focusStep:2, focusStepLabel:'③ Rule 조건 평가',
+    cluster:'T02', profile:'B', resultKey:'B',
+    synonyms:['뇌졸중 보험','심혈관 보험'],
+    queries:['심혈관질환 보험 보장 기준이 어떻게 되나요?'],
+  },
+  PB002: {
+    id:'PB002', type:'playbook', typeLabel:'Playbook', title:'뇌혈관 보장 공백 상담 플레이북',
+    pendingEdge:'PB002 신규 등록',
+    upstreamConceptId:'CN003', focusStep:0, focusStepLabel:'① Trigger 조건 충족',
+    cluster:'T02', profile:'B', resultKey:'B',
+    synonyms:[], queries:[],
+    scenarios:[
+      '뇌혈관 보장 미보유 — GA 상담 연결 필요',
+      '고혈압 기저질환 + 뇌혈관 담보 없음 확인',
+      '뇌졸중 보험 신규 가입 검토 상담',
+    ],
+    triggerConditions:[
+      'RU002 뇌혈관 보장 판정 기준 조건 충족',
+      '고객 뇌혈관 담보코드 미보유 확인',
+      '고객 동의 및 GA 매칭 가능',
+    ],
+    playbookAction:'GA 매칭 → 뇌혈관 보장 설계 상담 플로우 실행',
+    playbookSteps:['① 보장 공백 안내 (마이데이터 기반)', '② 뇌혈관 담보 제안', '③ GA 연결 및 상담 예약'],
+  },
+};
+
+// Concept 카드 동의어 참조 (체인 진입점 정보용)
+const CONCEPT_SYNONYMS = {
+  CN001: { title:'암보험 보장 내용',       synonyms:['암보험 보장 내용','암보험 보장 범위','암 진단 후 보험금','암 치료비','암보험 얼마'] },
+  CN002: { title:'암 진단비 얼마나 받나요', synonyms:['암 진단비','암 진단금','암 보험금 금액','암 치료비 얼마'] },
+  CN003: { title:'뇌졸중 보험 보장',       synonyms:['뇌졸중 보험','뇌졸중 보장','뇌졸중 치료비','뇌혈관 보험'] },
+  CN004: { title:'뇌경색 치료비 보장',     synonyms:['뇌경색 치료비','뇌경색 보장','뇌경색 보험','뇌경색 치료비 보장 알려줘'] },
+  CN005: { title:'중대질병 보험 범위',     synonyms:['중대질병','중대질병 보험','중대질병 범위','3대 질병 보험'] },
+};
+
+// 카테고리별 테스트 가능 카드 (pending edge 있는 것만)
+const CARDS_BY_TYPE = {
+  concept:  ['CN004'],
+  risk:     ['RT03'],
+  rule:     ['RU003'],
+  evidence: [],
+  policy:   [],
+  playbook: ['PB002'],
+};
+const CARD_LABELS = {
+  CN004: 'CN004 — 뇌경색 치료비 보장 ★ 준비 연결',
+  RT03:  'RT03 — 심혈관질환 클러스터 ★ 준비 연결 (신규)',
+  RU003: 'RU003 — 심혈관 보장 판정 기준 ★ 준비 연결 (신규)',
+  PB002: 'PB002 — 뇌혈관 보장 공백 상담 플레이북 ★ 준비 연결 (신규)',
+};
+
+// ============================================================
+// 프로필 데이터
+// ============================================================
+const PROFILES = {
+  A: {
+    label: '고객 A — 45세 남성 | 암 진단금 미보유',
+    riskLabel: 'T01 암 클러스터 (RT01) 해당 예상',
+    hasRisk: true,
+    rows: [
+      {k:'담보코드', v:'A4100 (암진단금 미보유)'},
+      {k:'나이',     v:'45세'},
+      {k:'암위험도', v:'위험 등급 (프롬에이지)'},
+      {k:'담보금액', v:'10,000,000원 (소액)'},
+    ]
+  },
+  B: {
+    label: '고객 B — 55세 남성 | 뇌혈관 담보 미보유',
+    riskLabel: 'T02 뇌혈관 클러스터 (RT02) 해당 예상',
+    hasRisk: true,
+    rows: [
+      {k:'담보코드', v:'뇌혈관 담보 미보유'},
+      {k:'나이',     v:'55세'},
+      {k:'기저질환', v:'고혈압 진단 이력'},
+      {k:'담보금액', v:'뇌혈관 0원'},
+    ]
+  },
+  C: {
+    label: '고객 C — 52세 남성 | 주요 담보 완비',
+    riskLabel: null,
+    hasRisk: false,
+    rows: [
+      {k:'담보코드', v:'A4200, A4202, A4300 모두 보유'},
+      {k:'담보금액', v:'50,000,000원 이상'},
+      {k:'나이',     v:'52세'},
+      {k:'암위험도', v:'양호'},
+    ]
+  }
+};
+
+// ============================================================
+// 카드 타입 매핑
+// ============================================================
+const CARD_TYPE = {
+  CN001:'concept',CN002:'concept',CN003:'concept',CN004:'concept',CN005:'concept',
+  RT01:'risk',RT02:'risk',
+  RU001:'rule',RU002:'rule',
+  EV001:'evidence',EV002:'evidence',EV003:'evidence',EV004:'evidence',EV005:'evidence',
+  PO001:'policy',PO002:'policy',PB001:'playbook',
+};
+const TYPE_COLOR = {
+  concept:'#1A4A9A',risk:'#C94B1A',rule:'#9A1A1A',
+  evidence:'#1A7A4A',policy:'#5A5A55',playbook:'#6B4A9A'
+};
+
+function typeColor(type){ return TYPE_COLOR[type]||'#999'; }
+function cardTag(id){
+  const t = CARD_TYPE[id]||'concept';
+  const c = typeColor(t);
+  const r=parseInt(c.slice(1,3),16),g=parseInt(c.slice(3,5),16),b=parseInt(c.slice(5,7),16);
+  return '<span class="card-tag tag-'+t+'" title="'+id+'" style="background:rgba('+r+','+g+','+b+',.1);color:'+c+'">'+id+'</span>';
+}
+function usedChip(id){
+  const t = CARD_TYPE[id]||'concept';
+  const c = typeColor(t);
+  const r=parseInt(c.slice(1,3),16),g=parseInt(c.slice(3,5),16),b=parseInt(c.slice(5,7),16);
+  return '<span class="used-card-chip" style="background:rgba('+r+','+g+','+b+',.09);color:'+c+';border:1px solid rgba('+r+','+g+','+b+',.2)">'+id+'</span>';
+}
+
+// ============================================================
+// 결과 데이터
+// ============================================================
+const RESULTS = {
+  A: {
+    routing: 'kc',
+    // 고객이 실제로 받는 AI 답변
+    aiAnswer: {
+      paras: [
+        { text: '암 치료비에 대해 안내드릴게요.', tags: [] },
+        { text: '국내 암 환자 평균 입원 진료비는 약 <strong>386만원</strong>이에요(심평원 2024). 암 5년 생존율이 <strong>71.5%</strong>로 높아진 만큼 치료 기간도 길어지는 추세라, 장기 보장 설계가 더 중요해지고 있어요.', tags: ['EV001','EV002'] },
+        { text: '고객님 보험 내역을 보니 암 진단금 보장이 없으신 상태예요. 실제 치료비와 비교하면 보장 공백이 있을 수 있어 확인이 필요해 보입니다.', tags: ['RU001'] },
+        { text: '상담을 통해 딱 맞는 보장 금액을 같이 살펴봐 드릴게요.', tags: [] },
+      ],
+      policy: { text: '보험 가입 후 90일 이내에 암을 진단받으신 경우에는 면책 기간이 적용될 수 있으니 꼭 확인해 보세요.', tags: ['PO001'] },
+      usedCards: ['CN001','RT01','RU001','EV001','EV002','PO001'],
+    },
+    // 카드 체인 평가 단계
+    steps: [
+      { num:'①', title:'Concept 동의어 매칭', icon:'ok', result:'매칭 성공', resultColor:'var(--status-active)',
+        details:[
+          {cls:'eval-ok',  icon:'✓', text:'질문 키워드 → CN001 암보험 보장 내용 매칭'},
+          {cls:'eval-ok',  icon:'✓', text:'RT01 암·종양 체인 진입'},
+        ]
+      },
+      { num:'②', title:'Risk-type 판정', icon:'ok', result:'RT01 판정', resultColor:'var(--status-active)',
+        details:[
+          {cls:'eval-ok',  icon:'✓', text:'RT01 암·종양 (KCD: C00–D48) 조건 충족'},
+          {cls:'eval-ok',  icon:'✓', text:'상태: 라이브 — 조건 평가 진행'},
+        ]
+      },
+      { num:'③', title:'Rule 조건 평가', icon:'ok', result:'충족', resultColor:'var(--status-active)',
+        details:[
+          {cls:'eval-neutral',icon:'', text:'<div class="source-label">마이데이터</div>'},
+          {cls:'eval-ok',  icon:'✓', text:'RU001 암 진단비 산정 기준 적용'},
+          {cls:'eval-ok',  icon:'✓', text:'조건: 암진단금 담보코드 미보유 확인'},
+          {cls:'eval-ok',  icon:'✓', text:'고객 A 보유코드 A4100 → 조건 충족'},
+        ]
+      },
+      { num:'④', title:'Evidence 참조', icon:'ok', result:'2개 참조', resultColor:'var(--status-active)',
+        details:[
+          {cls:'eval-ok',  icon:'✓', text:'EV001 암 평균 입원 진료비 (심평원 2024) 참조'},
+          {cls:'eval-ok',  icon:'✓', text:'EV002 암 5년 생존율 (건보공단 2023) 참조'},
+        ]
+      },
+      { num:'⑤', title:'Policy 검증', icon:'ok', result:'통과', resultColor:'var(--status-active)',
+        details:[
+          {cls:'eval-ok',  icon:'✓', text:'PO001 암 보장 면책 고지 (금소법 17조) 통과'},
+        ]
+      },
+    ],
+    finalType: 'kc',
+    finalTitle: '✅ KC 기반 답변 제공 가능',
+    finalDesc: '암 진단금 미보유 조건 충족. T01 암 클러스터 카드 체인이 정상 작동합니다.',
+  },
+
+  B: {
+    routing: 'kc',
+    aiAnswer: {
+      paras: [
+        { text: '뇌혈관 질환 보장에 대해 안내드릴게요.', tags: [] },
+        { text: '뇌졸중 환자의 평균 입원 진료비는 약 <strong>512만원</strong>이에요(심평원 2024). 국내 고혈압 유병률도 <strong>28.3%</strong>에 달해, 특히 고혈압이 있으신 분들은 사전 예방 관점의 보장 설계가 더욱 중요합니다.', tags: ['EV003','EV004'] },
+        { text: '고객님 보험 내역에 뇌혈관 관련 담보가 없으신 상태예요. 실제 치료비를 감안하면 보장 공백이 있을 수 있어 확인이 필요합니다.', tags: ['RU002'] },
+        { text: '상담을 통해 함께 살펴봐 드릴게요.', tags: [] },
+      ],
+      policy: { text: '면책 기간 및 고지 의무 관련 내용을 꼭 확인하세요. 기저질환이 있으신 경우 계약 전 알릴 의무 사항이 적용될 수 있습니다.', tags: ['PO002'] },
+      usedCards: ['CN003','RT02','RU002','EV003','EV004','PO002'],
+    },
+    steps: [
+      { num:'①', title:'Concept 동의어 매칭', icon:'ok', result:'매칭 성공', resultColor:'var(--status-active)',
+        details:[
+          {cls:'eval-ok',  icon:'✓', text:'질문 키워드 → CN003 뇌졸중 보험 보장 매칭'},
+          {cls:'eval-ok',  icon:'✓', text:'RT02 뇌혈관질환 체인 진입'},
+        ]
+      },
+      { num:'②', title:'Risk-type 판정', icon:'ok', result:'RT02 판정', resultColor:'var(--status-active)',
+        details:[
+          {cls:'eval-ok',  icon:'✓', text:'RT02 뇌혈관질환 (KCD: I60–I69) 조건 충족'},
+          {cls:'eval-ok',  icon:'✓', text:'상태: 라이브 — 조건 평가 진행'},
+        ]
+      },
+      { num:'③', title:'Rule 조건 평가', icon:'ok', result:'충족', resultColor:'var(--status-active)',
+        details:[
+          {cls:'eval-neutral',icon:'', text:'<div class="source-label">마이데이터</div>'},
+          {cls:'eval-ok',  icon:'✓', text:'RU002 뇌혈관 보장 판정 기준 적용'},
+          {cls:'eval-ok',  icon:'✓', text:'조건: 뇌혈관 담보코드 미보유 확인'},
+          {cls:'eval-ok',  icon:'✓', text:'고객 B 뇌혈관 담보 없음 → 조건 충족'},
+        ]
+      },
+      { num:'④', title:'Evidence 참조', icon:'ok', result:'2개 참조', resultColor:'var(--status-active)',
+        details:[
+          {cls:'eval-ok',  icon:'✓', text:'EV003 뇌졸중 평균 입원 진료비 (심평원 2024) 참조'},
+          {cls:'eval-ok',  icon:'✓', text:'EV004 고혈압 유병률 (HIRA 2024) 참조'},
+        ]
+      },
+      { num:'⑤', title:'Policy 검증', icon:'ok', result:'통과', resultColor:'var(--status-active)',
+        details:[
+          {cls:'eval-ok',  icon:'✓', text:'PO002 뇌혈관 면책 고지 통과'},
+        ]
+      },
+    ],
+    finalType: 'kc',
+    finalTitle: '✅ KC 기반 답변 제공 가능',
+    finalDesc: '뇌혈관 담보 미보유 조건 충족. T02 뇌혈관 클러스터 카드 체인이 정상 작동합니다.',
+  },
+
+  C: {
+    routing: 'gen',
+    aiAnswer: {
+      paras: [
+        { text: '암 보험에 대해 안내드릴게요.', tags: [] },
+        { text: '암 치료는 진단명과 치료 기간에 따라 비용이 크게 달라져요. 일반적으로 입원·수술·약제비를 포함하면 상당한 준비가 필요할 수 있습니다.', tags: [] },
+        { text: '현재 가입하신 보험 내역을 기반으로 보장 수준을 함께 확인해드리면 더 정확한 안내가 가능합니다.', tags: [] },
+        { text: '담당 설계사를 통해 보장 분석을 받아보시는 걸 추천드려요.', tags: [] },
+      ],
+      policy: null,
+      usedCards: [],
+    },
+    steps: [
+      { num:'①', title:'Concept 동의어 매칭', icon:'ok', result:'매칭 성공', resultColor:'var(--status-active)',
+        details:[
+          {cls:'eval-ok',  icon:'✓', text:'질문 키워드 → CN001 암보험 보장 내용 매칭'},
+          {cls:'eval-ok',  icon:'✓', text:'RT01 암·종양 체인 진입 시도'},
+        ]
+      },
+      { num:'②', title:'Risk-type 판정', icon:'warn', result:'판정 시도', resultColor:'var(--status-review)',
+        details:[
+          {cls:'eval-warn', icon:'→', text:'T01 암 클러스터 Rule 조건 평가 시작'},
+        ]
+      },
+      { num:'③', title:'Rule 조건 평가', icon:'warn', result:'미충족', resultColor:'var(--status-review)',
+        details:[
+          {cls:'eval-neutral',icon:'', text:'<div class="source-label">마이데이터</div>'},
+          {cls:'eval-err',  icon:'✗', text:'RU001 조건: 암진단금 담보코드 미보유'},
+          {cls:'eval-err',  icon:'✗', text:'고객 C 보유코드 A4200 포함 → 조건 미충족'},
+          {cls:'eval-warn', icon:'→', text:'KC 기반 답변 불가 — 일반 생성형으로 전환'},
+        ]
+      },
+      { num:'④', title:'답변 경로 결정', icon:'warn', result:'생성형 전환', resultColor:'var(--status-review)',
+        details:[
+          {cls:'eval-warn', icon:'→', text:'Rule 조건 미충족 → KC 카드 미적용'},
+          {cls:'eval-warn', icon:'→', text:'일반 생성형 LLM 답변으로 처리'},
+        ]
+      },
+    ],
+    finalType: 'gen',
+    finalTitle: '⚠ 일반 생성형 답변 (Rule 조건 미충족)',
+    finalDesc: '고객 C는 암 진단금(A4200)을 이미 보유 중입니다. KC 카드 조건에 해당하지 않아 일반 생성형 답변으로 처리됩니다.',
+  },
+
+  mismatch: {
+    routing: 'gen',
+    aiAnswer: {
+      paras: [
+        { text: '보장 내용에 대해 안내드릴게요.', tags: [] },
+        { text: '현재 고객 프로필 조건이 선택하신 Concept 카드의 클러스터 조건과 일치하지 않아 일반 생성형 답변으로 안내됩니다.', tags: [] },
+        { text: '좌측에 표시된 권장 프로필로 다시 테스트하시면 KC 기반 답변 체인을 검증하실 수 있습니다.', tags: [] },
+      ],
+      policy: null,
+      usedCards: [],
+    },
+    steps: [
+      { num:'①', title:'Concept 동의어 매칭', icon:'ok', result:'매칭 성공', resultColor:'var(--status-active)',
+        details:[
+          {cls:'eval-ok',  icon:'✓', text:'질문 키워드 → Concept 카드 매칭'},
+          {cls:'eval-ok',  icon:'✓', text:'체인 진입 시도'},
+        ]
+      },
+      { num:'②', title:'Risk-type 판정', icon:'ok', result:'판정 완료', resultColor:'var(--status-active)',
+        details:[
+          {cls:'eval-ok',  icon:'✓', text:'Risk-type 조건 확인'},
+        ]
+      },
+      { num:'③', title:'Rule 조건 평가', icon:'warn', result:'미충족', resultColor:'var(--status-review)',
+        details:[
+          {cls:'eval-err',  icon:'✗', text:'선택한 프로필이 해당 Concept 카드 클러스터 조건에 해당하지 않습니다'},
+          {cls:'eval-warn', icon:'→', text:'일반 생성형 답변으로 전환'},
+        ]
+      },
+      { num:'④', title:'답변 경로 결정', icon:'warn', result:'생성형 전환', resultColor:'var(--status-review)',
+        details:[
+          {cls:'eval-warn', icon:'→', text:'KC 조건 미충족 — 일반 생성형으로 처리'},
+        ]
+      },
+    ],
+    finalType: 'gen',
+    finalTitle: '⚠ 클러스터 불일치 — KC 기반 답변 미적용',
+    finalDesc: '선택한 고객 프로필이 Concept 카드 클러스터 조건과 일치하지 않습니다. 좌측 Concept 카드의 권장 프로필로 다시 테스트해보세요.',
+  }
+};
+
+const MOCK_NOTE = '이 결과는 가상 프로필 기반 사전 확인입니다. 실제 Clark AI 답변은 실제 고객 데이터로 평가됩니다.';
+
+// ============================================================
+// UI — 카테고리 → 카드 2단 선택
+// ============================================================
+function onCategoryChange() {
+  var cat = document.getElementById('categorySelect').value;
+  var cardGroup = document.getElementById('cardSelectGroup');
+  var cardSel = document.getElementById('cardSelect');
+  resetCardSection();
+  if (!cat) { cardGroup.style.display = 'none'; return; }
+  var cards = CARDS_BY_TYPE[cat] || [];
+  cardSel.innerHTML = '<option value="">-- 카드 선택 --</option>';
+  if (cards.length === 0) {
+    cardSel.innerHTML += '<option value="" disabled style="color:var(--text-hint)">— 준비 연결된 카드 없음 —</option>';
+  } else {
+    cards.forEach(function(id) { cardSel.innerHTML += '<option value="'+id+'">'+CARD_LABELS[id]+'</option>'; });
+  }
+  cardGroup.style.display = 'block';
+}
+
+function onCardChange() {
+  var val = document.getElementById('cardSelect').value;
+  var det = document.getElementById('cardDetail');
+  resetBelowCard();
+  if (!val) { det.style.display = 'none'; return; }
+
+  var card = ALL_PENDING[val];
+  var conceptRef = CONCEPT_SYNONYMS[card.upstreamConceptId] || {};
+  var tc = typeColor(card.type);
+  var r = parseInt(tc.slice(1,3),16), g = parseInt(tc.slice(3,5),16), b = parseInt(tc.slice(5,7),16);
+
+  var upstreamNote = '';
+  if (card.type === 'playbook') {
+    upstreamNote =
+      '<div class="upstream-note"><i class="fa-solid fa-circle-info" style="color:#1A4A9A;margin-right:5px;font-size:10px"></i>' +
+      '테스트 방식: 고객 프로필 + 상담 시나리오 → Playbook 트리거 조건 매칭 확인</div>';
+  } else if (card.type !== 'concept') {
+    upstreamNote =
+      '<div class="upstream-note"><i class="fa-solid fa-arrow-right" style="color:#1A4A9A;margin-right:5px;font-size:10px"></i>' +
+      '테스트 진입점: <strong>'+card.upstreamConceptId+'</strong> '+(conceptRef.title||'')+' 동의어로 질문 입력' +
+      ' <span style="color:var(--text-hint);font-size:11px">(AI 체인은 항상 Concept에서 시작)</span></div>';
+  }
+
+  var synLabel, synHtml;
+  if (card.type === 'playbook') {
+    synLabel = '트리거 조건';
+    synHtml = card.triggerConditions.map(function(s) { return '<span class="syn-chip">'+s+'</span>'; }).join('');
+  } else {
+    synLabel = card.type === 'concept' ? '매칭 동의어' : card.upstreamConceptId+' 동의어 (테스트 질문 기준)';
+    synHtml = card.synonyms.map(function(s) { return '<span class="syn-chip">'+s+'</span>'; }).join('');
+  }
+
+  det.innerHTML =
+    '<div class="profile-detail">' +
+      '<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">' +
+        '<span style="display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;background:rgba('+r+','+g+','+b+',.1);color:'+tc+'">'+card.typeLabel+'</span>' +
+        '<span style="font-size:13px;font-weight:700">'+card.id+' — '+card.title+'</span>' +
+      '</div>' +
+      upstreamNote +
+      '<div style="font-size:11px;font-weight:700;color:var(--text-secondary);margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em">'+synLabel+'</div>' +
+      '<div style="margin-bottom:8px">'+synHtml+'</div>' +
+      '<span style="display:inline-flex;align-items:center;gap:5px;background:rgba(26,74,154,.08);color:var(--status-approved);border:1px dashed rgba(26,74,154,.3);border-radius:4px;padding:3px 10px;font-size:12px;font-weight:700"><i class="fa-solid fa-circle-dot" style="font-size:9px"></i>준비 연결: '+card.pendingEdge+'</span>' +
+      (card.type !== 'playbook' ? '<div style="margin-top:8px;font-size:12px;color:var(--text-hint)">검수 핵심 단계: <strong style="color:var(--text-primary)">'+card.focusStepLabel+'</strong> &nbsp;·&nbsp; 권장 프로필: <strong style="color:var(--text-primary)">고객 '+card.profile+'</strong></div>' : '') +
+    '</div>';
+  det.style.display = 'block';
+
+  document.getElementById('profileGroup').style.display = 'block';
+
+  if (card.type === 'playbook') {
+    var scenSel = document.getElementById('scenarioSelect');
+    scenSel.innerHTML = '<option value="">-- 시나리오 선택 --</option>';
+    card.scenarios.forEach(function(s) { scenSel.innerHTML += '<option value="'+s+'">'+s+'</option>'; });
+    document.getElementById('playbookInputGroup').style.display = 'block';
+    document.getElementById('chainInputGroup').style.display = 'none';
+    document.getElementById('quickQCard').style.display = 'none';
+  } else {
+    document.getElementById('playbookInputGroup').style.display = 'none';
+    document.getElementById('chainInputGroup').style.display = 'block';
+    document.getElementById('quickQCard').style.display = 'block';
+    updateQuickQButtons(card.queries);
+    if (card.queries.length > 0 && !document.getElementById('questionInput').value) {
+      document.getElementById('questionInput').value = card.queries[0];
+    }
+  }
+  document.getElementById('runBtns').style.display = 'flex';
+}
+
+function updateQuickQButtons(queries) {
+  const el = document.getElementById('quickQButtons');
+  if (!queries || !queries.length) {
+    el.innerHTML =
+      '<button class="btn btn-secondary btn-sm" onclick="setQ(\'암 치료비 준비됐나요?\')">암 치료비 준비됐나요?</button>' +
+      '<button class="btn btn-secondary btn-sm" onclick="setQ(\'암보험 얼마나 필요해?\')">암보험 얼마나 필요해?</button>' +
+      '<button class="btn btn-secondary btn-sm" onclick="setQ(\'뇌졸중 보험 있어야 하나요?\')">뇌졸중 보험 있어야 하나요?</button>' +
+      '<button class="btn btn-secondary btn-sm" onclick="setQ(\'내 보험 보장이 충분한가요?\')">내 보험 보장이 충분한가요?</button>';
+    return;
+  }
+  el.innerHTML = queries.map(function(q) {
+    return '<button class="btn btn-secondary btn-sm" onclick="setQ(\''+q.replace(/'/g,"\\'")+'\')" style="white-space:nowrap">'+q+'</button>';
+  }).join('');
+}
+
+function onProfileChange() {
+  const val = document.getElementById('profileSelect').value;
+  const det = document.getElementById('profileDetail');
+  if (!val) { det.style.display = 'none'; return; }
+  const p = PROFILES[val];
+  document.getElementById('profileRows').innerHTML = p.rows.map(function(r) {
+    return '<div class="profile-row"><span class="profile-key">'+r.k+'</span><span class="profile-val">'+r.v+'</span></div>';
+  }).join('');
+  document.getElementById('profileRiskTag').innerHTML = p.hasRisk
+    ? '<span class="profile-risk-tag"><i class="fa-solid fa-triangle-exclamation"></i> '+p.riskLabel+'</span>'
+    : '<span class="profile-ok-tag"><i class="fa-solid fa-circle-check"></i> KC 해당 없음 — 일반 생성형 예상</span>';
+  det.style.display = 'block';
+}
+
+function setQ(q) { document.getElementById('questionInput').value = q; }
+
+function resetBelowCard() {
+  document.getElementById('profileGroup').style.display = 'none';
+  document.getElementById('profileSelect').value = '';
+  document.getElementById('profileDetail').style.display = 'none';
+  document.getElementById('chainInputGroup').style.display = 'none';
+  document.getElementById('playbookInputGroup').style.display = 'none';
+  document.getElementById('runBtns').style.display = 'none';
+  document.getElementById('quickQCard').style.display = 'none';
+  document.getElementById('questionInput').value = '';
+  document.getElementById('emptyState').style.display = 'block';
+  document.getElementById('loadingState').style.display = 'none';
+  document.getElementById('resultContent').style.display = 'none';
+  document.getElementById('resultTitle').textContent = '사전 테스트 결과';
+  updateQuickQButtons([]);
+}
+
+function resetCardSection() {
+  document.getElementById('cardSelect').value = '';
+  document.getElementById('cardDetail').style.display = 'none';
+  resetBelowCard();
+}
+
+function resetAll() {
+  document.getElementById('categorySelect').value = '';
+  document.getElementById('cardSelectGroup').style.display = 'none';
+  resetCardSection();
+}
+
+function getResultKey(cardId, profile) {
+  var card = ALL_PENDING[cardId];
+  if (!card) return profile;
+  if (profile === 'C') return 'C';
+  var profileCluster = { A:'T01', B:'T02' }[profile];
+  return profileCluster === card.cluster ? card.resultKey : 'mismatch';
+}
+
+function runDryRun() {
+  var cardId  = document.getElementById('cardSelect').value;
+  var profile = document.getElementById('profileSelect').value;
+  if (!cardId)  { showToast('테스트 대상 카드를 선택해 주세요'); return; }
+  if (!profile) { showToast('고객 프로필을 선택해 주세요'); return; }
+
+  var card = ALL_PENDING[cardId];
+  var loadingP = document.getElementById('loadingState').querySelector('p');
+
+  if (card.type === 'playbook') {
+    var scenario = document.getElementById('scenarioSelect').value;
+    if (!scenario) { showToast('상담 시나리오를 선택해 주세요'); return; }
+    document.getElementById('emptyState').style.display = 'none';
+    document.getElementById('resultContent').style.display = 'none';
+    document.getElementById('loadingState').style.display = 'block';
+    if (loadingP) loadingP.textContent = 'Playbook 매칭 조건 평가 중...';
+    setTimeout(function() {
+      document.getElementById('loadingState').style.display = 'none';
+      renderPlaybookResult(cardId, profile, scenario);
+    }, 850);
+  } else {
+    var q = document.getElementById('questionInput').value.trim();
+    if (!q) { showToast('질문을 입력해 주세요'); return; }
+    document.getElementById('emptyState').style.display = 'none';
+    document.getElementById('resultContent').style.display = 'none';
+    document.getElementById('loadingState').style.display = 'block';
+    if (loadingP) loadingP.textContent = '카드 체인 평가 중...';
+    setTimeout(function() {
+      document.getElementById('loadingState').style.display = 'none';
+      renderResult(cardId, profile, q);
+    }, 950);
+  }
+}
+
+// ============================================================
+// Playbook 결과 렌더링
+// ============================================================
+function renderPlaybookResult(cardId, profile, scenario) {
+  var card = ALL_PENDING[cardId];
+  var p = PROFILES[profile] || {};
+  var isMatch = (profile === card.profile);
+  var numChars = ['①','②','③','④','⑤'];
+
+  document.getElementById('routingBadge').innerHTML =
+    '<span style="display:inline-flex;align-items:center;gap:5px;background:rgba(107,74,154,.1);color:#6B4A9A;border:1px solid rgba(107,74,154,.2);padding:4px 12px;border-radius:20px;font-size:13px;font-weight:700">' +
+      '<i class="fa-solid fa-handshake" style="font-size:11px"></i> Playbook 매칭' +
+    '</span>';
+
+  document.getElementById('aiAnswerSection').innerHTML =
+    '<div class="answer-preview" style="background:#F9F5FF;border-color:#C8B8F0;margin-bottom:18px">' +
+      '<div class="answer-preview-hd" style="margin-bottom:12px">' +
+        '<span style="font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#5A3A8A">' +
+          '<i class="fa-solid fa-handshake" style="margin-right:4px"></i>Playbook 매칭 미리보기' +
+        '</span>' +
+      '</div>' +
+      '<div style="margin-bottom:10px">' +
+        '<span style="display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;background:rgba(107,74,154,.1);color:#6B4A9A">Playbook</span>' +
+        '<strong style="font-size:13px;margin-left:8px">'+card.id+' — '+card.title+'</strong>' +
+      '</div>' +
+      '<div style="font-size:12px;font-weight:700;color:var(--text-secondary);margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em">활성화 액션</div>' +
+      '<div style="font-size:13px;color:var(--text-primary);margin-bottom:12px">'+card.playbookAction+'</div>' +
+      '<div style="display:flex;gap:5px;flex-wrap:wrap;align-items:center">' +
+        card.playbookSteps.map(function(s, i) {
+          return (i > 0 ? '<i class="fa-solid fa-arrow-right" style="color:#C8C0E0;font-size:11px;flex-shrink:0"></i>' : '') +
+            '<span style="display:inline-block;background:#EDE8FF;border:1px solid #C8B0F0;color:#4A2A8A;border-radius:4px;padding:3px 8px;font-size:12px">'+s+'</span>';
+        }).join('') +
+      '</div>' +
+    '</div>';
+
+  var evalHd = document.getElementById('chainEvalHd');
+  evalHd.innerHTML = '<i class="fa-solid fa-list-check" style="font-size:10px"></i> 트리거 조건 체크';
+  evalHd.style.display = '';
+
+  document.getElementById('evalSteps').innerHTML = card.triggerConditions.map(function(cond, i) {
+    var matched = isMatch || i < 2;
+    var iconCls = matched ? 'step-ok' : 'step-warn';
+    var isFocus = (i === card.focusStep);
+    var focusBadge = isFocus ? '<span class="focus-step-badge">★ 검수 대상</span>' : '';
+    return '<div class="eval-step">' +
+      '<div class="eval-step-header" onclick="toggleStep(this)">' +
+        '<div class="eval-step-num '+iconCls+'">'+(matched?'✓':'!')+'</div>' +
+        '<div class="eval-step-title">'+numChars[i]+' '+cond+focusBadge+'</div>' +
+        '<div class="eval-step-result" style="color:'+(matched?'var(--status-active)':'var(--status-review)')+'">'+(matched?'충족':'미충족')+'</div>' +
+        '<i class="fa-solid fa-chevron-down" style="font-size:11px;color:var(--text-hint);margin-left:6px;'+(isFocus?'transform:rotate(180deg)':'')+'"></i>' +
+      '</div>' +
+      '<div class="eval-step-body"'+(isFocus?'':' style="display:none"')+'>' +
+        '<div class="eval-check eval-ok">✓ 프로필 고객 '+profile+' — '+(p.label||'').split('|')[0].trim()+' 조건 확인</div>' +
+        '<div class="eval-check eval-ok">✓ 선택 시나리오: '+scenario+'</div>' +
+        (isFocus ? '<div class="eval-check eval-warn">→ 준비 연결(pending edge): '+card.pendingEdge+' — 배포 후 Playbook 활성화</div>' : '') +
+      '</div>' +
+    '</div>';
+  }).join('');
+
+  var finalColor = isMatch ? 'var(--status-active)' : 'var(--status-review)';
+  var finalTitle = isMatch ? '✅ Playbook 매칭 성공' : '⚠ 프로필 불일치 — 권장 프로필로 재테스트 필요';
+  var finalDesc = isMatch
+    ? card.title+' — 트리거 조건 충족. 배포 후 해당 프로필 상담 시 자동 활성화됩니다.'
+    : '선택한 프로필이 Playbook 트리거 조건과 일치하지 않습니다. 권장 프로필 고객 '+card.profile+'로 다시 테스트해보세요.';
+  document.getElementById('finalResult').className = 'result-final '+(isMatch?'result-kc':'result-gen');
+  var profileLabel = p.label ? p.label.split('|')[0].trim() : profile;
+  document.getElementById('finalResult').innerHTML =
+    '<div class="result-title" style="color:'+finalColor+'">'+finalTitle+'</div>' +
+    '<div class="result-desc">'+finalDesc+'</div>' +
+    '<div class="result-meta">카드: <strong>'+card.id+'</strong> Playbook &nbsp;·&nbsp; 시나리오: "'+scenario+'" &nbsp;·&nbsp; 프로필: '+profileLabel+'</div>' +
+    '<div class="result-note"><i class="fa-solid fa-circle-info" style="margin-right:4px"></i>'+MOCK_NOTE+'</div>';
+
+  var existingDeploy = document.getElementById('finalResult').nextElementSibling;
+  if (existingDeploy && existingDeploy.classList.contains('deploy-section')) existingDeploy.remove();
+
+  var deployEl = document.createElement('div');
+  deployEl.className = 'deploy-section '+(isMatch?'deploy-section-ok':'');
+  deployEl.innerHTML = isMatch
+    ? '<div style="display:flex;align-items:center;justify-content:space-between;gap:12px">' +
+        '<div><div style="font-size:13px;font-weight:700;color:#0F6E56;margin-bottom:2px"><i class="fa-solid fa-circle-check"></i> 사전 테스트 통과 — 배포 준비 완료</div>' +
+        '<div style="font-size:12px;color:var(--text-secondary)">Playbook 매칭 조건이 정상 작동합니다.</div></div>' +
+        '<button class="btn btn-deploy btn-sm" onclick="openDeployModal()" style="flex-shrink:0"><i class="fa-solid fa-rocket"></i> 배포 요청</button>' +
+      '</div>'
+    : '<div style="display:flex;align-items:center;justify-content:space-between;gap:12px">' +
+        '<div><div style="font-size:13px;font-weight:700;color:#BA7517;margin-bottom:2px"><i class="fa-solid fa-triangle-exclamation"></i> 프로필 불일치</div>' +
+        '<div style="font-size:12px;color:var(--text-secondary)">권장 프로필로 다시 테스트해보세요.</div></div>' +
+        '<a href="00_canvas-main.html" class="btn btn-secondary btn-sm" style="flex-shrink:0;text-decoration:none"><i class="fa-solid fa-diagram-project"></i> 캔버스 확인</a>' +
+      '</div>';
+  document.getElementById('finalResult').after(deployEl);
+
+  document.getElementById('resultContent').style.display = 'block';
+  document.getElementById('resultTitle').textContent = '테스트 결과 — '+card.id+' '+card.title+' [Playbook]';
+  showToast('테스트 완료');
+}
+
+// ============================================================
+// 체인 카드 결과 렌더링
+// ============================================================
+function renderResult(cardId, profile, question) {
+  var resultKey = getResultKey(cardId, profile);
+  var data = RESULTS[resultKey] || RESULTS['C'];
+  var card = ALL_PENDING[cardId] || {};
+  var conceptRef = CONCEPT_SYNONYMS[card.upstreamConceptId] || {};
+  var p = PROFILES[profile] || {};
+
+  var evalHd = document.getElementById('chainEvalHd');
+  evalHd.innerHTML = '<i class="fa-solid fa-link" style="font-size:10px"></i> 카드 체인 평가';
+  evalHd.style.display = '';
+
+  // 라우팅 배지
+  document.getElementById('routingBadge').innerHTML = data.routing === 'kc'
+    ? '<span class="routing-badge-kc"><i class="fa-solid fa-shield-check" style="font-size:11px"></i> KC 기반 답변</span>'
+    : '<span class="routing-badge-gen"><i class="fa-solid fa-microchip" style="font-size:11px"></i> 일반 생성형 답변</span>';
+
+  // ── AI 답변 미리보기 ─────────────────────────────────
+  var ai = data.aiAnswer;
+  var routeLabel = data.routing === 'kc'
+    ? '<span class="agent-route-kc"><i class="fa-solid fa-shield-check" style="font-size:9px"></i> KC 기반</span>'
+    : '<span class="agent-route-gen">일반 생성형</span>';
+
+  var parasHtml = ai.paras.map(function(para) {
+    var tags = para.tags.map(function(id) { return cardTag(id); }).join('');
+    return '<p>' + para.text + tags + '</p>';
+  }).join('');
+
+  var policyHtml = ai.policy
+    ? '<div class="chat-policy"><i class="fa-solid fa-circle-exclamation" style="margin-right:5px;color:#BA7517"></i>'
+      + ai.policy.text + ai.policy.tags.map(function(id) { return cardTag(id); }).join('') + '</div>'
+    : '';
+
+  var usedChipsHtml = ai.usedCards.length
+    ? '<div class="used-cards-row"><span style="font-size:11px;font-weight:700;color:var(--text-hint);margin-right:2px;flex-shrink:0">적용 카드</span>'
+      + ai.usedCards.map(function(id) { return usedChip(id); }).join('') + '</div>'
+    : '<div class="no-kc-note">KC 카드 미적용 — 일반 생성형 답변이 제공됩니다</div>';
+
+  document.getElementById('aiAnswerSection').innerHTML =
+    '<div class="answer-preview">' +
+      '<div class="answer-preview-hd">' +
+        '<span style="font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#4A5A8A"><i class="fa-solid fa-comment-dots" style="margin-right:4px"></i>고객이 받는 AI 답변</span>' +
+        routeLabel +
+      '</div>' +
+      '<div class="agent-row">' +
+        '<div class="agent-avatar">C</div>' +
+        '<span class="agent-name">Clark AI</span>' +
+      '</div>' +
+      '<div class="chat-bubble">' + parasHtml + policyHtml + '</div>' +
+      usedChipsHtml +
+    '</div>';
+
+  // ── 카드 체인 평가 (카드 타입별 포커스 스텝 강조) ──
+  var pendingNote = '<div class="eval-check eval-warn">→ 준비 연결(pending edge): '+card.pendingEdge+' — 배포 후 Clark AI에 반영 예정</div>';
+
+  document.getElementById('evalSteps').innerHTML = data.steps.map(function(step, idx) {
+    var iconCls = step.icon === 'ok' ? 'step-ok' : step.icon === 'warn' ? 'step-warn' : 'step-err';
+    var iconChar = step.icon === 'ok' ? '✓' : '!';
+    var isFocus = (idx === card.focusStep);
+    var detailsHtml;
+
+    if (idx === 0 && conceptRef.synonyms) {
+      // step ①: 항상 실제 진입점 Concept 정보 표시
+      detailsHtml =
+        '<div class="eval-check eval-ok">✓ 질문 키워드 → <strong>'+card.upstreamConceptId+'</strong> '+conceptRef.title+' 매칭 (동의어 '+conceptRef.synonyms.length+'개 중)</div>' +
+        '<div class="eval-check eval-ok">✓ <strong>'+card.cluster.replace('T','RT0')+'</strong> 클러스터 체인 진입</div>' +
+        (isFocus ? pendingNote : '');
+    } else {
+      detailsHtml = step.details.map(function(d) {
+        if (d.text && d.text.indexOf('<div') === 0) return d.text;
+        return '<div class="eval-check '+d.cls+'">'+(d.icon?d.icon+' ':'')+d.text+'</div>';
+      }).join('');
+      if (isFocus) {
+        // 검수 대상 카드 단계: 신규 카드 정보 + pending 노트를 상단에 추가
+        var tc = typeColor(card.type);
+        detailsHtml =
+          '<div class="eval-check eval-ok">✓ <strong>'+card.id+'</strong> '+card.title+' <span style="background:rgba('+
+            (function(){var r=parseInt(tc.slice(1,3),16),g=parseInt(tc.slice(3,5),16),b=parseInt(tc.slice(5,7),16);return r+','+g+','+b;})()+
+          ',.1);color:'+tc+';border-radius:3px;padding:1px 5px;font-size:10px;font-weight:700">'+card.typeLabel+' 신규</span></div>' +
+          pendingNote +
+          detailsHtml;
+      }
+    }
+
+    // 포커스 스텝: 자동 펼침 + 배지
+    var autoExpand = isFocus;
+    var focusBadge = isFocus ? '<span class="focus-step-badge">★ 검수 대상</span>' : '';
+    var chevronStyle = isFocus ? 'font-size:11px;color:var(--text-hint);margin-left:6px;transition:transform .2s;transform:rotate(180deg)' : 'font-size:11px;color:var(--text-hint);margin-left:6px;transition:transform .2s';
+
+    return '<div class="eval-step">' +
+      '<div class="eval-step-header" onclick="toggleStep(this)">' +
+        '<div class="eval-step-num '+iconCls+'">'+iconChar+'</div>' +
+        '<div class="eval-step-title">'+step.num+' '+step.title+focusBadge+'</div>' +
+        '<div class="eval-step-result" style="color:'+step.resultColor+'">'+step.result+'</div>' +
+        '<i class="fa-solid fa-chevron-down" style="'+chevronStyle+'"></i>' +
+      '</div>' +
+      '<div class="eval-step-body"'+(autoExpand ? '' : ' style="display:none"')+'>'+detailsHtml+'</div>' +
+    '</div>';
+  }).join('');
+
+  // ── 최종 결과 ──────────────────────────────────────
+  var isKc = data.finalType === 'kc';
+  var finalColor = isKc ? 'var(--status-active)' : 'var(--status-draft)';
+  document.getElementById('finalResult').className = 'result-final ' + (isKc ? 'result-kc' : 'result-gen');
+  var profileLabel = p.label ? p.label.split('|')[0].trim() : profile;
+  document.getElementById('finalResult').innerHTML =
+    '<div class="result-title" style="color:'+finalColor+'">'+data.finalTitle+'</div>' +
+    '<div class="result-desc">'+data.finalDesc+'</div>' +
+    '<div class="result-meta">카드: <strong>'+card.id+'</strong> '+card.typeLabel+' &nbsp;·&nbsp; 질문: "'+question+'" &nbsp;·&nbsp; 프로필: '+profileLabel+'</div>' +
+    '<div class="result-note"><i class="fa-solid fa-circle-info" style="margin-right:4px"></i>'+MOCK_NOTE+'</div>';
+
+  // 배포 섹션
+  var existingDeploy = document.getElementById('finalResult').nextElementSibling;
+  if (existingDeploy && existingDeploy.classList.contains('deploy-section')) existingDeploy.remove();
+
+  var deployEl = document.createElement('div');
+  deployEl.className = 'deploy-section ' + (isKc ? 'deploy-section-ok' : '');
+  deployEl.innerHTML = isKc
+    ? '<div style="display:flex;align-items:center;justify-content:space-between;gap:12px">' +
+        '<div><div style="font-size:13px;font-weight:700;color:#0F6E56;margin-bottom:2px"><i class="fa-solid fa-circle-check"></i> 사전 테스트 통과 — 배포 준비 완료</div>' +
+        '<div style="font-size:12px;color:var(--text-secondary)">KC 기반 답변 체인이 정상 작동합니다. 배포를 요청할 수 있습니다.</div></div>' +
+        '<button class="btn btn-deploy btn-sm" onclick="openDeployModal()" style="flex-shrink:0"><i class="fa-solid fa-rocket"></i> 배포 요청</button>' +
+      '</div>'
+    : '<div style="display:flex;align-items:center;justify-content:space-between;gap:12px">' +
+        '<div><div style="font-size:13px;font-weight:700;color:#BA7517;margin-bottom:2px"><i class="fa-solid fa-triangle-exclamation"></i> KC 기반 답변 적용 불가</div>' +
+        '<div style="font-size:12px;color:var(--text-secondary)">Rule 조건 미충족 — 카드 연결 구조를 확인하세요.</div></div>' +
+        '<a href="00_canvas-main.html" class="btn btn-secondary btn-sm" style="flex-shrink:0;text-decoration:none"><i class="fa-solid fa-diagram-project"></i> 캔버스 확인</a>' +
+      '</div>';
+
+  document.getElementById('finalResult').after(deployEl);
+  document.getElementById('resultContent').style.display = 'block';
+  document.getElementById('resultTitle').textContent = '테스트 결과 — ' + card.id + ' ' + (card.title || '') + ' [' + card.typeLabel + ']';
+  showToast('테스트 완료');
+}
+
+// ============================================================
+// 유틸
+// ============================================================
+function toggleStep(header) {
+  const body = header.nextElementSibling;
+  const arrow = header.querySelector('.fa-chevron-down');
+  const open = body.style.display !== 'none' && body.style.display !== '';
+  body.style.display = open ? 'none' : 'block';
+  if (arrow) arrow.style.transform = open ? '' : 'rotate(180deg)';
+}
+function openDeployModal()  { document.getElementById('deployModalBackdrop').style.display = 'flex'; }
+function closeDeployModal(e){ if(e&&e.target!==document.getElementById('deployModalBackdrop'))return; document.getElementById('deployModalBackdrop').style.display='none'; }
+function confirmDeploy()    { document.getElementById('deployModalBackdrop').style.display='none'; showToast('🚀 v4 배포 완료 — AI 챗봇에 반영되었습니다'); }
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2200);
+}
+</script>
+</body>
+</html>

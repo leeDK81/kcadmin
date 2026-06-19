@@ -1,0 +1,373 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1280">
+<title>운영 현황 대시보드 – KC Admin</title>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<style>
+:root {
+  --card-risk:#C94B1A; --card-evidence:#1A7A4A; --card-concept:#1A4A9A; --card-rule:#9A1A1A; --card-policy:#5A5A55;
+  --card-playbook:#6B4A9A; --card-case:#D0CFC9;
+  --status-draft:#9C9C94; --status-review:#BA7517; --status-active:#0F6E56; --status-approved:#1A4A9A; --status-paused:#7A4A00; --status-rejected:#A32D2D;
+  --scope-public:#1A4A9A; --scope-baseline:#BA7517; --scope-internal:#5A5A55;
+  --route-kc:#0F6E56; --route-gen:#6B6B65; --route-path:#1A3A6B;
+  --step-done:#0F6E56; --step-active:#1A3A6B; --step-pending:#D0CFC9;
+  --sidebar-w:220px; --bg-page:#F4F4F5; --bg-card:#FFFFFF;
+  --text-primary:#171719; --text-secondary:#70737C; --text-hint:#989BA2;
+  --border:#E1E2E4; --radius:8px; --shadow:0px 2px 4px -2px rgba(23,23,23,.06),0px 4px 6px -1px rgba(23,23,23,.06);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg-page);color:var(--text-primary);min-width:1280px;font-size:15px;line-height:1.5}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:var(--sidebar-w);background:#1A1A18;flex-shrink:0;padding:20px 0;position:sticky;top:0;height:100vh;overflow-y:auto}
+.sidebar-logo{padding:0 16px 20px;font-size:16px;font-weight:700;color:#fff;border-bottom:1px solid #333;margin-bottom:12px}
+.sidebar a,.nav-locked{display:flex;align-items:center;gap:8px;padding:8px 16px;color:#C8C8C4;text-decoration:none;font-size:14px;transition:background .15s}
+.sidebar a:hover{background:rgba(255,255,255,.08);color:#fff}
+.sidebar a.active{background:rgba(255,255,255,.15);color:#fff;font-weight:600;border-left:3px solid #5A8AE0}
+.nav-section{padding:16px 16px 4px;font-size:11px;color:#666;text-transform:uppercase;letter-spacing:.08em}
+.nav-divider{border-top:1px solid #333;margin:8px 0}
+.nav-locked{color:#555!important;cursor:not-allowed}
+.main{flex:1;padding:32px;overflow-y:auto}
+.page-header{margin-bottom:20px}
+.page-header h1{font-size:24px;font-weight:700;margin-bottom:6px}
+.page-header p{color:var(--text-secondary)}
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);margin-bottom:16px}
+.section-title{font-size:17px;font-weight:700;margin:0 0 16px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.guide-box{background:#EEF4FF;border:1px solid #C0D0F0;border-radius:var(--radius);padding:16px 20px;margin-bottom:20px}
+.guide-box h3{font-size:16px;font-weight:700;margin-bottom:4px}
+.guide-box p{font-size:14px;color:var(--text-secondary);line-height:1.6;margin-top:4px}
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;font-size:13px;font-weight:600;white-space:nowrap}
+.badge-risk{background:rgba(201,75,26,.12);color:var(--card-risk)}.badge-evidence{background:rgba(26,122,74,.12);color:var(--card-evidence)}.badge-rule{background:rgba(154,26,26,.12);color:var(--card-rule)}.badge-policy{background:rgba(90,90,85,.12);color:var(--card-policy)}
+.badge-review{background:rgba(186,117,23,.15);color:var(--status-review)}.badge-active{background:rgba(15,110,86,.15);color:var(--status-active)}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:6px;font-size:14px;font-weight:600;cursor:pointer;border:none;font-family:inherit;transition:opacity .15s}
+.btn:hover{opacity:.85}.btn-sm{padding:5px 10px;font-size:13px}
+.btn-primary{background:var(--step-active);color:#fff}.btn-secondary{background:var(--bg-card);color:var(--text-primary);border:1px solid var(--border)}
+.banner{padding:12px 16px;border-radius:var(--radius);margin-bottom:16px;font-size:14px;line-height:1.6}
+.banner-info{background:#EEF4FF;border:1px solid #C0D0F0;color:#1A3A6B}
+.banner a{color:inherit;font-weight:600}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;padding:10px 12px;font-size:13px;font-weight:600;color:var(--text-secondary);border-bottom:2px solid var(--border);background:#F8F8F6}
+td{padding:10px 12px;font-size:14px;border-bottom:1px solid var(--border)}
+tr:hover td{background:#FAFAF8}
+.toast{position:fixed;bottom:24px;right:24px;background:#1A1A18;color:#fff;padding:12px 20px;border-radius:8px;font-size:14px;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none}
+.toast.show{opacity:1}
+/* Workflow strip */
+.wf-strip{display:flex;align-items:stretch;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);margin-bottom:24px}
+.wf-step{flex:1;padding:14px 16px;cursor:pointer;transition:background .15s;display:flex;flex-direction:column;gap:3px;border-right:1px solid var(--border);position:relative;min-width:0}
+.wf-step:last-child{border-right:none;cursor:default}
+.wf-step:not(:last-child):hover{background:#F8F8F6}
+.wf-step-num{font-size:11px;font-weight:700;color:var(--text-hint)}
+.wf-step-title{font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wf-step-count{font-size:12px;font-weight:600;margin-top:1px}
+.wf-step-count.c-ok{color:var(--status-active)}.wf-step-count.c-warn{color:var(--status-review)}.wf-step-count.c-alert{color:var(--status-rejected)}.wf-step-count.c-pending{color:var(--status-approved)}
+.wf-step-cta{font-size:11px;font-weight:700;color:var(--step-active);margin-top:auto;padding-top:8px}
+.wf-alert-bar{position:absolute;top:0;left:0;right:0;height:3px}
+/* Stat cards */
+.stat-row{display:flex;gap:16px;margin-bottom:24px}
+.stat-card{flex:1;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.stat-card.clickable{cursor:pointer;transition:box-shadow .15s}
+.stat-card.clickable:hover{box-shadow:0 4px 12px rgba(0,0,0,.12)}
+.stat-card .accent-bar{position:absolute;top:0;left:0;right:0;height:3px}
+.stat-number{font-size:28px;font-weight:700;line-height:1.2;margin-bottom:4px}
+.stat-label{font-size:14px;color:var(--text-secondary)}
+.stat-icon{position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:28px;opacity:.12}
+/* Two column */
+.two-col{display:grid;grid-template-columns:1fr 320px;gap:20px}
+/* Progress rows */
+.prog-row{display:flex;align-items:center;gap:10px;padding:8px 0;cursor:pointer;border-bottom:1px solid var(--border)}
+.prog-row:last-child{border-bottom:none}
+.prog-row:hover{background:#FAFAF8;margin:0 -4px;padding-left:4px;padding-right:4px;border-radius:4px}
+.prog-label{font-size:14px;font-weight:600;width:110px;flex-shrink:0}
+.prog-bar-wrap{flex:1;height:8px;background:var(--border);border-radius:4px;overflow:hidden}
+.prog-bar{height:100%;border-radius:4px}
+.prog-count{font-size:13px;color:var(--text-secondary);width:80px;text-align:right;flex-shrink:0}
+/* Risk-type readiness */
+.readiness-grid{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.rt-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:6px;font-size:13px;font-weight:600;border:1px solid var(--border);background:#F8F8F6}
+.rt-chip.ok{background:rgba(15,110,86,.08);border-color:rgba(15,110,86,.25);color:var(--status-active)}
+.rt-chip.warn{background:rgba(186,117,23,.08);border-color:rgba(186,117,23,.25);color:var(--status-review)}
+.rt-chip.no{background:rgba(163,45,45,.06);border-color:rgba(163,45,45,.2);color:var(--status-rejected)}
+/* Integration card */
+.integ-info{display:flex;gap:32px;margin-bottom:16px}
+.integ-item{display:flex;flex-direction:column;gap:2px}
+.integ-item .lbl{font-size:13px;color:var(--text-secondary)}
+.integ-item .val{font-size:16px;font-weight:700}
+/* Review queue ID cell */
+.id-cell{font-weight:700;font-family:monospace;white-space:nowrap}
+.id-name{font-size:12px;font-weight:400;color:var(--text-secondary);display:block;font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;margin-top:1px}
+</style>
+</head>
+<body>
+<div class="layout">
+  <nav class="sidebar">
+  <div class="sidebar-logo">&#9889; KC Admin <span style="font-size:10px;background:#5A8AE0;color:#fff;padding:1px 6px;border-radius:3px;margin-left:4px;font-weight:600">v2</span></div>
+
+  <a href="02_dashboard.html" class="active"><i class="fa-solid fa-chart-bar fa-fw"></i> 대시보드</a>
+
+  <div class="nav-divider"></div>
+
+  <a href="03_card-library.html"><i class="fa-solid fa-folder-open fa-fw"></i> ① 카드 등록</a>
+  <a href="04_risk-type-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-circle-exclamation fa-fw" style="font-size:11px;color:#C94B1A"></i> Risk-type</a>
+  <a href="05_evidence-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-database fa-fw" style="font-size:11px;color:#1A7A4A"></i> Evidence</a>
+  <a href="06_concept-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-lightbulb fa-fw" style="font-size:11px;color:#1A4A9A"></i> Concept</a>
+  <a href="07_rule-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-scale-balanced fa-fw" style="font-size:11px;color:#9A1A1A"></i> Rule</a>
+  <a href="08_policy-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-file-shield fa-fw" style="font-size:11px;color:#5A5A55"></i> Policy</a>
+  <a href="16_playbook-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-handshake fa-fw" style="font-size:11px;color:#9A70D0"></i> Playbook</a>
+  <span class="nav-locked" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-lock fa-fw" style="font-size:11px"></i> Case &#128274;</span>
+
+  <a href="09_review-workflow.html"><i class="fa-solid fa-circle-check fa-fw"></i> ② 검수·승인</a>
+  <a href="00_canvas-main.html"><i class="fa-solid fa-diagram-project fa-fw"></i> ③ 연결</a>
+  <a href="11_dry-run.html"><i class="fa-solid fa-flask fa-fw"></i> ④ 사전 테스트</a>
+  <a href="18_system-settings.html"><i class="fa-solid fa-sliders fa-fw"></i> 시스템 설정</a>
+
+  <div class="nav-divider"></div>
+  <a href="13_answer-logic.html"><i class="fa-solid fa-diagram-project fa-fw"></i> AI 답변 로직</a>
+  <a href="14_answer-logic-guide.html"><i class="fa-solid fa-book-open fa-fw"></i> AI 답변 생성 예시</a>
+  <a href="17_system-data-guide.html"><i class="fa-solid fa-network-wired fa-fw"></i> 데이터 연결 구조</a>
+  <a href="15_aio-guide.html"><i class="fa-solid fa-globe fa-fw"></i> AIO 가이드</a>
+  <a href="12_coverage-code-table.html"><i class="fa-solid fa-table-list fa-fw"></i> 담보코드</a>
+
+  <div class="nav-divider"></div>
+  <a href="01_guide.html"><i class="fa-solid fa-clipboard-list fa-fw"></i> 업무 가이드</a>
+  <a href="00_design-system.html"><i class="fa-solid fa-palette fa-fw"></i> 디자인 시스템</a>
+</nav>
+
+  <main class="main">
+    <div class="page-header">
+      <h1>운영 현황 대시보드</h1>
+      <p>Clark AI KC 기반 답변 운영 상태를 한눈에 파악하세요</p>
+    </div>
+
+    <!-- 운영 워크플로우 -->
+    <div class="wf-strip">
+      <div class="wf-step" onclick="location.href='03_card-library.html'">
+        <div class="wf-alert-bar" style="background:var(--status-active)"></div>
+        <div class="wf-step-num">① 카드 등록</div>
+        <div class="wf-step-title">카드 편집기</div>
+        <div class="wf-step-count c-ok">6종 라이브 · 2종 진행 중</div>
+        <div class="wf-step-cta">카드 목록 →</div>
+      </div>
+      <div class="wf-step" onclick="location.href='09_review-workflow.html'">
+        <div class="wf-alert-bar" style="background:var(--status-review)"></div>
+        <div class="wf-step-num">② 검수·승인</div>
+        <div class="wf-step-title">검수 대기</div>
+        <div class="wf-step-count c-warn">⚠ 4건 대기 중</div>
+        <div class="wf-step-cta">검수하기 →</div>
+      </div>
+      <div class="wf-step" onclick="location.href='00_canvas-main.html'">
+        <div class="wf-alert-bar" style="background:var(--status-approved)"></div>
+        <div class="wf-step-num">③ 캔버스 연결</div>
+        <div class="wf-step-title">준비 연결 구성</div>
+        <div class="wf-step-count c-pending">준비 연결 3개</div>
+        <div class="wf-step-cta">캔버스 →</div>
+      </div>
+      <div class="wf-step" onclick="location.href='00_canvas-main.html'">
+        <div class="wf-alert-bar" style="background:var(--step-active)"></div>
+        <div class="wf-step-num">④ 사전 테스트·배포</div>
+        <div class="wf-step-title">연결 검증 후 배포</div>
+        <div class="wf-step-count c-pending">캔버스에서 진행</div>
+        <div class="wf-step-cta">캔버스 →</div>
+      </div>
+      <div class="wf-step">
+        <div class="wf-alert-bar" style="background:var(--status-active)"></div>
+        <div class="wf-step-num">⑤ 라이브 현황</div>
+        <div class="wf-step-title">KC 기반 답변</div>
+        <div class="wf-step-count c-ok">3 / 8 Risk-type</div>
+        <div class="wf-step-cta" style="color:var(--text-hint)">이 대시보드</div>
+      </div>
+    </div>
+
+    <!-- Stat cards -->
+    <div style="font-size:14px;font-weight:700;margin-bottom:12px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.06em">AI 답변 경로 현황</div>
+    <div class="stat-row">
+      <div class="stat-card">
+        <div class="accent-bar" style="background:var(--route-kc)"></div>
+        <div class="stat-number" style="color:var(--route-kc)">3 / 8</div>
+        <div class="stat-label">KC 기반 답변 가능 Risk-type</div>
+        <i class="fa-solid fa-circle-check stat-icon" style="color:var(--route-kc)"></i>
+      </div>
+      <div class="stat-card">
+        <div class="accent-bar" style="background:var(--status-active)"></div>
+        <div class="stat-number" style="color:var(--status-active)">31건</div>
+        <div class="stat-label">라이브 카드 총계</div>
+        <i class="fa-solid fa-layer-group stat-icon" style="color:var(--status-active)"></i>
+      </div>
+      <div class="stat-card clickable" onclick="location.href='09_review-workflow.html'">
+        <div class="accent-bar" style="background:var(--status-review)"></div>
+        <div class="stat-number" style="color:var(--status-review)">4건</div>
+        <div class="stat-label">검수 대기 <i class="fa-solid fa-arrow-right" style="font-size:12px"></i></div>
+        <i class="fa-solid fa-clock stat-icon" style="color:var(--status-review)"></i>
+      </div>
+      <div class="stat-card clickable" onclick="location.href='00_canvas-main.html'">
+        <div class="accent-bar" style="background:var(--status-rejected)"></div>
+        <div class="stat-number" style="color:var(--status-rejected)">3건</div>
+        <div class="stat-label">미연결 카드 <i class="fa-solid fa-arrow-right" style="font-size:12px"></i></div>
+        <i class="fa-solid fa-link-slash stat-icon" style="color:var(--status-rejected)"></i>
+      </div>
+    </div>
+
+    <!-- Two column -->
+    <div class="two-col">
+      <!-- Left: review queue -->
+      <div class="card">
+        <div class="section-title">검수 대기 목록</div>
+        <table>
+          <thead>
+            <tr>
+              <th>카드 ID</th>
+              <th>유형</th>
+              <th>Risk-type</th>
+              <th>상태</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="id-cell">RU001<span class="id-name">암진단금 미보유 또는 소액</span></td>
+              <td><span class="badge badge-rule">Rule</span></td>
+              <td><span style="font-size:13px;color:var(--text-secondary)">T02 암투병생활비 부족형</span></td>
+              <td><span class="badge badge-review">승인요청</span></td>
+              <td><button class="btn btn-sm btn-primary" onclick="location.href='09_review-workflow.html'">검수하기 →</button></td>
+            </tr>
+            <tr>
+              <td class="id-cell">POL002<span class="id-name">보험업법 보험료 산출 관련 고지 기준</span></td>
+              <td><span class="badge badge-policy">Policy</span></td>
+              <td><span style="font-size:13px;color:var(--text-hint)">—</span></td>
+              <td><span class="badge badge-review">승인요청</span></td>
+              <td><button class="btn btn-sm btn-primary" onclick="location.href='09_review-workflow.html'">검수하기 →</button></td>
+            </tr>
+            <tr>
+              <td class="id-cell">EV004<span class="id-name">고혈압 유병률 (HIRA 2024)</span></td>
+              <td><span class="badge badge-evidence">Evidence</span></td>
+              <td><span style="font-size:13px;color:var(--text-hint)">—</span></td>
+              <td><span class="badge badge-review" style="display:inline-flex;flex-direction:column;align-items:flex-start;gap:1px"><span>승인요청</span><span style="font-size:11px;font-weight:400">(승인요청)</span></span></td>
+              <td><button class="btn btn-sm btn-primary" onclick="location.href='09_review-workflow.html'">검수하기 →</button></td>
+            </tr>
+            <tr>
+              <td class="id-cell">RU002<span class="id-name">심혈관 주요 담보 부재</span></td>
+              <td><span class="badge badge-rule">Rule</span></td>
+              <td><span style="font-size:13px;color:var(--text-secondary)">T03 심혈관질환보장 협소형</span></td>
+              <td><span class="badge badge-review">승인요청</span></td>
+              <td><button class="btn btn-sm btn-primary" onclick="location.href='09_review-workflow.html'">검수하기 →</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Right: progress -->
+      <div>
+        <div class="card">
+          <div class="section-title">카드 등록 진행 현황</div>
+          <div class="prog-row" onclick="location.href='03_card-library.html'">
+            <div class="prog-label">① Risk-type</div>
+            <div class="prog-bar-wrap"><div class="prog-bar" style="width:100%;background:var(--status-active)"></div></div>
+            <div class="prog-count" style="color:var(--status-active)">✅ 8/8건</div>
+          </div>
+          <div class="prog-row" onclick="location.href='03_card-library.html'">
+            <div class="prog-label">② Evidence</div>
+            <div class="prog-bar-wrap"><div class="prog-bar" style="width:80%;background:var(--status-active)"></div></div>
+            <div class="prog-count" style="color:var(--status-active)">✅ 4/5건</div>
+          </div>
+          <div class="prog-row" onclick="location.href='03_card-library.html'">
+            <div class="prog-label">③ Concept</div>
+            <div class="prog-bar-wrap"><div class="prog-bar" style="width:66%;background:var(--status-review)"></div></div>
+            <div class="prog-count" style="color:var(--status-review)">⚠ 2/3건</div>
+          </div>
+          <div class="prog-row" onclick="location.href='03_card-library.html'">
+            <div class="prog-label">④ Rule</div>
+            <div class="prog-bar-wrap"><div class="prog-bar" style="width:33%;background:var(--card-risk)"></div></div>
+            <div class="prog-count" style="color:var(--card-risk)">⚠ 1/3건</div>
+          </div>
+          <div class="prog-row" onclick="location.href='03_card-library.html'">
+            <div class="prog-label">⑤ Policy</div>
+            <div class="prog-bar-wrap"><div class="prog-bar" style="width:50%;background:var(--text-hint)"></div></div>
+            <div class="prog-count" style="color:var(--text-hint)">❌ 1/2건</div>
+          </div>
+          <div class="prog-row" onclick="location.href='16_playbook-list.html'">
+            <div class="prog-label" style="color:var(--card-playbook);font-size:13px">⑥ Playbook</div>
+            <div class="prog-bar-wrap"><div class="prog-bar" style="width:50%;background:var(--card-playbook)"></div></div>
+            <div class="prog-count" style="color:var(--card-playbook)">🟢 1/2건</div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:0">
+          <div class="section-title" style="font-size:15px">리드 전환 현황 <span style="font-size:12px;font-weight:400;color:var(--text-hint);margin-left:4px">Playbook MVP</span></div>
+          <div style="display:flex;gap:16px;margin-bottom:8px">
+            <div style="flex:1;background:#F4F0FA;border:1px solid #C8B0E8;border-radius:6px;padding:12px;text-align:center">
+              <div style="font-size:22px;font-weight:700;color:var(--card-playbook)">1</div>
+              <div style="font-size:12px;color:var(--text-secondary)">라이브 Playbook</div>
+            </div>
+            <div style="flex:1;background:#F4F4F2;border:1px solid var(--border);border-radius:6px;padding:12px;text-align:center">
+              <div style="font-size:22px;font-weight:700;color:var(--text-hint)">7</div>
+              <div style="font-size:12px;color:var(--text-secondary)">설정 키워드 수</div>
+            </div>
+            <div style="flex:1;background:#F4F4F2;border:1px solid var(--border);border-radius:6px;padding:12px;text-align:center">
+              <div style="font-size:22px;font-weight:700;color:var(--step-active)">10</div>
+              <div style="font-size:12px;color:var(--text-secondary)">스코어 연결 Risk-type</div>
+            </div>
+          </div>
+          <div style="font-size:13px;color:var(--text-hint);background:#F8F6FC;border:1px solid #DDD0F0;border-radius:5px;padding:8px 12px;line-height:1.6">
+            <i class="fa-solid fa-handshake" style="color:var(--card-playbook);margin-right:4px"></i>
+            리드 전환 발화 감지 시 Risk-type 스코어 포함 고객 DB를 원수사·GA에 전달합니다. 배정 최적화는 Phase 2.
+            <a href="16_playbook-list.html" style="color:var(--card-playbook);font-weight:600;margin-left:6px">Playbook 설정 →</a>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:0">
+          <div class="section-title">답변 가능 상태</div>
+          <div style="font-size:13px;color:var(--text-secondary);margin-bottom:10px">KC 기반 답변 가능한 Risk-type</div>
+          <div class="readiness-grid">
+            <div class="rt-chip no"><i class="fa-solid fa-xmark"></i> T01 무보장형</div>
+            <div class="rt-chip ok"><i class="fa-solid fa-check"></i> T02 암투병생활비 부족형</div>
+            <div class="rt-chip warn"><i class="fa-solid fa-triangle-exclamation"></i> T03 심혈관질환보장 협소형 <span style="font-weight:400;font-size:12px">(Rule 검수중)</span></div>
+            <div class="rt-chip no"><i class="fa-solid fa-xmark"></i> T04 뇌혈관질환보장 협소형</div>
+            <div class="rt-chip no"><i class="fa-solid fa-xmark"></i> T05 노후돌봄보장 공백형</div>
+            <div class="rt-chip no"><i class="fa-solid fa-xmark"></i> T06 납입여력부족 우려형</div>
+            <div class="rt-chip no"><i class="fa-solid fa-xmark"></i> T07 비용 대비 보장 비효율형</div>
+            <div class="rt-chip no"><i class="fa-solid fa-xmark"></i> T08 생애주기 적합도 저조형</div>
+          </div>
+          <div style="font-size:12px;color:var(--text-hint);margin-top:10px">T04~T08: Rule 미등록</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Integration status -->
+    <div class="card">
+      <div class="section-title">Clark AI 연동 상태</div>
+      <div class="integ-info">
+        <div class="integ-item">
+          <span class="lbl">마지막 반영 시각</span>
+          <span class="val">2026-05-14 14:32</span>
+        </div>
+        <div class="integ-item">
+          <span class="lbl">라이브 카드 총계</span>
+          <span class="val" style="color:var(--status-active)">31건</span>
+        </div>
+        <div class="integ-item">
+          <span class="lbl">연동 상태</span>
+          <span class="val" style="color:var(--status-active)"><i class="fa-solid fa-circle" style="font-size:11px"></i> 정상</span>
+        </div>
+      </div>
+      <div class="banner banner-info">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <strong>미연결 카드 주의:</strong> EV004 고혈압 유병률 (HIRA 2024)가 Rule과 연결되지 않았습니다.
+        <a href="00_canvas-main.html" style="margin-left:8px">카드 캔버스에서 확인 →</a>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+</script>
+</body>
+</html>

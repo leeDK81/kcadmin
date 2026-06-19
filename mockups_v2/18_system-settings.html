@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>시스템 설정 — KC Admin</title>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<style>
+:root {
+  --status-draft:#9C9C94; --status-review:#BA7517; --status-active:#0F6E56; --status-approved:#1A4A9A; --status-paused:#7A4A00; --status-rejected:#A32D2D;
+  --step-done:#0F6E56; --step-active:#1A3A6B; --step-pending:#D0CFC9;
+  --sidebar-w:220px; --bg-page:#F4F4F5; --bg-card:#FFFFFF;
+  --text-primary:#171719; --text-secondary:#70737C; --text-hint:#989BA2;
+  --border:#E1E2E4; --radius:8px; --shadow:0px 2px 4px -2px rgba(23,23,23,.06),0px 4px 6px -1px rgba(23,23,23,.06);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg-page);color:var(--text-primary);min-width:1280px;font-size:15px;line-height:1.5}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:var(--sidebar-w);background:#1A1A18;flex-shrink:0;padding:20px 0;position:sticky;top:0;height:100vh;overflow-y:auto}
+.sidebar-logo{padding:0 16px 20px;font-size:16px;font-weight:700;color:#fff;border-bottom:1px solid #333;margin-bottom:12px}
+.sidebar a,.nav-locked{display:flex;align-items:center;gap:8px;padding:8px 16px;color:#C8C8C4;text-decoration:none;font-size:14px;transition:background .15s}
+.sidebar a:hover{background:rgba(255,255,255,.08);color:#fff}
+.sidebar a.active{background:rgba(255,255,255,.15);color:#fff;font-weight:600;border-left:3px solid #5A8AE0}
+.nav-divider{border-top:1px solid #333;margin:8px 0}
+.nav-locked{color:#555!important;cursor:not-allowed}
+.main{flex:1;padding:32px;overflow-y:auto}
+.page-header{margin-bottom:28px}
+.page-header h1{font-size:24px;font-weight:700;margin-bottom:6px}
+.page-header p{color:var(--text-secondary)}
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);margin-bottom:20px}
+.section-title{font-size:17px;font-weight:700;margin:0 0 6px;display:flex;align-items:center;gap:10px}
+.section-desc{font-size:14px;color:var(--text-secondary);margin-bottom:20px;line-height:1.6;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;font-size:13px;font-weight:600;white-space:nowrap}
+.badge-active{background:rgba(15,110,86,.15);color:var(--status-active)}
+.badge-draft{background:rgba(156,156,148,.15);color:var(--status-draft)}
+.badge-review{background:rgba(186,117,23,.15);color:var(--status-review)}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:6px;font-size:14px;font-weight:600;cursor:pointer;border:none;font-family:inherit;transition:opacity .15s}
+.btn:hover{opacity:.85}
+.btn-primary{background:var(--step-active);color:#fff}
+.btn-secondary{background:var(--bg-card);color:var(--text-primary);border:1px solid var(--border)}
+.btn-sm{padding:5px 10px;font-size:13px}
+.form-group{margin-bottom:18px}
+.form-group label{display:block;font-size:14px;font-weight:600;margin-bottom:4px}
+.field-hint{display:block;font-size:13px;color:var(--text-hint);margin-top:3px;line-height:1.4}
+.form-control{width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-family:inherit;background:#fff;color:var(--text-primary)}
+.form-control:focus{outline:none;border-color:var(--step-active);box-shadow:0 0 0 2px rgba(26,58,107,.12)}
+textarea.form-control{resize:vertical}
+.banner{padding:12px 16px;border-radius:var(--radius);margin-bottom:16px;font-size:14px;line-height:1.6}
+.banner-info{background:#EEF4FF;border:1px solid #C0D0F0;color:#1A3A6B}
+.two-col{display:grid;grid-template-columns:1fr 280px;gap:20px;align-items:start}
+.action-bar{display:flex;gap:10px;justify-content:flex-end;margin-top:4px}
+/* 현재 적용 중 패널 */
+.active-panel{background:#F0FBF6;border:1.5px solid #7ABCAA;border-radius:var(--radius);padding:16px 20px;margin-bottom:20px}
+.active-panel-hd{font-size:13px;font-weight:700;color:#0F6E56;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.active-item{display:flex;gap:8px;padding:6px 0;border-bottom:1px solid rgba(15,110,86,.12);font-size:14px}
+.active-item:last-child{border-bottom:none}
+.active-item-key{color:var(--text-hint);flex-shrink:0;width:110px;font-size:13px}
+.active-item-val{flex:1;line-height:1.5}
+.prohibit-list{display:flex;flex-direction:column;gap:3px}
+.prohibit-chip{display:inline-flex;align-items:center;gap:5px;font-size:13px;color:#A32D2D}
+.prohibit-chip::before{content:"✕";font-weight:700;font-size:11px}
+.toast{position:fixed;bottom:24px;right:24px;background:#1A1A18;color:#fff;padding:12px 20px;border-radius:8px;font-size:14px;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none}
+.toast.show{opacity:1}
+</style>
+</head>
+<body>
+<div class="layout">
+<nav class="sidebar">
+  <div class="sidebar-logo">&#9889; KC Admin <span style="font-size:10px;background:#5A8AE0;color:#fff;padding:1px 6px;border-radius:3px;margin-left:4px;font-weight:600">v2</span></div>
+
+  <a href="02_dashboard.html"><i class="fa-solid fa-chart-bar fa-fw"></i> 대시보드</a>
+
+  <div class="nav-divider"></div>
+
+  <a href="03_card-library.html"><i class="fa-solid fa-folder-open fa-fw"></i> ① 카드 등록</a>
+  <a href="04_risk-type-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-circle-exclamation fa-fw" style="font-size:11px;color:#C94B1A"></i> Risk-type</a>
+  <a href="05_evidence-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-database fa-fw" style="font-size:11px;color:#1A7A4A"></i> Evidence</a>
+  <a href="06_concept-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-lightbulb fa-fw" style="font-size:11px;color:#1A4A9A"></i> Concept</a>
+  <a href="07_rule-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-scale-balanced fa-fw" style="font-size:11px;color:#9A1A1A"></i> Rule</a>
+  <a href="08_policy-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-file-shield fa-fw" style="font-size:11px;color:#5A5A55"></i> Policy</a>
+  <a href="16_playbook-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-handshake fa-fw" style="font-size:11px;color:#9A70D0"></i> Playbook</a>
+  <span class="nav-locked" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-lock fa-fw" style="font-size:11px"></i> Case &#128274;</span>
+
+  <a href="09_review-workflow.html"><i class="fa-solid fa-circle-check fa-fw"></i> ② 검수·승인</a>
+  <a href="00_canvas-main.html"><i class="fa-solid fa-diagram-project fa-fw"></i> ③ 연결</a>
+  <a href="11_dry-run.html"><i class="fa-solid fa-flask fa-fw"></i> ④ 사전 테스트</a>
+  <a href="18_system-settings.html" class="active"><i class="fa-solid fa-sliders fa-fw"></i> 시스템 설정</a>
+
+  <div class="nav-divider"></div>
+  <a href="13_answer-logic.html"><i class="fa-solid fa-diagram-project fa-fw"></i> AI 답변 로직</a>
+  <a href="14_answer-logic-guide.html"><i class="fa-solid fa-book-open fa-fw"></i> AI 답변 생성 예시</a>
+  <a href="17_system-data-guide.html"><i class="fa-solid fa-network-wired fa-fw"></i> 데이터 연결 구조</a>
+  <a href="15_aio-guide.html"><i class="fa-solid fa-globe fa-fw"></i> AIO 가이드</a>
+  <a href="12_coverage-code-table.html"><i class="fa-solid fa-table-list fa-fw"></i> 담보코드</a>
+
+  <div class="nav-divider"></div>
+  <a href="01_guide.html"><i class="fa-solid fa-clipboard-list fa-fw"></i> 업무 가이드</a>
+  <a href="00_design-system.html"><i class="fa-solid fa-palette fa-fw"></i> 디자인 시스템</a>
+</nav>
+
+<main class="main">
+  <div class="page-header">
+    <h1>시스템 설정</h1>
+    <p>KC 카드 체인과 독립적으로 동작하는 Clark AI 시스템 수준 설정을 관리합니다</p>
+  </div>
+
+  <div class="two-col">
+    <!-- LEFT: 편집 폼 -->
+    <div>
+      <div class="card">
+        <div class="section-title">
+          <i class="fa-solid fa-robot" style="color:var(--step-active)"></i>
+          LLM 기본 응답 가이드라인
+        </div>
+        <div class="section-desc">
+          KC Concept 카드가 매칭되지 않을 때 <strong>(Case 3·4)</strong> LLM 생성형 답변에 자동 적용되는 제한 규칙입니다.<br>
+          KC 카드 체인(Policy 포함)과 완전히 독립적으로 동작합니다. 저장하면 즉시 Clark AI에 반영됩니다.
+        </div>
+
+        <div class="form-group">
+          <label>금지 사항 <span style="color:var(--status-rejected)">*</span></label>
+          <textarea class="form-control" id="prohibit" style="min-height:110px">경쟁사(카카오보험·토스보험·뱅크샐러드 등) 언급 금지
+타 금융 서비스·앱 비교·추천 금지
+외부 URL·링크 안내 금지</textarea>
+          <span class="field-hint">LLM이 반드시 지켜야 하는 금지 항목. 항목당 한 줄 입력</span>
+        </div>
+
+        <div class="form-group">
+          <label>허용 답변 범위</label>
+          <textarea class="form-control" id="scope" style="min-height:80px">Clark 서비스 내 기능 안내 허용
+일반적인 보험 개념 설명 허용 (상품 추천 제외)</textarea>
+          <span class="field-hint">LLM이 자유롭게 답변할 수 있는 범위. 비워두면 금지 사항 외 모두 허용</span>
+        </div>
+
+        <div class="form-group">
+          <label>마무리 안내 문구</label>
+          <input class="form-control" id="cta" type="text" value="더 정확한 안내는 보닥플래너 상담을 통해 확인하실 수 있습니다.">
+          <span class="field-hint">모든 Fallback 답변 끝에 자동 추가되는 전문가 연결 유도 문구. 비워두면 생략</span>
+        </div>
+
+        <div class="action-bar">
+          <button class="btn btn-primary" onclick="saveSettings()"><i class="fa fa-floppy-disk"></i> 저장 — 즉시 반영</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: 안내 -->
+    <div>
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;box-shadow:var(--shadow)">
+        <div style="font-size:14px;font-weight:700;margin-bottom:10px">이 설정이 적용되는 케이스</div>
+        <div style="font-size:13px;color:var(--text-secondary);line-height:1.8">
+          <div><strong>Case 3</strong> — Concept 미매칭 + Playbook 미감지</div>
+          <div><strong>Case 4</strong> — Concept 미매칭 + Playbook 감지</div>
+          <div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border);color:var(--text-hint)">
+            <i class="fa-solid fa-circle-info fa-fw" style="font-size:11px"></i>
+            Case 1·2 (Concept 매칭 성공)에는 적용되지 않습니다.<br>
+            KC 카드 체인이 정상 작동하는 경우 이 설정은 무시됩니다.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+function saveSettings() {
+  const p = document.getElementById('prohibit').value.trim();
+  if (!p) { showToast('금지 사항을 입력해야 합니다.'); return; }
+  showToast('저장되었습니다. Clark AI에 즉시 반영됩니다.');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,513 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1280">
+<title>담보코드·필드 레퍼런스 — KC Admin</title>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root {
+  --card-risk:#C94B1A; --card-evidence:#1A7A4A; --card-concept:#1A4A9A; --card-rule:#9A1A1A; --card-policy:#5A5A55;
+  --card-playbook:#6B4A9A; --card-case:#D0CFC9;
+  --status-draft:#9C9C94; --status-review:#BA7517; --status-active:#0F6E56; --status-approved:#1A4A9A; --status-paused:#7A4A00; --status-rejected:#A32D2D;
+  --scope-public:#1A4A9A; --scope-baseline:#BA7517; --scope-internal:#5A5A55;
+  --route-kc:#0F6E56; --route-gen:#6B6B65; --route-path:#1A3A6B;
+  --step-done:#0F6E56; --step-active:#1A3A6B; --step-pending:#D0CFC9;
+  --sidebar-w:220px; --bg-page:#F4F4F5; --bg-card:#FFFFFF;
+  --text-primary:#171719; --text-secondary:#70737C; --text-hint:#989BA2;
+  --border:#E1E2E4; --radius:8px; --shadow:0px 2px 4px -2px rgba(23,23,23,.06),0px 4px 6px -1px rgba(23,23,23,.06);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg-page);color:var(--text-primary);min-width:1280px;font-size:15px;line-height:1.5}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:var(--sidebar-w);background:#1A1A18;flex-shrink:0;padding:20px 0;position:sticky;top:0;height:100vh;overflow-y:auto}
+.sidebar-logo{padding:0 16px 20px;font-size:16px;font-weight:700;color:#fff;border-bottom:1px solid #333;margin-bottom:12px}
+.sidebar a,.nav-locked{display:flex;align-items:center;gap:8px;padding:8px 16px;color:#C8C8C4;text-decoration:none;font-size:14px;transition:background .15s}
+.sidebar a:hover{background:rgba(255,255,255,.08);color:#fff}
+.sidebar a.active{background:rgba(255,255,255,.15);color:#fff;font-weight:600;border-left:3px solid #5A8AE0}
+.nav-section{padding:16px 16px 4px;font-size:11px;color:#666;text-transform:uppercase;letter-spacing:.08em}
+.nav-divider{border-top:1px solid #333;margin:8px 0}
+.nav-locked{color:#555!important;cursor:not-allowed}
+.main{flex:1;padding:32px;overflow-y:auto}
+.page-header{margin-bottom:28px}
+.page-header h1{font-size:24px;font-weight:700;margin-bottom:6px}
+.page-header p{color:var(--text-secondary)}
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);margin-bottom:16px}
+.section-title{font-size:17px;font-weight:700;margin:0 0 16px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;font-size:13px;font-weight:600;white-space:nowrap}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:6px;font-size:14px;font-weight:600;cursor:pointer;border:none;font-family:inherit;transition:opacity .15s}
+.btn:hover{opacity:.85}
+.btn-primary{background:var(--step-active);color:#fff}
+.btn-secondary{background:var(--bg-card);color:var(--text-primary);border:1px solid var(--border)}
+.btn-sm{padding:5px 10px;font-size:13px}
+.form-control{width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-family:inherit;background:#fff;color:var(--text-primary)}
+.form-control:focus{outline:none;border-color:var(--step-active);box-shadow:0 0 0 2px rgba(26,58,107,.12)}
+.banner-info{background:#EEF4FF;border:1px solid #C0D0F0;color:#1A3A6B;padding:12px 16px;border-radius:var(--radius);margin-bottom:16px;font-size:14px;line-height:1.6}
+.banner-warn{background:#FFF3D4;border:1px solid #F0C040;color:#8A5A00;padding:12px 16px;border-radius:var(--radius);margin-bottom:16px;font-size:14px;line-height:1.6}
+.toast{position:fixed;bottom:24px;right:24px;background:#1A1A18;color:#fff;padding:12px 20px;border-radius:8px;font-size:14px;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none}
+.toast.show{opacity:1}
+.chip{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;background:var(--bg-page);border:1px solid var(--border);border-radius:20px;font-size:13px;cursor:pointer;margin:2px;position:relative}
+.chip:hover{background:var(--border)}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;padding:10px 12px;font-size:13px;font-weight:600;color:var(--text-secondary);border-bottom:2px solid var(--border);background:#F8F8F6}
+td{padding:10px 12px;font-size:14px;border-bottom:1px solid var(--border);vertical-align:middle}
+tr:hover td{background:#FAFAF8}
+tr.clickable{cursor:pointer}
+
+/* Source tabs */
+.source-tabs{display:flex;gap:0;border-bottom:2px solid var(--border);margin-bottom:20px}
+.source-tab{padding:10px 20px;font-size:15px;font-weight:600;cursor:pointer;border:none;background:none;font-family:inherit;color:var(--text-secondary);border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .15s}
+.source-tab:hover{color:var(--text-primary)}
+.source-tab.active{color:var(--step-active);border-bottom-color:var(--step-active)}
+
+/* Stats strip */
+.stats-strip{display:flex;gap:20px;padding:10px 16px;background:#F8F8F6;border:1px solid var(--border);border-radius:6px;margin-bottom:16px;font-size:14px}
+.stat-item{display:flex;align-items:center;gap:6px}
+.stat-label{color:var(--text-secondary)}
+.stat-val{font-weight:700}
+
+/* Filter row */
+.filter-row{display:flex;gap:12px;margin-bottom:16px;align-items:center}
+.search-wrap{position:relative;flex:1}
+.search-wrap input{padding-left:32px}
+.search-icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--text-hint);font-size:14px}
+.cat-select{width:180px;padding:8px 12px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-family:inherit}
+
+/* Rule badge in table */
+.rule-link{background:rgba(26,58,107,.1);color:var(--step-active);padding:2px 8px;border-radius:4px;font-size:13px;font-weight:600;cursor:pointer;text-decoration:none}
+.rule-link:hover{background:rgba(26,58,107,.2)}
+.unused-badge{color:var(--text-hint);font-size:13px}
+
+/* Type pill */
+.type-pill{display:inline-block;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:700;background:#F0F0EE;color:var(--text-secondary)}
+
+/* Detail row */
+tr.detail-row td{background:#EEF4FF;padding:16px 20px}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.detail-item label{font-size:12px;font-weight:700;color:var(--text-hint);text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:4px}
+.detail-item span{font-size:14px;color:var(--text-primary)}
+
+/* Coverage code section */
+.code-category{margin-bottom:20px}
+.code-cat-title{font-size:14px;font-weight:700;color:var(--text-secondary);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.chips-row{display:flex;flex-wrap:wrap;gap:4px}
+
+/* Tooltip */
+.tooltip-wrap{position:relative;display:inline-flex}
+.tooltip-box{position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:#1A1A18;color:#fff;padding:8px 12px;border-radius:6px;font-size:13px;white-space:nowrap;z-index:100;pointer-events:none;opacity:0;transition:opacity .15s;min-width:160px;text-align:center;line-height:1.5}
+.tooltip-box.show{opacity:1}
+.tooltip-box::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:#1A1A18}
+</style>
+</head>
+<body>
+<div class="layout">
+<nav class="sidebar">
+  <div class="sidebar-logo">&#9889; KC Admin <span style="font-size:10px;background:#5A8AE0;color:#fff;padding:1px 6px;border-radius:3px;margin-left:4px;font-weight:600">v2</span></div>
+
+  <a href="02_dashboard.html"><i class="fa-solid fa-chart-bar fa-fw"></i> 대시보드</a>
+
+  <div class="nav-divider"></div>
+
+  <a href="03_card-library.html"><i class="fa-solid fa-folder-open fa-fw"></i> ① 카드 등록</a>
+  <a href="04_risk-type-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-circle-exclamation fa-fw" style="font-size:11px;color:#C94B1A"></i> Risk-type</a>
+  <a href="05_evidence-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-database fa-fw" style="font-size:11px;color:#1A7A4A"></i> Evidence</a>
+  <a href="06_concept-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-lightbulb fa-fw" style="font-size:11px;color:#1A4A9A"></i> Concept</a>
+  <a href="07_rule-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-scale-balanced fa-fw" style="font-size:11px;color:#9A1A1A"></i> Rule</a>
+  <a href="08_policy-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-file-shield fa-fw" style="font-size:11px;color:#5A5A55"></i> Policy</a>
+  <a href="16_playbook-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-handshake fa-fw" style="font-size:11px;color:#9A70D0"></i> Playbook</a>
+  <span class="nav-locked" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-lock fa-fw" style="font-size:11px"></i> Case &#128274;</span>
+
+  <a href="09_review-workflow.html"><i class="fa-solid fa-circle-check fa-fw"></i> ② 검수·승인</a>
+  <a href="00_canvas-main.html"><i class="fa-solid fa-diagram-project fa-fw"></i> ③ 연결</a>
+  <a href="11_dry-run.html"><i class="fa-solid fa-flask fa-fw"></i> ④ 사전 테스트</a>
+  <a href="18_system-settings.html"><i class="fa-solid fa-sliders fa-fw"></i> 시스템 설정</a>
+
+  <div class="nav-divider"></div>
+  <a href="13_answer-logic.html"><i class="fa-solid fa-diagram-project fa-fw"></i> AI 답변 로직</a>
+  <a href="14_answer-logic-guide.html"><i class="fa-solid fa-book-open fa-fw"></i> AI 답변 생성 예시</a>
+  <a href="17_system-data-guide.html"><i class="fa-solid fa-network-wired fa-fw"></i> 데이터 연결 구조</a>
+  <a href="15_aio-guide.html"><i class="fa-solid fa-globe fa-fw"></i> AIO 가이드</a>
+  <a href="12_coverage-code-table.html" class="active"><i class="fa-solid fa-table-list fa-fw"></i> 담보코드</a>
+
+  <div class="nav-divider"></div>
+  <a href="01_guide.html"><i class="fa-solid fa-clipboard-list fa-fw"></i> 업무 가이드</a>
+  <a href="00_design-system.html"><i class="fa-solid fa-palette fa-fw"></i> 디자인 시스템</a>
+</nav>
+<main class="main">
+  <div class="page-header">
+    <h1>📋 담보코드·필드 레퍼런스 테이블</h1>
+    <p>Rule 조건 빌더에서 사용할 수 있는 전체 필드를 탐색하세요</p>
+  </div>
+
+  <div class="banner-info">
+    📌 아래 목록은 주요 담보코드 예시입니다. 실제 운영 시에는 더 많은 항목이 있을 수 있습니다.
+  </div>
+
+  <div class="card">
+    <!-- Source tabs -->
+    <div class="source-tabs">
+      <button class="source-tab active" data-source="mydata" onclick="switchTab('mydata')">
+        <i class="fa fa-database"></i> 마이데이터
+      </button>
+      <button class="source-tab" data-source="fromage" onclick="switchTab('fromage')">
+        <i class="fa fa-dna"></i> 프롬에이지
+      </button>
+      <button class="source-tab" data-source="profile" onclick="switchTab('profile')">
+        <i class="fa fa-user"></i> 프로파일
+      </button>
+    </div>
+
+    <!-- MYDATA: 담보코드 -->
+    <div id="coverageSection">
+      <div id="coverageCodes"></div>
+    </div>
+
+    <!-- 프롬에이지: 데이터 필드 -->
+    <div id="fromageSection" style="display:none">
+      <div id="fromageCodes"></div>
+    </div>
+
+    <!-- 프로파일: 사용자 기본정보 필드 -->
+    <div id="profileSection" style="display:none">
+      <div id="profileFields"></div>
+    </div>
+  </div>
+</main>
+</div>
+<div class="toast" id="toast"></div>
+<div class="tooltip-box" id="globalTooltip"></div>
+
+<script>
+
+const COVERAGE_CODES = {
+  '사망 담보 (A1xxx)': [
+    {code:'A1100',desc:'질병사망'},{code:'A1101',desc:'유병자질병사망'},{code:'A1199',desc:'특정질병사망'},
+    {code:'A1200',desc:'암사망'},{code:'A1299',desc:'특정암사망'},
+    {code:'A1300',desc:'상해사망'},{code:'A1301',desc:'유병자상해사망'},{code:'A1399',desc:'특정상해사망'},
+    {code:'A1400',desc:'교통상해사망'},{code:'A1401',desc:'휴일교통상해사망'},
+    {code:'A1403',desc:'대중교통상해사망'},{code:'A1404',desc:'휴일대중교통상해사망'},{code:'A1499',desc:'특정교통상해사망'}
+  ],
+  '후유장해 담보 (A3xxx)': [
+    {code:'A3100',desc:'질병후유장해'},{code:'A3101',desc:'질병80%이상후유장해'},{code:'A3103',desc:'질병50%이상후유장해'},
+    {code:'A3199',desc:'특정질병후유장해'},
+    {code:'A3300',desc:'상해후유장해'},{code:'A3301',desc:'상해80%이상후유장해'},{code:'A3303',desc:'상해50%이상후유장해'},
+    {code:'A3399',desc:'특정상해후유장해'},
+    {code:'A3400',desc:'교통상해후유장해'},{code:'A3401',desc:'교통상해80%이상후유장해'},{code:'A3403',desc:'교통상해50%이상후유장해'},
+    {code:'A3404',desc:'휴일교통상해후유장해'},{code:'A3412',desc:'대중교통상해후유장해'},
+    {code:'A3413',desc:'대중교통상해80%이상후유장해'},{code:'A3415',desc:'대중교통상해50%이상후유장해'},
+    {code:'A3416',desc:'휴일대중교통상해후유장애'},{code:'A3499',desc:'특정교통상해후유장해'}
+  ],
+  '진단 담보 (A4xxx)': [
+    {code:'A4101',desc:'뇌혈관질환진단'},{code:'A4102',desc:'뇌출혈진단'},{code:'A4103',desc:'뇌졸중진단'},
+    {code:'A4104',desc:'급성심근경색진단'},{code:'A4105',desc:'허혈성심장질환진단'},
+    {code:'A4109',desc:'치매진단'},{code:'A4110',desc:'치매진단(경증)'},{code:'A4199',desc:'특정질병진단'},
+    {code:'A4200',desc:'암진단'},{code:'A4201',desc:'유병자암진단'},
+    {code:'A4209',desc:'고액암진단'},{code:'A4210',desc:'소액암진단'},{code:'A4299',desc:'특정암진단'},
+    {code:'A4301',desc:'골절진단'},{code:'A4302',desc:'화상진단'},
+    {code:'A4303',desc:'중대골절진단'},{code:'A4304',desc:'중대화상진단'},{code:'A4399',desc:'특정상해진단'},
+    {code:'A4501',desc:'장기간병요양진단(1급)'},{code:'A4502',desc:'장기간병요양진단(1,2급)'},
+    {code:'A4503',desc:'장기간병요양진단(1,2,3급)'},{code:'A4504',desc:'장기간병요양진단(1,2,3,4급)'},
+    {code:'A4505',desc:'장기간병요양진단(1,2,3,4,5급)'},
+    {code:'A4601',desc:'중증질환(뇌혈관) 산정특례대상'},{code:'A4602',desc:'중증질환(심장) 산정특례대상'},
+    {code:'A4603',desc:'중증질환(암) 산정특례대상'},{code:'A4604',desc:'중증질환(치매) 산정특례대상'},
+    {code:'A4699',desc:'특정중증질환 산정특례대상'}
+  ],
+  '수술 담보 (A5xxx)': [
+    {code:'A5100',desc:'질병수술'},{code:'A5101',desc:'유병자질병수술'},
+    {code:'A5104',desc:'뇌혈관질환수술'},{code:'A5107',desc:'허혈성심장질환수술'},{code:'A5109',desc:'질병종수술'},
+    {code:'A5199',desc:'특정질병수술'},
+    {code:'A5200',desc:'암수술'},{code:'A5299',desc:'특정암수술'},
+    {code:'A5300',desc:'상해수술'},{code:'A5301',desc:'골절수술'},{code:'A5302',desc:'화상수술'},
+    {code:'A5309',desc:'상해종수술'},{code:'A5310',desc:'유병자상해수술'},{code:'A5399',desc:'특정상해수술'},
+    {code:'A5508',desc:'인공관절수술'},{code:'A5999',desc:'기타수술'}
+  ],
+  '입원 담보 (A6xxx)': [
+    {code:'A6100',desc:'질병입원일당'},{code:'A6101',desc:'유병자질병입원일당'},
+    {code:'A6103',desc:'간질환입원일당'},{code:'A6105',desc:'여성/부인과질환입원일당'},
+    {code:'A6107',desc:'뇌혈관질환입원일당'},{code:'A6109',desc:'허혈성심장질환입원일당'},
+    {code:'A6112',desc:'질병중환자실입원일당'},{code:'A6113',desc:'환경성질환입원일당'},
+    {code:'A6114',desc:'어린이다발성질병입원일당'},{code:'A6115',desc:'VDT증후군입원일당'},
+    {code:'A6116',desc:'개호유발특정질병입원일당'},{code:'A6117',desc:'생활질환입원일당'},
+    {code:'A6118',desc:'피부질환입원일당'},{code:'A6119',desc:'희귀난치성질환입원일당'},
+    {code:'A6120',desc:'간병인지원질병입원일당'},{code:'A6150',desc:'특정질병입원일당'},
+    {code:'A6200',desc:'암입원일당'},{code:'A6201',desc:'암요양병원입원일당'},
+    {code:'A6300',desc:'상해입원일당'},{code:'A6301',desc:'유병자상해입원일당'},
+    {code:'A6302',desc:'상해중환자실입원일당'},{code:'A6303',desc:'간병인지원상해입원일당'},
+    {code:'A6350',desc:'특정상해입원일당'},{code:'A6400',desc:'교통상해입원일당'},
+    {code:'A6510',desc:'질병장기입원비'},{code:'A6550',desc:'상해장기입원비'},{code:'A6999',desc:'기타입원일당'}
+  ],
+  '통원 담보 (A7xxx)': [
+    {code:'A7100',desc:'질병통원'},{code:'A7101',desc:'유병자질병통원'},{code:'A7199',desc:'특정질병통원'},
+    {code:'A7200',desc:'암통원'},
+    {code:'A7300',desc:'상해통원'},{code:'A7301',desc:'유병자상해통원'},{code:'A7399',desc:'특정상해통원'},
+    {code:'A7500',desc:'치과통원'},{code:'A7999',desc:'기타통원'}
+  ],
+  '기타 담보 (A8~A9xxx)': [
+    {code:'A8000',desc:'간병'},
+    {code:'A9001',desc:'질병한방치료'},{code:'A9021',desc:'암한방치료'},{code:'A9041',desc:'상해한방치료'},
+    {code:'A9100',desc:'소득보상금(질병사망)'},{code:'A9101',desc:'소득보상금(상해사망)'},
+    {code:'A9400',desc:'면허정지위로금'},{code:'A9401',desc:'면허취소위로금'},{code:'A9402',desc:'차량손해위로금'},
+    {code:'A9403',desc:'강도손해위로금'},{code:'A9404',desc:'선천성이상수술위로금'},
+    {code:'A9405',desc:'유괴납치위로금'},{code:'A9406',desc:'학원폭력위로금'},
+    {code:'A9407',desc:'질병상해입원위로금'},{code:'A9408',desc:'자동차사고부상위로금'},
+    {code:'A9409',desc:'화재손해위로금'},{code:'A9499',desc:'기타위로금'},
+    {code:'A9500',desc:'치과치료(보존치료)'},{code:'A9509',desc:'치과치료(보철치료)'},{code:'A9599',desc:'기타치과담보'},
+    {code:'A9600',desc:'응급치료'},{code:'A9601',desc:'깁스치료'},
+    {code:'A9602',desc:'질병상해구직급여지원금'},{code:'A9603',desc:'구직급여지원금'},
+    {code:'A9604',desc:'벌금비용'},{code:'A9605',desc:'변호사선임비용'},{code:'A9606',desc:'방어비용'},
+    {code:'A9607',desc:'형사합의지원금'},{code:'A9608',desc:'자동차보험료할증지원금'},
+    {code:'A9609',desc:'긴급출동및견인비용'},{code:'A9610',desc:'렌트비용'},
+    {code:'A9611',desc:'자동차부상치료비(경상제외)'},{code:'A9612',desc:'홀인원비용'},
+    {code:'A9613',desc:'알바트로스비용'},{code:'A9614',desc:'골프용품손해비용'},
+    {code:'A9615',desc:'보이스메신저피싱손해비용'},{code:'A9616',desc:'정신피해치료비'},
+    {code:'A9617',desc:'항암방사선약물치료비'},{code:'A9619',desc:'고액항암치료비'},
+    {code:'A9620',desc:'교통사고피해부상치료비'},{code:'A9621',desc:'자동차부상치료비(경상)'},
+    {code:'A9999',desc:'기타 인보험(정액)담보'}
+  ]
+};
+
+const FROMAGE_SECTIONS = {
+  '암위험도 (위험/주의/양호)': [
+    {code:'canr_ca',desc:'암 종합 등급'},{code:'lung_ca',desc:'폐암'},{code:'gaca_ca',desc:'위암'},
+    {code:'lica_ca',desc:'간암'},{code:'coca_ca',desc:'대장암'},{code:'brca_ca',desc:'유방암'},
+    {code:'thca_ca',desc:'갑상선암'},{code:'prca_ca',desc:'전립선암'},{code:'ovca_ca',desc:'난소암'},
+    {code:'utca_ca',desc:'자궁암'},{code:'bntr_ca',desc:'뇌암'},{code:'blca_ca',desc:'방광암'},
+    {code:'paca_ca',desc:'췌장암'},{code:'esop_ca',desc:'식도암'},{code:'oral_ca',desc:'구강암'},
+    {code:'lary_ca',desc:'후두암'},{code:'rcc_ca',desc:'신장암'},{code:'gall_ca',desc:'담낭암'},
+    {code:'lymp_ca',desc:'림프종'},{code:'leuk_ca',desc:'백혈병'},{code:'myel_ca',desc:'골수종'},
+    {code:'skin_ca',desc:'피부암'},{code:'smbl_ca',desc:'소장암'}
+  ],
+  '생체나이 (숫자)': [
+    {code:'metabolic_msa',desc:'대사증후군나이'},{code:'medical_bad',desc:'의학생체나이'},
+    {code:'caa',desc:'심장나이'},{code:'pua',desc:'폐나이'},{code:'hea',desc:'간나이'},
+    {code:'paa',desc:'췌장나이'},{code:'rea',desc:'신장나이'},{code:'baa',desc:'비만체형나이'},
+    {code:'bpa',desc:'혈압나이'},{code:'bla',desc:'혈관나이'},
+    {code:'fsa',desc:'혈당나이'},{code:'msa',desc:'평균혈당나이'},
+    {code:'medical_tle',desc:'기대수명'},{code:'medical_rle',desc:'잔여수명'}
+  ],
+  '질병위험도 (위험/주의/양호)': [
+    {code:'고지혈증',desc:'고지혈증'},{code:'당뇨병',desc:'당뇨병'},{code:'고혈압',desc:'고혈압'},
+    {code:'치매',desc:'치매'},{code:'비만',desc:'비만'},{code:'만성신부전증',desc:'만성신부전증'},
+    {code:'COPD',desc:'만성폐쇄성폐질환'},{code:'골절',desc:'골절'},{code:'골관절염',desc:'골관절염'},
+    {code:'골다공증',desc:'골다공증'},{code:'백내장',desc:'백내장'},{code:'황반변성',desc:'황반변성'},
+    {code:'파킨슨병',desc:'파킨슨병'},{code:'전립선비대증',desc:'전립선비대증'},
+    {code:'허혈성심장질환',desc:'허혈성심장질환'},{code:'급성심근경색증',desc:'급성심근경색증'},
+    {code:'뇌혈관질환',desc:'뇌혈관질환'},{code:'뇌졸중',desc:'뇌졸중'},{code:'부정맥',desc:'부정맥'},
+    {code:'류마티스관절염',desc:'류마티스관절염'},{code:'우울증',desc:'우울증'},
+    {code:'심부전',desc:'심부전'},{code:'폐렴',desc:'폐렴'},{code:'천식',desc:'천식'},
+    {code:'난청',desc:'난청'},{code:'녹내장',desc:'녹내장'},{code:'췌장염',desc:'췌장염'}
+  ],
+  '의료비 예측 (원/일수)': [
+    {code:'me_0y',desc:'금년도 의료비'},{code:'me_5y',desc:'5년후 의료비'},{code:'me_10y',desc:'10년후 의료비'},
+    {code:'me_0y_sa',desc:'동년배 금년도 의료비'},{code:'me_avg',desc:'연평균 의료비'},
+    {code:'me_avg_p',desc:'연평균 의료비상승률(%)'},
+    {code:'ambul',desc:'외래진료일수'},{code:'ambul_10y',desc:'10년후 외래진료일수'},
+    {code:'hospital',desc:'입원일수'},{code:'hospital_10y',desc:'10년후 입원일수'}
+  ]
+};
+
+// 프롬에이지 카테고리별 조건 유형 설명
+const FROMAGE_COND = {
+  '암위험도 (위험/주의/양호)': {icon:'fa-circle-dot', color:'#9A1A1A', text:'Rule 조건: <b>위험</b> / <b>주의</b> / <b>양호</b> 등급 선택'},
+  '생체나이 (숫자)': {icon:'fa-clock', color:'#1A4A9A', text:'Rule 조건: 나이 <b>이상</b> · <b>이하</b> — 예) 대사나이가 실제나이보다 5세 초과'},
+  '질병위험도 (위험/주의/양호)': {icon:'fa-heart-pulse', color:'#C94B1A', text:'Rule 조건: <b>위험</b> / <b>주의</b> / <b>양호</b> 등급 선택'},
+  '의료비 예측 (원/일수)': {icon:'fa-receipt', color:'#1A7A4A', text:'Rule 조건: 금액·일수 <b>이상</b> · <b>이하</b> — 예) 10년후 의료비 500만원 이상'}
+};
+
+function switchTab(source) {
+  document.querySelectorAll('.source-tab').forEach(t => t.classList.toggle('active', t.dataset.source === source));
+  document.getElementById('coverageSection').style.display = source === 'mydata' ? 'block' : 'none';
+  document.getElementById('fromageSection').style.display = source === 'fromage' ? 'block' : 'none';
+  document.getElementById('profileSection').style.display = source === 'profile' ? 'block' : 'none';
+}
+
+function renderCoverageCodes() {
+  const total = Object.values(COVERAGE_CODES).reduce((s, v) => s + v.length, 0);
+  const condNote = `
+    <div class="banner-info" style="margin-bottom:20px">
+      <i class="fa fa-sliders fa-fw"></i>
+      <strong>담보코드별 Rule 조건 유형</strong>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 24px;margin-top:10px;font-size:14px">
+        <div><i class="fa fa-circle-check fa-fw" style="color:var(--status-active);font-size:12px"></i> 담보 <b>존재 여부</b> — 있음 / 없음</div>
+        <div><i class="fa fa-circle-check fa-fw" style="color:var(--status-active);font-size:12px"></i> <b>갱신형 여부</b> — 갱신형 / 비갱신형</div>
+        <div><i class="fa fa-circle-check fa-fw" style="color:var(--status-active);font-size:12px"></i> 담보금액 <b>이상 · 이하</b></div>
+        <div><i class="fa fa-circle-check fa-fw" style="color:var(--status-active);font-size:12px"></i> <b>보험 유형</b> — 종신 / 정기 / 건강보험 등</div>
+        <div><i class="fa fa-circle-check fa-fw" style="color:var(--status-active);font-size:12px"></i> 계약 <b>시작일 · 종료일</b> 이상 · 이하</div>
+      </div>
+      <div style="margin-top:10px;padding-top:10px;border-top:1px solid #C0D0F0;font-size:13px;color:var(--text-hint)">
+        예) 암진단(A4200) 담보 없음 → T01 무보장형 &nbsp;/&nbsp; 암진단금 3,000만원 미만 → T02 생활비 부족형 &nbsp;/&nbsp; 갱신형 비율 높음 → T06 납입여력부족형
+      </div>
+      <div style="margin-top:8px;padding:8px 10px;background:rgba(15,110,86,.07);border-radius:6px;font-size:13px;color:#0F6E56">
+        <i class="fa fa-user fa-fw"></i> <strong>프로파일 조건 연계:</strong> 동일 담보코드라도 <b>연령·성별·직업위험도</b> 등 사용자 프로파일 조건을 함께 설정하면 기준값을 세분화할 수 있습니다.
+        예) "40세 이상 AND 암진단(A4200) 담보금 3천만원 이하" — <a href="07_card-editor-rule.html" style="color:#0F6E56">Rule 카드 조건 빌더 →</a>
+      </div>
+    </div>
+    <div style="font-size:13px;color:var(--text-hint);margin-bottom:12px">전체 ${total}개 담보코드</div>`;
+
+  const cats = Object.entries(COVERAGE_CODES).map(([cat, codes]) => `
+    <div class="code-category">
+      <div class="code-cat-title">
+        <i class="fa fa-tag" style="font-size:12px"></i> ${cat}
+        <span style="font-weight:400;color:var(--text-hint)">(${codes.length}개)</span>
+      </div>
+      <div class="chips-row">
+        ${codes.map(c => `
+          <span class="chip" style="gap:6px;padding:4px 10px">
+            <code style="font-size:12px;font-weight:700;color:var(--step-active);letter-spacing:.02em">${c.code}</code>
+            <span style="font-size:13px;color:var(--text-secondary)">${c.desc}</span>
+          </span>`).join('')}
+      </div>
+    </div>`).join('');
+
+  document.getElementById('coverageCodes').innerHTML = condNote + cats;
+}
+
+function renderFromageSections() {
+  const note = `
+    <div class="banner-warn" style="margin-bottom:20px">
+      <i class="fa fa-circle-exclamation fa-fw"></i>
+      <strong>민감정보 처리 원칙 (§3-8)</strong> — 프롬에이지 데이터는 사용자 출력 시 <b>위험 / 주의 / 양호</b> 3단계 등급명만 허용.
+      원본 수치(canr_ca 실수값 등) 직접 노출 금지. Rule 조건 빌더에서 프롬에이지를 소스로 선택하면 건강위험도 등급 조건을 설정할 수 있습니다 (위험/주의/양호). 원본 수치는 직접 노출하지 않습니다.
+    </div>`;
+
+  const cats = Object.entries(FROMAGE_SECTIONS).map(([cat, fields]) => {
+    const cond = FROMAGE_COND[cat] || {};
+    const condBanner = cond.text ? `
+      <div style="display:flex;align-items:center;gap:8px;padding:7px 12px;background:#F8F8F6;border:1px solid var(--border);border-radius:6px;margin-bottom:10px;font-size:13px">
+        <i class="fa ${cond.icon} fa-fw" style="color:${cond.color}"></i>
+        <span>${cond.text}</span>
+      </div>` : '';
+    const chips = fields.map(f => {
+      const isApiCode = /^[a-z_]+$/.test(f.code);
+      return `<span class="chip" style="gap:6px;padding:4px 10px;border-color:rgba(107,74,154,.25)">
+        <i class="fa fa-circle" style="font-size:6px;color:#6B4A9A"></i>
+        <span style="font-size:13px;color:var(--text-primary)">${f.desc}</span>
+        ${isApiCode ? `<code style="font-size:11px;color:var(--text-hint)">${f.code}</code>` : ''}
+      </span>`;
+    }).join('');
+    return `
+      <div class="code-category">
+        <div class="code-cat-title">
+          <i class="fa fa-dna" style="font-size:12px;color:#6B4A9A"></i> ${cat}
+          <span style="font-weight:400;color:var(--text-hint)">(${fields.length}개)</span>
+        </div>
+        ${condBanner}
+        <div class="chips-row">${chips}</div>
+      </div>`;
+  }).join('');
+
+  document.getElementById('fromageCodes').innerHTML = note + cats;
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+// 사용자 프로파일 필드 정의
+const USER_PROFILE_FIELDS = [
+  {field:'age',          label:'나이 (만)',  type:'number', opType:'range',  hint:'만 나이 기준. 예: 40 → 40세 이상/이하', values:[], example:'40세 이상'},
+  {field:'gender',       label:'성별',       type:'enum',   opType:'select', hint:'남 / 여',                              values:['남','여'], example:'남'},
+  {field:'marital',      label:'결혼 여부',  type:'enum',   opType:'select', hint:'기혼 / 미혼',                          values:['기혼','미혼'], example:'기혼'},
+  {field:'has_children', label:'자녀 유무',  type:'enum',   opType:'select', hint:'Y (있음) / N (없음)',                  values:['Y','N'], example:'Y'},
+  {field:'job_risk',     label:'직업위험도', type:'enum',   opType:'select', hint:'비위험(사무직·IT) / 중위험(영업·자영업) / 고위험(단순노무·군인·경찰)', values:['비위험','중위험','고위험'], example:'고위험'},
+  {field:'expecting',    label:'출산 예정',  type:'enum',   opType:'select', hint:'Y (예정) / N (해당없음)',              values:['Y','N'], example:'Y'},
+  {field:'region',       label:'거주지',     type:'enum',   opType:'multi',  hint:'거주 지역 — 단일 또는 복수 선택 가능', values:['서울','경기','인천','부산','대구','광주','대전','울산','세종','강원','충북','충남','전북','전남','경북','경남','제주'], example:'서울, 경기'},
+];
+
+function renderProfileFields() {
+  const note = `
+    <div class="banner-info" style="margin-bottom:20px">
+      <i class="fa fa-user fa-fw"></i>
+      <strong>사용자 프로파일 — Rule 조건 3번째 소스</strong>
+      <div style="margin-top:8px;font-size:14px;line-height:1.7">
+        마이데이터 담보 기준값을 <b>연령·성별·직업위험도</b> 등으로 세분화할 때 사용합니다.<br>
+        예) <b>40세 이상</b> AND 암진단(A4200) 담보금 <b>3천만원 이하</b> → T02 암투병생활비 부족형
+      </div>
+      <div style="margin-top:8px;padding-top:8px;border-top:1px solid #C0D0F0;font-size:13px;color:var(--text-hint)">
+        Rule 조건 빌더에서 소스를 <b>프로파일</b>로 선택하면 아래 항목을 조건으로 설정할 수 있습니다.
+        <a href="07_card-editor-rule.html" style="color:var(--step-active)">Rule 카드 편집기 →</a>
+      </div>
+    </div>`;
+
+  const opBadge = (opType) => {
+    if (opType === 'range') return `<span style="font-size:12px;padding:2px 7px;border-radius:10px;background:rgba(26,74,154,.1);color:#1A4A9A;font-weight:600">이상 · 이하</span>`;
+    if (opType === 'multi') return `<span style="font-size:12px;padding:2px 7px;border-radius:10px;background:rgba(26,122,74,.1);color:#1A7A4A;font-weight:600">같음 · 포함됨 · 포함 안 됨</span>`;
+    return `<span style="font-size:12px;padding:2px 7px;border-radius:10px;background:rgba(15,110,86,.1);color:#0F6E56;font-weight:600">같음 · 포함됨 · 포함 안 됨</span>`;
+  };
+
+  const rows = USER_PROFILE_FIELDS.map(f => {
+    const valChips = f.values.length
+      ? f.values.map(v => `<span style="display:inline-block;margin:2px;padding:2px 8px;background:#F0F0EC;border-radius:10px;font-size:13px">${v}</span>`).join('')
+      : `<span style="font-size:13px;color:var(--text-hint)">${f.hint}</span>`;
+    return `
+      <tr>
+        <td style="font-weight:600;font-size:14px;white-space:nowrap;color:var(--text-primary)">${f.label}</td>
+        <td><code style="font-size:12px;color:var(--text-hint)">${f.field}</code></td>
+        <td>${opBadge(f.opType)}</td>
+        <td>${valChips}</td>
+        <td style="font-size:13px;color:var(--text-hint)">${f.example}</td>
+      </tr>`;
+  }).join('');
+
+  const table = `
+    <table style="border-collapse:collapse;width:100%">
+      <thead>
+        <tr style="background:#F8F8F6;font-size:13px;color:var(--text-secondary)">
+          <th style="padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap">항목명</th>
+          <th style="padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap">필드 코드</th>
+          <th style="padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap">조건 유형</th>
+          <th style="padding:10px 12px;text-align:left;border-bottom:1px solid var(--border)">선택 가능 값</th>
+          <th style="padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap">조건 예시</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>`;
+
+  const sampleBox = `
+    <div style="margin-top:24px">
+      <div style="font-size:14px;font-weight:600;color:var(--text-primary);margin-bottom:12px">샘플 Rule 조건 (3가지 소스 조합)</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="padding:12px 16px;background:#F8F8F6;border:1px solid var(--border);border-radius:8px;font-size:14px">
+          <div style="display:flex;gap:8px;align-items:flex-start;flex-wrap:wrap">
+            <span style="padding:3px 10px;border-radius:12px;background:rgba(15,110,86,.1);color:#0F6E56;font-size:13px;font-weight:600;white-space:nowrap">👤 프로파일</span>
+            <span style="padding-top:3px">나이 (만) <b>≥ 40</b></span>
+            <span style="padding-top:3px;color:var(--text-hint)">AND</span>
+            <span style="padding:3px 10px;border-radius:12px;background:rgba(26,74,154,.1);color:#1A4A9A;font-size:13px;font-weight:600;white-space:nowrap">📋 마이데이터</span>
+            <span style="padding-top:3px">암진단(A4200) 담보금액 <b>≤ 30,000,000원</b></span>
+            <span style="padding-top:3px;color:var(--text-hint)">AND</span>
+            <span style="padding:3px 10px;border-radius:12px;background:rgba(107,74,154,.1);color:#6B4A9A;font-size:13px;font-weight:600;white-space:nowrap">🧬 프롬에이지</span>
+            <span style="padding-top:3px">암위험도 <b>= 위험</b></span>
+          </div>
+          <div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border);font-size:13px;color:var(--text-hint)">
+            → T02 암투병생활비 부족형 판정
+          </div>
+        </div>
+        <div style="padding:12px 16px;background:#F8F8F6;border:1px solid var(--border);border-radius:8px;font-size:14px">
+          <div style="display:flex;gap:8px;align-items:flex-start;flex-wrap:wrap">
+            <span style="padding:3px 10px;border-radius:12px;background:rgba(15,110,86,.1);color:#0F6E56;font-size:13px;font-weight:600;white-space:nowrap">👤 프로파일</span>
+            <span style="padding-top:3px">직업위험도 <b>= 고위험</b></span>
+            <span style="padding-top:3px;color:var(--text-hint)">AND</span>
+            <span style="padding:3px 10px;border-radius:12px;background:rgba(26,74,154,.1);color:#1A4A9A;font-size:13px;font-weight:600;white-space:nowrap">📋 마이데이터</span>
+            <span style="padding-top:3px">상해후유장해(A3200) 담보금액 <b>= 0원</b> (미보유)</span>
+          </div>
+          <div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border);font-size:13px;color:var(--text-hint)">
+            → 직업 특성 고려 상해 담보 공백 판정
+          </div>
+        </div>
+      </div>
+    </div>`;
+
+  document.getElementById('profileFields').innerHTML = note + table + sampleBox;
+}
+
+// Init
+renderCoverageCodes();
+renderFromageSections();
+renderProfileFields();
+</script>
+</body>
+</html>

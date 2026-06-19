@@ -1,0 +1,372 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1280">
+<title>Evidence 카드 편집 | KC Admin</title>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<style>
+:root {
+  --card-risk:#C94B1A; --card-evidence:#1A7A4A; --card-concept:#1A4A9A; --card-rule:#9A1A1A; --card-policy:#5A5A55;
+  --card-playbook:#6B4A9A; --card-case:#D0CFC9;
+  --status-draft:#9C9C94; --status-review:#BA7517; --status-active:#0F6E56; --status-approved:#1A4A9A; --status-paused:#7A4A00; --status-rejected:#A32D2D;
+  --scope-public:#1A4A9A; --scope-baseline:#BA7517; --scope-internal:#5A5A55;
+  --route-kc:#0F6E56; --route-gen:#6B6B65; --route-path:#1A3A6B;
+  --step-done:#0F6E56; --step-active:#1A3A6B; --step-pending:#D0CFC9;
+  --sidebar-w:220px; --bg-page:#F4F4F5; --bg-card:#FFFFFF;
+  --text-primary:#171719; --text-secondary:#70737C; --text-hint:#989BA2;
+  --border:#E1E2E4; --radius:8px; --shadow:0px 2px 4px -2px rgba(23,23,23,.06),0px 4px 6px -1px rgba(23,23,23,.06);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg-page);color:var(--text-primary);min-width:1280px;font-size:15px;line-height:1.5}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:var(--sidebar-w);background:#1A1A18;flex-shrink:0;padding:20px 0;position:sticky;top:0;height:100vh;overflow-y:auto}
+.sidebar-logo{padding:0 16px 20px;font-size:16px;font-weight:700;color:#fff;border-bottom:1px solid #333;margin-bottom:12px}
+.sidebar a,.nav-locked{display:flex;align-items:center;gap:8px;padding:8px 16px;color:#C8C8C4;text-decoration:none;font-size:14px;transition:background .15s}
+.sidebar a:hover{background:rgba(255,255,255,.08);color:#fff}
+.sidebar a.active{background:rgba(255,255,255,.15);color:#fff;font-weight:600;border-left:3px solid #5A8AE0}
+.nav-section{padding:16px 16px 4px;font-size:11px;color:#666;text-transform:uppercase;letter-spacing:.08em}
+.nav-divider{border-top:1px solid #333;margin:8px 0}
+.nav-locked{color:#555!important;cursor:not-allowed}
+.main{flex:1;padding:32px;overflow-y:auto}
+.page-header{margin-bottom:28px}
+.page-header h1{font-size:24px;font-weight:700;margin-bottom:6px}
+.page-header p{color:var(--text-secondary)}
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);margin-bottom:16px}
+.section-title{font-size:17px;font-weight:700;margin:0 0 16px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.guide-box{background:#EEF4FF;border:1px solid #C0D0F0;border-radius:var(--radius);padding:16px 20px;margin-bottom:24px}
+.step-badge{display:inline-block;background:var(--step-active);color:#fff;padding:2px 10px;border-radius:20px;font-size:13px;font-weight:600;margin-bottom:8px}
+.routing-role{display:inline-block;background:#D4EAE0;color:var(--route-kc);padding:2px 10px;border-radius:4px;font-size:13px;font-weight:600;margin-left:8px}
+.guide-box h3{font-size:17px;font-weight:700;margin-bottom:6px}
+.guide-box p{font-size:14px;color:var(--text-secondary);line-height:1.6;margin-top:6px}
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;font-size:13px;font-weight:600;white-space:nowrap}
+.badge-risk{background:rgba(201,75,26,.12);color:var(--card-risk)}.badge-evidence{background:rgba(26,122,74,.12);color:var(--card-evidence)}.badge-concept{background:rgba(26,74,154,.12);color:var(--card-concept)}.badge-rule{background:rgba(154,26,26,.12);color:var(--card-rule)}.badge-policy{background:rgba(90,90,85,.12);color:var(--card-policy)}.badge-locked{background:rgba(208,207,201,.3);color:#999}
+.badge-draft{background:rgba(156,156,148,.15);color:var(--status-draft)}.badge-review{background:rgba(186,117,23,.15);color:var(--status-review)}.badge-active{background:rgba(15,110,86,.15);color:var(--status-active)}.badge-rejected{background:rgba(163,45,45,.15);color:var(--status-rejected)}
+.badge-public{background:rgba(26,74,154,.12);color:var(--scope-public)}.badge-baseline{background:rgba(186,117,23,.12);color:var(--scope-baseline)}.badge-internal{background:rgba(90,90,85,.12);color:var(--scope-internal)}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:6px;font-size:14px;font-weight:600;cursor:pointer;border:none;font-family:inherit;transition:opacity .15s}
+.btn:hover{opacity:.85}.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn-primary{background:var(--step-active);color:#fff}.btn-secondary{background:var(--bg-card);color:var(--text-primary);border:1px solid var(--border)}.btn-danger{background:var(--status-rejected);color:#fff}.btn-success{background:var(--status-active);color:#fff}.btn-sm{padding:5px 10px;font-size:13px}.btn-warn{background:var(--status-review);color:#fff}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:14px;font-weight:600;margin-bottom:4px}
+.field-hint{display:block;font-size:13px;color:var(--text-hint);font-weight:400;margin-top:2px;line-height:1.4}
+.form-control{width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-family:inherit;background:#fff;color:var(--text-primary)}
+.form-control:focus{outline:none;border-color:var(--step-active);box-shadow:0 0 0 2px rgba(26,58,107,.12)}
+textarea.form-control{resize:vertical;min-height:80px}
+.banner{padding:12px 16px;border-radius:var(--radius);margin-bottom:0;font-size:14px;line-height:1.6}
+.banner-warn{background:#FFF3D4;border:1px solid #F0C040;color:#8A5A00}.banner-error{background:#FFF0F0;border:1px solid #F0C0C0;color:#8A0000}.banner-info{background:#EEF4FF;border:1px solid #C0D0F0;color:#1A3A6B}.banner-success{background:#EDFAF4;border:1px solid #A0D8C0;color:#0A5A3C}
+.toast{position:fixed;bottom:24px;right:24px;background:#1A1A18;color:#fff;padding:12px 20px;border-radius:8px;font-size:14px;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none}
+.toast.show{opacity:1}
+.two-col{display:grid;grid-template-columns:1fr 320px;gap:20px}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;padding:10px 12px;font-size:13px;font-weight:600;color:var(--text-secondary);border-bottom:2px solid var(--border);background:#F8F8F6}
+td{padding:10px 12px;font-size:14px;border-bottom:1px solid var(--border)}
+tr:hover td{background:#FAFAF8}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.card-header-left{display:flex;align-items:center;gap:10px}
+.card-header-title{font-size:16px;font-weight:700}
+.list-item{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)}
+.list-item:last-child{border-bottom:none}
+.list-item-name{flex:1;font-size:14px}
+.rule-link-note{background:#F4F4F2;border:1px solid var(--border);border-radius:6px;padding:8px 12px;font-size:13px;color:var(--text-hint)}
+
+.ev-note{background:#FFF9ED;border:1px solid #F0D080;border-radius:6px;padding:10px 14px;margin-top:12px;font-size:13px;color:#8A5A00}
+.status-guide{margin-top:16px}
+.status-guide-item{padding:10px 14px;border-radius:6px;font-size:14px;line-height:1.5}
+.status-draft-guide{background:#FFF9EC;border:1px solid #F0D880;color:#7A5A00}
+.action-bar{display:flex;gap:8px;justify-content:flex-end}
+.status-guidance{display:flex;align-items:flex-start;gap:8px;padding:10px 14px;background:#FFF9EC;border:1px solid #F0D880;border-radius:6px;margin-top:10px;font-size:13px;color:#7A5A00;line-height:1.5}
+.status-guidance i{margin-top:1px;flex-shrink:0}
+.status-review-guide{background:#FFF8EC;border:1px solid #F0D890;color:#7A5200}
+.status-active-guide{background:#EDFAF4;border:1px solid #A0D8C0;color:#0A5A3C}
+.wf-tracker{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;margin-bottom:16px;box-shadow:var(--shadow)}
+.wf-title{font-size:15px;font-weight:700;margin-bottom:12px}
+.wf-step{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
+.wf-step:last-child{border-bottom:none}
+.wf-num{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px}
+.wf-num-on{background:var(--step-active);color:#fff}.wf-num-off{background:var(--step-pending);color:#888}
+.wf-body{flex:1}
+.wf-label{font-size:14px;font-weight:600}.wf-label-on{color:var(--step-active)}.wf-label-off{color:var(--text-hint)}
+.wf-tag{background:var(--step-active);color:#fff;font-size:11px;padding:1px 6px;border-radius:10px;margin-left:4px;vertical-align:middle;display:inline}
+.wf-hint{font-size:13px;color:var(--text-hint);margin-top:2px}
+.sum-box{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;box-shadow:var(--shadow)}
+.sum-title{font-size:15px;font-weight:700;margin-bottom:10px}
+.sum-total{font-size:24px;font-weight:700;color:var(--text-primary);margin-bottom:2px}
+.sum-label{font-size:13px;color:var(--text-secondary);margin-bottom:8px}
+.sum-stats{font-size:13px;color:var(--text-secondary);margin-bottom:10px}
+.sum-active{color:var(--status-active);font-weight:600}.sum-review{color:var(--status-review);font-weight:600}.sum-draft{color:var(--status-draft)}
+.sum-link{font-size:13px;color:var(--step-active);text-decoration:none;font-weight:600}
+.sum-link:hover{text-decoration:underline}
+.rel-box{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;box-shadow:var(--shadow)}
+.rel-title{font-size:15px;font-weight:700;margin-bottom:10px;color:var(--text-primary)}
+.rel-chain{font-size:14px;background:#F0F4FF;border:1px solid #D0DAFA;border-radius:6px;padding:8px 12px;margin-bottom:10px;color:var(--text-primary);letter-spacing:.02em}
+.rel-chain strong{color:var(--step-active)}
+.rel-list{padding-left:16px;font-size:13px;color:var(--text-secondary);line-height:1.9;margin-bottom:12px}
+.rel-back{font-size:13px;color:var(--step-active);text-decoration:none;font-weight:600;display:inline-flex;align-items:center;gap:4px}
+.rel-back:hover{text-decoration:underline}
+.rel-connected{margin:10px 0 12px}
+.rel-connected-label{font-size:12px;font-weight:700;color:var(--text-secondary);letter-spacing:.04em;margin-bottom:6px;display:block}
+.rel-item{display:flex;align-items:center;gap:6px;padding:6px 10px;background:#F8F8F6;border:1px solid var(--border);border-radius:6px;margin-bottom:4px;font-size:13px}
+.rel-item-name{flex:1;font-weight:600;color:var(--text-primary)}
+.rel-item-status{font-size:11px;padding:1px 6px;flex-shrink:0}
+.rel-item-edit{color:var(--step-active);text-decoration:none;font-weight:600;font-size:12px;white-space:nowrap;flex-shrink:0}
+.rel-item-edit:hover{text-decoration:underline}
+.rel-empty{font-size:13px;color:var(--text-hint);padding:6px 0;line-height:1.6}
+.rel-divider{height:1px;background:var(--border);margin:12px 0}
+
+.breadcrumb{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-hint);margin-bottom:16px}
+.breadcrumb a{color:var(--step-active);text-decoration:none;font-weight:600}
+.breadcrumb a:hover{text-decoration:underline}
+.breadcrumb-sep{color:var(--border)}
+</style>
+</head>
+<body>
+<div class="layout">
+  <nav class="sidebar">
+  <div class="sidebar-logo">&#9889; KC Admin <span style="font-size:10px;background:#5A8AE0;color:#fff;padding:1px 6px;border-radius:3px;margin-left:4px;font-weight:600">v2</span></div>
+
+  <a href="02_dashboard.html"><i class="fa-solid fa-chart-bar fa-fw"></i> 대시보드</a>
+
+  <div class="nav-divider"></div>
+
+  <a href="03_card-library.html"><i class="fa-solid fa-folder-open fa-fw"></i> ① 카드 등록</a>
+  <a href="04_risk-type-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-circle-exclamation fa-fw" style="font-size:11px;color:#C94B1A"></i> Risk-type</a>
+  <a href="05_evidence-list.html" class="active" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-database fa-fw" style="font-size:11px;color:#1A7A4A"></i> Evidence</a>
+  <a href="06_concept-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-lightbulb fa-fw" style="font-size:11px;color:#1A4A9A"></i> Concept</a>
+  <a href="07_rule-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-scale-balanced fa-fw" style="font-size:11px;color:#9A1A1A"></i> Rule</a>
+  <a href="08_policy-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-file-shield fa-fw" style="font-size:11px;color:#5A5A55"></i> Policy</a>
+  <a href="16_playbook-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-handshake fa-fw" style="font-size:11px;color:#9A70D0"></i> Playbook</a>
+  <span class="nav-locked" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-lock fa-fw" style="font-size:11px"></i> Case &#128274;</span>
+
+  <a href="09_review-workflow.html"><i class="fa-solid fa-circle-check fa-fw"></i> ② 검수·승인</a>
+  <a href="00_canvas-main.html"><i class="fa-solid fa-diagram-project fa-fw"></i> ③ 연결</a>
+  <a href="11_dry-run.html"><i class="fa-solid fa-flask fa-fw"></i> ④ 사전 테스트</a>
+  <a href="18_system-settings.html"><i class="fa-solid fa-sliders fa-fw"></i> 시스템 설정</a>
+
+  <div class="nav-divider"></div>
+  <a href="13_answer-logic.html"><i class="fa-solid fa-diagram-project fa-fw"></i> AI 답변 로직</a>
+  <a href="14_answer-logic-guide.html"><i class="fa-solid fa-book-open fa-fw"></i> AI 답변 생성 예시</a>
+  <a href="17_system-data-guide.html"><i class="fa-solid fa-network-wired fa-fw"></i> 데이터 연결 구조</a>
+  <a href="15_aio-guide.html"><i class="fa-solid fa-globe fa-fw"></i> AIO 가이드</a>
+  <a href="12_coverage-code-table.html"><i class="fa-solid fa-table-list fa-fw"></i> 담보코드</a>
+
+  <div class="nav-divider"></div>
+  <a href="01_guide.html"><i class="fa-solid fa-clipboard-list fa-fw"></i> 업무 가이드</a>
+  <a href="00_design-system.html"><i class="fa-solid fa-palette fa-fw"></i> 디자인 시스템</a>
+</nav>
+
+  <main class="main">
+      <nav class="breadcrumb">
+    <a href="05_evidence-list.html"><i class="fa fa-arrow-left"></i> ② Evidence 목록</a>
+    <span class="breadcrumb-sep">›</span>
+    <span>신규 등록 / 편집</span>
+  </nav>
+<div class="page-header">
+      <h1>Evidence 카드 편집</h1>
+      <p>Rule 판단 기준의 근거 데이터를 등록합니다 · <a href="01_guide.html" style="color:var(--step-active);font-size:13px;text-decoration:none">업무 가이드 보기 →</a></p>
+    </div>
+
+    <div class="guide-box">
+      <div>
+        <span class="step-badge">등록 순서 ②/5</span>
+        <span class="routing-role">AI 답변 역할: 근거 참조 단계</span>
+      </div>
+      <h3>Evidence 카드</h3>
+      <p>공인 기관 통계를 등록해 Rule 임계값의 근거를 제공합니다. Rule 카드 저장 시 Evidence 1개 이상 연결이 필수이므로 Rule보다 먼저 만드세요.</p>
+      <p style="margin-top:8px;padding-top:8px;border-top:1px solid #C0D0F0;font-size:13px;color:var(--text-secondary)"><strong>공인 외부 통계 기반 단일 유형</strong> — 건강보험심사평가원·국민건강보험공단·통계청·금융감독원 등 공인 기관의 통계 수치를 직접 입력합니다.<br>
+      마이데이터(고객 보험 현황)와 프롬에이지(건강 위험도)는 상담 시 자동으로 제공되므로 Evidence 카드 등록이 불필요합니다.</p>
+      <p style="margin-top:8px;font-size:13px;color:var(--text-hint)">다음 단계: Evidence 등록 후 → Concept 카드 또는 Rule 카드를 등록하세요.</p>
+    </div>
+
+    <div class="two-col">
+      <!-- LEFT: Editor -->
+      <div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-header-left">
+              <span class="card-header-title">새 Evidence 카드</span>
+              <span class="badge badge-draft">임시저장</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>카드 ID <span style="color:var(--text-hint);font-weight:400;font-size:13px">(자동 생성)</span>
+              <span class="field-hint">저장 시 자동 부여됩니다. 다른 카드가 이 코드로 연결합니다</span>
+            </label>
+            <input class="form-control" type="text" value="EV001 (저장 시 자동 부여)" disabled style="background:#F4F4F2;color:var(--text-hint);font-family:monospace;font-size:13px;width:240px">
+          </div>
+
+          <div class="form-group">
+            <label for="evTitle">제목 <span style="color:var(--card-risk)">*</span>
+              <span class="field-hint">이 Evidence의 핵심 내용을 한 줄로</span>
+            </label>
+            <input class="form-control" id="evTitle" type="text" placeholder="예: 암 평균 입원 진료비 (심평원 2024)">
+          </div>
+
+          <div class="form-group">
+            <label for="evAgency">출처 기관 <span style="color:var(--card-risk)">*</span>
+              <span class="field-hint">통계를 발행한 공인 기관</span>
+            </label>
+            <select class="form-control" id="evAgency" onchange="onAgencyChange()">
+              <option value="">-- 기관 선택 --</option>
+              <option value="HIRA">건강보험심사평가원 (HIRA)</option>
+              <option value="NHIS">국민건강보험공단 (NHIS)</option>
+              <option value="KOSTAT">통계청</option>
+              <option value="FSS">금융감독원 (FSS)</option>
+              <option value="OTHER">기타 (직접 입력)</option>
+            </select>
+          </div>
+
+          <div class="form-group" id="agencyOtherSection" style="display:none">
+            <label for="evAgencyOther">기관명 <span style="color:var(--card-risk)">*</span></label>
+            <input class="form-control" id="evAgencyOther" type="text" placeholder="예: 보험개발원">
+          </div>
+
+          <div class="form-group">
+            <label for="evReport">보고서명 <span style="color:var(--card-risk)">*</span>
+              <span class="field-hint">통계를 인용한 공식 보고서 또는 자료명</span>
+            </label>
+            <input class="form-control" id="evReport" type="text" placeholder="예: 2024년 암 진료비 통계">
+          </div>
+
+          <div class="form-group">
+            <label for="evYear">기준 연도 <span style="color:var(--card-risk)">*</span></label>
+            <select class="form-control" id="evYear" style="width:200px">
+              <option value="">-- 연도 선택 --</option>
+              <option value="2025">2025년</option>
+              <option value="2024">2024년</option>
+              <option value="2023">2023년</option>
+              <option value="2022">2022년</option>
+              <option value="2021">2021년</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="evIndicator">지표명 <span style="color:var(--card-risk)">*</span>
+              <span class="field-hint">활용할 통계 지표의 명칭</span>
+            </label>
+            <input class="form-control" id="evIndicator" type="text" placeholder="예: 암 평균 입원 진료비">
+          </div>
+
+          <div class="form-group">
+            <label for="evValue">기준값 <span style="color:var(--card-risk)">*</span>
+              <span class="field-hint">단위 포함하여 입력. Rule 임계값 설정의 근거가 됩니다</span>
+            </label>
+            <input class="form-control" id="evValue" type="text" placeholder="예: 3,800만원 또는 68%">
+          </div>
+
+          <div class="form-group">
+            <label for="evUrl">출처 URL <span style="color:var(--text-hint);font-weight:400;font-size:13px">(선택)</span>
+              <span class="field-hint">공식 자료 링크 — 검수자가 원본 확인 시 활용</span>
+            </label>
+            <input class="form-control" id="evUrl" type="url" placeholder="https://...">
+          </div>
+
+          <div class="form-group">
+            <label for="evUsage">활용 방법 <span style="color:var(--card-risk)">*</span>
+              <span class="field-hint">어떤 Rule의 임계값 근거로 쓰이는지, 왜 이 수치가 기준인지 설명</span>
+            </label>
+            <textarea class="form-control" id="evUsage" rows="3" placeholder="예: T02 암투병생활비 부족형 Rule에서 암진단금 임계값(5,000만원) 설정의 근거. 심평원 기준 암 평균 치료비가 3,800만원이므로 여유율을 고려한 수치입니다."></textarea>
+          </div>
+
+          <div class="action-bar" style="padding-top:8px;border-top:1px solid var(--border);margin-top:8px">
+            <button class="btn btn-secondary" onclick="saveDraft()"><i class="fa-regular fa-floppy-disk"></i> 임시저장</button>
+            <button class="btn btn-primary" onclick="requestReview()"><i class="fa-solid fa-paper-plane"></i> 검수 요청</button>
+          </div>
+          <div class="status-guidance">
+            <i class="fa-solid fa-circle-info fa-fw"></i>
+            <span><strong>현재 상태: 임시저장</strong> — 출처 기관·보고서명·지표명·기준값·활용 방법을 입력한 후 [검수 요청]을 클릭하세요.</span>
+          </div>
+          <p class="field-hint" style="margin-top:12px"><i class="fa-solid fa-arrow-left" style="font-size:11px"></i> 이 카드는 Rule 카드에서 연결됩니다. 연결은 캔버스(③ 연결)에서 관리됩니다.</p>
+        </div>
+      </div>
+
+      <!-- RIGHT: Workflow Tracker + Summary -->
+      <div>
+        <div class="wf-tracker">
+  <div class="wf-title">이 카드의 작업 흐름</div>
+  <div class="wf-step">
+    <div class="wf-num wf-num-on">①</div>
+    <div class="wf-body">
+      <div class="wf-label wf-label-on">내용 입력 <span class="wf-tag">현재</span></div>
+      <div class="wf-hint">데이터 출처·유형·활용 방법을 입력하세요</div>
+    </div>
+  </div>
+  <div class="wf-step">
+    <div class="wf-num wf-num-off">②</div>
+    <div class="wf-body">
+      <div class="wf-label wf-label-off">검수 요청</div>
+      <div class="wf-hint">[검수 요청] 클릭 → 도메인 검수자에게 전달</div>
+    </div>
+  </div>
+  <div class="wf-step">
+    <div class="wf-num wf-num-off">③</div>
+    <div class="wf-body">
+      <div class="wf-label wf-label-off">승인완료</div>
+      <div class="wf-hint">검수자 승인 후 승인완료 상태 · <a href="09_review-workflow.html" style="font-size:12px;color:var(--step-active)">검수·승인 화면 →</a></div>
+    </div>
+  </div>
+  <div class="wf-step">
+    <div class="wf-num wf-num-off">④</div>
+    <div class="wf-body">
+      <div class="wf-label wf-label-off">라이브</div>
+      <div class="wf-hint">Rule 카드가 이 Evidence를 근거로 활용합니다 · <a href="00_canvas-main.html" style="font-size:12px;color:var(--step-active)">카드 캔버스에서 연결 확인 →</a></div>
+    </div>
+  </div>
+</div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const MOCK_DATA = {
+  evidences: [
+    {id:'EV001',title:'암 평균 입원 진료비 (심평원 2024)',type:'external',agency:'HIRA',indicator:'암 평균 입원 진료비',value:'3,800만원',linkedRules:['RU001'],status:'active'},
+    {id:'EV002',title:'65세 이상 간병보험 미가입률 (금감원 2024)',type:'external',agency:'FSS',indicator:'65세 이상 간병보험 미가입률',value:'68%',linkedRules:['RU004'],status:'active'},
+    {id:'EV003',title:'뇌졸중 평균 입원 진료비 (심평원 2024)',type:'external',agency:'HIRA',indicator:'뇌졸중 평균 입원 진료비',value:'2,100만원',linkedRules:['RU002'],status:'active'}
+  ]
+};
+
+const AGENCY_LABELS = {HIRA:'건강보험심사평가원',NHIS:'국민건강보험공단',KOSTAT:'통계청',FSS:'금융감독원',OTHER:'기타'};
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+function saveDraft() { showToast('임시 저장되었습니다'); }
+
+function onAgencyChange() {
+  const val = document.getElementById('evAgency').value;
+  document.getElementById('agencyOtherSection').style.display = val === 'OTHER' ? 'block' : 'none';
+}
+
+function requestReview() {
+  const title     = document.getElementById('evTitle').value.trim();
+  const agency    = document.getElementById('evAgency').value;
+  const report    = document.getElementById('evReport').value.trim();
+  const year      = document.getElementById('evYear').value;
+  const indicator = document.getElementById('evIndicator').value.trim();
+  const value     = document.getElementById('evValue').value.trim();
+  const usage     = document.getElementById('evUsage').value.trim();
+
+  if (!title)     { showToast('제목을 입력하세요'); return; }
+  if (!agency)    { showToast('출처 기관을 선택하세요'); return; }
+  if (agency === 'OTHER' && !document.getElementById('evAgencyOther').value.trim()) {
+    showToast('기관명을 입력하세요'); return;
+  }
+  if (!report)    { showToast('보고서명을 입력하세요'); return; }
+  if (!year)      { showToast('기준 연도를 선택하세요'); return; }
+  if (!indicator) { showToast('지표명을 입력하세요'); return; }
+  if (!value)     { showToast('기준값을 입력하세요'); return; }
+  if (!usage)     { showToast('활용 방법을 입력하세요'); return; }
+  showToast('검수 요청이 접수되었습니다');
+}
+</script>
+</body>
+</html>
