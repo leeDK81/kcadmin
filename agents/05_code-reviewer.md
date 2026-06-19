@@ -34,6 +34,9 @@
 - [ ] Playbook 편집기에서 `removeExtraAction(id)` 클릭 시 해당 섹션만 제거되는가?
 - [ ] Playbook 편집기에서 상담 연결 버튼 선택 시 Card ③ `scoring-inactive` → `scoring-active`로 토글되는가?
 - [ ] Playbook 목록에서 상태별 액션 버튼이 올바르게 렌더링되는가? (draft: 편집+삭제 / review: 요청취소 / approved: 라이브전환+편집 / active: 일시중지+편집 / paused: 재시작+편집)
+- [ ] Risk-type 편집기: 중요도 라디오 그룹 3개(높음/보통/낮음)가 있는가? 기본값 "보통(×2)"이 checked인가?
+- [ ] 09_review-workflow.html: 승인완료(approved) 카드 액션이 "캔버스에서 연결" 버튼인가? ("라이브 전환" 버튼이 없는가? — 라이브 전환은 사전 테스트 후 캔버스에서 처리)
+- [ ] 09_review-workflow.html: 승인요청(pending/review) 카드에 conn(연결정보) 데이터가 없는가?
 - [ ] Playbook 편집기 Card ②에 `standaloneGuide` textarea가 border-top 구분선으로 분리되어 있는가? (Standalone 답변 가이드 섹션)
 - [ ] Standalone 배너의 케이스 가이드 링크가 `14_answer-logic-guide.html`로 연결되어 있는가? (`17_playbook-answer-guide.html`은 삭제된 파일 — 연결 시 404 오류)
 - [ ] `standaloneGuide` textarea에 `oninput="updateStandaloneCounter()"` 핸들러가 있는가?

@@ -87,6 +87,9 @@ KC Admin Phase 1의 시각 언어를 정의하고, "처음 보는 개발자·운
 **2-card (① Risk-type, ② Evidence — 연결 패널 없음):**
 ```
 [.card ①] 기본정보 (.card-header + .section-title + .form-group×N)
+           Risk-type 편집기 전용 — form-group 순서: 카드ID → 유형명 → 설명 → 중요도(라디오) → 리드스코어
+           중요도 라디오: 높음(×3) / 보통(×2, 기본값) / 낮음(×1)
+           힌트: "다중 감지 시 노출 순서: ①중요도×Rule충족수 → ②충족Rule 조건수 합계 → ③카드코드 오름차순"
 [.card ②] 액션 (.action-bar + .status-guidance)
 ```
 

@@ -197,7 +197,7 @@
 
 | 파일 | 상태 | 코드·명칭 | 전용 컬럼 | 연결 컬럼 | 수정일 | 액션 | auto |
 |---|---|---|---|---|---|---|---|
-| 04 Risk-type | 100px | 200px | — | 참조Rule 320px | 110px | 80px | 설명 186px |
+| 04 Risk-type | 100px | 200px | 중요도 80px | 참조Rule 320px | 110px | 80px | 설명 106px |
 | 05 Evidence | 100px | 185px | 유형 120px | 참조Rule 280px | 110px | 80px | 설명 121px |
 | 06 Concept | 100px | 245px | Risk-type 200px + 동의어수 140px | — | 110px | 80px | 동의어 121px |
 | 07 Rule | 90px | 245px | Risk-type 160px | Evidence auto + Policy 180px | 110px | 80px | — |
@@ -282,6 +282,50 @@ function showToast(msg) {
 .gc-badge-approved { background:rgba(26,74,154,.1); color:var(--status-approved) }
 .gc-review-badge   { font-size:9px; font-weight:700; padding:1px 5px; border-radius:3px; background:rgba(184,119,34,.15); color:#B87722 }
 ```
+
+---
+
+## Risk-type 중요도 라디오 패턴
+
+다중 Risk-type이 동시 감지될 때 노출 순서를 결정하는 중요도 설정 UI.
+우선순위 공식: ①중요도 가중치(높음×3/보통×2/낮음×1) × Rule 충족 수 → ②충족 Rule 조건 수 합계 → ③카드코드 오름차순.
+
+```html
+<div class="form-group">
+  <label>중요도 <span style="color:var(--card-risk)">*</span>
+    <span class="field-hint">다중 Risk-type 동시 감지 시 노출 순서: ①중요도×Rule충족수 → ②충족Rule 조건수 합계 → ③카드코드 오름차순. 운영자는 이 중요도만 설정합니다.</span>
+  </label>
+  <div style="display:flex;gap:24px;margin-top:8px;padding:12px 14px;background:#FAFAF8;border:1px solid var(--border);border-radius:6px">
+    <label style="display:flex;align-items:center;gap:6px;cursor:pointer">
+      <input type="radio" name="priority" value="high">
+      <span style="color:#A32D2D;font-weight:700">높음</span>
+      <span style="color:var(--text-hint);font-size:12px">가중치 ×3</span>
+    </label>
+    <label style="display:flex;align-items:center;gap:6px;cursor:pointer">
+      <input type="radio" name="priority" value="mid" checked>
+      <span style="color:#BA7517;font-weight:700">보통</span>
+      <span style="color:var(--text-hint);font-size:12px">가중치 ×2 · 기본값</span>
+    </label>
+    <label style="display:flex;align-items:center;gap:6px;cursor:pointer">
+      <input type="radio" name="priority" value="low">
+      <span style="color:var(--text-hint);font-weight:700">낮음</span>
+      <span style="color:var(--text-hint);font-size:12px">가중치 ×1</span>
+    </label>
+  </div>
+</div>
+```
+
+적용 위치: `04_card-editor-risk-type.html` — 설명(desc) 필드와 리드스코어(leadScore) 필드 사이.
+
+### Risk-type 목록 중요도 배지 CSS
+
+```css
+.pri-high { background:rgba(163,45,45,.1); color:#A32D2D; font-weight:700; }
+.pri-mid  { background:rgba(186,117,23,.1); color:#BA7517; font-weight:700; }
+.pri-low  { background:rgba(152,155,162,.12); color:var(--text-hint); font-weight:400; }
+```
+
+목록 테이블 헤더에 "중요도" 컬럼(80px) 추가 — 코드·명칭 다음, 설명 이전.
 
 ---
 

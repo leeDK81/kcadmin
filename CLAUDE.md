@@ -31,7 +31,7 @@
 
 ```
 context/
-  project.md      ← KC Admin 개요, 카드 체계, 워크플로우, 파일 목록 25개 (v2)
+  project.md      ← KC Admin 개요, 카드 체계, 워크플로우, 파일 목록 26개 (v2)
   decisions.md    ← 확정된 설계 결정 (기획서와 충돌 시 이 파일 우선)
 
 guides/
@@ -43,7 +43,7 @@ guides/
 agents/           ← 역할별 전담 파일 (위 에이전트 구성 표 참조)
 CHANGELOG.md      ← 세션별 변경 이력 (에이전트가 읽을 필요 없음)
 mockups/          ← Phase 1 완료 산출물 24개 (참조용 — 신규 작업은 mockups_v2/ 사용)
-mockups_v2/       ← 현행 작업 폴더. 25개 HTML (캔버스 UX 기준)
+mockups_v2/       ← 현행 작업 폴더. 26개 HTML (캔버스 UX 기준)
 Data/             ← 원천 기획서 — 별도 지시 없이 접근 금지
 ```
 

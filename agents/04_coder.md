@@ -9,7 +9,7 @@
 UI 디자이너(03)의 설계 명세를 바탕으로 인터랙티브 HTML 목업을 구현한다.
 완성 기준: "처음 보는 개발자·운영자가 이 화면만 보고 다음 행동을 알 수 있는" 수준.
 
-파일 목록 25개 (mockups_v2/) → `context/project.md` 참조.
+파일 목록 26개 (mockups_v2/) → `context/project.md` 참조.
 Evidence 편집기 구현 → `agents/04a_coder-evidence.md` 전담.
 Playbook 편집기 구현 → `agents/04b_coder-playbook.md` 전담.
 
@@ -86,7 +86,8 @@ HTML 패턴 → `guides/ux-patterns.md` 참조.
 | 03_card-library | 필터 탭. 행 클릭 → 편집기 |
 | 04~08 편집기 | 임시저장 → 토스트. 검수 요청 → 승인요청 전환. 연결 상태: 읽기 전용 표시만 |
 | 07_rule | 조건 추가/삭제(3-source). 게이트: 내용 필드 충족 시 검수 요청 활성 |
-| 09_review | 카드 내용 통합 목록. 필터(전체/검수대기/처리완료). 승인→완료. 반려→사유 입력 모달 |
+| 09_review | 카드 내용 통합 목록. 필터(전체/검수대기/처리완료). 승인→완료. 반려→사유 입력 모달. 승인완료 상태 액션: "상세 보기" + "캔버스에서 연결" 버튼 (라이브 전환 버튼 없음 — 라이브 전환은 사전 테스트 후 캔버스에서 처리). 승인요청 상태 카드: 연결정보(conn) 없음 |
+| 18_system-settings | LLM Fallback 설정 폼. KC 미매칭(Case 3) 시 적용되는 제한 규칙. 저장 즉시 반영. KC 체인과 독립적으로 동작 |
 | 11_dry-run | Risk-type + 고객 선택 → 예상 라우팅(KC/생성형) + 조건 평가 상세 |
 | 16_playbook-list | 상태 필터 탭. 상태별 액션 버튼 → `agents/04b_coder-playbook.md` |
 | 16_card-editor-playbook | 키워드 Enter 추가/× 제거. updatePreview() 실시간. Card ③ 토글 → `agents/04b_coder-playbook.md` |
@@ -107,6 +108,7 @@ HTML 패턴 → `guides/ux-patterns.md` 참조.
 - [ ] Rule 편집기: Risk-type·Evidence 연결 — 읽기 전용 배지 표시 (선택 UI 없음)
 - [ ] Policy 편집기: Rule 연결 — 읽기 전용 배지 + "캔버스에서 변경" 버튼 (선택 UI 없음)
 - [ ] Risk-type·Evidence·Playbook 편집기: outgoing 연결 UI 없음
+- [ ] Risk-type 편집기: 중요도 라디오 그룹 (높음 ×3 / 보통 ×2 기본값 / 낮음 ×1) — 설명 필드와 리드스코어 필드 사이에 위치. 힌트: "다중 Risk-type 동시 감지 시 노출 순서: ①중요도×Rule충족수 → ②충족Rule 조건수 합계 → ③카드코드 오름차순"
 - [ ] 편집기 연결 카드: "캔버스에서 변경" 버튼이 `00_canvas-main.html`로 링크됨
 
 **캔버스 (00_canvas-main.html)**

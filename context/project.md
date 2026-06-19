@@ -7,7 +7,7 @@
 ## KC Admin이란
 
 Clark AI가 정확한 KC(Knowledge Core) 기반 답변을 하기 위한 카드 등록·승인·관리 도구.
-목표: 개발자·운영자에게 전달 가능한 HTML 인터랙티브 목업 제작 (`mockups_v2/` 25개).
+목표: 개발자·운영자에게 전달 가능한 HTML 인터랙티브 목업 제작 (`mockups_v2/` 26개).
 
 - **KC Admin** = 운영자가 카드를 사전 등록·승인·관리하는 UI 도구 (이 목업)
 - **KC Engine(API)** = 런타임에 카드를 실행·참조하는 처리 엔진
@@ -104,7 +104,7 @@ CSS 변수값 → `guides/design-system.md` 참조.
 |---|---|---|---|
 | Case 1 | ✓ 매칭 | — | KC 구조화 답변 |
 | Case 2 | ✓ 매칭 | ✓ 감지 | KC 구조화 답변 + CTA 버튼 |
-| Case 3 | — 미매칭 | — | LLM 일반 생성형 답변 |
+| Case 3 | — 미매칭 | — | Fallback Policy 적용 제한 생성형 답변 (시스템 설정 제한 규칙 LLM 주입) |
 | Case 4 (Standalone) | — 미매칭 | ✓ 감지 | LLM 생성형(Standalone 가이드 주입) + CTA 버튼 |
 
 ---
@@ -125,7 +125,7 @@ Phase 1.5 이관: 리드 스코어링 (GA 수신 스펙 대기). Phase 2: 배정
 
 ---
 
-## 화면 파일 목록 (mockups_v2/ 25개)
+## 화면 파일 목록 (mockups_v2/ 26개)
 
 | 파일 | 화면 |
 |---|---|
@@ -153,6 +153,7 @@ Phase 1.5 이관: 리드 스코어링 (GA 수신 스펙 대기). Phase 2: 배정
 | 16_playbook-list.html | Playbook 목록 |
 | 16_card-editor-playbook.html | Playbook 편집기 |
 | 17_system-data-guide.html | KC 엔진 데이터 연결 구조 |
+| 18_system-settings.html | **LLM Fallback 시스템 설정** — Case 3 미매칭 시 답변 제한 규칙 (KC 체인과 독립, 저장 즉시 반영) |
 
 > 10_chain-visualizer.html: 파일은 존재하나 사이드바에서 제거됨 — v2에서 카드 캔버스로 대체
 
