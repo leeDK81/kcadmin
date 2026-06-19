@@ -61,8 +61,26 @@ Data/             ← 원천 기획서 — 별도 지시 없이 접근 금지
 
 ## 현재 상태 (2026-06-19)
 
-**전수 정합성 검사·수정 완료 (2026-06-19):**
-- 25개 파일 전수 검사 → Critical 9건·Warning 14건·Minor 8건 수정 완료
+**에이전트 학습 + 가이드 전면 업데이트 완료 (2026-06-19 세션 2):**
+- mockups_v2/ 최신 변경사항을 context/ + agents/ + guides/ 전체에 동기화
+- Risk-type 중요도 라디오 (높음×3/보통×2/낮음×1): 03·04·05·06·08 에이전트 + ux-patterns.md 반영
+- Risk-type 다중 감지 우선순위 3단계 공식 (①중요도×Rule충족수→②조건수합계→③코드 오름차순): 01·context/decisions.md 반영
+- 18_system-settings.html (LLM Fallback 시스템 설정, 26번째 파일): project.md·CLAUDE.md·02·04 에이전트 반영
+- Case 3: "LLM 일반 생성형" → "Fallback Policy 적용 제한 생성형": 01·02·project.md 반영
+- 검수·승인 흐름: 승인완료=캔버스에서연결(라이브전환 없음), 승인요청=연결정보없음: 02·04·05·08 에이전트 반영
+- 파일 수 25→26 전체 동기화 (CLAUDE.md·project.md·04_coder.md)
+
+**기능 개발 완료 (2026-06-19 세션 1):**
+- Risk-type 편집기: 중요도 라디오 필드 추가 (04_card-editor-risk-type.html)
+- Risk-type 목록: 중요도 컬럼(배지) 추가 (04_risk-type-list.html)
+- AI 답변 로직: Step 2-B 우선순위 공식 섹션 추가 (13_answer-logic.html)
+- 검수·승인: 승인완료 "라이브 전환" 버튼 제거 → "캔버스에서 연결" 버튼 (09_review-workflow.html)
+- 검수·승인: 승인요청 카드 conn 데이터 제거 (09_review-workflow.html)
+- Playbook 목록: "Playbook 등록" → "신규 등록" 버튼 텍스트 통일 (16_playbook-list.html)
+- context/decisions.md: Risk-type 노출 우선순위 확정 섹션 추가
+
+**전수 정합성 검사·수정 완료 (2026-06-19 세션 1):**
+- 26개 파일 전수 검사 → Critical 9건·Warning 14건·Minor 8건 수정 완료
 - 6단계 상태 모델 확정: draft/review/approved/active/paused/rejected (context/project.md 반영)
 - 공식 엣지 타입 2종 확정: pending(점선 파랑 #1A4A9A) / active(실선 초록 #0F6E56). crossCluster 폐기
 - EV004 전면 교체: "갱신형 납입 부담(금감원 2023)" → "고혈압 유병률(HIRA 2024)" — 5개 파일 일괄 수정
@@ -125,3 +143,73 @@ Data/             ← 원천 기획서 — 별도 지시 없이 접근 금지
    - 캔버스 작업 → `context/decisions.md` (v2 캔버스 UX 섹션)
 3. 작업 대상 폴더: **`mockups_v2/`** (mockups/ 아님)
 4. "시작해" 신호 대기
+
+---
+
+## 새 PC에서 작업 시작하기
+
+### 사전 설치 (최초 1회)
+
+```
+1. Node.js 18+ 설치  →  https://nodejs.org
+2. Vercel CLI 설치   →  npm install -g vercel
+3. Git 설치          →  https://git-scm.com
+4. Claude Code 설치  →  npm install -g @anthropic-ai/claude-code
+```
+
+### 프로젝트 복원
+
+**방법 A — GitHub에서 클론 (권장, 항상 최신):**
+```bash
+git clone https://github.com/leeDK81/kcadmin.git KC_Admin
+cd KC_Admin
+```
+
+**방법 B — 폴더 복사:**
+```bash
+# 기존 PC에서 폴더 전체를 USB / 공유 드라이브로 복사
+# 새 PC에서 원하는 경로에 붙여넣기
+cd KC_Admin
+git remote set-url origin https://github.com/leeDK81/kcadmin.git
+```
+
+### Vercel 연결 (새 PC 최초 1회)
+
+```bash
+vercel login          # 브라우저 인증
+vercel link           # 프로젝트 선택: kris-2792s-projects/kcadmin
+```
+
+### Claude Code 시작
+
+```bash
+# KC_Admin 폴더에서 실행
+claude
+```
+
+Claude Code가 CLAUDE.md를 자동으로 읽어 컨텍스트를 복원한다.
+
+### 작업 → 배포 루틴
+
+```bash
+# 1. 파일 수정 후 커밋 & 푸시
+git add <파일>
+git commit -m "..."
+git push origin main
+
+# 2. Vercel alias 업데이트 (push마다 실행 필요)
+#    최신 배포 URL 확인
+vercel ls --scope kris-2792s-projects
+
+#    alias 갱신 (URL 부분만 교체)
+vercel alias set <최신배포URL>.vercel.app kc-admin-v2.vercel.app
+```
+
+> **주의:** `git push` 후 Vercel이 자동 배포하지만 `kc-admin-v2.vercel.app` alias는 자동으로 최신을 따라가지 않는다. 매 push 후 `vercel alias set` 을 수동으로 실행해야 한다.
+
+### 배포 URL
+
+| 구분 | URL |
+|---|---|
+| 고정 alias (공유용) | https://kc-admin-v2.vercel.app/mockups_v2/ |
+| GitHub 저장소 | https://github.com/leeDK81/kcadmin |
