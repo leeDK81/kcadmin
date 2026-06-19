@@ -324,7 +324,7 @@ function renderData(filter) {
       : d.state === 'approved'
         ? '<div class="action-group">'
             + '<a href="' + d.href + '" class="btn btn-sm btn-secondary"><i class="fa fa-eye"></i> 상세 보기</a>'
-            + '<button class="btn btn-sm btn-primary" onclick="doGoLive(\'' + d.id + '\',\'' + d.name.replace(/'/g, "\\'") + '\')" title="캔버스 연결·테스트 완료 후 라이브 전환"><i class="fa fa-rocket"></i> 라이브 전환</button>'
+            + '<a href="00_canvas-main.html" class="btn btn-sm btn-secondary" style="color:var(--status-approved)"><i class="fa fa-diagram-project"></i> 캔버스에서 연결</a>'
             + '</div>'
         : '<a href="' + d.href + '" class="btn btn-sm btn-secondary"><i class="fa fa-eye"></i> 상세 보기</a>';
 
@@ -347,11 +347,7 @@ function filterData(f, btn) {
 }
 
 function doApprove(id, name) {
-  showToast('✅ ' + id + ' — 승인완료. 카드 캔버스에서 연결 구성 후 라이브 전환하세요.');
-}
-
-function doGoLive(id, name) {
-  showToast('🚀 ' + id + ' — 라이브 전환 완료. Clark AI에 즉시 반영되었습니다.');
+  showToast('✅ ' + id + ' — 승인완료. 카드 캔버스에서 연결 구성 후 사전 테스트를 진행하세요.');
 }
 
 function openReject(id, name) {
