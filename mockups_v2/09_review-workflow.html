@@ -208,22 +208,12 @@ const PENDING_DATA = [
   {
     id:'CO003', name:'암진단 위험군', type:'concept', typeLabel:'Concept',
     reqDate:'2026-05-14', state:'pending', doneDate:'',
-    href:'06_card-editor-concept.html',
-    conn:{
-      badgeClass:'badge-conn-cr', label:'Concept → Risk-type',
-      from:{color:'var(--card-concept)', text:'CO003 암진단 위험군'},
-      to:{color:'var(--card-risk)', text:'T02 암투병생활비 부족형'}
-    }
+    href:'06_card-editor-concept.html', conn:null
   },
   {
     id:'POL002', name:'보험업법 보험료 산출 관련 고지', type:'policy', typeLabel:'Policy',
     reqDate:'2026-05-13', state:'pending', doneDate:'',
-    href:'08_card-editor-policy.html', compliance:true,
-    conn:{
-      badgeClass:'badge-conn-pr', label:'Policy → Rule',
-      from:{color:'var(--card-policy)', text:'POL002 보험업법 고지'},
-      to:{color:'var(--card-rule)', text:'RU003 심혈관 보장 미흡'}
-    }
+    href:'08_card-editor-policy.html', compliance:true, conn:null
   },
   {
     id:'EV001', name:'암 평균 입원 진료비 (심평원 2024)', type:'evidence', typeLabel:'Evidence',
