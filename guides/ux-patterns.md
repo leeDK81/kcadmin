@@ -74,10 +74,11 @@
   <a href="16_playbook-list.html" style="padding-left:20px"><i class="fa-solid fa-bullseye fa-fw"></i> ⑥ Playbook</a>
   <span class="nav-locked" style="padding-left:20px"><i class="fa-solid fa-lock fa-fw"></i> ⑦ Case 🔒</span>
   <div class="nav-divider"></div>
-  <a href="10_chain-visualizer.html"><i class="fa-solid fa-diagram-project fa-fw"></i> 카드 연결 현황</a>
+  <a href="00_canvas-main.html"><i class="fa-solid fa-diagram-project fa-fw"></i> 카드 연결</a>
   <div class="nav-divider"></div>
   <a href="09_review-workflow.html"><i class="fa-solid fa-check-double fa-fw"></i> 검수·승인</a>
   <a href="11_dry-run.html"><i class="fa-solid fa-flask fa-fw"></i> 사전 테스트</a>
+  <a href="18_system-settings.html"><i class="fa-solid fa-sliders fa-fw"></i> 시스템 설정</a>
   <div class="nav-divider"></div>
   <a href="00_design-system.html"><i class="fa-solid fa-palette fa-fw"></i> 디자인 시스템</a>
   <a href="13_answer-logic.html"><i class="fa-solid fa-sitemap fa-fw"></i> AI 답변 생성 로직</a>
@@ -157,17 +158,20 @@
 </div>
 ```
 
-### 연결 선택 UI (라이브 카드만 선택 가능)
+### 연결 선택 UI (approved(승인완료) 및 active(라이브) 카드 연결 가능)
 
 ```html
 <select class="form-control">
   <optgroup label="🟢 라이브 (연결 가능)">
-    <option value="EV001">EV001 ICIS 암진단 담보 미보유 통계</option>
+    <option value="EV001">EV001 암 평균 입원 진료비 (심평원 2024)</option>
   </optgroup>
-  <optgroup label="⏳ 승인요청 (승인 후 연결 가능)" disabled>
-    <option disabled>EV004 프롬에이지 암위험도 등급 분포</option>
+  <optgroup label="✔ 승인완료 (연결 가능 — 준비 연결)">
+    <option value="EV004">EV004 고혈압 유병률 (HIRA 2024)</option>
   </optgroup>
-  <optgroup label="📝 임시저장 (승인 후 연결 가능)" disabled>
+  <optgroup label="⏳ 승인요청 (연결 불가)" disabled>
+    <option disabled>EV005 승인 대기 중</option>
+  </optgroup>
+  <optgroup label="📝 임시저장 (연결 불가)" disabled>
   </optgroup>
 </select>
 ```
@@ -213,6 +217,73 @@ function showToast(msg) {
 ```html
 <div class="toast" id="toast"></div>
 ```
+
+## 캔버스 UX 패턴 (00_canvas-main.html)
+
+### 피커 패널 컬럼 헤더
+
+```html
+<div class="picker-col">
+  <div class="picker-col-hd">CONCEPT</div>
+  <!-- 카드 아이템 반복 -->
+  <div class="picker-card" onclick="selectCard('CN001')">
+    <div class="pc-title">암보험 보장 내용</div>
+    <div class="pc-id">CN001</div>
+  </div>
+</div>
+```
+
+### 그리드 섹션 헤더 (연결됨 / 연결 가능)
+
+```html
+<!-- 연결됨 (초록) -->
+<div class="gc-section-hd sh-connected">
+  <i class="fa-solid fa-link" style="font-size:9px"></i> 연결됨
+  <span style="font-weight:400;opacity:.7">(N)</span>
+</div>
+
+<!-- 연결 가능 (파란) -->
+<div class="gc-section-hd sh-available">
+  <i class="fa-solid fa-circle-plus" style="font-size:10px"></i> 연결 가능
+  <span style="font-weight:400;opacity:.7">(N)</span>
+</div>
+```
+
+### 그리드 카드 상태 배지
+
+```html
+<!-- active 카드 -->
+<span class="gc-status-badge gc-badge-live">라이브</span>
+
+<!-- review 카드 -->
+<span class="gc-status-badge gc-badge-approved">승인완료</span>
+
+<!-- review 엣지 경로 배지 -->
+<span class="gc-review-badge">연결 검수중</span>
+```
+
+### 연결 추가 버튼 (연결 가능 카드)
+
+```html
+<button class="btn gc-btn-connect" onclick="addConnection('RU001','EV004')">
+  <i class="fa-solid fa-circle-plus"></i> 연결 추가
+</button>
+```
+
+### 캔버스 전용 CSS 클래스
+
+```css
+.gc-section-hd.sh-connected { color:var(--status-active); background:rgba(15,110,86,.06) }
+.gc-section-hd.sh-available { color:var(--step-active); background:rgba(26,58,107,.07) }
+.gc-card.gc-available { border-style:solid!important; border-width:1.5px!important; background:rgba(26,74,154,.04) }
+.gc-btn-connect { border-color:var(--step-active); background:var(--step-active); color:#fff; width:100%; justify-content:center }
+.gc-status-badge { font-size:9px; font-weight:700; padding:1px 6px; border-radius:3px; flex-shrink:0; margin-left:auto }
+.gc-badge-live     { background:rgba(15,110,86,.1); color:var(--status-active) }
+.gc-badge-approved { background:rgba(26,74,154,.1); color:var(--status-approved) }
+.gc-review-badge   { font-size:9px; font-weight:700; padding:1px 5px; border-radius:3px; background:rgba(184,119,34,.15); color:#B87722 }
+```
+
+---
 
 ## 폰트·CSS 변수 (guides/design-system.md 참조)
 

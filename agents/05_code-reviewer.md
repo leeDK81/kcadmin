@@ -82,22 +82,18 @@
 - [ ] 예시 데이터가 기획서의 실제 값을 사용하는가? (T01~T08 ID·명칭, 실제 담보코드 등)
 - [ ] 임의로 만든 데이터(예: "테스트 카드", "Card123")가 없는가?
 
-### F. Evidence 구조 (데이터 출처 기반)
+### F. Evidence 구조 (공인 외부 통계 기반)
 
-- [ ] Evidence 유형 select: **2개 옵션** (보닥통계/프롬에이지) — `mydata`, `disease` 옵션 없어야 함
-- [ ] Evidence staticSection: 핵심 통계 수치 수동 입력 필드가 없는가? (수치 직접 입력 없음)
-- [ ] Evidence staticSection: 담보코드 select, 조회지표 select 있는가?
-- [ ] 조회지표 select: optgroup 2depth 구조 (비율 계열 4종 / 금액 계열 3종 / 기간 계열 1종) — 총 8종
-- [ ] 보닥통계 기반: 모집단 라디오 (전체/세그먼트) 있는가?
-- [ ] 보닥통계 세그먼트 지정 시: 연령대 + 성별 select 노출되고 필수 처리되는가?
-- [ ] 보닥통계 추가축: #extraSegList + #addExtraSegBtn 구조인가? (단일 select 아님)
-- [ ] 보닥통계 추가축: 행 동적 추가(addExtraSegment) + 삭제(removeExtraSegment) + 렌더(renderExtraSegments) 함수 있는가?
-- [ ] 보닥통계 추가축: 이미 선택된 항목이 다른 행에서 제외되는가? (중복 방지)
-- [ ] 보닥통계 추가축: 5개 모두 선택 시 "추가" 버튼 숨겨지는가?
-- [ ] 추가축 EXTRA_SEG_FIELDS에 나이·성별이 없는가? (필수 연령+성별 축과 중복 제외)
-- [ ] 프롬에이지 기반: 출력 형식 체크박스 2개(`pFmtAbsolute` / `pFmtPercentile`) 있는가? 절대값 기본 checked
-- [ ] 프롬에이지 기반: 최소 1개 필수 유효성 검사가 requestReview()에 있는가?
-- [ ] 프롬에이지 기반: Evidence ID `hidden#pEvId` 필드가 있고 화면에 노출되지 않는가?
+- [ ] Evidence 유형 select 없는가? (단일 유형 — select 제거됨, stat/fromage 옵션 없어야 함)
+- [ ] 출처 기관 select: 5개 옵션 (HIRA/NHIS/KOSTAT/FSS/OTHER) 있는가?
+- [ ] OTHER 선택 시 기관명 직접 입력 필드(#agencyOtherSection) 노출되는가?
+- [ ] 보고서명·기준연도·지표명·기준값 필드 모두 있는가?
+- [ ] 기준값: 단위 포함 자유 입력 필드인가? (수치만 입력 강요하는 구조 아님)
+- [ ] 출처 URL: 선택사항 표기 있는가?
+- [ ] staticSection / promageSection / metricSection / populationSection 없는가?
+- [ ] N-segment 빌더 함수(addExtraSegment 등) 없는가?
+- [ ] MOCK_DATA Evidence type: 'external' (stat/fromage 아님)
+- [ ] requestReview(): 7개 필수 필드(제목·기관·보고서명·연도·지표명·기준값·활용방법) 검증하는가?
 
 ---
 

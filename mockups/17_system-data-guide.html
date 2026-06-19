@@ -204,38 +204,38 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
     </div>
   </div>
 
-  <!-- 섹션 2: KC 엔진이 상시 보유하는 통계 데이터 -->
+  <!-- 섹션 2: KC 엔진이 상시 보유하거나 자동 전달받는 데이터 -->
   <div class="section">
-    <div class="section-title"><i class="fa-solid fa-database fa-fw" style="color:var(--card-evidence)"></i> KC 엔진이 항상 가지고 있는 데이터</div>
-    <p style="font-size:14px;color:var(--text-secondary);margin-bottom:16px;line-height:1.6">Evidence 카드의 근거 데이터는 유형에 따라 소스가 다릅니다. <strong>보닥통계·프롬에이지</strong>는 KC 엔진이 실시간으로 자동 조회하므로 운영자가 수치를 직접 입력하지 않아도 됩니다. <strong>약관 면책사항</strong>은 보험사 약관 크롤링 파이프라인이 약관 DB를 자동 관리하며, Rule 카드의 "약관 DB 연동" 플래그 활성화 시 담보코드 기준으로 자동 조회됩니다 — KC Admin에서 별도 Evidence 카드를 등록하지 않아도 됩니다.</p>
+    <div class="section-title"><i class="fa-solid fa-database fa-fw" style="color:var(--card-evidence)"></i> KC 엔진이 자동으로 활용하는 데이터</div>
+    <p style="font-size:14px;color:var(--text-secondary);margin-bottom:16px;line-height:1.6"><strong>마이데이터·프롬에이지·프로파일</strong>은 상담 시 자동으로 KC 엔진에 전달됩니다 — Evidence 카드로 별도 등록하지 않아도 됩니다. <strong>공인 외부 통계</strong>(심평원·건보공단 등)는 KC 엔진이 자동 접근할 수 없으므로 운영자가 Evidence 카드로 직접 등록해야 합니다. <strong>약관 DB</strong>는 크롤링 파이프라인이 자동 관리하며, Rule 카드의 "약관 DB 연동" 플래그 활성화 시 자동 조회됩니다.</p>
     <div class="stat-grid">
 
       <div class="stat-card">
-        <div class="stat-card-icon" style="color:var(--card-evidence)"><i class="fa-solid fa-chart-bar"></i></div>
-        <div class="stat-card-title">보닥 마이데이터 통계</div>
+        <div class="stat-card-icon" style="color:var(--card-concept)"><i class="fa-solid fa-shield-halved"></i></div>
+        <div class="stat-card-title">마이데이터 + 프롬에이지 + 프로파일 <span style="font-size:12px;font-weight:400;color:var(--text-hint)">자동 전달</span></div>
         <ul class="stat-card-list">
-          <li><i class="fa-solid fa-circle fa-fw" style="font-size:6px;color:var(--card-evidence);margin-top:5px"></i>보닥 전체 사용자의 담보별 가입 현황</li>
-          <li><i class="fa-solid fa-circle fa-fw" style="font-size:6px;color:var(--card-evidence);margin-top:5px"></i>담보 금액 분포 (평균·중위·소액 가입 비율 등)</li>
-          <li><i class="fa-solid fa-circle fa-fw" style="font-size:6px;color:var(--card-evidence);margin-top:5px"></i>갱신형/비갱신형 비율</li>
-          <li><i class="fa-solid fa-circle fa-fw" style="font-size:6px;color:var(--card-evidence);margin-top:5px"></i>납입 기간 분포</li>
+          <li><i class="fa-solid fa-circle fa-fw" style="font-size:6px;color:var(--card-concept);margin-top:5px"></i>마이데이터 — 보험 담보 종류·보장 금액·납입 방식</li>
+          <li><i class="fa-solid fa-circle fa-fw" style="font-size:6px;color:var(--card-concept);margin-top:5px"></i>프롬에이지 — 건강 위험도 등급 (위험/주의/양호)</li>
+          <li><i class="fa-solid fa-circle fa-fw" style="font-size:6px;color:var(--card-concept);margin-top:5px"></i>프로파일 — 나이·성별·결혼여부·거주지 등</li>
         </ul>
-        <div class="stat-card-note">특정 개인의 정보가 아닌, 전체 사용자 집계 통계입니다.</div>
+        <div class="stat-card-note">상담 시 실시간 전달. Rule 조건 판단에 직접 활용. Evidence 카드 등록 불필요.</div>
       </div>
 
-      <div class="stat-card">
-        <div class="stat-card-icon" style="color:var(--card-playbook)"><i class="fa-solid fa-heartbeat"></i></div>
-        <div class="stat-card-title">프롬에이지 통계</div>
+      <div class="stat-card" style="border-color:rgba(26,122,74,.3)">
+        <div class="stat-card-icon" style="color:var(--card-evidence)"><i class="fa-solid fa-building-columns"></i></div>
+        <div class="stat-card-title">공인 외부 통계 <span style="font-size:12px;font-weight:400;color:var(--card-evidence)">Evidence 카드 등록 필요</span></div>
         <ul class="stat-card-list">
-          <li><i class="fa-solid fa-circle fa-fw" style="font-size:6px;color:var(--card-playbook);margin-top:5px"></i>보닥 프롬에이지 전체 측정자의 건강 위험도 분포</li>
-          <li><i class="fa-solid fa-circle fa-fw" style="font-size:6px;color:var(--card-playbook);margin-top:5px"></i>생체나이 백분위 분포 (동년배 비교 기준)</li>
-          <li><i class="fa-solid fa-circle fa-fw" style="font-size:6px;color:var(--card-playbook);margin-top:5px"></i>암·심혈관·당뇨 등 질환별 위험도 분포</li>
+          <li><i class="fa-solid fa-circle fa-fw" style="font-size:6px;color:var(--card-evidence);margin-top:5px"></i>HIRA(심평원) — 암·뇌졸중·심혈관 평균 입원 진료비</li>
+          <li><i class="fa-solid fa-circle fa-fw" style="font-size:6px;color:var(--card-evidence);margin-top:5px"></i>NHIS(건보공단) — 발병률·5년 생존율·의료이용 통계</li>
+          <li><i class="fa-solid fa-circle fa-fw" style="font-size:6px;color:var(--card-evidence);margin-top:5px"></i>KOSTAT(통계청) — 사망원인·기대여명</li>
+          <li><i class="fa-solid fa-circle fa-fw" style="font-size:6px;color:var(--card-evidence);margin-top:5px"></i>FSS(금감원) — 보험계약 유지율·미가입률 통계</li>
         </ul>
-        <div class="stat-card-note">개인 측정값이 아닌, 전체 측정자 집계 통계입니다. 개인의 등급은 상담 시 별도로 전달됩니다.</div>
+        <div class="stat-card-note">KC 엔진이 자동 접근 불가 — 운영자가 출처·지표·기준값을 Evidence 카드에 직접 입력해야 합니다.</div>
       </div>
 
       <div class="stat-card">
         <div class="stat-card-icon" style="color:#BA7517"><i class="fa-solid fa-file-contract"></i></div>
-        <div class="stat-card-title">약관 DB</div>
+        <div class="stat-card-title">약관 DB <span style="font-size:12px;font-weight:400;color:var(--text-hint)">파이프라인 자동 관리</span></div>
         <ul class="stat-card-list">
           <li><i class="fa-solid fa-circle fa-fw" style="font-size:6px;color:#BA7517;margin-top:5px"></i>보험사별 담보 약관 원문 (크롤링 파이프라인 자동 수집)</li>
           <li><i class="fa-solid fa-circle fa-fw" style="font-size:6px;color:#BA7517;margin-top:5px"></i>담보별 주요 면책 항목 (면책기간·기왕증·특정 치료 제한 등)</li>
@@ -267,16 +267,10 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
           <td>상담 시 실시간</td>
         </tr>
         <tr>
-          <td><span class="badge badge-evidence">② Evidence</span> — 보닥통계</td>
-          <td>보닥 마이데이터 집계 통계</td>
-          <td>"같은 나이대의 몇 %가 이 담보를 보유하지 않았다"는 근거 수치 제공</td>
-          <td>KC 엔진 상시 보유 + 상담 시 조회</td>
-        </tr>
-        <tr>
-          <td><span class="badge badge-evidence">② Evidence</span> — 프롬에이지</td>
-          <td>프롬에이지 집계 통계 + 개인 위험도 등급</td>
-          <td>"동년배 상위 20%", "대사나이 +5세" 등 건강 근거 수치 제공</td>
-          <td>KC 엔진 상시 보유 + 개인 등급 상담 시</td>
+          <td><span class="badge badge-evidence">② Evidence</span> — 공인 외부 통계</td>
+          <td>HIRA·NHIS·KOSTAT·FSS 등 공인 기관 통계 (운영자 직접 입력)</td>
+          <td>"암 평균 입원 진료비 3,800만원(심평원 2024)" 등 Rule 판단의 금액·비율 기준 근거 제공. 금소법상 설명 의무 이행 근거로 활용</td>
+          <td>운영자가 Evidence 카드 등록 시 고정값 (연 1회 이상 갱신 권장)</td>
         </tr>
         <tr style="background:#FFF8F8">
           <td><span class="badge badge-rule">④ Rule</span> — <span style="color:#7A5A00;font-weight:700">약관 DB 연동 플래그</span></td>
@@ -353,15 +347,15 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
     <div class="caution-grid">
 
       <div class="caution-card">
-        <div class="caution-icon" style="color:var(--card-evidence)"><i class="fa-solid fa-database"></i></div>
-        <div class="caution-title">유의 ① Evidence 수치는 직접 입력하지 않습니다</div>
-        <div class="caution-body">Evidence 카드에 담보코드와 조회지표만 지정하면, KC 엔진이 상담이 진행될 때 보닥 통계를 자동으로 조회해 답변에 활용합니다. 운영자가 "미보유율 64%" 같은 수치를 직접 입력하지 않아도 됩니다. 수치는 항상 최신 통계 기준으로 자동 산출됩니다.</div>
+        <div class="caution-icon" style="color:var(--card-evidence)"><i class="fa-solid fa-building-columns"></i></div>
+        <div class="caution-title">유의 ① Evidence에는 공인 기관 통계를 직접 입력해야 합니다</div>
+        <div class="caution-body">Evidence 카드는 KC 엔진이 자동으로 접근할 수 없는 공인 외부 통계 전용입니다. 운영자가 출처 기관·보고서명·기준 연도·지표명·기준값을 직접 입력해야 합니다. 마이데이터·프롬에이지는 상담 시 자동 전달되므로 별도 Evidence 카드 등록이 필요하지 않습니다.</div>
       </div>
 
       <div class="caution-card">
-        <div class="caution-icon" style="color:var(--card-playbook)"><i class="fa-solid fa-lock"></i></div>
-        <div class="caution-title">유의 ② 프롬에이지 Evidence 원본 수치는 내부 전용으로 자동 고정</div>
-        <div class="caution-body">건강 관련 데이터가 근거로 포함되는 프롬에이지 기반 Evidence는 공개범위가 "내부 전용"으로 자동 적용됩니다 — 운영자가 별도 설정할 필요 없습니다. 원본 수치가 외부 AI(AIO)에 색인되거나 외부에 공개되지 않도록 파이프라인 구현에서 반드시 검증해야 합니다 [§3-8].</div>
+        <div class="caution-icon" style="color:#BA7517"><i class="fa-solid fa-calendar-check"></i></div>
+        <div class="caution-title">유의 ② Evidence 통계는 기준 연도를 반드시 명시하고 주기적으로 갱신해야 합니다</div>
+        <div class="caution-body">공인 기관 통계는 연도별로 수치가 바뀝니다. Evidence 카드 등록 시 기준 연도를 명확히 입력하고, 신규 발표가 있을 때마다 카드를 업데이트해야 합니다. 1년 이상 경과한 통계를 근거로 사용하면 Clark 답변의 신뢰도가 하락합니다.</div>
       </div>
 
       <div class="caution-card">
@@ -373,7 +367,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
       <div class="caution-card">
         <div class="caution-icon" style="color:#BA7517"><i class="fa-solid fa-triangle-exclamation"></i></div>
         <div class="caution-title">유의 ④ Evidence 없는 Rule은 근거 없는 답변을 만듭니다</div>
-        <div class="caution-body">Rule에 Evidence가 연결되지 않아도 조건 판단 자체는 작동합니다. 단, 답변에서 근거 데이터 섹션이 빠지므로 "왜 이 보험이 부족한지"를 설명하는 통계 근거 없이 Clark이 권고만 하게 됩니다. 가능하면 Rule에는 관련 Evidence를 연결해 주세요.</div>
+        <div class="caution-body">Rule에 Evidence가 연결되지 않아도 조건 판단 자체는 작동합니다. 단, 답변에서 "왜 이 보험이 부족한지"를 설명하는 공인 통계 근거 섹션이 빠지므로 Clark이 권고만 하게 됩니다. Rule을 등록할 때 관련 공인 외부 통계 Evidence를 함께 연결해 주세요.</div>
       </div>
 
       <div class="caution-card" style="border-color:rgba(186,117,23,.3);grid-column:1/-1">
@@ -405,17 +399,17 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
         <i class="fa-solid fa-chevron-down faq-chevron"></i>
       </div>
       <div class="faq-a">
-        프롬에이지 데이터가 없으면 프롬에이지 조건이 포함된 Rule은 충족되지 않고, 프롬에이지 기반 Evidence도 출력되지 않습니다. 다만 마이데이터·프로파일 기반의 다른 카드들은 정상 작동합니다.
+        프롬에이지 데이터가 없으면 프롬에이지 조건이 포함된 Rule은 충족되지 않습니다. 다만 마이데이터·프로파일 기반의 다른 카드들은 정상 작동하며, 공인 외부 통계 기반 Evidence는 운영자가 미리 등록한 고정 데이터이므로 프롬에이지 유무와 관계없이 항상 참조됩니다.
       </div>
     </div>
 
     <div class="faq-item">
       <div class="faq-q" onclick="toggleFaq(this)">
-        Q3. KC 엔진이 보닥 통계를 가지고 있다면, 특정 사용자 정보도 알 수 있지 않나요?
+        Q3. Evidence 카드에 입력하는 공인 통계는 얼마나 자주 갱신해야 하나요?
         <i class="fa-solid fa-chevron-down faq-chevron"></i>
       </div>
       <div class="faq-a">
-        아닙니다. KC 엔진이 보유하는 통계는 전체 보닥 사용자의 집계 데이터로, 특정 개인을 식별하는 정보는 포함되지 않습니다. 개인의 보험 현황은 상담 시에만 해당 사용자의 데이터가 전달되며, 상담이 끝나면 저장하지 않습니다.
+        심평원·건보공단·통계청·금감원의 주요 통계는 보통 연 1회 발표됩니다. 신규 통계가 발표되면 해당 Evidence 카드의 기준 연도·기준값을 업데이트하고 검수 요청을 통해 재승인을 받아야 합니다. 1년 이상 경과한 통계를 계속 사용하면 Clark 답변의 신뢰도가 하락할 수 있습니다. Evidence 카드 목록에서 기준 연도를 확인하고 오래된 카드를 주기적으로 점검해 주세요.
       </div>
     </div>
 

@@ -6,164 +6,72 @@
 
 > agents/04_coder.md의 서브에이전트. Evidence 카드 편집기(05_card-editor-evidence.html) 구현·수정 시 전담 참조.
 
-## Evidence 아키텍처 (2026-06-10 확정)
+## Evidence 아키텍처 (2026-06-17 재확정)
 
-**핵심 원칙:** 수치 직접 입력 없음. 담보코드·조회지표·모집단만 지정 → KC Engine이 상담 시 자동 조회.
+**단일 유형: 공인 외부 통계 기반** (code: `external`)
 
-**유형 2종** (질병코드 기반 → `12_coverage-code-table.html` 이관):
-- 보닥통계 기반 — 전체 또는 세그먼트 모집단 기준 통계
-- 프롬에이지 기반 — 메디에이지 건강검진 분석
+KC 엔진이 자동 접근 불가한 공인 기관 통계를 운영자가 직접 입력하는 카드.
+마이데이터·프롬에이지는 상담 시 자동 전달 → Evidence 카드 불필요. Evidence = 외부 통계 전용.
 
-## 유형 선택 (select#evType)
+유형 select 없음 (단일 유형). 모든 필드가 단일 섹션에 노출.
 
-```html
-<select class="form-control" id="evType" onchange="handleTypeChange()">
-  <option value="">-- 유형 선택 --</option>
-  <option value="stat">보닥통계 기반</option>
-  <option value="fromage">프롬에이지 기반</option>
-</select>
-```
-
-optgroup 분류 없음 (1depth 플랫 구조, 3개 옵션).
-
-## 폼 섹션 구조
-
-### #staticSection (stat 전용)
+## 편집기 필드 구조
 
 ```
-[데이터 출처 안내 배너 — banner-info]
+[카드 ID — disabled, 자동생성 안내]
 [제목 input — 필수]
-[담보코드 select — 필수] (guides/insurance-domain.md 9종)
-[#metricSection] — 조회지표 select (optgroup 2depth)
-  비율 계열(%): 미보유율 / 보유율 / 소액가입비율 / 갱신형비율
-  금액 계열(원): 평균보장금액 / 중위보장금액 / 평균월보험료
-  기간 계열(년): 평균납입기간
-[#populationSection] — 모집단 라디오
-  ○ 전체 보닥 사용자 (value="all")
-     → #allPopInfo: "전체 보닥 사용자 기준" 안내 div
-  ● 세그먼트 지정 (value="segment")
-     → #segmentSection 노출:
-          [연령대 select — 필수] [성별 select — 필수]
-          [#extraSegmentSection — 선택사항, N개 동적 추가]
-               #extraSegList: 추가된 행 렌더링 영역
-               각 행: [프로파일 항목 select] [값 select] [× 삭제 버튼] (3-column grid)
-               항목: 결혼여부 / 자녀유무 / 직업위험도 / 출산예정 / 거주지 (나이·성별 제외)
-               이미 선택된 항목은 다른 행 드롭다운에서 제외 (중복 불가)
-               모든 5개 항목 선택 시 #addExtraSegBtn 숨김
-[활용방법 textarea — 필수]
-```
-
-### #promageSection (fromage 전용)
-
-```
-[§3-8 민감정보 경고 배너 — banner-warn]
-[개별 고객 데이터 안내 배너 — banner-info]
-[제목 input — 필수]
-[카테고리 select#pCat — 암위험도/생체나이/질병위험도/의료비예측]
-[항목 select#pField — 카테고리 선택 시 동적 로드]
-[출력 형식 checkbox — 필수, 최소 1개]
-  ☑ 절대값   — "대사나이 실제 나이 대비 +5세" (개인 Promage 수치)
-  ☐ 백분위   — "동년배 상위 20%" (보닥 Promage 전체 분포, KC Engine 산출)
-  → id: pFmtAbsolute / pFmtPercentile (기본값: 절대값 checked)
-[hidden#pEvId — 카테고리·항목 선택 시 자동생성, UI 비노출 (백단 처리)]
+[출처 기관 select — 필수]
+  options: HIRA(건강보험심사평가원) / NHIS(국민건강보험공단) / KOSTAT(통계청) / FSS(금융감독원) / OTHER(기타)
+  OTHER 선택 시 → #agencyOtherSection 노출 (기관명 직접 입력 — 필수)
+[보고서명 input — 필수]
+[기준 연도 select — 필수] (2025/2024/2023/2022/2021)
+[지표명 input — 필수]
+[기준값 input — 필수] (단위 포함, 예: 3,800만원, 68%)
+[출처 URL input — 선택]
+[활용 방법 textarea — 필수]
+[action-bar: 임시저장 / 검수 요청]
+[status-guidance]
 ```
 
 ## JS 함수
 
-### handleTypeChange()
+### onAgencyChange()
 ```js
-function handleTypeChange() {
-  const val = document.getElementById('evType').value;
-  document.getElementById('typePrompt').style.display     = val ? 'none' : 'block';
-  document.getElementById('staticSection').style.display  = (val && val !== 'fromage') ? 'block' : 'none';
-  document.getElementById('promageSection').style.display = val === 'fromage' ? 'block' : 'none';
-  if (val === 'stat') {
-    document.getElementById('metricSection').style.display     = 'block';
-    document.getElementById('populationSection').style.display = 'block';
-  }
-}
-```
-
-### onPopulationChange()
-```js
-function onPopulationChange() {
-  const isSegment = document.querySelector('input[name="population"]:checked').value === 'segment';
-  document.getElementById('allPopInfo').style.display     = isSegment ? 'none'  : 'block';
-  document.getElementById('segmentSection').style.display = isSegment ? 'block' : 'none';
-}
-```
-
-### N-segment 동적 빌더 (addExtraSegment / removeExtraSegment / renderExtraSegments)
-```js
-// EXTRA_SEG_FIELDS: 5개 프로파일 항목 배열 (code/label/values)
-// let extraSegs = [], extraSegSeq = 0;
-
-function addExtraSegment() {
-  // used.length >= EXTRA_SEG_FIELDS.length 이면 showToast 후 return
-  extraSegs.push({id: ++extraSegSeq, field:'', value:''});
-  renderExtraSegments();
-}
-function removeExtraSegment(id) {
-  extraSegs = extraSegs.filter(s => s.id !== id);
-  renderExtraSegments();
-}
-function updateExtraSegField(id, field) {
-  // field 변경 시 value 초기화 후 renderExtraSegments()
-}
-function updateExtraSegValue(id, value) {
-  // seg.value만 업데이트 (리렌더 불필요)
-}
-function renderExtraSegments() {
-  // used = 이미 선택된 field코드 배열
-  // 각 행: 3-column grid (항목 select / 값 select / × 버튼)
-  // 항목 select: used에 없는 항목만 노출 (본인 field 제외)
-  // 값 select: fieldData 없으면 disabled
-  // #addExtraSegBtn: used.length >= 5 이면 display:none
+function onAgencyChange() {
+  const val = document.getElementById('evAgency').value;
+  document.getElementById('agencyOtherSection').style.display = val === 'OTHER' ? 'block' : 'none';
 }
 ```
 
 ### requestReview() 유효성 검사 규칙
 ```
-stat (전체):    제목 + 담보코드 + 조회지표 + 활용방법 필수
-stat (세그먼트): 위 + 연령대 + 성별 필수
-fromage:        제목 + 카테고리 + 항목 + 출력형식(최소 1개) 필수
+필수: 제목 + 출처기관 + (OTHER면 기관명) + 보고서명 + 기준연도 + 지표명 + 기준값 + 활용방법
+선택: 출처 URL
 ```
 
-### onPCatChange() / updateEvId()
-카테고리 선택 시 항목 select 동적 로드 + Evidence ID 자동생성.
-Promage 필드 코드 형식: `EVID.HEALTH.{catData.idKey}.{fieldCode}.V1`
+## MOCK_DATA
 
-## PROMAGE_EV_FIELDS 데이터 (요약)
-
-상세 필드 목록은 `05_card-editor-evidence.html` 내 `const PROMAGE_EV_FIELDS` 참조.
-
-| 카테고리 | idKey | 주요 필드 |
-|---|---|---|
-| 암위험도 | CANCER_RISK | canr_ca (암 종합), lung_ca, gaca_ca 등 22종 |
-| 생체나이 | BIO_AGE | metabolic_msa, medical_bad, caa 등 14종 |
-| 질병위험도 | DISEASE_RISK | 고지혈증, 당뇨병, 고혈압 등 17종 |
-| 의료비예측 | MEDICAL_COST | me_0y, me_5y, me_10y, ambul, hospital 등 |
+```js
+const MOCK_DATA = {
+  evidences: [
+    {id:'EV001',title:'암 평균 입원 진료비 (심평원 2024)',type:'external',agency:'HIRA',indicator:'암 평균 입원 진료비',value:'3,800만원',linkedRules:['RU001'],status:'active'},
+    {id:'EV002',title:'65세 이상 간병보험 미가입률 (금감원 2024)',type:'external',agency:'FSS',indicator:'65세 이상 간병보험 미가입률',value:'68%',linkedRules:['RU004'],status:'active'},
+    {id:'EV003',title:'뇌졸중 평균 입원 진료비 (심평원 2024)',type:'external',agency:'HIRA',indicator:'뇌졸중 평균 입원 진료비',value:'2,100만원',linkedRules:['RU002'],status:'active'}
+  ]
+};
+```
 
 ## 검수 체크리스트
 
-- [ ] 유형 select: **2개 옵션** (보닥통계/프롬에이지) — `mydata`, `disease` 옵션 없어야 함
-- [ ] staticSection: 핵심 통계 수치 수동 입력 필드가 없는가?
-- [ ] 데이터 출처 안내 배너가 staticSection 상단에 있는가?
-- [ ] 담보코드 select: 9종 모두 있는가?
-- [ ] stat: metricSection(조회지표) + populationSection(모집단 라디오) 노출되는가?
-- [ ] stat: 조회지표 select가 optgroup 2depth 구조인가? (비율 4종 / 금액 3종 / 기간 1종 — 총 8종)
-- [ ] stat 전체: allPopInfo 안내 div 노출되는가?
-- [ ] stat 세그먼트: segmentSection 노출되고 연령대·성별 필수 처리되는가?
-- [ ] stat 추가축: EXTRA_SEG_FIELDS에 나이·성별 항목 없는가?
-- [ ] stat 추가축: addExtraSegment() 버튼으로 행 동적 추가되는가?
-- [ ] stat 추가축: 이미 선택된 항목이 다른 행 드롭다운에서 제외되는가?
-- [ ] stat 추가축: × 버튼으로 행 개별 삭제되는가?
-- [ ] stat 추가축: 5개 모두 선택 시 "추가" 버튼 숨겨지는가?
-- [ ] staticSection이 stat 선택 시에만 노출되는가? (fromage 선택 시 숨김)
-- [ ] fromage: §3-8 경고 배너 표시되는가?
-- [ ] fromage: 카테고리 select(암위험도/생체나이/질병위험도/의료비예측)가 있는가?
-- [ ] fromage: 출력 형식 체크박스 2개(`pFmtAbsolute` / `pFmtPercentile`) 있는가?
-- [ ] fromage: 절대값 기본 checked, 최소 1개 필수 검증 처리되는가?
-- [ ] fromage: 등급명 위험/주의/양호 표기인가?
-- [ ] fromage: `hidden#pEvId` 필드가 있고 UI에 노출되지 않는가?
-- [ ] Evidence ID 자동생성 형식: `EVID.HEALTH.{idKey}.{fieldCode}.V1` 인가?
+- [ ] 유형 select 없는가? (단일 유형 — select 제거됨)
+- [ ] 출처 기관 select: 5개 옵션 (HIRA/NHIS/KOSTAT/FSS/OTHER) 있는가?
+- [ ] OTHER 선택 시 #agencyOtherSection 노출되는가?
+- [ ] 기준 연도 select: 2021~2025 옵션 있는가?
+- [ ] 기준값 필드: 단위 포함 자유 입력 (수치만 입력하는 필드 없는가)?
+- [ ] 출처 URL: 선택사항 표기 있는가? (필수 아님)
+- [ ] requestReview(): 7개 필수 필드 검증되는가?
+- [ ] stat/fromage/보닥통계/프롬에이지 관련 코드가 없는가?
+- [ ] staticSection/promageSection/metricSection/populationSection 없는가?
+- [ ] N-segment 빌더 함수(addExtraSegment 등) 없는가?
+- [ ] MOCK_DATA type: 'external' (stat/fromage 아님)
+- [ ] status-guidance 문구가 새 필수 필드 기준인가?

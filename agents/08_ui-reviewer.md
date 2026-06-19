@@ -84,10 +84,10 @@
 | AI 답변 역할 배지 | `routing-role` 배지 존재 |
 | 필드 힌트 | 모든 입력 필드에 `field-hint` 한 줄 존재 |
 | 작업 흐름 트래커 | 오른쪽 컬럼에 `.wf-tracker` (①내용+연결입력→②검수요청→③승인완료→④라이브 **4단계**) 존재 |
-| 연결 UI 위치 | ③ Concept: Risk-type **체크박스** 선택 패널 있음(선택사항, **1:N 다중 선택** — 라디오 버튼 아님). ④ Rule: Risk-type 연결 패널 있음(필수, 별도 `.card`) + Evidence 연결 패널 있음(필수, 별도 `.card`). ⑤ Policy: Rule 선택 패널 있음(선택사항). ①②는 연결 UI 없음. |
+| 연결 UI 위치 | **v2: 편집기에 연결 선택 UI 없음.** 편집기에는 읽기 전용 배지 + "캔버스에서 변경" 버튼만. 연결 추가·변경은 `00_canvas-main.html`에서만. |
 | Policy 출력 설정 섹션 | ⑤ Policy 편집기 기본정보 카드: "Clark 앱 출력 설정" 섹션(출력 대상 화면 select + Clark 앱 표시 문구 textarea)이 핵심 조항 요약 아래, 준수 체크리스트 위에 있는가? |
 | Policy 동적 연동 배너 | ⑤ Policy 편집기: `.banner-info`로 "동적 연동 안내 — 준법감시인 승인 후 앱 배포 없이 즉시 반영" 배너가 출력 설정 섹션 상단에 있는가? |
-| wf-tracker ④ | `라이브` 표시 + 카드 연결 현황 링크 존재 |
+| wf-tracker ④ | `라이브` 표시 (카드 연결 현황 링크 없음 — v2에서 캔버스로 대체됨) |
 | rel-box 제거 | 오른쪽 컬럼에 `.rel-box` 없음. sum-box도 없음 |
 
 **[Playbook 편집기 추가 체크 — 16_card-editor-playbook.html]**
@@ -143,11 +143,11 @@
 |---|---|
 | 기술 용어 노출 | 기술 용어(런타임에·파라미터·라우팅·매핑·비활성·활성화됩니다)가 운영자 화면에 노출되지 않는가? |
 | 등급명 | 위험/주의/양호로 표기되어 있는가? (상/중/하 금지) |
-| Evidence 수치 입력 | Evidence 편집기: 수치 직접 입력 필드가 없는가? (수치 직접 입력 없음) |
-| Evidence 유형 select | 2개 옵션만 (보닥통계 기반 / 프롬에이지 기반) — 마이데이터 기반·질병코드 기반 옵션 없어야 함 |
-| Evidence 조회지표 | optgroup 2depth select 구조: 비율 계열 4종(미보유율·보유율·소액가입비율·갱신형비율) / 금액 계열 3종(평균보장금액·중위보장금액·평균월보험료) / 기간 계열 1종(평균납입기간) |
-| Evidence 출력 형식 | 프롬에이지 기반: 체크박스 2개 (절대값 기본 checked / 백분위) — 최소 1개 필수 |
-| Evidence ID 비노출 | 프롬에이지 기반 Evidence ID(`pEvId`)가 화면에 노출되지 않는가? (hidden input으로 처리) |
+| Evidence 유형 select | 유형 select 없는가? (단일 유형 — 보닥통계/프롬에이지 옵션 없어야 함) |
+| Evidence 출처기관 | 출처 기관 select: 5개 옵션만 (HIRA/NHIS/KOSTAT/FSS/OTHER) |
+| Evidence OTHER 입력 | OTHER 선택 시 기관명 입력 필드(`#agencyOtherSection`) 노출되는가? |
+| Evidence 필수 필드 | 보고서명·기준연도·지표명·기준값 모두 있는가? 기준값 단위 포함 자유 입력 구조인가? |
+| Evidence 선택 필드 | 출처 URL: 선택사항 표기 (필수 마크 없어야 함) |
 | MYDATA 화면 표시 | "마이데이터"로 표기. "MYDATA" 텍스트 레이블 직접 노출 금지 |
 | Promage 화면 표시 | "프롬에이지"로 표기. "Promage" 텍스트 레이블 직접 노출 금지 |
 
@@ -196,6 +196,22 @@
    - 🔴 **즉시 수정** — 흐름이 막히거나 정보 누락
    - 🟡 **개선 권장** — 일관성 위반, 사용성 저하
    - ⚪ **참고** — 개선 가능하나 긴급하지 않음
+
+### H. 캔버스 (00_canvas-main.html)
+
+| 항목 | 기준 |
+|---|---|
+| 피커 패널 | 상단 5컬럼 (CONCEPT / RISK-TYPE / RULE / EVIDENCE·POLICY / PLAYBOOK) — 각 컬럼 카드 목록 표시 |
+| 카드 표시 범위 | active + approved + review 카드 (draft 제외) |
+| 상태 배지 | active → "라이브" (초록 `gc-badge-live`), approved → "승인완료" (파랑 `gc-badge-approved`), review → "승인요청" (주황 `gc-badge-review`) |
+| 연결 가능 범위 | active + approved만 연결 가능. review 카드는 "연결 추가" 버튼 없어야 함 |
+| 그리드 섹션 헤더 | "연결됨" → 초록 헤더(`sh-connected`). "연결 가능" → 파란 헤더(`sh-available`) |
+| 연결 가능 판정 | `findDirectTarget` 기준 — CONNECT_RULES 직접 연결만 (체인 경유 불가) |
+| 연결 추가 버튼 | "연결 가능" 카드에 전폭 파란 "연결 추가" 버튼 (`gc-btn-connect`) 존재 |
+| pending 엣지 | `edge.status === 'pending'` 시 점선 파랑(`stroke-dasharray:6,4`, `#1A4A9A`) SVG 선 + arr-pending 마커 |
+| active 엣지 | `edge.status === 'active'` 시 실선 초록(`#0F6E56`) SVG 선 + arr-active 마커 |
+| PLAYBOOK 컬럼 | 현재 연결 없음(Phase 1.5+ 예정) → 포컬 카드 무관 "해당 없음" 표시 |
+| 포컬 헤더 경고 | 체인 0개 카드: "⚠ 연결 없음" 배지 표시. "연결 가능 N개" 있으면 파란 정보 배지 함께 표시 |
 
 ---
 

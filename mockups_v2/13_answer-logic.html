@@ -386,6 +386,46 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
     </table>
   </div>
 
+  <!-- Step 2-B: Risk-type 다중 감지 노출 우선순위 -->
+  <div class="section">
+    <div class="section-title"><i class="fa-solid fa-circle-exclamation fa-fw" style="color:var(--card-risk)"></i> Step 2-B — 다중 Risk-type 감지 시 노출 우선순위</div>
+    <p style="font-size:14px;color:var(--text-secondary);margin-bottom:14px">하나의 사용자 질의로 복수의 Risk-type이 동시에 감지될 때, 최종 노출 순서를 결정하는 기준입니다.</p>
+
+    <div class="section-sub">우선순위 산출 공식</div>
+    <div style="background:#FFF9EC;border:1px solid #F0D880;border-radius:8px;padding:16px 20px;margin-bottom:14px">
+      <div style="font-size:15px;font-weight:700;color:#7A5A00;font-family:monospace;letter-spacing:.02em">
+        점수 = 중요도 가중치 × (Rule 충족 개수 + 충족 심각도)
+      </div>
+      <div style="font-size:13px;color:var(--text-secondary);margin-top:8px;line-height:1.6">
+        점수가 높은 Risk-type을 먼저 노출합니다. 운영자는 중요도 3단계만 설정하며, Rule 충족 강도는 시스템이 자동 계산합니다.
+      </div>
+    </div>
+
+    <div class="section-sub">운영자 중요도 가중치 (Risk-type 편집기에서 설정)</div>
+    <table class="spec-table">
+      <thead><tr><th style="width:100px">중요도</th><th style="width:90px">가중치</th><th>활용 기준</th></tr></thead>
+      <tbody>
+        <tr><td><strong style="color:#A32D2D">높음</strong></td><td>×3</td><td>핵심 진단 유형 — 다른 유형과 동시 감지 시 반드시 선노출</td></tr>
+        <tr><td><strong style="color:#BA7517">보통</strong></td><td>×2</td><td>일반 진단 유형 — 기본값 (미설정 시 자동 적용)</td></tr>
+        <tr><td><strong style="color:var(--text-hint)">낮음</strong></td><td>×1</td><td>보조 진단 유형 — 상위 유형 노출 후 후순위 안내</td></tr>
+      </tbody>
+    </table>
+
+    <div class="section-sub">자동 산출 요소 — Rule 충족 강도</div>
+    <table class="spec-table">
+      <thead><tr><th style="width:200px">요소</th><th>산출 방법</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Rule 충족 개수</strong></td><td>해당 Risk-type에 연결된 라이브 Rule 중 고객 조건을 충족한 개수. 충족 Rule이 많을수록 강도 증가</td></tr>
+        <tr><td><strong>충족 심각도</strong></td><td>충족된 각 Rule의 조건 충족률 평균 (전체 조건 수 대비 충족 수). 더 정밀하게 매칭된 Rule의 Risk-type이 우선</td></tr>
+      </tbody>
+    </table>
+
+    <div class="section-sub">동점 처리</div>
+    <div class="note-box" style="margin-top:0">최종 점수가 동일한 Risk-type이 복수일 경우 <strong>카드 코드 오름차순(T01 우선)</strong>으로 순서를 결정합니다.<br>
+      <span style="font-size:12px;opacity:.85">중요도 설정 → <a href="04_card-editor-risk-type.html" style="color:#8A5A00;font-weight:600">Risk-type 카드 편집기</a></span>
+    </div>
+  </div>
+
   <!-- Step 3: Evidence -->
   <div class="section">
     <div class="section-title"><i class="fa-solid fa-database fa-fw" style="color:var(--card-evidence)"></i> Step 3 — Evidence 참조 방식</div>

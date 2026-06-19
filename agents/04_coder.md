@@ -9,7 +9,7 @@
 UI 디자이너(03)의 설계 명세를 바탕으로 인터랙티브 HTML 목업을 구현한다.
 완성 기준: "처음 보는 개발자·운영자가 이 화면만 보고 다음 행동을 알 수 있는" 수준.
 
-파일 목록 23개 → `context/project.md` 참조.
+파일 목록 25개 (mockups_v2/) → `context/project.md` 참조.
 Evidence 편집기 구현 → `agents/04a_coder-evidence.md` 전담.
 Playbook 편집기 구현 → `agents/04b_coder-playbook.md` 전담.
 
@@ -55,9 +55,10 @@ Playbook 편집기 구현 → `agents/04b_coder-playbook.md` 전담.
 
 적용: 드롭다운 옵션 · 칩 · 테이블 셀 · 체인 시각화 노드 · 연결 선택 UI 전체.
 
-### 라이브 전용 연결 선택 UI
+### 승인완료 이상 연결 선택 UI
 
-임시저장·승인요청 카드: `.conn-item.disabled` + `opacity:0.4` + `pointer-events:none` + "라이브 전 선택불가".
+임시저장·승인요청 카드: `.conn-item.disabled` + `opacity:0.4` + `pointer-events:none` + "승인완료 후 연결 가능".
+승인완료(approved) 이상 카드만 캔버스에서 연결 가능.
 HTML 패턴 → `guides/ux-patterns.md` 참조.
 
 ### 상태별 다음 행동 안내
@@ -65,7 +66,8 @@ HTML 패턴 → `guides/ux-patterns.md` 참조.
 | 상태 | `.status-guidance` 안내 메시지 |
 |---|---|
 | 임시저장 | "작성이 완료되면 [검수 요청] 버튼을 클릭하세요." |
-| 승인요청 | "검수자가 검토 중입니다. 승인되면 라이브 상태가 됩니다." |
+| 승인요청 | "검수자가 검토 중입니다. 승인완료 후 카드 캔버스에서 연결을 구성할 수 있습니다." |
+| 승인완료 | "카드 캔버스에서 연결을 구성하세요. 연결 완료 후 라이브 전환하세요." |
 | 라이브 | "이 카드는 Clark AI에 반영되어 있습니다. 수정 시 임시저장으로 전환되고 재승인이 필요합니다." |
 
 ---
@@ -74,15 +76,17 @@ HTML 패턴 → `guides/ux-patterns.md` 참조.
 
 **Policy 편집기(08) 특이사항:** 기본정보 카드 내 border-top으로 "Clark 앱 출력 설정" 섹션 구분. Clark 앱 표시 문구 textarea + 동적 연동 안내 배너. 상세: `context/decisions.md > 면책 문구 관리`.
 
+**v2 캔버스 UX 핵심:** 편집기에서 연결 선택 UI 없음. 연결은 `00_canvas-main.html` 캔버스에서만 처리. 편집기 내 연결 표시는 읽기 전용 배지 + "캔버스에서 변경" 버튼. 상세: `context/decisions.md > v2 캔버스 UX`.
+
 | 화면 | 핵심 인터랙션 |
 |---|---|
-| 01_guide | 프로세스 5단계 클릭 → 해당 화면. 라우팅 다이어그램 hover → 설명 표시 |
-| 02_dashboard | 검수 대기 클릭 → 09. 카드 유형 클릭 → 03. 미연결 클릭 → 10 |
-| 03_card-library | 필터 탭. 행 클릭 → 편집기. 연결 수 클릭 → 10 |
-| 04~08 편집기 | 임시저장 → 토스트. 검수 요청 → 승인요청 전환. 연결 카드 추가/제거 |
-| 07_rule | 조건 추가/삭제(3-source). Risk-type 미선택 → `#rtWarning`. 게이트 3항목 충족 시 검수 요청 활성 |
-| 09_review | 카드 내용+연결 통합 목록. 필터(전체/검수대기/처리완료). 승인→완료. 반려→사유 입력 모달 |
-| 10_chain | Risk-type 필터. 노드 클릭 → 편집기. 미연결 빨간 점선. 라우팅 완성도 표시 |
+| 00_canvas | 피커 패널(상단 5컬럼)에서 카드 클릭 → 그리드(하단 5컬럼)에서 연결됨·연결가능 표시. "연결 추가"/"연결 제거" 버튼. active+approved+review 카드 표시, draft 제외. 연결 가능: active+approved만. 카드 상태 배지(라이브/승인완료/승인요청). pending 엣지(점선 파랑) → approved 카드 간 연결. active 엣지(실선 초록) → active 카드 간 연결. `computeChain` / `findDirectTarget` / `confirmAction` 세 함수로 구성 |
+| 01_guide | 프로세스 5단계 클릭 → 해당 화면 |
+| 02_dashboard | 검수 대기 클릭 → 09. 카드 유형 클릭 → 03 |
+| 03_card-library | 필터 탭. 행 클릭 → 편집기 |
+| 04~08 편집기 | 임시저장 → 토스트. 검수 요청 → 승인요청 전환. 연결 상태: 읽기 전용 표시만 |
+| 07_rule | 조건 추가/삭제(3-source). 게이트: 내용 필드 충족 시 검수 요청 활성 |
+| 09_review | 카드 내용 통합 목록. 필터(전체/검수대기/처리완료). 승인→완료. 반려→사유 입력 모달 |
 | 11_dry-run | Risk-type + 고객 선택 → 예상 라우팅(KC/생성형) + 조건 평가 상세 |
 | 16_playbook-list | 상태 필터 탭. 상태별 액션 버튼 → `agents/04b_coder-playbook.md` |
 | 16_card-editor-playbook | 키워드 Enter 추가/× 제거. updatePreview() 실시간. Card ③ 토글 → `agents/04b_coder-playbook.md` |
@@ -98,20 +102,24 @@ HTML 패턴 → `guides/ux-patterns.md` 참조.
 - [ ] 사이드바 아이콘 `fa-solid fa-[name] fa-fw` 형식 (이모지 혼용 금지)?
 - [ ] ⑥ Playbook → `16_playbook-list.html` 실제 링크 (잠금 아님). ⑦ Case → 잠금(🔒)?
 
-**편집기 구조**
-- [ ] Concept 편집기: Risk-type 선택 패널 (선택사항. 체크박스 1:N. Standalone/Linked 라디오 없음)
-- [ ] Rule 편집기: Risk-type 연결 (`<select>` + optgroups. 필수. `#rtWarning`)
-- [ ] Rule 편집기: Evidence 연결 (conn-panel. 필수. 검수 게이트)
-- [ ] Policy 편집기: Rule 선택 패널 (선택사항)
-- [ ] Risk-type·Evidence 편집기: outgoing 연결 UI 없음
+**편집기 구조 (v2 캔버스 UX 기준)**
+- [ ] Concept 편집기: Risk-type 연결 — 읽기 전용 배지 + "캔버스에서 변경" 버튼 (선택 UI 없음)
+- [ ] Rule 편집기: Risk-type·Evidence 연결 — 읽기 전용 배지 표시 (선택 UI 없음)
+- [ ] Policy 편집기: Rule 연결 — 읽기 전용 배지 + "캔버스에서 변경" 버튼 (선택 UI 없음)
+- [ ] Risk-type·Evidence·Playbook 편집기: outgoing 연결 UI 없음
+- [ ] 편집기 연결 카드: "캔버스에서 변경" 버튼이 `00_canvas-main.html`로 링크됨
 
-**연결 선택 패널 통일성**
-- [ ] 모든 연결 패널에 `badge-required`/`badge-optional` 배지
-- [ ] 필수 패널: 0개 선택 시 [검수 요청] `disabled` + `.conn-validation.error`
-- [ ] 선택사항 패널: 0개 선택이어도 버튼 활성 + `.conn-validation.info`
-- [ ] 비활성 카드: `opacity:0.4` + `pointer-events:none` + "라이브 전 선택불가"
-- [ ] Concept→Risk-type: 체크박스 다중 선택 (1:N)
-- [ ] 연결 패널 카드: 코드+명칭 병기
+**캔버스 (00_canvas-main.html)**
+- [ ] 피커 패널: 5컬럼 (CONCEPT/RISK-TYPE/RULE/EVIDENCE·POLICY/PLAYBOOK), active+approved+review 표시
+- [ ] 그리드 섹션 헤더: `sh-connected`(초록) / `sh-available`(파란) CSS 클래스 사용
+- [ ] 카드 상태 배지: active→`gc-badge-live`(초록), approved→`gc-badge-approved`(파랑), review→`gc-badge-review`(주황)
+- [ ] 연결 가능: active + approved만 (review 카드는 "연결 추가" 버튼 없음)
+- [ ] pending 엣지: 점선 파랑 SVG (`stroke-dasharray:6,4`, `#1A4A9A`) — approved 카드 포함 연결
+- [ ] active 엣지: 실선 초록 SVG (`#0F6E56`) — 모두 active 카드 연결
+- [ ] `confirmAction`: edgeStatus = approved 포함 시 'pending', 모두 active면 'active'
+- [ ] "연결 추가" 버튼: `gc-btn-connect` 클래스, 전폭(width:100%), 파란 배경
+- [ ] `findDirectTarget` 사용: CONNECT_RULES 직접 연결만 (체인 경유 금지)
+- [ ] PLAYBOOK 컬럼: 포컬 카드 무관 "해당 없음" 표시
 
 **오른쪽 컬럼**
 - [ ] wf-tracker 4단계만. rel-box 없음.

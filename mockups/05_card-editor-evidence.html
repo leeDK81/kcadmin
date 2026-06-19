@@ -69,9 +69,7 @@ tr:hover td{background:#FAFAF8}
 .list-item:last-child{border-bottom:none}
 .list-item-name{flex:1;font-size:14px}
 .rule-link-note{background:#F4F4F2;border:1px solid var(--border);border-radius:6px;padding:8px 12px;font-size:13px;color:var(--text-hint)}
-.fromage-warn{margin-top:8px}
-.fromage-warn ul{margin:6px 0 0 16px}
-.fromage-warn li{font-size:14px;margin-bottom:2px}
+
 .ev-note{background:#FFF9ED;border:1px solid #F0D080;border-radius:6px;padding:10px 14px;margin-top:12px;font-size:13px;color:#8A5A00}
 .status-guide{margin-top:16px}
 .status-guide-item{padding:10px 14px;border-radius:6px;font-size:14px;line-height:1.5}
@@ -168,11 +166,9 @@ tr:hover td{background:#FAFAF8}
         <span class="routing-role">AI 답변 역할: 근거 참조 단계</span>
       </div>
       <h3>Evidence 카드</h3>
-      <p>Rule의 기준값이 왜 그 숫자인지 보여주는 통계 근거입니다. Rule 카드 저장 시 Evidence 1개 이상 연결이 필수이므로 Rule보다 먼저 만드세요.</p>
-      <p style="margin-top:8px;padding-top:8px;border-top:1px solid #C0D0F0;font-size:13px;color:var(--text-secondary)">유형을 선택하면 해당 입력 항목이 표시됩니다.<br>
-      <strong>보닥통계</strong>는 조회 조건(담보코드·지표·모집단)만 지정하면 KC 엔진이 자동 산출합니다.<br>
-      <strong>프롬에이지</strong>는 카테고리·항목만 지정합니다.<br>
-      약관 면책사항 고지는 Rule 카드의 "약관 DB 연동" 플래그로 처리됩니다 — 이 편집기에서 별도 등록 불필요.</p>
+      <p>공인 기관 통계를 등록해 Rule 임계값의 근거를 제공합니다. Rule 카드 저장 시 Evidence 1개 이상 연결이 필수이므로 Rule보다 먼저 만드세요.</p>
+      <p style="margin-top:8px;padding-top:8px;border-top:1px solid #C0D0F0;font-size:13px;color:var(--text-secondary)"><strong>공인 외부 통계 기반 단일 유형</strong> — 건강보험심사평가원·국민건강보험공단·통계청·금융감독원 등 공인 기관의 통계 수치를 직접 입력합니다.<br>
+      마이데이터(고객 보험 현황)와 프롬에이지(건강 위험도)는 상담 시 자동으로 제공되므로 Evidence 카드 등록이 불필요합니다.</p>
       <p style="margin-top:8px;font-size:13px;color:var(--text-hint)">다음 단계: Evidence 등록 후 → Concept 카드 또는 Rule 카드를 등록하세요.</p>
     </div>
 
@@ -194,227 +190,86 @@ tr:hover td{background:#FAFAF8}
             <input class="form-control" type="text" value="EV001 (저장 시 자동 부여)" disabled style="background:#F4F4F2;color:var(--text-hint);font-family:monospace;font-size:13px;width:240px">
           </div>
 
-          <!-- ① 유형 선택 -->
           <div class="form-group">
-            <label for="evType">Evidence 유형 <span style="color:var(--card-risk)">*</span>
-              <span class="field-hint">유형에 따라 입력 방식이 달라집니다</span>
+            <label for="evTitle">제목 <span style="color:var(--card-risk)">*</span>
+              <span class="field-hint">이 Evidence의 핵심 내용을 한 줄로</span>
             </label>
-            <select class="form-control" id="evType" onchange="handleTypeChange()">
-              <option value="">-- 유형 선택 --</option>
-              <option value="stat">보닥통계 기반</option>
-              <option value="fromage">프롬에이지 기반</option>
+            <input class="form-control" id="evTitle" type="text" placeholder="예: 암 평균 입원 진료비 (심평원 2024)">
+          </div>
+
+          <div class="form-group">
+            <label for="evAgency">출처 기관 <span style="color:var(--card-risk)">*</span>
+              <span class="field-hint">통계를 발행한 공인 기관</span>
+            </label>
+            <select class="form-control" id="evAgency" onchange="onAgencyChange()">
+              <option value="">-- 기관 선택 --</option>
+              <option value="HIRA">건강보험심사평가원 (HIRA)</option>
+              <option value="NHIS">국민건강보험공단 (NHIS)</option>
+              <option value="KOSTAT">통계청</option>
+              <option value="FSS">금융감독원 (FSS)</option>
+              <option value="OTHER">기타 (직접 입력)</option>
             </select>
           </div>
 
-          <!-- ② 보닥통계 섹션 -->
-          <div id="staticSection" style="display:none">
-            <div class="banner banner-info" style="margin-bottom:16px;font-size:13px;display:flex;gap:10px;align-items:flex-start">
-              <i class="fa-solid fa-database fa-fw" style="margin-top:2px;flex-shrink:0;color:#1A4A9A"></i>
-              <span>담당자가 조회 조건(담보코드·지표·세그먼트)을 선택하면, 상담 시 자동으로 보닥 통계 DB에서 최신 수치를 가져옵니다. 수치를 직접 입력하지 않습니다.</span>
-            </div>
-
-            <div class="form-group">
-              <label for="evTitle">제목 <span style="color:var(--card-risk)">*</span>
-                <span class="field-hint">이 Evidence의 핵심 내용을 한 줄로</span>
-              </label>
-              <input class="form-control" id="evTitle" type="text" placeholder="예: 40대 남성 암진단 담보 미보유율">
-            </div>
-
-            <div class="form-group">
-              <label for="evCovCode">담보코드 <span style="color:var(--card-risk)">*</span>
-                <span class="field-hint">조회 대상 담보 항목</span>
-              </label>
-              <select class="form-control" id="evCovCode">
-                <option value="">-- 담보코드 선택 --</option>
-                <option value="A4200">A4200 — 암진단</option>
-                <option value="A4102">A4102 — 뇌졸중진단</option>
-                <option value="A4104">A4104 — 급성심근경색진단</option>
-                <option value="A4106">A4106 — 심장질환수술</option>
-                <option value="A3001">A3001 — 상해후유장해</option>
-                <option value="A3201">A3201 — 입원일당</option>
-                <option value="A4300">A4300 — 간병인지원</option>
-                <option value="A1001">A1001 — 사망</option>
-                <option value="A1002">A1002 — 정기사망</option>
-              </select>
-            </div>
-
-            <!-- 조회 지표 (마이데이터·보닥통계 전용) -->
-            <div id="metricSection" style="display:none">
-              <div class="form-group">
-                <label for="evMetric">조회 지표 <span style="color:var(--card-risk)">*</span>
-                  <span class="field-hint">어떤 통계 수치를 기준으로 할지 선택하세요</span>
-                </label>
-                <select class="form-control" id="evMetric">
-                  <option value="">-- 지표 선택 --</option>
-                  <optgroup label="비율 계열 (%)">
-                    <option value="미보유율">미보유율 — 해당 담보를 보유하지 않은 사용자 비율</option>
-                    <option value="보유율">보유율 — 해당 담보를 보유한 사용자 비율</option>
-                    <option value="소액가입비율">소액가입비율 — KC Engine 기준금액 미만으로 가입한 사용자 비율</option>
-                    <option value="갱신형비율">갱신형비율 — 갱신형으로 보유한 사용자 비율</option>
-                  </optgroup>
-                  <optgroup label="금액 계열 (원)">
-                    <option value="평균보장금액">평균보장금액 — 담보 보유 사용자의 평균 보장 금액</option>
-                    <option value="중위보장금액">중위보장금액 — 담보 보유 사용자의 중위 보장 금액</option>
-                    <option value="평균월보험료">평균월보험료 — 담보 보유 사용자의 월 평균 납입 보험료</option>
-                  </optgroup>
-                  <optgroup label="기간 계열 (년)">
-                    <option value="평균납입기간">평균납입기간 — 담보 보유 사용자의 평균 납입 기간</option>
-                  </optgroup>
-                </select>
-              </div>
-            </div>
-
-            <!-- 모집단 선택 (보닥통계 전용) -->
-            <div id="populationSection" style="display:none">
-              <div class="form-group">
-                <label>모집단 <span style="color:var(--card-risk)">*</span>
-                  <span class="field-hint">통계를 조회할 기준 사용자 범위</span>
-                </label>
-                <div style="display:flex;flex-direction:column;gap:10px;padding:4px 0">
-                  <label style="display:flex;align-items:center;gap:8px;font-weight:400;cursor:pointer;font-size:14px">
-                    <input type="radio" name="population" value="all" checked onchange="onPopulationChange()">
-                    전체 보닥 사용자
-                  </label>
-                  <label style="display:flex;align-items:center;gap:8px;font-weight:400;cursor:pointer;font-size:14px">
-                    <input type="radio" name="population" value="segment" onchange="onPopulationChange()">
-                    세그먼트 지정
-                  </label>
-                </div>
-              </div>
-              <div id="allPopInfo" style="padding:10px 14px;background:#EEF4FF;border:1px solid #B0C8FF;border-radius:6px;font-size:13px;color:#1A4A9A;margin-bottom:16px">
-                <i class="fa-solid fa-users fa-fw"></i>
-                <strong>모집단:</strong> 전체 보닥 사용자 (세그먼트 구분 없음)
-              </div>
-              <div id="segmentSection" style="display:none">
-                <div class="form-group">
-                  <label>연령대·성별 <span style="color:var(--card-risk)">*</span>
-                    <span class="field-hint">필수 기준축 — 두 항목 모두 선택</span>
-                  </label>
-                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-                    <select class="form-control" id="evSegAge">
-                      <option value="">연령대 선택</option>
-                      <option value="20대">20대 (20–29세)</option>
-                      <option value="30대">30대 (30–39세)</option>
-                      <option value="40대">40대 (40–49세)</option>
-                      <option value="50대">50대 (50–59세)</option>
-                      <option value="60대">60대 (60–69세)</option>
-                      <option value="70대이상">70대 이상</option>
-                    </select>
-                    <select class="form-control" id="evSegGender">
-                      <option value="">성별 선택</option>
-                      <option value="남성">남성</option>
-                      <option value="여성">여성</option>
-                      <option value="전체">전체 (성별 구분 없음)</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="form-group" id="extraSegmentSection">
-                  <label>추가 세그먼트 <span style="color:var(--text-hint);font-weight:400;font-size:13px">(선택사항)</span>
-                    <span class="field-hint">연령+성별 외 추가로 세분화할 프로파일 항목 — 중복 선택 불가</span>
-                  </label>
-                  <div id="extraSegList"></div>
-                  <button type="button" class="btn btn-secondary btn-sm" onclick="addExtraSegment()" id="addExtraSegBtn" style="margin-top:4px">
-                    <i class="fa-solid fa-plus"></i> 세그먼트 추가
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label for="evUsage">활용 방법 <span style="color:var(--card-risk)">*</span>
-                <span class="field-hint">어떤 Rule의 기준값 근거로 쓰이는지 적어주세요</span>
-              </label>
-              <textarea class="form-control" id="evUsage" rows="3" placeholder="예: 암진단 담보(A4200) 미보유율이 Rule 조건 기준값(30%) 설정의 근거로 사용됩니다."></textarea>
-            </div>
-
-            <div class="action-bar" style="padding-top:8px;border-top:1px solid var(--border);margin-top:8px">
-              <button class="btn btn-secondary" onclick="saveDraft()"><i class="fa-regular fa-floppy-disk"></i> 임시저장</button>
-              <button class="btn btn-primary" onclick="requestReview()"><i class="fa-solid fa-paper-plane"></i> 검수 요청</button>
-            </div>
-            <div class="status-guidance">
-              <i class="fa-solid fa-circle-info fa-fw"></i>
-              <span><strong>현재 상태: 임시저장</strong> — 담보코드·조회 지표를 선택하고 활용 방법을 입력한 후 [검수 요청]을 클릭하세요.</span>
-            </div>
+          <div class="form-group" id="agencyOtherSection" style="display:none">
+            <label for="evAgencyOther">기관명 <span style="color:var(--card-risk)">*</span></label>
+            <input class="form-control" id="evAgencyOther" type="text" placeholder="예: 보험개발원">
           </div>
 
-          <!-- ③ 프롬에이지 섹션 -->
-          <div id="promageSection" style="display:none">
-            <div class="banner banner-warn fromage-warn" style="margin-bottom:16px">
-              <strong><i class="fa-solid fa-triangle-exclamation"></i> 민감정보 처리 원칙 적용 (§3-8)</strong>
-              <ul>
-                <li>건강검진 원본 데이터는 보닥 서버(국내)에만 저장</li>
-                <li>사용자 출력 시 3단계 등급(<strong>위험 / 주의 / 양호</strong>)만 표시 — 수치·percentile 노출 금지</li>
-                <li>정보보호실 사전 협의 필요 항목 확인 후 등록</li>
-              </ul>
-            </div>
-
-            <div class="banner banner-info" style="margin-bottom:16px;font-size:13px;display:flex;gap:10px;align-items:flex-start">
-              <i class="fa-solid fa-rotate fa-fw" style="margin-top:2px;flex-shrink:0;color:#6B4A9A"></i>
-              <span><strong>메디에이지 건강검진 분석 결과</strong> — 해당 고객의 건강 위험 등급을 데이터 출처에서 가져옵니다. 카테고리와 항목만 선택하면 됩니다.<br>
-              AI 답변 예시: <em style="color:var(--text-secondary)">"개인 암 위험도가 높은 편이라는 점을 감안하면, 암 담보 보강을 우선적으로 검토하시길 권합니다."</em></span>
-            </div>
-
-            <div class="form-group">
-              <label for="evTitleFromage">제목 <span style="color:var(--card-risk)">*</span>
-                <span class="field-hint">이 Evidence의 핵심 내용을 한 줄로</span>
-              </label>
-              <input class="form-control" id="evTitleFromage" type="text" placeholder="예: 프롬에이지 암 종합 위험도">
-            </div>
-
-            <div class="form-group">
-              <label>프롬에이지카테고리 <span style="color:var(--card-risk)">*</span>
-                <span class="field-hint">항목 목록은 카테고리 선택 후 자동으로 표시됩니다</span>
-              </label>
-              <select class="form-control" id="pCat" onchange="onPCatChange()">
-                <option value="">카테고리 선택</option>
-                <option value="암위험도">암위험도 (위험/주의/양호)</option>
-                <option value="생체나이">생체나이 (숫자)</option>
-                <option value="질병위험도">질병위험도 (위험/주의/양호)</option>
-                <option value="의료비예측">의료비예측 (원/일수)</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label>항목 선택 <span style="color:var(--card-risk)">*</span>
-                <span class="field-hint">AI 답변에서 참조할 프롬에이지지표</span>
-              </label>
-              <select class="form-control" id="pField">
-                <option value="">카테고리를 먼저 선택하세요</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label>출력 형식 <span style="color:var(--card-risk)">*</span>
-                <span class="field-hint">Clark 상담 시 고객에게 제공할 정보 유형 — 최소 1개 선택</span>
-              </label>
-              <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px">
-                <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;font-weight:400">
-                  <input type="checkbox" id="pFmtAbsolute" value="absolute" style="margin-top:3px" checked>
-                  <span>절대값<span style="color:var(--text-secondary);font-size:13px;margin-left:6px">— "대사나이 실제 나이 대비 +5세"</span></span>
-                </label>
-                <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;font-weight:400">
-                  <input type="checkbox" id="pFmtPercentile" value="percentile" style="margin-top:3px">
-                  <span>백분위<span style="color:var(--text-secondary);font-size:13px;margin-left:6px">— "동년배 상위 20%" (보닥 프롬에이지전체 분포 기준, KC Engine 산출)</span></span>
-                </label>
-              </div>
-            </div>
-
-            <input type="hidden" id="pEvId">
-
-            <div class="action-bar" style="padding-top:8px;border-top:1px solid var(--border);margin-top:8px">
-              <button class="btn btn-secondary" onclick="saveDraft()"><i class="fa-regular fa-floppy-disk"></i> 임시저장</button>
-              <button class="btn btn-primary" onclick="requestReview()"><i class="fa-solid fa-paper-plane"></i> 검수 요청</button>
-            </div>
-            <div class="status-guidance">
-              <i class="fa-solid fa-circle-info fa-fw"></i>
-              <span><strong>현재 상태: 임시저장</strong> — 카테고리·항목을 선택한 후 [검수 요청]을 클릭하세요.</span>
-            </div>
+          <div class="form-group">
+            <label for="evReport">보고서명 <span style="color:var(--card-risk)">*</span>
+              <span class="field-hint">통계를 인용한 공식 보고서 또는 자료명</span>
+            </label>
+            <input class="form-control" id="evReport" type="text" placeholder="예: 2024년 암 진료비 통계">
           </div>
 
-          <!-- 유형 미선택 안내 -->
-          <div id="typePrompt" style="padding:24px;text-align:center;color:var(--text-hint);font-size:14px">
-            <i class="fa-solid fa-arrow-up" style="display:block;font-size:22px;margin-bottom:8px;color:var(--border)"></i>
-            위에서 Evidence 유형을 선택하면 입력 폼이 표시됩니다
+          <div class="form-group">
+            <label for="evYear">기준 연도 <span style="color:var(--card-risk)">*</span></label>
+            <select class="form-control" id="evYear" style="width:200px">
+              <option value="">-- 연도 선택 --</option>
+              <option value="2025">2025년</option>
+              <option value="2024">2024년</option>
+              <option value="2023">2023년</option>
+              <option value="2022">2022년</option>
+              <option value="2021">2021년</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="evIndicator">지표명 <span style="color:var(--card-risk)">*</span>
+              <span class="field-hint">활용할 통계 지표의 명칭</span>
+            </label>
+            <input class="form-control" id="evIndicator" type="text" placeholder="예: 암 평균 입원 진료비">
+          </div>
+
+          <div class="form-group">
+            <label for="evValue">기준값 <span style="color:var(--card-risk)">*</span>
+              <span class="field-hint">단위 포함하여 입력. Rule 임계값 설정의 근거가 됩니다</span>
+            </label>
+            <input class="form-control" id="evValue" type="text" placeholder="예: 3,800만원 또는 68%">
+          </div>
+
+          <div class="form-group">
+            <label for="evUrl">출처 URL <span style="color:var(--text-hint);font-weight:400;font-size:13px">(선택)</span>
+              <span class="field-hint">공식 자료 링크 — 검수자가 원본 확인 시 활용</span>
+            </label>
+            <input class="form-control" id="evUrl" type="url" placeholder="https://...">
+          </div>
+
+          <div class="form-group">
+            <label for="evUsage">활용 방법 <span style="color:var(--card-risk)">*</span>
+              <span class="field-hint">어떤 Rule의 임계값 근거로 쓰이는지, 왜 이 수치가 기준인지 설명</span>
+            </label>
+            <textarea class="form-control" id="evUsage" rows="3" placeholder="예: T02 암투병생활비 부족형 Rule에서 암진단금 임계값(5,000만원) 설정의 근거. 심평원 기준 암 평균 치료비가 3,800만원이므로 여유율을 고려한 수치입니다."></textarea>
+          </div>
+
+          <div class="action-bar" style="padding-top:8px;border-top:1px solid var(--border);margin-top:8px">
+            <button class="btn btn-secondary" onclick="saveDraft()"><i class="fa-regular fa-floppy-disk"></i> 임시저장</button>
+            <button class="btn btn-primary" onclick="requestReview()"><i class="fa-solid fa-paper-plane"></i> 검수 요청</button>
+          </div>
+          <div class="status-guidance">
+            <i class="fa-solid fa-circle-info fa-fw"></i>
+            <span><strong>현재 상태: 임시저장</strong> — 출처 기관·보고서명·지표명·기준값·활용 방법을 입력한 후 [검수 요청]을 클릭하세요.</span>
           </div>
         </div>
       </div>
@@ -461,60 +316,14 @@ tr:hover td{background:#FAFAF8}
 
 <script>
 const MOCK_DATA = {
-  evidences:[
-    {id:'EV001',title:'보닥 암진단 담보 미보유율 통계',type:'stat',population:'all',linkedRules:['RU001'],status:'active'},
-    {id:'EV002',title:'보닥 40대 암보장 평균 분석',type:'stat',population:'segment',segment:{age:'40대',gender:'여성'},linkedRules:['RU001'],status:'active'},
-    {id:'EV003',title:'보닥 뇌심혈관 담보 미보유율',type:'stat',linkedRules:['RU002'],status:'active'},
-    {id:'EV004',title:'프롬에이지 암위험도 등급 분포',type:'fromage',linkedRules:[],status:'draft'},
-    {id:'EV005',title:'40대 남성 심혈관 담보 보유율',type:'stat',population:'segment',segment:{age:'40대',gender:'남성'},linkedRules:['RU002'],status:'active'}
+  evidences: [
+    {id:'EV001',title:'암 평균 입원 진료비 (심평원 2024)',type:'external',agency:'HIRA',indicator:'암 평균 입원 진료비',value:'3,800만원',linkedRules:['RU001'],status:'active'},
+    {id:'EV002',title:'65세 이상 간병보험 미가입률 (금감원 2024)',type:'external',agency:'FSS',indicator:'65세 이상 간병보험 미가입률',value:'68%',linkedRules:['RU004'],status:'active'},
+    {id:'EV003',title:'뇌졸중 평균 입원 진료비 (심평원 2024)',type:'external',agency:'HIRA',indicator:'뇌졸중 평균 입원 진료비',value:'2,100만원',linkedRules:['RU002'],status:'active'}
   ]
 };
 
-const PROMAGE_EV_FIELDS = {
-  '암위험도': {
-    idKey: 'CANCER_RISK',
-    fields: [
-      {code:'canr_ca',name:'암 종합 등급'},{code:'lung_ca',name:'폐암'},{code:'gaca_ca',name:'위암'},
-      {code:'lica_ca',name:'간암'},{code:'coca_ca',name:'대장암'},{code:'brca_ca',name:'유방암'},
-      {code:'thca_ca',name:'갑상선암'},{code:'prca_ca',name:'전립선암'},{code:'ovca_ca',name:'난소암'},
-      {code:'utca_ca',name:'자궁암'},{code:'bntr_ca',name:'뇌암'},{code:'blca_ca',name:'방광암'},
-      {code:'paca_ca',name:'췌장암'},{code:'esop_ca',name:'식도암'},{code:'oral_ca',name:'구강암'},
-      {code:'lary_ca',name:'후두암'},{code:'rcc_ca',name:'신장암'},{code:'gall_ca',name:'담낭암'},
-      {code:'lymp_ca',name:'림프종'},{code:'leuk_ca',name:'백혈병'},{code:'myel_ca',name:'골수종'},
-      {code:'skin_ca',name:'피부암'},{code:'smbl_ca',name:'소장암'}
-    ]
-  },
-  '생체나이': {
-    idKey: 'BIO_AGE',
-    fields: [
-      {code:'metabolic_msa',name:'대사나이'},{code:'medical_bad',name:'의학생체나이'},
-      {code:'caa',name:'심장나이'},{code:'pua',name:'폐나이'},{code:'hea',name:'간나이'},
-      {code:'paa',name:'췌장나이'},{code:'rea',name:'신장나이'},{code:'baa',name:'비만체형나이'},
-      {code:'bpa',name:'혈압나이'},{code:'bla',name:'혈관나이'},
-      {code:'fsa',name:'혈당나이'},{code:'msa',name:'평균혈당나이'},
-      {code:'medical_tle',name:'기대수명'},{code:'medical_rle',name:'잔여수명'}
-    ]
-  },
-  '질병위험도': {
-    idKey: 'DISEASE_RISK',
-    fields: [
-      {code:'고지혈증',name:'고지혈증'},{code:'당뇨병',name:'당뇨병'},{code:'고혈압',name:'고혈압'},
-      {code:'치매',name:'치매'},{code:'비만',name:'비만'},{code:'만성신부전증',name:'만성신부전증'},
-      {code:'COPD',name:'만성폐쇄성폐질환'},{code:'골관절염',name:'골관절염'},{code:'골다공증',name:'골다공증'},
-      {code:'허혈성심장질환',name:'허혈성심장질환'},{code:'급성심근경색증',name:'급성심근경색증'},
-      {code:'뇌혈관질환',name:'뇌혈관질환'},{code:'뇌졸중',name:'뇌졸중'},{code:'부정맥',name:'부정맥'},
-      {code:'우울증',name:'우울증'},{code:'심부전',name:'심부전'},{code:'천식',name:'천식'}
-    ]
-  },
-  '의료비예측': {
-    idKey: 'MEDICAL_COST',
-    fields: [
-      {code:'me_0y',name:'금년도 의료비'},{code:'me_5y',name:'5년후 의료비'},{code:'me_10y',name:'10년후 의료비'},
-      {code:'me_avg',name:'연평균 의료비'},{code:'me_avg_p',name:'연평균 의료비상승률(%)'},
-      {code:'ambul',name:'외래진료일수'},{code:'hospital',name:'입원일수'}
-    ]
-  }
-};
+const AGENCY_LABELS = {HIRA:'건강보험심사평가원',NHIS:'국민건강보험공단',KOSTAT:'통계청',FSS:'금융감독원',OTHER:'기타'};
 
 function showToast(msg) {
   const t = document.getElementById('toast');
@@ -523,138 +332,34 @@ function showToast(msg) {
   setTimeout(() => t.classList.remove('show'), 2500);
 }
 
-function saveDraft() {
-  showToast('임시 저장되었습니다');
+function saveDraft() { showToast('임시 저장되었습니다'); }
+
+function onAgencyChange() {
+  const val = document.getElementById('evAgency').value;
+  document.getElementById('agencyOtherSection').style.display = val === 'OTHER' ? 'block' : 'none';
 }
 
 function requestReview() {
-  const type = document.getElementById('evType').value;
-  if (!type) { showToast('Evidence 유형을 선택하세요'); return; }
-  if (type === 'fromage') {
-    const cat = document.getElementById('pCat').value;
-    const fld = document.getElementById('pField').value;
-    const title = document.getElementById('evTitleFromage').value.trim();
-    if (!title) { showToast('제목을 입력하세요'); return; }
-    if (!cat || !fld) { showToast('카테고리와 항목을 선택하세요'); return; }
-    const fmtChecked = ['pFmtAbsolute','pFmtPercentile'].some(id => document.getElementById(id).checked);
-    if (!fmtChecked) { showToast('출력 형식을 최소 1개 선택하세요'); return; }
-  } else {
-    const title = document.getElementById('evTitle').value.trim();
-    const covCode = document.getElementById('evCovCode').value;
-    const usage = document.getElementById('evUsage').value.trim();
-    if (!title) { showToast('제목을 입력하세요'); return; }
-    if (!covCode) { showToast('담보코드를 선택하세요'); return; }
-    if (type === 'stat') {
-      const metric = document.getElementById('evMetric').value;
-      if (!metric) { showToast('조회 지표를 선택하세요'); return; }
-      const isSegment = document.querySelector('input[name="population"]:checked').value === 'segment';
-      if (isSegment) {
-        if (!document.getElementById('evSegAge').value) { showToast('연령대를 선택하세요'); return; }
-        if (!document.getElementById('evSegGender').value) { showToast('성별을 선택하세요'); return; }
-      }
-    }
-    if (!usage) { showToast('활용 방법을 입력하세요'); return; }
+  const title     = document.getElementById('evTitle').value.trim();
+  const agency    = document.getElementById('evAgency').value;
+  const report    = document.getElementById('evReport').value.trim();
+  const year      = document.getElementById('evYear').value;
+  const indicator = document.getElementById('evIndicator').value.trim();
+  const value     = document.getElementById('evValue').value.trim();
+  const usage     = document.getElementById('evUsage').value.trim();
+
+  if (!title)     { showToast('제목을 입력하세요'); return; }
+  if (!agency)    { showToast('출처 기관을 선택하세요'); return; }
+  if (agency === 'OTHER' && !document.getElementById('evAgencyOther').value.trim()) {
+    showToast('기관명을 입력하세요'); return;
   }
+  if (!report)    { showToast('보고서명을 입력하세요'); return; }
+  if (!year)      { showToast('기준 연도를 선택하세요'); return; }
+  if (!indicator) { showToast('지표명을 입력하세요'); return; }
+  if (!value)     { showToast('기준값을 입력하세요'); return; }
+  if (!usage)     { showToast('활용 방법을 입력하세요'); return; }
   showToast('검수 요청이 접수되었습니다');
 }
-
-function handleTypeChange() {
-  const val = document.getElementById('evType').value;
-  document.getElementById('typePrompt').style.display       = val ? 'none' : 'block';
-  document.getElementById('staticSection').style.display    = val === 'stat' ? 'block' : 'none';
-  document.getElementById('promageSection').style.display   = val === 'fromage' ? 'block' : 'none';
-  if (val === 'stat') {
-    document.getElementById('metricSection').style.display     = 'block';
-    document.getElementById('populationSection').style.display = 'block';
-  }
-}
-
-function onPopulationChange() {
-  const isSegment = document.querySelector('input[name="population"]:checked').value === 'segment';
-  document.getElementById('allPopInfo').style.display     = isSegment ? 'none'  : 'block';
-  document.getElementById('segmentSection').style.display = isSegment ? 'block' : 'none';
-}
-
-const EXTRA_SEG_FIELDS = [
-  {code:'marital',    label:'결혼여부',   values:['기혼','미혼']},
-  {code:'has_children',label:'자녀유무', values:['Y (자녀 있음)','N (자녀 없음)']},
-  {code:'job_risk',   label:'직업위험도', values:['비위험','중위험','고위험']},
-  {code:'expecting',  label:'출산예정',   values:['Y (출산 예정)','N']},
-  {code:'region',     label:'거주지',     values:['서울','경기','인천','부산','대구','광주','대전','울산','세종','강원','충북','충남','전북','전남','경북','경남','제주']}
-];
-let extraSegs = [], extraSegSeq = 0;
-
-function addExtraSegment() {
-  const used = extraSegs.map(s => s.field).filter(Boolean);
-  if (used.length >= EXTRA_SEG_FIELDS.length) { showToast('모든 세그먼트 항목이 선택되었습니다'); return; }
-  extraSegs.push({id: ++extraSegSeq, field:'', value:''});
-  renderExtraSegments();
-}
-
-function removeExtraSegment(id) {
-  extraSegs = extraSegs.filter(s => s.id !== id);
-  renderExtraSegments();
-}
-
-function updateExtraSegField(id, field) {
-  const seg = extraSegs.find(s => s.id === id);
-  if (seg) { seg.field = field; seg.value = ''; renderExtraSegments(); }
-}
-
-function updateExtraSegValue(id, value) {
-  const seg = extraSegs.find(s => s.id === id);
-  if (seg) seg.value = value;
-}
-
-function renderExtraSegments() {
-  const used = extraSegs.map(s => s.field).filter(Boolean);
-  const container = document.getElementById('extraSegList');
-  container.innerHTML = extraSegs.map(seg => {
-    const fieldData = EXTRA_SEG_FIELDS.find(f => f.code === seg.field);
-    const fieldOpts = '<option value="">항목 선택</option>' +
-      EXTRA_SEG_FIELDS.filter(f => !used.includes(f.code) || f.code === seg.field)
-        .map(f => `<option value="${f.code}"${f.code === seg.field ? ' selected' : ''}>${f.label}</option>`).join('');
-    const valOpts = fieldData
-      ? '<option value="">값 선택</option>' + fieldData.values.map(v => `<option value="${v}"${v === seg.value ? ' selected' : ''}>${v}</option>`).join('')
-      : '<option value="">항목을 먼저 선택하세요</option>';
-    return `<div style="display:grid;grid-template-columns:1fr 1fr auto;gap:8px;margin-bottom:8px;align-items:center">
-      <select class="form-control" onchange="updateExtraSegField(${seg.id},this.value)">${fieldOpts}</select>
-      <select class="form-control" onchange="updateExtraSegValue(${seg.id},this.value)"${!fieldData?' disabled':''}>${valOpts}</select>
-      <button type="button" class="btn btn-sm" onclick="removeExtraSegment(${seg.id})" style="color:var(--status-rejected);flex-shrink:0"><i class="fa-solid fa-xmark"></i></button>
-    </div>`;
-  }).join('');
-  const btn = document.getElementById('addExtraSegBtn');
-  if (btn) btn.style.display = used.length >= EXTRA_SEG_FIELDS.length ? 'none' : 'inline-flex';
-}
-
-function onPCatChange() {
-  const cat = document.getElementById('pCat').value;
-  const fldSel = document.getElementById('pField');
-  const idEl = document.getElementById('pEvId');
-  const catData = PROMAGE_EV_FIELDS[cat];
-  if (!catData) {
-    fldSel.innerHTML = '<option value="">카테고리를 먼저 선택하세요</option>';
-    idEl.value = '';
-    return;
-  }
-  fldSel.innerHTML = catData.fields.map(f =>
-    `<option value="${f.code}">${f.name} (${f.code})</option>`).join('');
-  updateEvId();
-}
-
-function updateEvId() {
-  const cat = document.getElementById('pCat').value;
-  const fld = document.getElementById('pField').value;
-  const catData = PROMAGE_EV_FIELDS[cat];
-  if (!catData || !fld) { document.getElementById('pEvId').value = ''; return; }
-  const fieldCode = fld.replace(/[^a-zA-Z0-9]/g, '_').toUpperCase();
-  document.getElementById('pEvId').value = `EVID.HEALTH.${catData.idKey}.${fieldCode}.V1`;
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('pField').addEventListener('change', updateEvId);
-});
-
 </script>
 </body>
 </html>

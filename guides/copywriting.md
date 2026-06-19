@@ -31,9 +31,7 @@ Evidence, Rule, Concept, Policy, Playbook, KC Engine, ICIS, KCD, Clark AI, KC Ad
 
 > **표기 원칙:** MYDATA·Promage는 JS 변수명·value 속성에서만 영문 유지. 라벨·힌트·버튼 등 **운영자에게 보이는 모든 텍스트는 마이데이터·프롬에이지로 표기**.
 
-> **Fromage 표기 예외:** CSS 클래스명(`.fromage-warn`)·JS value(`value="fromage"`)·JS 식별자(`type:'fromage'`, `#promageSection` 등)는 영문 유지. 운영자에게 보이는 라벨·안내문·헤더 텍스트는 반드시 **프롬에이지**로 표기.
-
-> **주의:** KC Engine은 개발자·가이드 문서 전용 시스템 명칭. 운영자 화면(HTML mockup) 텍스트에 직접 노출 금지 — 운영자에게는 어느 시스템이 데이터를 가져오는지가 아니라 어떤 데이터 출처(마이데이터·보닥통계·KCD·메디에이지)를 쓰는지만 표시합니다.
+> **주의:** KC Engine은 개발자·가이드 문서 전용 시스템 명칭. 운영자 화면(HTML mockup) 텍스트에 직접 노출 금지 — 운영자에게는 어느 시스템이 데이터를 가져오는지가 아니라 어떤 데이터 출처(마이데이터·공인 외부 통계·KCD·메디에이지)를 쓰는지만 표시합니다.
 
 ## 텍스트 작성 원칙
 

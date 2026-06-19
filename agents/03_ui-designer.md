@@ -11,7 +11,7 @@ KC Admin Phase 1의 시각 언어를 정의하고, "처음 보는 개발자·운
 **설계 범위:** Concept · Risk-type · Rule · Evidence · Policy 카드 5종 + 승인 워크플로우 + Playbook MVP.
 **제외:** Case 카드, aGCR, Graph RAG, Digital Twin.
 
-**데이터 소스 (Phase 1 모두 포함):** Rule 조건 빌더 3-source (MYDATA + Promage + 프로파일). Evidence 유형 2종 (보닥통계·프롬에이지).
+**데이터 소스 (Phase 1 모두 포함):** Rule 조건 빌더 3-source (MYDATA + Promage + 프로파일). Evidence 단일 유형 (공인 외부 통계 — HIRA/NHIS/KOSTAT/FSS).
 
 ---
 
@@ -125,33 +125,32 @@ rel-box 없음. 4단계 흐름만. HTML/CSS → `guides/ux-patterns.md` + `guide
 
 ---
 
-## 카드 연결 선택 패널 기준
+## 캔버스 연결 규칙 기준 (v2 — 캔버스에서 처리)
 
-| 연결 | 카디널리티 | 구분 | 근거 |
+> **v2 변경:** 편집기 내 연결 선택 UI 없음. 연결 추가·변경은 `00_canvas-main.html` 캔버스에서만 처리. 편집기에는 읽기 전용 배지 + "캔버스에서 변경" 버튼만 표시.
+
+**CONNECT_RULES (캔버스에서 적용):**
+
+| 연결 방향 | 카디널리티 | 구분 | 근거 |
 |---|---|---|---|
-| Concept → Risk-type | 1:N | 선택사항 | 하나의 질문 개념이 여러 Risk-type에 동시 해당 가능. Risk-type 없어도 동의어 매칭 유효 |
-| Rule → Risk-type | 1:1 | **필수** | 어떤 위험 유형 판정인지 지정. 미연결 = KC 엔진 분류 불가 |
-| Rule → Evidence | 1:N | **필수** | 근거 없는 Rule = AI hallucination 위험. 검수자 검증 불가 |
-| Policy → Rule | 1:N | 선택사항 | Policy = 독립 규제 문서. Rule 미연결 상태도 유효 |
+| Concept → Risk-type | N:M | 선택사항 | 하나의 질문 개념이 여러 Risk-type에 동시 해당 가능. Risk-type 없어도 동의어 매칭 유효 |
+| Risk-type → Rule | 1:N | 권장 | Risk-type 기반 판정 조건 지정 |
+| Rule → Evidence | 1:N | 권장 | 근거 없는 Rule = AI hallucination 위험 |
+| Rule → Policy | 1:N | 선택사항 | Policy = 독립 규제 문서. Rule 미연결도 유효 |
+| Playbook ← Risk-type | — | **미결** | Phase 1.5+ 예정 (리드 스코어링·배정 최적화) |
 
-**배지:**
-- 필수 → `badge-required` (#C94B1A 빨강)
-- 선택사항 → `badge-optional` (#9C9C94 회색)
+**캔버스 그리드 섹션 헤더:**
+- "연결됨" → 초록 헤더 (`sh-connected`)
+- "연결 가능" → 파란 헤더 (`sh-available`) + "연결 추가" 전폭 버튼
+- "해당 없음" → 불투명 처리
 
-**안내 문구 (구분별 고정):**
-- 필수: "AI 답변의 근거가 됩니다. 1개 이상 연결해야 검수 요청이 가능합니다."
-- 선택사항: "연결하면 이 카드의 적용 범위를 추적할 수 있습니다. 연결하지 않아도 검수 요청 가능합니다."
+**연결 가능 판정 로직:** `findDirectTarget(card, focalCard)` — CONNECT_RULES 직접 연결만 (체인 경유 불가)
 
-**비활성 표시:** 임시저장·승인요청 카드 → `opacity:0.4` + `pointer-events:none` + "라이브 전 선택불가"
+**카드 상태 배지 (캔버스 그리드):**
+- active → `"라이브"` (초록), review → `"승인완료"` (주황)
+- review 엣지 → `"연결 검수중"` 배지 (주황)
 
-**유효성:**
-
-| 선택 수 | 필수 패널 | 선택사항 패널 |
-|---|---|---|
-| 0개 | [검수 요청] 비활성 + `.conn-validation.error` | 버튼 활성 유지 + `.conn-validation.info` |
-| 1개 이상 | 버튼 활성 | 버튼 활성 유지 |
-
-HTML 패턴 → `guides/ux-patterns.md` 참조. CSS → `guides/design-system.md` 참조.
+HTML/CSS 패턴 → `guides/ux-patterns.md` 캔버스 섹션 참조.
 
 ---
 

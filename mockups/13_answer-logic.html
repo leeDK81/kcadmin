@@ -386,12 +386,11 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
       <thead><tr><th style="width:180px">항목</th><th>기준</th></tr></thead>
       <tbody>
         <tr><td><strong>참조 범위</strong></td><td>선택된 Rule에 연결된 <strong>모든 라이브 Evidence</strong>를 병렬 참조. 우선순위 선택 없음 — 전부 참조</td></tr>
-        <tr><td><strong>Evidence 유형 2종</strong></td><td>
-          <strong>보닥통계 (stat)</strong> — 담보별 미보유율·평균 보장금액 등 집계 통계. KC 엔진 상시 보유<br>
-          <strong>프롬에이지 (fromage)</strong> — 건강 위험도 등급. 출력 시 위험/주의/양호 3단계만 허용 [§3-8]
+        <tr><td><strong>Evidence 단일 유형</strong></td><td>
+          <strong>공인 외부 통계 (external)</strong> — HIRA·NHIS·KOSTAT·FSS 등 공인 기관 통계. 운영자가 Evidence 카드에 직접 등록한 고정값 (기준 연도 명시 필수)<br>
+          <span style="color:var(--text-hint);font-size:13px">마이데이터·프롬에이지는 상담 시 자동 전달 → Evidence 카드 불필요</span>
         </td></tr>
         <tr><td><strong>약관 DB 연동 (Rule 플래그)</strong></td><td>Rule 카드의 "약관 DB 연동" 플래그 활성화 시, 해당 담보코드 기준으로 약관 DB 자동 조회 → Clark 답변에 ⚠️ 면책조항 섹션 자동 포함. Evidence 카드 별도 등록 불필요 — 크롤링 파이프라인이 약관 DB 최신화를 담당</td></tr>
-        <tr><td><strong>프롬에이지 Evidence</strong></td><td>출력 시 3단계 등급(위험/주의/양호)만 사용. 수치(예: +19.6%) 고객 공개 금지 [민감정보 처리 원칙 §3-8]</td></tr>
         <tr><td><strong>라이브 Evidence 없음</strong></td><td>근거 섹션 생략. Rule의 clarkMessage는 그대로 출력 (답변 생성 계속)</td></tr>
       </tbody>
     </table>
@@ -488,13 +487,13 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
           <td rowspan="4"><span class="card-tag ct-evidence"><i class="fa-solid fa-database fa-fw"></i> Evidence</span></td>
           <td><span class="out-field">type</span></td>
           <td><span class="out-cond">조건부</span></td>
-          <td>근거 출처 표시. 예: "보닥통계 기반", "프롬에이지 기반"</td>
+          <td>근거 출처 표시. 예: "심평원 2024", "금감원 2024"</td>
           <td>출처 표시 시</td>
         </tr>
         <tr>
           <td><span class="out-field">title</span></td>
           <td><span class="out-cond">조건부</span></td>
-          <td>근거 데이터 이름. 예: "보닥 암진단 담보 미보유율 통계"</td>
+          <td>근거 데이터 이름. 예: "암 평균 입원 진료비 (심평원 2024)"</td>
           <td>근거 섹션 있을 때</td>
         </tr>
         <tr>
@@ -656,15 +655,15 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
       <div class="card-found cf-evidence">
         <div class="card-icon ci-evidence"><i class="fa-solid fa-database fa-fw"></i></div>
         <div class="cf-meta">
-          <div class="cf-tag">② Evidence 카드 — 근거 데이터 (보닥통계 기반)</div>
-          <div class="cf-name">EV002 &nbsp;보닥통계 암 연령대 보유율</div>
-          <div class="cf-detail">동일 연령대 평균 암진단금 통계 데이터. RU001의 5,000만원 기준이 이 통계에서 도출됨.</div>
+          <div class="cf-tag">② Evidence 카드 — 공인 외부 통계 (HIRA 심평원 2024)</div>
+          <div class="cf-name">EV001 &nbsp;암 평균 입원 진료비 (심평원 2024)</div>
+          <div class="cf-detail">건강보험심사평가원 2024년 암 입원 진료비 통계. RU001의 5,000만원 기준이 이 통계에서 도출됨.</div>
         </div>
       </div>
       <div class="data-out">
-        <div class="data-out-label">데이터 소스 &nbsp;<span class="ds-chip ds-bodaq"><i class="fa-solid fa-chart-bar fa-fw"></i> KC 엔진 보닥통계</span></div>
-        <div class="data-row" style="padding-bottom:4px"><span class="data-key" style="font-size:12px;color:var(--text-hint)">조회 방식</span><span class="data-val" style="font-size:12px;color:var(--text-hint);font-weight:400">KC 엔진 상시 보유 데이터 — 고객 마이데이터 조회 없음</span></div>
-        <div class="data-row"><span class="data-key">근거 요약</span><span class="data-val">"40대 남성 평균 암진단금은 5,000만원입니다. 고객님은 이에 미치지 못합니다."</span></div>
+        <div class="data-out-label">데이터 소스 &nbsp;<span class="ds-chip ds-bodaq"><i class="fa-solid fa-building-columns fa-fw"></i> 심평원(HIRA) 공인 통계</span></div>
+        <div class="data-row" style="padding-bottom:4px"><span class="data-key" style="font-size:12px;color:var(--text-hint)">등록 방식</span><span class="data-val" style="font-size:12px;color:var(--text-hint);font-weight:400">운영자가 Evidence 카드에 직접 입력한 고정값 — 기준 연도 2024</span></div>
+        <div class="data-row"><span class="data-key">근거 요약</span><span class="data-val">"암 평균 입원 진료비는 3,800만원입니다(심평원 2024). 고객님의 암진단금은 이에 미치지 못합니다."</span></div>
       </div>
       <div class="if-none"><i class="fa-solid fa-arrow-turn-down-right fa-fw"></i><span><strong>만약 연결된 Evidence 카드가 없다면?</strong> — 근거 설명 섹션 생략. Rule의 경고 메시지는 그대로 포함하여 답변 생성 계속</span></div>
     </div>
@@ -899,8 +898,8 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
         <td><span style="background:rgba(26,122,74,.1);color:var(--card-evidence);padding:2px 8px;border-radius:4px;font-size:12px;font-weight:700">② Evidence</span></td>
         <td><span class="uses">활용 방법 · 데이터 출처</span></td>
         <td style="font-size:13px"><strong>활용 방법</strong> → 근거 설명 섹션<br><span style="color:var(--text-hint)">예: "40대 평균 암진단금은 5,000만원입니다."</span></td>
-        <td style="font-size:12px;line-height:1.7"><span class="ds-chip ds-bodaq">KC 엔진 보닥통계</span> 상시 보유<br><span class="ds-chip ds-fromage">프롬에이지</span> (fromage 유형 시)<br><span class="ds-chip ds-card">약관 DB</span> (Rule 약관 DB 연동 플래그 활성화 시)</td>
-        <td style="font-size:13px;color:var(--text-hint)">프롬에이지 원본 수치 — 반드시 "위험/주의/양호" 등급으로 변환 후 출력 [§3-8]</td>
+        <td style="font-size:12px;line-height:1.7"><span class="ds-chip ds-bodaq">공인 외부 통계</span> (운영자 등록 고정값)<br><span class="ds-chip ds-card">약관 DB</span> (Rule 약관 DB 연동 플래그 활성화 시)</td>
+        <td style="font-size:13px;color:var(--text-hint)">Evidence 카드의 활용 방법 필드 → 근거 설명 섹션 출력. 기준 연도 함께 표시 권장</td>
       </tr>
       <tr>
         <td><span style="background:rgba(90,90,85,.1);color:var(--card-policy);padding:2px 8px;border-radius:4px;font-size:12px;font-weight:700">⑤ Policy</span></td>

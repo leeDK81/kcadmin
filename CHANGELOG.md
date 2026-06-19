@@ -4,6 +4,216 @@
 
 ---
 
+## 2026-06-18 — 카드 라이프사이클 재설계 (승인완료 → 캔버스 → Dry-run → 라이브 전환)
+
+### 핵심 변경: 카드 라이프사이클 흐름
+
+**기존:** 승인완료 → 라이브 전환 → 캔버스 연결 → Dry-run
+**신규:** 승인완료 → 캔버스 연결(준비 연결, pending edge) → Dry-run → 라이브 전환 → KC Engine 반영
+
+### 수정 파일 목록
+
+**`context/decisions.md`**
+- 카드 라이프사이클 섹션 신규 추가 (흐름 테이블 포함)
+- 캔버스 표시 범위: `active + review` → `active + approved + review`
+- 연결 가능 범위: `active`만 → `active + approved` (준비 연결 개념 추가)
+- 카드 상태 배지 매핑 수정: review→"승인요청"(주황), approved→"승인완료"(파랑) [기존 잘못된 매핑 수정]
+- pending 엣지(점선 파랑) / active 엣지(실선 초록) 개념 추가
+
+**`context/project.md`**
+- 카드 등록 워크플로우 섹션 전면 재작성 (연결 구성 + 라이브 전환 단계 분리)
+
+**`mockups_v2/00_canvas-main.html`**
+- CSS: `gc-badge-approved`(파랑 신규), `gc-badge-review`(주황 신규), `gc-badge-pending`, `pk-card-status.approved`
+- CARDS 데이터: CN004 status `review` → `approved`
+- EDGES 데이터: CN004→RT02 status `review` → `pending`
+- `pickerCardHTML`: tri-state 상태 도트 + 라벨 (active/approved/review)
+- `chainCardHTML`, `availableCardHTML`: tri-state 상태 배지
+- `openConnect` 모달: 준비 연결/연결 추가 분기 설명
+- `confirmAction`: edgeStatus 로직 (approved 포함 시 'pending', 모두 active면 'active')
+- SVG 마커/선: `arr-review` → `arr-pending` (파랑, 점선); `arr-active`(초록) 구분
+
+**`mockups_v2/09_review-workflow.html`**
+- 가이드 박스: 신규 라이프사이클 흐름 설명
+- 버튼 로직: pending→"승인완료", approved→"라이브 전환" + "상세 보기"
+- `doApprove()` 토스트: "카드 캔버스에서 연결 구성 후 라이브 전환하세요."
+- `doGoLive()` 함수 신규 추가
+
+**`mockups_v2/01_guide.html`**
+- 카드 등록 흐름 7단계 재작성: ①내용입력→②임시저장→③검수요청→④승인완료→⑤캔버스연결→⑥사전테스트→⑦라이브전환
+- 연결 유형 테이블 조건: "라이브 카드만" → "승인완료 이상"
+- 연결 원칙 박스: 승인완료 이상 연결 가능, 준비 연결(점선 파랑) 설명 추가
+- processData[]: 전 항목 신규 라이프사이클 기준 재작성
+- 카드 유형 바로가기: "모든 카드를 라이브로 만든 뒤" → "승인완료된 카드부터"
+
+**`agents/02_po.md`**
+- 운영 관점 전체 프로세스: 캔버스 표시 범위 / 연결 범위 / 라이브 전환 단계 추가
+
+**`agents/04_coder.md`**
+- 연결 선택 UI: "라이브 전 선택불가" → "승인완료 후 연결 가능"
+- 상태별 다음 행동 안내: 승인완료 상태 항목 추가
+- 화면별 인터랙션: 00_canvas 항목 전면 업데이트
+- 캔버스 체크리스트: 표시 범위·배지·엣지 스타일 업데이트
+
+**`agents/08_ui-reviewer.md`**
+- 캔버스 H 체크리스트: 카드 표시 범위, 상태 배지, pending 엣지, review 연결 불가 기준 업데이트
+
+---
+
+## 2026-06-17 (v2 정합성 전수 수정 — 세션 2)
+
+### 전수 검사 및 35개 이슈 일괄 수정
+
+**목적:** v2 캔버스 UX 정책 기반으로 mockups_v2/ 전체 25개 파일 전수 감사 후 모든 이슈 수정
+
+**Pattern B — 편집기 연결 UI v2 전환 (4파일)**
+- `04_card-editor-risk-type.html`: CSS var() garbage 수정, Rule 연결 카드 제거, 연결 안내 문구 추가
+- `06_card-editor-concept.html`: Risk-type 피커 → 읽기전용 배지 + "캔버스에서 변경" 버튼, JS 5개 함수 제거
+- `07_card-editor-rule.html`: Risk-type·Evidence 피커 → 읽기전용 배지, Policy 연결 섹션 완전 제거, JS 20개 함수 제거 (6→6카드, Policy 제거로 5카드 의도이나 약관DB 유지)
+- `08_card-editor-policy.html`: Rule 피커 → 읽기전용 배지 + "캔버스에서 변경" 버튼, banner "동적 연동 안내", JS 6개 함수 제거
+
+**Pattern A — wf-tracker ④ 링크 수정 (5파일)**
+- 04·05·06·07·08 편집기 — `10_chain-visualizer.html` → `00_canvas-main.html`
+
+**Pattern D — CSS var() 문법 오류 수정**
+- `02_dashboard.html`: `.rt-chip.no` color 오류 수정
+- `04_card-editor-risk-type.html`: `.badge-rejected` / `.btn-danger` garbage var() 수정
+
+**Pattern C — 폐기 링크 수정 (2파일)**
+- `02_dashboard.html`: 배너·stat-card onclick — `10_chain-visualizer.html` → `00_canvas-main.html`
+- `03_card-library.html`: 가이드박스·JS chain-link — 동일 교체, Step bar → 6종 카드 배지로 교체
+
+**Pattern E — 폐기 프롬에이지 데이터 교체**
+- `02_dashboard.html`: EV004 "프롬에이지 암위험도 등급 분포" → "고혈압 유병률 (HIRA 2024)"
+- `03_card-library.html`: RU003 조건 source PROMAGE → MYDATA
+- `12_coverage-code-table.html`: 프롬에이지 설명 — "Evidence 카드 참조 전용" → Rule 조건 빌더 소스로 재정의
+
+**개별 이슈 수정**
+- `07_rule-list.html`: "적용 Policy" 컬럼 제거
+- `04_risk-type-list.html`: 필터 탭 6→4개, 수정일 컬럼 100px→110px
+- `05_evidence-list.html`: 수정일 컬럼 100px→110px
+- `16_card-editor-playbook.html`: 연결 정보 카드 문구 수정(Phase 1.5+ 예정), Standalone 링크 13→14
+- `01_guide.html`: Rule 카드 설명 수정, "드래그 연결" 4건 → "캔버스에서 연결"
+- `11_dry-run.html`: "미활성화" → "적용 불가", Case 배지 추가, 소스 레이블 추가
+- `05_card-editor-evidence.html`: "연결 정보" 카드 기본정보 카드로 통합
+- `00_canvas-main.html`: `.gc-review-badge` CSS 클래스 정의, chainCardHTML 인라인→클래스
+
+**사이드바 전체 표준화 (24개 파일 일괄)**
+- `<div class="nav-section">` 레이블 3종 제거 (업무 흐름·참조·시스템) — `nav-divider`만 사용
+- 참조 섹션에 `14_answer-logic-guide.html` ("AI 답변 생성 예시") 추가 — 23개 파일 누락 → 전파일 추가
+- PowerShell 스크립트로 일괄 처리 (UTF-8 without BOM 보존)
+
+**에이전트·가이드 문서 업데이트 (세션 1 — 캔버스 UX 확정 반영)**
+- `context/decisions.md`: 캔버스 v2 UX 전체 섹션, CONNECT_RULES 확정, Playbook 미결 항목 등록
+- `context/project.md`: 카드 등록 워크플로우 v2 반영
+- `guides/ux-patterns.md`: 사이드바 표준 (14_answer-logic-guide 포함), 캔버스 UX 패턴 섹션
+- `agents/02_po.md`: v2 워크플로우 (편집기·캔버스 분리)
+- `agents/03_ui-designer.md`: 캔버스 연결 규칙 기준 v2
+- `agents/04_coder.md`: 캔버스 체크리스트, 화면별 인터랙션
+- `agents/08_ui-reviewer.md`: v2 편집기 연결 UI 검수, 캔버스 체크리스트
+
+---
+
+## 2026-06-17 (v2 캔버스 UX 세션)
+
+### mockups_v2/ 신규 — 카드 캔버스 UX 적용
+
+**신규 파일:**
+- `mockups_v2/00_canvas-main.html` — 그래프 기반 카드 연결 캔버스 (v2 핵심 신규)
+  - 하드코딩 노드 + SVG bezier 엣지 + 슬라이드 패널(읽기 전용)
+  - AI 답변 체인 순서로 배치: Concept → Risk → Rule → Evidence → Policy
+  - Playbook 독립 배치 (메인 체인과 병렬)
+  - CONNECT_RULES: concept→risk, risk→rule, rule→evidence/policy (Policy outgoing 없음)
+  - 패널: viewCard() + viewPanelHTML() — 편집기와 동일 필드 읽기 전용
+  - 툴바: 타입 필터 (Concept·Risk·Rule·Evidence·Policy·Playbook 순)
+
+**mockups_v2/ 전체 (24개 복사 + 1개 신규 = 25개):**
+- 모든 파일 사이드바 통일: v2 배지 + "카드 캔버스" 메뉴 + chain-visualizer 제거
+- 편집기 3종 연결 UI 제거 → 읽기 전용으로 전환:
+  - `06_card-editor-concept.html`: Risk-type 체크박스 → 읽기 전용 배지 + "캔버스에서 변경"
+  - `07_card-editor-rule.html`: Risk-type select·Evidence 패널 → 읽기 전용 배지
+  - `08_card-editor-policy.html`: Rule 선택 목록 → 읽기 전용 배지 + "캔버스에서 변경"
+
+### 가이드·문서 업데이트
+
+- `01_guide.html`: 편집기 흐름 재작성 (연계 카드 선택 제거), 연결 테이블 캔버스 기준, Step3 chain-visualizer→canvas, 카드 등록 순서 → 카드 유형 바로가기
+- `13_answer-logic.html`: "프롬에이지 기반 Evidence" 폐기 각주 제거
+- 전체 25개 파일: `10_chain-visualizer.html` 사이드바 메뉴 제거
+
+### 에이전트 파일 업데이트
+
+- `CLAUDE.md`: v2 캔버스 UX 현재 상태 반영, mockups_v2/ 폴더 명시
+- `context/project.md`: 등록 순서 의존성 제거, 캔버스 연결 방향, 파일 목록 25개
+- `context/decisions.md`: v2 캔버스 UX 결정 추가 (연결 정책, CONNECT_RULES, 편집기 읽기 전용, 등록 순서 자유화)
+- `agents/02_po.md`: 카드 등록 순서 → 카드 역할 표, chain-visualizer 참조 제거
+- `agents/04_coder.md`: 파일 수 25개, 편집기 구조 v2, 화면별 인터랙션 캔버스 추가
+- `agents/06_spec-reviewer.md`: 워크플로우 v2 캔버스 기준, 체크리스트 편집기 읽기 전용 기준
+
+---
+
+## 2026-06-17
+
+### 전수 조사 3차 — 정책 정합성 검사 후 추가 수정
+
+**발견 및 수정:**
+- `context/project.md` — Evidence 역할 설명 "쿼리 정의"→"공인 외부 통계 등록", "자동 조회"→"운영자 등록 고정값" 수정
+- `mockups/15_aio-guide.html` — "프롬에이지 Evidence" 표현 제거, Evidence 공개범위 설명 재작성
+
+---
+
+### 전수 조사 2차 — 잔여 구식 Evidence 참조 전면 수정
+
+**추가 수정 파일:**
+- `mockups/17_system-data-guide.html` — FAQ Q2 "프롬에이지 기반 Evidence" 표현 수정, 섹션 3 내용 업데이트
+- `mockups/03_card-library.html` — Evidence MOCK_DATA 5종 전면 교체 (stat/fromage → external 공인 통계 명칭)
+- `mockups/07_card-editor-rule.html` — Evidence MOCK_DATA 명칭 교체
+- `mockups/07_rule-list.html` — Rule evidences 배열 명칭 교체
+- `mockups/09_review-workflow.html` — EV001/EV003 명칭 교체
+- `mockups/10_chain-visualizer.html` — Evidence 노드 EV001~EV005 명칭 전체 교체
+- `mockups/11_dry-run.html` — Evidence 참조 결과 명칭 교체
+- `mockups/13_answer-logic.html` — Evidence 2종→단일유형 스펙 표, 출력 예시, 데이터 소스 칩 전면 수정
+- `mockups/05_card-editor-evidence.html` — 고아 `.fromage-warn` CSS 제거
+- `guides/copywriting.md` — Fromage 예외 규칙 삭제, 보닥통계→공인 외부 통계 표현 수정
+- `agents/06_spec-reviewer.md` — 17_system-data-guide Evidence 2종 체크 항목 업데이트
+
+**통일된 Evidence MOCK_DATA 명칭:**
+- EV001: '암 평균 입원 진료비 (심평원 2024)' — HIRA
+- EV002: '암 5년 생존율 (건보공단 2023)' — NHIS
+- EV003: '뇌졸중 평균 입원 진료비 (심평원 2024)' — HIRA
+- EV004: '고혈압 유병률 (통계청 2023)' — KOSTAT (draft)
+- EV005: '65세 이상 간병보험 미가입률 (금감원 2024)' — FSS
+
+---
+
+### Evidence 아키텍처 재확정 — 공인 외부 통계 기반 단일 유형
+
+**배경:** TF 리뷰에서 Rule의 기준(근거)을 보닥 내부 통계로 설정하면 통계가 바뀔 때마다 Rule 기준이 흔들린다는 문제 제기. 마이데이터·프롬에이지는 어차피 상담 시 자동 전달되므로 별도 Evidence 카드 등록이 불필요하다는 결론.
+
+**확정 사항:**
+- Evidence 2종(보닥통계·프롬에이지) → 단일 유형(공인 외부 통계, code: `external`) 전환
+- 마이데이터: 상담 시 자동 전달, Evidence 카드 불필요
+- 프롬에이지: 상담 시 자동 전달, Evidence 카드 불필요
+- 공인 기관 출처: HIRA(심평원) / NHIS(건보공단) / KOSTAT(통계청) / FSS(금감원) / 기타
+- 8개 필드: 제목·출처기관·보고서명·기준연도·지표명·기준값(단위 포함)·출처URL(선택)·활용방법
+- 조회지표 8종·N-segment 빌더·프롬에이지 출력형식 체크박스 전면 폐기
+
+**업데이트된 파일 (전수 조사):**
+- `mockups/05_card-editor-evidence.html` — 폼 전체 재작성 (stat/fromage → external 단일 유형)
+- `mockups/05_evidence-list.html` — 유형 뱃지·DATA 배열 업데이트
+- `context/decisions.md` — Evidence 섹션 재작성
+- `guides/insurance-domain.md` — Evidence 조회지표 8종 → 공인 외부 통계 섹션
+- `agents/04a_coder-evidence.md` — 전면 재작성
+- `agents/05_code-reviewer.md` — Section F Evidence 체크리스트 업데이트
+- `agents/06_spec-reviewer.md` — 라인 24·G섹션 Evidence 항목 업데이트
+- `agents/07_insurance-expert.md` — Evidence 조회지표 8종 섹션 → 공인 외부 통계
+- `agents/08_ui-reviewer.md` — E-1 Evidence 구조 검수 항목 업데이트
+- `agents/01_ai-rag-architect.md` — Evidence 임베딩 전략 항목 업데이트
+- `agents/02_po.md` — Evidence 유형 설명·등록순서·화면우선순위 업데이트
+- `agents/03_ui-designer.md` — Evidence 유형 2종 → 단일 유형 업데이트
+- `CLAUDE.md` — 현재 상태 섹션 업데이트
+
+---
+
 ## 2026-06-10
 
 ### Evidence 아키텍처 개편

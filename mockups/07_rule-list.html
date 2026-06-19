@@ -128,12 +128,12 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 </div>
 <script>
 const DATA=[
-  {code:'RU001',name:'암진단금 미보유 또는 소액',status:'active',riskType:'T02 암투병생활비 부족형',evidences:['EV001 보닥 암진단 담보 미보유율 통계','EV002 보닥 40대 암보장 평균 분석'],conditions:2,policies:['PO001 암 보장 기준 가이드','PO003 프롬에이지 위험도 등급 출력'],updated:'2026-05-14'},
-  {code:'RU002',name:'뇌혈관 보장 범위 협소',status:'review',riskType:'T04 뇌혈관질환보장 협소형',evidences:['EV003 보닥 뇌심혈관 담보 미보유율'],conditions:3,policies:['PO001 암 보장 기준 가이드'],updated:'2026-05-12'},
+  {code:'RU001',name:'암진단금 미보유 또는 소액',status:'active',riskType:'T02 암투병생활비 부족형',evidences:['EV001 암 평균 입원 진료비 (심평원 2024)','EV002 암 5년 생존율 (건보공단 2023)'],conditions:2,policies:['PO001 암 보장 기준 가이드','PO003 프롬에이지 위험도 등급 출력'],updated:'2026-05-14'},
+  {code:'RU002',name:'뇌혈관 보장 범위 협소',status:'review',riskType:'T04 뇌혈관질환보장 협소형',evidences:['EV003 뇌졸중 평균 입원 진료비 (심평원 2024)'],conditions:3,policies:['PO001 암 보장 기준 가이드'],updated:'2026-05-12'},
   {code:'RU003',name:'심혈관 보장 미흡',status:'draft',riskType:'T03 심혈관질환보장 협소형',evidences:[],conditions:0,policies:[],updated:'2026-05-08'},
-  {code:'RU004',name:'노후 간병 보장 부재',status:'approved',riskType:'T05 노후돌봄보장 공백형',evidences:['EV006 보닥 노후 간병보험 가입 현황'],conditions:2,policies:['PO004 노후 간병 안내 기준'],updated:'2026-05-15'},
+  {code:'RU004',name:'노후 간병 보장 부재',status:'approved',riskType:'T05 노후돌봄보장 공백형',evidences:['EV005 65세 이상 간병보험 미가입률 (금감원 2024)'],conditions:2,policies:['PO004 노후 간병 안내 기준'],updated:'2026-05-15'},
   {code:'RU005',name:'보험료 납입 부담 과다',status:'paused',riskType:'T06 납입여력부족 우려형',evidences:[],conditions:0,policies:[],updated:'2026-05-16'},
-  {code:'RU010',name:'단기납 만기 후 공백',status:'approved',riskType:'T09 단기납 만기 후 공백형',evidences:['EV005 40대 남성 심혈관 담보 보유율'],conditions:2,policies:[],updated:'2026-05-15'},
+  {code:'RU010',name:'단기납 만기 후 공백',status:'approved',riskType:'T09 단기납 만기 후 공백형',evidences:['EV005 65세 이상 간병보험 미가입률 (금감원 2024)'],conditions:2,policies:[],updated:'2026-05-15'},
   {code:'RU011',name:'고액 보험료 유지 부담',status:'paused',riskType:'T10 고액 보험료 유지 부담형',evidences:[],conditions:0,policies:[],updated:'2026-05-16'},
 ];
 const ST={active:'🟢 라이브',review:'⏳ 승인요청',draft:'📝 임시저장',approved:'✔ 승인완료',paused:'⏸ 일시중지'};
