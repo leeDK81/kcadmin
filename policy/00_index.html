@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=1280">
+<title>KC Admin 정책서 — 목차</title>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<style>
+:root{--card-risk:#C94B1A;--card-evidence:#1A7A4A;--card-concept:#1A4A9A;--card-rule:#9A1A1A;--card-policy:#5A5A55;--card-playbook:#6B4A9A;--status-draft:#9C9C94;--status-review:#BA7517;--status-active:#0F6E56;--status-approved:#1A4A9A;--status-paused:#7A4A00;--status-rejected:#A32D2D;--step-active:#1A3A6B;--sidebar-w:240px;--bg-page:#F4F4F5;--bg-card:#FFFFFF;--text-primary:#171719;--text-secondary:#70737C;--text-hint:#989BA2;--border:#E1E2E4;--radius:8px;--shadow:0px 2px 4px -2px rgba(23,23,23,.06),0px 4px 6px -1px rgba(23,23,23,.06)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg-page);color:var(--text-primary);min-width:1280px;font-size:15px;line-height:1.5}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:var(--sidebar-w);background:#1A1A18;flex-shrink:0;padding:20px 0;position:sticky;top:0;height:100vh;overflow-y:auto}
+.sidebar-logo{padding:0 16px 16px;font-size:15px;font-weight:700;color:#fff;border-bottom:1px solid #333;margin-bottom:12px;line-height:1.4}
+.sidebar a{display:flex;align-items:center;gap:8px;padding:8px 16px;color:#C8C8C4;text-decoration:none;font-size:14px;transition:background .15s}
+.sidebar a:hover{background:rgba(255,255,255,.08);color:#fff}
+.sidebar a.active{background:rgba(255,255,255,.15);color:#fff;font-weight:600;border-left:3px solid #5A8AE0}
+.sidebar a.ext{color:#777;font-size:13px}
+.nav-divider{border-top:1px solid #333;margin:8px 0}
+.main{flex:1;padding:32px;overflow-y:auto}
+.page-header{margin-bottom:32px}
+.page-header h1{font-size:24px;font-weight:700;margin-bottom:6px}
+.page-header p{color:var(--text-secondary)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px}
+.policy-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);cursor:pointer;text-decoration:none;color:inherit;transition:box-shadow .15s,border-color .15s;display:block}
+.policy-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.1);border-color:#C0C0BA}
+.pc-num{font-size:28px;font-weight:700;color:var(--border);margin-bottom:8px;line-height:1}
+.pc-title{font-size:16px;font-weight:700;margin-bottom:6px}
+.pc-desc{font-size:13px;color:var(--text-secondary);line-height:1.6}
+.pc-bar{height:3px;border-radius:2px;margin-bottom:14px}
+.intro-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);margin-bottom:24px;display:flex;align-items:flex-start;gap:16px}
+.intro-icon{font-size:28px;color:var(--step-active);flex-shrink:0;margin-top:2px}
+.intro-body h3{font-size:16px;font-weight:700;margin-bottom:6px}
+.intro-body p{font-size:14px;color:var(--text-secondary);line-height:1.6}
+.target-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.target-chip{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border:1px solid var(--border);border-radius:20px;font-size:13px;font-weight:600;background:var(--bg-page)}
+</style>
+</head>
+<body>
+<div class="layout">
+<nav class="sidebar">
+  <div class="sidebar-logo">KC 정책서<br><span style="font-size:11px;color:#888;font-weight:400">메이커 조직용 v2</span></div>
+  <a href="00_index.html" class="active"><i class="fa-solid fa-house fa-fw"></i> 목차</a>
+  <div class="nav-divider"></div>
+  <a href="01_glossary.html"><i class="fa-solid fa-book fa-fw"></i> 01 용어 정의</a>
+  <a href="02_card-purpose.html"><i class="fa-solid fa-layer-group fa-fw"></i> 02 카드 기능·목적</a>
+  <a href="03_connect-policy.html"><i class="fa-solid fa-diagram-project fa-fw"></i> 03 연결 정책</a>
+  <a href="04_lifecycle.html"><i class="fa-solid fa-rotate fa-fw"></i> 04 라이프사이클</a>
+  <a href="05_approval.html"><i class="fa-solid fa-check-double fa-fw"></i> 05 승인 정책</a>
+  <a href="06_field-data.html"><i class="fa-solid fa-table-list fa-fw"></i> 06 필드·데이터 정의</a>
+  <a href="07_permission.html"><i class="fa-solid fa-user-shield fa-fw"></i> 07 역할별 권한</a>
+  <a href="08_screen-policy.html"><i class="fa-solid fa-desktop fa-fw"></i> 08 화면 정책</a>
+  <div class="nav-divider"></div>
+  <a href="../mockups_v2/01_guide.html" target="_blank" class="ext"><i class="fa-solid fa-arrow-up-right-from-square fa-fw"></i> KC Admin 목업</a>
+</nav>
+<main class="main">
+  <div class="page-header">
+    <h1>KC Admin 정책서</h1>
+    <p>디자이너·개발자가 KC Admin 시스템을 구현하기 위한 공식 정책 문서</p>
+  </div>
+
+  <div class="intro-card">
+    <div class="intro-icon"><i class="fa-solid fa-shield-halved"></i></div>
+    <div class="intro-body">
+      <h3>이 문서의 목적</h3>
+      <p>KC Admin은 Clark AI가 보험 상담 사용자에게 정확한 답변을 생성하도록 판단 기준(KC 카드)을 등록·관리하는 내부 운영 시스템입니다. 이 정책서는 디자이너·프론트엔드·백엔드·AI 개발자가 시스템을 구현할 때 기준으로 삼아야 할 규칙, 데이터 구조, 화면 정책을 정의합니다. <strong>목업(mockups_v2/)과 이 정책서를 함께 참조</strong>하여 구현하세요.</p>
+      <div class="target-row">
+        <span class="target-chip"><i class="fa-solid fa-pen-nib" style="color:#1A4A9A"></i> 디자이너</span>
+        <span class="target-chip"><i class="fa-solid fa-code" style="color:#0F6E56"></i> 프론트엔드</span>
+        <span class="target-chip"><i class="fa-solid fa-server" style="color:#9A1A1A"></i> 백엔드</span>
+        <span class="target-chip"><i class="fa-solid fa-robot" style="color:#6B4A9A"></i> AI 개발자</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <a href="01_glossary.html" class="policy-card">
+      <div class="pc-bar" style="background:#5A8AE0"></div>
+      <div class="pc-num">01</div>
+      <div class="pc-title">용어 정의</div>
+      <div class="pc-desc">KC카드, Clark AI, 캔버스, 체인, 엣지 등 시스템 전반에서 사용되는 핵심 용어를 정의합니다.</div>
+    </a>
+    <a href="02_card-purpose.html" class="policy-card">
+      <div class="pc-bar" style="background:var(--card-concept)"></div>
+      <div class="pc-num">02</div>
+      <div class="pc-title">카드 기능·목적</div>
+      <div class="pc-desc">6종의 KC카드(Risk-type·Evidence·Concept·Rule·Policy·Playbook) 각각의 역할과 AI 체인에서의 위치를 정의합니다.</div>
+    </a>
+    <a href="03_connect-policy.html" class="policy-card">
+      <div class="pc-bar" style="background:var(--status-active)"></div>
+      <div class="pc-num">03</div>
+      <div class="pc-title">연결 정책</div>
+      <div class="pc-desc">카드 간 연결 방향(CONNECT_RULES), 캔버스 전용 연결 원칙, 준비 연결·라이브 연결 구분을 정의합니다.</div>
+    </a>
+    <a href="04_lifecycle.html" class="policy-card">
+      <div class="pc-bar" style="background:var(--status-review)"></div>
+      <div class="pc-num">04</div>
+      <div class="pc-title">라이프사이클 정책</div>
+      <div class="pc-desc">6단계 상태(임시저장→승인요청→승인완료→라이브→일시중지→반려) 전환 규칙 및 각 상태에서의 가능 액션을 정의합니다.</div>
+    </a>
+    <a href="05_approval.html" class="policy-card">
+      <div class="pc-bar" style="background:var(--status-approved)"></div>
+      <div class="pc-num">05</div>
+      <div class="pc-title">승인 정책</div>
+      <div class="pc-desc">표준 1단계 검수·승인 흐름과 Policy 카드의 2단계 승인(도메인 검수 + 준법감시인) 정책을 정의합니다.</div>
+    </a>
+    <a href="06_field-data.html" class="policy-card">
+      <div class="pc-bar" style="background:var(--card-rule)"></div>
+      <div class="pc-num">06</div>
+      <div class="pc-title">필드·데이터 정의</div>
+      <div class="pc-desc">6종 카드 타입별 필드 목록, 필수/선택 여부, 데이터 타입 및 유효성 규칙을 정의합니다.</div>
+    </a>
+    <a href="07_permission.html" class="policy-card">
+      <div class="pc-bar" style="background:var(--card-playbook)"></div>
+      <div class="pc-num">07</div>
+      <div class="pc-title">역할별 권한</div>
+      <div class="pc-desc">운영자·검수자·준법감시인·관리자 역할 정의와 기능별 접근 권한 매트릭스를 정의합니다.</div>
+    </a>
+    <a href="08_screen-policy.html" class="policy-card">
+      <div class="pc-bar" style="background:var(--card-risk)"></div>
+      <div class="pc-num">08</div>
+      <div class="pc-title">화면 정책</div>
+      <div class="pc-desc">KC Admin 전체 26개 화면의 목적, 주요 기능, 구현 시 준수해야 할 정책을 화면별로 정의합니다.</div>
+    </a>
+  </div>
+
+</main>
+</div>
+</body>
+</html>

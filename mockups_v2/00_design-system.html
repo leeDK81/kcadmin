@@ -99,10 +99,10 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
   <a href="00_canvas-main.html"><i class="fa-solid fa-diagram-project fa-fw"></i> ③ 연결</a>
   <a href="11_dry-run.html"><i class="fa-solid fa-flask fa-fw"></i> ④ 사전 테스트</a>
   <a href="18_system-settings.html"><i class="fa-solid fa-sliders fa-fw"></i> 시스템 설정</a>
+  <a href="19_faq-rag.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-list-check fa-fw" style="font-size:11px;color:#1A4A9A"></i> FAQ RAG 관리</a>
 
   <div class="nav-divider"></div>
   <a href="13_answer-logic.html"><i class="fa-solid fa-diagram-project fa-fw"></i> AI 답변 로직</a>
-  <a href="14_answer-logic-guide.html"><i class="fa-solid fa-book-open fa-fw"></i> AI 답변 생성 예시</a>
   <a href="17_system-data-guide.html"><i class="fa-solid fa-network-wired fa-fw"></i> 데이터 연결 구조</a>
   <a href="15_aio-guide.html"><i class="fa-solid fa-globe fa-fw"></i> AIO 가이드</a>
   <a href="12_coverage-code-table.html"><i class="fa-solid fa-table-list fa-fw"></i> 담보코드</a>
@@ -262,7 +262,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
   <!-- 배너 -->
   <div class="card">
     <div class="section-title">경고 배너</div>
-    <div class="banner banner-info"><strong>안내:</strong> Concept 카드가 없으면 해당 질문은 일반 생성형 AI 경로로 처리됩니다.</div>
+    <div class="banner banner-info"><strong>안내:</strong> Concept 카드가 없으면 해당 질문은 RAG 레이어(약관 RAG → Clark 서비스 FAQ RAG) 검색 후 Fallback 제한 생성형 경로로 처리됩니다.</div>
     <div class="banner banner-warn"><strong>주의:</strong> Policy 카드는 저장 전 준법감시인 1차 검토가 필요합니다.</div>
     <div class="banner banner-error"><strong>오류:</strong> Rule 저장 실패 – Evidence 카드가 연결되지 않았습니다.</div>
     <div class="banner banner-success"><strong>완료:</strong> 카드가 라이브 상태로 전환되어 Clark AI에 반영되었습니다.</div>
@@ -319,9 +319,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
       <a href="11_dry-run.html" class="screen-link"><div class="screen-num">11</div><div class="screen-name">🧪 사전 테스트</div></a>
       <a href="12_coverage-code-table.html" class="screen-link"><div class="screen-num">12</div><div class="screen-name">📋 담보코드</div></a>
       <a href="13_answer-logic.html" class="screen-link"><div class="screen-num">13</div><div class="screen-name">🔀 AI 답변 로직·예시</div></a>
-      <a href="14_answer-logic-guide.html"><i class="fa-solid fa-book-open fa-fw"></i> AI 답변 생성 예시</a>
       <a href="13_answer-logic.html" class="screen-link"><div class="screen-num">14</div><div class="screen-name">↪ 13으로 통합</div></a>
-      <a href="14_answer-logic-guide.html"><i class="fa-solid fa-book-open fa-fw"></i> AI 답변 생성 예시</a>
       <a href="15_aio-guide.html" class="screen-link"><div class="screen-num">15</div><div class="screen-name">🌐 AIO 가이드</div></a>
       <a href="16_playbook-list.html" class="screen-link"><div class="screen-num">16</div><div class="screen-name">⑥ Playbook 목록</div></a>
       <a href="16_card-editor-playbook.html" class="screen-link"><div class="screen-num">16e</div><div class="screen-name">⑥ Playbook 편집기</div></a>

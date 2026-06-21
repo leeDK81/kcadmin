@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=1280">
+<title>KC Admin 정책서 — 06 필드·데이터 정의</title>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<style>
+:root{--card-risk:#C94B1A;--card-evidence:#1A7A4A;--card-concept:#1A4A9A;--card-rule:#9A1A1A;--card-policy:#5A5A55;--card-playbook:#6B4A9A;--status-draft:#9C9C94;--status-review:#BA7517;--status-active:#0F6E56;--status-approved:#1A4A9A;--status-paused:#7A4A00;--status-rejected:#A32D2D;--step-active:#1A3A6B;--sidebar-w:240px;--bg-page:#F4F4F5;--bg-card:#FFFFFF;--text-primary:#171719;--text-secondary:#70737C;--text-hint:#989BA2;--border:#E1E2E4;--radius:8px;--shadow:0px 2px 4px -2px rgba(23,23,23,.06),0px 4px 6px -1px rgba(23,23,23,.06)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg-page);color:var(--text-primary);min-width:1280px;font-size:15px;line-height:1.5}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:var(--sidebar-w);background:#1A1A18;flex-shrink:0;padding:20px 0;position:sticky;top:0;height:100vh;overflow-y:auto}
+.sidebar-logo{padding:0 16px 16px;font-size:15px;font-weight:700;color:#fff;border-bottom:1px solid #333;margin-bottom:12px;line-height:1.4}
+.sidebar a{display:flex;align-items:center;gap:8px;padding:8px 16px;color:#C8C8C4;text-decoration:none;font-size:14px;transition:background .15s}
+.sidebar a:hover{background:rgba(255,255,255,.08);color:#fff}
+.sidebar a.active{background:rgba(255,255,255,.15);color:#fff;font-weight:600;border-left:3px solid #5A8AE0}
+.sidebar a.ext{color:#777;font-size:13px}
+.nav-divider{border-top:1px solid #333;margin:8px 0}
+.main{flex:1;padding:32px;overflow-y:auto}
+.page-header{margin-bottom:28px}
+.page-header h1{font-size:24px;font-weight:700;margin-bottom:6px}
+.page-header p{color:var(--text-secondary)}
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);margin-bottom:16px}
+.section-title{font-size:17px;font-weight:700;margin:0 0 16px;padding-bottom:8px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{padding:8px 12px;text-align:left;border:1px solid var(--border);background:#F4F4F2;font-weight:600;white-space:nowrap}
+.tbl td{padding:8px 12px;border:1px solid var(--border);line-height:1.5;vertical-align:top}
+.tbl tr:nth-child(even) td{background:#FAFAF8}
+.chip{display:inline-flex;padding:1px 7px;border-radius:10px;font-size:11px;font-weight:700}
+.chip-req{background:#C94B1A;color:#fff}
+.chip-opt{background:#9C9C94;color:#fff}
+.notice{display:flex;align-items:flex-start;gap:8px;padding:10px 14px;background:#FFF9EC;border:1px solid #F0D880;border-radius:6px;margin:10px 0;font-size:13px;color:#7A5A00;line-height:1.5}
+.notice i{flex-shrink:0;margin-top:1px}
+</style>
+</head>
+<body>
+<div class="layout">
+<nav class="sidebar">
+  <div class="sidebar-logo">KC 정책서<br><span style="font-size:11px;color:#888;font-weight:400">메이커 조직용 v2</span></div>
+  <a href="00_index.html"><i class="fa-solid fa-house fa-fw"></i> 목차</a>
+  <div class="nav-divider"></div>
+  <a href="01_glossary.html"><i class="fa-solid fa-book fa-fw"></i> 01 용어 정의</a>
+  <a href="02_card-purpose.html"><i class="fa-solid fa-layer-group fa-fw"></i> 02 카드 기능·목적</a>
+  <a href="03_connect-policy.html"><i class="fa-solid fa-diagram-project fa-fw"></i> 03 연결 정책</a>
+  <a href="04_lifecycle.html"><i class="fa-solid fa-rotate fa-fw"></i> 04 라이프사이클</a>
+  <a href="05_approval.html"><i class="fa-solid fa-check-double fa-fw"></i> 05 승인 정책</a>
+  <a href="06_field-data.html" class="active"><i class="fa-solid fa-table-list fa-fw"></i> 06 필드·데이터 정의</a>
+  <a href="07_permission.html"><i class="fa-solid fa-user-shield fa-fw"></i> 07 역할별 권한</a>
+  <a href="08_screen-policy.html"><i class="fa-solid fa-desktop fa-fw"></i> 08 화면 정책</a>
+  <div class="nav-divider"></div>
+  <a href="../mockups_v2/01_guide.html" target="_blank" class="ext"><i class="fa-solid fa-arrow-up-right-from-square fa-fw"></i> KC Admin 목업</a>
+</nav>
+<main class="main">
+  <div class="page-header">
+    <h1>06 필드·데이터 정의</h1>
+    <p>6종 KC카드 타입별 필드 목록, 필수/선택, 데이터 타입 및 유효성 규칙</p>
+  </div>
+
+  <!-- Risk-type -->
+  <div class="card">
+    <div class="section-title"><i class="fa-solid fa-circle-exclamation fa-fw" style="color:var(--card-risk)"></i> Risk-type 카드 필드</div>
+    <table class="tbl">
+      <thead><tr><th>필드명</th><th>API 키</th><th>필수</th><th>타입</th><th>설명 / 유효성</th></tr></thead>
+      <tbody>
+        <tr><td>카드 코드</td><td><code>code</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>T01~T10 형식. 시스템 자동 부여. 편집 불가</td></tr>
+        <tr><td>명칭</td><td><code>name</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>최대 30자. 예: "암투병생활비 부족형"</td></tr>
+        <tr><td>설명</td><td><code>desc</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>최대 200자. 이 위험 유형이 발생하는 상황 설명</td></tr>
+        <tr><td>중요도</td><td><code>priority</code></td><td><span class="chip chip-req">필수</span></td><td>enum</td><td>high / mid / low. 기본값: mid(보통·가중치×2). 다중 감지 시 노출 우선순위 1순위 기준: 중요도 가중치(high=×3 / mid=×2 / low=×1) × 충족 Rule 수</td></tr>
+        <tr><td>리드 스코어</td><td><code>leadScore</code></td><td><span class="chip chip-opt">선택</span></td><td>number</td><td>Phase 1.5 이후 활성화. 현재 미사용</td></tr>
+        <tr><td>공개범위</td><td><code>scope</code></td><td>자동</td><td>string</td><td>"public" 고정. 운영자 변경 불가</td></tr>
+        <tr><td>상태</td><td><code>status</code></td><td>자동</td><td>enum</td><td>draft / review / approved / active / paused / rejected</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Evidence -->
+  <div class="card">
+    <div class="section-title"><i class="fa-solid fa-database fa-fw" style="color:var(--card-evidence)"></i> Evidence 카드 필드</div>
+    <table class="tbl">
+      <thead><tr><th>필드명</th><th>API 키</th><th>필수</th><th>타입</th><th>설명 / 유효성</th></tr></thead>
+      <tbody>
+        <tr><td>카드 코드</td><td><code>code</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>EV001~ 형식. 시스템 자동 부여</td></tr>
+        <tr><td>제목</td><td><code>title</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>핵심 내용 한 줄 요약. 최대 60자</td></tr>
+        <tr><td>출처 기관</td><td><code>sourceOrg</code></td><td><span class="chip chip-req">필수</span></td><td>enum</td><td>HIRA(건강보험심사평가원) / NHIS(국민건강보험공단) / 통계청(KOSTAT) / FSS(금융감독원) / 기타(OTHER)</td></tr>
+        <tr><td>보고서명</td><td><code>reportName</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>인용한 공식 보고서명</td></tr>
+        <tr><td>기준 연도</td><td><code>baseYear</code></td><td><span class="chip chip-req">필수</span></td><td>select</td><td>통계 발행 연도. 2021~현재 연도 중 선택</td></tr>
+        <tr><td>지표명</td><td><code>indicatorName</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>활용할 통계 지표 명칭</td></tr>
+        <tr><td>기준값</td><td><code>baseValue</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>단위 포함 입력. 예: "3,800만원", "68%"</td></tr>
+        <tr><td>출처 URL</td><td><code>sourceUrl</code></td><td><span class="chip chip-opt">선택</span></td><td>string(url)</td><td>원본 자료 링크</td></tr>
+        <tr><td>활용 방법</td><td><code>usage</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>어떤 Rule 임계값의 근거인지, 왜 이 수치가 기준인지</td></tr>
+        <tr><td>카드 유형</td><td><code>evidenceType</code></td><td>자동</td><td>string</td><td>"external" 고정. 단일 유형</td></tr>
+        <tr><td>공개범위</td><td><code>scope</code></td><td>자동</td><td>string</td><td>"internal" 고정</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Concept -->
+  <div class="card">
+    <div class="section-title"><i class="fa-solid fa-lightbulb fa-fw" style="color:var(--card-concept)"></i> Concept 카드 필드</div>
+    <table class="tbl">
+      <thead><tr><th>필드명</th><th>API 키</th><th>필수</th><th>타입</th><th>설명 / 유효성</th></tr></thead>
+      <tbody>
+        <tr><td>카드 코드</td><td><code>code</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>CN001~ 형식. 시스템 자동 부여</td></tr>
+        <tr><td>개념명</td><td><code>name</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>최대 40자. 예: "암보험 보장 내용"</td></tr>
+        <tr><td>설명</td><td><code>desc</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>이 개념의 의미와 적용 범위 설명</td></tr>
+        <tr><td>동의어 목록</td><td><code>synonyms</code></td><td><span class="chip chip-req">필수</span></td><td>string[]</td><td>최소 1개. 사용자 질의에서 매칭될 키워드 목록. 쉼표 구분</td></tr>
+        <tr><td>연결 Risk-type</td><td><code>linkedRiskTypes</code></td><td><span class="chip chip-opt">선택</span></td><td>string[]</td><td>캔버스에서 설정. 편집기에서 읽기 전용 표시</td></tr>
+        <tr><td>공개범위</td><td><code>scope</code></td><td>자동</td><td>string</td><td>"public" 고정</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Rule -->
+  <div class="card">
+    <div class="section-title"><i class="fa-solid fa-scale-balanced fa-fw" style="color:var(--card-rule)"></i> Rule 카드 필드</div>
+    <table class="tbl">
+      <thead><tr><th>필드명</th><th>API 키</th><th>필수</th><th>타입</th><th>설명 / 유효성</th></tr></thead>
+      <tbody>
+        <tr><td>카드 코드</td><td><code>code</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>RU001~ 형식. 시스템 자동 부여</td></tr>
+        <tr><td>Rule명</td><td><code>name</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>최대 60자</td></tr>
+        <tr><td>설명</td><td><code>desc</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>이 Rule이 판단하는 내용</td></tr>
+        <tr><td>판단 조건</td><td><code>conditions</code></td><td><span class="chip chip-req">필수</span></td><td>ConditionRow[]</td><td>최소 1개. 3개 데이터 소스(MYDATA·Promage·프로파일) 중 선택하여 조건 행 배열 구성. 각 행의 source 값: "MYDATA" | "PROMAGE" | "PROFILE"</td></tr>
+        <tr><td>출력 등급</td><td><code>outputGrade</code></td><td><span class="chip chip-req">필수</span></td><td>enum</td><td>위험 / 주의 / 양호 (상/중/하 사용 금지)</td></tr>
+        <tr><td>약관 DB 연동</td><td><code>useContractDb</code></td><td><span class="chip chip-opt">선택</span></td><td>boolean</td><td>true 시 Rule 충족 → 담보코드 기준 약관 DB 자동 조회 → 면책조항 자동 추가</td></tr>
+        <tr><td>연결 Risk-type</td><td><code>linkedRiskTypes</code></td><td>캔버스</td><td>string[]</td><td>캔버스에서 설정. 편집기 읽기 전용</td></tr>
+        <tr><td>연결 Evidence</td><td><code>linkedEvidences</code></td><td>캔버스</td><td>string[]</td><td>캔버스에서 설정. 최소 1개 필요</td></tr>
+        <tr><td>연결 Policy</td><td><code>linkedPolicies</code></td><td>캔버스</td><td>string[]</td><td>캔버스에서 설정. 선택사항</td></tr>
+        <tr><td>공개범위</td><td><code>scope</code></td><td>자동</td><td>string</td><td>"baseline" 고정</td></tr>
+      </tbody>
+    </table>
+    <div class="notice" style="margin-top:12px">
+      <i class="fa-solid fa-circle-info fa-fw"></i>
+      <span><strong>ConditionRow 구조:</strong> <code>{ source: "MYDATA"|"PROMAGE"|"PROFILE", field: string, operator: string, value: string }</code>. MYDATA는 추가로 <code>coverageCode</code> 필드 포함 (<code>{ source: "MYDATA", coverageCode: string, field: string, operator: string, value: string }</code>).<br>
+      <strong>MYDATA 확인항목 5종 (field 값):</strong> <code>coverage_amt</code>(가입금액) / <code>renewal_status</code>(갱신여부) / <code>insu_type</code>(보험유형) / <code>start_date</code>(시작일) / <code>end_date</code>(종료일).</span>
+    </div>
+  </div>
+
+  <!-- Policy -->
+  <div class="card">
+    <div class="section-title"><i class="fa-solid fa-file-shield fa-fw" style="color:var(--card-policy)"></i> Policy 카드 필드</div>
+    <table class="tbl">
+      <thead><tr><th>필드명</th><th>API 키</th><th>필수</th><th>타입</th><th>설명 / 유효성</th></tr></thead>
+      <tbody>
+        <tr><td>카드 코드</td><td><code>code</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>PL001~ 형식. 시스템 자동 부여</td></tr>
+        <tr><td>규제 문서명</td><td><code>regulationName</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>준거 법령·내부 규정명</td></tr>
+        <tr><td>적용 범위</td><td><code>coverageScope</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>이 Policy가 적용되는 상황·카드 범위</td></tr>
+        <tr><td>핵심 조항 요약</td><td><code>summary</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>준수해야 할 핵심 규제 내용 요약</td></tr>
+        <tr><td>출력 대상 화면</td><td><code>displayTarget</code></td><td><span class="chip chip-req">필수</span></td><td>enum</td><td>진단 화면 전체 / 기본 진단만 / 프롬에이지 고도화 진단만. 이 면책 문구가 표시될 Clark 앱 화면 범위</td></tr>
+        <tr><td>Clark 앱 표시 문구</td><td><code>appDisplayText</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>Clark 앱에 표시될 면책 고지 문구. 앱 코드 하드코딩 금지. 준법감시인 승인 후 즉시 반영</td></tr>
+        <tr><td>출력 제한 설정</td><td><code>outputRestriction</code></td><td><span class="chip chip-opt">선택</span></td><td>object</td><td>AI 답변 출력 제한 상세 설정</td></tr>
+        <tr><td>준수 체크리스트</td><td><code>complianceChecklist</code></td><td><span class="chip chip-req">필수</span></td><td>boolean[]</td><td>필수 체크 항목 3개 모두 체크해야 검수 요청 가능</td></tr>
+        <tr><td>공개범위</td><td><code>scope</code></td><td>자동</td><td>string</td><td>"internal" 고정</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Playbook -->
+  <div class="card">
+    <div class="section-title"><i class="fa-solid fa-bullseye fa-fw" style="color:var(--card-playbook)"></i> Playbook 카드 필드</div>
+    <table class="tbl">
+      <thead><tr><th>필드명</th><th>API 키</th><th>필수</th><th>타입</th><th>설명 / 유효성</th></tr></thead>
+      <tbody>
+        <tr><td>카드 코드</td><td><code>code</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>PB001~ 형식. 시스템 자동 부여</td></tr>
+        <tr><td>Playbook명</td><td><code>name</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>최대 60자</td></tr>
+        <tr><td>설명</td><td><code>desc</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>이 Playbook의 목적과 발동 조건 설명</td></tr>
+        <tr><td>발화 키워드</td><td><code>triggerKeywords</code></td><td><span class="chip chip-req">필수</span></td><td>string[]</td><td>최소 3개. 사용자 질의에서 감지될 키워드 목록</td></tr>
+        <tr><td>전환 액션(CTA)</td><td><code>ctaButtons</code></td><td><span class="chip chip-req">필수</span></td><td>CTAButton[]</td><td>기본 버튼(consult) 필수. 추가 버튼 N개 선택</td></tr>
+        <tr><td>Standalone 답변 가이드</td><td><code>standaloneGuide</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>최소 20자. KC 미매칭 시 LLM이 참조할 답변 방향 가이드</td></tr>
+        <tr><td>리드 스코어링</td><td><code>leadScoring</code></td><td>미사용</td><td>object</td><td>Phase 1.5 이후 활성화</td></tr>
+        <tr><td>배정 최적화</td><td><code>assignOptimization</code></td><td>미사용</td><td>object</td><td>Phase 2 이후 활성화</td></tr>
+        <tr><td>공개범위</td><td><code>scope</code></td><td>자동</td><td>string</td><td>"internal" 고정. 변경 불가</td></tr>
+      </tbody>
+    </table>
+    <div class="notice" style="margin-top:12px">
+      <i class="fa-solid fa-circle-info fa-fw"></i>
+      <span><strong>CTAButton 구조:</strong> <code>{ type: "consult"|"deeplink"|"external", label: string, url?: string }</code>. type "consult"가 기본 버튼(필수, 1개).</span>
+    </div>
+  </div>
+
+  <!-- Rule 조건 빌더 3-source 구조 -->
+  <div class="card">
+    <div class="section-title"><i class="fa-solid fa-scale-balanced fa-fw" style="color:var(--card-rule)"></i> Rule 조건 빌더 — 데이터 소스 3종 구조</div>
+    <table class="tbl">
+      <thead><tr><th>소스</th><th>source 값</th><th>행 구조</th><th>배경색 클래스</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>마이데이터</strong></td>
+          <td><code>MYDATA</code></td>
+          <td>담보코드 select + 확인항목 select(5종) + 조건 + 기준값</td>
+          <td><code>.cond-row-mydata</code> (기본 회색)</td>
+        </tr>
+        <tr>
+          <td><strong>프롬에이지</strong></td>
+          <td><code>PROMAGE</code></td>
+          <td>카테고리 select(암위험도/생체나이/질병위험도/의료비예측) + 항목 select + 조건 + 기준값</td>
+          <td><code>.cond-row-promage</code> (보라, <code>#FAF8FD</code>)</td>
+        </tr>
+        <tr>
+          <td><strong>프로파일</strong></td>
+          <td><code>PROFILE</code></td>
+          <td>항목 select(7개) + 조건 + 기준값</td>
+          <td><code>.cond-row-profile</code> (초록, <code>#F4FBF8</code>)</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="notice" style="margin-top:10px">
+      <i class="fa-solid fa-triangle-exclamation fa-fw"></i>
+      <span>Amplitude 소스는 완전 제거됨(2026-06-08). 조건 빌더에 4번째 소스 구현 금지.</span>
+    </div>
+  </div>
+
+  <!-- 사용자 프로파일 필드 -->
+  <div class="card">
+    <div class="section-title">사용자 프로파일 필드 (Rule 조건 빌더 참조)</div>
+    <table class="tbl">
+      <thead><tr><th>필드코드</th><th>레이블</th><th>타입</th><th>허용 값</th></tr></thead>
+      <tbody>
+        <tr><td><code>age</code></td><td>나이(만)</td><td>number</td><td>정수</td></tr>
+        <tr><td><code>gender</code></td><td>성별</td><td>enum</td><td>남 / 여</td></tr>
+        <tr><td><code>marital</code></td><td>결혼여부</td><td>enum</td><td>기혼 / 미혼</td></tr>
+        <tr><td><code>has_children</code></td><td>자녀유무</td><td>enum</td><td>Y / N</td></tr>
+        <tr><td><code>job_risk</code></td><td>직업위험도</td><td>enum</td><td>비위험 / 중위험 / 고위험</td></tr>
+        <tr><td><code>expecting</code></td><td>출산예정</td><td>enum</td><td>Y / N</td></tr>
+        <tr><td><code>region</code></td><td>거주지</td><td>enum</td><td>서울 / 경기 / 인천 / 부산 / 대구 / 광주 / 대전 / 울산 / 세종 / 강원 / 충북 / 충남 / 전북 / 전남 / 경북 / 경남 / 제주</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</main>
+</div>
+</body>
+</html>

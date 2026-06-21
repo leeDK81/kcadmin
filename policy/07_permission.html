@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=1280">
+<title>KC Admin 정책서 — 07 역할별 권한</title>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<style>
+:root{--card-risk:#C94B1A;--card-evidence:#1A7A4A;--card-concept:#1A4A9A;--card-rule:#9A1A1A;--card-policy:#5A5A55;--card-playbook:#6B4A9A;--status-draft:#9C9C94;--status-review:#BA7517;--status-active:#0F6E56;--status-approved:#1A4A9A;--status-paused:#7A4A00;--status-rejected:#A32D2D;--step-active:#1A3A6B;--sidebar-w:240px;--bg-page:#F4F4F5;--bg-card:#FFFFFF;--text-primary:#171719;--text-secondary:#70737C;--text-hint:#989BA2;--border:#E1E2E4;--radius:8px;--shadow:0px 2px 4px -2px rgba(23,23,23,.06),0px 4px 6px -1px rgba(23,23,23,.06)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg-page);color:var(--text-primary);min-width:1280px;font-size:15px;line-height:1.5}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:var(--sidebar-w);background:#1A1A18;flex-shrink:0;padding:20px 0;position:sticky;top:0;height:100vh;overflow-y:auto}
+.sidebar-logo{padding:0 16px 16px;font-size:15px;font-weight:700;color:#fff;border-bottom:1px solid #333;margin-bottom:12px;line-height:1.4}
+.sidebar a{display:flex;align-items:center;gap:8px;padding:8px 16px;color:#C8C8C4;text-decoration:none;font-size:14px;transition:background .15s}
+.sidebar a:hover{background:rgba(255,255,255,.08);color:#fff}
+.sidebar a.active{background:rgba(255,255,255,.15);color:#fff;font-weight:600;border-left:3px solid #5A8AE0}
+.sidebar a.ext{color:#777;font-size:13px}
+.nav-divider{border-top:1px solid #333;margin:8px 0}
+.main{flex:1;padding:32px;overflow-y:auto}
+.page-header{margin-bottom:28px}
+.page-header h1{font-size:24px;font-weight:700;margin-bottom:6px}
+.page-header p{color:var(--text-secondary)}
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);margin-bottom:16px}
+.section-title{font-size:17px;font-weight:700;margin:0 0 16px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.tbl{width:100%;border-collapse:collapse;font-size:14px}
+.tbl th{padding:9px 12px;text-align:left;border:1px solid var(--border);background:#F4F4F2;font-weight:600;font-size:13px;white-space:nowrap}
+.tbl td{padding:9px 12px;border:1px solid var(--border);line-height:1.5;vertical-align:middle;text-align:center}
+.tbl td.desc{text-align:left}
+.tbl tr:nth-child(even) td{background:#FAFAF8}
+.role-block{border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:10px}
+.role-block h3{font-size:15px;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.role-block p{font-size:14px;color:var(--text-secondary);line-height:1.6}
+.o{color:var(--status-active);font-weight:700;font-size:16px}
+.x{color:var(--status-draft);font-weight:400;font-size:16px}
+.t{color:var(--status-review);font-weight:700;font-size:14px}
+.notice{display:flex;align-items:flex-start;gap:8px;padding:10px 14px;background:#FFF9EC;border:1px solid #F0D880;border-radius:6px;margin:10px 0;font-size:13px;color:#7A5A00;line-height:1.5}
+.notice i{flex-shrink:0;margin-top:1px}
+</style>
+</head>
+<body>
+<div class="layout">
+<nav class="sidebar">
+  <div class="sidebar-logo">KC 정책서<br><span style="font-size:11px;color:#888;font-weight:400">메이커 조직용 v2</span></div>
+  <a href="00_index.html"><i class="fa-solid fa-house fa-fw"></i> 목차</a>
+  <div class="nav-divider"></div>
+  <a href="01_glossary.html"><i class="fa-solid fa-book fa-fw"></i> 01 용어 정의</a>
+  <a href="02_card-purpose.html"><i class="fa-solid fa-layer-group fa-fw"></i> 02 카드 기능·목적</a>
+  <a href="03_connect-policy.html"><i class="fa-solid fa-diagram-project fa-fw"></i> 03 연결 정책</a>
+  <a href="04_lifecycle.html"><i class="fa-solid fa-rotate fa-fw"></i> 04 라이프사이클</a>
+  <a href="05_approval.html"><i class="fa-solid fa-check-double fa-fw"></i> 05 승인 정책</a>
+  <a href="06_field-data.html"><i class="fa-solid fa-table-list fa-fw"></i> 06 필드·데이터 정의</a>
+  <a href="07_permission.html" class="active"><i class="fa-solid fa-user-shield fa-fw"></i> 07 역할별 권한</a>
+  <a href="08_screen-policy.html"><i class="fa-solid fa-desktop fa-fw"></i> 08 화면 정책</a>
+  <div class="nav-divider"></div>
+  <a href="../mockups_v2/01_guide.html" target="_blank" class="ext"><i class="fa-solid fa-arrow-up-right-from-square fa-fw"></i> KC Admin 목업</a>
+</nav>
+<main class="main">
+  <div class="page-header">
+    <h1>07 역할별 권한</h1>
+    <p>운영자·검수자·준법감시인·관리자 역할 정의 및 기능별 권한 매트릭스</p>
+  </div>
+
+  <!-- 역할 정의 -->
+  <div class="card">
+    <div class="section-title">역할 정의</div>
+
+    <div class="role-block" style="border-left:4px solid #5A8AE0">
+      <h3><i class="fa-solid fa-pen fa-fw" style="color:#5A8AE0"></i> 운영자 (Operator)</h3>
+      <p>KC 카드를 실제로 등록·수정·검수 요청하는 실무 운영자. 카드 내용 작성 및 임시저장, 검수 요청이 주요 업무. 직접 승인·반려는 불가.</p>
+    </div>
+
+    <div class="role-block" style="border-left:4px solid var(--status-approved)">
+      <h3><i class="fa-solid fa-magnifying-glass fa-fw" style="color:var(--status-approved)"></i> 검수자 (Reviewer)</h3>
+      <p>운영자가 요청한 카드를 검토하여 승인 또는 반려하는 도메인 전문가. Policy 외 모든 카드의 최종 승인권을 갖는다. 검수·승인 화면(<code>09_review-workflow.html</code>)에서 작업.</p>
+    </div>
+
+    <div class="role-block" style="border-left:4px solid var(--card-policy)">
+      <h3><i class="fa-solid fa-gavel fa-fw" style="color:var(--card-policy)"></i> 준법감시인 (Compliance Officer)</h3>
+      <p>Policy 카드의 최종 승인권자. 도메인 검수자 승인 후 준법 고지 문구·금소법 준수 여부를 최종 검토하여 승인 또는 반려한다. Policy 카드만 처리.</p>
+    </div>
+
+    <div class="role-block" style="border-left:4px solid var(--status-active)">
+      <h3><i class="fa-solid fa-shield-halved fa-fw" style="color:var(--status-active)"></i> 관리자 (Admin)</h3>
+      <p>시스템 전체 관리 권한. LLM Fallback 정책 설정, 카드 일시중지·재시작, 사용자 관리 등 운영자·검수자 권한 포함 모든 기능에 접근 가능.</p>
+    </div>
+  </div>
+
+  <!-- 권한 매트릭스 -->
+  <div class="card">
+    <div class="section-title">기능별 권한 매트릭스</div>
+    <div class="notice">
+      <i class="fa-solid fa-circle-info fa-fw"></i>
+      <span>✅ 허용 &nbsp;|&nbsp; ❌ 불가 &nbsp;|&nbsp; △ 조건부 (본인 생성 카드에 한함)</span>
+    </div>
+    <table class="tbl" style="margin-top:10px">
+      <thead>
+        <tr>
+          <th class="desc">기능</th>
+          <th style="min-width:80px">운영자</th>
+          <th style="min-width:80px">검수자</th>
+          <th style="min-width:80px">준법감시인</th>
+          <th style="min-width:80px">관리자</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="desc" style="font-weight:600;background:#F8F8F6" colspan="5">카드 편집기</td></tr>
+        <tr><td class="desc">카드 신규 등록</td><td><span class="o">✅</span></td><td><span class="x">❌</span></td><td><span class="x">❌</span></td><td><span class="o">✅</span></td></tr>
+        <tr><td class="desc">카드 내용 수정 (draft/rejected)</td><td><span class="t">△ 본인</span></td><td><span class="x">❌</span></td><td><span class="x">❌</span></td><td><span class="o">✅</span></td></tr>
+        <tr><td class="desc">카드 내용 수정 (approved/active)</td><td><span class="o">✅</span> 재검수 필요</td><td><span class="x">❌</span></td><td><span class="x">❌</span></td><td><span class="o">✅</span></td></tr>
+        <tr><td class="desc">검수 요청</td><td><span class="o">✅</span></td><td><span class="x">❌</span></td><td><span class="x">❌</span></td><td><span class="o">✅</span></td></tr>
+        <tr><td class="desc">검수 요청 취소</td><td><span class="t">△ 본인</span></td><td><span class="x">❌</span></td><td><span class="x">❌</span></td><td><span class="o">✅</span></td></tr>
+        <tr><td class="desc" style="font-weight:600;background:#F8F8F6" colspan="5">검수·승인</td></tr>
+        <tr><td class="desc">카드 승인 (Policy 제외)</td><td><span class="x">❌</span></td><td><span class="o">✅</span></td><td><span class="x">❌</span></td><td><span class="o">✅</span></td></tr>
+        <tr><td class="desc">카드 반려</td><td><span class="x">❌</span></td><td><span class="o">✅</span></td><td><span class="t">△ Policy만</span></td><td><span class="o">✅</span></td></tr>
+        <tr><td class="desc">Policy 1차 승인 (도메인)</td><td><span class="x">❌</span></td><td><span class="o">✅</span></td><td><span class="x">❌</span></td><td><span class="o">✅</span></td></tr>
+        <tr><td class="desc">Policy 2차 승인 (준법감시인)</td><td><span class="x">❌</span></td><td><span class="x">❌</span></td><td><span class="o">✅</span></td><td><span class="o">✅</span></td></tr>
+        <tr><td class="desc" style="font-weight:600;background:#F8F8F6" colspan="5">카드 캔버스</td></tr>
+        <tr><td class="desc">캔버스 연결 추가</td><td><span class="o">✅</span></td><td><span class="o">✅</span></td><td><span class="x">❌</span></td><td><span class="o">✅</span></td></tr>
+        <tr><td class="desc">캔버스 연결 제거</td><td><span class="o">✅</span></td><td><span class="o">✅</span></td><td><span class="x">❌</span></td><td><span class="o">✅</span></td></tr>
+        <tr><td class="desc" style="font-weight:600;background:#F8F8F6" colspan="5">사전 테스트·배포</td></tr>
+        <tr><td class="desc">사전 테스트 실행</td><td><span class="o">✅</span></td><td><span class="o">✅</span></td><td><span class="x">❌</span></td><td><span class="o">✅</span></td></tr>
+        <tr><td class="desc">배포 요청(라이브 전환) — 일반 카드</td><td><span class="o">✅</span></td><td><span class="o">✅</span></td><td><span class="x">❌</span></td><td><span class="o">✅</span></td></tr>
+        <tr><td class="desc">Playbook 라이브 전환 (캔버스 연결 없이 직접 전환)</td><td><span class="o">✅</span></td><td><span class="o">✅</span></td><td><span class="x">❌</span></td><td><span class="o">✅</span></td></tr>
+        <tr><td class="desc" style="font-weight:600;background:#F8F8F6" colspan="5">운영 관리</td></tr>
+        <tr><td class="desc">카드 일시중지</td><td><span class="x">❌</span></td><td><span class="o">✅</span></td><td><span class="x">❌</span></td><td><span class="o">✅</span></td></tr>
+        <tr><td class="desc">카드 재시작</td><td><span class="x">❌</span></td><td><span class="o">✅</span></td><td><span class="x">❌</span></td><td><span class="o">✅</span></td></tr>
+        <tr><td class="desc" style="font-weight:600;background:#F8F8F6" colspan="5">RAG 관리</td></tr>
+        <tr><td class="desc">FAQ RAG Q&A 직접 등록 (Clark 서비스 전용)</td><td><span class="o">✅</span></td><td><span class="x">❌</span></td><td><span class="x">❌</span></td><td><span class="o">✅</span></td></tr>
+        <tr><td class="desc">FAQ RAG Q&A 승인 (인덱스 등록)</td><td><span class="x">❌</span></td><td><span class="o">✅</span></td><td><span class="x">❌</span></td><td><span class="o">✅</span></td></tr>
+        <tr><td class="desc" style="font-weight:600;background:#F8F8F6" colspan="5">시스템 설정</td></tr>
+        <tr><td class="desc">LLM Fallback 정책 설정</td><td><span class="x">❌</span></td><td><span class="x">❌</span></td><td><span class="x">❌</span></td><td><span class="o">✅</span></td></tr>
+        <tr><td class="desc">약관 RAG 파이프라인 설정</td><td><span class="x">❌</span></td><td><span class="x">❌</span></td><td><span class="x">❌</span></td><td><span class="o">✅</span></td></tr>
+        <tr><td class="desc">RAG 유사도 임계값 설정</td><td><span class="x">❌</span></td><td><span class="x">❌</span></td><td><span class="x">❌</span></td><td><span class="o">✅</span></td></tr>
+        <tr><td class="desc">사용자 계정 관리</td><td><span class="x">❌</span></td><td><span class="x">❌</span></td><td><span class="x">❌</span></td><td><span class="o">✅</span></td></tr>
+        <tr><td class="desc" style="font-weight:600;background:#F8F8F6" colspan="5">조회</td></tr>
+        <tr><td class="desc">카드 라이브러리 조회</td><td><span class="o">✅</span></td><td><span class="o">✅</span></td><td><span class="t">△ Policy만</span></td><td><span class="o">✅</span></td></tr>
+        <tr><td class="desc">대시보드 조회</td><td><span class="o">✅</span></td><td><span class="o">✅</span></td><td><span class="x">❌</span></td><td><span class="o">✅</span></td></tr>
+        <tr><td class="desc">담보코드·AIO 참조 화면</td><td><span class="o">✅</span></td><td><span class="o">✅</span></td><td><span class="x">❌</span></td><td><span class="o">✅</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</main>
+</div>
+</body>
+</html>

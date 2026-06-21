@@ -170,9 +170,9 @@ textarea.form-control{resize:vertical;min-height:80px}
   <a href="00_canvas-main.html"><i class="fa-solid fa-diagram-project fa-fw"></i> ③ 연결</a>
   <a href="11_dry-run.html" class="active"><i class="fa-solid fa-flask fa-fw"></i> ④ 사전 테스트</a>
   <a href="18_system-settings.html"><i class="fa-solid fa-sliders fa-fw"></i> 시스템 설정</a>
+  <a href="19_faq-rag.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-list-check fa-fw" style="font-size:11px;color:#1A4A9A"></i> FAQ RAG 관리</a>
   <div class="nav-divider"></div>
   <a href="13_answer-logic.html"><i class="fa-solid fa-diagram-project fa-fw"></i> AI 답변 로직</a>
-  <a href="14_answer-logic-guide.html"><i class="fa-solid fa-book-open fa-fw"></i> AI 답변 생성 예시</a>
   <a href="17_system-data-guide.html"><i class="fa-solid fa-network-wired fa-fw"></i> 데이터 연결 구조</a>
   <a href="15_aio-guide.html"><i class="fa-solid fa-globe fa-fw"></i> AIO 가이드</a>
   <a href="12_coverage-code-table.html"><i class="fa-solid fa-table-list fa-fw"></i> 담보코드</a>
@@ -618,19 +618,19 @@ const RESULTS = {
           {cls:'eval-neutral',icon:'', text:'<div class="source-label">마이데이터</div>'},
           {cls:'eval-err',  icon:'✗', text:'RU001 조건: 암진단금 담보코드 미보유'},
           {cls:'eval-err',  icon:'✗', text:'고객 C 보유코드 A4200 포함 → 조건 미충족'},
-          {cls:'eval-warn', icon:'→', text:'KC 기반 답변 불가 — 일반 생성형으로 전환'},
+          {cls:'eval-warn', icon:'→', text:'KC 기반 답변 불가 — RAG 레이어 시도 후 Fallback 제한 생성형으로 전환'},
         ]
       },
-      { num:'④', title:'답변 경로 결정', icon:'warn', result:'생성형 전환', resultColor:'var(--status-review)',
+      { num:'④', title:'답변 경로 결정', icon:'warn', result:'RAG·Fallback 경로', resultColor:'var(--status-review)',
         details:[
           {cls:'eval-warn', icon:'→', text:'Rule 조건 미충족 → KC 카드 미적용'},
-          {cls:'eval-warn', icon:'→', text:'일반 생성형 LLM 답변으로 처리'},
+          {cls:'eval-warn', icon:'→', text:'RAG 레이어(약관 RAG → Clark 서비스 FAQ RAG) 검색 시도 → 결과 없으면 Fallback 제한 생성형 처리'},
         ]
       },
     ],
     finalType: 'gen',
-    finalTitle: '⚠ 일반 생성형 답변 (Rule 조건 미충족)',
-    finalDesc: '고객 C는 암 진단금(A4200)을 이미 보유 중입니다. KC 카드 조건에 해당하지 않아 일반 생성형 답변으로 처리됩니다.',
+    finalTitle: '⚠ KC 미적용 — RAG·Fallback 경로 (Rule 조건 미충족)',
+    finalDesc: '고객 C는 암 진단금(A4200)을 이미 보유 중입니다. KC 카드 조건에 해당하지 않아 RAG 레이어를 거친 후 Fallback 제한 생성형 답변으로 처리됩니다.',
   },
 
   mismatch: {
@@ -638,7 +638,7 @@ const RESULTS = {
     aiAnswer: {
       paras: [
         { text: '보장 내용에 대해 안내드릴게요.', tags: [] },
-        { text: '현재 고객 프로필 조건이 선택하신 Concept 카드의 클러스터 조건과 일치하지 않아 일반 생성형 답변으로 안내됩니다.', tags: [] },
+        { text: '현재 고객 프로필 조건이 선택하신 Concept 카드의 클러스터 조건과 일치하지 않아 RAG 레이어를 거친 후 Fallback 제한 생성형 답변으로 안내됩니다.', tags: [] },
         { text: '좌측에 표시된 권장 프로필로 다시 테스트하시면 KC 기반 답변 체인을 검증하실 수 있습니다.', tags: [] },
       ],
       policy: null,
@@ -659,18 +659,18 @@ const RESULTS = {
       { num:'③', title:'Rule 조건 평가', icon:'warn', result:'미충족', resultColor:'var(--status-review)',
         details:[
           {cls:'eval-err',  icon:'✗', text:'선택한 프로필이 해당 Concept 카드 클러스터 조건에 해당하지 않습니다'},
-          {cls:'eval-warn', icon:'→', text:'일반 생성형 답변으로 전환'},
+          {cls:'eval-warn', icon:'→', text:'KC 기반 답변 불가 — RAG 레이어 시도 후 Fallback 제한 생성형으로 전환'},
         ]
       },
-      { num:'④', title:'답변 경로 결정', icon:'warn', result:'생성형 전환', resultColor:'var(--status-review)',
+      { num:'④', title:'답변 경로 결정', icon:'warn', result:'RAG·Fallback 경로', resultColor:'var(--status-review)',
         details:[
-          {cls:'eval-warn', icon:'→', text:'KC 조건 미충족 — 일반 생성형으로 처리'},
+          {cls:'eval-warn', icon:'→', text:'KC 조건 미충족 — RAG 레이어(약관 RAG → Clark 서비스 FAQ RAG) 검색 후 결과 없으면 Fallback 제한 생성형 처리'},
         ]
       },
     ],
     finalType: 'gen',
-    finalTitle: '⚠ 클러스터 불일치 — KC 기반 답변 미적용',
-    finalDesc: '선택한 고객 프로필이 Concept 카드 클러스터 조건과 일치하지 않습니다. 좌측 Concept 카드의 권장 프로필로 다시 테스트해보세요.',
+    finalTitle: '⚠ 클러스터 불일치 — KC 기반 답변 미적용 (RAG·Fallback 경로)',
+    finalDesc: '선택한 고객 프로필이 Concept 카드 클러스터 조건과 일치하지 않습니다. RAG 레이어를 거친 후 Fallback 제한 생성형 답변으로 처리됩니다. 좌측 Concept 카드의 권장 프로필로 다시 테스트해보세요.',
   }
 };
 
@@ -787,7 +787,7 @@ function onProfileChange() {
   }).join('');
   document.getElementById('profileRiskTag').innerHTML = p.hasRisk
     ? '<span class="profile-risk-tag"><i class="fa-solid fa-triangle-exclamation"></i> '+p.riskLabel+'</span>'
-    : '<span class="profile-ok-tag"><i class="fa-solid fa-circle-check"></i> KC 해당 없음 — 일반 생성형 예상</span>';
+    : '<span class="profile-ok-tag"><i class="fa-solid fa-circle-check"></i> KC 해당 없음 — RAG·Fallback 경로 예상</span>';
   det.style.display = 'block';
 }
 
@@ -975,13 +975,13 @@ function renderResult(cardId, profile, question) {
   // 라우팅 배지
   document.getElementById('routingBadge').innerHTML = data.routing === 'kc'
     ? '<span class="routing-badge-kc"><i class="fa-solid fa-shield-check" style="font-size:11px"></i> KC 기반 답변</span>'
-    : '<span class="routing-badge-gen"><i class="fa-solid fa-microchip" style="font-size:11px"></i> 일반 생성형 답변</span>';
+    : '<span class="routing-badge-gen"><i class="fa-solid fa-microchip" style="font-size:11px"></i> RAG·Fallback 경로</span>';
 
   // ── AI 답변 미리보기 ─────────────────────────────────
   var ai = data.aiAnswer;
   var routeLabel = data.routing === 'kc'
     ? '<span class="agent-route-kc"><i class="fa-solid fa-shield-check" style="font-size:9px"></i> KC 기반</span>'
-    : '<span class="agent-route-gen">일반 생성형</span>';
+    : '<span class="agent-route-gen">RAG·Fallback 경로</span>';
 
   var parasHtml = ai.paras.map(function(para) {
     var tags = para.tags.map(function(id) { return cardTag(id); }).join('');
@@ -996,7 +996,7 @@ function renderResult(cardId, profile, question) {
   var usedChipsHtml = ai.usedCards.length
     ? '<div class="used-cards-row"><span style="font-size:11px;font-weight:700;color:var(--text-hint);margin-right:2px;flex-shrink:0">적용 카드</span>'
       + ai.usedCards.map(function(id) { return usedChip(id); }).join('') + '</div>'
-    : '<div class="no-kc-note">KC 카드 미적용 — 일반 생성형 답변이 제공됩니다</div>';
+    : '<div class="no-kc-note">KC 카드 미적용 — RAG 레이어 검색 후 Fallback 제한 생성형 답변이 제공됩니다</div>';
 
   document.getElementById('aiAnswerSection').innerHTML =
     '<div class="answer-preview">' +

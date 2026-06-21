@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=1280">
+<title>KC Admin 정책서 — 02 카드 기능·목적</title>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<style>
+:root{--card-risk:#C94B1A;--card-evidence:#1A7A4A;--card-concept:#1A4A9A;--card-rule:#9A1A1A;--card-policy:#5A5A55;--card-playbook:#6B4A9A;--status-draft:#9C9C94;--status-review:#BA7517;--status-active:#0F6E56;--status-approved:#1A4A9A;--status-paused:#7A4A00;--status-rejected:#A32D2D;--step-active:#1A3A6B;--sidebar-w:240px;--bg-page:#F4F4F5;--bg-card:#FFFFFF;--text-primary:#171719;--text-secondary:#70737C;--text-hint:#989BA2;--border:#E1E2E4;--radius:8px;--shadow:0px 2px 4px -2px rgba(23,23,23,.06),0px 4px 6px -1px rgba(23,23,23,.06)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg-page);color:var(--text-primary);min-width:1280px;font-size:15px;line-height:1.5}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:var(--sidebar-w);background:#1A1A18;flex-shrink:0;padding:20px 0;position:sticky;top:0;height:100vh;overflow-y:auto}
+.sidebar-logo{padding:0 16px 16px;font-size:15px;font-weight:700;color:#fff;border-bottom:1px solid #333;margin-bottom:12px;line-height:1.4}
+.sidebar a{display:flex;align-items:center;gap:8px;padding:8px 16px;color:#C8C8C4;text-decoration:none;font-size:14px;transition:background .15s}
+.sidebar a:hover{background:rgba(255,255,255,.08);color:#fff}
+.sidebar a.active{background:rgba(255,255,255,.15);color:#fff;font-weight:600;border-left:3px solid #5A8AE0}
+.sidebar a.ext{color:#777;font-size:13px}
+.nav-divider{border-top:1px solid #333;margin:8px 0}
+.main{flex:1;padding:32px;overflow-y:auto}
+.page-header{margin-bottom:28px}
+.page-header h1{font-size:24px;font-weight:700;margin-bottom:6px}
+.page-header p{color:var(--text-secondary)}
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);margin-bottom:16px}
+.section-title{font-size:17px;font-weight:700;margin:0 0 16px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.tbl{width:100%;border-collapse:collapse;font-size:14px;margin-bottom:4px}
+.tbl th{padding:9px 12px;text-align:left;border:1px solid var(--border);background:#F4F4F2;font-weight:600;font-size:13px;white-space:nowrap}
+.tbl td{padding:9px 12px;border:1px solid var(--border);line-height:1.5;vertical-align:top}
+.tbl tr:nth-child(even) td{background:#FAFAF8}
+.chip{display:inline-flex;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:700}
+.chip-pub{background:#1A4A9A;color:#fff}
+.chip-base{background:#BA7517;color:#fff}
+.chip-int{background:#5A5A55;color:#fff}
+.type-block{border-left:4px solid var(--border);padding:16px 20px;margin-bottom:16px;background:var(--bg-card);border-radius:0 var(--radius) var(--radius) 0;box-shadow:var(--shadow)}
+.type-block h3{font-size:16px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:10px}
+.type-block p{font-size:14px;color:var(--text-secondary);line-height:1.7;margin-bottom:8px}
+.type-block .meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
+.meta-item{font-size:13px;color:var(--text-secondary)}
+.meta-item strong{color:var(--text-primary)}
+.chain-flow{display:flex;align-items:center;gap:6px;padding:14px;background:#F8F8F6;border-radius:var(--radius);margin:16px 0;flex-wrap:wrap}
+.chain-node{padding:6px 14px;border-radius:4px;font-weight:700;font-size:13px;color:#fff}
+.chain-arrow{color:var(--text-hint);font-size:14px}
+.chain-note{font-size:12px;color:var(--text-hint);margin-left:4px}
+.notice{display:flex;align-items:flex-start;gap:8px;padding:10px 14px;background:#FFF9EC;border:1px solid #F0D880;border-radius:6px;margin:10px 0;font-size:13px;color:#7A5A00;line-height:1.5}
+.notice i{flex-shrink:0;margin-top:1px}
+</style>
+</head>
+<body>
+<div class="layout">
+<nav class="sidebar">
+  <div class="sidebar-logo">KC 정책서<br><span style="font-size:11px;color:#888;font-weight:400">메이커 조직용 v2</span></div>
+  <a href="00_index.html"><i class="fa-solid fa-house fa-fw"></i> 목차</a>
+  <div class="nav-divider"></div>
+  <a href="01_glossary.html"><i class="fa-solid fa-book fa-fw"></i> 01 용어 정의</a>
+  <a href="02_card-purpose.html" class="active"><i class="fa-solid fa-layer-group fa-fw"></i> 02 카드 기능·목적</a>
+  <a href="03_connect-policy.html"><i class="fa-solid fa-diagram-project fa-fw"></i> 03 연결 정책</a>
+  <a href="04_lifecycle.html"><i class="fa-solid fa-rotate fa-fw"></i> 04 라이프사이클</a>
+  <a href="05_approval.html"><i class="fa-solid fa-check-double fa-fw"></i> 05 승인 정책</a>
+  <a href="06_field-data.html"><i class="fa-solid fa-table-list fa-fw"></i> 06 필드·데이터 정의</a>
+  <a href="07_permission.html"><i class="fa-solid fa-user-shield fa-fw"></i> 07 역할별 권한</a>
+  <a href="08_screen-policy.html"><i class="fa-solid fa-desktop fa-fw"></i> 08 화면 정책</a>
+  <div class="nav-divider"></div>
+  <a href="../mockups_v2/01_guide.html" target="_blank" class="ext"><i class="fa-solid fa-arrow-up-right-from-square fa-fw"></i> KC Admin 목업</a>
+</nav>
+<main class="main">
+  <div class="page-header">
+    <h1>02 카드 기능·목적</h1>
+    <p>KC카드 6종의 역할, AI 체인에서의 위치, 공개범위 정의</p>
+  </div>
+
+  <!-- AI 답변 체인 흐름 -->
+  <div class="card">
+    <div class="section-title">AI 답변 체인 — 카드 연결 순서</div>
+    <div class="chain-flow">
+      <div class="chain-node" style="background:var(--card-concept)">① Concept</div>
+      <span class="chain-arrow">→</span>
+      <div class="chain-node" style="background:var(--card-risk)">② Risk-type</div>
+      <span class="chain-arrow">→</span>
+      <div class="chain-node" style="background:var(--card-rule)">③ Rule</div>
+      <span class="chain-arrow">→</span>
+      <div class="chain-node" style="background:var(--card-evidence)">④ Evidence</div>
+      <span style="color:var(--text-hint);font-size:14px">/</span>
+      <div class="chain-node" style="background:var(--card-policy)">⑤ Policy</div>
+      <span class="chain-note">※ Playbook은 체인과 독립 병렬 동작</span>
+    </div>
+    <p style="font-size:14px;color:var(--text-secondary);line-height:1.7">사용자 질의 → Concept 동의어 매칭 → Risk-type 감지 → Rule 조건 판단 → Evidence 근거 제시 / Policy 고지 문구 추가 순으로 처리됩니다. 체인이 완전히 연결된 경우에만 KC 기반 정밀 답변(Case 1/2)이 생성됩니다.</p>
+  </div>
+
+  <!-- 답변 케이스 결정 매트릭스 -->
+  <div class="card">
+    <div class="section-title">답변 케이스 결정 — KC 매칭 × Playbook 감지</div>
+    <p style="font-size:14px;color:var(--text-secondary);margin-bottom:14px">사용자 발화는 KC 메인 체인과 Playbook 체인이 <strong>동시에 독립 분석</strong>됩니다. 두 결과의 조합에 따라 4가지 답변 케이스 중 하나가 결정됩니다.</p>
+    <table class="tbl" style="margin-bottom:14px">
+      <thead>
+        <tr>
+          <th style="width:80px">케이스</th>
+          <th style="width:160px">KC Concept 매칭</th>
+          <th style="width:170px">Playbook 키워드 감지</th>
+          <th>Clark 출력</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Case 1</strong></td>
+          <td style="color:#0F6E56;font-weight:700">✓ 매칭</td>
+          <td style="color:var(--text-hint)">— 미감지</td>
+          <td>KC 구조화 답변 (Concept → Risk-type → Rule → Evidence → Policy 체인)</td>
+        </tr>
+        <tr>
+          <td><strong>Case 2</strong></td>
+          <td style="color:#0F6E56;font-weight:700">✓ 매칭</td>
+          <td style="color:#6B4A9A;font-weight:700">✓ 감지</td>
+          <td>KC 구조화 답변 <strong>+</strong> CTA 버튼 (두 체인 동시 출력)</td>
+        </tr>
+        <tr>
+          <td><strong>Case 3</strong></td>
+          <td style="color:var(--text-hint)">— 미매칭</td>
+          <td style="color:var(--text-hint)">— 미감지</td>
+          <td>RAG 우선 시도 (약관 RAG → Clark 서비스 FAQ RAG 순) → RAG 결과 있으면 RAG 기반 답변 / RAG 결과도 없으면 Fallback 제한 생성형 답변 (경쟁사·외부 서비스 언급 금지 등 제한 규칙 적용)</td>
+        </tr>
+        <tr>
+          <td><strong>Case 4</strong></td>
+          <td style="color:var(--text-hint)">— 미매칭</td>
+          <td style="color:#6B4A9A;font-weight:700">✓ 감지</td>
+          <td>LLM 생성형 답변 (Playbook Standalone 가이드 컨텍스트 주입) <strong>+</strong> CTA 버튼</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="notice" style="background:#FFF0ED;border-color:#F0B0A0;color:#A32D2D;margin-bottom:10px">
+      <i class="fa-solid fa-triangle-exclamation fa-fw"></i>
+      <span><strong>KC 기반 답변 불가 조건 (Fallback 진입) — 아래 3가지 중 하나라도 해당 시:</strong><br>
+      ① Concept 동의어 매칭 없음 &nbsp;|&nbsp; ② 매칭된 Risk-type에 라이브 Rule 없음 &nbsp;|&nbsp; ③ 라이브 Rule이 있으나 모든 Rule 조건 미충족<br>
+      KC 미매칭 시 RAG 레이어(약관 RAG → Clark 서비스 FAQ RAG) 우선 시도 → RAG 결과 없을 때 최종적으로 Fallback 생성형 발동.<br>
+      <span style="font-size:12px;opacity:.85">RAG 임계값·Fallback 제한 규칙 설정 → 시스템 설정(18_system-settings.html)</span></span>
+    </div>
+    <div class="notice" style="background:#EEF4FF;border-color:#C0D0F0;color:#1A3A6B">
+      <i class="fa-solid fa-circle-info fa-fw"></i>
+      <span><strong>주요 선택 규칙 (개발자 참조):</strong><br>
+      · <strong>Concept 매칭:</strong> 완전 일치 &gt; 포함 일치. 복수 매칭 시 타이브레이킹 — ①매칭 방식 → ②synonyms 일치 수 → ③Risk-type 연결 여부 → ④최근 라이브 전환일. 최종 Concept 1개만 선택.<br>
+      · <strong>Rule 평가:</strong> Rule 간 OR (하나라도 충족 시 진행) / Rule 내 AND (모든 조건 충족 시만 해당). 복수 충족 시 — ①조건 충족률 → ②조건 수 → ③최근 라이브 전환일 순으로 Rule 1개 선택.<br>
+      · <strong>Policy 복수 적용:</strong> 연결된 모든 라이브 Policy 동시 적용(AND). 충돌 시 더 제한적인 Policy 우선. 전체 출력 차단 시 Clark 기본 안내 문구로 대체, 운영팀 알림 발생.</span>
+    </div>
+  </div>
+
+  <!-- Risk-type -->
+  <div class="type-block" style="border-left-color:var(--card-risk)">
+    <h3 style="color:var(--card-risk)"><i class="fa-solid fa-circle-exclamation fa-fw"></i> Risk-type — 리스크 유형</h3>
+    <p><strong>역할:</strong> 사용자의 보험 보장 공백 유형을 분류하는 카드. Clark AI 답변 체인의 핵심 분류 기준이며, 사용자가 어떤 보장 공백 상황에 있는지를 정의한다.</p>
+    <p><strong>체인 위치:</strong> Concept → <strong>Risk-type</strong> → Rule. Concept이 질문의 주제를 잡고, Risk-type이 해당 주제에서 어떤 위험 유형인지를 분류한다.</p>
+    <p><strong>다중 감지:</strong> 하나의 사용자 진단에서 복수의 Risk-type이 동시에 감지될 수 있다. 노출 우선순위는 ①중요도 가중치×Rule 충족 수 → ②충족 Rule 조건 수 합계 → ③카드 코드 오름차순으로 결정된다.</p>
+    <div class="meta">
+      <span class="meta-item"><strong>공개범위:</strong> <span class="chip chip-pub">고객 공개</span></span>
+      <span class="meta-item"><strong>코드 형식:</strong> T01 ~ T10</span>
+      <span class="meta-item"><strong>현행 운영 코드:</strong> T01~T09 active, T10 paused</span>
+      <span class="meta-item"><strong>중요도:</strong> 높음(×3) / 보통(×2, 기본값) / 낮음(×1)</span>
+    </div>
+  </div>
+
+  <!-- Evidence -->
+  <div class="type-block" style="border-left-color:var(--card-evidence)">
+    <h3 style="color:var(--card-evidence)"><i class="fa-solid fa-database fa-fw"></i> Evidence — 근거 자료</h3>
+    <p><strong>역할:</strong> Rule 카드가 사용하는 공인 외부 통계를 등록하는 카드. KC 엔진이 자동 접근할 수 없는 공인 기관 통계 수치를 운영자가 직접 입력한다.</p>
+    <p><strong>단일 유형:</strong> 공인 외부 통계 기반(<code>external</code>) 단일 유형. 마이데이터·프롬에이지는 상담 시 자동 전달되므로 Evidence 카드 불필요.</p>
+    <p><strong>허용 출처:</strong> HIRA(건강보험심사평가원), NHIS(국민건강보험공단), 통계청(KOSTAT), FSS(금융감독원), 기타 공인 기관.</p>
+    <div class="meta">
+      <span class="meta-item"><strong>공개범위:</strong> <span class="chip chip-int">내부 전용</span></span>
+      <span class="meta-item"><strong>출처 유형:</strong> 공인 외부 통계만 허용</span>
+    </div>
+  </div>
+
+  <!-- Concept -->
+  <div class="type-block" style="border-left-color:var(--card-concept)">
+    <h3 style="color:var(--card-concept)"><i class="fa-solid fa-lightbulb fa-fw"></i> Concept — 개념</h3>
+    <p><strong>역할:</strong> AI 답변 체인의 진입점. 사용자 질의 키워드와 동의어 매칭을 담당. Concept이 매칭되어야 KC 기반 정밀 답변(Case 1/2)이 시작된다.</p>
+    <p><strong>체인 위치:</strong> <strong>Concept</strong> → Risk-type. 하나의 Concept은 복수의 Risk-type과 연결 가능(1:N 관계). 연결 없이도 동의어 매칭은 유효하다.</p>
+    <p><strong>구성 요소:</strong> 개념명, 설명, 동의어 목록(사용자 질의 키워드 집합). 동의어가 많을수록 매칭 정확도가 높아진다.</p>
+    <div class="meta">
+      <span class="meta-item"><strong>공개범위:</strong> <span class="chip chip-pub">고객 공개</span></span>
+      <span class="meta-item"><strong>Risk-type 연결:</strong> 1:N (다중 선택, 캔버스에서 설정)</span>
+    </div>
+  </div>
+
+  <!-- Rule -->
+  <div class="type-block" style="border-left-color:var(--card-rule)">
+    <h3 style="color:var(--card-rule)"><i class="fa-solid fa-scale-balanced fa-fw"></i> Rule — 판단 규칙</h3>
+    <p><strong>역할:</strong> 고객의 보험 보장 공백 여부를 실제로 판단하는 조건 집합. 마이데이터·프롬에이지·사용자 프로파일 3개 데이터 소스를 조건 빌더로 설정.</p>
+    <p><strong>조건 빌더 데이터 소스 3종:</strong><br>
+    · <strong>마이데이터(MyData):</strong> 담보코드 + 확인항목(가입금액·갱신여부·보험유형·시작일·종료일) + 조건 + 기준값<br>
+    · <strong>프롬에이지(Promage):</strong> 카테고리(암위험도/생체나이/질병위험도/의료비예측) + 항목 + 조건 + 기준값<br>
+    · <strong>사용자 프로파일:</strong> 나이·성별·결혼여부·자녀유무·직업위험도·출산예정·거주지</p>
+    <p><strong>약관 DB 연동:</strong> Rule 카드에 "약관 DB 연동" 플래그(선택사항) 활성화 시, Rule 조건 충족 → 담보코드 기준으로 약관 DB 자동 조회 → Clark 답변에 면책조항 섹션 자동 포함.</p>
+    <div class="meta">
+      <span class="meta-item"><strong>공개범위:</strong> <span class="chip chip-base">공통 기준</span></span>
+      <span class="meta-item"><strong>출력 등급:</strong> 위험 / 주의 / 양호 (상/중/하 금지)</span>
+    </div>
+  </div>
+
+  <!-- Policy -->
+  <div class="type-block" style="border-left-color:var(--card-policy)">
+    <h3 style="color:var(--card-policy)"><i class="fa-solid fa-file-shield fa-fw"></i> Policy — 정책</h3>
+    <p><strong>역할:</strong> 준법 고지 문구와 Clark AI 출력 제한을 설정하는 카드. Clark 앱에 표시되는 면책 고지 문구를 이 카드의 "Clark 앱 표시 문구" 필드로 관리. 앱 코드 하드코딩 금지.</p>
+    <p><strong>승인 특이사항:</strong> 도메인 검수자 승인 후 <strong>준법감시인이 추가 최종 승인</strong>하는 2단계 승인 필요. Policy 카드는 준법감시인 승인 없이 active 전환 불가.</p>
+    <p><strong>체인 연결:</strong> Rule → Policy (선택사항). 연결 없이도 Policy 자체는 등록·승인 가능.</p>
+    <div class="meta">
+      <span class="meta-item"><strong>공개범위:</strong> <span class="chip chip-int">내부 전용</span></span>
+      <span class="meta-item"><strong>승인 단계:</strong> 2단계 (도메인 검수 + 준법감시인)</span>
+    </div>
+  </div>
+
+  <!-- Playbook -->
+  <div class="type-block" style="border-left-color:var(--card-playbook)">
+    <h3 style="color:var(--card-playbook)"><i class="fa-solid fa-bullseye fa-fw"></i> Playbook — 플레이북</h3>
+    <p><strong>역할:</strong> 사용자 발화에서 특정 키워드 감지 시 CTA(Call-to-Action) 버튼을 추가하거나 Standalone 답변을 제공하는 카드. 메인 AI 체인(Concept→Risk→Rule→…)과 <strong>완전히 독립적으로 병렬 동작</strong>한다.</p>
+    <p><strong>동작 방식:</strong><br>
+    · KC 체인 매칭 + Playbook 발화 키워드 감지 → KC 답변 + CTA 버튼 추가 (Case 2)<br>
+    · KC 체인 미매칭 + Playbook 발화 키워드 감지 → Standalone 가이드 기반 답변 + CTA (Case 4)</p>
+    <p><strong>CTA 버튼 유형:</strong> 상담 연결(consult) / 앱 내 이동(deeplink) / 외부 링크(external). "상담 연결"이 기본 버튼(필수).</p>
+    <p><strong>Standalone 답변 가이드:</strong> Playbook 편집기 Card ② 내 "Standalone 답변 가이드" 텍스트 필드(최소 20자 필수). Case 4(KC 미매칭 + Playbook 키워드 감지) 발생 시 LLM 시스템 프롬프트에 주입되어 답변 방향을 가이드. 작성 참조: <code>14_answer-logic-guide.html</code>.</p>
+    <p><strong>라이브 전환 경로:</strong> Playbook은 캔버스 연결 없이 approved 상태에서 직접 "라이브 전환" 가능. 사전 테스트 불필요.</p>
+    <p><strong>병렬 체인 4단계 (P1~P4):</strong><br>
+    · <strong>P1 — 발화 키워드 감지:</strong> 사용자 발화에서 Playbook 등록 키워드 부분 매칭. 미감지 시 전환 없음<br>
+    · <strong>P2 — 리드 스코어 산출:</strong> 메인 체인 Risk-type 판정 결과 + 상담 유형 가중치 합산 (Phase 1.5 구현 예정)<br>
+    · <strong>P3 — 고객 DB 전달:</strong> 리드 스코어 포함 고객 정보를 원수사·GA에 전달 (Phase 1.5)<br>
+    · <strong>P4 — 배정 최적화:</strong> 원수사·GA 내부 처리 — KC Admin 관할 외 (Phase 2)<br>
+    <span style="font-size:13px;color:var(--text-hint)">MVP 범위: P1(발화 감지) + P2(스코어 산출) + P3(DB 전달). P4는 원수사·GA API 연동 후 Phase 2 예정.</span></p>
+    <div class="meta">
+      <span class="meta-item"><strong>공개범위:</strong> <span class="chip chip-int">내부 전용 고정</span> (변경 불가)</span>
+      <span class="meta-item"><strong>최소 키워드:</strong> 3개</span>
+      <span class="meta-item"><strong>체인 독립:</strong> CONNECT_RULES 적용 안 함</span>
+      <span class="meta-item"><strong>Standalone 가이드:</strong> 최소 20자 (Case 4 LLM 주입)</span>
+    </div>
+  </div>
+
+  <!-- 카드별 답변 출력 필드 -->
+  <div class="card">
+    <div class="section-title">카드별 답변 출력 필드 — 개발자 참조</div>
+    <p style="font-size:14px;color:var(--text-secondary);margin-bottom:14px">KC 기반 답변(Case 1·2) 생성 시 각 카드의 어떤 필드 데이터가 사용자 답변에 포함되는지 정의합니다.</p>
+    <table class="tbl" style="margin-bottom:14px">
+      <thead>
+        <tr>
+          <th style="width:110px">카드 유형</th>
+          <th style="width:190px">필드</th>
+          <th style="width:80px">포함 여부</th>
+          <th>사용자 답변 내 활용 방식</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td rowspan="2" style="color:var(--card-concept);font-weight:700">① Concept</td>
+          <td><code>synonyms</code> · <code>name</code> · <code>definition</code></td>
+          <td style="color:var(--text-hint)">미포함</td>
+          <td>질의 매칭 전용. 답변 본문에 직접 노출 안 함 (AIO·내부 교육 전용)</td>
+        </tr>
+        <tr>
+          <td>전체 필드</td>
+          <td style="color:var(--text-hint)">미포함</td>
+          <td>Concept은 질의 인식 경로 역할만 담당. 답변에 포함되지 않음</td>
+        </tr>
+        <tr style="border-top:2px solid var(--border)">
+          <td rowspan="2" style="color:var(--card-risk);font-weight:700">② Risk-type</td>
+          <td><code>name</code> (위험 유형명)</td>
+          <td style="color:#0F6E56;font-weight:700">포함</td>
+          <td>답변 첫 문장 제목. 예: "고객님은 <strong>암투병생활비 부족형</strong>으로 진단됩니다."</td>
+        </tr>
+        <tr>
+          <td><code>description</code> (설명)</td>
+          <td style="color:#0F6E56;font-weight:700">포함</td>
+          <td>진단 이유 본문 섹션에 참조</td>
+        </tr>
+        <tr style="border-top:2px solid var(--border)">
+          <td rowspan="2" style="color:var(--card-rule);font-weight:700">③ Rule</td>
+          <td><code>clarkMessage</code></td>
+          <td style="color:#0F6E56;font-weight:700">포함</td>
+          <td>핵심 출력 메시지. 예: "암진단금이 5,000만원 미만입니다. 치료비 보완을 검토해보세요."</td>
+        </tr>
+        <tr>
+          <td><code>conditions</code> (판단 조건)</td>
+          <td style="color:var(--text-hint)">미포함</td>
+          <td>내부 판단 로직 전용. 필드명·연산자·기준값은 사용자에게 노출하지 않음</td>
+        </tr>
+        <tr style="border-top:2px solid var(--border)">
+          <td rowspan="2" style="color:var(--card-evidence);font-weight:700">④ Evidence</td>
+          <td><code>usageNote</code> · <code>title</code></td>
+          <td style="color:#BA7517;font-weight:700">조건부</td>
+          <td>근거 섹션 있을 때 포함. "이 진단의 근거: ..." 형식. Evidence가 없으면 근거 섹션 생략, clarkMessage는 그대로 출력</td>
+        </tr>
+        <tr>
+          <td>원본 수치 (<code>rawData</code>)</td>
+          <td style="color:#A32D2D;font-weight:700">금지</td>
+          <td>프롬에이지 원본 수치 고객 공개 금지 [§3-8]. 반드시 3단계 등급(위험/주의/양호)으로 변환 후 포함</td>
+        </tr>
+        <tr style="border-top:2px solid var(--border)">
+          <td style="color:var(--card-policy);font-weight:700">⑤ Policy</td>
+          <td><code>appDisplayText</code> (Clark 앱 표시 문구)</td>
+          <td style="color:#BA7517;font-weight:700">조건부</td>
+          <td>이 필드만 사용자 답변에 포함. Policy 자체 내용(조건·배경·원문)은 미노출 (내부 전용 고정)</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="notice">
+      <i class="fa-solid fa-triangle-exclamation fa-fw"></i>
+      <span><strong>프롬에이지 민감정보 처리 원칙 [§3-8]:</strong> 건강검진 원본 수치·위험값은 보닥 서버(국내)에만 저장, 외부 서버·LLM 전송 금지. 답변 시 반드시 3단계 등급으로 변환. 허용: "건강위험도가 높은 편입니다" / 금지: "암위험도 +19.6%"</span>
+    </div>
+  </div>
+
+  <!-- 카드 유형 요약 -->
+  <div class="card">
+    <div class="section-title">카드 유형 요약표</div>
+    <table class="tbl">
+      <thead>
+        <tr>
+          <th>카드 유형</th>
+          <th>핵심 역할</th>
+          <th>체인 위치</th>
+          <th>공개범위</th>
+          <th>승인 단계</th>
+          <th>연결 방향</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="color:var(--card-concept);font-weight:700">Concept</td>
+          <td>사용자 질의 매칭 진입점</td>
+          <td>① 체인 시작</td>
+          <td><span class="chip chip-pub">고객 공개</span></td>
+          <td>1단계</td>
+          <td>→ Risk-type</td>
+        </tr>
+        <tr>
+          <td style="color:var(--card-risk);font-weight:700">Risk-type</td>
+          <td>보장 공백 유형 분류</td>
+          <td>② Concept 다음</td>
+          <td><span class="chip chip-pub">고객 공개</span></td>
+          <td>1단계</td>
+          <td>→ Rule</td>
+        </tr>
+        <tr>
+          <td style="color:var(--card-rule);font-weight:700">Rule</td>
+          <td>보장 공백 판단 조건</td>
+          <td>③ Risk 다음</td>
+          <td><span class="chip chip-base">공통 기준</span></td>
+          <td>1단계</td>
+          <td>→ Evidence, Policy</td>
+        </tr>
+        <tr>
+          <td style="color:var(--card-evidence);font-weight:700">Evidence</td>
+          <td>공인 통계 근거 자료</td>
+          <td>④ Rule 다음</td>
+          <td><span class="chip chip-int">내부 전용</span></td>
+          <td>1단계</td>
+          <td>없음 (단말)</td>
+        </tr>
+        <tr>
+          <td style="color:var(--card-policy);font-weight:700">Policy</td>
+          <td>준법 고지·출력 제한</td>
+          <td>⑤ Rule 다음</td>
+          <td><span class="chip chip-int">내부 전용</span></td>
+          <td><strong>2단계</strong></td>
+          <td>없음 (단말)</td>
+        </tr>
+        <tr>
+          <td style="color:var(--card-playbook);font-weight:700">Playbook</td>
+          <td>키워드 감지→CTA 전환</td>
+          <td>체인 독립 병렬</td>
+          <td><span class="chip chip-int">내부 전용 고정</span></td>
+          <td>1단계</td>
+          <td>없음 (독립)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</main>
+</div>
+</body>
+</html>

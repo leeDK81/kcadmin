@@ -64,6 +64,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 .badge-review{background:rgba(186,117,23,.15);color:var(--status-review)}
 .badge-approved{background:rgba(26,74,154,.15);color:var(--status-approved)}
 .badge-active{background:rgba(15,110,86,.15);color:var(--status-active)}
+.badge-paused{background:rgba(122,74,0,.12);color:var(--status-paused)}
 .badge-rejected{background:rgba(163,45,45,.12);color:var(--status-rejected)}
 /* compliance tag */
 .compliance-tag{display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--card-policy);font-weight:600;background:rgba(90,90,85,.08);padding:2px 7px;border-radius:4px;margin-left:4px}
@@ -122,10 +123,10 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
   <a href="00_canvas-main.html"><i class="fa-solid fa-diagram-project fa-fw"></i> ③ 연결</a>
   <a href="11_dry-run.html"><i class="fa-solid fa-flask fa-fw"></i> ④ 사전 테스트</a>
   <a href="18_system-settings.html"><i class="fa-solid fa-sliders fa-fw"></i> 시스템 설정</a>
+  <a href="19_faq-rag.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-list-check fa-fw" style="font-size:11px;color:#1A4A9A"></i> FAQ RAG 관리</a>
 
   <div class="nav-divider"></div>
   <a href="13_answer-logic.html"><i class="fa-solid fa-diagram-project fa-fw"></i> AI 답변 로직</a>
-  <a href="14_answer-logic-guide.html"><i class="fa-solid fa-book-open fa-fw"></i> AI 답변 생성 예시</a>
   <a href="17_system-data-guide.html"><i class="fa-solid fa-network-wired fa-fw"></i> 데이터 연결 구조</a>
   <a href="15_aio-guide.html"><i class="fa-solid fa-globe fa-fw"></i> AIO 가이드</a>
   <a href="12_coverage-code-table.html"><i class="fa-solid fa-table-list fa-fw"></i> 담보코드</a>
@@ -148,7 +149,8 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
   <div class="guide-box">
     <strong>검수 절차:</strong> 작성자가 카드 편집기에서 승인요청 → 상세 보기로 카드 내용 확인 → <strong>승인완료</strong> 또는 반려 처리.<br>
     승인완료된 카드는 <a href="00_canvas-main.html" style="color:var(--step-active);font-weight:600">카드 캔버스</a>에서 연결 구성이 가능합니다. 사전 테스트 통과 후 <strong>라이브 전환</strong>으로 Clark AI에 반영됩니다.<br>
-    <strong style="color:var(--card-policy)">Policy 카드</strong>는 도메인 검수 후 <strong>준법감시인 추가 승인</strong>이 필요합니다.
+    <strong style="color:var(--card-policy)">Policy 카드</strong>는 도메인 검수 후 <strong>준법감시인 추가 승인</strong>이 필요합니다.<br>
+    <strong style="color:var(--status-paused)">일시중지(paused) 카드</strong>는 이 화면에 표시되지 않습니다. 카드 편집기 또는 카드 라이브러리에서 [재시작]으로 즉시 복원 — 검수 절차 없이 active 전환됩니다.
   </div>
 
   <div class="filter-bar">
@@ -277,7 +279,9 @@ function renderData(filter) {
       ? '<span class="badge badge-review">⏳ 승인요청</span>'
       : d.state === 'approved'
         ? '<span class="badge badge-approved">✔ 승인완료</span>'
-        : '<span class="badge badge-rejected">✕ 반려</span>';
+        : d.state === 'paused'
+          ? '<span class="badge badge-paused">⏸ 일시중지</span>'
+          : '<span class="badge badge-rejected">✕ 반려</span>';
 
     /* 처리일 */
     var doneCell = d.state === 'pending'

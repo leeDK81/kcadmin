@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=1280">
+<title>KC Admin 정책서 — 04 라이프사이클 정책</title>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<style>
+:root{--card-risk:#C94B1A;--card-evidence:#1A7A4A;--card-concept:#1A4A9A;--card-rule:#9A1A1A;--card-policy:#5A5A55;--card-playbook:#6B4A9A;--status-draft:#9C9C94;--status-review:#BA7517;--status-active:#0F6E56;--status-approved:#1A4A9A;--status-paused:#7A4A00;--status-rejected:#A32D2D;--step-active:#1A3A6B;--sidebar-w:240px;--bg-page:#F4F4F5;--bg-card:#FFFFFF;--text-primary:#171719;--text-secondary:#70737C;--text-hint:#989BA2;--border:#E1E2E4;--radius:8px;--shadow:0px 2px 4px -2px rgba(23,23,23,.06),0px 4px 6px -1px rgba(23,23,23,.06)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg-page);color:var(--text-primary);min-width:1280px;font-size:15px;line-height:1.5}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:var(--sidebar-w);background:#1A1A18;flex-shrink:0;padding:20px 0;position:sticky;top:0;height:100vh;overflow-y:auto}
+.sidebar-logo{padding:0 16px 16px;font-size:15px;font-weight:700;color:#fff;border-bottom:1px solid #333;margin-bottom:12px;line-height:1.4}
+.sidebar a{display:flex;align-items:center;gap:8px;padding:8px 16px;color:#C8C8C4;text-decoration:none;font-size:14px;transition:background .15s}
+.sidebar a:hover{background:rgba(255,255,255,.08);color:#fff}
+.sidebar a.active{background:rgba(255,255,255,.15);color:#fff;font-weight:600;border-left:3px solid #5A8AE0}
+.sidebar a.ext{color:#777;font-size:13px}
+.nav-divider{border-top:1px solid #333;margin:8px 0}
+.main{flex:1;padding:32px;overflow-y:auto}
+.page-header{margin-bottom:28px}
+.page-header h1{font-size:24px;font-weight:700;margin-bottom:6px}
+.page-header p{color:var(--text-secondary)}
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);margin-bottom:16px}
+.section-title{font-size:17px;font-weight:700;margin:0 0 16px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.tbl{width:100%;border-collapse:collapse;font-size:14px;margin-bottom:4px}
+.tbl th{padding:9px 12px;text-align:left;border:1px solid var(--border);background:#F4F4F2;font-weight:600;font-size:13px;white-space:nowrap}
+.tbl td{padding:9px 12px;border:1px solid var(--border);line-height:1.5;vertical-align:top}
+.tbl tr:nth-child(even) td{background:#FAFAF8}
+.badge{display:inline-flex;padding:3px 10px;border-radius:4px;font-size:13px;font-weight:600;white-space:nowrap}
+.badge-draft{background:rgba(156,156,148,.15);color:var(--status-draft)}
+.badge-review{background:rgba(186,117,23,.12);color:var(--status-review)}
+.badge-active{background:rgba(15,110,86,.12);color:var(--status-active)}
+.badge-approved{background:rgba(26,74,154,.12);color:var(--status-approved)}
+.badge-paused{background:rgba(122,74,0,.12);color:var(--status-paused)}
+.badge-rejected{background:rgba(163,45,45,.12);color:var(--status-rejected)}
+.notice{display:flex;align-items:flex-start;gap:8px;padding:10px 14px;background:#FFF9EC;border:1px solid #F0D880;border-radius:6px;margin:10px 0;font-size:13px;color:#7A5A00;line-height:1.5}
+.notice i{flex-shrink:0;margin-top:1px}
+.flow-wrap{display:flex;align-items:flex-start;gap:0;overflow-x:auto;padding:16px 0}
+.flow-node{text-align:center;min-width:130px}
+.flow-box{display:inline-flex;flex-direction:column;align-items:center;padding:12px 16px;border-radius:var(--radius);font-size:13px;font-weight:700;min-width:110px}
+.flow-arrow{display:flex;align-items:center;padding:0 6px;color:var(--text-hint);font-size:18px;margin-top:14px}
+.flow-label{font-size:11px;color:var(--text-hint);margin-top:6px}
+.state-block{padding:16px;border:1px solid var(--border);border-radius:var(--radius);margin-bottom:10px}
+.state-block h3{font-size:15px;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.state-block p{font-size:14px;color:var(--text-secondary);line-height:1.6}
+</style>
+</head>
+<body>
+<div class="layout">
+<nav class="sidebar">
+  <div class="sidebar-logo">KC 정책서<br><span style="font-size:11px;color:#888;font-weight:400">메이커 조직용 v2</span></div>
+  <a href="00_index.html"><i class="fa-solid fa-house fa-fw"></i> 목차</a>
+  <div class="nav-divider"></div>
+  <a href="01_glossary.html"><i class="fa-solid fa-book fa-fw"></i> 01 용어 정의</a>
+  <a href="02_card-purpose.html"><i class="fa-solid fa-layer-group fa-fw"></i> 02 카드 기능·목적</a>
+  <a href="03_connect-policy.html"><i class="fa-solid fa-diagram-project fa-fw"></i> 03 연결 정책</a>
+  <a href="04_lifecycle.html" class="active"><i class="fa-solid fa-rotate fa-fw"></i> 04 라이프사이클</a>
+  <a href="05_approval.html"><i class="fa-solid fa-check-double fa-fw"></i> 05 승인 정책</a>
+  <a href="06_field-data.html"><i class="fa-solid fa-table-list fa-fw"></i> 06 필드·데이터 정의</a>
+  <a href="07_permission.html"><i class="fa-solid fa-user-shield fa-fw"></i> 07 역할별 권한</a>
+  <a href="08_screen-policy.html"><i class="fa-solid fa-desktop fa-fw"></i> 08 화면 정책</a>
+  <div class="nav-divider"></div>
+  <a href="../mockups_v2/01_guide.html" target="_blank" class="ext"><i class="fa-solid fa-arrow-up-right-from-square fa-fw"></i> KC Admin 목업</a>
+</nav>
+<main class="main">
+  <div class="page-header">
+    <h1>04 라이프사이클 정책</h1>
+    <p>KC 카드의 6단계 상태 정의, 전환 규칙, 각 상태에서의 가능 액션</p>
+  </div>
+
+  <!-- 상태 흐름도 -->
+  <div class="card">
+    <div class="section-title">카드 상태 흐름도</div>
+    <div class="flow-wrap">
+      <div class="flow-node">
+        <div class="flow-box" style="background:rgba(156,156,148,.15);color:var(--status-draft)">임시저장<br><span style="font-size:11px;font-weight:400">draft</span></div>
+        <div class="flow-label">운영자 작성 중</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node">
+        <div class="flow-box" style="background:rgba(186,117,23,.12);color:var(--status-review)">승인요청<br><span style="font-size:11px;font-weight:400">review</span></div>
+        <div class="flow-label">검수자 검토 중</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node">
+        <div class="flow-box" style="background:rgba(26,74,154,.12);color:var(--status-approved)">승인완료<br><span style="font-size:11px;font-weight:400">approved</span></div>
+        <div class="flow-label">캔버스 연결 가능</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node">
+        <div class="flow-box" style="background:rgba(15,110,86,.12);color:var(--status-active)">라이브<br><span style="font-size:11px;font-weight:400">active</span></div>
+        <div class="flow-label">Clark AI 반영</div>
+      </div>
+      <div class="flow-arrow">⇌</div>
+      <div class="flow-node">
+        <div class="flow-box" style="background:rgba(122,74,0,.12);color:var(--status-paused)">일시중지<br><span style="font-size:11px;font-weight:400">paused</span></div>
+        <div class="flow-label">Clark AI 미반영</div>
+      </div>
+    </div>
+    <div style="font-size:13px;color:var(--text-hint);margin-top:4px">※ 반려(rejected)는 승인요청→반려 경로로 발생. 반려 후 다시 임시저장으로 전환하여 수정 가능.</div>
+  </div>
+
+  <!-- 6개 상태 상세 -->
+  <div class="card">
+    <div class="section-title">상태별 상세 정의</div>
+
+    <div class="state-block" style="border-left:4px solid var(--status-draft)">
+      <h3><span class="badge badge-draft">임시저장 (draft)</span></h3>
+      <p>운영자가 카드를 작성 중인 상태. 언제든 저장·수정 가능. 검수 요청 전까지 이 상태를 유지한다. 캔버스에 표시되지 않으며 연결 불가.</p>
+      <p style="margin-top:6px"><strong>전환 조건:</strong> 운영자가 [검수 요청] 버튼 클릭 → review 전환 / 반려 후 [재편집] → draft 복원</p>
+    </div>
+
+    <div class="state-block" style="border-left:4px solid var(--status-review)">
+      <h3><span class="badge badge-review">승인요청 (review)</span></h3>
+      <p>운영자가 검수를 요청한 상태. 검수자가 내용을 검토한다. 이 상태에서 운영자는 수정 불가(요청 취소 후 draft로 돌아가야 수정 가능). 캔버스에 표시되나 연결 불가.</p>
+      <p style="margin-top:6px"><strong>전환 조건:</strong> 검수자 승인 → approved / 검수자 반려 → rejected / 운영자 요청 취소 → draft</p>
+    </div>
+
+    <div class="state-block" style="border-left:4px solid var(--status-approved)">
+      <h3><span class="badge badge-approved">승인완료 (approved)</span></h3>
+      <p>검수자가 내용을 승인한 상태. 캔버스에서 연결 가능(준비 연결, pending 엣지). Clark AI에는 아직 미반영. 사전 테스트(Dry-run) 후 배포 요청으로 라이브 전환 가능.</p>
+      <p style="margin-top:6px"><strong>Policy 카드 특이사항:</strong> 도메인 검수자 승인 후 준법감시인 추가 승인 필요. 두 단계 모두 완료해야 approved 상태.</p>
+      <p style="margin-top:6px"><strong>Playbook 카드 특이사항:</strong> Playbook은 다른 카드와 캔버스 연결을 하지 않는다(CONNECT_RULES 미적용, 독립 체인). 따라서 approved 상태에서 캔버스 연결 없이 <strong>바로 "라이브 전환" 버튼</strong>이 노출된다. 사전 테스트 단계도 생략 가능.</p>
+      <p style="margin-top:6px"><strong>전환 조건 (일반 카드):</strong> 캔버스 연결 → 사전 테스트 통과 → 배포 요청 → active<br><strong>전환 조건 (Playbook):</strong> 승인완료 → "라이브 전환" 버튼 클릭 → active (캔버스 연결·사전 테스트 불필요)</p>
+    </div>
+
+    <div class="state-block" style="border-left:4px solid var(--status-active)">
+      <h3><span class="badge badge-active">라이브 (active)</span></h3>
+      <p>배포 완료 상태. Clark AI에 즉시 반영. 연결된 모든 카드가 active가 되면 엣지도 active(실선 초록)로 전환. 운영 중 수정이 필요하면 [편집] → 내용 수정 → 재검수 → 재배포 흐름.</p>
+      <p style="margin-top:6px"><strong>전환 조건:</strong> [일시중지] → paused</p>
+    </div>
+
+    <div class="state-block" style="border-left:4px solid var(--status-paused)">
+      <h3><span class="badge badge-paused">일시중지 (paused)</span></h3>
+      <p>운영자 또는 관리자가 카드를 일시적으로 비활성화한 상태. Clark AI에서 즉시 제외. 기존 연결은 유지되나 AI 답변에 활용되지 않는다. [재시작] → active로 즉시 복원 가능.</p>
+      <p style="margin-top:6px"><strong>전환 조건:</strong> [재시작] → active</p>
+    </div>
+
+    <div class="state-block" style="border-left:4px solid var(--status-rejected)">
+      <h3><span class="badge badge-rejected">반려 (rejected)</span></h3>
+      <p>검수자가 내용을 반려한 상태. 운영자가 반려 코멘트를 확인하고 내용을 수정한 뒤 다시 검수 요청해야 한다. 캔버스에 표시되지 않음.</p>
+      <p style="margin-top:6px"><strong>전환 조건:</strong> 운영자 [재편집] → draft 전환 후 수정 → review 재요청</p>
+      <p style="margin-top:6px"><strong>Policy 카드 2단계 반려 특이사항:</strong> 도메인 검수자 또는 준법감시인 중 한 단계에서 반려되어도 전체 반려. 단, <strong>이미 통과한 단계는 재검토 불필요</strong>. 준법감시인이 반려한 경우 수정 후 도메인 검수자 재검토 없이 준법감시인 단계부터 재개.</p>
+    </div>
+  </div>
+
+  <!-- 상태 요약 -->
+  <div class="card">
+    <div class="section-title">상태별 주요 속성 요약</div>
+    <table class="tbl">
+      <thead>
+        <tr>
+          <th>상태</th>
+          <th>API 값</th>
+          <th>캔버스 표시</th>
+          <th>연결 가능</th>
+          <th>Clark AI 반영</th>
+          <th>편집 가능</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="badge badge-draft">임시저장</span></td>
+          <td><code>draft</code></td>
+          <td>❌</td>
+          <td>❌</td>
+          <td>❌</td>
+          <td>✅ 운영자</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-review">승인요청</span></td>
+          <td><code>review</code></td>
+          <td>✅ (연결 불가)</td>
+          <td>❌</td>
+          <td>❌</td>
+          <td>❌ (취소 후 가능)</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-approved">승인완료</span></td>
+          <td><code>approved</code></td>
+          <td>✅</td>
+          <td>✅ (pending)</td>
+          <td>❌</td>
+          <td>✅ (재검수 필요)</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-active">라이브</span></td>
+          <td><code>active</code></td>
+          <td>✅</td>
+          <td>✅ (active)</td>
+          <td>✅</td>
+          <td>✅ (재검수 필요)</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-paused">일시중지</span></td>
+          <td><code>paused</code></td>
+          <td>✅</td>
+          <td>△ 신규 불가</td>
+          <td>❌</td>
+          <td>✅ (재검수 필요)</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-rejected">반려</span></td>
+          <td><code>rejected</code></td>
+          <td>❌</td>
+          <td>❌</td>
+          <td>❌</td>
+          <td>✅ (재편집 후)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- CSS 색상 참조 -->
+  <div class="card">
+    <div class="section-title">상태 배지 CSS 색상 참조</div>
+    <table class="tbl">
+      <thead>
+        <tr><th>상태</th><th>CSS 변수</th><th>배경색</th><th>글자색</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>임시저장</td><td><code>--status-draft</code></td><td><code>rgba(156,156,148,.15)</code></td><td><code>#9C9C94</code></td></tr>
+        <tr><td>승인요청</td><td><code>--status-review</code></td><td><code>rgba(186,117,23,.12)</code></td><td><code>#BA7517</code></td></tr>
+        <tr><td>승인완료</td><td><code>--status-approved</code></td><td><code>rgba(26,74,154,.12)</code></td><td><code>#1A4A9A</code></td></tr>
+        <tr><td>라이브</td><td><code>--status-active</code></td><td><code>rgba(15,110,86,.12)</code></td><td><code>#0F6E56</code></td></tr>
+        <tr><td>일시중지</td><td><code>--status-paused</code></td><td><code>rgba(122,74,0,.12)</code></td><td><code>#7A4A00</code></td></tr>
+        <tr><td>반려</td><td><code>--status-rejected</code></td><td><code>rgba(163,45,45,.12)</code></td><td><code>#A32D2D</code></td></tr>
+      </tbody>
+    </table>
+    <div class="notice" style="margin-top:12px">
+      <i class="fa-solid fa-circle-info fa-fw"></i>
+      <span>6개 상태 변수 전부 <code>:root</code>에 포함 필수. 누락 시 특정 화면에서 배지 색상 오류 발생. <code>guides/design-system.md</code> 참조.</span>
+    </div>
+  </div>
+
+</main>
+</div>
+</body>
+</html>

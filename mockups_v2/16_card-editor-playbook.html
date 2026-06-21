@@ -38,7 +38,9 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 .badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;font-size:13px;font-weight:600;white-space:nowrap}
 .badge-draft{background:rgba(156,156,148,.15);color:var(--status-draft)}
 .badge-review{background:rgba(186,117,23,.15);color:var(--status-review)}
+.badge-approved{background:rgba(26,74,154,.15);color:var(--status-approved)}
 .badge-active{background:rgba(15,110,86,.15);color:var(--status-active)}
+.badge-paused{background:rgba(122,74,0,.12);color:var(--status-paused)}
 .btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:6px;font-size:14px;font-weight:600;cursor:pointer;border:none;font-family:inherit;transition:opacity .15s}
 .btn:hover{opacity:.85}.btn:disabled{opacity:.4;cursor:not-allowed}
 .btn-primary{background:var(--card-playbook);color:#fff}
@@ -137,6 +139,7 @@ textarea.form-control{resize:vertical;min-height:72px}
   <a href="00_canvas-main.html"><i class="fa-solid fa-diagram-project fa-fw"></i> ③ 연결</a>
   <a href="11_dry-run.html"><i class="fa-solid fa-flask fa-fw"></i> ④ 사전 테스트</a>
   <a href="18_system-settings.html"><i class="fa-solid fa-sliders fa-fw"></i> 시스템 설정</a>
+  <a href="19_faq-rag.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-list-check fa-fw" style="font-size:11px;color:#1A4A9A"></i> FAQ RAG 관리</a>
 
   <div class="nav-divider"></div>
   <a href="13_answer-logic.html"><i class="fa-solid fa-diagram-project fa-fw"></i> AI 답변 로직</a>
@@ -291,7 +294,7 @@ textarea.form-control{resize:vertical;min-height:72px}
             </label>
             <div class="banner banner-info" style="margin-bottom:10px">
               <i class="fa-solid fa-circle-info" style="margin-right:6px"></i>
-              <strong>Standalone 표시 조건:</strong> Concept 카드가 인식되지 않고 이 Playbook의 키워드만 감지된 경우. 버튼만 단독으로 표시하면 클릭률이 낮으므로 AI 답변을 먼저 제공합니다. 상세 케이스는 <a href="14_answer-logic-guide.html" style="color:var(--card-playbook);font-size:13px">AI 답변 로직·예시 →</a> 참고
+              <strong>Standalone 표시 조건:</strong> Concept 카드가 인식되지 않고 이 Playbook의 키워드만 감지된 경우. 버튼만 단독으로 표시하면 클릭률이 낮으므로 AI 답변을 먼저 제공합니다. 상세 케이스는 <a href="13_answer-logic.html" style="color:var(--card-playbook);font-size:13px">AI 답변 로직·예시 →</a> 참고
             </div>
             <textarea class="form-control" id="standaloneGuide" rows="4" placeholder="예: 보험 전문가와 1:1 상담을 통해 현재 보장 상태를 점검하고 맞춤 설계를 받아볼 수 있습니다." oninput="updateStandaloneCounter()">보험 전문가와 1:1 상담을 통해 현재 보장 상태를 점검하고 맞춤 설계를 받아볼 수 있습니다. 지금 아이지넷 설계사와 상담을 시작해보세요.</textarea>
             <div style="text-align:right;font-size:12px;margin-top:4px">
@@ -349,48 +352,55 @@ textarea.form-control{resize:vertical;min-height:72px}
           </div>
         </div>
 
+        <!-- 상태 시뮬레이터 (목업 전용) -->
+        <div style="background:#F0EAF8;border:1px solid #C8B0E8;border-radius:6px;padding:10px 14px;margin-bottom:8px;display:flex;align-items:center;gap:10px;font-size:13px;color:#4A2A7A">
+          <i class="fa-solid fa-sliders"></i>
+          <strong>상태 전환 시뮬레이터 (목업용)</strong>
+          <select id="stateSelect" onchange="applyState(this.value)" style="padding:4px 8px;border:1px solid #C8B0E8;border-radius:4px;font-size:13px;color:#4A2A7A;background:#fff;cursor:pointer">
+            <option value="draft">📝 임시저장</option>
+            <option value="review">⏳ 승인요청</option>
+            <option value="approved">✔ 승인완료</option>
+            <option value="active">🟢 라이브</option>
+            <option value="paused">⏸ 일시중지</option>
+          </select>
+        </div>
+
         <!-- 카드 ⑤: 액션 -->
-        <div class="card">
-          <div class="action-bar">
-            <button class="btn btn-secondary" onclick="saveDraft()"><i class="fa-regular fa-floppy-disk"></i> 임시저장</button>
-            <button class="btn btn-primary" onclick="requestReview()"><i class="fa-solid fa-paper-plane"></i> 검수 요청</button>
-          </div>
-          <div class="status-guidance">
-            <i class="fa-solid fa-circle-info fa-fw"></i>
-            <span><strong>현재 상태: 임시저장</strong> — 기본정보·전환 키워드(3개 이상)·전환 액션(버튼명·딥링크)·Standalone 답변 가이드(20자 이상) 입력 후 [검수 요청]을 클릭하세요.</span>
-          </div>
+        <div class="card" id="actionCard">
+          <div class="action-bar" id="actionBar"></div>
+          <div class="status-guidance" id="statusGuidance"></div>
         </div>
       </div>
 
       <!-- RIGHT: Workflow Tracker + 요약 -->
       <div>
-        <div class="wf-tracker">
+        <div class="wf-tracker" id="wfTracker">
           <div class="wf-title">이 Playbook의 작업 흐름</div>
-          <div class="wf-step">
-            <div class="wf-num wf-num-on">①</div>
+          <div class="wf-step" id="wf1">
+            <div class="wf-num wf-num-on" id="wfn1">①</div>
             <div class="wf-body">
-              <div class="wf-label wf-label-on">설정 입력 <span class="wf-tag">현재</span></div>
+              <div class="wf-label wf-label-on" id="wfl1">설정 입력 <span class="wf-tag">현재</span></div>
               <div class="wf-hint">기본정보·전환 키워드·스코어를 입력하세요</div>
             </div>
           </div>
-          <div class="wf-step">
-            <div class="wf-num wf-num-off">②</div>
+          <div class="wf-step" id="wf2">
+            <div class="wf-num wf-num-off" id="wfn2">②</div>
             <div class="wf-body">
-              <div class="wf-label wf-label-off">검수 요청</div>
+              <div class="wf-label wf-label-off" id="wfl2">검수 요청</div>
               <div class="wf-hint">[검수 요청] 클릭 → 도메인 검수자에게 전달</div>
             </div>
           </div>
-          <div class="wf-step">
-            <div class="wf-num wf-num-off">③</div>
+          <div class="wf-step" id="wf3">
+            <div class="wf-num wf-num-off" id="wfn3">③</div>
             <div class="wf-body">
-              <div class="wf-label wf-label-off">승인완료</div>
+              <div class="wf-label wf-label-off" id="wfl3">승인완료</div>
               <div class="wf-hint">검수자 승인 후 승인완료 · <a href="09_review-workflow.html" style="font-size:12px;color:var(--card-playbook)">검수·승인 →</a></div>
             </div>
           </div>
-          <div class="wf-step">
-            <div class="wf-num wf-num-off">④</div>
+          <div class="wf-step" id="wf4">
+            <div class="wf-num wf-num-off" id="wfn4">④</div>
             <div class="wf-body">
-              <div class="wf-label wf-label-off">라이브</div>
+              <div class="wf-label wf-label-off" id="wfl4">라이브</div>
               <div class="wf-hint">Clark AI가 이 Playbook으로 리드 전환을 시작합니다</div>
             </div>
           </div>
@@ -566,10 +576,87 @@ function updateStandaloneCounter() {
   el.style.fontWeight = len < 20 ? '700' : '400';
 }
 
+// 상태별 액션 카드 렌더링
+const STATE_CONFIG = {
+  draft: {
+    badgeClass: 'badge-draft', badgeText: '📝 임시저장',
+    actions: `<button class="btn btn-secondary" onclick="saveDraft()"><i class="fa-regular fa-floppy-disk"></i> 임시저장</button>
+              <button class="btn btn-primary" onclick="requestReview()"><i class="fa-solid fa-paper-plane"></i> 검수 요청</button>`,
+    guidance: '<strong>현재 상태: 임시저장</strong> — 기본정보·전환 키워드(3개 이상)·전환 액션·Standalone 답변 가이드(20자 이상) 입력 후 [검수 요청]을 클릭하세요.',
+    wfCurrent: 1
+  },
+  review: {
+    badgeClass: 'badge-review', badgeText: '⏳ 승인요청',
+    actions: `<button class="btn btn-secondary" onclick="showToast('검수 요청이 취소되었습니다. 임시저장 상태로 전환됩니다.')"><i class="fa-solid fa-xmark"></i> 요청 취소</button>`,
+    guidance: '<strong>현재 상태: 승인요청</strong> — 도메인 검수자가 내용을 검토 중입니다. 내용 수정이 필요하면 [요청 취소] 후 수정하세요.',
+    wfCurrent: 2
+  },
+  approved: {
+    badgeClass: 'badge-approved', badgeText: '✔ 승인완료',
+    actions: `<button class="btn btn-secondary" onclick="showToast('편집 모드로 전환됩니다. 수정 후 재검수가 필요합니다.')"><i class="fa-solid fa-pen"></i> 편집</button>
+              <button class="btn btn-primary" style="background:var(--status-active)" onclick="showToast('✅ 라이브 전환 완료. Clark AI가 이 Playbook으로 리드 전환을 시작합니다.')"><i class="fa-solid fa-circle-play"></i> 라이브 전환</button>`,
+    guidance: '<strong>현재 상태: 승인완료</strong> — 캔버스 연결 없이 바로 라이브 전환 가능합니다. [라이브 전환]을 클릭하면 Clark AI에 즉시 반영됩니다.',
+    wfCurrent: 3
+  },
+  active: {
+    badgeClass: 'badge-active', badgeText: '🟢 라이브',
+    actions: `<button class="btn btn-secondary" onclick="showToast('편집 모드로 전환됩니다. 수정 후 재검수가 필요합니다.')"><i class="fa-solid fa-pen"></i> 편집</button>
+              <button class="btn btn-secondary" style="color:var(--status-paused);border-color:rgba(122,74,0,.3)" onclick="showToast('⏸ 일시중지 처리되었습니다. Clark AI에서 즉시 제외됩니다.')"><i class="fa-solid fa-pause"></i> 일시중지</button>`,
+    guidance: '<strong>현재 상태: 라이브</strong> — Clark AI에 반영 중입니다. 내용 수정이 필요하면 [편집] 후 재검수 흐름을 진행하세요.',
+    wfCurrent: 4
+  },
+  paused: {
+    badgeClass: 'badge-paused', badgeText: '⏸ 일시중지',
+    actions: `<button class="btn btn-secondary" onclick="showToast('편집 모드로 전환됩니다.')"><i class="fa-solid fa-pen"></i> 편집</button>
+              <button class="btn btn-primary" style="background:var(--status-active)" onclick="showToast('▶ 재시작 완료. Clark AI에 즉시 반영됩니다.')"><i class="fa-solid fa-play"></i> 재시작</button>`,
+    guidance: '<strong>현재 상태: 일시중지</strong> — Clark AI에서 제외된 상태입니다. [재시작]을 클릭하면 즉시 다시 반영됩니다.',
+    wfCurrent: 4
+  }
+};
+
+function applyState(state) {
+  const cfg = STATE_CONFIG[state];
+  if (!cfg) return;
+
+  // 기본정보 카드 배지 업데이트
+  const hdrBadge = document.querySelector('.card-header .badge');
+  if (hdrBadge) { hdrBadge.className = 'badge ' + cfg.badgeClass; hdrBadge.textContent = cfg.badgeText; }
+
+  // 요약 박스 상태 업데이트
+  const sumBadgeEl = document.querySelector('.sum-row .badge');
+  if (sumBadgeEl) { sumBadgeEl.className = 'badge ' + cfg.badgeClass; sumBadgeEl.textContent = cfg.badgeText; }
+
+  // 액션 카드 업데이트
+  document.getElementById('actionBar').innerHTML = cfg.actions;
+  const guidance = document.getElementById('statusGuidance');
+  guidance.innerHTML = '<i class="fa-solid fa-circle-info fa-fw"></i><span>' + cfg.guidance + '</span>';
+
+  // wf-tracker 단계 업데이트
+  for (let i = 1; i <= 4; i++) {
+    const num = document.getElementById('wfn' + i);
+    const lbl = document.getElementById('wfl' + i);
+    if (!num || !lbl) continue;
+    if (i < cfg.wfCurrent) {
+      num.className = 'wf-num'; num.style.background = 'var(--step-done)'; num.style.color = '#fff';
+      lbl.className = 'wf-label wf-label-on'; lbl.innerHTML = lbl.textContent.replace(/ ?<span.*?<\/span>/, '');
+    } else if (i === cfg.wfCurrent) {
+      num.className = 'wf-num wf-num-on'; num.style.background = ''; num.style.color = '';
+      const baseText = lbl.textContent.replace(/ ?현재/, '');
+      lbl.className = 'wf-label wf-label-on';
+      lbl.innerHTML = baseText + ' <span class="wf-tag">현재</span>';
+    } else {
+      num.className = 'wf-num wf-num-off'; num.style.background = ''; num.style.color = '';
+      lbl.className = 'wf-label wf-label-off';
+      lbl.innerHTML = lbl.textContent.replace(/ ?<span.*?<\/span>/, '').replace(/ ?현재/, '');
+    }
+  }
+}
+
 // 초기 렌더링
 renderKeywords();
 updatePreview();
 updateStandaloneCounter();
+applyState('draft');
 </script>
 </body>
 </html>

@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FAQ RAG 관리 — KC Admin</title>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<style>
+:root {
+  --status-draft:#9C9C94; --status-review:#BA7517; --status-active:#0F6E56; --status-approved:#1A4A9A; --status-paused:#7A4A00; --status-rejected:#A32D2D;
+  --step-done:#0F6E56; --step-active:#1A3A6B; --step-pending:#D0CFC9;
+  --sidebar-w:220px; --bg-page:#F4F4F5; --bg-card:#FFFFFF;
+  --text-primary:#171719; --text-secondary:#70737C; --text-hint:#989BA2;
+  --border:#E1E2E4; --radius:8px; --shadow:0px 2px 4px -2px rgba(23,23,23,.06),0px 4px 6px -1px rgba(23,23,23,.06);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg-page);color:var(--text-primary);min-width:1280px;font-size:15px;line-height:1.5}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:var(--sidebar-w);background:#1A1A18;flex-shrink:0;padding:20px 0;position:sticky;top:0;height:100vh;overflow-y:auto}
+.sidebar-logo{padding:0 16px 20px;font-size:16px;font-weight:700;color:#fff;border-bottom:1px solid #333;margin-bottom:12px}
+.sidebar a,.nav-locked{display:flex;align-items:center;gap:8px;padding:8px 16px;color:#C8C8C4;text-decoration:none;font-size:14px;transition:background .15s}
+.sidebar a:hover{background:rgba(255,255,255,.08);color:#fff}
+.sidebar a.active{background:rgba(255,255,255,.15);color:#fff;font-weight:600;border-left:3px solid #5A8AE0}
+.nav-divider{border-top:1px solid #333;margin:8px 0}
+.nav-locked{color:#555!important;cursor:not-allowed}
+.main{flex:1;padding:32px;overflow-y:auto}
+.page-header{margin-bottom:24px}
+.page-header h1{font-size:24px;font-weight:700;margin-bottom:6px}
+.page-header p{color:var(--text-secondary);font-size:14px}
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);margin-bottom:20px}
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;font-size:13px;font-weight:600;white-space:nowrap}
+.badge-active{background:rgba(15,110,86,.15);color:var(--status-active)}
+.badge-draft{background:rgba(156,156,148,.15);color:var(--status-draft)}
+.badge-review{background:rgba(186,117,23,.15);color:var(--status-review)}
+.badge-rejected{background:rgba(163,45,45,.15);color:var(--status-rejected)}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:6px;font-size:14px;font-weight:600;cursor:pointer;border:none;font-family:inherit;transition:opacity .15s}
+.btn:hover{opacity:.85}
+.btn-primary{background:#1A3A6B;color:#fff}
+.btn-danger{background:var(--status-rejected);color:#fff}
+.btn-secondary{background:var(--bg-card);color:var(--text-primary);border:1px solid var(--border)}
+.btn-ghost{background:transparent;color:var(--text-secondary);border:1px solid var(--border)}
+.btn-sm{padding:5px 10px;font-size:13px}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:14px;font-weight:600;margin-bottom:4px}
+.field-hint{display:block;font-size:13px;color:var(--text-hint);margin-top:3px}
+.form-control{width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-family:inherit;background:#fff;color:var(--text-primary)}
+.form-control:focus{outline:none;border-color:#1A3A6B;box-shadow:0 0 0 2px rgba(26,58,107,.12)}
+textarea.form-control{resize:vertical}
+.banner{padding:12px 16px;border-radius:var(--radius);margin-bottom:16px;font-size:14px;line-height:1.6}
+.banner-info{background:#EEF4FF;border:1px solid #C0D0F0;color:#1A3A6B}
+.toast{position:fixed;bottom:24px;right:24px;background:#1A1A18;color:#fff;padding:12px 20px;border-radius:8px;font-size:14px;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none}
+.toast.show{opacity:1}
+
+/* 통계 바 */
+.stats-bar{display:flex;gap:20px;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--border)}
+.stat-item{font-size:13px;color:var(--text-secondary)}
+.stat-num{font-size:16px;font-weight:700;display:block;margin-bottom:1px}
+
+/* 상단 액션 바 */
+.top-bar{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.search-wrap{position:relative;display:inline-flex;align-items:center}
+.search-wrap i{position:absolute;left:10px;color:var(--text-hint);font-size:13px;pointer-events:none}
+.search-input{padding:8px 12px 8px 34px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-family:inherit;background:#fff;width:240px}
+.filter-select{padding:8px 12px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-family:inherit;background:#fff;cursor:pointer}
+
+/* 목록 테이블 */
+.list-table{width:100%;border-collapse:collapse;font-size:14px;table-layout:fixed}
+.list-table thead th{padding:10px 12px;text-align:left;border-bottom:2px solid var(--border);font-weight:600;font-size:13px;background:#FAFAF8;white-space:nowrap}
+.list-table tbody tr{border-bottom:1px solid var(--border);transition:background .12s}
+.list-table tbody tr:hover{background:#F8F8F6}
+.list-table td{padding:10px 12px;vertical-align:middle}
+.cell-q{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:500}
+.cell-a{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text-secondary);font-size:13px}
+
+/* 인라인 등록 패널 */
+.inline-panel{border-radius:var(--radius);padding:20px 24px;margin-bottom:16px;display:none}
+.inline-panel.open{display:block}
+.panel-reg{background:#EEF4FF;border:1.5px solid #A8C4F0}
+.panel-draft{background:#F2EEFF;border:1.5px solid #C0AEF0}
+.panel-header{font-size:15px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
+.panel-header-title{display:flex;align-items:center;gap:8px}
+
+/* 초안 카드 */
+.draft-card{background:#fff;border:1.5px solid var(--border);border-radius:6px;padding:14px 16px;margin-bottom:10px;display:flex;gap:12px;cursor:pointer;transition:border-color .15s}
+.draft-card:hover{border-color:#8A6AE0}
+.draft-card.selected{border-color:#1A4A9A;background:#EEF4FF}
+.draft-card-content{flex:1;min-width:0}
+.draft-q{font-size:14px;font-weight:600;margin-bottom:5px}
+.draft-a{font-size:13px;color:var(--text-secondary);line-height:1.5}
+.draft-src{font-size:12px;color:var(--text-hint);margin-top:6px}
+
+/* 모달 */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.48);z-index:1000;display:none;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:#fff;border-radius:var(--radius);width:680px;max-height:90vh;display:flex;flex-direction:column;box-shadow:0 8px 32px rgba(0,0,0,.2)}
+.modal-header{padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:12px}
+.modal-meta-id{font-size:12px;color:var(--text-hint);margin-bottom:4px}
+.modal-q{font-size:16px;font-weight:700;line-height:1.4;flex:1}
+.modal-body{padding:20px 24px;overflow-y:auto;flex:1}
+.modal-footer{padding:14px 24px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end}
+.meta-row{display:grid;grid-template-columns:90px 1fr;gap:4px 0;font-size:13px;padding-top:14px;margin-top:14px;border-top:1px solid var(--border)}
+.meta-k{color:var(--text-hint);font-weight:600;padding:3px 0}
+.meta-v{padding:3px 0}
+.reject-box{background:#FFF0ED;border:1px solid #F0B0A0;border-radius:6px;padding:12px 14px;margin-top:12px;font-size:13px;color:#A32D2D;line-height:1.5}
+.reject-form{background:#FFF8F6;border:1.5px solid #E08070;border-radius:6px;padding:16px;margin-top:12px;display:none}
+.reject-form.open{display:block}
+.a-display{margin-top:6px;font-size:14px;line-height:1.7;padding:12px;background:#FAFAF8;border:1px solid var(--border);border-radius:6px;white-space:pre-wrap}
+</style>
+</head>
+<body>
+<div class="layout">
+<nav class="sidebar">
+  <div class="sidebar-logo">&#9889; KC Admin <span style="font-size:10px;background:#5A8AE0;color:#fff;padding:1px 6px;border-radius:3px;margin-left:4px;font-weight:600">v2</span></div>
+
+  <a href="02_dashboard.html"><i class="fa-solid fa-chart-bar fa-fw"></i> 대시보드</a>
+
+  <div class="nav-divider"></div>
+
+  <a href="03_card-library.html"><i class="fa-solid fa-folder-open fa-fw"></i> ① 카드 등록</a>
+  <a href="04_risk-type-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-circle-exclamation fa-fw" style="font-size:11px;color:#C94B1A"></i> Risk-type</a>
+  <a href="05_evidence-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-database fa-fw" style="font-size:11px;color:#1A7A4A"></i> Evidence</a>
+  <a href="06_concept-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-lightbulb fa-fw" style="font-size:11px;color:#1A4A9A"></i> Concept</a>
+  <a href="07_rule-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-scale-balanced fa-fw" style="font-size:11px;color:#9A1A1A"></i> Rule</a>
+  <a href="08_policy-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-file-shield fa-fw" style="font-size:11px;color:#5A5A55"></i> Policy</a>
+  <a href="16_playbook-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-handshake fa-fw" style="font-size:11px;color:#9A70D0"></i> Playbook</a>
+  <span class="nav-locked" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-lock fa-fw" style="font-size:11px"></i> Case &#128274;</span>
+
+  <a href="09_review-workflow.html"><i class="fa-solid fa-circle-check fa-fw"></i> ② 검수·승인</a>
+  <a href="00_canvas-main.html"><i class="fa-solid fa-diagram-project fa-fw"></i> ③ 연결</a>
+  <a href="11_dry-run.html"><i class="fa-solid fa-flask fa-fw"></i> ④ 사전 테스트</a>
+  <a href="18_system-settings.html"><i class="fa-solid fa-sliders fa-fw"></i> 시스템 설정</a>
+  <a href="19_faq-rag.html" class="active" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-list-check fa-fw" style="font-size:11px;color:#1A4A9A"></i> FAQ RAG 관리</a>
+
+  <div class="nav-divider"></div>
+  <a href="13_answer-logic.html"><i class="fa-solid fa-diagram-project fa-fw"></i> AI 답변 로직</a>
+  <a href="17_system-data-guide.html"><i class="fa-solid fa-network-wired fa-fw"></i> 데이터 연결 구조</a>
+  <a href="15_aio-guide.html"><i class="fa-solid fa-globe fa-fw"></i> AIO 가이드</a>
+  <a href="12_coverage-code-table.html"><i class="fa-solid fa-table-list fa-fw"></i> 담보코드</a>
+
+  <div class="nav-divider"></div>
+  <a href="01_guide.html"><i class="fa-solid fa-clipboard-list fa-fw"></i> 업무 가이드</a>
+  <a href="00_design-system.html"><i class="fa-solid fa-palette fa-fw"></i> 디자인 시스템</a>
+</nav>
+
+<main class="main">
+  <div class="page-header">
+    <h1>FAQ RAG 관리</h1>
+    <p>약관 RAG가 커버하지 못하는 <strong>Clark 서비스 전용 Q&A</strong>(앱 사용 안내, 보닥 플래너 연결, 서비스 정책 등)를 운영자가 직접 등록·관리합니다. 보험 약관 관련 질문은 약관 RAG가 자동 처리하므로 이 화면에 등록하지 않습니다.</p>
+  </div>
+
+  <div class="banner banner-info">
+    <strong>처리 흐름:</strong>&nbsp; 운영자가 Clark 서비스 전용 Q&A 직접 등록 &rarr; <strong>검수자 승인</strong> &rarr; 인덱스 자동 등록 &rarr; Clark AI가 약관 RAG 결과 없을 때 참조
+    <span style="display:block;margin-top:4px;font-size:13px;color:#5A5A9A"><i class="fa-solid fa-circle-info fa-fw"></i> 약관·보장 관련 질문은 약관 RAG(자동 파이프라인)가 처리 — 이 화면에 등록 불필요</span>
+  </div>
+
+  <!-- 상단 액션 바 -->
+  <div class="top-bar">
+    <div class="search-wrap">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input class="search-input" type="text" id="searchInput" placeholder="질문으로 검색..." oninput="renderTable()">
+    </div>
+    <select class="filter-select" id="statusFilter" onchange="renderTable()">
+      <option value="">전체 상태</option>
+      <option value="approved">인덱스 등록됨</option>
+      <option value="review">검수대기</option>
+      <option value="draft">초안</option>
+      <option value="rejected">반려됨</option>
+    </select>
+    <div style="flex:1"></div>
+    <button class="btn btn-primary" id="btnReg" onclick="toggleReg()"><i class="fa-solid fa-plus fa-fw"></i> Q&amp;A 직접 등록</button>
+  </div>
+
+  <!-- 직접 등록 패널 -->
+  <div class="inline-panel panel-reg" id="regPanel">
+    <div class="panel-header">
+      <span class="panel-header-title" style="color:#1A3A6B"><i class="fa-solid fa-pen-to-square fa-fw"></i> Clark 서비스 전용 Q&amp;A 등록</span>
+      <button class="btn btn-ghost btn-sm" onclick="closeReg()">닫기</button>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+      <div class="form-group" style="margin-bottom:0">
+        <label>질문 (Q) <span style="color:var(--status-rejected)">*</span></label>
+        <textarea class="form-control" id="newQ" placeholder="예) 보닥 플래너 상담 신청은 어떻게 하나요? (약관·보장 관련 질문 등록 불가)" style="min-height:80px"></textarea>
+      </div>
+      <div class="form-group" style="margin-bottom:0">
+        <label>답변 (A) <span style="color:var(--status-rejected)">*</span></label>
+        <textarea class="form-control" id="newA" placeholder="Clark 서비스 안내 답변을 입력하세요. 보장 금액·청구 가능 여부·타사 비교 금지." style="min-height:80px"></textarea>
+        <span class="field-hint" style="display:block;margin-top:3px;font-size:13px;color:var(--text-hint)">저장 후 검수자 승인 → 승인 시 인덱스 자동 등록. Clark 서비스 전용 내용만 등록.</span>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:14px">
+      <button class="btn btn-primary" onclick="submitRegister(false)"><i class="fa-solid fa-paper-plane fa-fw"></i> 저장 후 검수 요청</button>
+      <button class="btn btn-ghost" onclick="submitRegister(true)"><i class="fa-solid fa-floppy-disk fa-fw"></i> 초안으로 저장</button>
+      <button class="btn btn-secondary" onclick="closeReg()">취소</button>
+    </div>
+  </div>
+
+  <!-- FAQ 목록 -->
+  <div class="card">
+    <div class="stats-bar" id="statsBar"></div>
+    <table class="list-table">
+      <thead>
+        <tr>
+          <th style="width:34%">질문 (Q)</th>
+          <th style="width:28%">답변 미리보기</th>
+          <th style="width:80px">출처</th>
+          <th style="width:110px">상태</th>
+          <th style="width:88px">등록일</th>
+          <th style="width:185px">액션</th>
+        </tr>
+      </thead>
+      <tbody id="faqBody"></tbody>
+    </table>
+    <div id="emptyMsg" style="display:none;text-align:center;padding:48px 0;color:var(--text-hint)">
+      <i class="fa-solid fa-inbox" style="font-size:24px;opacity:.35;display:block;margin-bottom:8px"></i>
+      조건에 맞는 Q&amp;A가 없습니다.
+    </div>
+  </div>
+</main>
+</div>
+
+<!-- 상세 모달 -->
+<div class="modal-overlay" id="detailModal" onclick="overlayClose(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <div style="flex:1;min-width:0">
+        <div class="modal-meta-id" id="mId"></div>
+        <div class="modal-q" id="mQ"></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;margin-left:14px">
+        <span class="badge" id="mBadge"></span>
+        <button class="btn btn-ghost btn-sm" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label style="font-size:13px;font-weight:600;color:var(--text-hint)">답변 (A)</label>
+        <div class="a-display" id="mADisplay"></div>
+        <textarea class="form-control" id="mAEdit" style="min-height:110px;margin-top:6px;display:none"></textarea>
+      </div>
+      <div class="meta-row">
+        <span class="meta-k">출처</span><span class="meta-v" id="mSource"></span>
+        <span class="meta-k">등록자</span><span class="meta-v" id="mReg"></span>
+        <span class="meta-k">등록일</span><span class="meta-v" id="mDate"></span>
+        <span class="meta-k" id="mApvK" style="display:none">승인자</span><span class="meta-v" id="mApv" style="display:none"></span>
+        <span class="meta-k" id="mApvDK" style="display:none">승인일</span><span class="meta-v" id="mApvD" style="display:none"></span>
+      </div>
+      <div class="reject-box" id="mRejectBox" style="display:none">
+        <strong><i class="fa-solid fa-circle-xmark fa-fw"></i> 반려 사유</strong>
+        <div id="mRejectText" style="margin-top:4px"></div>
+      </div>
+      <!-- 반려 사유 입력 (검수자가 반려 클릭 시 노출) -->
+      <div class="reject-form" id="rejectForm">
+        <label style="font-size:14px;font-weight:600;color:#A32D2D;margin-bottom:8px;display:block"><i class="fa-solid fa-circle-xmark fa-fw"></i> 반려 사유 입력 (필수)</label>
+        <textarea class="form-control" id="rejectInput" placeholder="반려 사유를 구체적으로 입력하세요" style="min-height:68px;margin-bottom:10px"></textarea>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-danger btn-sm" onclick="confirmReject()">반려 확정</button>
+          <button class="btn btn-ghost btn-sm" onclick="cancelReject()">취소</button>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer" id="mFooter"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let idSeq = 10;
+let currentId = null;
+let editMode = false;
+
+let faqs = [
+  {id:'FAQ001',q:'보닥 플래너 상담은 어떻게 신청하나요?',a:'Clark 화면 우측 하단 "상담 신청" 버튼을 탭하거나, 상담사 연결 메시지에서 "연결하기"를 선택하시면 됩니다. 보닥 플래너가 배정되면 알림으로 안내드립니다.',status:'approved',source:'운영자',registrar:'김운영',date:'2026-06-15',approver:'이검수',approvedDate:'2026-06-16'},
+  {id:'FAQ002',q:'Clark AI 답변이 내 실제 보장과 다를 수 있나요?',a:'Clark AI는 등록된 KC 카드 기준으로 안내합니다. 정확한 보장 내용은 가입 약관 또는 보닥 플래너 상담을 통해 확인하세요.',status:'review',source:'운영자',registrar:'박운영',date:'2026-06-19'},
+  {id:'FAQ003',q:'Clark을 통해 타사 보험료 비교가 가능한가요?',a:'타사 보험료 직접 비교는 제공하지 않습니다.',status:'rejected',source:'운영자',registrar:'이운영',date:'2026-06-18',rejectReason:'타사 서비스 언급 유도 가능 — Fallback Policy 위반. 서비스 범위 안내로 재작성 필요'},
+  {id:'FAQ004',q:'Clark에서 제공하는 서비스 범위가 어떻게 되나요?',a:'Clark AI는 가입 보험 기반 보장 안내, KC 카드 기반 답변, 보닥 플래너 연결을 제공합니다.',status:'draft',source:'운영자',registrar:'박운영',date:'2026-06-21'}
+];
+
+const SL = {approved:'인덱스 등록됨', review:'검수대기', draft:'초안', rejected:'반려됨'};
+const SB = {approved:'badge-active', review:'badge-review', draft:'badge-draft', rejected:'badge-rejected'};
+
+function getFiltered() {
+  const q = (document.getElementById('searchInput').value||'').toLowerCase();
+  const s = document.getElementById('statusFilter').value;
+  return faqs.filter(f => (!s || f.status===s) && (!q || f.q.toLowerCase().includes(q)));
+}
+
+function renderStats() {
+  const c = {approved:0,review:0,draft:0,rejected:0};
+  faqs.forEach(f => c[f.status]++);
+  document.getElementById('statsBar').innerHTML =
+    `<div class="stat-item"><span class="stat-num">${faqs.length}</span>전체</div>
+     <div class="stat-item" style="color:var(--status-active)"><span class="stat-num" style="color:var(--status-active)">${c.approved}</span>인덱스 등록</div>
+     <div class="stat-item" style="color:var(--status-review)"><span class="stat-num" style="color:var(--status-review)">${c.review}</span>검수대기</div>
+     <div class="stat-item" style="color:var(--status-draft)"><span class="stat-num" style="color:var(--status-draft)">${c.draft}</span>초안</div>
+     <div class="stat-item" style="color:var(--status-rejected)"><span class="stat-num" style="color:var(--status-rejected)">${c.rejected}</span>반려</div>`;
+}
+
+function renderTable() {
+  renderStats();
+  const data = getFiltered();
+  const body = document.getElementById('faqBody');
+  const empty = document.getElementById('emptyMsg');
+  if (!data.length) { body.innerHTML=''; empty.style.display='block'; return; }
+  empty.style.display = 'none';
+  body.innerHTML = data.map(f => {
+    let btns = `<button class="btn btn-ghost btn-sm" onclick="openModal('${f.id}')"><i class="fa-solid fa-eye fa-fw"></i> 상세</button> `;
+    if (f.status==='review') {
+      btns += `<button class="btn btn-primary btn-sm" onclick="quickApprove('${f.id}')">승인</button> `;
+      btns += `<button class="btn btn-danger btn-sm" onclick="openRejectFlow('${f.id}')">반려</button>`;
+    } else if (f.status==='draft') {
+      btns += `<button class="btn btn-secondary btn-sm" onclick="sendReview('${f.id}')">검수 요청</button>`;
+    } else if (f.status==='rejected') {
+      btns += `<button class="btn btn-ghost btn-sm" onclick="sendReview('${f.id}')"><i class="fa-solid fa-rotate-right fa-fw"></i> 재검수</button>`;
+    }
+    return `<tr>
+      <td class="cell-q" title="${f.q}">${f.q}</td>
+      <td class="cell-a" title="${f.a}">${f.a}</td>
+      <td style="font-size:13px;color:var(--text-hint)">${f.source}</td>
+      <td><span class="badge ${SB[f.status]}">${SL[f.status]}</span></td>
+      <td style="font-size:12px;color:var(--text-hint)">${f.date}</td>
+      <td>${btns}</td>
+    </tr>`;
+  }).join('');
+}
+
+/* 등록 패널 토글 */
+function toggleReg() {
+  const p = document.getElementById('regPanel');
+  if (p.classList.contains('open')) { p.classList.remove('open'); }
+  else { p.classList.add('open'); setTimeout(()=>document.getElementById('newQ').focus(), 50); }
+}
+function closeReg() { document.getElementById('regPanel').classList.remove('open'); }
+
+/* 직접 등록 */
+function submitRegister(asDraft) {
+  const q = document.getElementById('newQ').value.trim();
+  const a = document.getElementById('newA').value.trim();
+  if (!q) { showToast('질문을 입력하세요.'); return; }
+  if (!asDraft && !a) { showToast('답변을 입력하세요.'); return; }
+  const today = new Date().toISOString().split('T')[0];
+  faqs.push({id:'FAQ0'+( ++idSeq),q,a,status:asDraft?'draft':'review',source:'운영자',registrar:'현재 사용자',date:today});
+  document.getElementById('newQ').value='';
+  document.getElementById('newA').value='';
+  closePanel('regPanel');
+  renderTable();
+  showToast(asDraft ? '초안으로 저장되었습니다.' : '검수 요청되었습니다.');
+}
+
+/* 빠른 액션 */
+function quickApprove(id) {
+  const f = faqs.find(x=>x.id===id);
+  if (!f) return;
+  f.status='approved'; f.approver='현재 검수자'; f.approvedDate=new Date().toISOString().split('T')[0];
+  renderTable(); showToast('승인되었습니다. 인덱스에 등록됩니다.');
+}
+function openRejectFlow(id) { openModal(id); setTimeout(()=>document.getElementById('rejectForm').classList.add('open'), 60); }
+function sendReview(id) {
+  const f = faqs.find(x=>x.id===id);
+  if (!f) return;
+  f.status='review'; delete f.rejectReason;
+  renderTable(); showToast('검수 요청되었습니다.');
+}
+
+/* 모달 */
+function openModal(id) {
+  currentId = id; editMode = false;
+  const f = faqs.find(x=>x.id===id);
+  if (!f) return;
+  document.getElementById('mId').textContent = f.id;
+  document.getElementById('mQ').textContent = f.q;
+  document.getElementById('mBadge').className = 'badge '+SB[f.status];
+  document.getElementById('mBadge').textContent = SL[f.status];
+  document.getElementById('mADisplay').textContent = f.a;
+  document.getElementById('mADisplay').style.display='block';
+  document.getElementById('mAEdit').style.display='none';
+  document.getElementById('mSource').textContent = f.source;
+  document.getElementById('mReg').textContent = f.registrar||'-';
+  document.getElementById('mDate').textContent = f.date;
+  const hasApv = !!f.approver;
+  ['mApvK','mApv','mApvDK','mApvD'].forEach(i=>document.getElementById(i).style.display=hasApv?'':'none');
+  if (hasApv) { document.getElementById('mApv').textContent=f.approver; document.getElementById('mApvD').textContent=f.approvedDate; }
+  const hasRej = !!f.rejectReason;
+  document.getElementById('mRejectBox').style.display = hasRej?'block':'none';
+  if (hasRej) document.getElementById('mRejectText').textContent = f.rejectReason;
+  document.getElementById('rejectForm').classList.remove('open');
+  document.getElementById('rejectInput').value='';
+  renderFooter(f);
+  document.getElementById('detailModal').classList.add('open');
+}
+
+function renderFooter(f) {
+  let h = '';
+  if (f.status==='review') {
+    h = `<button class="btn btn-ghost" onclick="closeModal()">닫기</button>
+         <button class="btn btn-danger" onclick="showRejectForm()"><i class="fa-solid fa-circle-xmark fa-fw"></i> 반려</button>
+         <button class="btn btn-primary" onclick="approveModal()"><i class="fa-solid fa-circle-check fa-fw"></i> 승인</button>`;
+  } else if (f.status==='draft') {
+    h = `<button class="btn btn-ghost" onclick="closeModal()">닫기</button>
+         <button class="btn btn-secondary" onclick="startEdit()"><i class="fa-solid fa-pen fa-fw"></i> 수정</button>
+         <button class="btn btn-primary" onclick="reviewModal()"><i class="fa-solid fa-paper-plane fa-fw"></i> 검수 요청</button>`;
+  } else if (f.status==='rejected') {
+    h = `<button class="btn btn-ghost" onclick="closeModal()">닫기</button>
+         <button class="btn btn-secondary" onclick="startEdit()"><i class="fa-solid fa-pen fa-fw"></i> 수정</button>
+         <button class="btn btn-primary" onclick="reviewModal()"><i class="fa-solid fa-rotate-right fa-fw"></i> 재검수 요청</button>`;
+  } else {
+    h = `<button class="btn btn-danger btn-sm" onclick="deleteModal()"><i class="fa-solid fa-trash fa-fw"></i> 삭제</button>
+         <button class="btn btn-ghost" onclick="closeModal()">닫기</button>`;
+  }
+  document.getElementById('mFooter').innerHTML = h;
+}
+
+function approveModal() {
+  const f = faqs.find(x=>x.id===currentId); if (!f) return;
+  f.status='approved'; f.approver='현재 검수자'; f.approvedDate=new Date().toISOString().split('T')[0];
+  renderTable(); closeModal(); showToast('승인되었습니다. 인덱스에 등록됩니다.');
+}
+function showRejectForm() { document.getElementById('rejectForm').classList.add('open'); document.getElementById('rejectInput').focus(); }
+function cancelReject() { document.getElementById('rejectForm').classList.remove('open'); document.getElementById('rejectInput').value=''; }
+function confirmReject() {
+  const reason = document.getElementById('rejectInput').value.trim();
+  if (!reason) { showToast('반려 사유를 입력하세요.'); return; }
+  const f = faqs.find(x=>x.id===currentId); if (!f) return;
+  f.status='rejected'; f.rejectReason=reason;
+  renderTable(); closeModal(); showToast('반려 처리되었습니다.');
+}
+function reviewModal() {
+  const f = faqs.find(x=>x.id===currentId); if (!f) return;
+  f.status='review'; delete f.rejectReason;
+  renderTable(); closeModal(); showToast('검수 요청되었습니다.');
+}
+function startEdit() {
+  editMode=true;
+  const f = faqs.find(x=>x.id===currentId);
+  document.getElementById('mADisplay').style.display='none';
+  const ta = document.getElementById('mAEdit');
+  ta.style.display='block'; ta.value=f.a;
+  document.getElementById('mFooter').innerHTML=`
+    <button class="btn btn-ghost" onclick="cancelEdit()">취소</button>
+    <button class="btn btn-primary" onclick="saveEdit()"><i class="fa-solid fa-floppy-disk fa-fw"></i> 저장</button>`;
+}
+function cancelEdit() {
+  editMode=false;
+  document.getElementById('mADisplay').style.display='block';
+  document.getElementById('mAEdit').style.display='none';
+  renderFooter(faqs.find(x=>x.id===currentId));
+}
+function saveEdit() {
+  const val = document.getElementById('mAEdit').value.trim();
+  if (!val) { showToast('답변을 입력하세요.'); return; }
+  const f = faqs.find(x=>x.id===currentId); f.a=val;
+  document.getElementById('mADisplay').textContent=val;
+  cancelEdit(); showToast('수정되었습니다.');
+}
+function deleteModal() {
+  faqs = faqs.filter(x=>x.id!==currentId);
+  renderTable(); closeModal(); showToast('삭제되었습니다.');
+}
+function closeModal() { document.getElementById('detailModal').classList.remove('open'); currentId=null; editMode=false; }
+function overlayClose(e) { if (e.target.id==='detailModal') closeModal(); }
+
+function showToast(msg) {
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+renderTable();
+</script>
+</body>
+</html>
