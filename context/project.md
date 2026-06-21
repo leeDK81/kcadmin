@@ -7,7 +7,7 @@
 ## KC Admin이란
 
 Clark AI가 정확한 KC(Knowledge Core) 기반 답변을 하기 위한 카드 등록·승인·관리 도구.
-목표: 개발자·운영자에게 전달 가능한 HTML 인터랙티브 목업 제작 (`mockups_v2/` 26개).
+목표: 개발자·운영자에게 전달 가능한 HTML 인터랙티브 목업 제작 (`mockups_v2/` 27개).
 
 - **KC Admin** = 운영자가 카드를 사전 등록·승인·관리하는 UI 도구 (이 목업)
 - **KC Engine(API)** = 런타임에 카드를 실행·참조하는 처리 엔진
@@ -125,7 +125,7 @@ Phase 1.5 이관: 리드 스코어링 (GA 수신 스펙 대기). Phase 2: 배정
 
 ---
 
-## 화면 파일 목록 (mockups_v2/ 26개)
+## 화면 파일 목록 (mockups_v2/ 27개)
 
 | 파일 | 화면 |
 |---|---|
@@ -154,7 +154,52 @@ Phase 1.5 이관: 리드 스코어링 (GA 수신 스펙 대기). Phase 2: 배정
 | 16_card-editor-playbook.html | Playbook 편집기 |
 | 17_system-data-guide.html | KC 엔진 데이터 연결 구조 |
 | 18_system-settings.html | **LLM Fallback 시스템 설정** — Case 3 미매칭 시 답변 제한 규칙 (KC 체인과 독립, 저장 즉시 반영) |
+| 19_faq-rag.html | **Clark 서비스 전용 FAQ RAG 관리** — Clark 앱 사용 안내·서비스 정책 Q&A 등록·검수·인덱스 관리 (사이드바: 18_system-settings 하위) |
 
 > 10_chain-visualizer.html: 파일은 존재하나 사이드바에서 제거됨 — v2에서 카드 캔버스로 대체
 
 Case 편집기: Phase 1.5+, 파일 없음. 사이드바에 잠금(🔒) 표시만.
+
+---
+
+## RAG 아키텍처 (2026-06-21 확정)
+
+KC 카드 미매칭(Case 3/4) 발생 시 RAG 레이어가 동작한다.
+
+```
+사용자 질문
+├─ KC 카드 매칭 → 구조화 답변 (Case 1/2)
+└─ KC 미매칭 → RAG 레이어
+   ├─ 약관 RAG: 가입 상품 약관 자동 파싱·인덱스 (크롤러 자동, 관리자 설정)
+   └─ Clark 서비스 FAQ RAG: 운영자 직접 등록 → 검수자 승인 → 인덱스 등록
+      → RAG 결과 없으면 → Fallback 제한 생성형 (18_system-settings 설정 적용)
+```
+
+**역할 분리:**
+
+| RAG 유형 | 역할 | 관리 방식 | 등록 금지 |
+|---|---|---|---|
+| 약관 RAG | 가입 상품 약관 원문 검색 | 크롤러 자동 파이프라인 (KC Admin 직접 관리 불가) | — |
+| Clark 서비스 FAQ RAG | Clark 앱 사용 안내·서비스 정책·보닥 플래너 연결 등 서비스 고유 Q&A | 운영자 직접 등록 → 검수자 승인 (19_faq-rag.html) | 약관·보장 관련 Q&A (약관 RAG가 처리) |
+
+**FAQ RAG 등록 원칙:**
+- 등록 주체: 운영자 직접 입력 (LLM 초안 자동 생성 없음)
+- 승인 주체: 검수자
+- 상태 4종: 초안 / 검수대기 / 인덱스 등록됨 / 반려됨
+- 약관·보장 관련 Q&A 등록 금지 (약관 RAG가 자동 처리)
+
+---
+
+## policy/ 폴더 (설계 정책 문서)
+
+| 파일 | 내용 |
+|---|---|
+| 00_index.html | 정책 문서 인덱스 |
+| 01_glossary.html | 용어 정의 |
+| 02_card-purpose.html | 카드 목적 |
+| 03_connect-policy.html | 연결 정책 |
+| 04_lifecycle.html | 카드 라이프사이클 |
+| 05_approval.html | 승인 흐름 |
+| 06_field-data.html | 필드·데이터 정책 |
+| 07_permission.html | 권한 정책 |
+| 08_screen-policy.html | 화면별 정책 (19_faq-rag.html 스펙 포함) |

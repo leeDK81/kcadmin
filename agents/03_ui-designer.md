@@ -8,7 +8,7 @@
 
 KC Admin Phase 1의 시각 언어를 정의하고, "처음 보는 개발자·운영자가 이해하고 사용할 수 있는" 화면 구조를 설계한다. 기능 나열 UI가 아닌 **업무 흐름 안내 UI**가 핵심 원칙이다.
 
-**설계 범위:** Concept · Risk-type · Rule · Evidence · Policy 카드 5종 + 승인 워크플로우 + Playbook MVP.
+**설계 범위:** Concept · Risk-type · Rule · Evidence · Policy 카드 5종 + 승인 워크플로우 + Playbook MVP + Clark 서비스 FAQ RAG 관리(19_faq-rag.html).
 **제외:** Case 카드, aGCR, Graph RAG, Digital Twin.
 
 **데이터 소스 (Phase 1 모두 포함):** Rule 조건 빌더 3-source (MYDATA + Promage + 프로파일). Evidence 단일 유형 (공인 외부 통계 — HIRA/NHIS/KOSTAT/FSS).
@@ -177,3 +177,18 @@ HTML/CSS 패턴 → `guides/ux-patterns.md` 캔버스 섹션 참조.
 
 **입력:** `context/project.md` · `context/decisions.md` · `Data/KC_기획서_v1_6_1.md` §2~§3 (별도 지시 시)
 **출력:** 화면별 레이아웃 명세 · `agents/04_coder.md` 구현 지시
+
+---
+
+## 19_faq-rag.html — Clark 서비스 FAQ RAG 관리 화면 설계 원칙
+
+**역할:** Clark 서비스 전용 Q&A 등록·검수·인덱스 관리. 약관·보장 관련 Q&A 금지 (약관 RAG 담당).
+
+**핵심 설계 포인트:**
+- 상단 안내 배너: "이 화면은 약관·보장 관련 Q&A가 아닌 Clark 서비스 고유 안내(앱 사용·보닥 플래너 연결·서비스 정책 등)를 등록하는 곳입니다."
+- 목록 테이블: 상태 필터(전체/검수대기/인덱스등록됨/반려됨) + 검색 + Q 미리보기
+- 등록 패널: 인라인 펼침 패널 (Q textarea + A textarea + "검수 요청" 버튼)
+- 상세 모달: Q·A 전문 + 상태 배지 + 승인·반려·재검수 액션
+- 상태 4종: 초안(`badge-draft`) / 검수대기(`badge-review`) / 인덱스 등록됨(`badge-active`) / 반려됨(`badge-rejected`)
+- LLM 초안 자동 생성 버튼 없음 — 운영자 직접 입력만
+- 사이드바: 18_system-settings.html 하위 항목 (들여쓰기 처리)

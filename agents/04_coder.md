@@ -9,7 +9,7 @@
 UI 디자이너(03)의 설계 명세를 바탕으로 인터랙티브 HTML 목업을 구현한다.
 완성 기준: "처음 보는 개발자·운영자가 이 화면만 보고 다음 행동을 알 수 있는" 수준.
 
-파일 목록 26개 (mockups_v2/) → `context/project.md` 참조.
+파일 목록 27개 (mockups_v2/) → `context/project.md` 참조.
 Evidence 편집기 구현 → `agents/04a_coder-evidence.md` 전담.
 Playbook 편집기 구현 → `agents/04b_coder-playbook.md` 전담.
 
@@ -88,6 +88,7 @@ HTML 패턴 → `guides/ux-patterns.md` 참조.
 | 07_rule | 조건 추가/삭제(3-source). 게이트: 내용 필드 충족 시 검수 요청 활성 |
 | 09_review | 카드 내용 통합 목록. 필터(전체/검수대기/처리완료). 승인→완료. 반려→사유 입력 모달. 승인완료 상태 액션: "상세 보기" + "캔버스에서 연결" 버튼 (라이브 전환 버튼 없음 — 라이브 전환은 사전 테스트 후 캔버스에서 처리). 승인요청 상태 카드: 연결정보(conn) 없음 |
 | 18_system-settings | LLM Fallback 설정 폼. KC 미매칭(Case 3) 시 적용되는 제한 규칙. 저장 즉시 반영. KC 체인과 독립적으로 동작 |
+| 19_faq-rag | Clark 서비스 전용 FAQ Q&A 목록(상태 필터·검색) + 인라인 등록 패널(Q·A 직접 입력, LLM 초안 없음) + 상세 모달(승인·반려·재검수). 상태 4종: 초안/검수대기/인덱스등록됨/반려됨. 약관·보장 관련 Q&A 등록 금지 문구 상단 배너 필수 |
 | 11_dry-run | Risk-type + 고객 선택 → 예상 라우팅(KC/생성형) + 조건 평가 상세 |
 | 16_playbook-list | 상태 필터 탭. 상태별 액션 버튼 → `agents/04b_coder-playbook.md` |
 | 16_card-editor-playbook | 키워드 Enter 추가/× 제거. updatePreview() 실시간. Card ③ 토글 → `agents/04b_coder-playbook.md` |

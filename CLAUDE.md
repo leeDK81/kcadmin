@@ -31,7 +31,7 @@
 
 ```
 context/
-  project.md      ← KC Admin 개요, 카드 체계, 워크플로우, 파일 목록 26개 (v2)
+  project.md      ← KC Admin 개요, 카드 체계, 워크플로우, 파일 목록 27개 (v2)
   decisions.md    ← 확정된 설계 결정 (기획서와 충돌 시 이 파일 우선)
 
 guides/
@@ -43,7 +43,8 @@ guides/
 agents/           ← 역할별 전담 파일 (위 에이전트 구성 표 참조)
 CHANGELOG.md      ← 세션별 변경 이력 (에이전트가 읽을 필요 없음)
 mockups/          ← Phase 1 완료 산출물 24개 (참조용 — 신규 작업은 mockups_v2/ 사용)
-mockups_v2/       ← 현행 작업 폴더. 26개 HTML (캔버스 UX 기준)
+mockups_v2/       ← 현행 작업 폴더. 27개 HTML (캔버스 UX 기준)
+policy/           ← 설계 정책 문서 8개 HTML (00_index~08_screen-policy)
 Data/             ← 원천 기획서 — 별도 지시 없이 접근 금지
 ```
 
@@ -59,7 +60,16 @@ Data/             ← 원천 기획서 — 별도 지시 없이 접근 금지
 
 ---
 
-## 현재 상태 (2026-06-19)
+## 현재 상태 (2026-06-21)
+
+**메타 문서 전수 업데이트 완료 (2026-06-21):**
+- 19_faq-rag.html 신규 추가 (Clark 서비스 전용 FAQ Q&A 등록·검수·관리): 파일 수 26→27
+- FAQ RAG 역할 재정의: "일반 보험 Q&A" → "Clark 서비스 전용 Q&A" (앱 사용 안내·서비스 정책·보닥 플래너 연결)
+- 약관에서 Q&A 초안 생성 기능 삭제 (약관 RAG가 직접 원문 검색하므로 중복 불필요)
+- RAG 아키텍처 확정: 약관 RAG(자동 파이프라인) + Clark 서비스 FAQ RAG(운영자 직접 등록)
+- policy/ 폴더 신규 추가 (설계 정책 문서 8개: 00_index~08_screen-policy)
+- 19_faq-rag.html 사이드바 위치: 18_system-settings.html 하위 항목
+- CLAUDE.md·project.md·decisions.md·agents/ 전 파일 동기화
 
 **에이전트 학습 + 가이드 전면 업데이트 완료 (2026-06-19 세션 2):**
 - mockups_v2/ 최신 변경사항을 context/ + agents/ + guides/ 전체에 동기화
