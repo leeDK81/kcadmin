@@ -101,8 +101,8 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
         <tr>
           <td style="color:var(--card-concept);font-weight:700">Concept</td>
           <td style="color:var(--card-risk);font-weight:700">Risk-type</td>
-          <td><span class="chip chip-opt">선택</span></td>
-          <td>AI 답변 체인 진입점 형성. 연결 없이도 동의어 매칭은 유효</td>
+          <td><span class="chip chip-req">필수</span></td>
+          <td>AI 답변 체인 진입점 형성. Risk-type 연결 필수. 미연결 시 KC 체인 미진입</td>
         </tr>
         <tr>
           <td style="color:var(--card-risk);font-weight:700">Risk-type</td>
@@ -202,7 +202,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
           <td style="color:var(--status-active)">✅ 표시</td>
           <td style="color:var(--status-rejected)">❌ 불가</td>
           <td>—</td>
-          <td>캔버스에 보이나 연결 버튼 비활성</td>
+          <td>캔버스에 보이나 연결 버튼 잠김(연결 불가)</td>
         </tr>
         <tr>
           <td><span class="badge badge-approved">승인완료</span></td>
@@ -247,7 +247,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
         <thead><tr><th style="width:80px">방향</th><th style="width:160px">대상 카드</th><th style="width:100px">필수/선택</th><th style="width:120px">개수 제한</th><th>설명</th></tr></thead>
         <tbody>
           <tr><td>← 유입</td><td>—</td><td>—</td><td>—</td><td>다른 카드로부터 연결받지 않음. 체인의 시작점</td></tr>
-          <tr><td>→ 유출</td><td style="color:var(--card-risk);font-weight:600">Risk-type</td><td><span class="chip chip-opt">선택</span></td><td>1:N (제한 없음)</td><td>연결 없이도 동의어 매칭으로 동작 가능. 연결 시 특정 Risk-type으로 AI 답변 체인 진입</td></tr>
+          <tr><td>→ 유출</td><td style="color:var(--card-risk);font-weight:600">Risk-type</td><td><span class="chip chip-req">필수</span></td><td>1:N (제한 없음)</td><td>Risk-type 연결 필수. 미연결 시 KC 체인 미진입. 연결 시 특정 Risk-type으로 AI 답변 체인 진입</td></tr>
         </tbody>
       </table>
     </div>
@@ -261,7 +261,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
       <table class="tbl" style="margin-bottom:0">
         <thead><tr><th style="width:80px">방향</th><th style="width:160px">대상 카드</th><th style="width:100px">필수/선택</th><th style="width:120px">개수 제한</th><th>설명</th></tr></thead>
         <tbody>
-          <tr><td>← 유입</td><td style="color:var(--card-concept);font-weight:600">Concept</td><td><span class="chip chip-opt">선택</span></td><td>N:1 (제한 없음)</td><td>여러 Concept이 동일 Risk-type을 가리킬 수 있음</td></tr>
+          <tr><td>← 유입</td><td style="color:var(--card-concept);font-weight:600">Concept</td><td><span class="chip chip-req">필수</span></td><td>N:1 (제한 없음)</td><td>여러 Concept이 동일 Risk-type을 가리킬 수 있음</td></tr>
           <tr><td>→ 유출</td><td style="color:var(--card-rule);font-weight:600">Rule</td><td><span class="chip chip-req">필수</span></td><td>1:N (최소 1개)</td><td>이 위험 유형에 적용할 Rule을 1개 이상 연결해야 함. 복수 Rule 연결 가능</td></tr>
         </tbody>
       </table>

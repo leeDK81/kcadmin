@@ -169,7 +169,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
         <tr>
           <td><span class="file-code">07_card-editor-rule.html</span></td>
           <td>Rule 편집기</td>
-          <td>Rule 카드 신규 등록·수정. 기본정보 + 조건 빌더(MYDATA·Promage·프로파일, 필수/선택 구분) + Evidence/Policy 연결(읽기 전용) + 약관 DB 연동 + 액션.</td>
+          <td>Rule 카드 신규 등록·수정. 기본정보 + 조건 빌더(MYDATA·PROMAGE·PROFILE, 필수/선택 구분) + Evidence/Policy 연결(읽기 전용) + 약관 DB 연동 + 액션.</td>
           <td>조건 빌더 데이터 소스: MYDATA·Promage·프로파일(Amplitude 없음). 등급명: 위험/주의/양호(상/중/하 금지).</td>
         </tr>
 
@@ -178,7 +178,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
         <tr>
           <td><span class="file-code">08_policy-list.html</span></td>
           <td>Policy 목록</td>
-          <td>전체 Policy 카드 목록. 적용 Rule·준수 상태 표시.</td>
+          <td>전체 Policy 카드 목록. 이름·Clark 앱 표시 문구·연결 Rule 표시.</td>
           <td>2단계 승인 상태 표시 필요. table-layout:fixed 적용.</td>
         </tr>
         <tr>
@@ -205,8 +205,8 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
         <tr>
           <td><span class="file-code">18_system-settings.html</span></td>
           <td>시스템 설정</td>
-          <td>LLM Fallback 정책(KC 미매칭 + RAG 결과 없을 때 적용) 설정. 금지 사항·허용 범위·마무리 안내 문구. RAG 설정(유사도 임계값·약관 RAG 소스 상태). FAQ RAG Q&A 관리는 19_faq-rag.html로 분리. 관리자 전용.</td>
-          <td>저장 즉시 Clark AI 반영. 카드 승인 흐름 없음. 상태 개념 없음. RAG 유사도 임계값은 관리자만 변경 가능.</td>
+          <td>LLM Fallback 정책(KC 미매칭 + RAG 결과 없을 때 적용) 설정. 금지 사항·허용 범위·마무리 안내 문구. RAG 설정(유사도 기준값·약관 RAG 소스 상태). FAQ RAG Q&A 관리는 19_faq-rag.html로 분리. 관리자 전용.</td>
+          <td>저장 즉시 Clark AI 반영. 카드 승인 흐름 없음. 상태 개념 없음. RAG 유사도 기준값은 관리자만 변경 가능.</td>
         </tr>
         <tr>
           <td><span class="file-code">19_faq-rag.html</span></td>

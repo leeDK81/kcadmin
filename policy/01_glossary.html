@@ -127,7 +127,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
     </div>
     <div class="term-row">
       <div class="term-name"><span class="tag tag-concept">Concept</span> 개념</div>
-      <div class="term-def">AI 답변 체인의 진입점. 사용자 질의 키워드와 동의어 매칭을 담당. 하나의 Concept은 여러 Risk-type과 연결 가능(1:N). 공개범위: 고객 공개.</div>
+      <div class="term-def">AI 답변 체인의 진입점. 사용자 질의 키워드와 동의어 매칭을 담당. Risk-type 연결이 필수이며, 연결 없으면 KC 체인 미진입(Case 3 또는 Case 4로 분기). 하나의 Concept은 여러 Risk-type과 연결 가능(1:N). Standalone 기능 없음. 공개범위: 고객 공개.</div>
     </div>
     <div class="term-row">
       <div class="term-name"><span class="tag tag-rule">Rule</span> 판단 규칙</div>
@@ -183,19 +183,19 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
     <div class="section-title">AI 답변 케이스</div>
     <div class="term-row">
       <div class="term-name">Case 1 — KC 기반 정밀 답변</div>
-      <div class="term-def">Concept 매칭 → Risk-type 감지 → Rule 충족 → KC 체인 완전 매칭. Clark AI가 KC 카드 기반으로 맞춤형 정밀 답변 생성.</div>
+      <div class="term-def">KC Concept 매칭O + Playbook 미감지. KC 카드 체인(Concept→Risk-type→Rule→Evidence/Policy)을 완전 통과하여 Clark AI가 맞춤형 구조화 답변 생성.</div>
     </div>
     <div class="term-row">
       <div class="term-name">Case 2 — KC 기반 + CTA</div>
-      <div class="term-def">Case 1과 동일하나 Playbook 발화 키워드도 감지된 경우. KC 답변에 CTA 버튼 추가.</div>
+      <div class="term-def">KC Concept 매칭O + Playbook 감지O. KC 구조화 답변에 CTA 버튼이 추가로 출력된다.</div>
     </div>
     <div class="term-row">
       <div class="term-name">Case 3 — RAG 우선 시도 → Fallback 생성형</div>
-      <div class="term-def">Concept 미매칭 + Playbook 미감지. 먼저 약관 RAG → Clark 서비스 FAQ RAG 순서로 검색을 시도한다. RAG 결과가 있으면(유사도 ≥ 임계값) RAG 기반 답변 출력. RAG 결과도 없을 때에만 시스템 설정(<code>18_system-settings.html</code>)의 LLM 가이드라인이 적용된 제한 생성형 답변 출력.</div>
+      <div class="term-def">Concept 미매칭 + Playbook 미감지. 먼저 약관 RAG → Clark 서비스 FAQ RAG 순서로 검색을 시도한다. RAG 결과가 있으면(유사도 ≥ 기준값) RAG 기반 답변 출력. RAG 결과도 없을 때에만 시스템 설정(<code>18_system-settings.html</code>)의 LLM 가이드라인이 적용된 제한 생성형 답변 출력.</div>
     </div>
     <div class="term-row">
       <div class="term-name">Case 4 — Playbook Standalone</div>
-      <div class="term-def">Concept 미매칭이나 Playbook 발화 키워드 감지. Playbook의 Standalone 답변 가이드 기반으로 답변 + CTA 버튼 출력.</div>
+      <div class="term-def">KC 미매칭 + Playbook 감지O. Playbook의 Standalone 답변 가이드 기반으로 답변 + CTA 버튼 출력. Standalone은 Playbook이 전담하며 Concept 카드에 Standalone 기능 없음.</div>
     </div>
   </div>
 
@@ -254,7 +254,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
       <div class="term-def">Clark 서비스 전용 Q&A(앱 사용 안내, 보닥 플래너 연결, 서비스 정책 등)를 인덱스로 사용하는 RAG 소스. 약관 RAG가 처리하지 못하는 서비스 고유 질의를 커버한다. 약관·보장 관련 질의는 약관 RAG가 담당하므로 FAQ RAG에 등록하지 않는다. 운영자가 Q&A를 직접 등록 → 검수자 승인 → 인덱스 등록. 등록 권한: 운영자. 인덱스 등록(승인) 권한: 검수자.</div>
     </div>
     <div class="term-row">
-      <div class="term-name">유사도 임계값 <span style="font-size:12px;color:var(--text-hint)">Similarity Threshold</span></div>
+      <div class="term-name">유사도 기준값 <span style="font-size:12px;color:var(--text-hint)">Similarity Threshold</span></div>
       <div class="term-def">RAG 검색 결과를 답변에 사용할지 결정하는 기준값. <code>18_system-settings.html</code>에서 관리자가 설정. 기본값 권장: 0.75 이상 = RAG 기반 답변 / 0.5~0.75 = "상담사 연결" 유도 / 0.5 미만 = Fallback 생성형.</div>
     </div>
   </div>

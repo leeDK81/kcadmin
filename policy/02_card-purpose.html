@@ -131,7 +131,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
       <span><strong>KC 기반 답변 불가 조건 (Fallback 진입) — 아래 3가지 중 하나라도 해당 시:</strong><br>
       ① Concept 동의어 매칭 없음 &nbsp;|&nbsp; ② 매칭된 Risk-type에 라이브 Rule 없음 &nbsp;|&nbsp; ③ 라이브 Rule이 있으나 모든 Rule 조건 미충족<br>
       KC 미매칭 시 RAG 레이어(약관 RAG → Clark 서비스 FAQ RAG) 우선 시도 → RAG 결과 없을 때 최종적으로 Fallback 생성형 발동.<br>
-      <span style="font-size:12px;opacity:.85">RAG 임계값·Fallback 제한 규칙 설정 → 시스템 설정(18_system-settings.html)</span></span>
+      <span style="font-size:12px;opacity:.85">RAG 판단 기준·Fallback 제한 규칙 설정 → 시스템 설정(18_system-settings.html)</span></span>
     </div>
     <div class="notice" style="background:#EEF4FF;border-color:#C0D0F0;color:#1A3A6B">
       <i class="fa-solid fa-circle-info fa-fw"></i>
@@ -172,7 +172,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
   <div class="type-block" style="border-left-color:var(--card-concept)">
     <h3 style="color:var(--card-concept)"><i class="fa-solid fa-lightbulb fa-fw"></i> Concept — 개념</h3>
     <p><strong>역할:</strong> AI 답변 체인의 진입점. 사용자 질의 키워드와 동의어 매칭을 담당. Concept이 매칭되어야 KC 기반 정밀 답변(Case 1/2)이 시작된다.</p>
-    <p><strong>체인 위치:</strong> <strong>Concept</strong> → Risk-type. 하나의 Concept은 복수의 Risk-type과 연결 가능(1:N 관계). 연결 없이도 동의어 매칭은 유효하다.</p>
+    <p><strong>체인 위치:</strong> <strong>Concept</strong> → Risk-type. 하나의 Concept은 복수의 Risk-type과 연결 가능(1:N 관계). Risk-type 연결은 필수(chip-req) — 미연결 시 KC 체인에 진입하지 못한다.</p>
     <p><strong>구성 요소:</strong> 개념명, 설명, 동의어 목록(사용자 질의 키워드 집합). 동의어가 많을수록 매칭 정확도가 높아진다.</p>
     <div class="meta">
       <span class="meta-item"><strong>공개범위:</strong> <span class="chip chip-pub">고객 공개</span></span>
@@ -198,7 +198,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
   <!-- Policy -->
   <div class="type-block" style="border-left-color:var(--card-policy)">
     <h3 style="color:var(--card-policy)"><i class="fa-solid fa-file-shield fa-fw"></i> Policy — 정책</h3>
-    <p><strong>역할:</strong> 준법 고지 문구와 Clark AI 출력 제한을 설정하는 카드. Clark 앱에 표시되는 면책 고지 문구를 이 카드의 "Clark 앱 표시 문구" 필드로 관리. 앱 코드 하드코딩 금지.</p>
+    <p><strong>역할:</strong> Clark 앱에 표시할 면책 고지 문구를 운영자가 직접 작성하는 카드. Clark 앱에 표시되는 면책 고지 문구를 이 카드의 "Clark 앱 표시 문구" 필드로 관리. 앱 코드 하드코딩 금지.</p>
     <p><strong>승인 특이사항:</strong> 도메인 검수자 승인 후 <strong>준법감시인이 추가 최종 승인</strong>하는 2단계 승인 필요. Policy 카드는 준법감시인 승인 없이 active 전환 불가.</p>
     <p><strong>체인 연결:</strong> Rule → Policy (선택사항). 연결 없이도 Policy 자체는 등록·승인 가능.</p>
     <div class="meta">

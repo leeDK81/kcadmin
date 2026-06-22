@@ -88,7 +88,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
         <tr><td>지표명</td><td><code>indicatorName</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>활용할 통계 지표 명칭</td></tr>
         <tr><td>기준값</td><td><code>baseValue</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>단위 포함 입력. 예: "3,800만원", "68%"</td></tr>
         <tr><td>출처 URL</td><td><code>sourceUrl</code></td><td><span class="chip chip-opt">선택</span></td><td>string(url)</td><td>원본 자료 링크</td></tr>
-        <tr><td>활용 방법</td><td><code>usage</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>어떤 Rule 임계값의 근거인지, 왜 이 수치가 기준인지</td></tr>
+        <tr><td>활용 방법</td><td><code>usage</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>어떤 Rule 판단 기준값의 근거인지, 왜 이 수치가 기준인지</td></tr>
         <tr><td>카드 유형</td><td><code>evidenceType</code></td><td>자동</td><td>string</td><td>"external" 고정. 단일 유형</td></tr>
         <tr><td>공개범위</td><td><code>scope</code></td><td>자동</td><td>string</td><td>"internal" 고정</td></tr>
       </tbody>
@@ -105,7 +105,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
         <tr><td>개념명</td><td><code>name</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>최대 40자. 예: "암보험 보장 내용"</td></tr>
         <tr><td>설명</td><td><code>desc</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>이 개념의 의미와 적용 범위 설명</td></tr>
         <tr><td>동의어 목록</td><td><code>synonyms</code></td><td><span class="chip chip-req">필수</span></td><td>string[]</td><td>최소 1개. 사용자 질의에서 매칭될 키워드 목록. 쉼표 구분</td></tr>
-        <tr><td>연결 Risk-type</td><td><code>linkedRiskTypes</code></td><td><span class="chip chip-opt">선택</span></td><td>string[]</td><td>캔버스에서 설정. 편집기에서 읽기 전용 표시</td></tr>
+        <tr><td>연결 Risk-type</td><td><code>linkedRiskTypes</code></td><td><span class="chip chip-req">필수</span></td><td>string[]</td><td>캔버스에서 설정. 편집기에서 읽기 전용 표시. 미연결 시 KC 체인 미진입</td></tr>
         <tr><td>공개범위</td><td><code>scope</code></td><td>자동</td><td>string</td><td>"public" 고정</td></tr>
       </tbody>
     </table>
@@ -120,7 +120,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
         <tr><td>카드 코드</td><td><code>code</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>RU001~ 형식. 시스템 자동 부여</td></tr>
         <tr><td>Rule명</td><td><code>name</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>최대 60자</td></tr>
         <tr><td>설명</td><td><code>desc</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>이 Rule이 판단하는 내용</td></tr>
-        <tr><td>판단 조건</td><td><code>conditions</code></td><td><span class="chip chip-req">필수</span></td><td>ConditionRow[]</td><td>최소 1개. 3개 데이터 소스(MYDATA·Promage·프로파일) 중 선택하여 조건 행 배열 구성. 각 행에 필수/선택 구분(<code>required: boolean</code>) 설정 필요. PROMAGE 조건은 선택 권장</td></tr>
+        <tr><td>판단 조건</td><td><code>conditions</code></td><td><span class="chip chip-req">필수</span></td><td>ConditionRow[]</td><td>최소 1개. 3개 데이터 소스(MYDATA·PROMAGE·PROFILE) 중 선택하여 조건 행 배열 구성. 각 행에 필수/선택 구분(<code>required: boolean</code>) 설정 필요. PROMAGE 조건은 선택 권장</td></tr>
         <tr><td>출력 등급</td><td><code>outputGrade</code></td><td><span class="chip chip-req">필수</span></td><td>enum</td><td>위험 / 주의 / 양호 (상/중/하 사용 금지)</td></tr>
         <tr><td>약관 DB 연동</td><td><code>useContractDb</code></td><td><span class="chip chip-opt">선택</span></td><td>boolean</td><td>true 시 Rule 충족 → 담보코드 기준 약관 DB 자동 조회 → 면책조항 자동 추가</td></tr>
         <tr><td>연결 Risk-type</td><td><code>linkedRiskTypes</code></td><td>캔버스</td><td>string[]</td><td>캔버스에서 설정. 편집기 읽기 전용</td></tr>
