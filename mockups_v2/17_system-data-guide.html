@@ -367,8 +367,9 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 
       <div class="caution-card">
         <div class="caution-icon" style="color:var(--card-rule)"><i class="fa-solid fa-scale-balanced"></i></div>
-        <div class="caution-title">유의 ③ Rule 조건의 프롬에이지는 등급 기준만 가능</div>
-        <div class="caution-body">Rule 조건에서 프롬에이지 항목을 사용할 때는 수치가 아닌 등급(위험/주의/양호)으로만 조건을 설정할 수 있습니다. "암위험도가 위험 등급인 경우"는 가능하지만, "암위험도 점수가 85점 이상인 경우"처럼 원본 수치로 조건을 설정하는 것은 불가합니다.</div>
+        <div class="caution-title">유의 ③ Rule 조건의 프롬에이지 — 등급 기준만 가능, 선택 조건으로 설정 권장</div>
+        <div class="caution-body">Rule 조건에서 프롬에이지 항목을 사용할 때는 수치가 아닌 등급(위험/주의/양호)으로만 조건을 설정할 수 있습니다. "암위험도가 위험 등급인 경우"는 가능하지만, "암위험도 점수가 85점 이상인 경우"처럼 원본 수치로 조건을 설정하는 것은 불가합니다.<br><br>
+        <strong>프롬에이지 조건은 선택 조건으로 설정하세요.</strong> 필수 조건으로 설정하면 프롬에이지 미연동 사용자는 해당 Rule이 발동하지 않습니다. 선택 조건으로 설정하면 미연동 사용자도 Rule이 발동하며, 프롬에이지 충족 여부는 Risk-type 노출 우선순위(2순위: 선택 조건 충족 개수)에만 반영됩니다.</div>
       </div>
 
       <div class="caution-card">
@@ -406,7 +407,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
         <i class="fa-solid fa-chevron-down faq-chevron"></i>
       </div>
       <div class="faq-a">
-        프롬에이지 데이터가 없으면 프롬에이지 조건이 포함된 Rule은 충족되지 않습니다. 다만 마이데이터·프로파일 기반의 다른 카드들은 정상 작동하며, 공인 외부 통계 기반 Evidence는 운영자가 미리 등록한 고정 데이터이므로 프롬에이지 유무와 관계없이 항상 참조됩니다.
+        프롬에이지 조건이 <strong>필수 조건</strong>으로 설정된 Rule은 미연동 사용자에게 발동하지 않습니다. 반면 <strong>선택 조건</strong>으로 설정된 경우 Rule은 정상 발동하며, 해당 선택 조건은 충족되지 않은 것으로 처리됩니다(Risk-type 우선순위 2순위인 선택 조건 충족 개수에 미포함). 이 때문에 프롬에이지 조건은 <strong>선택 조건으로 설정하는 것을 권장</strong>합니다. 마이데이터·프로파일 기반의 다른 카드들은 정상 작동하며, 공인 외부 통계 기반 Evidence는 프롬에이지 유무와 관계없이 항상 참조됩니다.
       </div>
     </div>
 

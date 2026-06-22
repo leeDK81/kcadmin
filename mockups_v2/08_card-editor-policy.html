@@ -192,13 +192,8 @@ textarea.form-control{resize:vertical;min-height:80px}
       <span class="routing-role">AI 답변 역할: 최종 출력 검증</span>
     </div>
     <h3>Policy 카드</h3>
-    <p>규제 문서·핵심 조항·준수 체크리스트를 입력하고 검수 요청 → 도메인 검수자 검수 → 준법감시인 최종 승인 → 라이브 순서로 진행합니다.</p>
-    <p>준법감시인 2단계 승인이 필요한 유일한 카드입니다. Rule 연결은 캔버스(③ 연결)에서 관리합니다. 편집기에서는 연결 현황만 확인할 수 있습니다. 연결 변경도 준법감시인 승인 대상입니다.</p>
-    <p style="margin-top:6px"><strong>면책 문구 관리:</strong> Policy 카드의 "Clark 앱 표시 문구" 필드에 입력한 면책 고지 원문이 Clark 앱에 바로 표시됩니다. 승인 후 앱 업데이트 없이 즉시 반영됩니다.</p>
-  </div>
-
-  <div class="banner banner-info">
-    <i class="fa fa-circle-info"></i> <strong>Policy 카드 승인 절차:</strong> 내용·Rule 연결을 함께 검수 요청합니다. 준법감시인 최종 승인 후 라이브 전환됩니다.
+    <p>Clark 앱에 표시될 면책 고지 문구를 등록합니다. 준법감시인 최종 승인 후 앱 배포 없이 즉시 반영됩니다.</p>
+    <p>Rule 연결은 캔버스(③ 연결)에서 관리합니다. 연결 변경도 준법감시인 승인 대상입니다.</p>
   </div>
 
   <div class="two-col">
@@ -221,65 +216,21 @@ textarea.form-control{resize:vertical;min-height:80px}
         </div>
 
         <div class="form-group">
-          <label>규제 문서명 <span style="color:var(--status-rejected)">*</span></label>
-          <input class="form-control" type="text" value="금융소비자보호법 §19 (적합성 원칙)" placeholder="예: 금융소비자보호법 §19">
-          <span class="field-hint">적용할 규제 또는 내부 규정 명칭</span>
+          <label>Policy 이름 <span style="color:var(--status-rejected)">*</span></label>
+          <input class="form-control" type="text" value="보험 진단 결과 면책 고지" placeholder="예: 보험 진단 결과 면책 고지">
+          <span class="field-hint">목록에서 이 Policy를 식별하는 이름</span>
         </div>
 
         <div class="form-group">
-          <label>적용 범위</label>
-          <input class="form-control" type="text" value="KC 기반 답변 중 보험 보장 공백 진단 포함 케이스 전체" placeholder="예: KC 기반 답변 중 보험 위험성 설명 포함 케이스 전체">
-          <span class="field-hint">이 Policy가 통제하는 Clark AI 답변 유형</span>
-        </div>
-
-        <div class="form-group">
-          <label>핵심 조항 요약 <span style="color:var(--status-rejected)">*</span></label>
-          <textarea class="form-control" placeholder="검수자가 먼저 확인할 핵심 내용을 요약하세요" style="min-height:100px">Clark AI가 보험 보장 공백을 진단할 때 특정 상품을 추천하는 표현을 사용해서는 안 됩니다. 위험성 과장 문구, 특정 보험사 언급, 즉각적 구매 유도 표현이 없어야 하며, 면책 고지(진단 참고용 정보임을 명시)가 모든 KC 기반 답변에 포함되어야 합니다.</textarea>
-          <span class="field-hint">검수자가 먼저 확인할 핵심 내용을 요약하세요</span>
-        </div>
-
-        <div style="border-top:1px solid var(--border);margin:20px 0 16px;padding-top:16px">
-          <div style="font-size:15px;font-weight:700;color:var(--text-primary);margin-bottom:12px">Clark 앱 출력 설정</div>
-          <div class="banner banner-info" style="margin-bottom:14px">
-            <i class="fa fa-circle-info"></i> <strong>동적 연동 안내 —</strong> 아래 입력한 면책 문구는 Clark AI 진단 화면에 직접 표시됩니다. 준법감시인 승인 후 앱 배포 없이 즉시 반영됩니다.
+          <label>Clark 앱 표시 문구 <span style="color:var(--status-rejected)">*</span></label>
+          <div class="banner banner-info" style="margin-bottom:10px">
+            <i class="fa fa-circle-info"></i> 아래 문구가 Clark 앱 진단 화면에 직접 표시됩니다. 준법감시인 승인 후 앱 배포 없이 즉시 반영됩니다.
           </div>
-          <div class="form-group">
-            <label>출력 대상 화면 <span style="color:var(--status-rejected)">*</span></label>
-            <select class="form-control">
-              <option value="diagnosis-all" selected>보험 진단 결과 화면 전체 (기본 진단 + 프롬에이지 고도화 진단 공통)</option>
-              <option value="diagnosis-basic">기본 진단 결과만</option>
-              <option value="diagnosis-fromage">프롬에이지 고도화 진단만</option>
-            </select>
-            <span class="field-hint">이 면책 문구가 표시될 Clark 앱 화면 범위를 지정합니다</span>
-          </div>
-          <div class="form-group">
-            <label>Clark 앱 표시 문구 (면책 고지 원문) <span style="color:var(--status-rejected)">*</span></label>
-            <textarea class="form-control" style="min-height:120px" placeholder="Clark 앱 화면에 실제로 표시될 면책 문구를 입력하세요">본 진단은 마이데이터와 건강정보에 기반하며, 재무 상황·가족력·선호도 등 고객의 전체 맥락을 완전히 반영하지 못합니다.
+          <textarea class="form-control" id="appDisplayText" style="min-height:140px" placeholder="Clark 앱 화면에 실제로 표시될 면책 문구를 입력하세요">본 진단은 마이데이터와 건강정보에 기반하며, 재무 상황·가족력·선호도 등 고객의 전체 맥락을 완전히 반영하지 못합니다.
 최종 판단은 전문가(보닥플래너 또는 설계사) 상담을 통해 수행하시길 권장합니다.
 가입 당시 개별 상황에 대한 평가가 아니며, 판매 적정성에 대한 판단이 아닙니다.</textarea>
-            <span class="field-hint">각 항목은 줄 바꿈으로 구분합니다. 승인 후 Clark 앱에 즉시 반영됩니다.</span>
-          </div>
+          <span class="field-hint">줄 바꿈으로 항목을 구분합니다. 승인 후 Clark 앱에 즉시 반영됩니다.</span>
         </div>
-
-        <div class="form-group">
-          <label>준수 체크리스트</label>
-          <div style="background:#F8F8F6;border:1px solid var(--border);border-radius:6px;padding:8px 12px">
-            <div class="check-item">
-              <input type="checkbox" id="chk1" onchange="checkSubmitReady()">
-              <label for="chk1" style="cursor:pointer">위험성 과장 표현 없음</label>
-            </div>
-            <div class="check-item">
-              <input type="checkbox" id="chk2" onchange="checkSubmitReady()">
-              <label for="chk2" style="cursor:pointer">특정 상품 추천 문구 없음</label>
-            </div>
-            <div class="check-item">
-              <input type="checkbox" id="chk3" onchange="checkSubmitReady()">
-              <label for="chk3" style="cursor:pointer">Clark 앱 표시 문구 (면책 고지 원문) 입력 완료</label>
-            </div>
-          </div>
-          <span class="field-hint">승인 요청 전 모든 항목을 확인하세요</span>
-        </div>
-
 
       </div>
 
@@ -298,17 +249,14 @@ textarea.form-control{resize:vertical;min-height:80px}
         </div>
       </div>
       <div class="card">
-        <div id="checkWarn" class="banner banner-warn" style="display:none;margin-bottom:12px">
-          <i class="fa fa-triangle-exclamation"></i> 준수 체크리스트를 모두 확인해야 검수 요청이 가능합니다.
-        </div>
         <div class="action-bar" style="padding-top:4px">
           <button class="btn btn-secondary" onclick="saveDraft()"><i class="fa fa-floppy-disk"></i> 임시저장</button>
           <button class="btn btn-primary" onclick="requestReview()"><i class="fa fa-paper-plane"></i> 검수 요청 →</button>
         </div>
         <div class="status-guidance">
           <i class="fa-solid fa-circle-info fa-fw"></i>
-          <span><strong>현재 상태: 임시저장</strong> — 규제 문서명·핵심 조항 입력 및 준수 체크리스트 확인 후 [검수 요청]을 클릭하세요.<br>
-          <span style="display:block;margin-top:4px;font-size:13px;opacity:.85">📌 Rule 연결은 캔버스(③ 연결)에서 관리합니다. 연결 변경도 준법감시인 승인 대상입니다.</span></span>
+          <span><strong>현재 상태: 임시저장</strong> — Clark 앱 표시 문구 입력 후 [검수 요청]을 클릭하세요.<br>
+          <span style="display:block;margin-top:4px;font-size:13px;opacity:.85">Rule 연결은 캔버스(③ 연결)에서 관리합니다. 연결 변경도 준법감시인 승인 대상입니다.</span></span>
         </div>
       </div>
 
@@ -322,8 +270,8 @@ textarea.form-control{resize:vertical;min-height:80px}
           <div class="wf-step">
             <div class="wf-num wf-num-on">①</div>
             <div class="wf-body">
-              <div class="wf-label wf-label-on">내용 + Rule 연결 입력 <span class="wf-tag">현재</span></div>
-              <div class="wf-hint">규제 문서·조항·체크리스트 입력 (Rule 연결은 캔버스에서 변경)</div>
+              <div class="wf-label wf-label-on">내용 입력 <span class="wf-tag">현재</span></div>
+              <div class="wf-hint">Policy 이름·Clark 앱 표시 문구 입력 (Rule 연결은 캔버스에서)</div>
             </div>
           </div>
           <div class="wf-step">
@@ -359,32 +307,17 @@ textarea.form-control{resize:vertical;min-height:80px}
 <div class="toast" id="toast"></div>
 
 <script>
-function checkSubmitReady() {
-  const c1 = document.getElementById('chk1').checked;
-  const c2 = document.getElementById('chk2').checked;
-  const c3 = document.getElementById('chk3').checked;
-  const warn = document.getElementById('checkWarn');
-  warn.style.display = (c1 && c2 && c3) ? 'none' : 'block';
-}
-
 function saveDraft() {
   showToast('임시저장 되었습니다.');
 }
 
 function requestReview() {
-  const c1 = document.getElementById('chk1').checked;
-  const c2 = document.getElementById('chk2').checked;
-  const c3 = document.getElementById('chk3').checked;
-  if (!c1 || !c2 || !c3) {
-    document.getElementById('checkWarn').style.display = 'block';
-    showToast('준수 체크리스트를 모두 확인해야 합니다.');
+  const text = document.getElementById('appDisplayText').value.trim();
+  if (!text) {
+    showToast('Clark 앱 표시 문구를 입력해야 합니다.');
     return;
   }
   showToast('검수 요청이 완료되었습니다. 도메인 검수자에게 전달됩니다.');
-}
-
-function selectPolicy(id) {
-  showToast(id + ' Policy 카드를 불러옵니다...');
 }
 
 function showToast(msg) {
@@ -393,7 +326,6 @@ function showToast(msg) {
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2800);
 }
-
 </script>
 </body>
 </html>

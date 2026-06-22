@@ -137,7 +137,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
       <i class="fa-solid fa-circle-info fa-fw"></i>
       <span><strong>주요 선택 규칙 (개발자 참조):</strong><br>
       · <strong>Concept 매칭:</strong> 완전 일치 &gt; 포함 일치. 복수 매칭 시 타이브레이킹 — ①매칭 방식 → ②synonyms 일치 수 → ③Risk-type 연결 여부 → ④최근 라이브 전환일. 최종 Concept 1개만 선택.<br>
-      · <strong>Rule 평가:</strong> Rule 간 OR (하나라도 충족 시 진행) / Rule 내 AND (모든 조건 충족 시만 해당). 복수 충족 시 — ①조건 충족률 → ②조건 수 → ③최근 라이브 전환일 순으로 Rule 1개 선택.<br>
+      · <strong>Rule 평가:</strong> Rule 간 OR (하나라도 충족 시 진행) / Rule 내 — 필수 조건은 AND(모두 충족해야 Rule 발동), 선택 조건은 미충족 시에도 Rule 발동(충족 개수는 Risk-type 노출 우선순위 2순위에 활용). 복수 Rule 충족 시 — 선택 조건 충족 개수 기준으로 Risk-type 우선순위 2순위 결정.<br>
       · <strong>Policy 복수 적용:</strong> 연결된 모든 라이브 Policy 동시 적용(AND). 충돌 시 더 제한적인 Policy 우선. 전체 출력 차단 시 Clark 기본 안내 문구로 대체, 운영팀 알림 발생.</span>
     </div>
   </div>
@@ -147,12 +147,12 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
     <h3 style="color:var(--card-risk)"><i class="fa-solid fa-circle-exclamation fa-fw"></i> Risk-type — 리스크 유형</h3>
     <p><strong>역할:</strong> 사용자의 보험 보장 공백 유형을 분류하는 카드. Clark AI 답변 체인의 핵심 분류 기준이며, 사용자가 어떤 보장 공백 상황에 있는지를 정의한다.</p>
     <p><strong>체인 위치:</strong> Concept → <strong>Risk-type</strong> → Rule. Concept이 질문의 주제를 잡고, Risk-type이 해당 주제에서 어떤 위험 유형인지를 분류한다.</p>
-    <p><strong>다중 감지:</strong> 하나의 사용자 진단에서 복수의 Risk-type이 동시에 감지될 수 있다. 노출 우선순위는 ①중요도 가중치×Rule 충족 수 → ②충족 Rule 조건 수 합계 → ③카드 코드 오름차순으로 결정된다.</p>
+    <p><strong>다중 감지:</strong> 하나의 사용자 진단에서 복수의 Risk-type이 동시에 감지될 수 있다. 노출 우선순위는 ①중요도(높음>보통>낮음) → ②선택 조건 충족 개수(시스템 자동) → ③카드 코드 오름차순으로 결정된다.</p>
     <div class="meta">
       <span class="meta-item"><strong>공개범위:</strong> <span class="chip chip-pub">고객 공개</span></span>
       <span class="meta-item"><strong>코드 형식:</strong> T01 ~ T10</span>
       <span class="meta-item"><strong>현행 운영 코드:</strong> T01~T09 active, T10 paused</span>
-      <span class="meta-item"><strong>중요도:</strong> 높음(×3) / 보통(×2, 기본값) / 낮음(×1)</span>
+      <span class="meta-item"><strong>중요도:</strong> 높음 / 보통(기본값) / 낮음</span>
     </div>
   </div>
 

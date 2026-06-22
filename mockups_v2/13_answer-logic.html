@@ -396,7 +396,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
       <thead><tr><th style="width:160px">항목</th><th>기준</th></tr></thead>
       <tbody>
         <tr><td><strong>평가 관계</strong></td><td>OR — 조건을 충족하는 Rule이 하나라도 있으면 KC 기반 답변으로 진행</td></tr>
-        <tr><td><strong>Rule 내 조건</strong></td><td>AND — 하나의 Rule 내 복수 조건은 모두 충족되어야 해당 Rule이 "충족"으로 판정</td></tr>
+        <tr><td><strong>Rule 내 조건</strong></td><td><strong>필수 조건</strong>은 AND — 모두 충족되어야 Rule 발동. <strong>선택 조건</strong>은 미충족 시에도 Rule 발동 — 충족 개수는 Risk-type 우선순위 2순위에 활용됨</td></tr>
         <tr><td><strong>미충족 Rule</strong></td><td>해당 Rule은 답변에 반영하지 않음. 나머지 충족 Rule만 이후 단계에 전달</td></tr>
         <tr><td><strong>복수 충족 시</strong></td><td>우선순위 기준(아래)으로 Rule 1개 선택</td></tr>
         <tr><td><strong>전체 미충족</strong></td><td>모든 Rule 조건 미충족 → RAG 레이어 우선 시도 → RAG 결과 없으면 Fallback 제한 생성형으로 전환</td></tr>
@@ -420,7 +420,8 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
         <tr><td><strong>마이데이터</strong></td><td>고객 마이데이터에서 지정 담보코드(<span class="out-field">coverage_code</span>)의 확인 항목(<span class="out-field">field</span>)이 기준값(<span class="out-field">value</span>)을 조건 연산자(<span class="out-field">op</span>)로 충족하는지 평가</td></tr>
         <tr><td><strong>프로파일</strong></td><td>사용자 프로파일 데이터(나이·성별·결혼·자녀·직업위험도·출산예정·거주지 7개 항목)에서 지정 필드가 조건을 충족하는지 평가. number 타입: GTE/LTE/GT/LT/EQ, enum 타입: EQ/IN/NOT_IN 조건</td></tr>
         <tr><td><strong>프롬에이지</strong></td><td>상담 시 수집된 건강검진 데이터(건강위험도·암위험도)를 3단계 등급(위험/주의/양호)으로 변환 후 조건 평가. 수치 직접 비교 금지 [§3-8].</td></tr>
-        <tr><td><strong>소스 없음</strong></td><td>해당 소스 데이터 취득 불가 시, 해당 조건은 "미충족"으로 처리 (Rule 전체 평가에서 제외하지 않음)</td></tr>
+        <tr><td><strong>프롬에이지 미연동</strong></td><td>프롬에이지 데이터 없는 사용자 — 해당 조건 "미충족" 처리. 필수 조건이면 Rule 미발동. 선택 조건이면 Rule은 발동하되 충족 개수에서 제외됨 → 선택 조건 설정 권장</td></tr>
+        <tr><td><strong>기타 소스 없음</strong></td><td>해당 소스 데이터 취득 불가 시, 해당 조건은 "미충족"으로 처리</td></tr>
       </tbody>
     </table>
   </div>
@@ -430,19 +431,23 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
     <div class="section-title"><i class="fa-solid fa-circle-exclamation fa-fw" style="color:var(--card-risk)"></i> Step 2-B — 다중 Risk-type 감지 시 노출 우선순위</div>
     <p style="font-size:14px;color:var(--text-secondary);margin-bottom:14px">하나의 사용자 질의로 복수의 Risk-type이 동시에 감지될 때, 최종 노출 순서를 결정하는 기준입니다.</p>
 
+    <div class="note-box" style="margin-bottom:16px">
+      <strong>설계 원칙:</strong> Rule은 "이 사용자가 해당 리스크인가" 진단만 담당합니다. 우선순위는 서비스 전략(중요도)과 사용자 적합도(선택 조건 충족 개수)로만 결정되며, Rule 충족 개수·조건 수 합계는 우선순위에 사용하지 않습니다.
+    </div>
+
     <div class="section-sub">우선순위 결정 — 3단계 계층 구조</div>
     <table class="spec-table">
-      <thead><tr><th style="width:60px">순위</th><th style="width:260px">기준</th><th>설명</th></tr></thead>
+      <thead><tr><th style="width:60px">순위</th><th style="width:220px">기준</th><th>설명</th></tr></thead>
       <tbody>
         <tr>
           <td><span class="pri-badge pri-1">1순위</span></td>
-          <td><strong>중요도 가중치 × Rule 충족 개수</strong></td>
-          <td>운영자가 설정한 중요도(×3/×2/×1)에 해당 Risk-type에서 충족된 Rule 수를 곱한 값. 높을수록 먼저 노출</td>
+          <td><strong>중요도</strong></td>
+          <td>운영자가 설정한 서비스 전략 판단 — 높음 > 보통 > 낮음. 동일 중요도면 2순위로 이동</td>
         </tr>
         <tr>
           <td><span class="pri-badge pri-2">2순위</span></td>
-          <td><strong>충족된 Rule들의 조건 수 합계</strong></td>
-          <td>1순위 동점 시 적용. 조건이 많은 Rule이 충족될수록 더 정밀한 매칭으로 판단. 합계가 큰 Risk-type 우선</td>
+          <td><strong>선택 조건 충족 개수</strong></td>
+          <td>발동된 Rule의 선택 조건 중 실제 충족된 개수 합계. 이 사용자에게 더 강하게 해당하는 Risk-type 우선</td>
         </tr>
         <tr>
           <td><span class="pri-badge pri-3">3순위</span></td>
@@ -452,21 +457,21 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
       </tbody>
     </table>
 
-    <div class="section-sub">운영자 중요도 가중치 (Risk-type 편집기에서 설정)</div>
+    <div class="section-sub">운영자 중요도 (Risk-type 편집기에서 설정)</div>
     <table class="spec-table">
-      <thead><tr><th style="width:100px">중요도</th><th style="width:90px">가중치</th><th>활용 기준</th></tr></thead>
+      <thead><tr><th style="width:100px">중요도</th><th>활용 기준</th></tr></thead>
       <tbody>
-        <tr><td><strong style="color:#A32D2D">높음</strong></td><td>×3</td><td>핵심 진단 유형 — 다른 유형과 동시 감지 시 반드시 선노출</td></tr>
-        <tr><td><strong style="color:#BA7517">보통</strong></td><td>×2</td><td>일반 진단 유형 — 기본값 (미설정 시 자동 적용)</td></tr>
-        <tr><td><strong style="color:var(--text-hint)">낮음</strong></td><td>×1</td><td>보조 진단 유형 — 상위 유형 노출 후 후순위 안내</td></tr>
+        <tr><td><strong style="color:#A32D2D">높음</strong></td><td>핵심 진단 유형 — 다른 유형과 동시 감지 시 반드시 선노출</td></tr>
+        <tr><td><strong style="color:#BA7517">보통</strong></td><td>일반 진단 유형 — 기본값 (미설정 시 자동 적용)</td></tr>
+        <tr><td><strong style="color:var(--text-hint)">낮음</strong></td><td>보조 진단 유형 — 상위 유형 노출 후 후순위 안내</td></tr>
       </tbody>
     </table>
 
-    <div class="section-sub">계산 예시</div>
+    <div class="section-sub">적용 예시</div>
     <div style="background:#F8F8F4;border:1px solid var(--border);border-radius:6px;padding:14px 16px;font-size:13px;line-height:1.9;margin-bottom:12px">
-      T01(높음) Rule 2개 충족, 조건 합계 5개 → <strong>1순위: 3×2=6점 / 2순위: 5</strong><br>
-      T02(보통) Rule 3개 충족, 조건 합계 4개 → <strong>1순위: 2×3=6점 / 2순위: 4</strong><br>
-      → 1순위 동점 → <span style="color:#0F6E56;font-weight:700">T01 우선</span> (2순위 5 > 4)
+      T02(중요도: 높음) Rule 발동, 선택 조건 2개 충족 → <strong>1순위: 높음 / 2순위: 2개</strong><br>
+      T05(중요도: 높음) Rule 발동, 선택 조건 3개 충족 → <strong>1순위: 높음 / 2순위: 3개</strong><br>
+      → 1순위 동점(둘 다 높음) → <span style="color:#0F6E56;font-weight:700">T05 우선</span> (2순위 선택 조건 3 > 2)
     </div>
 
     <div class="note-box" style="margin-top:0">2·3순위는 시스템 자동 계산. 운영자는 <strong>중요도 3단계 설정만</strong> 합니다.<br>

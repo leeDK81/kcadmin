@@ -66,7 +66,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
         <tr><td>카드 코드</td><td><code>code</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>T01~T10 형식. 시스템 자동 부여. 편집 불가</td></tr>
         <tr><td>명칭</td><td><code>name</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>최대 30자. 예: "암투병생활비 부족형"</td></tr>
         <tr><td>설명</td><td><code>desc</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>최대 200자. 이 위험 유형이 발생하는 상황 설명</td></tr>
-        <tr><td>중요도</td><td><code>priority</code></td><td><span class="chip chip-req">필수</span></td><td>enum</td><td>high / mid / low. 기본값: mid(보통·가중치×2). 다중 감지 시 노출 우선순위 1순위 기준: 중요도 가중치(high=×3 / mid=×2 / low=×1) × 충족 Rule 수</td></tr>
+        <tr><td>중요도</td><td><code>priority</code></td><td><span class="chip chip-req">필수</span></td><td>enum</td><td>high / mid / low. 기본값: mid(보통). 다중 감지 시 노출 우선순위 1순위 기준: 높음 > 보통 > 낮음 (동점 시 → 2순위: 선택 조건 충족 개수 / 3순위: 카드 코드 오름차순)</td></tr>
         <tr><td>리드 스코어</td><td><code>leadScore</code></td><td><span class="chip chip-opt">선택</span></td><td>number</td><td>Phase 1.5 이후 활성화. 현재 미사용</td></tr>
         <tr><td>공개범위</td><td><code>scope</code></td><td>자동</td><td>string</td><td>"public" 고정. 운영자 변경 불가</td></tr>
         <tr><td>상태</td><td><code>status</code></td><td>자동</td><td>enum</td><td>draft / review / approved / active / paused / rejected</td></tr>
@@ -120,7 +120,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
         <tr><td>카드 코드</td><td><code>code</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>RU001~ 형식. 시스템 자동 부여</td></tr>
         <tr><td>Rule명</td><td><code>name</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>최대 60자</td></tr>
         <tr><td>설명</td><td><code>desc</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>이 Rule이 판단하는 내용</td></tr>
-        <tr><td>판단 조건</td><td><code>conditions</code></td><td><span class="chip chip-req">필수</span></td><td>ConditionRow[]</td><td>최소 1개. 3개 데이터 소스(MYDATA·Promage·프로파일) 중 선택하여 조건 행 배열 구성. 각 행의 source 값: "MYDATA" | "PROMAGE" | "PROFILE"</td></tr>
+        <tr><td>판단 조건</td><td><code>conditions</code></td><td><span class="chip chip-req">필수</span></td><td>ConditionRow[]</td><td>최소 1개. 3개 데이터 소스(MYDATA·Promage·프로파일) 중 선택하여 조건 행 배열 구성. 각 행에 필수/선택 구분(<code>required: boolean</code>) 설정 필요. PROMAGE 조건은 선택 권장</td></tr>
         <tr><td>출력 등급</td><td><code>outputGrade</code></td><td><span class="chip chip-req">필수</span></td><td>enum</td><td>위험 / 주의 / 양호 (상/중/하 사용 금지)</td></tr>
         <tr><td>약관 DB 연동</td><td><code>useContractDb</code></td><td><span class="chip chip-opt">선택</span></td><td>boolean</td><td>true 시 Rule 충족 → 담보코드 기준 약관 DB 자동 조회 → 면책조항 자동 추가</td></tr>
         <tr><td>연결 Risk-type</td><td><code>linkedRiskTypes</code></td><td>캔버스</td><td>string[]</td><td>캔버스에서 설정. 편집기 읽기 전용</td></tr>
@@ -131,7 +131,10 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
     </table>
     <div class="notice" style="margin-top:12px">
       <i class="fa-solid fa-circle-info fa-fw"></i>
-      <span><strong>ConditionRow 구조:</strong> <code>{ source: "MYDATA"|"PROMAGE"|"PROFILE", field: string, operator: string, value: string }</code>. MYDATA는 추가로 <code>coverageCode</code> 필드 포함 (<code>{ source: "MYDATA", coverageCode: string, field: string, operator: string, value: string }</code>).<br>
+      <span><strong>ConditionRow 구조:</strong> <code>{ source: "MYDATA"|"PROMAGE"|"PROFILE", field: string, operator: string, value: string, required: boolean }</code>.<br>
+      · <code>required: true</code> — 필수 조건. 미충족 시 Rule 미발동 (AND)<br>
+      · <code>required: false</code> — 선택 조건. 미충족 시에도 Rule 발동. 충족 개수는 Risk-type 노출 우선순위 2순위에 활용<br>
+      · MYDATA는 추가로 <code>coverageCode</code> 필드 포함. PROMAGE 조건은 <code>required: false</code> 권장 (미연동 사용자 대응)<br>
       <strong>MYDATA 확인항목 5종 (field 값):</strong> <code>coverage_amt</code>(가입금액) / <code>renewal_status</code>(갱신여부) / <code>insu_type</code>(보험유형) / <code>start_date</code>(시작일) / <code>end_date</code>(종료일).</span>
     </div>
   </div>
@@ -182,24 +185,27 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
   <div class="card">
     <div class="section-title"><i class="fa-solid fa-scale-balanced fa-fw" style="color:var(--card-rule)"></i> Rule 조건 빌더 — 데이터 소스 3종 구조</div>
     <table class="tbl">
-      <thead><tr><th>소스</th><th>source 값</th><th>행 구조</th><th>배경색 클래스</th></tr></thead>
+      <thead><tr><th>소스</th><th>source 값</th><th>행 구조</th><th>필수/선택 기본값</th><th>배경색 클래스</th></tr></thead>
       <tbody>
         <tr>
           <td><strong>마이데이터</strong></td>
           <td><code>MYDATA</code></td>
-          <td>담보코드 select + 확인항목 select(5종) + 조건 + 기준값</td>
+          <td>담보코드 select + 확인항목 select(5종) + 조건 + 기준값 + 필수/선택 라디오</td>
+          <td><code>required: true</code> (필수)</td>
           <td><code>.cond-row-mydata</code> (기본 회색)</td>
         </tr>
         <tr>
           <td><strong>프롬에이지</strong></td>
           <td><code>PROMAGE</code></td>
-          <td>카테고리 select(암위험도/생체나이/질병위험도/의료비예측) + 항목 select + 조건 + 기준값</td>
+          <td>카테고리 select(암위험도/생체나이/질병위험도/의료비예측) + 항목 select + 조건 + 기준값 + 필수/선택 라디오</td>
+          <td><code>required: false</code> (선택 — 미연동 사용자 대응)</td>
           <td><code>.cond-row-promage</code> (보라, <code>#FAF8FD</code>)</td>
         </tr>
         <tr>
           <td><strong>프로파일</strong></td>
           <td><code>PROFILE</code></td>
-          <td>항목 select(7개) + 조건 + 기준값</td>
+          <td>항목 select(7개) + 조건 + 기준값 + 필수/선택 라디오</td>
+          <td><code>required: true</code> (필수)</td>
           <td><code>.cond-row-profile</code> (초록, <code>#F4FBF8</code>)</td>
         </tr>
       </tbody>

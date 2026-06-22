@@ -288,34 +288,67 @@ function showToast(msg) {
 ## Risk-type 중요도 라디오 패턴
 
 다중 Risk-type이 동시 감지될 때 노출 순서를 결정하는 중요도 설정 UI.
-우선순위 공식: ①중요도 가중치(높음×3/보통×2/낮음×1) × Rule 충족 수 → ②충족 Rule 조건 수 합계 → ③카드코드 오름차순.
+우선순위 공식: ①중요도(높음>보통>낮음) → ②선택 조건 충족 개수(시스템 자동) → ③카드코드 오름차순.
+가중치(×3/×2/×1) 개념 없음. 중요도는 서열(높음/보통/낮음)로만 판단.
 
 ```html
 <div class="form-group">
   <label>중요도 <span style="color:var(--card-risk)">*</span>
-    <span class="field-hint">다중 Risk-type 동시 감지 시 노출 순서: ①중요도×Rule충족수 → ②충족Rule 조건수 합계 → ③카드코드 오름차순. 운영자는 이 중요도만 설정합니다.</span>
+    <span class="field-hint">다중 감지 시 노출 순서: ①중요도 → ②선택 조건 충족 개수(시스템 자동) → ③카드코드 오름차순. 운영자는 이 중요도만 설정합니다.</span>
   </label>
   <div style="display:flex;gap:24px;margin-top:8px;padding:12px 14px;background:#FAFAF8;border:1px solid var(--border);border-radius:6px">
     <label style="display:flex;align-items:center;gap:6px;cursor:pointer">
       <input type="radio" name="priority" value="high">
       <span style="color:#A32D2D;font-weight:700">높음</span>
-      <span style="color:var(--text-hint);font-size:12px">가중치 ×3</span>
+      <span style="color:var(--text-hint);font-size:12px">핵심 — 동시 감지 시 선노출</span>
     </label>
     <label style="display:flex;align-items:center;gap:6px;cursor:pointer">
       <input type="radio" name="priority" value="mid" checked>
       <span style="color:#BA7517;font-weight:700">보통</span>
-      <span style="color:var(--text-hint);font-size:12px">가중치 ×2 · 기본값</span>
+      <span style="color:var(--text-hint);font-size:12px">기본값 (미설정 시 자동 적용)</span>
     </label>
     <label style="display:flex;align-items:center;gap:6px;cursor:pointer">
       <input type="radio" name="priority" value="low">
       <span style="color:var(--text-hint);font-weight:700">낮음</span>
-      <span style="color:var(--text-hint);font-size:12px">가중치 ×1</span>
+      <span style="color:var(--text-hint);font-size:12px">보조 — 상위 유형 노출 후 후순위</span>
     </label>
   </div>
 </div>
 ```
 
 적용 위치: `04_card-editor-risk-type.html` — 설명(desc) 필드와 리드스코어(leadScore) 필드 사이.
+
+---
+
+## Rule 조건 빌더 — 필수/선택 라디오 패턴
+
+각 조건 행에 필수/선택 구분을 설정하는 라디오 UI. 조건 행 컬럼 ⑥ 위치.
+
+```javascript
+function reqRadioHtml(id, isRequired) {
+  const req = isRequired !== false;
+  return `<div style="display:flex;flex-direction:column;gap:5px;padding-top:1px">
+    <label style="display:flex;align-items:center;gap:4px;cursor:pointer;font-size:12px">
+      <input type="radio" name="req-${id}" value="required"${req?' checked':''} style="accent-color:var(--status-rejected);width:13px;height:13px">
+      <span style="color:#A32D2D;font-weight:700">필수</span>
+    </label>
+    <label style="display:flex;align-items:center;gap:4px;cursor:pointer;font-size:12px">
+      <input type="radio" name="req-${id}" value="optional"${!req?' checked':''} style="accent-color:var(--text-hint);width:13px;height:13px">
+      <span style="color:var(--text-hint);font-weight:600">선택</span>
+    </label>
+  </div>`;
+}
+```
+
+**소스별 기본값:**
+- MYDATA / PROFILE: `isRequired = true` (필수)
+- PROMAGE: `isRequired = false` (선택 — 미연동 사용자 대응)
+
+**동작 원칙:**
+- 필수: 미충족 시 Rule 미발동 (AND)
+- 선택: 미충족 시에도 Rule 발동. 충족 개수 → Risk-type 우선순위 2순위에 활용
+
+적용 위치: `07_card-editor-rule.html` — 각 조건 행(MYDATA/PROMAGE/PROFILE) 기준값 열 다음, 삭제 버튼 이전.
 
 ### Risk-type 목록 중요도 배지 CSS
 

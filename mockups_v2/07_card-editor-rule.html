@@ -60,7 +60,7 @@ textarea.form-control{resize:vertical;min-height:80px}
 .toast{position:fixed;bottom:24px;right:24px;background:#1A1A18;color:#fff;padding:12px 20px;border-radius:8px;font-size:14px;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none}
 .toast.show{opacity:1}
 /* Condition Builder */
-.cond-row{display:grid;grid-template-columns:100px 130px 1fr 85px 1fr 36px;gap:6px;align-items:start;padding:10px;background:#F8F8F6;border:1px solid var(--border);border-radius:6px;margin-bottom:8px;position:relative}
+.cond-row{display:grid;grid-template-columns:90px 120px 1fr 75px 1fr 72px 36px;gap:6px;align-items:start;padding:10px;background:#F8F8F6;border:1px solid var(--border);border-radius:6px;margin-bottom:8px;position:relative}
 .cond-row-promage{border-color:rgba(107,74,154,.3);background:#FAF8FD}
 .cond-row-promage .cond-hint{color:#6B4A9A}
 .cond-row-profile{border-color:rgba(15,110,86,.3);background:#F4FBF8}
@@ -142,7 +142,7 @@ textarea.form-control{resize:vertical;min-height:80px}
 .rel-empty{font-size:13px;color:var(--text-hint);padding:6px 0;line-height:1.6}
 .rel-divider{height:1px;background:var(--border);margin:12px 0}
 /* Condition column headers */
-.cond-header{display:grid;grid-template-columns:100px 130px 1fr 85px 1fr 36px;gap:6px;padding:0 10px 6px;margin-bottom:2px}
+.cond-header{display:grid;grid-template-columns:90px 120px 1fr 75px 1fr 72px 36px;gap:6px;padding:0 10px 6px;margin-bottom:2px}
 .cond-header-cell{font-size:12px;color:var(--text-hint);font-weight:700}
 /* Submit gate checklist */
 .check-gate{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:14px 18px;margin-bottom:14px;box-shadow:var(--shadow)}
@@ -278,11 +278,12 @@ textarea.form-control{resize:vertical;min-height:80px}
           <div class="cond-header-cell">③ 확인 항목<br><span style="font-weight:400">(항목/속성)</span></div>
           <div class="cond-header-cell">④ 조건<br><span style="font-weight:400">(비교 방식)</span></div>
           <div class="cond-header-cell">⑤ 기준값<br><span style="font-weight:400">(비교할 값)</span></div>
+          <div class="cond-header-cell">⑥ 구분<br><span style="font-weight:400">(필수/선택)</span></div>
           <div></div>
         </div>
         <div id="conditionList"></div>
         <button class="btn btn-secondary btn-sm" onclick="addConditionRow()">
-          <i class="fa fa-plus"></i> AND 조건 추가
+          <i class="fa fa-plus"></i> 조건 추가
         </button>
       </div>
 
@@ -599,11 +600,26 @@ const selectedRiskTypesForRule = [{id:'RT01', name:'암·종양'}, {id:'RT02', n
 const selectedEv = [{id:'EV001', name:'암 평균 입원 진료비'}, {id:'EV002', name:'암 5년 생존율'}];
 
 // 샘플 조건: 40대 이상 + 암진단 담보금액 3천만원 이하 + 암 종합 위험도 '위험'
+// required:true = 필수 조건 (모두 충족해야 Rule 발동), required:false = 선택 조건 (충족 개수가 우선순위 2순위에 활용)
 const initialConditions = [
-  {source:'PROFILE', field:'age', op:'GTE', value:'40'},
-  {source:'MYDATA',  coverage:'A4200', field:'coverage_amt', op:'LTE', value:'30000000'},
-  {source:'PROMAGE', category:'암위험도', field:'canr_ca', op:'EQ', value:'위험'}
+  {source:'PROFILE', field:'age', op:'GTE', value:'40', required:true},
+  {source:'MYDATA',  coverage:'A4200', field:'coverage_amt', op:'LTE', value:'30000000', required:true},
+  {source:'PROMAGE', category:'암위험도', field:'canr_ca', op:'EQ', value:'위험', required:false}
 ];
+
+function reqRadioHtml(id, isRequired) {
+  const req = isRequired !== false;
+  return `<div style="display:flex;flex-direction:column;gap:5px;padding-top:1px">
+    <label style="display:flex;align-items:center;gap:4px;cursor:pointer;font-size:12px">
+      <input type="radio" name="req-${id}" value="required"${req?' checked':''} style="accent-color:var(--status-rejected);width:13px;height:13px">
+      <span style="color:#A32D2D;font-weight:700">필수</span>
+    </label>
+    <label style="display:flex;align-items:center;gap:4px;cursor:pointer;font-size:12px">
+      <input type="radio" name="req-${id}" value="optional"${!req?' checked':''} style="accent-color:var(--text-hint);width:13px;height:13px">
+      <span style="color:var(--text-hint);font-weight:600">선택</span>
+    </label>
+  </div>`;
+}
 
 function addConditionRow(init) {
   const list = document.getElementById('conditionList');
@@ -613,6 +629,7 @@ function addConditionRow(init) {
   const fld = (init && init.field) ? init.field : '';
   const op  = (init && init.op) ? init.op : 'LTE';
   const val = (init && init.value) ? init.value : '';
+  const isRequired = (init && init.required !== undefined) ? init.required : (src !== 'PROMAGE');
 
   const row = document.createElement('div');
   row.id = 'cond-' + id;
@@ -650,6 +667,7 @@ function addConditionRow(init) {
         <select class="form-control" style="font-size:13px" id="op-${id}">${profileOpSelectHtml(profFld.type, op)}</select>
       </div>
       <div id="val-cell-${id}">${buildValHtml(profFld, val)}</div>
+      ${reqRadioHtml(id, isRequired)}
       <button class="cond-delete" onclick="removeCondition(this)" title="조건 삭제"><i class="fa fa-trash"></i></button>
       <div style="grid-column:1/-1">
         <span class="cond-hint">👤 프로파일 — 나이·성별·직업위험도 등 사용자 기본정보. 동일 담보 기준값을 연령·성별별로 세분화할 때 사용합니다.</span>
@@ -696,9 +714,10 @@ function addConditionRow(init) {
         <select class="form-control" style="font-size:13px" id="op-${id}">${promageOpSelectHtml(catData.type, pop)}</select>
       </div>
       <div id="val-cell-${id}">${valHtml}</div>
+      ${reqRadioHtml(id, isRequired)}
       <button class="cond-delete" onclick="removeCondition(this)" title="조건 삭제"><i class="fa fa-trash"></i></button>
       <div style="grid-column:1/-1">
-        <span class="cond-hint">🧬 프롬에이지 — 메디에이지 건강검진 분석 데이터. 미연결 고객은 해당 조건 불충족 처리.</span>
+        <span class="cond-hint">🧬 프롬에이지 — 메디에이지 건강검진 분석 데이터. 미연동 고객은 해당 조건 불충족 처리. <strong style="color:#A32D2D">선택 조건 권장</strong> — 필수로 설정 시 미연동 사용자는 이 Rule이 발동하지 않습니다.</span>
       </div>`;
   } else {
     row.className = 'cond-row cond-row-mydata';
@@ -736,6 +755,7 @@ function addConditionRow(init) {
         <input class="form-control" style="font-size:13px" id="val-${id}" type="text" value="${val}" placeholder="⑤ 기준값 입력">
         <div id="val-hint-${id}" class="cond-hint" style="margin-top:2px">${valHintTxt}</div>
       </div>
+      ${reqRadioHtml(id, isRequired)}
       <button class="cond-delete" onclick="removeCondition(this)" title="조건 삭제"><i class="fa fa-trash"></i></button>
       <div style="grid-column:1/-1">
         <span class="cond-hint">📋 마이데이터 — 고객 보험 계약 데이터. 담보코드로 어떤 보험을 볼지 지정 후 확인 항목과 조건을 설정하세요.</span>

@@ -60,7 +60,13 @@ Data/             ← 원천 기획서 — 별도 지시 없이 접근 금지
 
 ---
 
-## 현재 상태 (2026-06-21)
+## 현재 상태 (2026-06-22)
+
+**Rule 필수/선택 조건 + Risk-type 우선순위 재설계 전수 반영 완료 (2026-06-22):**
+- Rule 조건 빌더: 필수/선택 구분 추가 (ConditionRow.required). PROMAGE 기본=선택, MYDATA/PROFILE 기본=필수
+- Risk-type 다중 감지 우선순위 재확정: ①중요도(서열) → ②선택 조건 충족 개수(시스템 자동) → ③카드코드 오름차순
+- 중요도 가중치(×3/×2/×1) 개념 제거 — 높음/보통/낮음 서열만 사용
+- 전수 반영 파일: 07_card-editor-rule.html / 04_card-editor-risk-type.html / 13_answer-logic.html / 17_system-data-guide.html / policy/02_card-purpose.html / policy/06_field-data.html / agents/01_ai-rag-architect.md / agents/03_ui-designer.md / agents/04_coder.md / guides/ux-patterns.md / context/decisions.md
 
 **메타 문서 전수 업데이트 완료 (2026-06-21):**
 - 19_faq-rag.html 신규 추가 (Clark 서비스 전용 FAQ Q&A 등록·검수·관리): 파일 수 26→27

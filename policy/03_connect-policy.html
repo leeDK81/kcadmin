@@ -120,7 +120,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
           <td style="color:var(--card-rule);font-weight:700">Rule</td>
           <td style="color:var(--card-policy);font-weight:700">Policy</td>
           <td><span class="chip chip-opt">선택</span></td>
-          <td>준법 고지 문구 추가 시 연결. 준법감시인 포함 승인 필수</td>
+          <td>Clark 앱에 표시할 면책 고지 문구를 운영자가 직접 작성. Rule 답변에 고지 문구를 덧붙여야 할 경우 연결</td>
         </tr>
         <tr>
           <td style="color:var(--card-evidence);font-weight:700">Evidence</td>
@@ -278,7 +278,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
         <tbody>
           <tr><td>← 유입</td><td style="color:var(--card-risk);font-weight:600">Risk-type</td><td><span class="chip chip-req">필수</span></td><td>N:1 (제한 없음)</td><td>여러 Risk-type이 동일 Rule을 공유 가능</td></tr>
           <tr><td>→ 유출</td><td style="color:var(--card-evidence);font-weight:600">Evidence</td><td><span class="chip chip-req">필수</span></td><td>1:N (최소 1개)</td><td>판단 근거 통계를 1개 이상 연결해야 함. 여러 Evidence 공유 가능</td></tr>
-          <tr><td>→ 유출</td><td style="color:var(--card-policy);font-weight:600">Policy</td><td><span class="chip chip-opt">선택</span></td><td>1:N (제한 없음)</td><td>준법 고지가 필요한 경우에만 연결. 준법감시인 승인 필수</td></tr>
+          <tr><td>→ 유출</td><td style="color:var(--card-policy);font-weight:600">Policy</td><td><span class="chip chip-opt">선택</span></td><td>1:N (제한 없음)</td><td>Clark 앱 표시용 면책 고지 문구가 필요한 경우에만 연결. 운영자가 직접 고지 문구를 작성한 Policy 카드를 연결</td></tr>
         </tbody>
       </table>
     </div>
@@ -307,7 +307,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
       <table class="tbl" style="margin-bottom:0">
         <thead><tr><th style="width:80px">방향</th><th style="width:160px">대상 카드</th><th style="width:100px">필수/선택</th><th style="width:120px">개수 제한</th><th>설명</th></tr></thead>
         <tbody>
-          <tr><td>← 유입</td><td style="color:var(--card-rule);font-weight:600">Rule</td><td><span class="chip chip-opt">선택</span></td><td>N:1 (제한 없음)</td><td>여러 Rule이 동일 Policy를 공유 가능</td></tr>
+          <tr><td>← 유입</td><td style="color:var(--card-rule);font-weight:600">Rule</td><td><span class="chip chip-opt">선택</span></td><td>N:1 (제한 없음)</td><td>여러 Rule이 동일 Policy를 공유 가능. Policy 카드는 Clark 앱에 표시할 면책 고지 문구(이름 + 고지 문구)를 운영자가 직접 작성하는 카드</td></tr>
           <tr><td>→ 유출</td><td>— (단말)</td><td>—</td><td>—</td><td>체인의 끝. 추가 연결 없음</td></tr>
         </tbody>
       </table>

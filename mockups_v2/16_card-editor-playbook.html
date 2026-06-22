@@ -298,7 +298,7 @@ textarea.form-control{resize:vertical;min-height:72px}
             </div>
             <textarea class="form-control" id="standaloneGuide" rows="4" placeholder="예: 보험 전문가와 1:1 상담을 통해 현재 보장 상태를 점검하고 맞춤 설계를 받아볼 수 있습니다." oninput="updateStandaloneCounter()">보험 전문가와 1:1 상담을 통해 현재 보장 상태를 점검하고 맞춤 설계를 받아볼 수 있습니다. 지금 아이지넷 설계사와 상담을 시작해보세요.</textarea>
             <div style="text-align:right;font-size:12px;margin-top:4px">
-              <span id="standaloneCount" style="font-weight:700">0</span>자 / 150자 이내 권장 <span style="color:var(--text-hint)">(20자 이상 필수)</span>
+              <span id="standaloneCount">0</span>자 / 150자 이내 권장 <span style="color:var(--text-hint)">(선택 — 비워두면 Clark 기본 안내 문구 사용)</span>
             </div>
           </div>
         </div>
@@ -564,7 +564,6 @@ function updatePreview() {
 function saveDraft() { showToast('임시저장 되었습니다'); }
 function requestReview() {
   if (keywords.length < 3) { showToast('전환 키워드를 3개 이상 등록해주세요'); return; }
-  if (document.getElementById('standaloneGuide').value.trim().length < 20) { showToast('Standalone 답변 가이드를 20자 이상 입력해주세요'); return; }
   showToast('검수 요청이 완료되었습니다');
 }
 function updateStandaloneCounter() {
@@ -572,8 +571,8 @@ function updateStandaloneCounter() {
   const el = document.getElementById('standaloneCount');
   if (!el) return;
   el.textContent = len;
-  el.style.color = len < 20 ? '#A32D2D' : (len > 150 ? '#BA7517' : 'var(--text-hint)');
-  el.style.fontWeight = len < 20 ? '700' : '400';
+  el.style.color = len > 150 ? '#BA7517' : 'var(--text-hint)';
+  el.style.fontWeight = '400';
 }
 
 // 상태별 액션 카드 렌더링
@@ -582,7 +581,7 @@ const STATE_CONFIG = {
     badgeClass: 'badge-draft', badgeText: '📝 임시저장',
     actions: `<button class="btn btn-secondary" onclick="saveDraft()"><i class="fa-regular fa-floppy-disk"></i> 임시저장</button>
               <button class="btn btn-primary" onclick="requestReview()"><i class="fa-solid fa-paper-plane"></i> 검수 요청</button>`,
-    guidance: '<strong>현재 상태: 임시저장</strong> — 기본정보·전환 키워드(3개 이상)·전환 액션·Standalone 답변 가이드(20자 이상) 입력 후 [검수 요청]을 클릭하세요.',
+    guidance: '<strong>현재 상태: 임시저장</strong> — 기본정보·전환 키워드(3개 이상)·전환 액션 입력 후 [검수 요청]을 클릭하세요. Standalone 답변 가이드는 선택사항입니다.',
     wfCurrent: 1
   },
   review: {
