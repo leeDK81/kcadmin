@@ -4,6 +4,62 @@
 
 ---
 
+## 2026-06-22 — policy 전수검사 + 에이전트 전체 동기화
+
+### 핵심 확정 사항
+
+| 항목 | 이전 | 확정 |
+|---|---|---|
+| Concept → Risk-type | 선택 (chip-opt) | **필수 (chip-req)** — 미연결 시 KC 체인 미진입 |
+| Concept Standalone | 일부 언급 잔존 | **완전 제거** — Case 4(Playbook)가 담당 |
+| Policy 카드 필드 | 6개 이상 | **2개만** (Policy 이름 + Clark 앱 표시 문구) |
+| Playbook Standalone | 20자 이상 필수 | **선택사항** — 비워두면 Clark 기본 안내 문구 |
+| Risk-type 우선순위 | 가중치(×3/×2/×1) | **서열만** (높음>보통>낮음, 가중치 없음) |
+| Rule PROMAGE 기본 | 미정 | **required=false** (선택, 미연동 사용자 대응) |
+| 금지어 추가 | — | **임계값 → 기준값/판단 기준** |
+
+### 수정 파일 목록
+
+**`mockups_v2/16_card-editor-playbook.html`**
+- Standalone 답변 가이드 20자 필수 게이트 제거 → 선택사항
+- `requestReview()` 20자 체크 제거
+- 카운터 라벨 `(20자 이상 필수)` → `(선택 — 비워두면 Clark 기본 안내 문구 사용)`
+
+**`policy/` 전수검사 — 9개 파일, 총 22건 수정**
+
+| 파일 | 수정 건수 | 주요 내용 |
+|---|---|---|
+| `00_index.html` | 1건 | 화면 수 26→27개 (19_faq-rag.html 반영) |
+| `01_glossary.html` | 6건 | Case 1~4 SOT 매트릭스 재정의, Concept Standalone 없음, 임계값→기준값 |
+| `02_card-purpose.html` | 3건 | Concept Risk-type 연결 필수 명시, Policy 출력 제한 잔존 제거, 임계값→기준값 |
+| `03_connect-policy.html` | 4건 | Concept→Risk-type 선택→필수, "비활성"→"잠김", Risk-type 유입도 필수 |
+| `04_lifecycle.html` | 1건 | "비활성화"→"잠금 처리" (금지어) |
+| `05_approval.html` | 0건 | SOT와 완전 일치 — 변경 없음 |
+| `06_field-data.html` | 3건 | Concept linkedRiskTypes 필수화, Promage→PROMAGE, 임계값→판단 기준값 |
+| `07_permission.html` | 1건 | RAG 유사도 임계값→기준값 |
+| `08_screen-policy.html` | 3건 | Policy 목록 준수 상태 제거, Promage→PROMAGE, 임계값 2곳→기준값 |
+
+**지침·가이드·에이전트 전체 동기화 — 14개 md 파일**
+
+| 파일 | 주요 업데이트 |
+|---|---|
+| `CLAUDE.md` | policy/ 9개 반영, 금지어 임계값 추가 |
+| `context/decisions.md` | `## 2026-06-22 확정 사항` 섹션 신규 추가 (7개 결정) |
+| `context/project.md` | CONNECT_RULES 필수 명시, Policy 2필드, Case 3/4 RAG 순서 |
+| `guides/ux-patterns.md` | Case 매트릭스·CONNECT_RULES·Policy·Playbook·RAG·금지어 7개 섹션 추가 |
+| `guides/copywriting.md` | 임계값→기준값 추가, 비활성화 명시, PROMAGE/PROFILE 코드 노트 |
+| `agents/01_ai-rag-architect.md` | Case 1~4 재확정, PROMAGE required=false, Policy 2필드, Standalone 선택 |
+| `agents/02_po.md` | Rule 소스 기본값, Case 표, CONNECT_RULES, 카드별 역할 표 갱신 |
+| `agents/03_ui-designer.md` | Concept 편집기 Standalone 없음, Policy 2필드, Playbook Standalone 선택 |
+| `agents/04_coder.md` | Policy 2필드 구현, standaloneGuide 선택사항, PROMAGE required=false |
+| `agents/04b_coder-playbook.md` | Standalone 필수→선택, minlength 제거, chip-opt 적용 |
+| `agents/05_code-reviewer.md` | Policy 2필드 검수, Standalone 선택 검수 항목 추가 |
+| `agents/06_spec-reviewer.md` | 최신 스펙 반영 |
+| `agents/07_insurance-expert.md` | Policy 2필드(면책 고지 직접 작성), 약관DB≠Policy 구분 |
+| `agents/08_ui-reviewer.md` | Concept Standalone 없음, Policy 2필드, Standalone chip-opt 검수 |
+
+---
+
 ## 2026-06-18 — 카드 라이프사이클 재설계 (승인완료 → 캔버스 → Dry-run → 라이브 전환)
 
 ### 핵심 변경: 카드 라이프사이클 흐름
