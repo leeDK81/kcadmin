@@ -28,21 +28,26 @@
 - [ ] Rule 편집기에서 Risk-type 미선택 시 `#rtWarning` 경고 배너가 표시되는가? (`validateRiskType()` 또는 동등한 동작)
 - [ ] Concept 편집기에서 Risk-type 행 클릭 시 `toggleRiskType()` 호출되어 체크박스 토글 + `.rt-selected` 클래스 추가 + `selectedRiskChips` 칩 갱신이 동시에 일어나는가? (라디오 버튼이 아닌 체크박스 — 1:N 다중 선택)
 - [ ] Concept 편집기에서 선택 칩의 × 클릭 시 해당 Risk-type만 개별 해제되는가?
+- [ ] Concept 편집기에 Standalone 관련 UI(라디오·토글·섹션 등)가 없는가? (Standalone 기능 Concept에서 완전 제거됨 — Playbook의 Case 4로 대체)
 - [ ] Playbook 편집기에서 전환 키워드 Enter 입력 시 태그 추가되는가?
 - [ ] Playbook 편집기에서 버튼 유형/명칭 변경 시 `updatePreview()` 호출되어 앱 미리보기 갱신되는가?
 - [ ] Playbook 편집기에서 `addExtraAction()` 클릭 시 추가 버튼 섹션이 생성되는가?
 - [ ] Playbook 편집기에서 `removeExtraAction(id)` 클릭 시 해당 섹션만 제거되는가?
 - [ ] Playbook 편집기에서 상담 연결 버튼 선택 시 Card ③ `scoring-inactive` → `scoring-active`로 토글되는가?
 - [ ] Playbook 목록에서 상태별 액션 버튼이 올바르게 렌더링되는가? (draft: 편집+삭제 / review: 요청취소 / approved: 라이브전환+편집 / active: 일시중지+편집 / paused: 재시작+편집)
-- [ ] Risk-type 편집기: 중요도 라디오 그룹 3개(높음/보통/낮음)가 있는가? 기본값 "보통(×2)"이 checked인가?
+- [ ] Risk-type 편집기: 중요도 라디오 그룹 3개(높음/보통/낮음)가 있는가? 기본값 "보통"이 checked인가? 라디오 레이블에 가중치(×3/×2/×1) 표기가 없는가? (가중치 완전 제거됨)
 - [ ] 09_review-workflow.html: 승인완료(approved) 카드 액션이 "캔버스에서 연결" 버튼인가? ("라이브 전환" 버튼이 없는가? — 라이브 전환은 사전 테스트 후 캔버스에서 처리)
 - [ ] 09_review-workflow.html: 승인요청(pending/review) 카드에 conn(연결정보) 데이터가 없는가?
 - [ ] Playbook 편집기 Card ②에 `standaloneGuide` textarea가 border-top 구분선으로 분리되어 있는가? (Standalone 답변 가이드 섹션)
 - [ ] Standalone 배너의 케이스 가이드 링크가 `14_answer-logic-guide.html`로 연결되어 있는가? (`17_playbook-answer-guide.html`은 삭제된 파일 — 연결 시 404 오류)
 - [ ] `standaloneGuide` textarea에 `oninput="updateStandaloneCounter()"` 핸들러가 있는가?
 - [ ] `standaloneCount` span이 있고 `updateStandaloneCounter()` 함수가 정의되어 있는가? (20자 미만: 빨강 #A32D2D / 20~150자: hint 색 / 150자 초과: 주황 #BA7517)
-- [ ] `requestReview()`에서 `standaloneGuide` 20자 미만 시 toast 경고 후 return 처리되는가?
+- [ ] `requestReview()`에서 `standaloneGuide` 20자 미만 시 toast 경고 후 return 처리되는가? → **삭제 대상**: standaloneGuide는 선택사항(minlength=20 검증 제거됨). 빈 값이면 Clark 기본 문구 사용. 이 검증 로직이 남아있으면 수정 필요.
 - [ ] 초기 렌더링 시 `updateStandaloneCounter()` 호출되어 카운터 초깃값이 표시되는가?
+- [ ] Playbook 편집기 `standaloneGuide` textarea에 `minlength="20"` 속성 또는 20자 미만 강제 경고 로직이 없는가? (선택사항 확정 — 최소 글자 수 제한 없음)
+
+- [ ] Policy 편집기 필드가 정확히 2개(Policy 이름 `name` + Clark 앱 표시 문구 `appDisplayText`)인가? 그 외 필드(규제 문서명·적용 범위·핵심 조항 요약·출력 대상 화면·출력 제한 설정·준수 체크리스트 등)가 없는가?
+- [ ] CONNECT_RULES — Concept → Risk-type 연결이 필수(`required`)로 표시되어 있는가? (연결 없으면 KC 체인 미진입. 읽기전용 배지 옆 "필수" 레이블 또는 `requestReview()` 내 미연결 시 블로킹)
 
 ### C. 디자인 시스템 일관성
 
@@ -97,6 +102,20 @@
 - [ ] N-segment 빌더 함수(addExtraSegment 등) 없는가?
 - [ ] MOCK_DATA Evidence type: 'external' (stat/fromage 아님)
 - [ ] requestReview(): 7개 필수 필드(제목·기관·보고서명·연도·지표명·기준값·활용방법) 검증하는가?
+
+### G. 금지어 및 구조 규칙 (2026-06-22 확정)
+
+**금지 표현 — 화면/레이블/placeholder/toast 메시지에서 모두 체크:**
+- [ ] `임계값` 없는가? → 대체어: `기준값` 또는 `판단 기준`
+- [ ] `비활성` / `비활성화` 없는가? → 대체어: `잠김` / `잠금 처리` / `연결 불가`
+- [ ] `Promage` (영문 표기) 없는가? → 화면 표기는 `프롬에이지`. API 코드 변수명은 `PROMAGE` 허용.
+
+**카드 구조 규칙:**
+- [ ] Risk-type 중요도 옵션(높음/보통/낮음) 레이블에 가중치 표기 없는가? (`×3` / `×2` / `×1` 등 — 완전 제거됨)
+- [ ] Concept 편집기에 Standalone 라디오·토글·섹션 없는가? (위 B 섹션과 중복 확인)
+- [ ] Policy 편집기 form-group이 정확히 2개인가? (`name` + `appDisplayText` — 위 B 섹션과 중복 확인)
+- [ ] Playbook `standaloneGuide` textarea에 `minlength` 속성 또는 최소 글자 수 강제 검증이 없는가?
+- [ ] CONNECT_RULES Concept → Risk-type 연결이 필수로 처리되는가? (위 B 섹션과 중복 확인)
 
 ---
 

@@ -85,11 +85,32 @@
 | 필드 힌트 | 모든 입력 필드에 `field-hint` 한 줄 존재 |
 | 작업 흐름 트래커 | 오른쪽 컬럼에 `.wf-tracker` (①내용+연결입력→②검수요청→③승인완료→④라이브 **4단계**) 존재 |
 | 연결 UI 위치 | **v2: 편집기에 연결 선택 UI 없음.** 편집기에는 읽기 전용 배지 + "캔버스에서 변경" 버튼만. 연결 추가·변경은 `00_canvas-main.html`에서만. |
-| Policy 출력 설정 섹션 | ⑤ Policy 편집기 기본정보 카드: "Clark 앱 출력 설정" 섹션(출력 대상 화면 select + Clark 앱 표시 문구 textarea)이 핵심 조항 요약 아래, 준수 체크리스트 위에 있는가? |
-| Policy 동적 연동 배너 | ⑤ Policy 편집기: `.banner-info`로 "동적 연동 안내 — 준법감시인 승인 후 앱 배포 없이 즉시 반영" 배너가 출력 설정 섹션 상단에 있는가? |
+| Policy 필드 2개만 | ⑤ Policy 편집기: 확정 필드는 Policy 이름(name) + Clark 앱 표시 문구(appDisplayText) 2개뿐. 규제 문서명·적용 범위·핵심 조항 요약·출력 대상 화면·출력 제한 설정·준수 체크리스트 등 삭제된 필드가 남아있지 않은가? |
+| Policy 검수 요청 제약 | Clark 앱 표시 문구(appDisplayText) 비어있으면 검수 요청 버튼 비활성 또는 경고 — 안내 문구 있는가? |
+| Policy 승인 2단계 | 도메인 검수자 → 준법감시인 2단계 승인 흐름 안내 있는가? |
+| Policy 동적 연동 배너 | ⑤ Policy 편집기: `.banner-info`로 "동적 연동 안내 — 준법감시인 승인 후 앱 배포 없이 즉시 반영" 배너 있는가? |
 | wf-tracker ④ | `라이브` 표시 (카드 연결 현황 링크 없음 — v2에서 캔버스로 대체됨) |
-| Risk-type 편집기 중요도 | 중요도 라디오 그룹(높음×3/보통×2/낮음×1) 존재. 기본값 "보통". 힌트 문구에 "①중요도×Rule충족수 → ②충족Rule 조건수 합계 → ③카드코드 오름차순" 우선순위 설명 있는가? |
+| Risk-type 편집기 중요도 | 중요도 라디오 그룹(높음/보통/낮음 — 가중치 숫자 없음) 존재. 기본값 "보통". 힌트 문구에 "①중요도 서열(높음>보통>낮음) → ②선택 조건 충족 개수(시스템 자동) → ③카드코드 오름차순" 우선순위 설명 있는가? 가중치(×3/×2/×1) 표기 완전 삭제 확인 |
 | rel-box 제거 | 오른쪽 컬럼에 `.rel-box` 없음. sum-box도 없음 |
+
+**[Concept 편집기 추가 체크]**
+
+| 항목 | 기준 |
+|---|---|
+| Standalone 기능 없음 | Concept 편집기에 Standalone 토글·라디오·관련 UI 없음. 완전 제거 확인 (구 기획 흔적 포함) |
+| Risk-type 연결 필수 표시 | Concept → Risk-type 연결은 필수. "필수" 표시 또는 연결 없으면 체인 미진입 경고 있는가? |
+| 미매칭 분기 안내 | Concept 미매칭 시 Case 3(RAG→Fallback) 또는 Case 4(Playbook 감지) 분기 안내 있는가? (선택: 힌트 또는 가이드 박스) |
+
+**[Rule 조건 빌더 추가 체크 — 07_card-editor-rule.html]**
+
+| 항목 | 기준 |
+|---|---|
+| ConditionRow 필수/선택 토글 | 각 조건 행에 필수/선택 구분 토글 또는 표시 있는가? |
+| MYDATA 기본값 | MYDATA(마이데이터) 소스 조건 행: required=true (필수) 기본값 |
+| PROMAGE 기본값 | PROMAGE(프롬에이지) 소스 조건 행: required=false (선택) 기본값 — 미연동 사용자 대응 |
+| PROFILE 기본값 | PROFILE 소스 조건 행: required=true (필수) 기본값 |
+| 소스 3종 | MYDATA/PROMAGE/PROFILE 3개. Amplitude 소스 없어야 함 |
+| 약관 DB 연동 옵션 | `useContractDb` 체크박스 또는 토글 있는가? 활성 시 담보코드 기준 약관 자동 조회 → 면책조항 자동 포함 안내 있는가? (Policy 카드와 다른 개념) |
 
 **[Playbook 편집기 추가 체크 — 16_card-editor-playbook.html]**
 
@@ -97,8 +118,9 @@
 |---|---|
 | 공개범위 미표시 | Card ①에 공개범위 form-group 없어야 함 (내부 전용 고정, 편집기 미표시) |
 | 앱 미리보기 | `btnPreview` div에 기본 버튼(primary 스타일) + 추가 버튼(secondary 스타일) 렌더링 |
-| Standalone 가이드 섹션 | Card ② 하단: border-top 구분선 + `standaloneGuide` textarea 존재. "Standalone 답변 가이드" 레이블 있는가? |
-| Standalone 글자 수 카운터 | textarea 하단에 `standaloneCount` span + "N자 / 150자 이내 권장 (20자 이상 필수)" 표시. 20자 미만: 빨강 굵게 / 20~150자: hint 색 / 150자 초과: 주황 |
+| Standalone 가이드 섹션 | Card ② 하단: border-top 구분선 + `standaloneGuide` textarea 존재. "Standalone 답변 가이드" 레이블 + **(선택)** 또는 chip-opt 배지 있는가? — 필수 마크 없어야 함 |
+| Standalone 글자 수 카운터 | textarea 하단에 `standaloneCount` span + "N자 / 150자 이내 권장" 표시. "20자 이상 필수" 문구 완전 삭제 확인 |
+| Standalone 빈칸 처리 | 비워두면 Clark 기본 안내 문구 사용 — 이 안내 힌트 있는가? |
 | Standalone 발동 조건 배너 | `.banner-info`로 "KC 카드 미매칭 + Playbook 키워드 감지 시(Case 4)" 안내 있는가? |
 | Standalone 배너 링크 | `14_answer-logic-guide.html`로 연결. `17_playbook-answer-guide.html` 링크는 삭제된 파일이므로 즉시 수정 필요 |
 | Card ③ 비활성 | 상담 연결 버튼 없을 때: fa-ban 아이콘 + 회색 텍스트 + 배지 배경 회색 |
@@ -142,15 +164,17 @@
 
 | 항목 | 기준 |
 |---|---|
-| 기술 용어 노출 | 기술 용어(런타임에·파라미터·라우팅·매핑·비활성·활성화됩니다)가 운영자 화면에 노출되지 않는가? |
+| 기술 용어 노출 | 기술 용어(런타임에·파라미터·라우팅·매핑·비활성·활성화됩니다·3-source)가 운영자 화면에 노출되지 않는가? |
+| 금지 표현 대체 | 비활성/비활성화 → 잠김/잠금 처리/연결 불가. 시뮬레이션 → 사전 테스트. 임계값 → 기준값/판단 기준 |
 | 등급명 | 위험/주의/양호로 표기되어 있는가? (상/중/하 금지) |
 | Evidence 유형 select | 유형 select 없는가? (단일 유형 — 보닥통계/프롬에이지 옵션 없어야 함) |
 | Evidence 출처기관 | 출처 기관 select: 5개 옵션만 (HIRA/NHIS/KOSTAT/FSS/OTHER) |
 | Evidence OTHER 입력 | OTHER 선택 시 기관명 입력 필드(`#agencyOtherSection`) 노출되는가? |
 | Evidence 필수 필드 | 보고서명·기준연도·지표명·기준값 모두 있는가? 기준값 단위 포함 자유 입력 구조인가? |
 | Evidence 선택 필드 | 출처 URL: 선택사항 표기 (필수 마크 없어야 함) |
-| MYDATA 화면 표시 | "마이데이터"로 표기. "MYDATA" 텍스트 레이블 직접 노출 금지 |
-| Promage 화면 표시 | "프롬에이지"로 표기. "Promage" 텍스트 레이블 직접 노출 금지 |
+| MYDATA 화면 표시 | "마이데이터"로 표기. "MYDATA" 텍스트 레이블 직접 노출 금지 (코드는 MYDATA) |
+| Promage 화면 표시 | "프롬에이지"로 표기. "Promage" 텍스트 레이블 직접 노출 금지 (API 코드는 PROMAGE) |
+| 금지 표시어 전수 | "비활성", "임계값", "시뮬레이션", "상/중/하" — 운영자 화면 어디에도 없어야 함 |
 
 ### F-0. CSS 변수 완전성 (실제 배지 깨짐 방지)
 

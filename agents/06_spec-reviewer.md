@@ -18,13 +18,31 @@
 
 | 카드 유형 | 기획서 필수 필드 | 확인 |
 |---|---|---|
-| Concept | 용어명, 정의 설명, 유사어/일상어(synonyms), 하위 분류, Risk-type 연결(N개, optional) | |
-| Risk-type | 위험 유형명, 설명, **중요도**(높음×3/보통×2/낮음×1 라디오), 리드 스코어 배정값 | |
-| Rule | 대상 Risk-type, 판단 조건(조건 빌더 — MYDATA·Promage·프로파일 3-source), 기준값, 경고 메시지, 연결 Evidence(필수) | |
+| Concept | 용어명, 정의 설명, 유사어/일상어(synonyms), 하위 분류, Risk-type 연결(N개, **required — 연결 없으면 KC 체인 미진입**) | |
+| Risk-type | 위험 유형명, 설명, **중요도**(높음/보통/낮음 서열 라디오 — 가중치 없음), 리드 스코어 배정값 | |
+| Rule | 대상 Risk-type, 판단 조건(조건 빌더 — MYDATA·프롬에이지·프로파일 3-source, 행별 required boolean), 기준값, 경고 메시지, 연결 Evidence(필수) | |
 | Evidence | 단일 유형(공인 외부 통계) · 출처 기관(HIRA/NHIS/KOSTAT/FSS/기타) · 보고서명 · 기준 연도 · 지표명 · 기준값(단위 포함) · 출처 URL(선택) · 활용 방법 | |
-| Policy | 규제 문서명, 적용 범위, 핵심 조항, **Clark 앱 출력 설정(출력 대상 화면 + Clark 앱 표시 문구/면책 고지 원문)**, 준수 체크리스트 | |
-| Playbook | **MVP 구현 완료** — Playbook명, 설명 (공개범위: 내부 전용 고정, 편집기 미표시), 전환 발화 키워드(최소 3개), 기본 버튼(유형+명칭+딥링크), 추가 버튼 N개, **Standalone 답변 가이드** (KC 미매칭 Case 4 시 LLM 컨텍스트 주입용 textarea) | |
+| Policy | **확정 필드 2개만:** Policy 이름(name) + Clark 앱 표시 문구(appDisplayText). 표시 문구 비어있으면 검수 요청 불가. 삭제 필드(절대 미포함): 규제 문서명, 적용 범위, 핵심 조항, 출력 대상 화면, 출력 제한 설정, 준수 체크리스트 | |
+| Playbook | **MVP 구현 완료** — Playbook명, 설명 (공개범위: 내부 전용 고정, 편집기 미표시), 전환 발화 키워드(최소 3개 필수), 기본 버튼(consult 필수), 추가 버튼 N개, **Standalone 답변 가이드** (선택사항 — 비워두면 Clark 기본 안내 문구 사용) | |
 | Case | *(Phase 1.5 이후 — 목업 범위 외)* | — |
+
+### A-1. Case 1~4 매트릭스 — KC매칭 × Playbook감지
+
+KC 체인 매칭 여부와 Playbook 감지 여부의 조합으로 4가지 케이스가 결정된다. 구현된 화면(특히 13_answer-logic.html, 14_answer-logic-guide.html)이 이 매트릭스를 정확히 반영하는지 확인한다.
+
+| 케이스 | KC Concept 매칭 | Playbook 감지 | 처리 방식 |
+|---|---|---|---|
+| Case 1 | O | X | KC 구조화 답변 |
+| Case 2 | O | O | KC 구조화 + CTA 버튼 |
+| Case 3 | X | X | RAG(약관→FAQ) → Fallback 생성형 |
+| Case 4 | X | O | Standalone 가이드 주입 + CTA 버튼 |
+
+**핵심 제약:**
+- Concept에 Standalone 기능 없음 — 구 기획 흔적(Concept Standalone 표현) 있으면 오류
+- Playbook이 Case 4로 KC 미매칭 시나리오 전체를 커버
+- Concept 미매칭 시 반드시 Case 3 또는 Case 4로 분기
+
+---
 
 ### B. 워크플로우 — v2 캔버스 UX 기준 정합성
 
@@ -52,8 +70,9 @@ v2에서 **카드 연결은 편집기가 아닌 캔버스(`00_canvas-main.html`)
 - [ ] Rule 편집기: Risk-type·Evidence 연결 선택 UI 없음. 읽기 전용 배지 표시인가?
 - [ ] Policy 편집기: Rule 선택 패널 없음. 읽기 전용 배지 + "캔버스에서 변경" 버튼인가?
 - [ ] Policy 카드는 준법감시인의 2단계 승인이 표시되어 있는가?
-- [ ] Policy 편집기: "Clark 앱 출력 설정" 섹션(출력 대상 화면 select + Clark 앱 표시 문구 textarea)이 있는가?
-- [ ] Policy 편집기: "동적 연동 안내" 배너("준법감시인 승인 후 앱 배포 없이 즉시 반영")가 있는가?
+- [ ] Policy 편집기: Policy 이름(name) + Clark 앱 표시 문구(appDisplayText) 2개 필드만 있는가?
+- [ ] Policy 편집기: 규제 문서명·적용 범위·핵심 조항·출력 대상 화면·출력 제한 설정·준수 체크리스트 필드가 없는가?
+- [ ] Policy 편집기: Clark 앱 표시 문구 비어있으면 검수 요청 버튼이 비활성화되는가?
 - [ ] wf-tracker가 3단계(내용 입력 → 검수 요청 → 승인완료 → 라이브)로 구성되어 있는가?
 - [ ] 00_canvas-main.html: 카드 클릭 시 슬라이드 패널이 열리고 읽기 전용 정보가 표시되는가?
 - [ ] 00_canvas-main.html: 패널 하단에 "편집기에서 수정" 링크가 있는가?
@@ -63,9 +82,10 @@ v2에서 **카드 연결은 편집기가 아닌 캔버스(`00_canvas-main.html`)
 **Playbook MVP 특이사항:**
 - [ ] Playbook 편집기 공개범위 필드 없음: Card ①에 공개범위 form-group이 없는가? (내부 전용 고정, 편집기 미표시 — 목록 화면에서만 badge-internal 배지 표시)
 - [ ] Playbook 편집기 Card ② 하단: Standalone 답변 가이드 textarea가 있는가? (border-top 구분선 분리)
-- [ ] Standalone 답변 가이드: **20자 이상 필수 입력** — 미충족 시 검수 요청 불가. 글자 수 카운터(20자 미만 빨강)가 textarea 하단에 있는가?
+- [ ] Standalone 답변 가이드: **선택사항** — 비워두면 Clark 기본 안내 문구 사용. "20자 이상 필수" 표현이 없는가? (삭제된 스펙, 있으면 오류)
 - [ ] Standalone 발동 조건 안내 배너: "KC 카드 미매칭 + Playbook 키워드 감지 시(Case 4)" 설명이 있는가?
 - [ ] Standalone 배너의 케이스 가이드 링크: `14_answer-logic-guide.html`로 연결되어 있는가?
+- [ ] Playbook: approved 상태에서 캔버스 연결 없이 직접 "라이브 전환" 가능한가? (Playbook은 단말 카드 — 캔버스 연결 불필요)
 - [ ] 가이드 파일(01·13·14·15·17) 사이드바에 "데이터 연결 구조(17)" 링크(`17_system-data-guide.html`)가 있는가?
 - [ ] `17_system-data-guide.html`의 Evidence 표기가 단일 유형(공인 외부 통계 기반)으로 되어 있는가? (보닥통계·프롬에이지 기반 표기 없어야 함 — 2026-06-17 재확정)
 - [ ] Playbook 편집기 Card ③: 상담 연결 버튼 없을 때 비활성(회색) 상태로 표시되는가?
@@ -114,18 +134,23 @@ v2에서 **카드 연결은 편집기가 아닌 캔버스(`00_canvas-main.html`)
 | T07 | 비용 대비 보장 비효율형 |
 | T08 | 생애주기 적합도 저조형 |
 
-### F. Rule 조건 빌더 — 필드·연산자 정합성 (2026-06-09 확정: 3-source)
+### F. Rule 조건 빌더 — 필드·연산자 정합성 (2026-06-22 확정: 3-source + 필수/선택 구분)
 
 조건 빌더에서 선택 가능한 source·필드·연산자가 `context/decisions.md` 기준과 일치하는지 확인한다.
-**주의: Amplitude는 완전 제거됨. MYDATA + Promage + 프로파일 3-source가 정답.**
+**주의: Amplitude는 완전 제거됨. MYDATA + 프롬에이지 + 프로파일 3-source가 정답. 화면 표기는 마이데이터/프롬에이지.**
 
-- [ ] source 선택: **MYDATA / Promage / 프로파일** 세 가지인가? (AMPLITUDE select는 없어야 함)
+- [ ] source 선택: **마이데이터(MYDATA) / 프롬에이지(PROMAGE) / 프로파일** 세 가지인가? (AMPLITUDE select는 없어야 함)
+- [ ] 각 ConditionRow에 required boolean 속성(필수/선택 구분)이 있는가?
+- [ ] MYDATA 행: required=true (기본 필수). 화면에 "필수" 표시인가?
+- [ ] 프롬에이지(PROMAGE) 행: required=false (기본 선택 — 미연동 사용자 대응). 화면에 "선택" 표시인가?
+- [ ] 프로파일 행: required=true (기본 필수). 화면에 "필수" 표시인가?
 - [ ] MYDATA 행 구조: 담보코드(col2) + 확인항목(col3) 분리 — coverage_amt / renewal_status / insu_type / start_date / end_date
-- [ ] Promage 행 구조: 카테고리 select (암위험도/생체나이/질병위험도/의료비예측) + 항목 select + 조건 + 기준값(위험/주의/양호 또는 수치)
+- [ ] 프롬에이지 행 구조: 카테고리 select (암위험도/생체나이/질병위험도/의료비예측) + 항목 select + 조건 + 기준값(위험/주의/양호 또는 수치)
 - [ ] 프로파일 행 구조: 항목 select (나이/성별/결혼/자녀/직업위험도/출산예정/거주지 7개) + 조건 + 기준값
 - [ ] 연산자: IN / NOT_IN / EQ / LT / GT / GTE / LTE (표기는 한국어 병기)
-- [ ] 행별 배경색 구분: MYDATA(기본 회색) / Promage(보라 계열 `.cond-row-promage`) / 프로파일(초록 계열 `.cond-row-profile`)
+- [ ] 행별 배경색 구분: MYDATA(기본 회색) / 프롬에이지(보라 계열 `.cond-row-promage`) / 프로파일(초록 계열 `.cond-row-profile`)
 - [ ] 등급명: **위험/주의/양호** 사용 — "상/중/하" "고/중/저" 표기 있으면 오류
+- [ ] Rule 카드: 약관 DB 연동(useContractDb) 선택 옵션이 있는가? (활성 시 담보코드 기준 약관 자동 조회 → 면책조항 자동 포함 — Policy 카드와 다른 개념)
 
 ### G. Evidence 편집기 — 데이터 구조 정합성 (2026-06-17 재확정)
 
@@ -138,10 +163,24 @@ v2에서 **카드 연결은 편집기가 아닌 캔버스(`00_canvas-main.html`)
 - [ ] staticSection / promageSection / metricSection / populationSection 없는가?
 - [ ] N-segment 빌더 관련 코드 없는가?
 
-### H. 카피라이팅 검수
+### H. Risk-type 우선순위 — 가중치 완전 제거 확인 (2026-06-22 확정)
+
+Risk-type 다중 감지 시 우선순위 로직이 가중치 없는 서열 방식인지 확인한다.
+
+- [ ] Risk-type 중요도 라디오: 높음/보통/낮음 서열 표기인가? (×3/×2/×1 가중치 표기 있으면 오류)
+- [ ] 우선순위 1순위: 중요도 서열 (높음 > 보통 > 낮음)
+- [ ] 우선순위 2순위: 선택 조건 충족 개수 (시스템 자동 계산)
+- [ ] 우선순위 3순위: 카드 코드 오름차순 (T01 < T02 < ...)
+- [ ] 코드·문서에서 "가중치" "×3" "×2" "×1" 표현이 없는가?
+
+### I. 카피라이팅 검수
 
 - [ ] 운영자 금지 용어(런타임에·파라미터·라우팅·매핑 등)가 화면에 노출되지 않는가?
-- [ ] 등급명이 위험/주의/양호로 표기되어 있는가?
+- [ ] "비활성/비활성화" → "잠김/잠금 처리/연결 불가"로 표기되어 있는가?
+- [ ] "시뮬레이션" → "사전 테스트"로 표기되어 있는가?
+- [ ] "임계값" → "기준값/판단 기준"으로 표기되어 있는가?
+- [ ] "3-source" 표현이 화면/문서에 노출되지 않는가? (코드 내부 용어, 운영자 화면 노출 금지)
+- [ ] 등급명이 위험/주의/양호로 표기되어 있는가? ("상/중/하" 없어야 함)
 - [ ] 화면 텍스트에서 "MYDATA" → "마이데이터", "Promage" → "프롬에이지"로 표기되어 있는가?
 
 ---
@@ -184,6 +223,53 @@ v2에서 **카드 연결은 편집기가 아닌 캔버스(`00_canvas-main.html`)
 **입력:** 코더(04)의 `mockups_v2/` HTML 파일, `Data/KC_기획서_v1_6_1.md` (특히 §2, §3).
 
 **출력:** 화면별 기획 정합성 검토 리포트 (PO에게 전달).
+
+---
+
+## RAG 아키텍처 정합성 검수 (2026-06-21 확정)
+
+- [ ] 약관 RAG: 자동 파이프라인(크롤러 자동). 운영자 관리 화면이 없어야 함
+- [ ] Clark 서비스 FAQ RAG: 운영자 직접 등록 → 검수자 승인 → 인덱스 (`19_faq-rag.html`)
+- [ ] Fallback: `18_system-settings.html` 설정 적용 (경쟁사/외부 서비스 언급 금지 등)
+- [ ] KC 체인 매칭 실패 시 처리 순서: RAG → Fallback (역순 없음)
+- [ ] 약관 RAG와 FAQ RAG가 별도 파이프라인으로 구분되어 있는가?
+
+---
+
+## CONNECT_RULES 정합성 검수 (2026-06-22 확정)
+
+카드 간 연결 방향과 필수/선택 여부가 아래 규칙과 일치하는지 확인한다.
+
+| 연결 방향 | 필수 여부 | 비고 |
+|---|---|---|
+| Concept → Risk-type | **필수** | 연결 없으면 KC 체인 미진입 |
+| Risk-type → Rule | **필수** (최소 1개) | |
+| Rule → Evidence | **필수** (최소 1개) | |
+| Rule → Policy | 선택 | |
+| Evidence | 단말 (outgoing 없음) | |
+| Policy | 단말 (outgoing 없음) | |
+| Playbook | 단말, 독립 체인 | KC 체인과 별개 |
+
+- [ ] Concept → Risk-type 연결이 필수로 표시되어 있는가? (optional 표현 있으면 오류)
+- [ ] Evidence·Policy·Playbook이 단말 카드로 처리되어 있는가? (outgoing 연결 불가)
+- [ ] Playbook이 KC 체인과 독립적으로 동작하는 구조인가?
+- [ ] 캔버스(00_canvas-main.html) 이외 편집기에서 연결 UI가 없는가?
+
+## 파일 참조 기준 (2026-06-22 확정)
+
+검수 시 아래 파일명을 기준으로 한다. 폐기된 파일명이 화면·문서에 나타나면 오류.
+
+| 용도 | 올바른 파일 | 폐기 파일 (언급 금지) |
+|---|---|---|
+| 카드 캔버스 (카드 연결·시각화) | `00_canvas-main.html` | `10_chain-visualizer.html` |
+| AI 답변 로직 가이드 | `13_answer-logic.html` | — |
+| Playbook Standalone 안내 | `14_answer-logic-guide.html` | — |
+| FAQ RAG 관리 | `19_faq-rag.html` | — |
+| 시스템 설정 (Fallback) | `18_system-settings.html` | — |
+
+- [ ] 사이드바 메뉴에서 `10_chain-visualizer.html` 링크가 없는가?
+- [ ] wf-tracker ④ 링크가 `00_canvas-main.html`로 연결되어 있는가?
+- [ ] 총 화면 수가 27개(mockups_v2/)인가?
 
 ---
 

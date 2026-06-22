@@ -218,6 +218,40 @@ function showToast(msg) {
 <div class="toast" id="toast"></div>
 ```
 
+## CASE 매트릭스 — KC매칭 × Playbook감지
+
+KC 체인 매칭 결과와 Playbook 감지 여부 조합으로 분기를 결정한다.
+
+| | Playbook 미감지 | Playbook 감지O |
+|---|---|---|
+| **KC Concept 매칭O** | Case 1: KC 구조화 답변 | Case 2: KC 구조화 + CTA 버튼 |
+| **KC 미매칭** | Case 3: RAG(약관→FAQ) → Fallback 생성형 | Case 4: Standalone 가이드 주입 + CTA 버튼 |
+
+- Case 3·4: KC 체인 미매칭 → RAG(약관 → Clark 서비스 FAQ) → Fallback 순서 적용
+- Playbook이 Case 4로 모든 KC 미매칭 시나리오를 커버하므로 Concept Standalone 기능 없음
+
+---
+
+## CONNECT_RULES (카드 연결 정책)
+
+카드 연결은 캔버스(00_canvas-main.html)에서만 수행. 편집기에서는 읽기 전용 배지 + "캔버스에서 변경" 버튼만 표시.
+
+```
+concept  → risk-type  (필수)     ← Concept에 Risk-type 미연결 시 KC 체인 미진입
+risk     → rule       (필수, 최소 1개)
+rule     → evidence   (필수, 최소 1개)
+rule     → policy     (선택)
+evidence → (단말)
+policy   → (단말)
+playbook → (단말, 독립 체인)
+```
+
+> **Concept → Risk-type 연결은 필수.** 연결 없으면 KC 체인 미진입.
+> Concept 미매칭 시 Case 3(RAG→Fallback) 또는 Case 4(Playbook 감지) 분기.
+> Concept에 Standalone 기능 없음.
+
+---
+
 ## 캔버스 UX 패턴 (00_canvas-main.html)
 
 ### 피커 패널 컬럼 헤더
@@ -288,8 +322,8 @@ function showToast(msg) {
 ## Risk-type 중요도 라디오 패턴
 
 다중 Risk-type이 동시 감지될 때 노출 순서를 결정하는 중요도 설정 UI.
-우선순위 공식: ①중요도(높음>보통>낮음) → ②선택 조건 충족 개수(시스템 자동) → ③카드코드 오름차순.
-가중치(×3/×2/×1) 개념 없음. 중요도는 서열(높음/보통/낮음)로만 판단.
+우선순위: ①중요도 서열(높음 > 보통 > 낮음) → ②선택 조건 충족 개수(시스템 자동) → ③카드 코드 오름차순.
+가중치(×3/×2/×1) 완전 제거됨 — 코드·문서에서 사용 금지. 중요도는 서열로만 판단.
 
 ```html
 <div class="form-group">
@@ -313,6 +347,7 @@ function showToast(msg) {
       <span style="color:var(--text-hint);font-size:12px">보조 — 상위 유형 노출 후 후순위</span>
     </label>
   </div>
+  <!-- 가중치(×3/×2/×1) 레이블 없음. 높음/보통/낮음 서열만 사용. -->
 </div>
 ```
 
@@ -359,6 +394,107 @@ function reqRadioHtml(id, isRequired) {
 ```
 
 목록 테이블 헤더에 "중요도" 컬럼(80px) 추가 — 코드·명칭 다음, 설명 이전.
+
+---
+
+## Policy 편집기 확정 필드
+
+Policy 카드는 필드 2개만 사용. 나머지 필드(규제 문서명, 적용 범위, 핵심 조항 요약, 출력 대상 화면, 출력 제한 설정, 준수 체크리스트)는 완전 제거됨 — 코드·화면 어디에도 노출 금지.
+
+```html
+<!-- Policy 편집기 폼 — 2개 필드만 -->
+<div class="form-group">
+  <label>Policy 이름 <span style="color:var(--card-policy)">*</span></label>
+  <input type="text" class="form-control" id="policyName" placeholder="예: 암 특약 면책 고지">
+</div>
+<div class="form-group">
+  <label>Clark 앱 표시 문구 <span style="color:var(--card-policy)">*</span>
+    <span class="field-hint">Clark 앱 화면에 표시되는 면책 고지 문구. 비워두면 검수 요청 불가.</span>
+  </label>
+  <textarea class="form-control" id="appDisplayText" rows="5"
+    placeholder="고객에게 표시될 면책 고지 문구를 직접 작성하세요."></textarea>
+</div>
+```
+
+**승인 2단계:** 도메인 검수자 → 준법감시인.
+**목적:** 운영자가 Clark 앱 표시 면책 고지 문구를 직접 작성.
+
+적용 위치: `08_card-editor-policy.html`
+
+---
+
+## Playbook 편집기 — Standalone 답변 가이드
+
+Standalone 답변 가이드는 선택사항. 비워두면 Clark 기본 안내 문구 사용.
+
+```html
+<div class="form-group">
+  <label>Standalone 답변 가이드
+    <span class="badge-optional" style="font-size:11px;color:var(--text-hint);font-weight:400">(선택)</span>
+    <span class="field-hint">비워두면 Clark 기본 안내 문구가 사용됩니다.</span>
+  </label>
+  <textarea class="form-control" id="standaloneGuide" rows="5"
+    placeholder="(선택) Clark이 이 Playbook을 단독으로 사용할 때의 안내 문구를 작성하세요."></textarea>
+</div>
+```
+
+**확정 규칙:**
+- 최소 키워드: 3개 (필수)
+- CTA 기본 버튼(`consult`) 필수
+- Standalone 답변 가이드: 선택. 최소 글자 수 제한 없음
+- approved 상태에서 캔버스 연결 없이 직접 "라이브 전환" 가능
+
+> "최소 20자 필수" 표현 완전 삭제. 코드·화면 어디에도 노출 금지.
+
+적용 위치: `14_answer-logic-guide.html` (Playbook Standalone 가이드 편집기)
+
+---
+
+## Rule 조건 빌더 — 약관 DB 연동 옵션
+
+`useContractDb` 옵션은 Rule 카드의 선택 기능. 활성 시 담보코드 기준 약관 자동 조회 → 면책조항 자동 포함.
+Policy 카드(운영자가 직접 문구 작성)와 다른 개념임.
+
+```html
+<div class="form-group">
+  <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+    <input type="checkbox" id="useContractDb">
+    <span>약관 DB 자동 연동</span>
+    <span class="field-hint">(선택) 활성화 시 담보코드 기준으로 약관 자동 조회, 면책조항 자동 포함</span>
+  </label>
+</div>
+```
+
+---
+
+## RAG 아키텍처 참조
+
+| 구분 | 관리 방식 | 운영자 개입 | 관련 화면 |
+|---|---|---|---|
+| 약관 RAG | 자동 파이프라인 (크롤러 자동) | 불가 | — |
+| Clark 서비스 FAQ RAG | 운영자 직접 등록 → 검수자 승인 → 인덱스 | 가능 | `19_faq-rag.html` |
+| Fallback | 18_system-settings.html 설정 적용 | 설정만 | `18_system-settings.html` |
+
+KC 체인 매칭 실패 시 순서: RAG(약관 → Clark 서비스 FAQ) → Fallback.
+경쟁사·외부 서비스 언급 금지 등 제한은 Fallback 설정에서 관리.
+
+---
+
+## 금지어 목록
+
+| 금지 표현 | 대체 표현 | 비고 |
+|---|---|---|
+| 비활성 / 비활성화 | 잠김 / 잠금 처리 / 연결 불가 | |
+| 시뮬레이션 | 사전 테스트 | |
+| 임계값 | 기준값 / 판단 기준 | |
+| 런타임 | (맥락에 맞게 풀어쓰기) | |
+| 파라미터 | (맥락에 맞게 풀어쓰기) | |
+| 라우팅 | (맥락에 맞게 풀어쓰기) | |
+| 매핑 | (맥락에 맞게 풀어쓰기) | |
+| 상/중/하 | 높음/보통/낮음 | |
+| 3-source | (화면·문서 노출 금지) | 코드 내부만 허용 |
+| MYDATA (화면 표기) | 마이데이터 | 코드는 MYDATA 유지 |
+| Promage (화면 표기) | 프롬에이지 | API 코드는 PROMAGE 유지 |
 
 ---
 

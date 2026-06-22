@@ -55,11 +55,23 @@ KC Admin Phase 1의 시각 언어를 정의하고, "처음 보는 개발자·운
 ### 원칙 5 — 답변 라우팅 구조를 항상 맥락으로 제공
 
 ```
-사용자 질문 → [Concept 동의어 매칭] → [Risk-type 판정]
-           → [Rule 조건 평가(3-source)] → [Evidence 근거 참조]
-           → [Policy 출력 검증] → KC 기반 답변
-                                → (미매칭) Case 3/4
+사용자 질문 → [Concept 동의어 매칭]
+           ├─ 매칭O + Playbook 미감지 → Case 1: KC 구조화 답변
+           ├─ 매칭O + Playbook 감지O  → Case 2: KC 구조화 + CTA 버튼
+           ├─ 미매칭 + Playbook 미감지 → Case 3: RAG(약관→FAQ) → Fallback 생성형
+           └─ 미매칭 + Playbook 감지O  → Case 4: Standalone 가이드 주입 + CTA 버튼
 ```
+
+**Case 1~4 정의 (KC매칭 × Playbook감지 매트릭스):**
+
+| Case | KC Concept 매칭 | Playbook 감지 | 처리 |
+|---|---|---|---|
+| Case 1 | O | 미감지 | KC 구조화 답변 |
+| Case 2 | O | 감지O | KC 구조화 + CTA 버튼 |
+| Case 3 | 미매칭 | 미감지 | RAG(약관→FAQ) → Fallback 생성형 |
+| Case 4 | 미매칭 | 감지O | Standalone 가이드 주입 + CTA 버튼 |
+
+> **Concept Standalone 제거 근거:** Playbook이 Case 4로 KC 미매칭 시나리오를 완전 커버하므로 Concept Standalone 기능은 불필요. Concept에 Standalone 기능 없음 — 완전 제거됨.
 
 ### 원칙 6 — 같은 목적, 같은 구조·같은 용어 ★
 
@@ -88,15 +100,27 @@ KC Admin Phase 1의 시각 언어를 정의하고, "처음 보는 개발자·운
 ```
 [.card ①] 기본정보 (.card-header + .section-title + .form-group×N)
            Risk-type 편집기 전용 — form-group 순서: 카드ID → 유형명 → 설명 → 중요도(라디오) → 리드스코어
-           중요도 라디오: 높음(핵심 — 동시 감지 시 선노출) / 보통(기본값) / 낮음(후순위)
-           힌트: "다중 감지 시 노출 순서: ①중요도 → ②선택 조건 충족 개수(시스템 자동) → ③카드코드 오름차순"
+           중요도 라디오: 높음 / 보통(기본값) / 낮음
+           ※ 가중치 레이블(×3/×2/×1) 표시 금지 — 서열(높음>보통>낮음)만 표시
+           힌트: "다중 감지 시 노출 순서: ①중요도(서열) → ②선택 조건 충족 개수(시스템 자동) → ③카드코드 오름차순"
 [.card ②] 액션 (.action-bar + .status-guidance)
 ```
 
-**3-card (③ Concept, ⑤ Policy — 연결 패널 1개):**
+**3-card (③ Concept — 연결 패널 1개):**
 ```
 [.card ①] 기본정보
-[.card ②] 연결 패널 (badge-required/optional + 안내 배너 + 선택 UI)
+           ※ Standalone 라디오 버튼 없음 — 완전 제거됨
+[.card ②] 연결 패널 — Risk-type 연결 [필수] (badge-required + "캔버스에서 변경" 버튼 + 읽기 전용 배지)
+           힌트: "연결 없으면 KC 체인에 진입하지 않습니다. 캔버스에서 Risk-type을 연결하세요."
+[.card ③] 액션
+```
+
+**3-card (⑤ Policy — 연결 패널 없음, 필드 2개만):**
+```
+[.card ①] 기본정보 — 필드: Policy 이름(name) + Clark 앱 표시 문구(appDisplayText)
+           ※ 삭제 필드(절대 추가 금지): 규제 문서명, 적용 범위, 핵심 조항 요약, 출력 대상 화면, 출력 제한 설정, 준수 체크리스트
+           힌트: "Clark 앱 표시 문구가 비어 있으면 검수 요청이 불가합니다."
+[.card ②] 승인 안내 (도메인 검수자 → 준법감시인 2단계)
 [.card ③] 액션
 ```
 
@@ -136,11 +160,13 @@ rel-box 없음. 4단계 흐름만. HTML/CSS → `guides/ux-patterns.md` + `guide
 
 | 연결 방향 | 카디널리티 | 구분 | 근거 |
 |---|---|---|---|
-| Concept → Risk-type | N:M | 선택사항 | 하나의 질문 개념이 여러 Risk-type에 동시 해당 가능. Risk-type 없어도 동의어 매칭 유효 |
-| Risk-type → Rule | 1:N | 권장 | Risk-type 기반 판정 조건 지정 |
-| Rule → Evidence | 1:N | 권장 | 근거 없는 Rule = AI hallucination 위험 |
-| Rule → Policy | 1:N | 선택사항 | Policy = 독립 규제 문서. Rule 미연결도 유효 |
-| Playbook ← Risk-type | — | **미결** | Phase 1.5+ 예정 (리드 스코어링·배정 최적화) |
+| Concept → Risk-type | N:M | **필수** | 연결 없으면 KC 체인 미진입. Concept 단독으로 답변 생성 불가 |
+| Risk-type → Rule | 1:N | **필수** (최소 1개) | Risk-type 기반 판정 조건 지정 |
+| Rule → Evidence | 1:N | **필수** (최소 1개) | 근거 없는 Rule = AI hallucination 위험 |
+| Rule → Policy | 1:N | 선택사항 | Policy = 면책 고지 문구 출력용. 미연결도 유효 |
+| Evidence | 단말 | — | outgoing 연결 없음 |
+| Policy | 단말 | — | outgoing 연결 없음 |
+| Playbook | 단말(독립 체인) | — | outgoing 연결 없음 |
 
 **캔버스 그리드 섹션 헤더:**
 - "연결됨" → 초록 헤더 (`sh-connected`)
@@ -179,10 +205,69 @@ HTML/CSS 패턴 → `guides/ux-patterns.md` 캔버스 섹션 참조.
 
 ---
 
+## Policy 편집기 확정 필드 (2026-06-22)
+
+**필드 2개만 — 이외 추가 금지:**
+1. **Policy 이름 (name)** — 내부 식별용
+2. **Clark 앱 표시 문구 (appDisplayText)** — 운영자가 직접 작성하는 면책 고지 문구. 비어 있으면 검수 요청 버튼 비활성.
+
+**승인 2단계:** 도메인 검수자 → 준법감시인 (Policy 카드만 해당)
+
+**삭제 필드 (코드·문서·화면 어디에도 표시 금지):**
+규제 문서명 / 적용 범위 / 핵심 조항 요약 / 출력 대상 화면 / 출력 제한 설정 / 준수 체크리스트
+
+---
+
+## Playbook 편집기 확정 규칙 (2026-06-22)
+
+**참조 파일:** `14_answer-logic-guide.html`
+
+| 필드 | 구분 | 규칙 |
+|---|---|---|
+| 키워드 | 필수 | 최소 3개 |
+| CTA 버튼 (consult) | 필수 | 기본 버튼 반드시 포함 |
+| Standalone 답변 가이드 | **선택사항 (chip-opt 레이블)** | 비워두면 Clark 기본 안내 문구 사용 |
+
+- "Standalone 답변 가이드 최소 20자 필수" 표현 완전 삭제 — 적용 금지
+- Playbook approved 상태에서 캔버스 연결 없이 직접 "라이브 전환" 가능
+
+---
+
 ## 입력 / 출력
 
 **입력:** `context/project.md` · `context/decisions.md` · `Data/KC_기획서_v1_6_1.md` §2~§3 (별도 지시 시)
 **출력:** 화면별 레이아웃 명세 · `agents/04_coder.md` 구현 지시
+
+---
+
+## RAG 아키텍처 (UI 설계 반영 사항)
+
+| RAG 종류 | 관리 방식 | 운영자 조작 |
+|---|---|---|
+| 약관 RAG | 자동 파이프라인 (크롤러 자동) | 관리 불가 — 화면 미제공 |
+| Clark 서비스 FAQ RAG | 운영자 직접 등록 | 19_faq-rag.html에서 관리 |
+
+**KC 체인 미매칭 시 순서:** RAG(약관 → FAQ) → Fallback (18_system-settings.html 설정 적용)
+
+**Fallback 설정 (18_system-settings.html):** 경쟁사·외부 서비스 언급 금지 등 제한 규칙 적용됨.
+
+---
+
+## 금지어 목록 (화면 표기 기준)
+
+| 금지 표현 | 대체 표현 |
+|---|---|
+| 비활성 / 비활성화 | 잠김 / 잠금 처리 / 연결 불가 |
+| 시뮬레이션 | 사전 테스트 |
+| 임계값 | 기준값 / 판단 기준 |
+| 런타임 | (사용 금지) |
+| 파라미터 | (사용 금지) |
+| 라우팅 | (사용 금지) |
+| 매핑 | (사용 금지) |
+| 상/중/하 | (사용 금지) |
+| 3-source | (화면/문서 노출 금지) |
+| MYDATA | 마이데이터 (화면 표기 시. 코드는 MYDATA) |
+| Promage | 프롬에이지 (화면 표기 시. API 코드는 PROMAGE) |
 
 ---
 

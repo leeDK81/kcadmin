@@ -73,7 +73,7 @@ Data/             ← 원천 기획서 — 별도 지시 없이 접근 금지
 - FAQ RAG 역할 재정의: "일반 보험 Q&A" → "Clark 서비스 전용 Q&A" (앱 사용 안내·서비스 정책·보닥 플래너 연결)
 - 약관에서 Q&A 초안 생성 기능 삭제 (약관 RAG가 직접 원문 검색하므로 중복 불필요)
 - RAG 아키텍처 확정: 약관 RAG(자동 파이프라인) + Clark 서비스 FAQ RAG(운영자 직접 등록)
-- policy/ 폴더 신규 추가 (설계 정책 문서 8개: 00_index~08_screen-policy)
+- policy/ 폴더 신규 추가 (설계 정책 문서 9개: 00_index~08_screen-policy)
 - 19_faq-rag.html 사이드바 위치: 18_system-settings.html 하위 항목
 - CLAUDE.md·project.md·decisions.md·agents/ 전 파일 동기화
 

@@ -78,9 +78,7 @@ function updateStandaloneCounter() {
   const len = val.length;
   const span = document.getElementById('standaloneCount');
   span.textContent = len + '자';
-  if (len < 20) {
-    span.style.color = '#A32D2D'; span.style.fontWeight = '700';
-  } else if (len <= 150) {
+  if (len <= 150) {
     span.style.color = 'var(--text-hint)'; span.style.fontWeight = '400';
   } else {
     span.style.color = '#BA7517'; span.style.fontWeight = '400';
@@ -88,7 +86,7 @@ function updateStandaloneCounter() {
 }
 ```
 
-`requestReview()` 내 게이트: standalone 20자 미만이면 toast 후 return.
+`standaloneGuide`는 **선택 항목**. `requestReview()`는 standaloneGuide 길이로 진행을 차단하지 않는다.
 
 ---
 
@@ -128,11 +126,11 @@ function act(type, id) {
 - [ ] Card ②: `act1Type` select + `act1Label` input + `act1Link` input (기본 버튼 필드)
 - [ ] Card ②: `extra-actions` div에 추가 버튼 동적 렌더링 (`addExtraAction()` / `removeExtraAction(id)`)
 - [ ] Card ②: `btnPreview` div에 `updatePreview()` 실시간 렌더링
-- [ ] Card ②: Standalone 답변 가이드 textarea — border-top 구분선으로 구분
+- [ ] Card ②: Standalone 답변 가이드 textarea — border-top 구분선으로 구분. chip-opt(선택) 배지. placeholder="비워두면 Clark 기본 안내 문구 사용". minlength 없음.
 - [ ] Card ②: Standalone 발동 조건 배너 (`.banner-info`, "KC 카드 미매칭 + Playbook 키워드 감지 시(Case 4)")
 - [ ] Card ②: Standalone 배너 링크 → `14_answer-logic-guide.html` (`17` 파일 사용 금지)
-- [ ] Card ②: `standaloneCount` span + `updateStandaloneCounter()` 함수
-- [ ] Card ②: `requestReview()`에서 standaloneGuide 20자 미만 시 toast 후 return
+- [ ] Card ②: `standaloneCount` span + `updateStandaloneCounter()` 함수 (20자 미만 빨간색 로직 없음)
+- [ ] Card ②: `requestReview()`는 standaloneGuide 길이로 차단하지 않음 (선택 항목)
 - [ ] Card ③: `scoring-inactive` / `scoring-active` 토글 구현
 - [ ] Card ③: `scoring-num` 배지 배경색 동적 변경
 - [ ] Card ③: "Phase 1.5 이관" 표시 (헤더·본문·sum-box 행)

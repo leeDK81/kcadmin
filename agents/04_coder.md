@@ -13,6 +13,10 @@ UI 디자이너(03)의 설계 명세를 바탕으로 인터랙티브 HTML 목업
 Evidence 편집기 구현 → `agents/04a_coder-evidence.md` 전담.
 Playbook 편집기 구현 → `agents/04b_coder-playbook.md` 전담.
 
+> **CONNECT_RULES (최종):**
+> concept → risk-type (필수) / risk → rule (필수, 최소 1개) / rule → evidence (필수, 최소 1개) / rule → policy (선택) / evidence → (단말) / policy → (단말) / playbook → (단말, 독립 체인)
+> Concept → Risk-type 연결은 필수. 연결 없으면 KC 체인 미진입. Concept에 Standalone 기능 없음.
+
 ---
 
 ## 코딩 원칙
@@ -74,7 +78,7 @@ HTML 패턴 → `guides/ux-patterns.md` 참조.
 
 ## 화면별 핵심 인터랙션
 
-**Policy 편집기(08) 특이사항:** 기본정보 카드 내 border-top으로 "Clark 앱 출력 설정" 섹션 구분. Clark 앱 표시 문구 textarea + 동적 연동 안내 배너. 상세: `context/decisions.md > 면책 문구 관리`.
+**Policy 편집기(08) 특이사항:** 확정 필드 2개만 — Policy 이름(name input) + Clark 앱 표시 문구(appDisplayText textarea). 삭제된 필드(코드·문서에 포함 금지): 규제 문서명, 적용 범위, 핵심 조항 요약, 출력 대상 화면, 출력 제한 설정, 준수 체크리스트. Clark 앱 표시 문구 비어있으면 검수 요청 불가. 승인 2단계: 도메인 검수자 → 준법감시인. 상세: `context/decisions.md > 면책 문구 관리`.
 
 **v2 캔버스 UX 핵심:** 편집기에서 연결 선택 UI 없음. 연결은 `00_canvas-main.html` 캔버스에서만 처리. 편집기 내 연결 표시는 읽기 전용 배지 + "캔버스에서 변경" 버튼. 상세: `context/decisions.md > v2 캔버스 UX`.
 
@@ -89,9 +93,9 @@ HTML 패턴 → `guides/ux-patterns.md` 참조.
 | 09_review | 카드 내용 통합 목록. 필터(전체/검수대기/처리완료). 승인→완료. 반려→사유 입력 모달. 승인완료 상태 액션: "상세 보기" + "캔버스에서 연결" 버튼 (라이브 전환 버튼 없음 — 라이브 전환은 사전 테스트 후 캔버스에서 처리). 승인요청 상태 카드: 연결정보(conn) 없음 |
 | 18_system-settings | LLM Fallback 설정 폼. KC 미매칭(Case 3) 시 적용되는 제한 규칙. 저장 즉시 반영. KC 체인과 독립적으로 동작 |
 | 19_faq-rag | Clark 서비스 전용 FAQ Q&A 목록(상태 필터·검색) + 인라인 등록 패널(Q·A 직접 입력, LLM 초안 없음) + 상세 모달(승인·반려·재검수). 상태 4종: 초안/검수대기/인덱스등록됨/반려됨. 약관·보장 관련 Q&A 등록 금지 문구 상단 배너 필수 |
-| 11_dry-run | Risk-type + 고객 선택 → 예상 라우팅(KC/생성형) + 조건 평가 상세 |
+| 11_dry-run | Risk-type + 고객 선택 → 예상 분기(KC/생성형) + 조건 평가 상세 (Case 1~4 매트릭스 기준) |
 | 16_playbook-list | 상태 필터 탭. 상태별 액션 버튼 → `agents/04b_coder-playbook.md` |
-| 16_card-editor-playbook | 키워드 Enter 추가/× 제거. updatePreview() 실시간. Card ③ 토글 → `agents/04b_coder-playbook.md` |
+| 16_card-editor-playbook | 키워드 Enter 추가/× 제거 (최소 3개 필수). updatePreview() 실시간. Card ③ standaloneGuide: 선택사항 textarea (chip-opt), minlength 검증 없음 — 비워두면 Clark 기본 안내 문구 사용. consult CTA 버튼 필수. approved 상태에서 캔버스 연결 없이 직접 "라이브 전환" 가능. 상세 → `agents/04b_coder-playbook.md` |
 
 ---
 
@@ -105,11 +109,11 @@ HTML 패턴 → `guides/ux-patterns.md` 참조.
 - [ ] ⑥ Playbook → `16_playbook-list.html` 실제 링크 (잠금 아님). ⑦ Case → 잠금(🔒)?
 
 **편집기 구조 (v2 캔버스 UX 기준)**
-- [ ] Concept 편집기: Risk-type 연결 — 읽기 전용 배지 + "캔버스에서 변경" 버튼 (선택 UI 없음)
+- [ ] Concept 편집기: Risk-type 연결 — 읽기 전용 배지 + "캔버스에서 변경" 버튼 (선택 UI 없음). Standalone 라디오/토글 없음 — Concept에 Standalone 기능 없음
 - [ ] Rule 편집기: Risk-type·Evidence 연결 — 읽기 전용 배지 표시 (선택 UI 없음)
 - [ ] Policy 편집기: Rule 연결 — 읽기 전용 배지 + "캔버스에서 변경" 버튼 (선택 UI 없음)
 - [ ] Risk-type·Evidence·Playbook 편집기: outgoing 연결 UI 없음
-- [ ] Risk-type 편집기: 중요도 라디오 그룹 (높음/보통 기본값/낮음) — 설명 필드와 리드스코어 필드 사이에 위치. 힌트: "다중 감지 시 노출 순서: ①중요도 → ②선택 조건 충족 개수(시스템 자동) → ③카드코드 오름차순"
+- [ ] Risk-type 편집기: 중요도 라디오 그룹 (높음/보통 기본값/낮음) — options = high/mid/low ONLY, 가중치 값(×3/×2/×1) 없음. 설명 필드와 리드스코어 필드 사이에 위치. 힌트: "다중 감지 시 노출 순서: ①중요도 서열(높음>보통>낮음) → ②선택 조건 충족 개수(시스템 자동) → ③카드코드 오름차순"
 - [ ] 편집기 연결 카드: "캔버스에서 변경" 버튼이 `00_canvas-main.html`로 링크됨
 
 **캔버스 (00_canvas-main.html)**
@@ -122,6 +126,7 @@ HTML 패턴 → `guides/ux-patterns.md` 참조.
 - [ ] `confirmAction`: edgeStatus = approved 포함 시 'pending', 모두 active면 'active'
 - [ ] "연결 추가" 버튼: `gc-btn-connect` 클래스, 전폭(width:100%), 파란 배경
 - [ ] `findDirectTarget` 사용: CONNECT_RULES 직접 연결만 (체인 경유 금지)
+- [ ] CONNECT_RULES 코드: concept→risk (required:true 표기), risk→rule (required:true), rule→evidence (required:true), rule→policy (required:false)
 - [ ] PLAYBOOK 컬럼: 포컬 카드 무관 "해당 없음" 표시
 
 **오른쪽 컬럼**
@@ -144,11 +149,14 @@ HTML 패턴 → `guides/ux-patterns.md` 참조.
 **Rule 편집기**
 - [ ] LEFT 컬럼 5개 독립 `.card` (①기본정보→②Risk-type→③판단조건→④Evidence→⑤액션)
 - [ ] 게이트 카드: Risk-type ☑ + 판단조건 ☑ + Evidence ☑ 충족 시 버튼 활성
-- [ ] MYDATA 행: 담보코드+확인항목+조건+기준값+힌트+구분(필수/선택)+삭제 7열. 기본: 필수
-- [ ] Promage 행: 카테고리+항목+조건+기준값+구분(필수/선택)+삭제. 기본: 선택. 힌트: "선택 조건 권장 — 필수 설정 시 미연동 사용자 Rule 미발동"
-- [ ] 프로파일 행: 항목+조건+기준값+구분(필수/선택)+삭제. 기본: 필수
+- [ ] MYDATA 행: 담보코드+확인항목+조건+기준값+힌트+구분(필수/선택)+삭제 7열. required=true 기본값 (필수). 화면 표기: "마이데이터"
+- [ ] Promage 행: 카테고리+항목+조건+기준값+구분(필수/선택)+삭제. required=false 기본값 (선택). 화면 표기: "프롬에이지". 힌트: "선택 조건 권장 — 필수 설정 시 미연동 사용자 Rule 미발동"
+- [ ] 프로파일 행: 항목+조건+기준값+구분(필수/선택)+삭제. required=true 기본값 (필수). 화면 표기: "프로파일"
+- [ ] ConditionRow 데이터 구조에 required:boolean 속성 포함 (소스별 기본값 다름)
 - [ ] 구분 라디오: 필수(빨간 텍스트) / 선택(회색 텍스트). `name="req-${id}"` 패턴
 - [ ] AMPLITUDE 행 없음
+- [ ] 소스 3종만: MYDATA / PROMAGE / PROFILE (Amplitude 없음)
+- [ ] useContractDb 옵션: Rule 카드의 선택 옵션 — 활성 시 담보코드 기준 약관 자동 조회 → 면책조항 자동 포함 (Policy 카드와 별개)
 
 **목록 테이블**
 - [ ] `.list-table`: `table-layout:fixed`
@@ -159,7 +167,10 @@ HTML 패턴 → `guides/ux-patterns.md` 참조.
 - [ ] `.cell-date`: `white-space:nowrap`
 
 **카피라이팅**
-- [ ] "런타임에", "파라미터", "라우팅" 등 기술 용어 없음
+- [ ] "런타임에", "파라미터", "라우팅", "매핑" 등 기술 용어 없음
+- [ ] "임계값" → "기준값" (코드 주석 포함)
+- [ ] "시뮬레이션" → "사전 테스트" (코드·화면 모두)
+- [ ] "비활성/비활성화" → "잠김/잠금 처리/연결 불가"
 - [ ] 등급명 "상/중/하" 없음 (위험/주의/양호만)
 - [ ] 목록 화면 공개범위 배지: 한국어 표기 (고객 공개/공통 기준/내부 전용) — select 금지, 읽기 전용 배지만 (편집기에는 미표시)
 - [ ] 화면 표시 텍스트: "MYDATA" → "마이데이터", "Promage" → "프롬에이지" (JS 변수명·value 속성은 영문 유지 가능)
@@ -167,5 +178,18 @@ HTML 패턴 → `guides/ux-patterns.md` 참조.
 - [ ] MOCK_DATA: T01~T10, 실제 담보코드 사용
 - [ ] `console.log` 없음
 - [ ] Pretendard CDN 사용 (Google Fonts 아님)
+
+**Policy 편집기 (08)**
+- [ ] 폼 필드 2개만: name(이름 input) + appDisplayText(Clark 앱 표시 문구 textarea)
+- [ ] 삭제 대상 필드가 코드에 없음: 규제 문서명·적용 범위·핵심 조항 요약·출력 대상 화면·출력 제한 설정·준법 체크리스트
+- [ ] appDisplayText 비어있으면 "검수 요청" 버튼 비활성 처리
+- [ ] 승인 2단계 안내 표시: 도메인 검수자 → 준법감시인
+
+**Case 1~4 분기 (KC매칭 × Playbook감지 매트릭스)**
+- Case 1: KC Concept 매칭O + Playbook 미감지 → KC 구조화 답변
+- Case 2: KC Concept 매칭O + Playbook 감지O → KC 구조화 + CTA 버튼
+- Case 3: KC 미매칭 + Playbook 미감지 → RAG(약관→FAQ) → Fallback 생성형
+- Case 4: KC 미매칭 + Playbook 감지O → Standalone 가이드 주입 + CTA 버튼
+- [ ] 11_dry-run 등 Case 분기 표현 시 위 4케이스 레이블 사용 (라우팅/매칭 등 기술 용어 금지)
 
 **Playbook 편집기 → `agents/04b_coder-playbook.md` 체크리스트 참조**
