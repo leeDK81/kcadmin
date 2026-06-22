@@ -146,13 +146,8 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
       <thead><tr><th>필드명</th><th>API 키</th><th>필수</th><th>타입</th><th>설명 / 유효성</th></tr></thead>
       <tbody>
         <tr><td>카드 코드</td><td><code>code</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>PL001~ 형식. 시스템 자동 부여</td></tr>
-        <tr><td>규제 문서명</td><td><code>regulationName</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>준거 법령·내부 규정명</td></tr>
-        <tr><td>적용 범위</td><td><code>coverageScope</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>이 Policy가 적용되는 상황·카드 범위</td></tr>
-        <tr><td>핵심 조항 요약</td><td><code>summary</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>준수해야 할 핵심 규제 내용 요약</td></tr>
-        <tr><td>출력 대상 화면</td><td><code>displayTarget</code></td><td><span class="chip chip-req">필수</span></td><td>enum</td><td>진단 화면 전체 / 기본 진단만 / 프롬에이지 고도화 진단만. 이 면책 문구가 표시될 Clark 앱 화면 범위</td></tr>
-        <tr><td>Clark 앱 표시 문구</td><td><code>appDisplayText</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>Clark 앱에 표시될 면책 고지 문구. 앱 코드 하드코딩 금지. 준법감시인 승인 후 즉시 반영</td></tr>
-        <tr><td>출력 제한 설정</td><td><code>outputRestriction</code></td><td><span class="chip chip-opt">선택</span></td><td>object</td><td>AI 답변 출력 제한 상세 설정</td></tr>
-        <tr><td>준수 체크리스트</td><td><code>complianceChecklist</code></td><td><span class="chip chip-req">필수</span></td><td>boolean[]</td><td>필수 체크 항목 3개 모두 체크해야 검수 요청 가능</td></tr>
+        <tr><td>Policy 이름</td><td><code>name</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>최대 60자. 이 Policy를 식별하는 명칭</td></tr>
+        <tr><td>Clark 앱 표시 문구</td><td><code>appDisplayText</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>Clark 앱에 표시될 면책 고지 문구. 비어있으면 검수 요청 불가. 앱 코드 하드코딩 금지. 준법감시인 승인 후 즉시 반영</td></tr>
         <tr><td>공개범위</td><td><code>scope</code></td><td>자동</td><td>string</td><td>"internal" 고정</td></tr>
       </tbody>
     </table>
@@ -169,7 +164,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
         <tr><td>설명</td><td><code>desc</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>이 Playbook의 목적과 발동 조건 설명</td></tr>
         <tr><td>발화 키워드</td><td><code>triggerKeywords</code></td><td><span class="chip chip-req">필수</span></td><td>string[]</td><td>최소 3개. 사용자 질의에서 감지될 키워드 목록</td></tr>
         <tr><td>전환 액션(CTA)</td><td><code>ctaButtons</code></td><td><span class="chip chip-req">필수</span></td><td>CTAButton[]</td><td>기본 버튼(consult) 필수. 추가 버튼 N개 선택</td></tr>
-        <tr><td>Standalone 답변 가이드</td><td><code>standaloneGuide</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>최소 20자. KC 미매칭 시 LLM이 참조할 답변 방향 가이드</td></tr>
+        <tr><td>Standalone 답변 가이드</td><td><code>standaloneGuide</code></td><td><span class="chip chip-opt">선택</span></td><td>string</td><td>(선택사항) 비워두면 Clark 기본 안내 문구 사용. KC 미매칭 시 LLM이 참조할 답변 방향 가이드</td></tr>
         <tr><td>리드 스코어링</td><td><code>leadScoring</code></td><td>미사용</td><td>object</td><td>Phase 1.5 이후 활성화</td></tr>
         <tr><td>배정 최적화</td><td><code>assignOptimization</code></td><td>미사용</td><td>object</td><td>Phase 2 이후 활성화</td></tr>
         <tr><td>공개범위</td><td><code>scope</code></td><td>자동</td><td>string</td><td>"internal" 고정. 변경 불가</td></tr>
