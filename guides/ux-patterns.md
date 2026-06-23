@@ -472,7 +472,7 @@ Policy 카드(운영자가 직접 문구 작성)와 다른 개념임.
 | 구분 | 관리 방식 | 운영자 개입 | 관련 화면 |
 |---|---|---|---|
 | 약관 RAG | 자동 파이프라인 (크롤러 자동) | 불가 | — |
-| Clark 서비스 FAQ RAG | 운영자 직접 등록 → 검수자 승인 → 인덱스 | 가능 | `19_faq-rag.html` |
+| Clark 서비스 FAQ RAG | 운영자 직접 등록 → 즉시 인덱스 등록 (승인 없음) | 가능 | `19_faq-rag.html` |
 | Fallback | 18_system-settings.html 설정 적용 | 설정만 | `18_system-settings.html` |
 
 KC 체인 매칭 실패 시 순서: RAG(약관 → Clark 서비스 FAQ) → Fallback.

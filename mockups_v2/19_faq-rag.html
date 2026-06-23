@@ -8,7 +8,7 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <style>
 :root {
-  --status-draft:#9C9C94; --status-review:#BA7517; --status-active:#0F6E56; --status-approved:#1A4A9A; --status-paused:#7A4A00; --status-rejected:#A32D2D;
+  --status-draft:#9C9C94; --status-active:#0F6E56;
   --step-done:#0F6E56; --step-active:#1A3A6B; --step-pending:#D0CFC9;
   --sidebar-w:220px; --bg-page:#F4F4F5; --bg-card:#FFFFFF;
   --text-primary:#171719; --text-secondary:#70737C; --text-hint:#989BA2;
@@ -32,12 +32,10 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 .badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;font-size:13px;font-weight:600;white-space:nowrap}
 .badge-active{background:rgba(15,110,86,.15);color:var(--status-active)}
 .badge-draft{background:rgba(156,156,148,.15);color:var(--status-draft)}
-.badge-review{background:rgba(186,117,23,.15);color:var(--status-review)}
-.badge-rejected{background:rgba(163,45,45,.15);color:var(--status-rejected)}
 .btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:6px;font-size:14px;font-weight:600;cursor:pointer;border:none;font-family:inherit;transition:opacity .15s}
 .btn:hover{opacity:.85}
 .btn-primary{background:#1A3A6B;color:#fff}
-.btn-danger{background:var(--status-rejected);color:#fff}
+.btn-danger{background:#A32D2D;color:#fff}
 .btn-secondary{background:var(--bg-card);color:var(--text-primary);border:1px solid var(--border)}
 .btn-ghost{background:transparent;color:var(--text-secondary);border:1px solid var(--border)}
 .btn-sm{padding:5px 10px;font-size:13px}
@@ -47,8 +45,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 .form-control{width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-family:inherit;background:#fff;color:var(--text-primary)}
 .form-control:focus{outline:none;border-color:#1A3A6B;box-shadow:0 0 0 2px rgba(26,58,107,.12)}
 textarea.form-control{resize:vertical}
-.banner{padding:12px 16px;border-radius:var(--radius);margin-bottom:16px;font-size:14px;line-height:1.6}
-.banner-info{background:#EEF4FF;border:1px solid #C0D0F0;color:#1A3A6B}
+.guide-box{background:#EEF4FF;border:1px solid #C0D0F0;border-radius:var(--radius);padding:14px 18px;margin-bottom:20px;font-size:14px;color:var(--text-secondary);line-height:1.6}
 .toast{position:fixed;bottom:24px;right:24px;background:#1A1A18;color:#fff;padding:12px 20px;border-radius:8px;font-size:14px;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none}
 .toast.show{opacity:1}
 
@@ -77,18 +74,8 @@ textarea.form-control{resize:vertical}
 .inline-panel{border-radius:var(--radius);padding:20px 24px;margin-bottom:16px;display:none}
 .inline-panel.open{display:block}
 .panel-reg{background:#EEF4FF;border:1.5px solid #A8C4F0}
-.panel-draft{background:#F2EEFF;border:1.5px solid #C0AEF0}
 .panel-header{font-size:15px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
 .panel-header-title{display:flex;align-items:center;gap:8px}
-
-/* 초안 카드 */
-.draft-card{background:#fff;border:1.5px solid var(--border);border-radius:6px;padding:14px 16px;margin-bottom:10px;display:flex;gap:12px;cursor:pointer;transition:border-color .15s}
-.draft-card:hover{border-color:#8A6AE0}
-.draft-card.selected{border-color:#1A4A9A;background:#EEF4FF}
-.draft-card-content{flex:1;min-width:0}
-.draft-q{font-size:14px;font-weight:600;margin-bottom:5px}
-.draft-a{font-size:13px;color:var(--text-secondary);line-height:1.5}
-.draft-src{font-size:12px;color:var(--text-hint);margin-top:6px}
 
 /* 모달 */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.48);z-index:1000;display:none;align-items:center;justify-content:center}
@@ -102,9 +89,6 @@ textarea.form-control{resize:vertical}
 .meta-row{display:grid;grid-template-columns:90px 1fr;gap:4px 0;font-size:13px;padding-top:14px;margin-top:14px;border-top:1px solid var(--border)}
 .meta-k{color:var(--text-hint);font-weight:600;padding:3px 0}
 .meta-v{padding:3px 0}
-.reject-box{background:#FFF0ED;border:1px solid #F0B0A0;border-radius:6px;padding:12px 14px;margin-top:12px;font-size:13px;color:#A32D2D;line-height:1.5}
-.reject-form{background:#FFF8F6;border:1.5px solid #E08070;border-radius:6px;padding:16px;margin-top:12px;display:none}
-.reject-form.open{display:block}
 .a-display{margin-top:6px;font-size:14px;line-height:1.7;padding:12px;background:#FAFAF8;border:1px solid var(--border);border-radius:6px;white-space:pre-wrap}
 </style>
 </head>
@@ -149,9 +133,8 @@ textarea.form-control{resize:vertical}
     <p>약관 RAG가 커버하지 못하는 <strong>Clark 서비스 전용 Q&A</strong>(앱 사용 안내, 보닥 플래너 연결, 서비스 정책 등)를 운영자가 직접 등록·관리합니다. 보험 약관 관련 질문은 약관 RAG가 자동 처리하므로 이 화면에 등록하지 않습니다.</p>
   </div>
 
-  <div class="banner banner-info">
-    <strong>처리 흐름:</strong>&nbsp; 운영자가 Clark 서비스 전용 Q&A 직접 등록 &rarr; <strong>검수자 승인</strong> &rarr; 인덱스 자동 등록 &rarr; Clark AI가 약관 RAG 결과 없을 때 참조
-    <span style="display:block;margin-top:4px;font-size:13px;color:#5A5A9A"><i class="fa-solid fa-circle-info fa-fw"></i> 약관·보장 관련 질문은 약관 RAG(자동 파이프라인)가 처리 — 이 화면에 등록 불필요</span>
+  <div class="guide-box">
+    <strong>FAQ RAG</strong>는 Clark 서비스 전용 Q&A를 운영자가 직접 관리하는 인덱스입니다. 등록하면 바로 인덱스에 추가되어 Clark AI가 약관 RAG 결과 없을 때 참조합니다.
   </div>
 
   <!-- 상단 액션 바 -->
@@ -162,13 +145,11 @@ textarea.form-control{resize:vertical}
     </div>
     <select class="filter-select" id="statusFilter" onchange="renderTable()">
       <option value="">전체 상태</option>
-      <option value="approved">인덱스 등록됨</option>
-      <option value="review">검수대기</option>
+      <option value="active">인덱스 등록됨</option>
       <option value="draft">초안</option>
-      <option value="rejected">반려됨</option>
     </select>
     <div style="flex:1"></div>
-    <button class="btn btn-primary" id="btnReg" onclick="toggleReg()"><i class="fa-solid fa-plus fa-fw"></i> Q&amp;A 직접 등록</button>
+    <button class="btn btn-primary" id="btnReg" onclick="toggleReg()"><i class="fa-solid fa-plus fa-fw"></i> Q&amp;A 등록</button>
   </div>
 
   <!-- 직접 등록 패널 -->
@@ -179,17 +160,17 @@ textarea.form-control{resize:vertical}
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
       <div class="form-group" style="margin-bottom:0">
-        <label>질문 (Q) <span style="color:var(--status-rejected)">*</span></label>
+        <label>질문 (Q) <span style="color:#A32D2D">*</span></label>
         <textarea class="form-control" id="newQ" placeholder="예) 보닥 플래너 상담 신청은 어떻게 하나요? (약관·보장 관련 질문 등록 불가)" style="min-height:80px"></textarea>
       </div>
       <div class="form-group" style="margin-bottom:0">
-        <label>답변 (A) <span style="color:var(--status-rejected)">*</span></label>
+        <label>답변 (A) <span style="color:#A32D2D">*</span></label>
         <textarea class="form-control" id="newA" placeholder="Clark 서비스 안내 답변을 입력하세요. 보장 금액·청구 가능 여부·타사 비교 금지." style="min-height:80px"></textarea>
-        <span class="field-hint" style="display:block;margin-top:3px;font-size:13px;color:var(--text-hint)">저장 후 검수자 승인 → 승인 시 인덱스 자동 등록. Clark 서비스 전용 내용만 등록.</span>
+        <span class="field-hint">등록하면 바로 인덱스에 추가됩니다. Clark 서비스 전용 내용만 등록하세요.</span>
       </div>
     </div>
     <div style="display:flex;gap:8px;margin-top:14px">
-      <button class="btn btn-primary" onclick="submitRegister(false)"><i class="fa-solid fa-paper-plane fa-fw"></i> 저장 후 검수 요청</button>
+      <button class="btn btn-primary" onclick="submitRegister(false)"><i class="fa-solid fa-circle-check fa-fw"></i> 인덱스에 등록</button>
       <button class="btn btn-ghost" onclick="submitRegister(true)"><i class="fa-solid fa-floppy-disk fa-fw"></i> 초안으로 저장</button>
       <button class="btn btn-secondary" onclick="closeReg()">취소</button>
     </div>
@@ -242,21 +223,6 @@ textarea.form-control{resize:vertical}
         <span class="meta-k">출처</span><span class="meta-v" id="mSource"></span>
         <span class="meta-k">등록자</span><span class="meta-v" id="mReg"></span>
         <span class="meta-k">등록일</span><span class="meta-v" id="mDate"></span>
-        <span class="meta-k" id="mApvK" style="display:none">승인자</span><span class="meta-v" id="mApv" style="display:none"></span>
-        <span class="meta-k" id="mApvDK" style="display:none">승인일</span><span class="meta-v" id="mApvD" style="display:none"></span>
-      </div>
-      <div class="reject-box" id="mRejectBox" style="display:none">
-        <strong><i class="fa-solid fa-circle-xmark fa-fw"></i> 반려 사유</strong>
-        <div id="mRejectText" style="margin-top:4px"></div>
-      </div>
-      <!-- 반려 사유 입력 (검수자가 반려 클릭 시 노출) -->
-      <div class="reject-form" id="rejectForm">
-        <label style="font-size:14px;font-weight:600;color:#A32D2D;margin-bottom:8px;display:block"><i class="fa-solid fa-circle-xmark fa-fw"></i> 반려 사유 입력 (필수)</label>
-        <textarea class="form-control" id="rejectInput" placeholder="반려 사유를 구체적으로 입력하세요" style="min-height:68px;margin-bottom:10px"></textarea>
-        <div style="display:flex;gap:8px">
-          <button class="btn btn-danger btn-sm" onclick="confirmReject()">반려 확정</button>
-          <button class="btn btn-ghost btn-sm" onclick="cancelReject()">취소</button>
-        </div>
       </div>
     </div>
     <div class="modal-footer" id="mFooter"></div>
@@ -271,14 +237,14 @@ let currentId = null;
 let editMode = false;
 
 let faqs = [
-  {id:'FAQ001',q:'보닥 플래너 상담은 어떻게 신청하나요?',a:'Clark 화면 우측 하단 "상담 신청" 버튼을 탭하거나, 상담사 연결 메시지에서 "연결하기"를 선택하시면 됩니다. 보닥 플래너가 배정되면 알림으로 안내드립니다.',status:'approved',source:'운영자',registrar:'김운영',date:'2026-06-15',approver:'이검수',approvedDate:'2026-06-16'},
-  {id:'FAQ002',q:'Clark AI 답변이 내 실제 보장과 다를 수 있나요?',a:'Clark AI는 등록된 KC 카드 기준으로 안내합니다. 정확한 보장 내용은 가입 약관 또는 보닥 플래너 상담을 통해 확인하세요.',status:'review',source:'운영자',registrar:'박운영',date:'2026-06-19'},
-  {id:'FAQ003',q:'Clark을 통해 타사 보험료 비교가 가능한가요?',a:'타사 보험료 직접 비교는 제공하지 않습니다.',status:'rejected',source:'운영자',registrar:'이운영',date:'2026-06-18',rejectReason:'타사 서비스 언급 유도 가능 — Fallback Policy 위반. 서비스 범위 안내로 재작성 필요'},
-  {id:'FAQ004',q:'Clark에서 제공하는 서비스 범위가 어떻게 되나요?',a:'Clark AI는 가입 보험 기반 보장 안내, KC 카드 기반 답변, 보닥 플래너 연결을 제공합니다.',status:'draft',source:'운영자',registrar:'박운영',date:'2026-06-21'}
+  {id:'FAQ001',q:'보닥 플래너 상담은 어떻게 신청하나요?',a:'Clark 화면 우측 하단 "상담 신청" 버튼을 탭하거나, 상담사 연결 메시지에서 "연결하기"를 선택하시면 됩니다. 보닥 플래너가 배정되면 알림으로 안내드립니다.',status:'active',source:'운영자',registrar:'김운영',date:'2026-06-15'},
+  {id:'FAQ002',q:'Clark AI 답변이 내 실제 보장과 다를 수 있나요?',a:'Clark AI는 등록된 KC 카드 기준으로 안내합니다. 정확한 보장 내용은 가입 약관 또는 보닥 플래너 상담을 통해 확인하세요.',status:'active',source:'운영자',registrar:'박운영',date:'2026-06-19'},
+  {id:'FAQ003',q:'Clark에서 제공하는 서비스 범위가 어떻게 되나요?',a:'Clark AI는 가입 보험 기반 보장 안내, KC 카드 기반 답변, 보닥 플래너 연결을 제공합니다.',status:'draft',source:'운영자',registrar:'이운영',date:'2026-06-18'},
+  {id:'FAQ004',q:'Clark을 통해 타사 보험료 비교가 가능한가요?',a:'타사 보험료 직접 비교는 제공하지 않습니다.',status:'draft',source:'운영자',registrar:'박운영',date:'2026-06-21'}
 ];
 
-const SL = {approved:'인덱스 등록됨', review:'검수대기', draft:'초안', rejected:'반려됨'};
-const SB = {approved:'badge-active', review:'badge-review', draft:'badge-draft', rejected:'badge-rejected'};
+const SL = {active:'인덱스 등록됨', draft:'초안'};
+const SB = {active:'badge-active', draft:'badge-draft'};
 
 function getFiltered() {
   const q = (document.getElementById('searchInput').value||'').toLowerCase();
@@ -287,14 +253,12 @@ function getFiltered() {
 }
 
 function renderStats() {
-  const c = {approved:0,review:0,draft:0,rejected:0};
+  const c = {active:0, draft:0};
   faqs.forEach(f => c[f.status]++);
   document.getElementById('statsBar').innerHTML =
     `<div class="stat-item"><span class="stat-num">${faqs.length}</span>전체</div>
-     <div class="stat-item" style="color:var(--status-active)"><span class="stat-num" style="color:var(--status-active)">${c.approved}</span>인덱스 등록</div>
-     <div class="stat-item" style="color:var(--status-review)"><span class="stat-num" style="color:var(--status-review)">${c.review}</span>검수대기</div>
-     <div class="stat-item" style="color:var(--status-draft)"><span class="stat-num" style="color:var(--status-draft)">${c.draft}</span>초안</div>
-     <div class="stat-item" style="color:var(--status-rejected)"><span class="stat-num" style="color:var(--status-rejected)">${c.rejected}</span>반려</div>`;
+     <div class="stat-item" style="color:var(--status-active)"><span class="stat-num" style="color:var(--status-active)">${c.active}</span>인덱스 등록됨</div>
+     <div class="stat-item" style="color:var(--status-draft)"><span class="stat-num" style="color:var(--status-draft)">${c.draft}</span>초안</div>`;
 }
 
 function renderTable() {
@@ -306,13 +270,10 @@ function renderTable() {
   empty.style.display = 'none';
   body.innerHTML = data.map(f => {
     let btns = `<button class="btn btn-ghost btn-sm" onclick="openModal('${f.id}')"><i class="fa-solid fa-eye fa-fw"></i> 상세</button> `;
-    if (f.status==='review') {
-      btns += `<button class="btn btn-primary btn-sm" onclick="quickApprove('${f.id}')">승인</button> `;
-      btns += `<button class="btn btn-danger btn-sm" onclick="openRejectFlow('${f.id}')">반려</button>`;
-    } else if (f.status==='draft') {
-      btns += `<button class="btn btn-secondary btn-sm" onclick="sendReview('${f.id}')">검수 요청</button>`;
-    } else if (f.status==='rejected') {
-      btns += `<button class="btn btn-ghost btn-sm" onclick="sendReview('${f.id}')"><i class="fa-solid fa-rotate-right fa-fw"></i> 재검수</button>`;
+    if (f.status==='draft') {
+      btns += `<button class="btn btn-primary btn-sm" onclick="activate('${f.id}')"><i class="fa-solid fa-circle-check fa-fw"></i> 등록</button>`;
+    } else {
+      btns += `<button class="btn btn-danger btn-sm" onclick="remove('${f.id}')"><i class="fa-solid fa-trash fa-fw"></i></button>`;
     }
     return `<tr>
       <td class="cell-q" title="${f.q}">${f.q}</td>
@@ -338,29 +299,26 @@ function submitRegister(asDraft) {
   const q = document.getElementById('newQ').value.trim();
   const a = document.getElementById('newA').value.trim();
   if (!q) { showToast('질문을 입력하세요.'); return; }
-  if (!asDraft && !a) { showToast('답변을 입력하세요.'); return; }
+  if (!a) { showToast('답변을 입력하세요.'); return; }
   const today = new Date().toISOString().split('T')[0];
-  faqs.push({id:'FAQ0'+( ++idSeq),q,a,status:asDraft?'draft':'review',source:'운영자',registrar:'현재 사용자',date:today});
+  faqs.push({id:'FAQ0'+(++idSeq),q,a,status:asDraft?'draft':'active',source:'운영자',registrar:'현재 사용자',date:today});
   document.getElementById('newQ').value='';
   document.getElementById('newA').value='';
-  closePanel('regPanel');
+  closeReg();
   renderTable();
-  showToast(asDraft ? '초안으로 저장되었습니다.' : '검수 요청되었습니다.');
+  showToast(asDraft ? '초안으로 저장되었습니다.' : '인덱스에 등록되었습니다.');
 }
 
 /* 빠른 액션 */
-function quickApprove(id) {
+function activate(id) {
   const f = faqs.find(x=>x.id===id);
   if (!f) return;
-  f.status='approved'; f.approver='현재 검수자'; f.approvedDate=new Date().toISOString().split('T')[0];
-  renderTable(); showToast('승인되었습니다. 인덱스에 등록됩니다.');
+  f.status='active';
+  renderTable(); showToast('인덱스에 등록되었습니다.');
 }
-function openRejectFlow(id) { openModal(id); setTimeout(()=>document.getElementById('rejectForm').classList.add('open'), 60); }
-function sendReview(id) {
-  const f = faqs.find(x=>x.id===id);
-  if (!f) return;
-  f.status='review'; delete f.rejectReason;
-  renderTable(); showToast('검수 요청되었습니다.');
+function remove(id) {
+  faqs = faqs.filter(x=>x.id!==id);
+  renderTable(); showToast('삭제되었습니다.');
 }
 
 /* 모달 */
@@ -378,57 +336,25 @@ function openModal(id) {
   document.getElementById('mSource').textContent = f.source;
   document.getElementById('mReg').textContent = f.registrar||'-';
   document.getElementById('mDate').textContent = f.date;
-  const hasApv = !!f.approver;
-  ['mApvK','mApv','mApvDK','mApvD'].forEach(i=>document.getElementById(i).style.display=hasApv?'':'none');
-  if (hasApv) { document.getElementById('mApv').textContent=f.approver; document.getElementById('mApvD').textContent=f.approvedDate; }
-  const hasRej = !!f.rejectReason;
-  document.getElementById('mRejectBox').style.display = hasRej?'block':'none';
-  if (hasRej) document.getElementById('mRejectText').textContent = f.rejectReason;
-  document.getElementById('rejectForm').classList.remove('open');
-  document.getElementById('rejectInput').value='';
   renderFooter(f);
   document.getElementById('detailModal').classList.add('open');
 }
 
 function renderFooter(f) {
-  let h = '';
-  if (f.status==='review') {
-    h = `<button class="btn btn-ghost" onclick="closeModal()">닫기</button>
-         <button class="btn btn-danger" onclick="showRejectForm()"><i class="fa-solid fa-circle-xmark fa-fw"></i> 반려</button>
-         <button class="btn btn-primary" onclick="approveModal()"><i class="fa-solid fa-circle-check fa-fw"></i> 승인</button>`;
-  } else if (f.status==='draft') {
-    h = `<button class="btn btn-ghost" onclick="closeModal()">닫기</button>
-         <button class="btn btn-secondary" onclick="startEdit()"><i class="fa-solid fa-pen fa-fw"></i> 수정</button>
-         <button class="btn btn-primary" onclick="reviewModal()"><i class="fa-solid fa-paper-plane fa-fw"></i> 검수 요청</button>`;
-  } else if (f.status==='rejected') {
-    h = `<button class="btn btn-ghost" onclick="closeModal()">닫기</button>
-         <button class="btn btn-secondary" onclick="startEdit()"><i class="fa-solid fa-pen fa-fw"></i> 수정</button>
-         <button class="btn btn-primary" onclick="reviewModal()"><i class="fa-solid fa-rotate-right fa-fw"></i> 재검수 요청</button>`;
+  let h = `<button class="btn btn-ghost" onclick="closeModal()">닫기</button>
+           <button class="btn btn-secondary" onclick="startEdit()"><i class="fa-solid fa-pen fa-fw"></i> 수정</button>`;
+  if (f.status==='draft') {
+    h += `<button class="btn btn-primary" onclick="activateModal()"><i class="fa-solid fa-circle-check fa-fw"></i> 인덱스 등록</button>`;
   } else {
-    h = `<button class="btn btn-danger btn-sm" onclick="deleteModal()"><i class="fa-solid fa-trash fa-fw"></i> 삭제</button>
-         <button class="btn btn-ghost" onclick="closeModal()">닫기</button>`;
+    h += `<button class="btn btn-danger" onclick="deleteModal()"><i class="fa-solid fa-trash fa-fw"></i> 삭제</button>`;
   }
   document.getElementById('mFooter').innerHTML = h;
 }
 
-function approveModal() {
+function activateModal() {
   const f = faqs.find(x=>x.id===currentId); if (!f) return;
-  f.status='approved'; f.approver='현재 검수자'; f.approvedDate=new Date().toISOString().split('T')[0];
-  renderTable(); closeModal(); showToast('승인되었습니다. 인덱스에 등록됩니다.');
-}
-function showRejectForm() { document.getElementById('rejectForm').classList.add('open'); document.getElementById('rejectInput').focus(); }
-function cancelReject() { document.getElementById('rejectForm').classList.remove('open'); document.getElementById('rejectInput').value=''; }
-function confirmReject() {
-  const reason = document.getElementById('rejectInput').value.trim();
-  if (!reason) { showToast('반려 사유를 입력하세요.'); return; }
-  const f = faqs.find(x=>x.id===currentId); if (!f) return;
-  f.status='rejected'; f.rejectReason=reason;
-  renderTable(); closeModal(); showToast('반려 처리되었습니다.');
-}
-function reviewModal() {
-  const f = faqs.find(x=>x.id===currentId); if (!f) return;
-  f.status='review'; delete f.rejectReason;
-  renderTable(); closeModal(); showToast('검수 요청되었습니다.');
+  f.status='active';
+  renderTable(); closeModal(); showToast('인덱스에 등록되었습니다.');
 }
 function startEdit() {
   editMode=true;
