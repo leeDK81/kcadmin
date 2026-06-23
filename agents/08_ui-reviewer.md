@@ -1,4 +1,4 @@
-﻿> **참조:** `CLAUDE.md` · `context/decisions.md` · `guides/design-system.md` · `guides/ux-patterns.md` · `guides/copywriting.md`
+﻿> **참조:** `CLAUDE.md` · `context/card-policy.md` · `context/card-types.md` · `guides/design-system.md` · `guides/ux-patterns.md` · `guides/copywriting.md`
 
 ---
 

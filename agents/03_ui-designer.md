@@ -1,4 +1,4 @@
-﻿> **참조:** `CLAUDE.md` · `context/project.md` · `context/decisions.md` · `guides/design-system.md` · `guides/ux-patterns.md` · `guides/copywriting.md`
+﻿> **참조:** `CLAUDE.md` · `context/card-policy.md` · `context/card-types.md` · `context/answer-logic.md` · `context/workflow.md` · `guides/design-system.md` · `guides/ux-patterns.md` · `guides/copywriting.md`
 
 ---
 
@@ -62,16 +62,8 @@ KC Admin Phase 1의 시각 언어를 정의하고, "처음 보는 개발자·운
            └─ 미매칭 + Playbook 감지O  → Case 4: Standalone 가이드 주입 + CTA 버튼
 ```
 
-**Case 1~4 정의 (KC매칭 × Playbook감지 매트릭스):**
-
-| Case | KC Concept 매칭 | Playbook 감지 | 처리 |
-|---|---|---|---|
-| Case 1 | O | 미감지 | KC 구조화 답변 |
-| Case 2 | O | 감지O | KC 구조화 + CTA 버튼 |
-| Case 3 | 미매칭 | 미감지 | RAG(약관→FAQ) → Fallback 생성형 |
-| Case 4 | 미매칭 | 감지O | Standalone 가이드 주입 + CTA 버튼 |
-
-> **Concept Standalone 제거 근거:** Playbook이 Case 4로 KC 미매칭 시나리오를 완전 커버하므로 Concept Standalone 기능은 불필요. Concept에 Standalone 기능 없음 — 완전 제거됨.
+**Case 1~4 매트릭스:** → `context/answer-logic.md`
+- Concept Standalone 기능 없음 — 완전 제거됨. Playbook(Case 4)이 미매칭 시나리오 전담.
 
 ### 원칙 6 — 같은 목적, 같은 구조·같은 용어 ★
 
@@ -156,17 +148,7 @@ rel-box 없음. 4단계 흐름만. HTML/CSS → `guides/ux-patterns.md` + `guide
 
 > **v2 변경:** 편집기 내 연결 선택 UI 없음. 연결 추가·변경은 `00_canvas-main.html` 캔버스에서만 처리. 편집기에는 읽기 전용 배지 + "캔버스에서 변경" 버튼만 표시.
 
-**CONNECT_RULES (캔버스에서 적용):**
-
-| 연결 방향 | 카디널리티 | 구분 | 근거 |
-|---|---|---|---|
-| Concept → Risk-type | N:M | **필수** | 연결 없으면 KC 체인 미진입. Concept 단독으로 답변 생성 불가 |
-| Risk-type → Rule | 1:N | **필수** (최소 1개) | Risk-type 기반 판정 조건 지정 |
-| Rule → Evidence | 1:N | **필수** (최소 1개) | 근거 없는 Rule = AI hallucination 위험 |
-| Rule → Policy | 1:N | 선택사항 | Policy = 면책 고지 문구 출력용. 미연결도 유효 |
-| Evidence | 단말 | — | outgoing 연결 없음 |
-| Policy | 단말 | — | outgoing 연결 없음 |
-| Playbook | 단말(독립 체인) | — | outgoing 연결 없음 |
+**CONNECT_RULES (캔버스에서 적용):** → `context/card-policy.md`
 
 **캔버스 그리드 섹션 헤더:**
 - "연결됨" → 초록 헤더 (`sh-connected`)
@@ -277,9 +259,11 @@ HTML/CSS 패턴 → `guides/ux-patterns.md` 캔버스 섹션 참조.
 
 **핵심 설계 포인트:**
 - 상단 안내 배너: "이 화면은 약관·보장 관련 Q&A가 아닌 Clark 서비스 고유 안내(앱 사용·보닥 플래너 연결·서비스 정책 등)를 등록하는 곳입니다."
-- 목록 테이블: 상태 필터(전체/검수대기/인덱스등록됨/반려됨) + 검색 + Q 미리보기
-- 등록 패널: 인라인 펼침 패널 (Q textarea + A textarea + "검수 요청" 버튼)
-- 상세 모달: Q·A 전문 + 상태 배지 + 승인·반려·재검수 액션
-- 상태 4종: 초안(`badge-draft`) / 검수대기(`badge-review`) / 인덱스 등록됨(`badge-active`) / 반려됨(`badge-rejected`)
+→ **스펙 상세:** `context/answer-logic.md`
+- 목록 테이블: 상태 필터(전체/인덱스등록됨/초안) + 검색 + Q 미리보기
+- 등록 패널: 인라인 펼침 패널 (Q textarea + A textarea + "인덱스에 등록" / "초안으로 저장" 버튼)
+- 상세 모달: Q·A 전문 + 상태 배지 + 인덱스 등록/삭제 액션
+- **상태 2종:** 초안(`badge-draft`) / 인덱스 등록됨(`badge-active`) — 검수대기·반려됨 없음
+- **승인 프로세스 없음** — 직접 등록 → 즉시 인덱스 반영
 - LLM 초안 자동 생성 버튼 없음 — 운영자 직접 입력만
 - 사이드바: 18_system-settings.html 하위 항목 (들여쓰기 처리)

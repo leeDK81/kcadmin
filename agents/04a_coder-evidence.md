@@ -1,4 +1,4 @@
-> **참조:** `CLAUDE.md` · `context/decisions.md` · `guides/ux-patterns.md` · `guides/insurance-domain.md`
+> **참조:** `CLAUDE.md` · `context/card-types.md` · `guides/ux-patterns.md` · `guides/insurance-domain.md`
 
 ---
 

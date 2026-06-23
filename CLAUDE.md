@@ -14,16 +14,16 @@
 
 | 번호 | 파일 | 역할 | 계층 2 참조 |
 |---|---|---|---|
-| 01 | `agents/01_ai-rag-architect.md` | AI/RAG 아키텍트 | context/project.md + context/decisions.md |
-| 02 | `agents/02_po.md` | PO — 범위·조율 | context/project.md + context/decisions.md |
-| 03 | `agents/03_ui-designer.md` | UI 디자이너 | context/project.md + context/decisions.md + guides/design-system.md |
-| 04 | `agents/04_coder.md` | 코더 | context/decisions.md + guides/design-system.md + guides/ux-patterns.md |
-| 04a | `agents/04a_coder-evidence.md` | Evidence 편집기 전담 | context/decisions.md + guides/ux-patterns.md + guides/insurance-domain.md |
-| 04b | `agents/04b_coder-playbook.md` | Playbook 편집기 전담 | context/decisions.md + guides/ux-patterns.md + guides/design-system.md |
-| 05 | `agents/05_code-reviewer.md` | 코딩 검수자 | context/decisions.md + guides/design-system.md |
-| 06 | `agents/06_spec-reviewer.md` | 기획 검수자 | context/project.md + context/decisions.md |
-| 07 | `agents/07_insurance-expert.md` | 보험 도메인 전문가 | context/project.md + guides/insurance-domain.md |
-| 08 | `agents/08_ui-reviewer.md` | UI 검수자 | context/decisions.md + guides/design-system.md + guides/ux-patterns.md + guides/copywriting.md |
+| 01 | `agents/01_ai-rag-architect.md` | AI/RAG 아키텍트 | card-policy + card-types + answer-logic + insurance-domain |
+| 02 | `agents/02_po.md` | PO — 범위·조율 | decisions + card-policy + card-types + answer-logic + workflow |
+| 03 | `agents/03_ui-designer.md` | UI 디자이너 | card-policy + card-types + answer-logic + workflow + design-system |
+| 04 | `agents/04_coder.md` | 코더 | card-policy + card-types + answer-logic + workflow + design-system + ux-patterns |
+| 04a | `agents/04a_coder-evidence.md` | Evidence 편집기 전담 | card-types + ux-patterns + insurance-domain |
+| 04b | `agents/04b_coder-playbook.md` | Playbook 편집기 전담 | card-types + answer-logic + ux-patterns + design-system |
+| 05 | `agents/05_code-reviewer.md` | 코딩 검수자 | card-policy + card-types + design-system |
+| 06 | `agents/06_spec-reviewer.md` | 기획 검수자 | project + decisions + card-policy + card-types + answer-logic + workflow |
+| 07 | `agents/07_insurance-expert.md` | 보험 도메인 전문가 | project + insurance-domain |
+| 08 | `agents/08_ui-reviewer.md` | UI 검수자 | card-policy + card-types + design-system + ux-patterns + copywriting |
 
 ---
 
@@ -32,7 +32,11 @@
 ```
 context/
   project.md      ← KC Admin 개요, 카드 체계, 워크플로우, 파일 목록 27개 (v2)
-  decisions.md    ← 확정된 설계 결정 (기획서와 충돌 시 이 파일 우선)
+  decisions.md    ← 미결 항목, Phase 범위, 변경 이력 인덱스 (정책 상세는 아래 파일들)
+  card-policy.md  ← CONNECT_RULES, 카드 상태/엣지, 공개범위, 카드블록 구조, 타입코드
+  card-types.md   ← 카드별 상세 스펙 (Evidence/Rule/Concept/Policy/Playbook/Risk-type)
+  answer-logic.md ← Case 1~4 매트릭스, RAG 정책, FAQ RAG 스펙, Fallback
+  workflow.md     ← 카드 라이프사이클, 캔버스 UX, 캔버스 JS 함수, 사이드바 v2 표준
 
 guides/
   design-system.md    ← Pretendard 폰트, :root CSS 변수 전체, 컴포넌트 CSS

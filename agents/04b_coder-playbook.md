@@ -1,4 +1,4 @@
-﻿> **참조:** `CLAUDE.md` · `context/decisions.md` · `guides/ux-patterns.md` · `guides/design-system.md`
+﻿> **참조:** `CLAUDE.md` · `context/card-types.md` · `context/answer-logic.md` · `guides/ux-patterns.md` · `guides/design-system.md`
 
 ---
 

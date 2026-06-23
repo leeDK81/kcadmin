@@ -1,0 +1,114 @@
+# KC Admin — 카드 체계 및 연결 정책
+
+> **진실원.** 카드 유형·상태·연결 규칙·편집기 구조 관련 모든 정책은 이 파일이 기준.
+> 변경 시 PO(02)가 이 파일을 즉시 업데이트한다.
+
+---
+
+## CONNECT_RULES (2026-06-22 최종 확정)
+
+```javascript
+const CONNECT_RULES = {
+  concept:  ['risk'],               // 필수 (미연결 시 KC 체인 진입 불가)
+  risk:     ['rule'],               // 필수, 최소 1개
+  rule:     ['evidence', 'policy'], // evidence 필수/최소 1개, policy 선택
+  evidence: [],                     // 단말
+  policy:   [],                     // 단말
+  playbook: [],                     // 단말, 독립 체인
+};
+```
+
+| 연결 | 필수/선택 | 비고 |
+|---|---|---|
+| concept → risk-type | **필수** (최소 1개) | 미연결 시 KC 체인 진입 불가 |
+| risk → rule | **필수** (최소 1개) | |
+| rule → evidence | **필수** (최소 1개) | |
+| rule → policy | 선택 | |
+| evidence → (단말) | — | outgoing 연결 없음 |
+| policy → (단말) | — | outgoing 연결 없음 |
+| playbook → (단말) | 독립 체인 | KC 카드 연결 불필요 |
+
+---
+
+## 카드 연결 카디널리티 (2026-06-21 확정)
+
+| 연결 | 출발 카드 기준 (유출) | 도착 카드 기준 (유입) |
+|---|---|---|
+| Concept → Risk-type | 1:N (최소 1개, 필수) | N:1 (여러 Concept 허용) |
+| Risk-type → Rule | 1:N (최소 1개, 필수) | N:1 (여러 Risk-type 허용) |
+| Rule → Evidence | 1:N (최소 1개, 필수) | N:1 (여러 Rule이 공유 가능) |
+| Rule → Policy | 1:N (제한 없음, 선택) | N:1 (여러 Rule이 공유 가능) |
+
+---
+
+## 카드 상태 모델 (6종)
+
+| 상태 | 코드 | 배지 | 의미 |
+|---|---|---|---|
+| 임시저장 | `draft` | `badge-draft` | 내용 작성 중 |
+| 승인요청 | `review` | `badge-review` | 검수 중 |
+| 승인완료 | `approved` | `badge-approved` | 캔버스 연결 가능 |
+| 라이브 | `active` | `badge-active` | KC Engine 반영 완료 |
+| 일시중지 | `paused` | `badge-paused` | 운영 중지 |
+| 반려 | `rejected` | `badge-rejected` | 검수 반려 |
+
+**캔버스 표시 범위:** active + approved + review (draft 제외)
+**연결 가능 범위:** active + approved만 (review는 캔버스에 표시되나 연결 불가)
+
+---
+
+## 엣지(연결) 상태
+
+| 엣지 상태 | 표시 | KC Engine | 조건 |
+|---|---|---|---|
+| `active` | 실선 초록 (#0F6E56) | 반영 완료 | 양쪽 카드 모두 active |
+| `pending` | 점선 파랑 (stroke-dasharray:6,4, #1A4A9A) | 미반영 | 한쪽이라도 approved |
+
+---
+
+## 공개범위 필드 (2026-06-16 확정)
+
+공개범위는 카드 유형에 따라 자동 고정 — 운영자 변경 불가.
+
+| 카드 유형 | 공개범위 (고정) | 배지 |
+|---|---|---|
+| Concept | 고객 공개 | `badge-public` |
+| Risk-type | 고객 공개 | `badge-public` |
+| Rule | 공통 기준 | `badge-baseline` |
+| Evidence | 내부 전용 | `badge-internal` |
+| Policy | 내부 전용 | `badge-internal` |
+| Playbook | 내부 전용 | `badge-internal` |
+
+**표시 원칙:**
+- 목록 화면(*-list.html)에서만 읽기 전용 배지 표시
+- 편집기(card-editor-*.html)에는 공개범위 form-group 미표시
+- 영문 표기(Public/Baseline/Internal) 금지 — 한국어만 사용
+
+---
+
+## 카드 편집기 카드 블록 구조 (원칙 6)
+
+| 편집기 | card 수 | 구성 |
+|---|---|---|
+| ① Risk-type, ② Evidence | 2-card | 기본정보 / 액션 |
+| ③ Concept, ⑤ Policy | 3-card | 기본정보 / 연결 패널(1개) / 액션 |
+| ④ Rule | 5-card | 기본정보 / Risk-type 연결(필수) / 판단 조건 / Evidence 연결(필수) / 액션 |
+
+연결 패널을 기본정보 카드 안에 섞지 않는다.
+
+---
+
+## 타입코드 운영 정책 (T01~T10)
+
+| ID | 명칭 | 상태 |
+|---|---|---|
+| T01 | 무보장형 | active |
+| T02 | 암투병생활비 부족형 | active |
+| T03 | 심혈관질환보장 협소형 | active |
+| T04 | 뇌혈관질환보장 협소형 | active |
+| T05 | 노후돌봄보장 공백형 | active |
+| T06 | 납입여력부족 우려형 | active |
+| T07 | 비용 대비 보장 비효율형 | active |
+| T08 | 생애주기 적합도 저조형 | active |
+| T09 | 단기납 만기 후 공백형 | active |
+| T10 | 고액 보험료 유지 부담형 | paused (시장 기준 개정 중) |

@@ -1,4 +1,4 @@
-﻿> **참조:** `CLAUDE.md` · `context/project.md` · `context/decisions.md`
+﻿> **참조:** `CLAUDE.md` · `context/project.md` · `context/decisions.md` · `context/card-policy.md` · `context/card-types.md` · `context/answer-logic.md` · `context/workflow.md`
 
 ---
 
