@@ -199,21 +199,21 @@ tr.clickable{cursor:pointer}
 
           <div class="form-group">
             <label for="riskName">위험 유형명 <span style="color:var(--card-risk)">*</span>
-              <span class="field-hint">Clark AI가 사용자에게 진단 결과를 설명할 때 사용하는 이름입니다</span>
+              <span class="field-hint">고객에게 직접 보이는 진단 유형 이름입니다. 명확하게 쓰세요</span>
             </label>
             <input class="form-control" id="riskName" type="text" value="실손보장 공백형" placeholder="예: 실손보장 공백형">
           </div>
 
           <div class="form-group">
             <label for="riskDesc">설명 <span style="color:var(--card-risk)">*</span>
-              <span class="field-hint">Clark AI가 진단 이유를 설명할 때 참조하는 내용입니다</span>
+              <span class="field-hint">이 위험 유형의 특징과 보장 공백 상황을 구체적으로 쓰세요</span>
             </label>
             <textarea class="form-control" id="riskDesc" rows="4" placeholder="이 위험 유형에 해당하는 고객의 특징과 보장 공백 상황을 설명하세요">실손의료보험이 없거나 보장 범위가 협소하여 입원·통원 의료비 지출 시 자기부담 비율이 높은 유형입니다. 비급여 항목 급증으로 실질 보장 공백이 발생하는 고객군입니다.</textarea>
           </div>
 
           <div class="form-group">
             <label>중요도 <span style="color:var(--card-risk)">*</span>
-              <span class="field-hint">다중 Risk-type 동시 감지 시 노출 순서: ①중요도 → ②선택 조건 충족 개수(시스템 자동) → ③카드코드 오름차순. 운영자는 이 중요도만 설정합니다</span>
+              <span class="field-hint">동시에 여러 Risk-type이 감지되면 ①중요도 → ②선택 조건 충족 수 → ③카드코드 순으로 노출됩니다. 이 순위를 설정하세요</span>
             </label>
             <div style="display:flex;gap:24px;margin-top:8px;padding:12px 14px;background:#FAFAF8;border:1px solid var(--border);border-radius:6px">
               <label style="display:flex;align-items:center;gap:7px;font-weight:400;cursor:pointer;font-size:14px">
@@ -250,7 +250,7 @@ tr.clickable{cursor:pointer}
             <i class="fa-solid fa-circle-info fa-fw"></i>
             <span><strong>현재 상태: 임시저장</strong> — 위험 유형명·설명을 입력한 후 [검수 요청]을 클릭하세요.</span>
           </div>
-          <p class="field-hint" style="margin-top:12px">이 카드에 대한 연결은 Concept 카드 편집기나 캔버스(③ 연결)에서 관리됩니다.</p>
+          <p class="field-hint" style="margin-top:12px">이 카드의 연결은 캔버스(③ 연결)에서만 관리합니다.</p>
         </div>
       </div>
 

@@ -198,7 +198,7 @@
 | 파일 | 상태 | 코드·명칭 | 전용 컬럼 | 연결 컬럼 | 수정일 | 액션 | auto |
 |---|---|---|---|---|---|---|---|
 | 04 Risk-type | 100px | 200px | 중요도 80px | 참조Rule 320px | 110px | 80px | 설명 106px |
-| 05 Evidence | 100px | 185px | 유형 120px | 참조Rule 280px | 110px | 80px | 설명 121px |
+| 05 Evidence | 100px | 185px | 출처기관 140px | 참조Rule 230px | 110px | 80px | 지표명·기준값 151px |
 | 06 Concept | 100px | 245px | Risk-type 200px + 동의어수 140px | — | 110px | 80px | 동의어 121px |
 | 07 Rule | 90px | 245px | Risk-type 160px | Evidence auto + Policy 180px | 110px | 80px | — |
 | 08 Policy | 100px | 230px | 공개범위 110px | 적용Rule 145px | 110px | 80px | 출력제한 221px |

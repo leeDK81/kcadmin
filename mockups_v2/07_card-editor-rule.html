@@ -213,14 +213,11 @@ textarea.form-control{resize:vertical;min-height:80px}
       <span class="routing-role">AI 답변 역할: 조건 판단 핵심</span>
     </div>
     <h3>Rule 카드</h3>
-    <p>Rule 카드 등록 시 두 가지 연결이 필요합니다: <strong>① 대상 Risk-type 선택 (필수)</strong> — 이 Rule이 판정하는 위험 유형을 지정합니다. <strong>② Evidence 연결 1개 이상 (필수)</strong> — 판단 근거 출처를 연결해야 검수 요청이 가능합니다.</p>
-    <p>연결 대상은 반드시 라이브 상태여야 합니다. 임시저장·승인요청 상태 카드는 선택 불가합니다.</p>
-    <p>등록 순서 ④인 이유: ① Risk-type·② Evidence가 모두 라이브여야 Rule을 완성할 수 있습니다.</p>
+    <p>Rule 카드에는 두 가지 연결이 필요합니다: <strong>① Risk-type 연결 (필수)</strong> — 이 Rule이 판정하는 위험 유형을 지정합니다. <strong>② Evidence 연결 1개 이상 (필수)</strong> — Rule의 판단 근거 출처를 연결합니다. 두 연결 모두 캔버스(③ 연결)에서 진행합니다.</p>
+    <p>연결 대상은 <strong>승인완료 또는 라이브</strong> 상태여야 합니다. 임시저장·승인요청 상태 카드는 연결 불가합니다.</p>
+    <p>등록 순서 ④인 이유: Risk-type·Evidence가 승인완료 이상이어야 캔버스에서 연결이 가능합니다.</p>
   </div>
 
-  <div id="evBanner" class="banner banner-error" style="display:none">
-    ⚠ Evidence 미연결: 검수 요청 전 Evidence를 1개 이상 연결해야 합니다. 검수 요청 버튼이 선택 불가 상태입니다.
-  </div>
 
   <div class="two-col">
     <!-- LEFT -->
@@ -248,7 +245,7 @@ textarea.form-control{resize:vertical;min-height:80px}
         <div class="form-group">
           <label>Clark 경고 메시지</label>
           <textarea class="form-control" placeholder="Rule 조건 충족 시 Clark AI가 사용자에게 보여줄 경고 문구. 예: '암 보장이 부족합니다'">암 보장이 부족합니다. 현재 보유하신 보험에 암 진단금 담보가 없거나 소액입니다.</textarea>
-          <span class="field-hint">Rule 조건 충족 시 Clark AI가 사용자에게 보여줄 경고 문구</span>
+          <span class="field-hint">Rule 조건에 해당하는 고객에게 Clark이 표시할 경고 문구를 입력하세요</span>
         </div>
       </div>
 
@@ -312,7 +309,7 @@ textarea.form-control{resize:vertical;min-height:80px}
             <input type="checkbox" id="policyDbToggle" onchange="onPolicyDbToggle()" style="width:16px;height:16px;cursor:pointer">
             <span style="font-size:14px;font-weight:600">약관 DB 연동 활성화</span>
           </label>
-          <span class="field-hint" style="margin-left:26px">체크 해제 시 Clark 답변에 면책조항 섹션 미출력</span>
+          <span class="field-hint" style="margin-left:26px">체크하면 이 Rule 조건 충족 시 Clark 답변에 면책조항 섹션이 자동 포함됩니다</span>
         </div>
         <div id="policyDbDetail" style="display:none;padding:12px 14px;background:#FFF9EC;border:1px solid #F0D880;border-radius:6px;font-size:13px;color:#7A5A00;line-height:1.6">
           <i class="fa fa-triangle-exclamation fa-fw"></i>
@@ -329,7 +326,7 @@ textarea.form-control{resize:vertical;min-height:80px}
         </div>
         <div class="status-guidance">
           <i class="fa-solid fa-circle-info fa-fw"></i>
-          <span><strong>현재 상태: 임시저장</strong> — 대상 Risk-type 선택 + 판단 조건 1개 이상 + Evidence 1개 이상 연결 후 [검수 요청]을 클릭하세요.</span>
+          <span><strong>현재 상태: 임시저장</strong> — 제목·판단 조건 1개 이상 입력 후 [검수 요청]을 클릭하세요. Risk-type·Evidence 연결은 승인완료 후 캔버스(③ 연결)에서 진행하세요.</span>
         </div>
       </div>
     </div>
@@ -349,7 +346,7 @@ textarea.form-control{resize:vertical;min-height:80px}
     <div class="wf-num wf-num-off">②</div>
     <div class="wf-body">
       <div class="wf-label wf-label-off">검수 요청</div>
-      <div class="wf-hint">Risk-type 선택 + 판단 조건 + Evidence 연결 충족 시 버튼 활성화</div>
+      <div class="wf-hint">제목·판단 조건 입력 완료 시 버튼 사용 가능해집니다</div>
     </div>
   </div>
   <div class="wf-step">
@@ -841,14 +838,8 @@ function removeCondition(btn) {
 
 function checkSubmitState() {
   const btn = document.getElementById('submitBtn');
-  const banner = document.getElementById('evBanner');
-  const warn = document.getElementById('evWarning');
-  const rtOk = selectedRiskTypesForRule.length > 0;
-  const evOk = selectedEv.length > 0;
   const condOk = document.querySelectorAll('.cond-row').length > 0;
-  btn.disabled = !(rtOk && evOk && condOk);
-  if (banner) banner.style.display = !evOk ? 'block' : 'none';
-  if (warn) warn.style.display = !evOk ? 'block' : 'none';
+  btn.disabled = !condOk;
 }
 
 function onPolicyDbToggle() {
@@ -859,8 +850,8 @@ function onPolicyDbToggle() {
 function saveDraft() { showToast('임시저장 되었습니다.'); }
 
 function requestReview() {
-  if (selectedRiskTypesForRule.length === 0) { showToast('Risk-type을 1개 이상 선택하세요'); return; }
-  if (selectedEv.length === 0) { showToast('Evidence를 1개 이상 연결하세요'); return; }
+  const condOk = document.querySelectorAll('.cond-row').length > 0;
+  if (!condOk) { showToast('판단 조건을 1개 이상 입력하세요'); return; }
   showToast('검수 요청이 완료되었습니다. 상태가 승인요청으로 변경됩니다.');
 }
 

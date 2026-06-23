@@ -42,11 +42,11 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 .guide-box p{font-size:14px;color:var(--text-secondary);line-height:1.6;margin-top:6px}
 .badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;font-size:13px;font-weight:600;white-space:nowrap}
 .badge-risk{background:rgba(201,75,26,.12);color:var(--card-risk)}.badge-evidence{background:rgba(26,122,74,.12);color:var(--card-evidence)}.badge-concept{background:rgba(26,74,154,.12);color:var(--card-concept)}.badge-rule{background:rgba(154,26,26,.12);color:var(--card-rule)}.badge-policy{background:rgba(90,90,85,.12);color:var(--card-policy)}.badge-locked{background:rgba(208,207,201,.3);color:#999}
-.badge-draft{background:rgba(156,156,148,.15);color:var(--status-draft)}.badge-review{background:rgba(186,117,23,.15);color:var(--status-review)}.badge-active{background:rgba(15,110,86,.15);color:var(--status-active)}.badge-rejected{background:rgba(163,45,45,.15);color:var(--status-approved:#1A4A9A; --status-paused:#7A4A00; --status-rejected)}
+.badge-draft{background:rgba(156,156,148,.15);color:var(--status-draft)}.badge-review{background:rgba(186,117,23,.15);color:var(--status-review)}.badge-active{background:rgba(15,110,86,.15);color:var(--status-active)}.badge-rejected{background:rgba(163,45,45,.15);color:var(--status-rejected)}
 .badge-public{background:rgba(26,74,154,.12);color:var(--scope-public)}.badge-baseline{background:rgba(186,117,23,.12);color:var(--scope-baseline)}.badge-internal{background:rgba(90,90,85,.12);color:var(--scope-internal)}
 .btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:6px;font-size:14px;font-weight:600;cursor:pointer;border:none;font-family:inherit;transition:opacity .15s}
 .btn:hover{opacity:.85}.btn:disabled{opacity:.4;cursor:not-allowed}
-.btn-primary{background:var(--step-active);color:#fff}.btn-secondary{background:var(--bg-card);color:var(--text-primary);border:1px solid var(--border)}.btn-danger{background:var(--status-approved:#1A4A9A; --status-paused:#7A4A00; --status-rejected);color:#fff}.btn-success{background:var(--status-active);color:#fff}.btn-sm{padding:5px 10px;font-size:13px}.btn-warn{background:var(--status-review);color:#fff}
+.btn-primary{background:var(--step-active);color:#fff}.btn-secondary{background:var(--bg-card);color:var(--text-primary);border:1px solid var(--border)}.btn-danger{background:var(--status-rejected);color:#fff}.btn-success{background:var(--status-active);color:#fff}.btn-sm{padding:5px 10px;font-size:13px}.btn-warn{background:var(--status-review);color:#fff}
 .form-group{margin-bottom:16px}
 .form-group label{display:block;font-size:14px;font-weight:600;margin-bottom:4px}
 .field-hint{display:block;font-size:13px;color:var(--text-hint);font-weight:400;margin-top:2px;line-height:1.4}
@@ -65,7 +65,7 @@ textarea.form-control{resize:vertical;min-height:80px}
 .chip-area:focus-within{border-color:var(--step-active);box-shadow:0 0 0 2px rgba(26,58,107,.12)}
 .chip{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;background:#EEF4FF;border:1px solid #C0D0F0;border-radius:20px;font-size:13px;color:var(--card-concept);white-space:nowrap}
 .chip-remove{background:none;border:none;color:var(--text-hint);cursor:pointer;padding:0;font-size:12px;line-height:1;display:flex;align-items:center}
-.chip-remove:hover{color:var(--status-approved:#1A4A9A; --status-paused:#7A4A00; --status-rejected)}
+.chip-remove:hover{color:var(--status-rejected)}
 .chip-input{border:none;outline:none;font-size:13px;font-family:inherit;min-width:80px;background:transparent;color:var(--text-primary)}
 .radio-group{display:flex;flex-direction:column;gap:10px}
 .radio-option{display:flex;align-items:flex-start;gap:8px;cursor:pointer}
@@ -181,8 +181,8 @@ textarea.form-control{resize:vertical;min-height:80px}
         <span class="routing-role">AI 답변 역할: 질문 매칭 입구</span>
       </div>
       <h3>Concept 카드</h3>
-      <p>용어명·동의어를 입력하고 검수 요청 → 라이브를 받습니다. 동의어를 최대한 풍부하게 입력할수록 KC 기반 답변 가능성이 높아집니다.</p>
-      <p>Risk-type 연결은 캔버스(③ 연결 화면)에서 변경할 수 있습니다. 동의어가 풍부할수록 매칭 가능성이 높아지고, Risk-type을 연결할수록 KC 기반 답변 정확도가 올라갑니다.</p>
+      <p>용어명·동의어를 입력하고 검수 요청 → 라이브 전환합니다. 동의어를 최대한 풍부하게 입력할수록 KC 기반 답변 가능성이 높아집니다.</p>
+      <p>Risk-type을 <strong>반드시 1개 이상 연결</strong>해야 KC 체인에 진입합니다. 연결은 캔버스(③ 연결)에서 진행하세요.</p>
       <p style="font-size:13px;background:#EEF4FF;border-radius:4px;padding:6px 10px;margin-top:8px;color:#1A3A6B">
   <strong>AI 답변 흐름에서의 위치:</strong> <strong>Concept</strong>(질문 인식) → Risk-type 판정 → Rule 조건 평가 → KC 기반 답변
 </p>
@@ -208,14 +208,14 @@ textarea.form-control{resize:vertical;min-height:80px}
 
           <div class="form-group">
             <label for="termName">용어명 <span style="color:var(--card-risk)">*</span>
-              <span class="field-hint">Clark AI가 이 단어를 인식하면 KC 카드 체계로 AI 답변 경로를 시작합니다</span>
+              <span class="field-hint">Clark AI가 인식할 핵심 용어를 입력하세요. 이 단어가 KC 답변의 입구가 됩니다</span>
             </label>
             <input class="form-control" id="termName" type="text" value="암 보장" placeholder="예: 암 보장">
           </div>
 
           <div class="form-group">
             <label>동의어 (synonyms) <span style="color:var(--card-risk)">*</span>
-              <span class="field-hint">사용자가 다르게 표현해도 같은 의미로 매칭됩니다. 많을수록 KC 기반 답변 가능성이 높아집니다</span>
+              <span class="field-hint">사용자가 다르게 표현할 수 있는 동의어를 모두 등록하세요. 많을수록 KC 기반 답변 가능성이 높아집니다</span>
             </label>
             <div class="chip-area" id="chipArea" onclick="document.getElementById('synonymInput').focus()">
               <div id="chipsContainer"></div>
@@ -226,7 +226,7 @@ textarea.form-control{resize:vertical;min-height:80px}
 
           <div class="form-group">
             <label for="termDef">한 줄 정의
-              <span class="field-hint">외부 공개(AIO) 및 사내 교육에 사용됩니다</span>
+              <span class="field-hint">이 용어의 핵심 개념을 한 문장으로 정의하세요. 외부 공개(AIO) 및 사내 교육에 사용됩니다</span>
             </label>
             <textarea class="form-control" id="termDef" rows="2" placeholder="이 용어의 핵심 개념을 한 문장으로 정의하세요">암 진단 시 발생하는 직접 치료비·생활비 손실에 대비하는 보험 보장을 총칭합니다.</textarea>
           </div>
@@ -238,7 +238,7 @@ textarea.form-control{resize:vertical;min-height:80px}
         <div style="margin-bottom:14px">
           <div class="section-title" style="margin:0 0 12px">Risk-type 연결 <span style="color:var(--text-hint);font-size:13px;font-weight:400">읽기 전용</span></div>
         </div>
-        <p class="field-hint">캔버스(③ 연결)에서 연결된 Risk-type 카드입니다. 변경은 캔버스에서만 가능합니다.</p>
+        <p class="field-hint"><strong style="color:#C94B1A">필수</strong> — 1개 이상 연결하지 않으면 KC 기반 답변이 작동하지 않습니다. 캔버스(③ 연결)에서 연결한 Risk-type이 여기에 표시됩니다. 변경은 캔버스에서만 가능합니다.</p>
         <div style="margin-top:8px">
           <span class="badge badge-risk">RT01 암·종양</span>
           <span class="badge badge-risk" style="margin-left:6px">RT02 뇌혈관질환</span>
@@ -256,7 +256,7 @@ textarea.form-control{resize:vertical;min-height:80px}
         </div>
         <div class="status-guidance">
           <i class="fa-solid fa-circle-info fa-fw"></i>
-          <span><strong>현재 상태: 임시저장</strong> — 용어명·동의어 입력 후 [검수 요청]을 클릭하세요. Risk-type 연결은 캔버스(③ 연결)에서 변경할 수 있습니다.</span>
+          <span><strong>현재 상태: 임시저장</strong> — 용어명·동의어 입력 후 [검수 요청]을 클릭하세요. Risk-type 연결은 <strong>필수</strong>이며 캔버스(③ 연결)에서 진행하세요.</span>
         </div>
       </div>
 
