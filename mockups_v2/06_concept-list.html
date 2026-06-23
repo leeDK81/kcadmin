@@ -56,6 +56,8 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 .btn-sm{padding:5px 12px;font-size:13px;background:var(--bg-card);border:1px solid var(--border);color:var(--text-primary);white-space:nowrap}
 .empty-row td{text-align:center;padding:48px;color:var(--text-hint)}
 .warn-tag{display:inline-flex;align-items:center;gap:4px;font-size:12px;color:#A32D2D;font-weight:600}
+.conn-chip{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600;white-space:nowrap;margin:0 4px 0 0}
+.chip-risk{background:rgba(201,75,26,.1);color:#C94B1A}
 </style>
 </head>
 <body>
@@ -120,7 +122,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
         <th style="width:130px">상태</th>
         <th style="width:200px">코드 · 명칭</th>
         <th>대표 동의어</th>
-        <th style="width:210px">연결 Risk-type</th>
+        <th style="width:120px">연결</th>
         <th style="width:120px;text-align:center">동의어수</th>
         <th style="width:100px">수정일</th>
         <th style="width:80px"></th>
@@ -154,7 +156,7 @@ function render(){
       <td><span class="badge badge-${d.status}">${ST[d.status]}</span></td>
       <td><div class="cell-code">${d.code}</div><div class="cell-name" title="${d.name}">${d.name}</div></td>
       <td>${chips}</td>
-      <td>${d.riskTypes.length ? d.riskTypes.slice(0,2).map(r=>`<div style="font-size:12px;color:var(--text-secondary);white-space:nowrap;line-height:1.8">${r}</div>`).join('')+(d.riskTypes.length>2?`<div style="font-size:12px;color:var(--text-hint)">+${d.riskTypes.length-2}개</div>`:''): `<span style="color:var(--text-hint);font-size:13px">—</span>`}</td>
+      <td>${d.riskTypes.length ? `<span class="conn-chip chip-risk">Risk-type ${d.riskTypes.length}</span>` : `<span style="color:var(--text-hint);font-size:13px">—</span>`}</td>
       <td style="text-align:center">${d.synonyms.length?`<span style="color:var(--step-active);font-weight:600">${d.synonyms.length}개</span>`:'<span style="color:var(--text-hint)">0</span>'}</td>
       <td class="cell-date">${d.updated}</td>
       <td><a href="06_card-editor-concept.html" class="btn btn-sm" onclick="event.stopPropagation()">편집</a></td>
