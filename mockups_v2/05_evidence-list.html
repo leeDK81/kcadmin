@@ -56,6 +56,8 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 .btn-primary{background:var(--step-active);color:#fff}
 .btn-sm{padding:5px 12px;font-size:13px;background:var(--bg-card);border:1px solid var(--border);color:var(--text-primary);white-space:nowrap}
 .rule-tag{display:inline-block;padding:2px 7px;background:rgba(154,26,26,.1);border-radius:4px;font-size:12px;color:#9A1A1A;font-weight:600;margin:1px}
+.conn-chip{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600;white-space:nowrap;margin:0 4px 0 0}
+.chip-rule{background:rgba(154,26,26,.1);color:#9A1A1A}
 .empty-row td{text-align:center;padding:48px;color:var(--text-hint)}
 </style>
 </head>
@@ -123,7 +125,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
         <th style="width:190px">코드 · 명칭</th>
         <th style="width:140px">유형</th>
         <th>설명</th>
-        <th style="width:210px">참조 Rule <span style="font-weight:400;color:var(--text-hint)">↓</span></th>
+        <th style="width:120px">연결</th>
         <th style="width:110px">수정일</th>
         <th style="width:80px"></th>
       </tr>
@@ -150,8 +152,7 @@ function render(){
   const tb=document.getElementById('tbody');
   tb.innerHTML=rows.length?rows.map(d=>{
     const ruleCell = d.rules.length
-      ? d.rules.slice(0,3).map(r=>`<div style="font-size:12px;color:var(--text-secondary);white-space:nowrap;line-height:1.8">${r}</div>`).join('')
-        + (d.rules.length>3 ? `<div style="font-size:12px;color:var(--text-hint)">+${d.rules.length-3}건 더</div>` : '')
+      ? `<span class="conn-chip chip-rule">Rule ${d.rules.length}</span>`
       : `<span style="color:var(--text-hint);font-size:13px">—</span>`;
     return `
     <tr class="card-row" onclick="location.href='05_card-editor-evidence.html'">
@@ -159,7 +160,7 @@ function render(){
       <td><div class="cell-code">${d.code}</div><div class="cell-name" title="${d.name}">${d.name}</div></td>
       <td><span class="badge-type ${TYPE_CLASS[d.type]}">${d.type}</span></td>
       <td style="max-width:0"><div style="overflow:hidden;white-space:nowrap;color:var(--text-secondary);font-size:13px" title="${d.desc}">${d.desc}</div></td>
-      <td style="line-height:1.8">${ruleCell}</td>
+      <td>${ruleCell}</td>
       <td class="cell-date">${d.updated}</td>
       <td><a href="05_card-editor-evidence.html" class="btn btn-sm" onclick="event.stopPropagation()">편집</a></td>
     </tr>`;}).join('')

@@ -56,6 +56,9 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 .btn-primary{background:var(--step-active);color:#fff}
 .btn-sm{padding:5px 12px;font-size:13px;background:var(--bg-card);border:1px solid var(--border);color:var(--text-primary);white-space:nowrap}
 .rule-tag{display:inline-block;padding:2px 7px;background:rgba(154,26,26,.1);border-radius:4px;font-size:12px;color:#9A1A1A;font-weight:600;margin:1px}
+.conn-chip{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600;white-space:nowrap;margin:0 4px 0 0}
+.chip-concept{background:rgba(26,74,154,.1);color:#1A4A9A}
+.chip-rule{background:rgba(154,26,26,.1);color:#9A1A1A}
 .pri-high{background:rgba(201,75,26,.12);color:#A32D2D;display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;font-size:12px;font-weight:600;white-space:nowrap}
 .pri-mid{background:rgba(186,117,23,.12);color:#BA7517;display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;font-size:12px;font-weight:600;white-space:nowrap}
 .pri-low{background:rgba(156,156,148,.15);color:#9C9C94;display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;font-size:12px;font-weight:600;white-space:nowrap}
@@ -124,7 +127,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
         <th style="width:200px">코드 · 명칭</th>
         <th style="width:80px">중요도</th>
         <th>설명</th>
-        <th style="width:210px">참조 Rule <span style="font-weight:400;color:var(--text-hint)">↓</span></th>
+        <th style="width:160px">연결</th>
         <th style="width:110px">수정일</th>
         <th style="width:80px"></th>
       </tr>
@@ -135,16 +138,16 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 </div>
 <script>
 const DATA = [
-  {code:'T01',name:'무보장형',status:'active',priority:'high',desc:'어떤 보장 담보도 없는 순수 저축·사망보험 보유자',rules:['RU006 무보장 기본 판정','RU007 사망만기 종신 판정'],updated:'2026-05-10'},
-  {code:'T02',name:'암투병생활비 부족형',status:'active',priority:'high',desc:'암 진단금 담보 없음 또는 소액 보유자',rules:['RU001 암진단금 미보유 또는 소액','RU008 암 치료비 한도 부족','RU009 암 입원비 미보유'],updated:'2026-05-14'},
-  {code:'T03',name:'심혈관질환보장 협소형',status:'review',priority:'high',desc:'심혈관 관련 담보 미보유 또는 보장 범위 협소',rules:['RU003 심혈관 보장 미흡'],updated:'2026-05-12'},
-  {code:'T04',name:'뇌혈관질환보장 협소형',status:'active',priority:'high',desc:'뇌혈관 관련 담보 미보유 또는 보장 범위 협소',rules:['RU002 뇌혈관 보장 범위 협소'],updated:'2026-05-10'},
-  {code:'T05',name:'노후돌봄보장 공백형',status:'draft',priority:'mid',desc:'노후 간병·요양 관련 담보 부재 또는 미흡',rules:[],updated:'2026-05-08'},
-  {code:'T06',name:'납입여력부족 우려형',status:'draft',priority:'mid',desc:'소득 대비 보험료 납입 부담이 과도한 상태',rules:[],updated:'2026-05-08'},
-  {code:'T07',name:'비용 대비 보장 비효율형',status:'draft',priority:'low',desc:'납입 보험료 대비 실질 보장 가치가 낮은 상태',rules:[],updated:'2026-05-08'},
-  {code:'T08',name:'생애주기 적합도 저조형',status:'draft',priority:'low',desc:'지금 나이나 상황에 맞지 않는 보장을 가진 고객',rules:[],updated:'2026-05-08'},
-  {code:'T09',name:'단기납 만기 후 공백형',status:'approved',priority:'mid',desc:'단기납 보험 만기 후 갱신·전환 보장이 없는 상태',rules:['RU010 단기납 만기 후 공백'],updated:'2026-05-15'},
-  {code:'T10',name:'고액 보험료 유지 부담형',status:'paused',priority:'mid',desc:'시장 기준 개정으로 재정의 중인 유형 — 운영 일시중지',rules:[],updated:'2026-05-16'},
+  {code:'T01',name:'무보장형',status:'active',priority:'high',concepts:2,desc:'어떤 보장 담보도 없는 순수 저축·사망보험 보유자',rules:['RU006 무보장 기본 판정','RU007 사망만기 종신 판정'],updated:'2026-05-10'},
+  {code:'T02',name:'암투병생활비 부족형',status:'active',priority:'high',concepts:1,desc:'암 진단금 담보 없음 또는 소액 보유자',rules:['RU001 암진단금 미보유 또는 소액','RU008 암 치료비 한도 부족','RU009 암 입원비 미보유'],updated:'2026-05-14'},
+  {code:'T03',name:'심혈관질환보장 협소형',status:'review',priority:'high',concepts:1,desc:'심혈관 관련 담보 미보유 또는 보장 범위 협소',rules:['RU003 심혈관 보장 미흡'],updated:'2026-05-12'},
+  {code:'T04',name:'뇌혈관질환보장 협소형',status:'active',priority:'high',concepts:1,desc:'뇌혈관 관련 담보 미보유 또는 보장 범위 협소',rules:['RU002 뇌혈관 보장 범위 협소'],updated:'2026-05-10'},
+  {code:'T05',name:'노후돌봄보장 공백형',status:'draft',priority:'mid',concepts:1,desc:'노후 간병·요양 관련 담보 부재 또는 미흡',rules:[],updated:'2026-05-08'},
+  {code:'T06',name:'납입여력부족 우려형',status:'draft',priority:'mid',concepts:1,desc:'소득 대비 보험료 납입 부담이 과도한 상태',rules:[],updated:'2026-05-08'},
+  {code:'T07',name:'비용 대비 보장 비효율형',status:'draft',priority:'low',concepts:0,desc:'납입 보험료 대비 실질 보장 가치가 낮은 상태',rules:[],updated:'2026-05-08'},
+  {code:'T08',name:'생애주기 적합도 저조형',status:'draft',priority:'low',concepts:0,desc:'지금 나이나 상황에 맞지 않는 보장을 가진 고객',rules:[],updated:'2026-05-08'},
+  {code:'T09',name:'단기납 만기 후 공백형',status:'approved',priority:'mid',concepts:0,desc:'단기납 보험 만기 후 갱신·전환 보장이 없는 상태',rules:['RU010 단기납 만기 후 공백'],updated:'2026-05-15'},
+  {code:'T10',name:'고액 보험료 유지 부담형',status:'paused',priority:'mid',concepts:0,desc:'시장 기준 개정으로 재정의 중인 유형 — 운영 일시중지',rules:[],updated:'2026-05-16'},
 ];
 const ST={active:'🟢 라이브',review:'⏳ 승인요청',draft:'📝 임시저장',approved:'✔ 승인완료',paused:'⏸ 일시중지'};
 const PRI={high:{label:'높음',cls:'pri-high'},mid:{label:'보통',cls:'pri-mid'},low:{label:'낮음',cls:'pri-low'}};
@@ -154,10 +157,9 @@ function render(){
   const rows=cur==='all'?DATA:DATA.filter(d=>d.status===cur);
   const tb=document.getElementById('tbody');
   tb.innerHTML=rows.length?rows.map(d=>{
-    const ruleCell = d.rules.length
-      ? d.rules.slice(0,3).map(r=>`<div style="font-size:12px;color:var(--text-secondary);white-space:nowrap;line-height:1.8">${r}</div>`).join('')
-        + (d.rules.length>3 ? `<div style="font-size:12px;color:var(--text-hint)">+${d.rules.length-3}건 더</div>` : '')
-      : `<span style="color:var(--text-hint);font-size:13px">—</span>`;
+    const conceptChip = d.concepts > 0 ? `<span class="conn-chip chip-concept">Concept ${d.concepts}</span>` : '';
+    const ruleChip = d.rules.length > 0 ? `<span class="conn-chip chip-rule">Rule ${d.rules.length}</span>` : '';
+    const ruleCell = (conceptChip || ruleChip) ? (conceptChip + ruleChip) : `<span style="color:var(--text-hint);font-size:13px">—</span>`;
     const p=PRI[d.priority||'mid'];
     return `
     <tr class="card-row" onclick="location.href='04_card-editor-risk-type.html'">
@@ -165,7 +167,7 @@ function render(){
       <td><div class="cell-code">${d.code}</div><div class="cell-name" title="${d.name}">${d.name}</div></td>
       <td><span class="${p.cls}">${p.label}</span></td>
       <td style="max-width:0"><div style="overflow:hidden;white-space:nowrap;color:var(--text-secondary);font-size:13px" title="${d.desc}">${d.desc}</div></td>
-      <td style="line-height:1.8">${ruleCell}</td>
+      <td>${ruleCell}</td>
       <td class="cell-date">${d.updated}</td>
       <td><a href="04_card-editor-risk-type.html" class="btn btn-sm" onclick="event.stopPropagation()">편집</a></td>
     </tr>`;

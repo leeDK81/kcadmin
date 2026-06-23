@@ -56,6 +56,9 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 .btn-primary{background:var(--step-active);color:#fff}
 .btn-sm{padding:5px 12px;font-size:13px;background:var(--bg-card);border:1px solid var(--border);color:var(--text-primary);white-space:nowrap}
 .policy-tag{display:inline-block;padding:2px 7px;background:rgba(90,90,85,.1);border-radius:4px;font-size:12px;color:#5A5A55;font-weight:600;margin:1px}
+.conn-chip{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600;white-space:nowrap;margin:0 4px 0 0}
+.chip-evidence{background:rgba(26,122,74,.1);color:#1A7A4A}
+.chip-policy{background:rgba(90,90,85,.1);color:#5A5A55}
 .empty-row td{text-align:center;padding:48px;color:var(--text-hint)}
 </style>
 </head>
@@ -122,7 +125,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
         <th style="width:130px">상태</th>
         <th style="width:200px">코드 · 명칭</th>
         <th style="width:200px">대상 Risk-type</th>
-        <th>연결 Evidence <span style="font-weight:400;color:var(--text-hint)">↗</span></th>
+        <th style="width:180px">연결</th>
         <th style="width:100px">수정일</th>
         <th style="width:80px"></th>
       </tr>
@@ -133,13 +136,13 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 </div>
 <script>
 const DATA=[
-  {code:'RU001',name:'암진단금 미보유 또는 소액',status:'active',riskType:'T02 암투병생활비 부족형',evidences:['EV001 암 평균 입원 진료비 (심평원 2024)','EV002 암 5년 생존율 (건보공단 2023)'],conditions:2,updated:'2026-05-14'},
-  {code:'RU002',name:'뇌혈관 보장 범위 협소',status:'review',riskType:'T04 뇌혈관질환보장 협소형',evidences:['EV003 뇌졸중 평균 입원 진료비 (심평원 2024)'],conditions:3,updated:'2026-05-12'},
-  {code:'RU003',name:'심혈관 보장 미흡',status:'draft',riskType:'T03 심혈관질환보장 협소형',evidences:[],conditions:0,updated:'2026-05-08'},
-  {code:'RU004',name:'노후 간병 보장 부재',status:'approved',riskType:'T05 노후돌봄보장 공백형',evidences:['EV005 65세 이상 간병보험 미가입률 (금감원 2024)'],conditions:2,updated:'2026-05-15'},
-  {code:'RU005',name:'보험료 납입 부담 과다',status:'paused',riskType:'T06 납입여력부족 우려형',evidences:[],conditions:0,updated:'2026-05-16'},
-  {code:'RU010',name:'단기납 만기 후 공백',status:'approved',riskType:'T09 단기납 만기 후 공백형',evidences:['EV005 65세 이상 간병보험 미가입률 (금감원 2024)'],conditions:2,updated:'2026-05-15'},
-  {code:'RU011',name:'고액 보험료 유지 부담',status:'paused',riskType:'T10 고액 보험료 유지 부담형',evidences:[],conditions:0,updated:'2026-05-16'},
+  {code:'RU001',name:'암진단금 미보유 또는 소액',status:'active',riskType:'T02 암투병생활비 부족형',evidences:['EV001 암 평균 입원 진료비 (심평원 2024)','EV002 암 5년 생존율 (건보공단 2023)'],policies:2,conditions:2,updated:'2026-05-14'},
+  {code:'RU002',name:'뇌혈관 보장 범위 협소',status:'review',riskType:'T04 뇌혈관질환보장 협소형',evidences:['EV003 뇌졸중 평균 입원 진료비 (심평원 2024)'],policies:1,conditions:3,updated:'2026-05-12'},
+  {code:'RU003',name:'심혈관 보장 미흡',status:'draft',riskType:'T03 심혈관질환보장 협소형',evidences:[],policies:0,conditions:0,updated:'2026-05-08'},
+  {code:'RU004',name:'노후 간병 보장 부재',status:'approved',riskType:'T05 노후돌봄보장 공백형',evidences:['EV005 65세 이상 간병보험 미가입률 (금감원 2024)'],policies:1,conditions:2,updated:'2026-05-15'},
+  {code:'RU005',name:'보험료 납입 부담 과다',status:'paused',riskType:'T06 납입여력부족 우려형',evidences:[],policies:0,conditions:0,updated:'2026-05-16'},
+  {code:'RU010',name:'단기납 만기 후 공백',status:'approved',riskType:'T09 단기납 만기 후 공백형',evidences:['EV005 65세 이상 간병보험 미가입률 (금감원 2024)'],policies:0,conditions:2,updated:'2026-05-15'},
+  {code:'RU011',name:'고액 보험료 유지 부담',status:'paused',riskType:'T10 고액 보험료 유지 부담형',evidences:[],policies:0,conditions:0,updated:'2026-05-16'},
 ];
 const ST={active:'🟢 라이브',review:'⏳ 승인요청',draft:'📝 임시저장',approved:'✔ 승인완료',paused:'⏸ 일시중지'};
 let cur='all';
@@ -148,15 +151,15 @@ function render(){
   const rows=cur==='all'?DATA:DATA.filter(d=>d.status===cur);
   const tb=document.getElementById('tbody');
   tb.innerHTML=rows.length?rows.map(d=>{
-    const evCell=d.evidences.length
-      ?d.evidences.slice(0,3).map(e=>`<div style="font-size:12px;color:var(--text-secondary);white-space:nowrap;line-height:1.8">${e}</div>`).join('')+(d.evidences.length>3?`<div style="font-size:12px;color:var(--text-hint)">+${d.evidences.length-3}건 더</div>`:'')
-      :`<span class="warn-tag"><i class="fa fa-triangle-exclamation"></i> Evidence 미연결</span>`;
+    const evChip = d.evidences.length > 0 ? `<span class="conn-chip chip-evidence">Evidence ${d.evidences.length}</span>` : `<span class="warn-tag"><i class="fa fa-triangle-exclamation"></i> Evidence 미연결</span>`;
+    const polChip = d.policies > 0 ? `<span class="conn-chip chip-policy">Policy ${d.policies}</span>` : '';
+    const evCell = evChip + (polChip ? ` ${polChip}` : '');
     return `
     <tr class="card-row" onclick="location.href='07_card-editor-rule.html'">
       <td><span class="badge badge-${d.status}">${ST[d.status]}</span></td>
       <td><div class="cell-code">${d.code}</div><div class="cell-name">${d.name} <span style="font-size:12px;color:var(--text-hint);font-weight:400">조건 ${d.conditions}개</span></div></td>
       <td><div style="white-space:nowrap;font-size:13px;color:var(--text-secondary)">${d.riskType}</div></td>
-      <td style="line-height:1.8">${evCell}</td>
+      <td>${evCell}</td>
       <td class="cell-date">${d.updated}</td>
       <td><a href="07_card-editor-rule.html" class="btn btn-sm" onclick="event.stopPropagation()">편집</a></td>
     </tr>`;}).join('')
