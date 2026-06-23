@@ -4,18 +4,6 @@
 
 ---
 
-## 2026-06-22 세션 확정 사항
-
-- **Concept → Risk-type 연결: 필수(required).** 연결 없으면 KC 체인 미진입. Concept Standalone 기능 완전 제거됨.
-- **Case 1~4 매트릭스 확정:** KC매칭×Playbook감지 조합. Case 4가 미매칭+Playbook 모든 시나리오 커버. Playbook Standalone은 선택사항(비워두면 Clark 기본 안내 사용).
-- **Risk-type 우선순위 가중치 제거:** ①중요도 서열(높음>보통>낮음) → ②선택조건 충족 개수 → ③카드코드 오름차순. 가중치(×3/×2/×1) 완전 삭제.
-- **Rule 조건 소스:** MYDATA(필수) / PROMAGE(선택, 기본 false) / PROFILE(필수). Amplitude 없음. 약관 DB 연동(useContractDb)은 Rule 카드 선택 옵션.
-- **Policy 카드 필드 2개 확정:** name + appDisplayText. 기타 필드 전면 삭제. appDisplayText 비어있으면 검수 요청 불가.
-- **Playbook Standalone 가이드:** 선택사항. "최소 20자 필수" 삭제. 최소 키워드 3개 필수. CTA 기본 버튼(consult) 필수. approved 상태에서 캔버스 연결 없이 직접 라이브 전환 가능.
-- **policy/ 전수검사 완료:** 8개 파일 수정, 22건 변경 반영.
-- **금지어 추가:** 3-source(화면 노출 금지), 상/중/하 → 높음/보통/낮음, 임계값 → 기준값/판단 기준.
-
----
 
 ## KC Admin이란
 

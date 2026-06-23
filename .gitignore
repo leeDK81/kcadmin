@@ -1,3 +1,5 @@
 Data/node_modules/
 Data/*.pdf
 .vercel/
+
+.vercel
