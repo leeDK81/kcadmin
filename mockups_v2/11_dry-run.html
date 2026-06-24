@@ -150,6 +150,36 @@ textarea.form-control{resize:vertical;min-height:80px}
 /* ── Toast ── */
 .toast{position:fixed;bottom:24px;right:24px;background:#1A1A18;color:#fff;padding:10px 18px;border-radius:8px;font-size:13px;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap}
 .toast.show{opacity:1}
+
+/* ── Custom Profile Builder ── */
+.profile-mode-tabs{display:flex;border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-bottom:12px}
+.pmtab{flex:1;padding:7px 0;font-size:13px;font-weight:600;cursor:pointer;border:none;font-family:inherit;background:#fff;color:var(--text-secondary);transition:all .15s;text-align:center}
+.pmtab.active{background:var(--step-active);color:#fff}
+.pmtab:not(.active):hover{background:var(--bg-page)}
+
+.custom-profile-wrap{border:1px solid var(--border);border-radius:8px;padding:14px}
+.cpro-sec{font-size:11px;font-weight:700;color:var(--text-secondary);letter-spacing:.05em;text-transform:uppercase;margin:14px 0 8px;padding-top:10px;border-top:1px solid var(--border)}
+.cpro-sec:first-child{margin-top:0;padding-top:0;border-top:none}
+
+.cov-toggle{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:5px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:#fff;color:var(--text-secondary);transition:all .15s;user-select:none;font-family:inherit}
+.cov-toggle:hover{opacity:.8}
+.cov-toggle.has{background:rgba(15,110,86,.1);border-color:rgba(15,110,86,.4);color:#0F6E56}
+.cov-toggle.none{background:rgba(201,75,26,.08);border-color:rgba(201,75,26,.3);color:#C94B1A}
+.cov-grid{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:4px}
+
+.promage-row{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.promage-lbl{font-size:13px;flex:1;min-width:80px}
+.grade-pills{display:flex;gap:3px}
+.gpill{padding:3px 10px;border-radius:12px;font-size:12px;font-weight:700;cursor:pointer;border:1px solid var(--border);background:#fff;color:var(--text-secondary);transition:all .15s;font-family:inherit}
+.gpill:hover{opacity:.8}
+.gpill.risk.active{background:rgba(163,45,45,.12);border-color:rgba(163,45,45,.35);color:#A32D2D}
+.gpill.caution.active{background:rgba(186,117,23,.12);border-color:rgba(186,117,23,.35);color:#BA7517}
+.gpill.good.active{background:rgba(15,110,86,.1);border-color:rgba(15,110,86,.3);color:#0F6E56}
+.gpill.none-set.active{background:#F0F0EE;border-color:var(--border);color:var(--text-secondary)}
+
+.profile-summary-bar{background:#F4F7FF;border:1px solid #C8D8F8;border-radius:6px;padding:10px 12px;margin-top:12px}
+.psum-chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px}
+.psum-chip{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:4px;font-size:12px;font-weight:600}
 </style>
 </head>
 <body>
@@ -222,17 +252,93 @@ textarea.form-control{resize:vertical;min-height:80px}
 
         <!-- ③ 고객 프로필 -->
         <div class="form-group" id="profileGroup" style="display:none">
-          <label>③ 고객 프로필 선택</label>
-          <select class="form-control" id="profileSelect" onchange="onProfileChange()">
-            <option value="">-- 프로필 선택 --</option>
-            <option value="A">고객 A — 45세 남성 | 암 진단금 미보유 (T01 암 클러스터)</option>
-            <option value="B">고객 B — 55세 남성 | 뇌혈관 담보 미보유 (T02 뇌혈관 클러스터)</option>
-            <option value="C">고객 C — 52세 남성 | 주요 담보 완비 (KC 미해당 예상)</option>
-          </select>
-          <div id="profileDetail" style="display:none;margin-top:10px">
-            <div class="profile-detail">
-              <div id="profileRows"></div>
-              <div id="profileRiskTag"></div>
+          <label>③ 고객 프로필 설정</label>
+
+          <!-- 모드 탭 -->
+          <div class="profile-mode-tabs">
+            <button class="pmtab active" data-mode="preset" onclick="switchProfileMode('preset')">프리셋</button>
+            <button class="pmtab" data-mode="custom" onclick="switchProfileMode('custom')">직접 구성</button>
+          </div>
+
+          <!-- 프리셋 모드 -->
+          <div id="presetProfileSection">
+            <select class="form-control" id="profileSelect" onchange="onProfileChange()">
+              <option value="">-- 프리셋 선택 --</option>
+              <option value="A">고객 A — 45세 남성 | 암 진단금 미보유 (T01 암 클러스터)</option>
+              <option value="B">고객 B — 55세 남성 | 뇌혈관 담보 미보유 (T02 뇌혈관 클러스터)</option>
+              <option value="C">고객 C — 52세 남성 | 주요 담보 완비 (KC 미해당 예상)</option>
+            </select>
+            <div id="profileDetail" style="display:none;margin-top:10px">
+              <div class="profile-detail">
+                <div id="profileRows"></div>
+                <div id="profileRiskTag"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 직접 구성 모드 -->
+          <div id="customProfileSection" style="display:none">
+            <div class="custom-profile-wrap">
+
+              <!-- 기본 정보 -->
+              <div class="cpro-sec">기본 정보</div>
+              <div style="display:grid;grid-template-columns:auto auto 1fr;gap:12px;align-items:start">
+                <div>
+                  <div style="font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:5px">나이</div>
+                  <div style="display:flex;align-items:center;gap:5px">
+                    <input type="number" class="form-control" id="customAge" min="20" max="80" value="45"
+                      oninput="onCustomBasicChange()" style="width:64px;text-align:center;padding:6px 8px">
+                    <span style="font-size:13px;color:var(--text-secondary)">세</span>
+                  </div>
+                </div>
+                <div>
+                  <div style="font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:5px">성별</div>
+                  <div style="display:flex;gap:10px;padding-top:7px">
+                    <label style="display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer;font-weight:600">
+                      <input type="radio" name="customGender" value="M" checked onchange="onCustomBasicChange()"> 남
+                    </label>
+                    <label style="display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer;font-weight:600">
+                      <input type="radio" name="customGender" value="F" onchange="onCustomBasicChange()"> 여
+                    </label>
+                  </div>
+                </div>
+                <div>
+                  <div style="font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:5px">직업위험도</div>
+                  <select class="form-control" id="customJobRisk" onchange="onCustomBasicChange()" style="padding:7px 10px">
+                    <option value="low">저위험직</option>
+                    <option value="normal" selected>일반직</option>
+                    <option value="high">고위험직</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- 마이데이터 담보코드 -->
+              <div class="cpro-sec">
+                <i class="fa-solid fa-database" style="font-size:10px;margin-right:4px"></i>마이데이터 — 보유 담보코드
+              </div>
+              <div style="font-size:12px;color:var(--text-hint);margin-bottom:8px">
+                클릭으로 상태 전환:
+                <span style="background:rgba(15,110,86,.1);color:#0F6E56;padding:1px 6px;border-radius:3px;font-weight:600">✓ 보유</span>
+                <i class="fa fa-arrow-right" style="font-size:10px;color:var(--text-hint);margin:0 4px"></i>
+                <span style="background:rgba(201,75,26,.08);color:#C94B1A;padding:1px 6px;border-radius:3px;font-weight:600">✗ 미보유</span>
+                <i class="fa fa-arrow-right" style="font-size:10px;color:var(--text-hint);margin:0 4px"></i>
+                <span style="background:#F0F0EE;color:var(--text-secondary);padding:1px 6px;border-radius:3px;font-weight:600">— 미설정</span>
+              </div>
+              <div id="customMydataFields" class="cov-grid"></div>
+
+              <!-- 프롬에이지 -->
+              <div class="cpro-sec">
+                <i class="fa-solid fa-dna" style="font-size:10px;color:#6B4A9A;margin-right:4px"></i>프롬에이지 — 질병위험도
+              </div>
+              <div id="customPromageFields"></div>
+
+              <!-- 프로필 요약 -->
+              <div class="profile-summary-bar">
+                <div style="font-size:11px;font-weight:700;color:var(--text-secondary);letter-spacing:.04em">현재 프로필 요약</div>
+                <div class="psum-chips" id="customProfileSummary">
+                  <span style="font-size:12px;color:var(--text-hint)">카드 선택 후 조건을 설정하세요</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -673,6 +779,212 @@ const RESULTS = {
   }
 };
 
+// ============================================================
+// 카드별 테스트 조건 (커스텀 프로필 빌더용)
+// ============================================================
+const CARD_TEST_CONDITIONS = {
+  CN004: {
+    mydata: [
+      {code:'A4601', desc:'중증질환(뇌혈관) 산정특례'},
+      {code:'A6107', desc:'뇌혈관질환 입원일당'},
+      {code:'A5104', desc:'뇌혈관질환 수술'},
+      {code:'A4300', desc:'뇌혈관질환 진단'},
+    ],
+    promage: ['뇌혈관질환','뇌졸중','고혈압'],
+    evaluate: function(p) {
+      var codes = ['A4601','A6107','A5104','A4300'];
+      return !codes.some(function(c){ return p.mydata[c] === true; });
+    }
+  },
+  RT03: {
+    mydata: [
+      {code:'A4601', desc:'중증질환(뇌혈관) 산정특례'},
+      {code:'A4602', desc:'중증질환(심장) 산정특례'},
+      {code:'A6107', desc:'뇌혈관질환 입원일당'},
+      {code:'A6109', desc:'허혈성심장질환 입원일당'},
+      {code:'A5104', desc:'뇌혈관질환 수술'},
+      {code:'A5107', desc:'허혈성심장질환 수술'},
+    ],
+    promage: ['뇌혈관질환','허혈성심장질환','뇌졸중','부정맥'],
+    evaluate: function(p) {
+      var codes = ['A4601','A4602','A6107','A6109','A5104','A5107'];
+      return !codes.some(function(c){ return p.mydata[c] === true; });
+    }
+  },
+  RU003: {
+    mydata: [
+      {code:'A4601', desc:'중증질환(뇌혈관) 산정특례'},
+      {code:'A4602', desc:'중증질환(심장) 산정특례'},
+      {code:'A6107', desc:'뇌혈관질환 입원일당'},
+      {code:'A6109', desc:'허혈성심장질환 입원일당'},
+    ],
+    promage: ['뇌혈관질환','허혈성심장질환','고혈압'],
+    evaluate: function(p) {
+      var codes = ['A4601','A4602','A6107','A6109'];
+      return !codes.some(function(c){ return p.mydata[c] === true; });
+    }
+  },
+  PB002: {
+    mydata: [
+      {code:'A4601', desc:'중증질환(뇌혈관) 산정특례'},
+      {code:'A6107', desc:'뇌혈관질환 입원일당'},
+      {code:'A5104', desc:'뇌혈관질환 수술'},
+    ],
+    promage: ['뇌혈관질환','뇌졸중','고혈압'],
+    evaluate: function(p) {
+      var codes = ['A4601','A6107','A5104'];
+      return !codes.some(function(c){ return p.mydata[c] === true; });
+    }
+  }
+};
+
+// 커스텀 프로필 상태
+var customProfile = {
+  age: 45,
+  gender: 'M',
+  jobRisk: 'normal',
+  mydata: {},   // code → true(보유) | false(미보유) | undefined(미설정)
+  promage: {}   // field → 'risk' | 'caution' | 'good' | undefined
+};
+var profileMode = 'preset';
+
+// ============================================================
+// 프로필 모드 전환
+// ============================================================
+function switchProfileMode(mode) {
+  profileMode = mode;
+  document.querySelectorAll('.pmtab').forEach(function(t){ t.classList.toggle('active', t.dataset.mode === mode); });
+  document.getElementById('presetProfileSection').style.display  = mode === 'preset'  ? 'block' : 'none';
+  document.getElementById('customProfileSection').style.display  = mode === 'custom'  ? 'block' : 'none';
+  // 결과 초기화
+  document.getElementById('emptyState').style.display   = 'block';
+  document.getElementById('resultContent').style.display = 'none';
+  document.getElementById('resultTitle').textContent    = '사전 테스트 결과';
+  // 카드가 이미 선택돼 있으면 직접 구성 UI 빌드
+  var cardId = document.getElementById('cardSelect').value;
+  if (mode === 'custom' && cardId) buildCustomProfileUI(cardId);
+  updateRunBtnState();
+}
+
+function updateRunBtnState() {
+  var cardId = document.getElementById('cardSelect').value;
+  if (!cardId) { document.getElementById('runBtns').style.display = 'none'; return; }
+  var ready = profileMode === 'custom' || !!document.getElementById('profileSelect').value;
+  document.getElementById('runBtns').style.display = ready ? 'flex' : 'none';
+}
+
+// ============================================================
+// 직접 구성 — UI 빌드
+// ============================================================
+function buildCustomProfileUI(cardId) {
+  var conds = CARD_TEST_CONDITIONS[cardId];
+  if (!conds) {
+    document.getElementById('customMydataFields').innerHTML = '<span style="font-size:13px;color:var(--text-hint)">이 카드 타입의 커스텀 조건 정의 없음</span>';
+    document.getElementById('customPromageFields').innerHTML = '';
+    updateCustomSummary();
+    return;
+  }
+
+  // 마이데이터 담보코드 토글
+  var mydataHtml = conds.mydata.map(function(item) {
+    var state = customProfile.mydata[item.code]; // true / false / undefined
+    var cls = state === true ? 'cov-toggle has' : state === false ? 'cov-toggle none' : 'cov-toggle';
+    var icon = state === true ? '✓' : state === false ? '✗' : '—';
+    var stateLabel = state === true ? '보유' : state === false ? '미보유' : '미설정';
+    var shortDesc = item.desc.length > 14 ? item.desc.slice(0,13)+'…' : item.desc;
+    return '<button class="'+cls+'" onclick="toggleCovCode(\''+item.code+'\')" title="'+item.desc+'">' +
+      '<span>'+icon+'</span>' +
+      '<code style="font-size:11px;font-weight:800;letter-spacing:.03em">'+item.code+'</code>' +
+      '<span>'+shortDesc+'</span>' +
+      '<span style="font-size:11px;opacity:.7;margin-left:2px">('+stateLabel+')</span>' +
+    '</button>';
+  }).join('');
+  document.getElementById('customMydataFields').innerHTML = mydataHtml || '<span style="font-size:13px;color:var(--text-hint)">해당 없음</span>';
+
+  // 프롬에이지 위험도
+  var promageHtml = conds.promage.map(function(field) {
+    var val = customProfile.promage[field];
+    function gp(grade, label) {
+      var isActive = val === grade;
+      var activeClass = isActive ? ' active' : '';
+      return '<button class="gpill '+grade+activeClass+'" onclick="setPromageGrade(\''+field+'\',\''+grade+'\')">'+label+'</button>';
+    }
+    var noneActive = !val ? ' active' : '';
+    return '<div class="promage-row">' +
+      '<span class="promage-lbl">'+field+'</span>' +
+      '<div class="grade-pills">' +
+        gp('risk','위험') + gp('caution','주의') + gp('good','양호') +
+        '<button class="gpill none-set'+noneActive+'" onclick="setPromageGrade(\''+field+'\',null)">미설정</button>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+  document.getElementById('customPromageFields').innerHTML = promageHtml || '<span style="font-size:13px;color:var(--text-hint)">해당 없음</span>';
+
+  updateCustomSummary();
+  document.getElementById('runBtns').style.display = 'flex';
+}
+
+function toggleCovCode(code) {
+  var cur = customProfile.mydata[code];
+  if (cur === undefined)    customProfile.mydata[code] = true;
+  else if (cur === true)    customProfile.mydata[code] = false;
+  else                      delete customProfile.mydata[code];
+  var cardId = document.getElementById('cardSelect').value;
+  buildCustomProfileUI(cardId);
+}
+
+function setPromageGrade(field, grade) {
+  if (grade === null) delete customProfile.promage[field];
+  else customProfile.promage[field] = grade;
+  var cardId = document.getElementById('cardSelect').value;
+  buildCustomProfileUI(cardId);
+}
+
+function onCustomBasicChange() {
+  customProfile.age    = parseInt(document.getElementById('customAge').value) || 45;
+  customProfile.gender = document.querySelector('input[name="customGender"]:checked').value;
+  customProfile.jobRisk = document.getElementById('customJobRisk').value;
+  updateCustomSummary();
+}
+
+function updateCustomSummary() {
+  var chips = [];
+  var genderLabel = customProfile.gender === 'M' ? '남성' : '여성';
+  var jobLabels = {low:'저위험직', normal:'일반직', high:'고위험직'};
+  chips.push('<span class="psum-chip" style="background:#EEF4FF;color:#1A3A6B">'+customProfile.age+'세 '+genderLabel+' · '+jobLabels[customProfile.jobRisk]+'</span>');
+
+  Object.keys(customProfile.mydata).forEach(function(code) {
+    var has = customProfile.mydata[code];
+    if (has === undefined) return;
+    chips.push('<span class="psum-chip" style="background:'+(has?'rgba(15,110,86,.1)':'rgba(201,75,26,.08)')+';color:'+(has?'#0F6E56':'#C94B1A')+'">'+(has?'✓ ':'✗ ')+code+'</span>');
+  });
+
+  var gradeLabels = {risk:'위험', caution:'주의', good:'양호'};
+  var gradeColors = {risk:'rgba(163,45,45,.12)', caution:'rgba(186,117,23,.12)', good:'rgba(15,110,86,.1)'};
+  var gradeFg     = {risk:'#A32D2D', caution:'#BA7517', good:'#0F6E56'};
+  Object.keys(customProfile.promage).forEach(function(field) {
+    var g = customProfile.promage[field];
+    if (!g) return;
+    chips.push('<span class="psum-chip" style="background:'+gradeColors[g]+';color:'+gradeFg[g]+'">'+field+' '+gradeLabels[g]+'</span>');
+  });
+
+  if (chips.length === 0) chips.push('<span style="font-size:12px;color:var(--text-hint)">조건을 설정하세요</span>');
+  document.getElementById('customProfileSummary').innerHTML = chips.join('');
+}
+
+function getCustomProfileLabel() {
+  var genderLabel = customProfile.gender === 'M' ? '남성' : '여성';
+  return customProfile.age+'세 '+genderLabel+' (직접 구성)';
+}
+
+function evaluateCustomProfile(cardId) {
+  var conds = CARD_TEST_CONDITIONS[cardId];
+  if (!conds) return 'C';
+  var card = ALL_PENDING[cardId];
+  var kcMatch = conds.evaluate(customProfile);
+  return kcMatch ? card.resultKey : 'C';
+}
+
 const MOCK_NOTE = '이 결과는 가상 프로필 기반 사전 확인입니다. 실제 Clark AI 답변은 실제 고객 데이터로 평가됩니다.';
 
 // ============================================================
@@ -741,6 +1053,7 @@ function onCardChange() {
   det.style.display = 'block';
 
   document.getElementById('profileGroup').style.display = 'block';
+  if (profileMode === 'custom') buildCustomProfileUI(val);
 
   if (card.type === 'playbook') {
     var scenSel = document.getElementById('scenarioSelect');
@@ -796,6 +1109,13 @@ function resetBelowCard() {
   document.getElementById('profileGroup').style.display = 'none';
   document.getElementById('profileSelect').value = '';
   document.getElementById('profileDetail').style.display = 'none';
+  customProfile.mydata = {};
+  customProfile.promage = {};
+  document.getElementById('customMydataFields').innerHTML = '';
+  document.getElementById('customPromageFields').innerHTML = '';
+  if (document.getElementById('customProfileSummary')) {
+    document.getElementById('customProfileSummary').innerHTML = '<span style="font-size:12px;color:var(--text-hint)">카드 선택 후 조건을 설정하세요</span>';
+  }
   document.getElementById('chainInputGroup').style.display = 'none';
   document.getElementById('playbookInputGroup').style.display = 'none';
   document.getElementById('runBtns').style.display = 'none';
@@ -830,9 +1150,14 @@ function getResultKey(cardId, profile) {
 
 function runDryRun() {
   var cardId  = document.getElementById('cardSelect').value;
-  var profile = document.getElementById('profileSelect').value;
-  if (!cardId)  { showToast('테스트 대상 카드를 선택해 주세요'); return; }
-  if (!profile) { showToast('고객 프로필을 선택해 주세요'); return; }
+  var profile;
+  if (profileMode === 'preset') {
+    profile = document.getElementById('profileSelect').value;
+    if (!profile) { showToast('고객 프로필을 선택해 주세요'); return; }
+  } else {
+    profile = evaluateCustomProfile(cardId);
+  }
+  if (!cardId) { showToast('테스트 대상 카드를 선택해 주세요'); return; }
 
   var card = ALL_PENDING[cardId];
   var loadingP = document.getElementById('loadingState').querySelector('p');
@@ -927,7 +1252,7 @@ function renderPlaybookResult(cardId, profile, scenario) {
     ? card.title+' — 트리거 조건 충족. 배포 후 해당 프로필 상담 시 자동 활성화됩니다.'
     : '선택한 프로필이 Playbook 트리거 조건과 일치하지 않습니다. 권장 프로필 고객 '+card.profile+'로 다시 테스트해보세요.';
   document.getElementById('finalResult').className = 'result-final '+(isMatch?'result-kc':'result-gen');
-  var profileLabel = p.label ? p.label.split('|')[0].trim() : profile;
+  var profileLabel = profileMode === 'custom' ? getCustomProfileLabel() : (p.label ? p.label.split('|')[0].trim() : profile);
   document.getElementById('finalResult').innerHTML =
     '<div class="result-title" style="color:'+finalColor+'">'+finalTitle+'</div>' +
     '<div class="result-desc">'+finalDesc+'</div>' +
@@ -1028,7 +1353,7 @@ function renderResult(cardId, profile, question) {
         (isFocus ? pendingNote : '');
     } else {
       detailsHtml = step.details.map(function(d) {
-        if (d.text && d.text.indexOf('<div') === 0) return d.text;
+        if (d.text && d.text.indexOf('<' + 'div') === 0) return d.text;
         return '<div class="eval-check '+d.cls+'">'+(d.icon?d.icon+' ':'')+d.text+'</div>';
       }).join('');
       if (isFocus) {
@@ -1063,7 +1388,7 @@ function renderResult(cardId, profile, question) {
   var isKc = data.finalType === 'kc';
   var finalColor = isKc ? 'var(--status-active)' : 'var(--status-draft)';
   document.getElementById('finalResult').className = 'result-final ' + (isKc ? 'result-kc' : 'result-gen');
-  var profileLabel = p.label ? p.label.split('|')[0].trim() : profile;
+  var profileLabel = profileMode === 'custom' ? getCustomProfileLabel() : (p.label ? p.label.split('|')[0].trim() : profile);
   document.getElementById('finalResult').innerHTML =
     '<div class="result-title" style="color:'+finalColor+'">'+data.finalTitle+'</div>' +
     '<div class="result-desc">'+data.finalDesc+'</div>' +
