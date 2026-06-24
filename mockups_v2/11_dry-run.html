@@ -317,12 +317,10 @@ textarea.form-control{resize:vertical;min-height:80px}
                 <i class="fa-solid fa-database" style="font-size:10px;margin-right:4px"></i>마이데이터 — 보유 담보코드
               </div>
               <div style="font-size:12px;color:var(--text-hint);margin-bottom:8px">
-                클릭으로 상태 전환:
+                클릭으로 전환:
                 <span style="background:rgba(15,110,86,.1);color:#0F6E56;padding:1px 6px;border-radius:3px;font-weight:600">✓ 보유</span>
                 <i class="fa fa-arrow-right" style="font-size:10px;color:var(--text-hint);margin:0 4px"></i>
                 <span style="background:rgba(201,75,26,.08);color:#C94B1A;padding:1px 6px;border-radius:3px;font-weight:600">✗ 미보유</span>
-                <i class="fa fa-arrow-right" style="font-size:10px;color:var(--text-hint);margin:0 4px"></i>
-                <span style="background:#F0F0EE;color:var(--text-secondary);padding:1px 6px;border-radius:3px;font-weight:600">— 미설정</span>
               </div>
               <div id="customMydataFields" class="cov-grid"></div>
 
@@ -793,7 +791,7 @@ const CARD_TEST_CONDITIONS = {
     promage: ['뇌혈관질환','뇌졸중','고혈압'],
     evaluate: function(p) {
       var codes = ['A4601','A6107','A5104','A4300'];
-      return !codes.some(function(c){ return p.mydata[c] === true; });
+      return !codes.some(function(c){ return p.mydata[c] !== false; });
     }
   },
   RT03: {
@@ -808,7 +806,7 @@ const CARD_TEST_CONDITIONS = {
     promage: ['뇌혈관질환','허혈성심장질환','뇌졸중','부정맥'],
     evaluate: function(p) {
       var codes = ['A4601','A4602','A6107','A6109','A5104','A5107'];
-      return !codes.some(function(c){ return p.mydata[c] === true; });
+      return !codes.some(function(c){ return p.mydata[c] !== false; });
     }
   },
   RU003: {
@@ -821,7 +819,7 @@ const CARD_TEST_CONDITIONS = {
     promage: ['뇌혈관질환','허혈성심장질환','고혈압'],
     evaluate: function(p) {
       var codes = ['A4601','A4602','A6107','A6109'];
-      return !codes.some(function(c){ return p.mydata[c] === true; });
+      return !codes.some(function(c){ return p.mydata[c] !== false; });
     }
   },
   PB002: {
@@ -833,7 +831,7 @@ const CARD_TEST_CONDITIONS = {
     promage: ['뇌혈관질환','뇌졸중','고혈압'],
     evaluate: function(p) {
       var codes = ['A4601','A6107','A5104'];
-      return !codes.some(function(c){ return p.mydata[c] === true; });
+      return !codes.some(function(c){ return p.mydata[c] !== false; });
     }
   }
 };
@@ -843,7 +841,7 @@ var customProfile = {
   age: 45,
   gender: 'M',
   jobRisk: 'normal',
-  mydata: {},   // code → true(보유) | false(미보유) | undefined(미설정)
+  mydata: {},   // code → true(보유) | false(미보유)
   promage: {}   // field → 'risk' | 'caution' | 'good' | undefined
 };
 var profileMode = 'preset';
@@ -887,10 +885,10 @@ function buildCustomProfileUI(cardId) {
 
   // 마이데이터 담보코드 토글
   var mydataHtml = conds.mydata.map(function(item) {
-    var state = customProfile.mydata[item.code]; // true / false / undefined
-    var cls = state === true ? 'cov-toggle has' : state === false ? 'cov-toggle none' : 'cov-toggle';
-    var icon = state === true ? '✓' : state === false ? '✗' : '—';
-    var stateLabel = state === true ? '보유' : state === false ? '미보유' : '미설정';
+    var state = customProfile.mydata[item.code] !== false; // default: 미보유(false)
+    var cls = state ? 'cov-toggle has' : 'cov-toggle none';
+    var icon = state ? '✓' : '✗';
+    var stateLabel = state ? '보유' : '미보유';
     var shortDesc = item.desc.length > 14 ? item.desc.slice(0,13)+'…' : item.desc;
     return '<button class="'+cls+'" onclick="toggleCovCode(\''+item.code+'\')" title="'+item.desc+'">' +
       '<span>'+icon+'</span>' +
@@ -925,10 +923,7 @@ function buildCustomProfileUI(cardId) {
 }
 
 function toggleCovCode(code) {
-  var cur = customProfile.mydata[code];
-  if (cur === undefined)    customProfile.mydata[code] = true;
-  else if (cur === true)    customProfile.mydata[code] = false;
-  else                      delete customProfile.mydata[code];
+  customProfile.mydata[code] = customProfile.mydata[code] === false ? true : false;
   var cardId = document.getElementById('cardSelect').value;
   buildCustomProfileUI(cardId);
 }
@@ -954,8 +949,7 @@ function updateCustomSummary() {
   chips.push('<span class="psum-chip" style="background:#EEF4FF;color:#1A3A6B">'+customProfile.age+'세 '+genderLabel+' · '+jobLabels[customProfile.jobRisk]+'</span>');
 
   Object.keys(customProfile.mydata).forEach(function(code) {
-    var has = customProfile.mydata[code];
-    if (has === undefined) return;
+    var has = customProfile.mydata[code] !== false;
     chips.push('<span class="psum-chip" style="background:'+(has?'rgba(15,110,86,.1)':'rgba(201,75,26,.08)')+';color:'+(has?'#0F6E56':'#C94B1A')+'">'+(has?'✓ ':'✗ ')+code+'</span>');
   });
 
