@@ -49,6 +49,7 @@
 
 | 날짜 | 내용 | 진실원 파일 |
 |---|---|---|
+| 2026-06-24 | Rule 카드 약관 DB 연동 플래그 제거. 약관 DB는 엔진 자동 처리(있으면 참조, 없으면 없이 답변) → 운영자 제어 불필요. 전수 반영 17개 파일. | `context/card-types.md`, `guides/ux-patterns.md`, `mockups_v2/07_card-editor-rule.html` 외 |
 | 2026-06-24 | 카드 상세 슬라이드 패널 구현: 00_canvas-main.html renderCardDetailHTML() 전면 교체(편집기 필드명 일치), 09_review-workflow.html 모달→슬라이드 패널 전환(pending: 승인완료+반려, 그 외: 닫기만) | `mockups_v2/00_canvas-main.html`, `mockups_v2/09_review-workflow.html` |
 | 2026-06-24 | 카드 편집기 6개 입력항목·카피라이팅 전수 감사. 07_card-editor-rule.html: "제목"→"Rule 이름", "조건 빌더"→"판단 조건" 통일. 16_card-editor-playbook.html: 설명 필드 필수(*) 마크 추가 | `mockups_v2/07_card-editor-rule.html`, `mockups_v2/16_card-editor-playbook.html` |
 | 2026-06-24 | 사이드바 메뉴 순서 변경: "카드 연결"을 "검수·승인" 하단으로 이동 (워크플로우 순서 반영: 등록→검수·승인→카드 연결→사전 테스트). 14_answer-logic-guide.html 삭제 (불필요). 파일 수 27→26 | `guides/ux-patterns.md`, `context/workflow.md` |

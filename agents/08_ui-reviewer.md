@@ -110,7 +110,7 @@
 | PROMAGE 기본값 | PROMAGE(프롬에이지) 소스 조건 행: required=false (선택) 기본값 — 미연동 사용자 대응 |
 | PROFILE 기본값 | PROFILE 소스 조건 행: required=true (필수) 기본값 |
 | 소스 3종 | MYDATA/PROMAGE/PROFILE 3개. Amplitude 소스 없어야 함 |
-| 약관 DB 연동 옵션 | `useContractDb` 체크박스 또는 토글 있는가? 활성 시 담보코드 기준 약관 자동 조회 → 면책조항 자동 포함 안내 있는가? (Policy 카드와 다른 개념) |
+| 약관 DB | 약관 DB 연동 체크박스 없는가? (엔진 자동 처리 — 체크박스 있으면 오류) |
 
 **[Playbook 편집기 추가 체크 — 16_card-editor-playbook.html]**
 

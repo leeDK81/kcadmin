@@ -122,8 +122,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
         <tr><td>설명</td><td><code>desc</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>이 Rule이 판단하는 내용</td></tr>
         <tr><td>판단 조건</td><td><code>conditions</code></td><td><span class="chip chip-req">필수</span></td><td>ConditionRow[]</td><td>최소 1개. 3개 데이터 소스(MYDATA·PROMAGE·PROFILE) 중 선택하여 조건 행 배열 구성. 각 행에 필수/선택 구분(<code>required: boolean</code>) 설정 필요. PROMAGE 조건은 선택 권장</td></tr>
         <tr><td>출력 등급</td><td><code>outputGrade</code></td><td><span class="chip chip-req">필수</span></td><td>enum</td><td>위험 / 주의 / 양호 (상/중/하 사용 금지)</td></tr>
-        <tr><td>약관 DB 연동</td><td><code>useContractDb</code></td><td><span class="chip chip-opt">선택</span></td><td>boolean</td><td>true 시 Rule 충족 → 담보코드 기준 약관 DB 자동 조회 → 면책조항 자동 추가</td></tr>
-        <tr><td>연결 Risk-type</td><td><code>linkedRiskTypes</code></td><td>캔버스</td><td>string[]</td><td>캔버스에서 설정. 편집기 읽기 전용</td></tr>
+<tr><td>연결 Risk-type</td><td><code>linkedRiskTypes</code></td><td>캔버스</td><td>string[]</td><td>캔버스에서 설정. 편집기 읽기 전용</td></tr>
         <tr><td>연결 Evidence</td><td><code>linkedEvidences</code></td><td>캔버스</td><td>string[]</td><td>캔버스에서 설정. 최소 1개 필요</td></tr>
         <tr><td>연결 Policy</td><td><code>linkedPolicies</code></td><td>캔버스</td><td>string[]</td><td>캔버스에서 설정. 선택사항</td></tr>
         <tr><td>공개범위</td><td><code>scope</code></td><td>자동</td><td>string</td><td>"baseline" 고정</td></tr>

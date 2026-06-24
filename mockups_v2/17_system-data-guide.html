@@ -206,7 +206,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
   <!-- 섹션 2: Clark AI가 상시 보유하거나 자동 전달받는 데이터 -->
   <div class="section">
     <div class="section-title"><i class="fa-solid fa-database fa-fw" style="color:var(--card-evidence)"></i> Clark AI가 자동으로 활용하는 데이터</div>
-    <p style="font-size:14px;color:var(--text-secondary);margin-bottom:16px;line-height:1.6"><strong>마이데이터·프롬에이지·프로파일</strong>은 상담 시 자동으로 Clark AI에 전달됩니다 — Evidence 카드로 별도 등록하지 않아도 됩니다. <strong>공인 외부 통계</strong>(심평원·건보공단 등)는 Clark AI가 자동 접근할 수 없으므로 운영자가 Evidence 카드로 직접 등록해야 합니다. <strong>약관 DB</strong>는 크롤링 파이프라인이 자동 관리하며, Rule 카드의 "약관 DB 연동" 플래그 활성화 시 자동 조회됩니다.</p>
+    <p style="font-size:14px;color:var(--text-secondary);margin-bottom:16px;line-height:1.6"><strong>마이데이터·프롬에이지·프로파일</strong>은 상담 시 자동으로 Clark AI에 전달됩니다 — Evidence 카드로 별도 등록하지 않아도 됩니다. <strong>공인 외부 통계</strong>(심평원·건보공단 등)는 Clark AI가 자동 접근할 수 없으므로 운영자가 Evidence 카드로 직접 등록해야 합니다. <strong>약관 DB</strong>는 크롤링 파이프라인이 자동 관리하며, 약관 DB 확보 시 자동으로 조회됩니다.</p>
     <div class="stat-grid">
 
       <div class="stat-card">
@@ -240,7 +240,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
           <li><i class="fa-solid fa-circle fa-fw" style="font-size:6px;color:#BA7517;margin-top:5px"></i>담보별 주요 면책 항목 (면책기간·기왕증·특정 치료 제한 등)</li>
           <li><i class="fa-solid fa-circle fa-fw" style="font-size:6px;color:#BA7517;margin-top:5px"></i>약관 개정 이력 및 적용 기간</li>
         </ul>
-        <div class="stat-card-note">보험사별·가입 시점별로 약관이 다를 수 있습니다. Rule 카드의 "약관 DB 연동" 플래그 활성화 시 담보코드 기준으로 자동 조회됩니다.</div>
+        <div class="stat-card-note">보험사별·가입 시점별로 약관이 다를 수 있습니다. 약관 DB 확보 시 자동으로 담보코드 기준으로 조회됩니다.</div>
       </div>
 
     </div>
@@ -272,9 +272,9 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
           <td>운영자가 Evidence 카드 등록 시 고정값 (연 1회 이상 갱신 권장)</td>
         </tr>
         <tr style="background:#FFF8F8">
-          <td><span class="badge badge-rule">③ Rule</span> — <span style="color:#7A5A00;font-weight:700">약관 DB 연동 플래그</span></td>
+          <td><span class="badge badge-rule">③ Rule</span> — <span style="color:#7A5A00;font-weight:700">약관 DB 자동 참조</span></td>
           <td>약관 DB (크롤링 파이프라인 자동 관리)</td>
-          <td>Rule 카드의 "약관 DB 연동" 플래그 활성화 시, 해당 담보코드를 기준으로 약관 DB 자동 조회 → Clark 답변에 ⚠️ 면책조항 섹션 자동 포함. 마이데이터 금액만으로 "다 보장" 오해 방지</td>
+          <td>약관 DB 확보 시 Rule 조건 충족 → 담보코드 기준으로 자동 조회 → Clark 답변에 ⚠️ 면책조항 섹션 자동 포함. 마이데이터 금액만으로 "다 보장" 오해 방지</td>
           <td>파이프라인이 약관 개정 시 자동 최신화</td>
         </tr>
         <tr>
@@ -372,8 +372,8 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 
       <div class="caution-card" style="border-color:rgba(186,117,23,.3);grid-column:1/-1">
         <div class="caution-icon" style="color:#BA7517"><i class="fa-solid fa-database"></i></div>
-        <div class="caution-title">유의 ⑤ 약관 DB 연동은 파이프라인 팀과 함께 검증해야 합니다</div>
-        <div class="caution-body">Rule 카드에서 "약관 DB 연동" 플래그를 활성화하면, 약관 크롤링 파이프라인이 관리하는 DB에서 담보코드 기준으로 면책조항이 자동 조회되어 Clark 답변에 노출됩니다. 파이프라인이 최신 약관을 정확히 수집·파싱하고 있는지 파이프라인 담당자와 사전 확인 후 플래그를 활성화하세요. 약관은 보험사별·가입 시점별로 다를 수 있으므로 Clark 답변에는 "실제 지급 여부는 보험사 확인 필요" 안내 문구가 반드시 함께 출력되도록 Policy 카드에서 설정해 주세요.</div>
+        <div class="caution-title">유의 ⑤ 약관 DB 파이프라인은 파이프라인 팀이 관리합니다</div>
+        <div class="caution-body">약관 DB는 크롤링 파이프라인이 자동으로 수집·최신화하며, 약관 DB가 확보된 담보코드에 대해 Clark 답변에 면책조항 섹션이 자동 포함됩니다. 파이프라인이 최신 약관을 정확히 수집·파싱하고 있는지 파이프라인 담당자와 주기적으로 확인하세요. 약관은 보험사별·가입 시점별로 다를 수 있으므로 Clark 답변에는 "실제 지급 여부는 보험사 확인 필요" 안내 문구가 반드시 함께 출력되도록 Policy 카드에서 설정해 주세요.</div>
       </div>
 
     </div>

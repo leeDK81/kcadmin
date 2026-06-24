@@ -225,7 +225,6 @@ var CARD_DETAILS = {
       { sourceLabel:'프롬에이지', source:'PROMAGE', label:'암 위험도 "위험" 등급', required:false },
       { sourceLabel:'프로파일', source:'PROFILE', label:'나이 40세 이상', required:true },
     ],
-    policyDbLinked:true,
   },
   'RU002':{
     description:'마이데이터 뇌혈관 담보 현황과 프롬에이지 뇌혈관 위험도를 기준으로 보장 공백을 판정합니다.',
@@ -234,7 +233,6 @@ var CARD_DETAILS = {
       { sourceLabel:'프롬에이지', source:'PROMAGE', label:'뇌혈관 위험도 "위험" 등급', required:false },
       { sourceLabel:'프로파일', source:'PROFILE', label:'나이 50세 이상', required:true },
     ],
-    policyDbLinked:false,
   },
   // ── Evidence ──
   'EV001':{ orgLabel:'심사평가원', org:'HIRA', report:'2024년 건강보험 진료비 통계연보', year:'2024', indicator:'암(악성신생물) 입원 1인당 평균 진료비', value:'386만원', url:'https://www.hira.or.kr', usage:'RU001 판단 기준의 근거. 입원 진료비가 이 금액 미만인 담보를 "소액"으로 판정하는 기준값으로 활용합니다.' },
@@ -369,8 +367,6 @@ function buildDetailHTML(d) {
     html += detailSectionR('③ Evidence 연결 <span style="font-size:11px;font-weight:400;color:var(--text-hint)">읽기 전용</span>');
     html += '<div class="detail-field"><span style="font-size:12px;color:var(--text-hint)">캔버스에서 확인</span></div>';
 
-    html += detailSectionR('④ 약관 DB 연동');
-    html += '<div class="detail-field"><span style="font-size:13px;color:'+(detail.policyDbLinked?'var(--status-active)':'var(--text-hint)')+';font-weight:600">'+(detail.policyDbLinked?'✔ 연동됨':'연동 안 됨')+'</span></div>';
   }
 
   else if (d.type === 'evidence') {
