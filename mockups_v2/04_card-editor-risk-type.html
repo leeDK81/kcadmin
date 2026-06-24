@@ -26,7 +26,6 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 .sidebar a,.nav-locked{display:flex;align-items:center;gap:8px;padding:8px 16px;color:#C8C8C4;text-decoration:none;font-size:14px;transition:background .15s}
 .sidebar a:hover{background:rgba(255,255,255,.08);color:#fff}
 .sidebar a.active{background:rgba(255,255,255,.15);color:#fff;font-weight:600;border-left:3px solid #5A8AE0}
-.nav-section{padding:16px 16px 4px;font-size:11px;color:#666;text-transform:uppercase;letter-spacing:.08em}
 .nav-divider{border-top:1px solid #333;margin:8px 0}
 .nav-locked{color:#555!important;cursor:not-allowed}
 .main{flex:1;padding:32px;overflow-y:auto}
@@ -127,35 +126,28 @@ tr.clickable{cursor:pointer}
 <div class="layout">
   <nav class="sidebar">
   <div class="sidebar-logo">&#9889; KC Admin <span style="font-size:10px;background:#5A8AE0;color:#fff;padding:1px 6px;border-radius:3px;margin-left:4px;font-weight:600">v2</span></div>
-
-  <a href="02_dashboard.html"><i class="fa-solid fa-chart-bar fa-fw"></i> 대시보드</a>
-
-  <div class="nav-divider"></div>
-
-  <a href="03_card-library.html"><i class="fa-solid fa-folder-open fa-fw"></i> ① 카드 등록</a>
-  <a href="04_risk-type-list.html" class="active" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-circle-exclamation fa-fw" style="font-size:11px;color:#C94B1A"></i> Risk-type</a>
-  <a href="05_evidence-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-database fa-fw" style="font-size:11px;color:#1A7A4A"></i> Evidence</a>
-  <a href="06_concept-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-lightbulb fa-fw" style="font-size:11px;color:#1A4A9A"></i> Concept</a>
-  <a href="07_rule-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-scale-balanced fa-fw" style="font-size:11px;color:#9A1A1A"></i> Rule</a>
-  <a href="08_policy-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-file-shield fa-fw" style="font-size:11px;color:#5A5A55"></i> Policy</a>
-  <a href="16_playbook-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-handshake fa-fw" style="font-size:11px;color:#9A70D0"></i> Playbook</a>
-  <span class="nav-locked" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-lock fa-fw" style="font-size:11px"></i> Case &#128274;</span>
-
-  <a href="09_review-workflow.html"><i class="fa-solid fa-circle-check fa-fw"></i> ② 검수·승인</a>
-  <a href="00_canvas-main.html"><i class="fa-solid fa-diagram-project fa-fw"></i> ③ 연결</a>
-  <a href="11_dry-run.html"><i class="fa-solid fa-flask fa-fw"></i> ④ 사전 테스트</a>
-  <a href="18_system-settings.html"><i class="fa-solid fa-sliders fa-fw"></i> 시스템 설정</a>
-  <a href="19_faq-rag.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-list-check fa-fw" style="font-size:11px;color:#1A4A9A"></i> FAQ RAG 관리</a>
-
-  <div class="nav-divider"></div>
-  <a href="13_answer-logic.html"><i class="fa-solid fa-diagram-project fa-fw"></i> AI 답변 로직</a>
-  <a href="17_system-data-guide.html"><i class="fa-solid fa-network-wired fa-fw"></i> 데이터 연결 구조</a>
-  <a href="15_aio-guide.html"><i class="fa-solid fa-globe fa-fw"></i> AIO 가이드</a>
-  <a href="12_coverage-code-table.html"><i class="fa-solid fa-table-list fa-fw"></i> 담보코드</a>
-
-  <div class="nav-divider"></div>
   <a href="01_guide.html"><i class="fa-solid fa-clipboard-list fa-fw"></i> 업무 가이드</a>
+  <a href="02_dashboard.html"><i class="fa-solid fa-chart-bar fa-fw"></i> 대시보드</a>
+  <div class="nav-divider"></div>
+  <a href="03_card-library.html"><i class="fa-solid fa-folder-open fa-fw"></i> 카드 라이브러리</a>
+  <a href="04_risk-type-list.html" class="active" style="padding-left:20px"><i class="fa-solid fa-circle-exclamation fa-fw"></i> ① Risk-type</a>
+  <a href="05_evidence-list.html" style="padding-left:20px"><i class="fa-solid fa-database fa-fw"></i> ② Evidence</a>
+  <a href="06_concept-list.html" style="padding-left:20px"><i class="fa-solid fa-lightbulb fa-fw"></i> ③ Concept</a>
+  <a href="07_rule-list.html" style="padding-left:20px"><i class="fa-solid fa-scale-balanced fa-fw"></i> ④ Rule</a>
+  <a href="08_policy-list.html" style="padding-left:20px"><i class="fa-solid fa-file-shield fa-fw"></i> ⑤ Policy</a>
+  <a href="16_playbook-list.html" style="padding-left:20px"><i class="fa-solid fa-bullseye fa-fw"></i> ⑥ Playbook</a>
+  <span class="nav-locked" style="padding-left:20px"><i class="fa-solid fa-lock fa-fw"></i> ⑦ Case 🔒</span>
+  <div class="nav-divider"></div>
+  <a href="09_review-workflow.html"><i class="fa-solid fa-check-double fa-fw"></i> 검수·승인</a>
+  <a href="00_canvas-main.html"><i class="fa-solid fa-diagram-project fa-fw"></i> 카드 연결</a>
+  <a href="11_dry-run.html"><i class="fa-solid fa-flask fa-fw"></i> 사전 테스트</a>
+  <a href="18_system-settings.html"><i class="fa-solid fa-sliders fa-fw"></i> 시스템 설정</a>
+  <a href="19_faq-rag.html" style="padding-left:20px"><i class="fa-solid fa-list-check fa-fw"></i> FAQ Q&A</a>
+  <div class="nav-divider"></div>
   <a href="00_design-system.html"><i class="fa-solid fa-palette fa-fw"></i> 디자인 시스템</a>
+  <a href="13_answer-logic.html"><i class="fa-solid fa-sitemap fa-fw"></i> AI 답변 생성 로직</a>
+  <a href="15_aio-guide.html"><i class="fa-solid fa-magnifying-glass fa-fw"></i> AIO 가이드</a>
+  <a href="12_coverage-code-table.html"><i class="fa-solid fa-table-list fa-fw"></i> 담보코드</a>
 </nav>
 
   <main class="main">
@@ -234,13 +226,6 @@ tr.clickable{cursor:pointer}
             </div>
           </div>
 
-          <div class="form-group" style="opacity:.45;pointer-events:none">
-            <label for="leadScore">리드 스코어 (0–100)
-              <span style="display:inline-flex;align-items:center;gap:4px;background:#F0D0A0;color:#7A4A00;border:1px solid #E0B060;border-radius:4px;padding:1px 7px;font-size:12px;font-weight:700;margin-left:6px"><i class="fa-solid fa-lock" style="font-size:9px"></i> Phase 1.5 이후</span>
-            </label>
-            <input class="form-control" id="leadScore" type="number" min="0" max="100" value="75" disabled style="width:120px;background:#F4F4F2;cursor:not-allowed">
-          </div>
-
           <div class="action-bar" style="padding-top:8px;border-top:1px solid var(--border);margin-top:8px">
             <button class="btn btn-secondary" onclick="saveDraft()"><i class="fa-regular fa-floppy-disk"></i> 임시저장</button>
             <button class="btn btn-primary" onclick="requestReview()"><i class="fa-solid fa-paper-plane"></i> 검수 요청</button>
@@ -297,16 +282,16 @@ tr.clickable{cursor:pointer}
 <script>
 const MOCK_DATA = {
   riskTypes:[
-    {id:'T01',name:'무보장형',leadScore:90,status:'active'},
-    {id:'T02',name:'암투병생활비 부족형',leadScore:85,status:'active'},
-    {id:'T03',name:'심혈관질환보장 협소형',leadScore:80,status:'review'},
-    {id:'T04',name:'뇌혈관질환보장 협소형',leadScore:75,status:'active'},
-    {id:'T05',name:'노후돌봄보장 공백형',leadScore:70,status:'draft'},
-    {id:'T06',name:'납입여력부족 우려형',leadScore:65,status:'draft'},
-    {id:'T07',name:'비용 대비 보장 비효율형',leadScore:60,status:'draft'},
-    {id:'T08',name:'생애주기 적합도 저조형',leadScore:55,status:'draft'},
-    {id:'T09',name:'단기납 만기 후 공백형',leadScore:72,status:'approved'},
-    {id:'T10',name:'고액 보험료 유지 부담형',leadScore:0,status:'paused'}
+    {id:'T01',name:'무보장형',status:'active'},
+    {id:'T02',name:'암투병생활비 부족형',status:'active'},
+    {id:'T03',name:'심혈관질환보장 협소형',status:'review'},
+    {id:'T04',name:'뇌혈관질환보장 협소형',status:'active'},
+    {id:'T05',name:'노후돌봄보장 공백형',status:'draft'},
+    {id:'T06',name:'납입여력부족 우려형',status:'draft'},
+    {id:'T07',name:'비용 대비 보장 비효율형',status:'draft'},
+    {id:'T08',name:'생애주기 적합도 저조형',status:'draft'},
+    {id:'T09',name:'단기납 만기 후 공백형',status:'approved'},
+    {id:'T10',name:'고액 보험료 유지 부담형',status:'paused'}
   ]
 };
 

@@ -26,7 +26,6 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 .sidebar a:hover{background:rgba(255,255,255,.08);color:#fff}
 .sidebar a.active{background:rgba(255,255,255,.15);color:#fff;font-weight:600;border-left:3px solid #5A8AE0}
 .nav-divider{border-top:1px solid #333;margin:8px 0}
-.nav-section{padding:16px 16px 4px;font-size:11px;color:#666;text-transform:uppercase;letter-spacing:.08em}
 .nav-locked{color:#555!important;cursor:not-allowed}
 .main{flex:1;padding:32px;overflow-y:auto}
 .page-header{margin-bottom:28px}
@@ -105,40 +104,33 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 <div class="layout">
 <nav class="sidebar">
   <div class="sidebar-logo">&#9889; KC Admin <span style="font-size:10px;background:#5A8AE0;color:#fff;padding:1px 6px;border-radius:3px;margin-left:4px;font-weight:600">v2</span></div>
-
-  <a href="02_dashboard.html"><i class="fa-solid fa-chart-bar fa-fw"></i> 대시보드</a>
-
-  <div class="nav-divider"></div>
-
-  <a href="03_card-library.html"><i class="fa-solid fa-folder-open fa-fw"></i> ① 카드 등록</a>
-  <a href="04_risk-type-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-circle-exclamation fa-fw" style="font-size:11px;color:#C94B1A"></i> Risk-type</a>
-  <a href="05_evidence-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-database fa-fw" style="font-size:11px;color:#1A7A4A"></i> Evidence</a>
-  <a href="06_concept-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-lightbulb fa-fw" style="font-size:11px;color:#1A4A9A"></i> Concept</a>
-  <a href="07_rule-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-scale-balanced fa-fw" style="font-size:11px;color:#9A1A1A"></i> Rule</a>
-  <a href="08_policy-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-file-shield fa-fw" style="font-size:11px;color:#5A5A55"></i> Policy</a>
-  <a href="16_playbook-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-handshake fa-fw" style="font-size:11px;color:#9A70D0"></i> Playbook</a>
-  <span class="nav-locked" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-lock fa-fw" style="font-size:11px"></i> Case &#128274;</span>
-
-  <a href="09_review-workflow.html"><i class="fa-solid fa-circle-check fa-fw"></i> ② 검수·승인</a>
-  <a href="00_canvas-main.html"><i class="fa-solid fa-diagram-project fa-fw"></i> ③ 연결</a>
-  <a href="11_dry-run.html"><i class="fa-solid fa-flask fa-fw"></i> ④ 사전 테스트</a>
-  <a href="18_system-settings.html"><i class="fa-solid fa-sliders fa-fw"></i> 시스템 설정</a>
-  <a href="19_faq-rag.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-list-check fa-fw" style="font-size:11px;color:#1A4A9A"></i> FAQ RAG 관리</a>
-
-  <div class="nav-divider"></div>
-  <a href="13_answer-logic.html"><i class="fa-solid fa-diagram-project fa-fw"></i> AI 답변 로직</a>
-  <a href="17_system-data-guide.html" class="active"><i class="fa-solid fa-network-wired fa-fw"></i> 데이터 연결 구조</a>
-  <a href="15_aio-guide.html"><i class="fa-solid fa-globe fa-fw"></i> AIO 가이드</a>
-  <a href="12_coverage-code-table.html"><i class="fa-solid fa-table-list fa-fw"></i> 담보코드</a>
-
-  <div class="nav-divider"></div>
   <a href="01_guide.html"><i class="fa-solid fa-clipboard-list fa-fw"></i> 업무 가이드</a>
+  <a href="02_dashboard.html"><i class="fa-solid fa-chart-bar fa-fw"></i> 대시보드</a>
+  <div class="nav-divider"></div>
+  <a href="03_card-library.html"><i class="fa-solid fa-folder-open fa-fw"></i> 카드 라이브러리</a>
+  <a href="04_risk-type-list.html" style="padding-left:20px"><i class="fa-solid fa-circle-exclamation fa-fw"></i> ① Risk-type</a>
+  <a href="05_evidence-list.html" style="padding-left:20px"><i class="fa-solid fa-database fa-fw"></i> ② Evidence</a>
+  <a href="06_concept-list.html" style="padding-left:20px"><i class="fa-solid fa-lightbulb fa-fw"></i> ③ Concept</a>
+  <a href="07_rule-list.html" style="padding-left:20px"><i class="fa-solid fa-scale-balanced fa-fw"></i> ④ Rule</a>
+  <a href="08_policy-list.html" style="padding-left:20px"><i class="fa-solid fa-file-shield fa-fw"></i> ⑤ Policy</a>
+  <a href="16_playbook-list.html" style="padding-left:20px"><i class="fa-solid fa-bullseye fa-fw"></i> ⑥ Playbook</a>
+  <span class="nav-locked" style="padding-left:20px"><i class="fa-solid fa-lock fa-fw"></i> ⑦ Case 🔒</span>
+  <div class="nav-divider"></div>
+  <a href="09_review-workflow.html"><i class="fa-solid fa-check-double fa-fw"></i> 검수·승인</a>
+  <a href="00_canvas-main.html"><i class="fa-solid fa-diagram-project fa-fw"></i> 카드 연결</a>
+  <a href="11_dry-run.html"><i class="fa-solid fa-flask fa-fw"></i> 사전 테스트</a>
+  <a href="18_system-settings.html"><i class="fa-solid fa-sliders fa-fw"></i> 시스템 설정</a>
+  <a href="19_faq-rag.html" style="padding-left:20px"><i class="fa-solid fa-list-check fa-fw"></i> FAQ Q&A</a>
+  <div class="nav-divider"></div>
   <a href="00_design-system.html"><i class="fa-solid fa-palette fa-fw"></i> 디자인 시스템</a>
+  <a href="13_answer-logic.html"><i class="fa-solid fa-sitemap fa-fw"></i> AI 답변 생성 로직</a>
+  <a href="15_aio-guide.html"><i class="fa-solid fa-magnifying-glass fa-fw"></i> AIO 가이드</a>
+  <a href="12_coverage-code-table.html"><i class="fa-solid fa-table-list fa-fw"></i> 담보코드</a>
 </nav>
 
 <main class="main">
   <div class="page-header">
-    <h1>KC 엔진 데이터 연결 구조</h1>
+    <h1>Clark AI 데이터 연결 구조</h1>
     <p>각 카드가 어떤 데이터를 보고 무엇을 하는지 — 제작·운영 담당자 참고용</p>
   </div>
 
@@ -162,7 +154,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
       <div class="flow-step">
         <div class="flow-step-num">②</div>
         <div class="flow-step-title">데이터 전달</div>
-        <div class="flow-step-desc">개인 식별 정보를 제외한 데이터가 KC 엔진으로 전달됩니다.</div>
+        <div class="flow-step-desc">개인 식별 정보를 제외한 데이터가 Clark AI로 전달됩니다.</div>
         <div class="flow-data-chips">
           <span class="flow-chip chip-mydata"><i class="fa-solid fa-shield-halved fa-fw"></i> 마이데이터 — 보험 보유 현황 (담보 종류·보장 금액 등)</span>
           <span class="flow-chip chip-fromage"><i class="fa-solid fa-heartbeat fa-fw"></i> 프롬에이지 — 건강 위험도 등급 (암·심혈관·생체나이 등)</span>
@@ -174,8 +166,8 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 
       <div class="flow-step">
         <div class="flow-step-num">③</div>
-        <div class="flow-step-title">KC 엔진 분석</div>
-        <div class="flow-step-desc">KC 엔진이 질의 내용과 전달받은 데이터를 바탕으로 KC 카드들을 참조해 답변 구성을 분석합니다.</div>
+        <div class="flow-step-title">Clark AI 분석</div>
+        <div class="flow-step-desc">Clark AI가 질의 내용과 전달받은 데이터를 바탕으로 KC 카드들을 참조해 답변 구성을 분석합니다.</div>
       </div>
 
       <div class="flow-arrow">↓</div>
@@ -211,19 +203,19 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
     </div>
   </div>
 
-  <!-- 섹션 2: KC 엔진이 상시 보유하거나 자동 전달받는 데이터 -->
+  <!-- 섹션 2: Clark AI가 상시 보유하거나 자동 전달받는 데이터 -->
   <div class="section">
-    <div class="section-title"><i class="fa-solid fa-database fa-fw" style="color:var(--card-evidence)"></i> KC 엔진이 자동으로 활용하는 데이터</div>
-    <p style="font-size:14px;color:var(--text-secondary);margin-bottom:16px;line-height:1.6"><strong>마이데이터·프롬에이지·프로파일</strong>은 상담 시 자동으로 KC 엔진에 전달됩니다 — Evidence 카드로 별도 등록하지 않아도 됩니다. <strong>공인 외부 통계</strong>(심평원·건보공단 등)는 KC 엔진이 자동 접근할 수 없으므로 운영자가 Evidence 카드로 직접 등록해야 합니다. <strong>약관 DB</strong>는 크롤링 파이프라인이 자동 관리하며, Rule 카드의 "약관 DB 연동" 플래그 활성화 시 자동 조회됩니다.</p>
+    <div class="section-title"><i class="fa-solid fa-database fa-fw" style="color:var(--card-evidence)"></i> Clark AI가 자동으로 활용하는 데이터</div>
+    <p style="font-size:14px;color:var(--text-secondary);margin-bottom:16px;line-height:1.6"><strong>마이데이터·프롬에이지·프로파일</strong>은 상담 시 자동으로 Clark AI에 전달됩니다 — Evidence 카드로 별도 등록하지 않아도 됩니다. <strong>공인 외부 통계</strong>(심평원·건보공단 등)는 Clark AI가 자동 접근할 수 없으므로 운영자가 Evidence 카드로 직접 등록해야 합니다. <strong>약관 DB</strong>는 크롤링 파이프라인이 자동 관리하며, Rule 카드의 "약관 DB 연동" 플래그 활성화 시 자동 조회됩니다.</p>
     <div class="stat-grid">
 
       <div class="stat-card">
         <div class="stat-card-icon" style="color:var(--card-concept)"><i class="fa-solid fa-shield-halved"></i></div>
         <div class="stat-card-title">마이데이터 + 프롬에이지 + 프로파일 <span style="font-size:12px;font-weight:400;color:var(--text-hint)">자동 전달</span></div>
         <ul class="stat-card-list">
-          <li><i class="fa-solid fa-circle fa-fw" style="font-size:6px;color:var(--card-concept);margin-top:5px"></i>마이데이터 — 보험 담보 종류·보장 금액·납입 방식</li>
-          <li><i class="fa-solid fa-circle fa-fw" style="font-size:6px;color:var(--card-concept);margin-top:5px"></i>프롬에이지 — 건강 위험도 등급 (위험/주의/양호)</li>
-          <li><i class="fa-solid fa-circle fa-fw" style="font-size:6px;color:var(--card-concept);margin-top:5px"></i>프로파일 — 나이·성별·결혼여부·거주지 등</li>
+          <li><i class="fa-solid fa-circle fa-fw" style="font-size:6px;color:var(--card-concept);margin-top:5px"></i><strong>마이데이터</strong> — coverage_amt (보장 금액) / renewal_status (갱신 여부) / insu_type (보험 유형) / start_date (가입일) / end_date (만기일)</li>
+          <li><i class="fa-solid fa-circle fa-fw" style="font-size:6px;color:var(--card-concept);margin-top:5px"></i><strong>프롬에이지</strong> — 건강 위험도 등급 (위험/주의/양호)</li>
+          <li><i class="fa-solid fa-circle fa-fw" style="font-size:6px;color:var(--card-concept);margin-top:5px"></i><strong>프로파일</strong> — age (나이/만) / gender (성별: 남/여) / marital (결혼여부: 기혼/미혼) / has_children (자녀유무: Y/N) / job_risk (직업위험도: 비위험/중위험/고위험) / expecting (출산예정: Y/N) / region (거주지: 서울/경기/인천/…)</li>
         </ul>
         <div class="stat-card-note">상담 시 실시간 전달. Rule 조건 판단에 직접 활용. Evidence 카드 등록 불필요.</div>
       </div>
@@ -237,7 +229,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
           <li><i class="fa-solid fa-circle fa-fw" style="font-size:6px;color:var(--card-evidence);margin-top:5px"></i>KOSTAT(통계청) — 사망원인·기대여명</li>
           <li><i class="fa-solid fa-circle fa-fw" style="font-size:6px;color:var(--card-evidence);margin-top:5px"></i>FSS(금감원) — 보험계약 유지율·미가입률 통계</li>
         </ul>
-        <div class="stat-card-note">KC 엔진이 자동 접근 불가 — 운영자가 출처·지표·기준값을 Evidence 카드에 직접 입력해야 합니다.</div>
+        <div class="stat-card-note">Clark AI가 자동 접근 불가 — 운영자가 출처·지표·기준값을 Evidence 카드에 직접 입력해야 합니다.</div>
       </div>
 
       <div class="stat-card">
@@ -315,12 +307,12 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 
   <!-- 섹션 4: 개인정보 처리 경계 -->
   <div class="section">
-    <div class="section-title"><i class="fa-solid fa-shield-halved fa-fw" style="color:var(--status-active)"></i> KC 엔진에 전달되는 정보와 전달되지 않는 정보</div>
+    <div class="section-title"><i class="fa-solid fa-shield-halved fa-fw" style="color:var(--status-active)"></i> Clark AI에 전달되는 정보와 전달되지 않는 정보</div>
     <div class="boundary-grid">
 
       <div class="boundary-yes">
         <div class="boundary-title" style="color:#0F6E56"><i class="fa-solid fa-circle-check fa-fw"></i> 전달되는 정보</div>
-        <p style="font-size:13px;color:#3A7A60;margin-bottom:12px;line-height:1.5">KC 엔진은 아래 정보를 상담 시 전달받아 분석에 활용합니다.</p>
+        <p style="font-size:13px;color:#3A7A60;margin-bottom:12px;line-height:1.5">Clark AI는 아래 정보를 상담 시 전달받아 분석에 활용합니다.</p>
         <ul class="boundary-list">
           <li><span class="mark" style="color:#0F6E56;font-weight:700">✓</span> 보험 담보 종류 (예: 암진단, 뇌졸중, 입원일당)</li>
           <li><span class="mark" style="color:#0F6E56;font-weight:700">✓</span> 담보별 보장 금액 범위</li>
@@ -332,7 +324,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 
       <div class="boundary-no">
         <div class="boundary-title" style="color:#A32D2D"><i class="fa-solid fa-circle-xmark fa-fw"></i> 전달되지 않는 정보</div>
-        <p style="font-size:13px;color:#8A3A3A;margin-bottom:12px;line-height:1.5">KC 엔진은 아래 정보를 전달받지 않으며, 분석에도 활용하지 않습니다.</p>
+        <p style="font-size:13px;color:#8A3A3A;margin-bottom:12px;line-height:1.5">Clark AI는 아래 정보를 전달받지 않으며, 분석에도 활용하지 않습니다.</p>
         <ul class="boundary-list">
           <li><span class="mark" style="color:#A32D2D;font-weight:700">✕</span> 이름, 주민등록번호, 연락처</li>
           <li><span class="mark" style="color:#A32D2D;font-weight:700">✕</span> 보험사 이름, 보험 상품명, 계약 번호</li>
@@ -356,7 +348,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
       <div class="caution-card">
         <div class="caution-icon" style="color:var(--card-evidence)"><i class="fa-solid fa-building-columns"></i></div>
         <div class="caution-title">유의 ① Evidence에는 공인 기관 통계를 직접 입력해야 합니다</div>
-        <div class="caution-body">Evidence 카드는 KC 엔진이 자동으로 접근할 수 없는 공인 외부 통계 전용입니다. 운영자가 출처 기관·보고서명·기준 연도·지표명·기준값을 직접 입력해야 합니다. 마이데이터·프롬에이지는 상담 시 자동 전달되므로 별도 Evidence 카드 등록이 필요하지 않습니다.</div>
+        <div class="caution-body">Evidence 카드는 Clark AI가 자동으로 접근할 수 없는 공인 외부 통계 전용입니다. 운영자가 출처 기관·보고서명·기준 연도·지표명·기준값을 직접 입력해야 합니다. 마이데이터·프롬에이지는 상담 시 자동 전달되므로 별도 Evidence 카드 등록이 필요하지 않습니다.</div>
       </div>
 
       <div class="caution-card">

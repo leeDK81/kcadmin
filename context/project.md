@@ -8,7 +8,7 @@
 ## KC Admin이란
 
 Clark AI가 정확한 KC(Knowledge Core) 기반 답변을 하기 위한 카드 등록·승인·관리 도구.
-목표: 개발자·운영자에게 전달 가능한 HTML 인터랙티브 목업 제작 (`mockups_v2/` 27개).
+목표: 개발자·운영자에게 전달 가능한 HTML 인터랙티브 목업 제작 (`mockups_v2/` 26개).
 
 - **KC Admin** = 운영자가 카드를 사전 등록·승인·관리하는 UI 도구 (이 목업)
 - **KC Engine(API)** = 런타임에 카드를 실행·참조하는 처리 엔진
@@ -127,7 +127,7 @@ Phase 1.5 이관: 리드 스코어링 (GA 수신 스펙 대기). Phase 2: 배정
 
 ---
 
-## 화면 파일 목록 (mockups_v2/ 27개)
+## 화면 파일 목록 (mockups_v2/ 26개)
 
 | 파일 | 화면 |
 |---|---|
@@ -150,11 +150,10 @@ Phase 1.5 이관: 리드 스코어링 (GA 수신 스펙 대기). Phase 2: 배정
 | 11_dry-run.html | 사전 테스트 |
 | 12_coverage-code-table.html | 담보코드·필드 레퍼런스 |
 | 13_answer-logic.html | AI 답변 생성 로직·예시 (개발자·기획자) |
-| 14_answer-logic-guide.html | 13_answer-logic.html 자동 리다이렉트 |
 | 15_aio-guide.html | AIO 가이드 |
 | 16_playbook-list.html | Playbook 목록 |
 | 16_card-editor-playbook.html | Playbook 편집기 |
-| 17_system-data-guide.html | KC 엔진 데이터 연결 구조 |
+| 17_system-data-guide.html | Clark AI 데이터 연결 구조 (사이드바 미노출 — 직접 URL 접근) |
 | 18_system-settings.html | **LLM Fallback 시스템 설정** — Case 3 미매칭 시 답변 제한 규칙 (KC 체인과 독립, 저장 즉시 반영) |
 | 19_faq-rag.html | **Clark 서비스 전용 FAQ RAG 관리** — Clark 앱 사용 안내·서비스 정책 Q&A 등록·검수·인덱스 관리 (사이드바: 18_system-settings 하위) |
 

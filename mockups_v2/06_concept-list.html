@@ -21,7 +21,6 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 .sidebar a,.nav-locked{display:flex;align-items:center;gap:8px;padding:8px 16px;color:#C8C8C4;text-decoration:none;font-size:14px;transition:background .15s}
 .sidebar a:hover{background:rgba(255,255,255,.08);color:#fff}
 .sidebar a.active{background:rgba(255,255,255,.15);color:#fff;font-weight:600;border-left:3px solid #5A8AE0}
-.nav-section{padding:16px 16px 4px;font-size:11px;color:#666;text-transform:uppercase;letter-spacing:.08em}
 .nav-divider{border-top:1px solid #333;margin:8px 0}
 .nav-locked{color:#555!important;cursor:not-allowed}
 .main{flex:1;padding:32px;overflow-y:auto}
@@ -58,41 +57,36 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 .warn-tag{display:inline-flex;align-items:center;gap:4px;font-size:12px;color:#A32D2D;font-weight:600}
 .conn-chip{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600;white-space:nowrap;margin:0 4px 0 0}
 .chip-risk{background:rgba(201,75,26,.1);color:#C94B1A}
+.chip-req{background:#FFF0ED;border:1px solid #C94B1A;color:#C94B1A;font-weight:700}
+.badge-public{background:rgba(26,74,154,.12);color:#1A4A9A}
 </style>
 </head>
 <body>
 <div class="layout">
 <nav class="sidebar">
   <div class="sidebar-logo">&#9889; KC Admin <span style="font-size:10px;background:#5A8AE0;color:#fff;padding:1px 6px;border-radius:3px;margin-left:4px;font-weight:600">v2</span></div>
-
-  <a href="02_dashboard.html"><i class="fa-solid fa-chart-bar fa-fw"></i> 대시보드</a>
-
-  <div class="nav-divider"></div>
-
-  <a href="03_card-library.html"><i class="fa-solid fa-folder-open fa-fw"></i> ① 카드 등록</a>
-  <a href="04_risk-type-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-circle-exclamation fa-fw" style="font-size:11px;color:#C94B1A"></i> Risk-type</a>
-  <a href="05_evidence-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-database fa-fw" style="font-size:11px;color:#1A7A4A"></i> Evidence</a>
-  <a href="06_concept-list.html" class="active" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-lightbulb fa-fw" style="font-size:11px;color:#1A4A9A"></i> Concept</a>
-  <a href="07_rule-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-scale-balanced fa-fw" style="font-size:11px;color:#9A1A1A"></i> Rule</a>
-  <a href="08_policy-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-file-shield fa-fw" style="font-size:11px;color:#5A5A55"></i> Policy</a>
-  <a href="16_playbook-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-handshake fa-fw" style="font-size:11px;color:#9A70D0"></i> Playbook</a>
-  <span class="nav-locked" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-lock fa-fw" style="font-size:11px"></i> Case &#128274;</span>
-
-  <a href="09_review-workflow.html"><i class="fa-solid fa-circle-check fa-fw"></i> ② 검수·승인</a>
-  <a href="00_canvas-main.html"><i class="fa-solid fa-diagram-project fa-fw"></i> ③ 연결</a>
-  <a href="11_dry-run.html"><i class="fa-solid fa-flask fa-fw"></i> ④ 사전 테스트</a>
-  <a href="18_system-settings.html"><i class="fa-solid fa-sliders fa-fw"></i> 시스템 설정</a>
-  <a href="19_faq-rag.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-list-check fa-fw" style="font-size:11px;color:#1A4A9A"></i> FAQ RAG 관리</a>
-
-  <div class="nav-divider"></div>
-  <a href="13_answer-logic.html"><i class="fa-solid fa-diagram-project fa-fw"></i> AI 답변 로직</a>
-  <a href="17_system-data-guide.html"><i class="fa-solid fa-network-wired fa-fw"></i> 데이터 연결 구조</a>
-  <a href="15_aio-guide.html"><i class="fa-solid fa-globe fa-fw"></i> AIO 가이드</a>
-  <a href="12_coverage-code-table.html"><i class="fa-solid fa-table-list fa-fw"></i> 담보코드</a>
-
-  <div class="nav-divider"></div>
   <a href="01_guide.html"><i class="fa-solid fa-clipboard-list fa-fw"></i> 업무 가이드</a>
+  <a href="02_dashboard.html"><i class="fa-solid fa-chart-bar fa-fw"></i> 대시보드</a>
+  <div class="nav-divider"></div>
+  <a href="03_card-library.html"><i class="fa-solid fa-folder-open fa-fw"></i> 카드 라이브러리</a>
+  <a href="04_risk-type-list.html" style="padding-left:20px"><i class="fa-solid fa-circle-exclamation fa-fw"></i> ① Risk-type</a>
+  <a href="05_evidence-list.html" style="padding-left:20px"><i class="fa-solid fa-database fa-fw"></i> ② Evidence</a>
+  <a href="06_concept-list.html" class="active" style="padding-left:20px"><i class="fa-solid fa-lightbulb fa-fw"></i> ③ Concept</a>
+  <a href="07_rule-list.html" style="padding-left:20px"><i class="fa-solid fa-scale-balanced fa-fw"></i> ④ Rule</a>
+  <a href="08_policy-list.html" style="padding-left:20px"><i class="fa-solid fa-file-shield fa-fw"></i> ⑤ Policy</a>
+  <a href="16_playbook-list.html" style="padding-left:20px"><i class="fa-solid fa-bullseye fa-fw"></i> ⑥ Playbook</a>
+  <span class="nav-locked" style="padding-left:20px"><i class="fa-solid fa-lock fa-fw"></i> ⑦ Case 🔒</span>
+  <div class="nav-divider"></div>
+  <a href="09_review-workflow.html"><i class="fa-solid fa-check-double fa-fw"></i> 검수·승인</a>
+  <a href="00_canvas-main.html"><i class="fa-solid fa-diagram-project fa-fw"></i> 카드 연결</a>
+  <a href="11_dry-run.html"><i class="fa-solid fa-flask fa-fw"></i> 사전 테스트</a>
+  <a href="18_system-settings.html"><i class="fa-solid fa-sliders fa-fw"></i> 시스템 설정</a>
+  <a href="19_faq-rag.html" style="padding-left:20px"><i class="fa-solid fa-list-check fa-fw"></i> FAQ Q&A</a>
+  <div class="nav-divider"></div>
   <a href="00_design-system.html"><i class="fa-solid fa-palette fa-fw"></i> 디자인 시스템</a>
+  <a href="13_answer-logic.html"><i class="fa-solid fa-sitemap fa-fw"></i> AI 답변 생성 로직</a>
+  <a href="15_aio-guide.html"><i class="fa-solid fa-magnifying-glass fa-fw"></i> AIO 가이드</a>
+  <a href="12_coverage-code-table.html"><i class="fa-solid fa-table-list fa-fw"></i> 담보코드</a>
 </nav>
 <main class="main">
   <div class="page-header">
@@ -108,10 +102,11 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
     <div class="filter-tabs">
       <button class="filter-tab active" onclick="filter('all',this)">전체 <span id="c-all"></span></button>
       <button class="filter-tab" onclick="filter('active',this)">🟢 라이브 <span id="c-active"></span></button>
-      <button class="filter-tab" onclick="filter('review',this)">⏳ 승인요청 <span id="c-review"></span></button>
-      <button class="filter-tab" onclick="filter('draft',this)">📝 임시저장 <span id="c-draft"></span></button>
       <button class="filter-tab" onclick="filter('approved',this)">✔ 승인완료 <span id="c-approved"></span></button>
+      <button class="filter-tab" onclick="filter('review',this)">⏳ 검수중 <span id="c-review"></span></button>
+      <button class="filter-tab" onclick="filter('draft',this)">📝 임시저장 <span id="c-draft"></span></button>
       <button class="filter-tab" onclick="filter('paused',this)">⏸ 일시중지 <span id="c-paused"></span></button>
+      <button class="filter-tab" onclick="filter('rejected',this)">🔴 반려 <span id="c-rejected"></span></button>
     </div>
     <a href="06_card-editor-concept.html" class="btn btn-primary"><i class="fa fa-plus"></i> 신규 등록</a>
   </div>
@@ -120,10 +115,11 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
     <thead>
       <tr>
         <th style="width:130px">상태</th>
-        <th style="width:200px">코드 · 명칭</th>
+        <th style="width:190px">코드 · 명칭</th>
+        <th style="width:100px">공개범위</th>
         <th>대표 동의어</th>
-        <th style="width:120px">연결</th>
-        <th style="width:120px;text-align:center">동의어수</th>
+        <th style="width:110px">연결</th>
+        <th style="width:100px;text-align:center">동의어수</th>
         <th style="width:100px">수정일</th>
         <th style="width:80px"></th>
       </tr>
@@ -140,9 +136,24 @@ const DATA=[
   {code:'CO004',name:'무보장',status:'active',synonyms:['보험없음','미보장','no coverage'],riskTypes:['T01 무보장형'],updated:'2026-05-10'},
   {code:'CO005',name:'노후간병',status:'approved',synonyms:['요양','간병','노인요양'],riskTypes:['T05 노후돌봄보장 공백형'],updated:'2026-05-15'},
   {code:'CO006',name:'보험료부담',status:'paused',synonyms:[],riskTypes:['T06 납입여력부족 우려형'],updated:'2026-05-16'},
+  {code:'CO007',name:'실손보험',status:'rejected',synonyms:['실비','실손','실비보험'],riskTypes:['T01 무보장형'],updated:'2026-06-20'},
 ];
-const ST={active:'🟢 라이브',review:'⏳ 승인요청',draft:'📝 임시저장',approved:'✔ 승인완료',paused:'⏸ 일시중지'};
+const ST={active:'🟢 라이브',review:'⏳ 승인요청',draft:'📝 임시저장',approved:'✔ 승인완료',paused:'⏸ 일시중지',rejected:'🔴 반려'};
 let cur='all';
+function actionBtns(d) {
+  const editUrl = `06_card-editor-concept.html?id=${d.code}`;
+  if (d.status === 'draft')    return `<a href="${editUrl}" class="btn btn-sm">편집</a> <button onclick="delCard('${d.code}')" class="btn btn-sm">삭제</button>`;
+  if (d.status === 'review')   return `<button onclick="cancelReview('${d.code}')" class="btn btn-sm">요청취소</button>`;
+  if (d.status === 'approved') return `<a href="00_canvas-main.html" class="btn btn-sm">캔버스에서 연결</a> <a href="${editUrl}" class="btn btn-sm">편집</a>`;
+  if (d.status === 'active')   return `<button onclick="pauseCard('${d.code}')" class="btn btn-sm">일시중지</button> <a href="${editUrl}" class="btn btn-sm">편집</a>`;
+  if (d.status === 'paused')   return `<button onclick="resumeCard('${d.code}')" class="btn btn-sm">재시작</button> <a href="${editUrl}" class="btn btn-sm">편집</a>`;
+  if (d.status === 'rejected') return `<a href="${editUrl}" class="btn btn-sm">편집</a> <button onclick="delCard('${d.code}')" class="btn btn-sm">삭제</button>`;
+  return `<a href="${editUrl}" class="btn btn-sm">편집</a>`;
+}
+function delCard(id){ alert('삭제: '+id); }
+function cancelReview(id){ alert('요청취소: '+id); }
+function pauseCard(id){ alert('일시중지: '+id); }
+function resumeCard(id){ alert('재시작: '+id); }
 function filter(s,btn){cur=s;document.querySelectorAll('.filter-tab').forEach(t=>t.classList.remove('active'));btn.classList.add('active');render();}
 function render(){
   const rows=cur==='all'?DATA:DATA.filter(d=>d.status===cur);
@@ -155,16 +166,17 @@ function render(){
     <tr class="card-row" onclick="location.href='06_card-editor-concept.html'">
       <td><span class="badge badge-${d.status}">${ST[d.status]}</span></td>
       <td><div class="cell-code">${d.code}</div><div class="cell-name" title="${d.name}">${d.name}</div></td>
+      <td><span class="badge badge-public">고객 공개</span></td>
       <td>${chips}</td>
       <td>${d.riskTypes.length ? `<span class="conn-chip chip-risk">Risk-type ${d.riskTypes.length}</span>` : `<span style="color:var(--text-hint);font-size:13px">—</span>`}</td>
       <td style="text-align:center">${d.synonyms.length?`<span style="color:var(--step-active);font-weight:600">${d.synonyms.length}개</span>`:'<span style="color:var(--text-hint)">0</span>'}</td>
       <td class="cell-date">${d.updated}</td>
-      <td><a href="06_card-editor-concept.html" class="btn btn-sm" onclick="event.stopPropagation()">편집</a></td>
+      <td style="white-space:nowrap" onclick="event.stopPropagation()">${actionBtns(d)}</td>
     </tr>`;}).join('')
-    :`<tr class="empty-row"><td colspan="7">해당 상태의 카드가 없습니다</td></tr>`;
-  const cnt={all:DATA.length,active:0,review:0,draft:0,approved:0,paused:0};
+    :`<tr class="empty-row"><td colspan="8">해당 상태의 카드가 없습니다</td></tr>`;
+  const cnt={all:DATA.length,active:0,review:0,draft:0,approved:0,paused:0,rejected:0};
   DATA.forEach(d=>cnt[d.status]++);
-  ['all','active','review','draft','approved','paused'].forEach(k=>{const el=document.getElementById('c-'+k);if(el)el.textContent=cnt[k]});
+  ['all','active','review','draft','approved','paused','rejected'].forEach(k=>{const el=document.getElementById('c-'+k);if(el)el.textContent=cnt[k]});
 }
 render();
 </script>

@@ -21,7 +21,6 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 .sidebar a,.nav-locked{display:flex;align-items:center;gap:8px;padding:8px 16px;color:#C8C8C4;text-decoration:none;font-size:14px;transition:background .15s}
 .sidebar a:hover{background:rgba(255,255,255,.08);color:#fff}
 .sidebar a.active{background:rgba(255,255,255,.15);color:#fff;font-weight:600;border-left:3px solid #5A8AE0}
-.nav-section{padding:16px 16px 4px;font-size:11px;color:#666;text-transform:uppercase;letter-spacing:.08em}
 .nav-divider{border-top:1px solid #333;margin:8px 0}
 .nav-locked{color:#555!important;cursor:not-allowed}
 .main{flex:1;padding:32px;overflow-y:auto}
@@ -60,41 +59,35 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 .chip-evidence{background:rgba(26,122,74,.1);color:#1A7A4A}
 .chip-policy{background:rgba(90,90,85,.1);color:#5A5A55}
 .empty-row td{text-align:center;padding:48px;color:var(--text-hint)}
+.badge-baseline{background:rgba(186,117,23,.12);color:#BA7517}
 </style>
 </head>
 <body>
 <div class="layout">
 <nav class="sidebar">
   <div class="sidebar-logo">&#9889; KC Admin <span style="font-size:10px;background:#5A8AE0;color:#fff;padding:1px 6px;border-radius:3px;margin-left:4px;font-weight:600">v2</span></div>
-
-  <a href="02_dashboard.html"><i class="fa-solid fa-chart-bar fa-fw"></i> 대시보드</a>
-
-  <div class="nav-divider"></div>
-
-  <a href="03_card-library.html"><i class="fa-solid fa-folder-open fa-fw"></i> ① 카드 등록</a>
-  <a href="04_risk-type-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-circle-exclamation fa-fw" style="font-size:11px;color:#C94B1A"></i> Risk-type</a>
-  <a href="05_evidence-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-database fa-fw" style="font-size:11px;color:#1A7A4A"></i> Evidence</a>
-  <a href="06_concept-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-lightbulb fa-fw" style="font-size:11px;color:#1A4A9A"></i> Concept</a>
-  <a href="07_rule-list.html" class="active" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-scale-balanced fa-fw" style="font-size:11px;color:#9A1A1A"></i> Rule</a>
-  <a href="08_policy-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-file-shield fa-fw" style="font-size:11px;color:#5A5A55"></i> Policy</a>
-  <a href="16_playbook-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-handshake fa-fw" style="font-size:11px;color:#9A70D0"></i> Playbook</a>
-  <span class="nav-locked" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-lock fa-fw" style="font-size:11px"></i> Case &#128274;</span>
-
-  <a href="09_review-workflow.html"><i class="fa-solid fa-circle-check fa-fw"></i> ② 검수·승인</a>
-  <a href="00_canvas-main.html"><i class="fa-solid fa-diagram-project fa-fw"></i> ③ 연결</a>
-  <a href="11_dry-run.html"><i class="fa-solid fa-flask fa-fw"></i> ④ 사전 테스트</a>
-  <a href="18_system-settings.html"><i class="fa-solid fa-sliders fa-fw"></i> 시스템 설정</a>
-  <a href="19_faq-rag.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-list-check fa-fw" style="font-size:11px;color:#1A4A9A"></i> FAQ RAG 관리</a>
-
-  <div class="nav-divider"></div>
-  <a href="13_answer-logic.html"><i class="fa-solid fa-diagram-project fa-fw"></i> AI 답변 로직</a>
-  <a href="17_system-data-guide.html"><i class="fa-solid fa-network-wired fa-fw"></i> 데이터 연결 구조</a>
-  <a href="15_aio-guide.html"><i class="fa-solid fa-globe fa-fw"></i> AIO 가이드</a>
-  <a href="12_coverage-code-table.html"><i class="fa-solid fa-table-list fa-fw"></i> 담보코드</a>
-
-  <div class="nav-divider"></div>
   <a href="01_guide.html"><i class="fa-solid fa-clipboard-list fa-fw"></i> 업무 가이드</a>
+  <a href="02_dashboard.html"><i class="fa-solid fa-chart-bar fa-fw"></i> 대시보드</a>
+  <div class="nav-divider"></div>
+  <a href="03_card-library.html"><i class="fa-solid fa-folder-open fa-fw"></i> 카드 라이브러리</a>
+  <a href="04_risk-type-list.html" style="padding-left:20px"><i class="fa-solid fa-circle-exclamation fa-fw"></i> ① Risk-type</a>
+  <a href="05_evidence-list.html" style="padding-left:20px"><i class="fa-solid fa-database fa-fw"></i> ② Evidence</a>
+  <a href="06_concept-list.html" style="padding-left:20px"><i class="fa-solid fa-lightbulb fa-fw"></i> ③ Concept</a>
+  <a href="07_rule-list.html" class="active" style="padding-left:20px"><i class="fa-solid fa-scale-balanced fa-fw"></i> ④ Rule</a>
+  <a href="08_policy-list.html" style="padding-left:20px"><i class="fa-solid fa-file-shield fa-fw"></i> ⑤ Policy</a>
+  <a href="16_playbook-list.html" style="padding-left:20px"><i class="fa-solid fa-bullseye fa-fw"></i> ⑥ Playbook</a>
+  <span class="nav-locked" style="padding-left:20px"><i class="fa-solid fa-lock fa-fw"></i> ⑦ Case 🔒</span>
+  <div class="nav-divider"></div>
+  <a href="09_review-workflow.html"><i class="fa-solid fa-check-double fa-fw"></i> 검수·승인</a>
+  <a href="00_canvas-main.html"><i class="fa-solid fa-diagram-project fa-fw"></i> 카드 연결</a>
+  <a href="11_dry-run.html"><i class="fa-solid fa-flask fa-fw"></i> 사전 테스트</a>
+  <a href="18_system-settings.html"><i class="fa-solid fa-sliders fa-fw"></i> 시스템 설정</a>
+  <a href="19_faq-rag.html" style="padding-left:20px"><i class="fa-solid fa-list-check fa-fw"></i> FAQ Q&A</a>
+  <div class="nav-divider"></div>
   <a href="00_design-system.html"><i class="fa-solid fa-palette fa-fw"></i> 디자인 시스템</a>
+  <a href="13_answer-logic.html"><i class="fa-solid fa-sitemap fa-fw"></i> AI 답변 생성 로직</a>
+  <a href="15_aio-guide.html"><i class="fa-solid fa-magnifying-glass fa-fw"></i> AIO 가이드</a>
+  <a href="12_coverage-code-table.html"><i class="fa-solid fa-table-list fa-fw"></i> 담보코드</a>
 </nav>
 <main class="main">
   <div class="page-header">
@@ -110,10 +103,11 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
     <div class="filter-tabs">
       <button class="filter-tab active" onclick="filter('all',this)">전체 <span id="c-all"></span></button>
       <button class="filter-tab" onclick="filter('active',this)">🟢 라이브 <span id="c-active"></span></button>
-      <button class="filter-tab" onclick="filter('review',this)">⏳ 승인요청 <span id="c-review"></span></button>
-      <button class="filter-tab" onclick="filter('draft',this)">📝 임시저장 <span id="c-draft"></span></button>
       <button class="filter-tab" onclick="filter('approved',this)">✔ 승인완료 <span id="c-approved"></span></button>
+      <button class="filter-tab" onclick="filter('review',this)">⏳ 검수중 <span id="c-review"></span></button>
+      <button class="filter-tab" onclick="filter('draft',this)">📝 임시저장 <span id="c-draft"></span></button>
       <button class="filter-tab" onclick="filter('paused',this)">⏸ 일시중지 <span id="c-paused"></span></button>
+      <button class="filter-tab" onclick="filter('rejected',this)">✕ 반려 <span id="c-rejected"></span></button>
     </div>
     <a href="07_card-editor-rule.html" class="btn btn-primary"><i class="fa fa-plus"></i> 신규 등록</a>
   </div>
@@ -123,8 +117,9 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
       <tr>
         <th style="width:130px">상태</th>
         <th style="width:200px">코드 · 명칭</th>
-        <th style="width:200px">대상 Risk-type</th>
-        <th style="width:180px">연결</th>
+        <th style="width:110px">공개범위</th>
+        <th style="width:180px">대상 Risk-type</th>
+        <th style="width:160px">연결</th>
         <th style="width:100px">수정일</th>
         <th style="width:80px"></th>
       </tr>
@@ -135,17 +130,33 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 </div>
 <script>
 const DATA=[
-  {code:'RU001',name:'암진단금 미보유 또는 소액',status:'active',riskType:'T02 암투병생활비 부족형',evidences:['EV001 암 평균 입원 진료비 (심평원 2024)','EV002 암 5년 생존율 (건보공단 2023)'],policies:2,conditions:2,updated:'2026-05-14'},
-  {code:'RU002',name:'뇌혈관 보장 범위 협소',status:'review',riskType:'T04 뇌혈관질환보장 협소형',evidences:['EV003 뇌졸중 평균 입원 진료비 (심평원 2024)'],policies:1,conditions:3,updated:'2026-05-12'},
-  {code:'RU003',name:'심혈관 보장 미흡',status:'draft',riskType:'T03 심혈관질환보장 협소형',evidences:[],policies:0,conditions:0,updated:'2026-05-08'},
-  {code:'RU004',name:'노후 간병 보장 부재',status:'approved',riskType:'T05 노후돌봄보장 공백형',evidences:['EV005 65세 이상 간병보험 미가입률 (금감원 2024)'],policies:1,conditions:2,updated:'2026-05-15'},
-  {code:'RU005',name:'보험료 납입 부담 과다',status:'paused',riskType:'T06 납입여력부족 우려형',evidences:[],policies:0,conditions:0,updated:'2026-05-16'},
-  {code:'RU010',name:'단기납 만기 후 공백',status:'approved',riskType:'T09 단기납 만기 후 공백형',evidences:['EV005 65세 이상 간병보험 미가입률 (금감원 2024)'],policies:0,conditions:2,updated:'2026-05-15'},
-  {code:'RU011',name:'고액 보험료 유지 부담',status:'paused',riskType:'T10 고액 보험료 유지 부담형',evidences:[],policies:0,conditions:0,updated:'2026-05-16'},
+  {code:'RU001',name:'암진단금 미보유 또는 소액',status:'active',scope:'공통 기준',riskType:'T02 암투병생활비 부족형',evidences:['EV001 암 평균 입원 진료비 (심평원 2024)','EV002 암 5년 생존율 (건보공단 2023)'],policies:2,conditions:2,updated:'2026-05-14'},
+  {code:'RU002',name:'뇌혈관 보장 범위 협소',status:'review',scope:'공통 기준',riskType:'T04 뇌혈관질환보장 협소형',evidences:['EV003 뇌졸중 평균 입원 진료비 (심평원 2024)'],policies:1,conditions:3,updated:'2026-05-12'},
+  {code:'RU003',name:'심혈관 보장 미흡',status:'draft',scope:'공통 기준',riskType:'T03 심혈관질환보장 협소형',evidences:[],policies:0,conditions:0,updated:'2026-05-08'},
+  {code:'RU004',name:'노후 간병 보장 부재',status:'approved',scope:'공통 기준',riskType:'T05 노후돌봄보장 공백형',evidences:['EV005 65세 이상 간병보험 미가입률 (금감원 2024)'],policies:1,conditions:2,updated:'2026-05-15'},
+  {code:'RU005',name:'보험료 납입 부담 과다',status:'paused',scope:'공통 기준',riskType:'T06 납입여력부족 우려형',evidences:[],policies:0,conditions:0,updated:'2026-05-16'},
+  {code:'RU010',name:'단기납 만기 후 공백',status:'approved',scope:'공통 기준',riskType:'T09 단기납 만기 후 공백형',evidences:['EV005 65세 이상 간병보험 미가입률 (금감원 2024)'],policies:0,conditions:2,updated:'2026-05-15'},
+  {code:'RU011',name:'고액 보험료 유지 부담',status:'paused',scope:'공통 기준',riskType:'T10 고액 보험료 유지 부담형',evidences:[],policies:0,conditions:0,updated:'2026-05-16'},
+  {code:'RU006',name:'실손 중복 보장 기준 미흡',status:'rejected',scope:'공통 기준',riskType:'T07 실손중복보장 과잉형',evidences:[],policies:0,conditions:1,updated:'2026-05-18'},
 ];
-const ST={active:'🟢 라이브',review:'⏳ 승인요청',draft:'📝 임시저장',approved:'✔ 승인완료',paused:'⏸ 일시중지'};
+const ST={active:'🟢 라이브',review:'⏳ 검수중',draft:'📝 임시저장',approved:'✔ 승인완료',paused:'⏸ 일시중지',rejected:'✕ 반려'};
 let cur='all';
 function filter(s,btn){cur=s;document.querySelectorAll('.filter-tab').forEach(t=>t.classList.remove('active'));btn.classList.add('active');render();}
+function actionBtns(d) {
+  const id = d.id || d.code;
+  const editUrl = `07_card-editor-rule.html?id=${id}`;
+  if (d.status === 'draft')    return `<a href="${editUrl}" class="btn btn-sm">편집</a> <button onclick="delCard('${id}')" class="btn btn-sm">삭제</button>`;
+  if (d.status === 'review')   return `<button onclick="cancelReview('${id}')" class="btn btn-sm">요청취소</button>`;
+  if (d.status === 'approved') return `<a href="00_canvas-main.html" class="btn btn-sm">캔버스에서 연결</a> <a href="${editUrl}" class="btn btn-sm">편집</a>`;
+  if (d.status === 'active')   return `<button onclick="pauseCard('${id}')" class="btn btn-sm">일시중지</button> <a href="${editUrl}" class="btn btn-sm">편집</a>`;
+  if (d.status === 'paused')   return `<button onclick="resumeCard('${id}')" class="btn btn-sm">재시작</button> <a href="${editUrl}" class="btn btn-sm">편집</a>`;
+  if (d.status === 'rejected') return `<a href="${editUrl}" class="btn btn-sm">편집</a> <button onclick="delCard('${id}')" class="btn btn-sm">삭제</button>`;
+  return `<a href="${editUrl}" class="btn btn-sm">편집</a>`;
+}
+function delCard(id){ alert('삭제: '+id); }
+function cancelReview(id){ alert('요청취소: '+id); }
+function pauseCard(id){ alert('일시중지: '+id); }
+function resumeCard(id){ alert('재시작: '+id); }
 function render(){
   const rows=cur==='all'?DATA:DATA.filter(d=>d.status===cur);
   const tb=document.getElementById('tbody');
@@ -154,18 +165,19 @@ function render(){
     const polChip = d.policies > 0 ? `<span class="conn-chip chip-policy">Policy ${d.policies}</span>` : '';
     const evCell = evChip + (polChip ? ` ${polChip}` : '');
     return `
-    <tr class="card-row" onclick="location.href='07_card-editor-rule.html'">
+    <tr class="card-row" onclick="location.href='07_card-editor-rule.html?id=${d.id||d.code}'">
       <td><span class="badge badge-${d.status}">${ST[d.status]}</span></td>
       <td><div class="cell-code">${d.code}</div><div class="cell-name">${d.name} <span style="font-size:12px;color:var(--text-hint);font-weight:400">조건 ${d.conditions}개</span></div></td>
+      <td><span class="badge badge-baseline">${d.scope}</span></td>
       <td><div style="white-space:nowrap;font-size:13px;color:var(--text-secondary)">${d.riskType}</div></td>
       <td>${evCell}</td>
       <td class="cell-date">${d.updated}</td>
-      <td><a href="07_card-editor-rule.html" class="btn btn-sm" onclick="event.stopPropagation()">편집</a></td>
+      <td style="white-space:nowrap">${actionBtns(d)}</td>
     </tr>`;}).join('')
-    :`<tr class="empty-row"><td colspan="6">해당 상태의 카드가 없습니다</td></tr>`;
-  const cnt={all:DATA.length,active:0,review:0,draft:0,approved:0,paused:0};
+    :`<tr class="empty-row"><td colspan="7">해당 상태의 카드가 없습니다</td></tr>`;
+  const cnt={all:DATA.length,active:0,review:0,draft:0,approved:0,paused:0,rejected:0};
   DATA.forEach(d=>cnt[d.status]++);
-  ['all','active','review','draft','approved','paused'].forEach(k=>{const el=document.getElementById('c-'+k);if(el)el.textContent=cnt[k]});
+  ['all','active','review','draft','approved','paused','rejected'].forEach(k=>{const el=document.getElementById('c-'+k);if(el)el.textContent=cnt[k]});
 }
 render();
 </script>

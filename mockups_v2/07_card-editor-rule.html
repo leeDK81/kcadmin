@@ -26,7 +26,6 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 .sidebar a,.nav-locked{display:flex;align-items:center;gap:8px;padding:8px 16px;color:#C8C8C4;text-decoration:none;font-size:14px;transition:background .15s}
 .sidebar a:hover{background:rgba(255,255,255,.08);color:#fff}
 .sidebar a.active{background:rgba(255,255,255,.15);color:#fff;font-weight:600;border-left:3px solid #5A8AE0}
-.nav-section{padding:16px 16px 4px;font-size:11px;color:#666;text-transform:uppercase;letter-spacing:.08em}
 .nav-divider{border-top:1px solid #333;margin:8px 0}
 .nav-locked{color:#555!important;cursor:not-allowed}
 .main{flex:1;padding:32px;overflow-y:auto}
@@ -166,35 +165,28 @@ textarea.form-control{resize:vertical;min-height:80px}
 <div class="layout">
 <nav class="sidebar">
   <div class="sidebar-logo">&#9889; KC Admin <span style="font-size:10px;background:#5A8AE0;color:#fff;padding:1px 6px;border-radius:3px;margin-left:4px;font-weight:600">v2</span></div>
-
-  <a href="02_dashboard.html"><i class="fa-solid fa-chart-bar fa-fw"></i> 대시보드</a>
-
-  <div class="nav-divider"></div>
-
-  <a href="03_card-library.html"><i class="fa-solid fa-folder-open fa-fw"></i> ① 카드 등록</a>
-  <a href="04_risk-type-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-circle-exclamation fa-fw" style="font-size:11px;color:#C94B1A"></i> Risk-type</a>
-  <a href="05_evidence-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-database fa-fw" style="font-size:11px;color:#1A7A4A"></i> Evidence</a>
-  <a href="06_concept-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-lightbulb fa-fw" style="font-size:11px;color:#1A4A9A"></i> Concept</a>
-  <a href="07_rule-list.html" class="active" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-scale-balanced fa-fw" style="font-size:11px;color:#9A1A1A"></i> Rule</a>
-  <a href="08_policy-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-file-shield fa-fw" style="font-size:11px;color:#5A5A55"></i> Policy</a>
-  <a href="16_playbook-list.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-handshake fa-fw" style="font-size:11px;color:#9A70D0"></i> Playbook</a>
-  <span class="nav-locked" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-lock fa-fw" style="font-size:11px"></i> Case &#128274;</span>
-
-  <a href="09_review-workflow.html"><i class="fa-solid fa-circle-check fa-fw"></i> ② 검수·승인</a>
-  <a href="00_canvas-main.html"><i class="fa-solid fa-diagram-project fa-fw"></i> ③ 연결</a>
-  <a href="11_dry-run.html"><i class="fa-solid fa-flask fa-fw"></i> ④ 사전 테스트</a>
-  <a href="18_system-settings.html"><i class="fa-solid fa-sliders fa-fw"></i> 시스템 설정</a>
-  <a href="19_faq-rag.html" style="padding-left:28px;font-size:13px"><i class="fa-solid fa-list-check fa-fw" style="font-size:11px;color:#1A4A9A"></i> FAQ RAG 관리</a>
-
-  <div class="nav-divider"></div>
-  <a href="13_answer-logic.html"><i class="fa-solid fa-diagram-project fa-fw"></i> AI 답변 로직</a>
-  <a href="17_system-data-guide.html"><i class="fa-solid fa-network-wired fa-fw"></i> 데이터 연결 구조</a>
-  <a href="15_aio-guide.html"><i class="fa-solid fa-globe fa-fw"></i> AIO 가이드</a>
-  <a href="12_coverage-code-table.html"><i class="fa-solid fa-table-list fa-fw"></i> 담보코드</a>
-
-  <div class="nav-divider"></div>
   <a href="01_guide.html"><i class="fa-solid fa-clipboard-list fa-fw"></i> 업무 가이드</a>
+  <a href="02_dashboard.html"><i class="fa-solid fa-chart-bar fa-fw"></i> 대시보드</a>
+  <div class="nav-divider"></div>
+  <a href="03_card-library.html"><i class="fa-solid fa-folder-open fa-fw"></i> 카드 라이브러리</a>
+  <a href="04_risk-type-list.html" style="padding-left:20px"><i class="fa-solid fa-circle-exclamation fa-fw"></i> ① Risk-type</a>
+  <a href="05_evidence-list.html" style="padding-left:20px"><i class="fa-solid fa-database fa-fw"></i> ② Evidence</a>
+  <a href="06_concept-list.html" style="padding-left:20px"><i class="fa-solid fa-lightbulb fa-fw"></i> ③ Concept</a>
+  <a href="07_rule-list.html" class="active" style="padding-left:20px"><i class="fa-solid fa-scale-balanced fa-fw"></i> ④ Rule</a>
+  <a href="08_policy-list.html" style="padding-left:20px"><i class="fa-solid fa-file-shield fa-fw"></i> ⑤ Policy</a>
+  <a href="16_playbook-list.html" style="padding-left:20px"><i class="fa-solid fa-bullseye fa-fw"></i> ⑥ Playbook</a>
+  <span class="nav-locked" style="padding-left:20px"><i class="fa-solid fa-lock fa-fw"></i> ⑦ Case 🔒</span>
+  <div class="nav-divider"></div>
+  <a href="09_review-workflow.html"><i class="fa-solid fa-check-double fa-fw"></i> 검수·승인</a>
+  <a href="00_canvas-main.html"><i class="fa-solid fa-diagram-project fa-fw"></i> 카드 연결</a>
+  <a href="11_dry-run.html"><i class="fa-solid fa-flask fa-fw"></i> 사전 테스트</a>
+  <a href="18_system-settings.html"><i class="fa-solid fa-sliders fa-fw"></i> 시스템 설정</a>
+  <a href="19_faq-rag.html" style="padding-left:20px"><i class="fa-solid fa-list-check fa-fw"></i> FAQ Q&A</a>
+  <div class="nav-divider"></div>
   <a href="00_design-system.html"><i class="fa-solid fa-palette fa-fw"></i> 디자인 시스템</a>
+  <a href="13_answer-logic.html"><i class="fa-solid fa-sitemap fa-fw"></i> AI 답변 생성 로직</a>
+  <a href="15_aio-guide.html"><i class="fa-solid fa-magnifying-glass fa-fw"></i> AIO 가이드</a>
+  <a href="12_coverage-code-table.html"><i class="fa-solid fa-table-list fa-fw"></i> 담보코드</a>
 </nav>
 <main class="main">
     <nav class="breadcrumb">
@@ -238,7 +230,7 @@ textarea.form-control{resize:vertical;min-height:80px}
           <input class="form-control" type="text" value="RU012 (저장 시 자동 부여)" disabled style="background:#F4F4F2;color:var(--text-hint);font-family:monospace;font-size:13px;width:240px">
         </div>
         <div class="form-group">
-          <label>제목 <span style="color:var(--status-rejected)">*</span></label>
+          <label>Rule 이름 <span style="color:var(--status-rejected)">*</span></label>
           <input class="form-control" type="text" value="암진단금 미보유 또는 소액" placeholder="이 Rule이 어떤 조건을 판단하는지 명확히 표현하세요">
           <span class="field-hint">이 Rule이 어떤 조건을 판단하는지 명확히 표현하세요</span>
         </div>
@@ -247,25 +239,24 @@ textarea.form-control{resize:vertical;min-height:80px}
           <textarea class="form-control" placeholder="Rule 조건 충족 시 Clark AI가 사용자에게 보여줄 경고 문구. 예: '암 보장이 부족합니다'">암 보장이 부족합니다. 현재 보유하신 보험에 암 진단금 담보가 없거나 소액입니다.</textarea>
           <span class="field-hint">Rule 조건에 해당하는 고객에게 Clark이 표시할 경고 문구를 입력하세요</span>
         </div>
+        <div class="form-group" style="margin-top:8px">
+          <label>Risk-type 연결 <span style="color:var(--card-risk);font-size:13px;font-weight:600">필수</span> <span style="color:var(--text-hint);font-size:13px;font-weight:400">읽기 전용</span></label>
+          <p class="field-hint">캔버스(③ 연결)에서 연결된 Risk-type 카드입니다. 변경은 캔버스에서만 가능합니다.</p>
+          <div style="margin-top:6px">
+            <span class="badge badge-risk">RT01 암·종양</span>
+            <span class="badge badge-risk" style="margin-left:6px">RT02 뇌혈관질환</span>
+          </div>
+          <div style="margin-top:8px">
+            <a href="00_canvas-main.html" class="btn btn-secondary btn-sm">
+              <i class="fa-solid fa-diagram-project"></i> 캔버스에서 변경
+            </a>
+          </div>
+        </div>
       </div>
 
-      <!-- ② Risk-type 연결 (읽기 전용) -->
+      <!-- ② 판단 조건 (3-source: MYDATA/PROMAGE/PROFILE) -->
       <div class="card">
-        <div class="section-title">Risk-type 연결 <span style="color:var(--card-risk);font-size:13px;font-weight:600">필수</span></div>
-        <p class="field-hint">캔버스(③ 연결)에서 연결된 Risk-type 카드입니다. 변경은 캔버스에서만 가능합니다.</p>
-        <div style="margin-top:8px">
-          <span class="badge badge-risk">RT01 암·종양</span>
-          <span class="badge badge-risk" style="margin-left:6px">RT02 뇌혈관질환</span>
-        </div>
-        <div style="margin-top:10px">
-          <a href="00_canvas-main.html" class="btn btn-secondary btn-sm">
-            <i class="fa-solid fa-diagram-project"></i> 캔버스에서 변경
-          </a>
-        </div>
-      </div>
-      <!-- ③ 판단 조건 설정 -->
-      <div class="card">
-        <div class="section-title">판단 조건 설정 <span style="color:var(--status-rejected);font-size:13px">필수</span></div>
+        <div class="section-title">② 판단 조건 <span style="color:var(--status-rejected);font-size:13px">필수</span></div>
         <div class="note-box">
           <i class="fa fa-circle-info"></i> 아래 선택지는 주요 항목 예시입니다. 검색으로 더 많은 항목을 찾을 수 있습니다.
         </div>
@@ -284,9 +275,9 @@ textarea.form-control{resize:vertical;min-height:80px}
         </button>
       </div>
 
-      <!-- ④ Evidence 연결 (읽기 전용) -->
+      <!-- ③ Evidence 연결 (읽기 전용 배지 + 캔버스에서 변경 버튼) -->
       <div class="card">
-        <div class="section-title">Evidence 연결 <span style="color:var(--card-risk);font-size:13px;font-weight:600">필수 1개 이상</span></div>
+        <div class="section-title">③ Evidence 연결 <span style="color:var(--card-risk);font-size:13px;font-weight:600">필수 1개 이상</span> <span style="color:var(--text-hint);font-size:13px;font-weight:400">읽기 전용</span></div>
         <p class="field-hint">캔버스(③ 연결)에서 연결된 Evidence 카드입니다. 변경은 캔버스에서만 가능합니다.</p>
         <div style="margin-top:8px">
           <span class="badge badge-evidence">EV001 암 평균 입원 진료비</span>
@@ -298,9 +289,9 @@ textarea.form-control{resize:vertical;min-height:80px}
           </a>
         </div>
       </div>
-      <!-- ⑤ 약관 DB 연동 -->
+      <!-- ④ 약관DB연동 (체크박스, 선택사항) -->
       <div class="card">
-        <div class="section-title">약관 DB 연동 <span style="color:var(--text-secondary);font-size:13px;font-weight:400">선택사항</span></div>
+        <div class="section-title">④ 약관 DB 연동 <span style="color:var(--text-secondary);font-size:13px;font-weight:400">선택사항</span></div>
         <div class="banner-info" style="padding:8px 12px;border-radius:6px;border:1px solid #C0D0F0;background:#EEF4FF;font-size:13px;color:#1A3A6B;margin-bottom:14px">
           <i class="fa fa-circle-info"></i> 활성화 시, 이 Rule 조건 충족 → 마이데이터 담보코드 기준으로 약관 DB 자동 조회 → Clark 답변에 ⚠️ 면책조항 섹션 자동 포함합니다. 약관 DB는 크롤링 파이프라인이 최신 상태를 유지합니다.
         </div>
@@ -318,7 +309,7 @@ textarea.form-control{resize:vertical;min-height:80px}
         </div>
       </div>
 
-      <!-- ⑥ 액션 -->
+      <!-- ⑤ 액션 -->
       <div class="card">
         <div class="action-bar" style="padding-top:4px">
           <button class="btn btn-secondary" onclick="saveDraft()"><i class="fa fa-floppy-disk"></i> 임시저장</button>

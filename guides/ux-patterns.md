@@ -74,15 +74,15 @@
   <a href="16_playbook-list.html" style="padding-left:20px"><i class="fa-solid fa-bullseye fa-fw"></i> ⑥ Playbook</a>
   <span class="nav-locked" style="padding-left:20px"><i class="fa-solid fa-lock fa-fw"></i> ⑦ Case 🔒</span>
   <div class="nav-divider"></div>
-  <a href="00_canvas-main.html"><i class="fa-solid fa-diagram-project fa-fw"></i> 카드 연결</a>
-  <div class="nav-divider"></div>
   <a href="09_review-workflow.html"><i class="fa-solid fa-check-double fa-fw"></i> 검수·승인</a>
+  <a href="00_canvas-main.html"><i class="fa-solid fa-diagram-project fa-fw"></i> 카드 연결</a>
+  <a href="00_canvas-main.html"><i class="fa-solid fa-diagram-project fa-fw"></i> 카드 연결</a>
   <a href="11_dry-run.html"><i class="fa-solid fa-flask fa-fw"></i> 사전 테스트</a>
   <a href="18_system-settings.html"><i class="fa-solid fa-sliders fa-fw"></i> 시스템 설정</a>
+  <a href="19_faq-rag.html" style="padding-left:20px"><i class="fa-solid fa-list-check fa-fw"></i> FAQ Q&A</a>
   <div class="nav-divider"></div>
   <a href="00_design-system.html"><i class="fa-solid fa-palette fa-fw"></i> 디자인 시스템</a>
   <a href="13_answer-logic.html"><i class="fa-solid fa-sitemap fa-fw"></i> AI 답변 생성 로직</a>
-  <a href="14_answer-logic-guide.html"><i class="fa-solid fa-book-open fa-fw"></i> AI 답변 생성 예시</a>
   <a href="15_aio-guide.html"><i class="fa-solid fa-magnifying-glass fa-fw"></i> AIO 가이드</a>
   <a href="12_coverage-code-table.html"><i class="fa-solid fa-table-list fa-fw"></i> 담보코드</a>
 </nav>
@@ -202,6 +202,38 @@
 | 06 Concept | 100px | 245px | Risk-type 200px + 동의어수 140px | — | 110px | 80px | 동의어 121px |
 | 07 Rule | 90px | 245px | Risk-type 160px | Evidence auto + Policy 180px | 110px | 80px | — |
 | 08 Policy | 100px | 230px | 공개범위 110px | 적용Rule 145px | 110px | 80px | 출력제한 221px |
+
+### 목록 페이지 공통 패턴 (2026-06-24 확정)
+
+**Filter 탭 순서 — 6개 목록 파일 공통:**
+```html
+<button class="filter-tab active" onclick="filter('all',this)">전체 <span id="c-all"></span></button>
+<button class="filter-tab" onclick="filter('active',this)">🟢 라이브 <span id="c-active"></span></button>
+<button class="filter-tab" onclick="filter('approved',this)">✔ 승인완료 <span id="c-approved"></span></button>
+<button class="filter-tab" onclick="filter('review',this)">⏳ 검수중 <span id="c-review"></span></button>
+<button class="filter-tab" onclick="filter('draft',this)">📝 임시저장 <span id="c-draft"></span></button>
+<button class="filter-tab" onclick="filter('paused',this)">⏸ 일시중지 <span id="c-paused"></span></button>
+<button class="filter-tab" onclick="filter('rejected',this)">🚫 반려 <span id="c-rejected"></span></button>
+```
+
+**액션 버튼 — 상태별, 색상 없이 `btn btn-sm` 단일 스타일:**
+```javascript
+function actionBtns(d) {
+  const id = d.id || d.code;
+  const editUrl = `XX_card-editor-TYPE.html?id=${id}`;  // 파일별 URL 교체
+  if (d.status === 'draft')    return `<a href="${editUrl}" class="btn btn-sm">편집</a> <button onclick="delCard('${id}')" class="btn btn-sm">삭제</button>`;
+  if (d.status === 'review')   return `<button onclick="cancelReview('${id}')" class="btn btn-sm">요청취소</button>`;
+  if (d.status === 'approved') return `<a href="00_canvas-main.html" class="btn btn-sm">캔버스에서 연결</a> <a href="${editUrl}" class="btn btn-sm">편집</a>`;
+  if (d.status === 'active')   return `<button onclick="pauseCard('${id}')" class="btn btn-sm">일시중지</button> <a href="${editUrl}" class="btn btn-sm">편집</a>`;
+  if (d.status === 'paused')   return `<button onclick="resumeCard('${id}')" class="btn btn-sm">재시작</button> <a href="${editUrl}" class="btn btn-sm">편집</a>`;
+  if (d.status === 'rejected') return `<a href="${editUrl}" class="btn btn-sm">편집</a> <button onclick="delCard('${id}')" class="btn btn-sm">삭제</button>`;
+  return `<a href="${editUrl}" class="btn btn-sm">편집</a>`;
+}
+// Playbook 예외: approved → '라이브 전환' (캔버스 연결 불필요, 직접 라이브 가능)
+```
+
+> 인라인 색상 스타일 금지. `btn-danger`, `btn-warn`, `btn-success` 목록 행에 사용 금지.
+> 신규 등록 버튼: `<a href="XX_card-editor.html" class="btn btn-primary">` — 색상 override 금지.
 
 ### Toast 알림
 

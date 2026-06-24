@@ -49,6 +49,10 @@
 
 | 날짜 | 내용 | 진실원 파일 |
 |---|---|---|
+| 2026-06-24 | 카드 편집기 6개 입력항목·카피라이팅 전수 감사. 07_card-editor-rule.html: "제목"→"Rule 이름", "조건 빌더"→"판단 조건" 통일. 16_card-editor-playbook.html: 설명 필드 필수(*) 마크 추가 | `mockups_v2/07_card-editor-rule.html`, `mockups_v2/16_card-editor-playbook.html` |
+| 2026-06-24 | 사이드바 메뉴 순서 변경: "카드 연결"을 "검수·승인" 하단으로 이동 (워크플로우 순서 반영: 등록→검수·승인→카드 연결→사전 테스트). 14_answer-logic-guide.html 삭제 (불필요). 파일 수 27→26 | `guides/ux-patterns.md`, `context/workflow.md` |
+| 2026-06-24 | mockups_v2/ 27개 전수 수정: 사이드바 표준화(FAQ Q&A 서브메뉴 추가), 6단계 상태 모델 반영, rejected 필터/데이터 추가, 임계값→기준값, KC 엔진→Clark AI, 18_system-settings RAG 설정 카드 제거, 17_system-data-guide MYDATA 5종·PROFILE 7종 완전 표기 | `guides/ux-patterns.md` |
+| 2026-06-24 | 목록 6개 파일 UI 통일: 필터탭 순서(라이브→승인완료→검수중→임시저장→일시중지→반려), 액션 버튼 btn-sm 단일 스타일(색상 제거), guide-box 파란 박스 통일, 신규 등록 버튼 btn-primary 통일 | `guides/ux-patterns.md` |
 | 2026-06-23 | FAQ RAG 승인 프로세스 제거, 상태 2종(active/draft) | `context/answer-logic.md` |
 | 2026-06-22 | Concept→Risk-type 필수 재확정, Case 매트릭스 최종, Policy 필드 2개, Playbook Standalone 선택사항, 가중치 제거, PROMAGE 기본=선택, CONNECT_RULES 최종 | `context/card-policy.md`, `context/card-types.md`, `context/answer-logic.md` |
 | 2026-06-21 | FAQ RAG = Clark 서비스 전용 Q&A 확정, 카드 연결 카디널리티 확정 | `context/answer-logic.md`, `context/card-policy.md` |
