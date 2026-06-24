@@ -49,6 +49,7 @@
 
 | 날짜 | 내용 | 진실원 파일 |
 |---|---|---|
+| 2026-06-24 | 약관 RAG 버전 매핑 방법 확정: 보험사+상품명+계약시작일(연도) 조합을 매핑 키로 사용. 크롤러가 effective_start/end 메타데이터 저장 → 계약일 범위 쿼리로 약관 버전 특정. Phase 2에서 보험사 API 직접 연동으로 정확도 개선 예정. | `context/answer-logic.md` |
 | 2026-06-24 | Rule 카드 약관 DB 연동 플래그 제거. 약관 DB는 엔진 자동 처리(있으면 참조, 없으면 없이 답변) → 운영자 제어 불필요. 전수 반영 17개 파일. | `context/card-types.md`, `guides/ux-patterns.md`, `mockups_v2/07_card-editor-rule.html` 외 |
 | 2026-06-24 | 카드 상세 슬라이드 패널 구현: 00_canvas-main.html renderCardDetailHTML() 전면 교체(편집기 필드명 일치), 09_review-workflow.html 모달→슬라이드 패널 전환(pending: 승인완료+반려, 그 외: 닫기만) | `mockups_v2/00_canvas-main.html`, `mockups_v2/09_review-workflow.html` |
 | 2026-06-24 | 카드 편집기 6개 입력항목·카피라이팅 전수 감사. 07_card-editor-rule.html: "제목"→"Rule 이름", "조건 빌더"→"판단 조건" 통일. 16_card-editor-playbook.html: 설명 필드 필수(*) 마크 추가 | `mockups_v2/07_card-editor-rule.html`, `mockups_v2/16_card-editor-playbook.html` |
