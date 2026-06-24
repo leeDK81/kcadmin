@@ -197,6 +197,12 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;backg
 .test-result-body{padding:14px;font-size:13px;line-height:1.8;color:var(--text-primary)}
 .test-used-cards{padding:8px 12px;border-top:1px solid var(--border);display:flex;gap:4px;flex-wrap:wrap;align-items:center;background:#fff}
 .test-used-chip{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700;border:1px solid}
+
+/* ── Card Detail (read-only fields) ── */
+.detail-field{margin-bottom:14px}
+.detail-label{font-size:11px;font-weight:700;color:var(--text-secondary);margin-bottom:4px;letter-spacing:.02em;text-transform:uppercase}
+.detail-value{padding:8px 10px;background:var(--bg-page);border:1px solid var(--border);border-radius:6px;font-size:13px;line-height:1.6;color:var(--text-primary);word-break:break-all}
+.detail-header-bar{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:8px;margin-bottom:18px;border:1px solid}
 </style>
 </head>
 <body>
@@ -360,6 +366,61 @@ const EDGES = [
   {from:'CN005',to:'RT01', status:'active'},
   {from:'CN005',to:'RT02', status:'active'},
 ];
+
+const CARD_DETAILS = {
+  // ── Concept ──
+  'CN001':{ synonyms:['암보험','암 보장','암 진단금','암보험료','암 보장 내용','암보험 가입','암보험 어때요'] },
+  'CN002':{ synonyms:['암 진단비 얼마','암 보험금 얼마나','암 진단시 보험금','암 진단 보험료','암보험 수령액'] },
+  'CN003':{ synonyms:['뇌졸중 보험','뇌졸중 보장','뇌혈관 보험','뇌졸중 진단금','뇌혈관 보험료'] },
+  'CN004':{ synonyms:['뇌경색 치료비','뇌경색 보험','뇌경색 보장','뇌경색 진단금','뇌경색 수술비'] },
+  'CN005':{ synonyms:['중대질병','대형 질병 보장','CI 보험','중증질환 보험','중대질병 보장 범위'] },
+  // ── Risk-type ──
+  'RT01':{
+    importance:'high',
+    description:'KCD C00–D48 범위의 악성·양성 신생물. 암진단금·수술비·입원비 담보 공백 여부를 판정합니다.',
+    warningMsg:'암 보장이 부족합니다. 현재 보유하신 보험에 암 진단금 담보가 없거나 소액입니다.',
+  },
+  'RT02':{
+    importance:'high',
+    description:'KCD I60–I69 범위의 뇌혈관 질환. 뇌졸중·뇌경색·뇌출혈 담보 공백 여부를 판정합니다.',
+    warningMsg:'뇌혈관 보장이 부족합니다. 현재 보유하신 보험에 뇌혈관 담보가 없거나 소액입니다.',
+  },
+  // ── Evidence ──
+  'EV001':{ orgLabel:'심사평가원', org:'HIRA', report:'2024년 건강보험 진료비 통계연보', year:'2024', indicator:'암(악성신생물) 입원 1인당 평균 진료비', value:'386만원', url:'https://www.hira.or.kr', usage:'RU001 판단 기준의 근거. 암 입원 진료비가 이 금액 미만인 담보를 "소액"으로 판정하는 기준값으로 활용합니다.' },
+  'EV002':{ orgLabel:'국민건강보험공단', org:'NHIS', report:'2023년 암 등록 통계', year:'2023', indicator:'주요 암종 5년 상대 생존율', value:'71.5%', url:'https://www.nhis.or.kr', usage:'암 생존율을 근거로 장기 보장 필요성을 설명하는 데 활용합니다.' },
+  'EV003':{ orgLabel:'심사평가원', org:'HIRA', report:'2024년 건강보험 진료비 통계연보', year:'2024', indicator:'뇌졸중 입원 1인당 평균 진료비', value:'512만원', url:'https://www.hira.or.kr', usage:'뇌혈관 Rule 기준값 근거. 뇌졸중 입원 진료비 평균으로 뇌혈관 담보 소액 기준을 설정합니다.' },
+  'EV004':{ orgLabel:'심사평가원', org:'HIRA', report:'2024년 고혈압 진단 통계', year:'2024', indicator:'30세 이상 고혈압 유병률', value:'28.3%', url:'https://www.hira.or.kr', usage:'고혈압 유병률을 활용해 뇌혈관 위험 근거를 강화합니다.' },
+  'EV005':{ orgLabel:'금융감독원', org:'FSS', report:'2024년 보험 가입 통계', year:'2024', indicator:'65세 이상 간병보험 미가입률', value:'68.3%', url:'https://www.fss.or.kr', usage:'고령층 보장 공백 근거로 활용. 간병비 준비 필요성을 수치로 뒷받침합니다.' },
+  // ── Rule ──
+  'RU001':{
+    description:'마이데이터 보험 현황과 프롬에이지 암 위험도를 종합하여 암 보장 공백 여부를 판정합니다.',
+    conditions:[
+      { sourceLabel:'마이데이터', source:'MYDATA', label:'암진단금 담보 합계 3,000만원 이하', op:'LTE', value:'3,000만원', required:true },
+      { sourceLabel:'프롬에이지', source:'PROMAGE', label:'암 위험도 "위험" 등급', op:'EQ', value:'위험', required:false },
+      { sourceLabel:'프로파일', source:'PROFILE', label:'나이 40세 이상', op:'GTE', value:'40', required:true },
+    ],
+    policyDbLinked:true,
+  },
+  'RU002':{
+    description:'마이데이터 뇌혈관 담보 현황과 프롬에이지 뇌혈관 위험도를 기준으로 보장 공백을 판정합니다.',
+    conditions:[
+      { sourceLabel:'마이데이터', source:'MYDATA', label:'뇌졸중 진단금 담보 합계 2,000만원 이하', op:'LTE', value:'2,000만원', required:true },
+      { sourceLabel:'프롬에이지', source:'PROMAGE', label:'뇌혈관 위험도 "위험" 등급', op:'EQ', value:'위험', required:false },
+      { sourceLabel:'프로파일', source:'PROFILE', label:'나이 50세 이상', op:'GTE', value:'50', required:true },
+    ],
+    policyDbLinked:false,
+  },
+  // ── Policy ──
+  'PO001':{ name:'암 보장 면책 고지', appDisplayText:'현재 보유하신 보험의 암 보장 금액이 충분하지 않을 수 있습니다. 금융소비자보호법 제17조에 따라 이 사실을 알려드립니다.' },
+  'PO002':{ name:'뇌혈관 면책 고지', appDisplayText:'뇌혈관 질환 관련 보험 보장이 부족할 수 있습니다. 가입 전 반드시 약관 및 상품 설명서를 확인하시기 바랍니다.' },
+  // ── Playbook ──
+  'PB001':{
+    description:'암 진단 또는 암 의심 증상이 있는 사용자의 상담 연결 요청 발화를 감지합니다.',
+    keywords:['암 진단 받았어요','암 수술 예정이에요','암 보험 상담해주세요','암 치료 중이에요','암 검사 결과 나왔어요'],
+    actions:[{ type:'consult', label:'💬 상담 연결', required:true }],
+    standalone:'암 관련 상담은 전문 GA와 직접 연결해 드립니다. 현재 보험 상태와 치료 계획을 함께 검토해 드립니다.',
+  },
+};
 
 // Which types can each type connect TO (outgoing)
 const CONNECT_RULES = {
@@ -528,16 +589,18 @@ function hexToRgba(hex, alpha) {
 // ============================================================
 function selectCard(id) {
   selectedCardId = id;
-  renderPicker(); // refresh highlight
+  renderPicker();
   renderGrid();
   requestAnimationFrame(drawLines);
 
-  const card = CARDS.find(c => c.id === id);
-  // Toolbar focal chip
-  const chip = document.getElementById('focalChip');
+  var card = CARDS.find(function(c){ return c.id === id; });
+  var chip = document.getElementById('focalChip');
   chip.style.background = TYPE_COLORS[card.type];
   chip.classList.add('visible');
   document.getElementById('focalChipLabel').textContent = card.id + ' · ' + card.title;
+
+  // 패널 자동 열기 (카드 정보 탭)
+  openPanel(id, 'info');
 }
 
 function clearSelection() {
@@ -872,46 +935,18 @@ function switchPanelTab(tab) {
 }
 
 function renderPanelInfo() {
-  const card = CARDS.find(c => c.id === panelCardId);
+  var card = CARDS.find(function(c){ return c.id === panelCardId; });
   if (!card) return;
 
-  const incoming = EDGES.filter(e => e.to   === card.id).map(e => CARDS.find(c => c.id === e.from)).filter(Boolean);
-  const outgoing = EDGES.filter(e => e.from === card.id).map(e => CARDS.find(c => c.id === e.to)).filter(Boolean);
-
+  var color = TYPE_COLORS[card.type];
   document.getElementById('panelTitle').innerHTML =
-    '<i class="fa-solid ' + TYPE_ICONS[card.type] + '" style="color:' + TYPE_COLORS[card.type] + ';margin-right:6px"></i>' + card.title;
+    '<i class="fa-solid ' + TYPE_ICONS[card.type] + '" style="color:' + color + ';margin-right:6px"></i>' + card.title;
 
-  let html =
-    '<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:10px 12px;background:var(--bg-page);border-radius:8px;margin-bottom:16px">' +
-      '<span style="font-size:11px;font-weight:700;color:' + TYPE_COLORS[card.type] + '">' + TYPE_NAMES[card.type] + '</span>' +
-      '<code style="font-size:11px;background:#f0f0ec;padding:1px 6px;border-radius:3px">' + card.id + '</code>' +
-      '<span style="font-size:11px;color:var(--text-hint)">' + card.cluster + '</span>' +
-      '<span style="font-size:11px;color:var(--text-hint);margin-left:auto">' + (SCOPE_NAMES[card.scope]||card.scope) + '</span>' +
-    '</div>';
+  document.getElementById('panelBody').innerHTML = renderCardDetailHTML(panelCardId);
 
-  html += '<div class="form-group"><label class="form-label" style="font-size:11px;color:var(--text-secondary)">카드명</label>' +
-    '<div style="padding:8px 10px;background:var(--bg-page);border:1px solid var(--border);border-radius:6px;font-size:13px;font-weight:600">' + card.title + '</div></div>';
-
-  html += '<div class="form-group"><label class="form-label" style="font-size:11px;color:var(--text-secondary)">메타 정보</label>' +
-    '<div style="padding:8px 10px;background:var(--bg-page);border:1px solid var(--border);border-radius:6px;font-size:12px;line-height:1.7">' + card.meta.split(' · ').join('<br>') + '</div></div>';
-
-  if (incoming.length) {
-    html += '<div class="form-group"><label class="form-label" style="font-size:11px;color:var(--text-secondary)">← 수신 연결 (' + incoming.length + ')</label><div style="display:flex;flex-wrap:wrap;gap:4px">' +
-      incoming.map(c => '<span class="chip" style="color:' + TYPE_COLORS[c.type] + ';border-color:' + hexToRgba(TYPE_COLORS[c.type], 0.3) + ';cursor:pointer" onclick="selectCard(\'' + c.id + '\');closePanel()">' +
-        c.id + ' · ' + c.title + '</span>').join('') + '</div></div>';
-  }
-  if (outgoing.length) {
-    html += '<div class="form-group"><label class="form-label" style="font-size:11px;color:var(--text-secondary)">→ 발신 연결 (' + outgoing.length + ')</label><div style="display:flex;flex-wrap:wrap;gap:4px">' +
-      outgoing.map(c => '<span class="chip" style="color:' + TYPE_COLORS[c.type] + ';border-color:' + hexToRgba(TYPE_COLORS[c.type], 0.3) + ';cursor:pointer" onclick="selectCard(\'' + c.id + '\');closePanel()">' +
-        c.id + ' · ' + c.title + '</span>').join('') + '</div></div>';
-  }
-
-  document.getElementById('panelBody').innerHTML = html;
   document.getElementById('panelFooter').innerHTML =
     '<button class="btn btn-secondary" onclick="closePanel()">닫기</button>' +
-    '<button class="btn btn-secondary" onclick="switchPanelTab(\'test\')"><i class="fa-solid fa-flask"></i> 답변 테스트</button>' +
-    '<a href="' + EDITOR_MAP[card.type] + '" class="btn btn-primary" style="text-decoration:none;display:inline-flex;align-items:center;gap:6px">' +
-    '<i class="fa-solid fa-pen-to-square"></i> 편집기에서 수정</a>';
+    '<button class="btn btn-secondary" onclick="switchPanelTab(\'test\')"><i class="fa-solid fa-flask"></i> 답변 테스트</button>';
 }
 
 function renderPanelTest() {
@@ -1124,6 +1159,179 @@ function drawLines() {
   });
 
   gridCols.appendChild(svg);
+}
+
+// ============================================================
+// CARD DETAIL RENDERER (type-specific read-only fields)
+// ============================================================
+function roField(label, value) {
+  return '<div class="detail-field">' +
+    '<div class="detail-label">' + label + '</div>' +
+    '<div class="detail-value">' + (value || '—') + '</div>' +
+  '</div>';
+}
+
+function renderCardDetailHTML(cardId) {
+  var card   = CARDS.find(function(c){ return c.id === cardId; });
+  var detail = CARD_DETAILS[cardId] || {};
+  if (!card) return '<p style="color:var(--text-hint)">카드 정보를 찾을 수 없습니다.</p>';
+
+  var color  = TYPE_COLORS[card.type] || '#888';
+  var tname  = TYPE_NAMES[card.type]  || card.type;
+  var SOURCE_COLORS = {MYDATA:'#1A4A9A',PROMAGE:'#6B4A9A',PROFILE:'#1A7A4A'};
+
+  // 헤더 바
+  var html = '<div class="detail-header-bar" style="background:'+hexToRgba(color,0.06)+';border-color:'+hexToRgba(color,0.2)+'">' +
+    '<span style="font-size:12px;font-weight:700;color:'+color+'">'+tname+'</span>' +
+    '<code style="font-size:11px;background:rgba(0,0,0,.07);padding:1px 7px;border-radius:3px;font-family:monospace">'+cardId+'</code>' +
+    (card.scope ? '<span style="font-size:11px;color:var(--text-hint);margin-left:auto">'+(SCOPE_NAMES[card.scope]||card.scope)+'</span>' : '') +
+  '</div>';
+
+  // ── Risk-type ────────────────────────────────
+  if (card.type === 'risk') {
+    html += roField('위험 유형명', card.title);
+    html += roField('설명', detail.description);
+    var imp = detail.importance==='high'?'높음':detail.importance==='low'?'낮음':'보통';
+    var ic  = detail.importance==='high'?'#C94B1A':detail.importance==='low'?'#1A7A4A':'#BA7517';
+    var impDesc = detail.importance==='high'?'핵심 — 동시 감지 시 선노출':detail.importance==='low'?'보조 — 상위 유형 노출 후 후순위':'기본값 (미설정 시 자동 적용)';
+    html += '<div class="detail-field"><div class="detail-label">중요도</div>' +
+      '<span style="display:inline-flex;align-items:center;gap:8px;padding:5px 12px;border-radius:6px;font-size:13px;font-weight:700;color:'+ic+';background:'+hexToRgba(ic,0.1)+'">'+imp+
+      '<span style="font-weight:400;font-size:12px;color:var(--text-secondary)">'+impDesc+'</span></span></div>';
+  }
+
+  // ── Evidence ────────────────────────────────
+  else if (card.type === 'evidence') {
+    var orgMap = {HIRA:'건강보험심사평가원 (HIRA)',NHIS:'국민건강보험공단 (NHIS)',KOSTAT:'통계청',FSS:'금융감독원 (FSS)'};
+    html += roField('제목', card.title);
+    html += roField('출처 기관', orgMap[detail.org] || detail.org || '—');
+    html += roField('보고서명', detail.report);
+    html += roField('기준 연도', detail.year);
+    html += roField('지표명', detail.indicator);
+    html += roField('기준값', detail.value);
+    if (detail.url) {
+      html += '<div class="detail-field"><div class="detail-label">출처 URL <span style="font-weight:400;color:var(--text-hint)">(선택)</span></div>' +
+        '<a href="'+detail.url+'" target="_blank" style="color:var(--step-active);font-size:13px;word-break:break-all">'+detail.url+'</a></div>';
+    } else {
+      html += roField('출처 URL (선택)', '—');
+    }
+    html += roField('활용 방법', detail.usage);
+  }
+
+  // ── Concept ────────────────────────────────
+  else if (card.type === 'concept') {
+    html += detailSection('Card ① 기본정보');
+    html += roField('용어명', card.title);
+    if (detail.synonyms && detail.synonyms.length) {
+      var chips = detail.synonyms.map(function(s){
+        return '<span style="display:inline-flex;background:'+hexToRgba(color,0.08)+';border:1px solid '+hexToRgba(color,0.25)+';border-radius:4px;padding:3px 9px;font-size:12px;font-weight:600;color:'+color+';margin:2px">'+s+'</span>';
+      }).join('');
+      html += '<div class="detail-field"><div class="detail-label">동의어 <span style="font-weight:400;color:var(--text-hint)">('+detail.synonyms.length+'개)</span></div><div style="display:flex;flex-wrap:wrap;margin-top:4px">'+chips+'</div></div>';
+    } else {
+      html += roField('동의어', '—');
+    }
+    html += roField('한 줄 정의 (선택)', detail.definition || '—');
+
+    html += detailSection('Card ② Risk-type 연결 <span style="font-size:11px;font-weight:400;color:var(--text-hint)">읽기 전용</span>');
+    var outRisk = EDGES.filter(function(e){ return e.from===cardId; }).map(function(e){ return CARDS.find(function(c){ return c.id===e.to; }); }).filter(Boolean);
+    if (outRisk.length) {
+      var rbadges = outRisk.map(function(c){ return '<span style="display:inline-flex;gap:4px;padding:3px 9px;border-radius:4px;font-size:12px;font-weight:700;background:rgba(201,75,26,.1);color:#C94B1A;margin:2px;cursor:pointer" onclick="selectCard(\''+c.id+'\');closePanel()">'+c.id+' '+c.title+'</span>'; }).join('');
+      html += '<div class="detail-field"><div style="display:flex;flex-wrap:wrap;margin-top:2px">'+rbadges+'</div></div>';
+    } else {
+      html += '<div style="padding:10px 12px;background:rgba(201,75,26,.04);border:1px dashed rgba(201,75,26,.3);border-radius:6px;font-size:12px;color:#C94B1A;margin-bottom:14px">⚠ 연결된 Risk-type이 없습니다. KC 체인에 진입하지 않습니다.</div>';
+    }
+  }
+
+  // ── Rule ────────────────────────────────────
+  else if (card.type === 'rule') {
+    html += detailSection('기본 정보');
+    html += roField('Rule 이름', card.title);
+    html += roField('Clark 경고 메시지 (선택)', detail.warningMsg || '—');
+
+    var rtConn = EDGES.filter(function(e){ return e.to===cardId; }).map(function(e){ return CARDS.find(function(c){ return c.id===e.from&&c.type==='risk'; }); }).filter(Boolean);
+    html += '<div class="detail-field"><div class="detail-label">Risk-type 연결 <span style="font-weight:400;color:var(--text-hint)">읽기 전용</span></div>';
+    if (rtConn.length) {
+      html += '<div style="display:flex;flex-wrap:wrap;margin-top:4px">'+rtConn.map(function(c){ return '<span style="display:inline-flex;gap:4px;padding:3px 9px;border-radius:4px;font-size:12px;font-weight:700;background:rgba(201,75,26,.1);color:#C94B1A;margin:2px">'+c.id+' '+c.title+'</span>'; }).join('')+'</div>';
+    } else {
+      html += '<span style="font-size:12px;color:var(--text-hint)">연결 없음</span>';
+    }
+    html += '</div>';
+
+    if (detail.conditions && detail.conditions.length) {
+      html += detailSection('② 판단 조건');
+      var condH = detail.conditions.map(function(c){
+        var sc = SOURCE_COLORS[c.source]||'#888';
+        var req = c.required
+          ? '<span style="font-size:10px;font-weight:700;color:#C94B1A;background:rgba(201,75,26,.1);padding:1px 5px;border-radius:3px">필수</span>'
+          : '<span style="font-size:10px;font-weight:700;color:var(--text-secondary);background:var(--bg-page);padding:1px 5px;border-radius:3px;border:1px solid var(--border)">선택</span>';
+        return '<div style="display:flex;align-items:flex-start;gap:8px;padding:8px 10px;background:'+hexToRgba(sc,0.05)+';border:1px solid '+hexToRgba(sc,0.2)+';border-radius:6px;margin-bottom:4px">' +
+          '<span style="font-size:10px;font-weight:700;color:'+sc+';flex-shrink:0;padding-top:2px;min-width:52px">'+c.sourceLabel+'</span>' +
+          '<span style="font-size:12px;flex:1;line-height:1.5">'+c.label+'</span>'+req+'</div>';
+      }).join('');
+      html += '<div class="detail-field">'+condH+'</div>';
+    }
+
+    html += detailSection('③ Evidence 연결 <span style="font-size:11px;font-weight:400;color:var(--text-hint)">읽기 전용</span>');
+    var evConn = EDGES.filter(function(e){ return e.from===cardId; }).map(function(e){ return CARDS.find(function(c){ return c.id===e.to&&c.type==='evidence'; }); }).filter(Boolean);
+    if (evConn.length) {
+      html += '<div class="detail-field"><div style="display:flex;flex-wrap:wrap;margin-top:2px">'+evConn.map(function(c){ return '<span style="display:inline-flex;gap:4px;padding:3px 9px;border-radius:4px;font-size:12px;font-weight:700;background:rgba(26,122,74,.1);color:#1A7A4A;margin:2px">'+c.id+' '+c.title+'</span>'; }).join('')+'</div></div>';
+    } else {
+      html += '<div class="detail-field"><span style="font-size:12px;color:var(--text-hint)">연결 없음</span></div>';
+    }
+
+    html += detailSection('④ 약관 DB 연동');
+    html += '<div class="detail-field"><span style="font-size:13px;color:'+(detail.policyDbLinked?'var(--status-active)':'var(--text-hint)')+';font-weight:600">'+(detail.policyDbLinked?'✔ 연동됨':'연동 안 됨')+'</span></div>';
+  }
+
+  // ── Policy ──────────────────────────────────
+  else if (card.type === 'policy') {
+    html += detailSection('Policy 정보');
+    html += roField('Policy 이름', detail.name||card.title);
+    html += roField('Clark 앱 표시 문구', detail.appDisplayText);
+
+    html += detailSection('Rule 연결 <span style="font-size:11px;font-weight:400;color:var(--text-hint)">읽기 전용</span>');
+    var ruleConn = EDGES.filter(function(e){ return e.to===cardId; }).map(function(e){ return CARDS.find(function(c){ return c.id===e.from&&c.type==='rule'; }); }).filter(Boolean);
+    if (ruleConn.length) {
+      html += '<div class="detail-field"><div style="display:flex;flex-wrap:wrap;margin-top:2px">'+ruleConn.map(function(c){ return '<span style="display:inline-flex;gap:4px;padding:3px 9px;border-radius:4px;font-size:12px;font-weight:700;background:rgba(154,26,26,.1);color:#9A1A1A;margin:2px">'+c.id+' '+c.title+'</span>'; }).join('')+'</div></div>';
+    } else {
+      html += '<div class="detail-field"><span style="font-size:12px;color:var(--text-hint)">연결 없음</span></div>';
+    }
+  }
+
+  // ── Playbook ────────────────────────────────
+  else if (card.type === 'playbook') {
+    html += detailSection('기본정보');
+    html += roField('Playbook 명칭', card.title);
+    html += roField('설명', detail.description);
+
+    html += '<div style="padding:10px 12px;background:rgba(107,74,154,.06);border:1px solid rgba(107,74,154,.2);border-radius:6px;font-size:12px;color:#6B4A9A;margin-bottom:18px">' +
+      '<i class="fa-solid fa-circle-info" style="margin-right:5px"></i>Playbook은 다른 카드와 직접 연결되지 않습니다. 독립 체인으로 동작합니다.</div>';
+
+    html += detailSection('① 리드 전환 레이어');
+    if (detail.keywords && detail.keywords.length) {
+      var kw = detail.keywords.map(function(k){ return '<span style="display:inline-flex;background:'+hexToRgba(color,0.08)+';border:1px solid '+hexToRgba(color,0.25)+';border-radius:4px;padding:3px 9px;font-size:12px;font-weight:600;color:'+color+';margin:2px">'+k+'</span>'; }).join('');
+      html += '<div class="detail-field"><div class="detail-label">전환 발화 키워드 <span style="font-weight:400;color:var(--text-hint)">('+detail.keywords.length+'개 · 최소 3개)</span></div><div style="display:flex;flex-wrap:wrap;margin-top:4px">'+kw+'</div></div>';
+    }
+    if (detail.actions && detail.actions.length) {
+      var acH = detail.actions.map(function(a){ return '<div style="display:flex;align-items:center;gap:6px;padding:7px 10px;background:var(--bg-page);border:1px solid var(--border);border-radius:6px;margin-bottom:4px;font-size:13px"><span style="font-weight:700">'+a.label+'</span>'+(a.required?'<span style="font-size:10px;font-weight:700;color:#C94B1A;background:rgba(201,75,26,.1);padding:1px 5px;border-radius:3px">기본 필수</span>':'')+'</div>'; }).join('');
+      html += '<div class="detail-field"><div class="detail-label">전환 액션 설정</div><div style="margin-top:6px">'+acH+'</div></div>';
+    }
+    html += roField('Standalone 답변 가이드 (선택)', detail.standalone||'—');
+
+    html += detailSection('② 리드 스코어링 레이어');
+    html += '<div style="padding:10px 12px;background:#F4F0FF;border:1px solid #D0C0F0;border-radius:6px;font-size:12px;color:#6B4A9A;margin-bottom:18px">' +
+      '<span style="font-size:10px;font-weight:700;background:#EDE8F5;border:1px solid #C8B0E8;border-radius:4px;padding:1px 7px;margin-right:6px">Phase 1.5 이관</span>' +
+      'GA 수신 스펙 확정 후 활성화 예정</div>';
+
+    html += detailSection('③ 배정 최적화 레이어');
+    html += '<div style="padding:10px 12px;background:#F4F4F2;border:1px solid var(--border);border-radius:6px;font-size:12px;color:var(--text-hint);margin-bottom:14px">' +
+      '🔒 Phase 2 예정 — 원수사·GA API 연동 확정 후 구성</div>';
+  }
+
+  return html;
+}
+
+function detailSection(title) {
+  return '<div style="font-size:11px;font-weight:700;color:var(--text-secondary);letter-spacing:.05em;text-transform:uppercase;padding:8px 0 6px;border-bottom:1px solid var(--border);margin-bottom:12px;margin-top:4px">'+title+'</div>';
 }
 
 // ============================================================
