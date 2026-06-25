@@ -152,11 +152,6 @@ textarea.form-control{resize:vertical;min-height:80px}
 .toast.show{opacity:1}
 
 /* ── Custom Profile Builder ── */
-.profile-mode-tabs{display:flex;border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-bottom:12px}
-.pmtab{flex:1;padding:7px 0;font-size:13px;font-weight:600;cursor:pointer;border:none;font-family:inherit;background:#fff;color:var(--text-secondary);transition:all .15s;text-align:center}
-.pmtab.active{background:var(--step-active);color:#fff}
-.pmtab:not(.active):hover{background:var(--bg-page)}
-
 .custom-profile-wrap{border:1px solid var(--border);border-radius:8px;padding:14px}
 .cpro-sec{font-size:11px;font-weight:700;color:var(--text-secondary);letter-spacing:.05em;text-transform:uppercase;margin:14px 0 8px;padding-top:10px;border-top:1px solid var(--border)}
 .cpro-sec:first-child{margin-top:0;padding-top:0;border-top:none}
@@ -180,25 +175,6 @@ textarea.form-control{resize:vertical;min-height:80px}
 .profile-summary-bar{background:#F4F7FF;border:1px solid #C8D8F8;border-radius:6px;padding:10px 12px;margin-top:12px}
 .psum-chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px}
 .psum-chip{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:4px;font-size:12px;font-weight:600}
-
-/* ── Demographic Risk Banner ── */
-.demo-banner{background:#F0F4FA;border:1px solid #C8D4E8;border-radius:8px;padding:12px 14px;margin:10px 0 6px}
-.demo-banner-hd{font-size:11px;font-weight:700;color:#4A5A8A;letter-spacing:.05em;text-transform:uppercase;margin-bottom:10px}
-.demo-cluster-row{display:flex;align-items:center;gap:10px;padding:5px 0}
-.demo-cluster-row+.demo-cluster-row{border-top:1px solid #DDE4F0}
-.demo-cluster-name{font-size:12px;font-weight:700;width:58px;flex-shrink:0}
-.demo-risk-bar-wrap{flex:1;background:#D8DFEA;border-radius:3px;height:5px;overflow:hidden}
-.demo-risk-bar{height:5px;border-radius:3px;transition:width .4s ease}
-.demo-risk-badge{font-size:11px;font-weight:700;padding:2px 9px;border-radius:8px;white-space:nowrap;flex-shrink:0;min-width:58px;text-align:center}
-.demo-stat-line{font-size:11px;color:var(--text-hint);margin-top:5px;line-height:1.5}
-.rlv1{background:#F0F0EE;color:var(--text-hint)}
-.rlv2{background:rgba(186,117,23,.12);color:#BA7517}
-.rlv3{background:rgba(201,75,26,.12);color:#C94B1A}
-.rlv4{background:rgba(163,45,45,.14);color:#8A1A1A}
-.rbar1{width:18%;background:#C0C0BC}
-.rbar2{width:44%;background:#BA7517}
-.rbar3{width:72%;background:#C94B1A}
-.rbar4{width:100%;background:#8A1A1A}
 
 /* ── Coverage Importance Label ── */
 .cov-item-wrap{display:flex;align-items:flex-start;gap:6px;margin-bottom:7px}
@@ -248,12 +224,12 @@ textarea.form-control{resize:vertical;min-height:80px}
 <main class="main">
   <div class="page-header">
     <h1><i class="fa-solid fa-flask" style="color:var(--step-active);margin-right:8px"></i>사전 테스트</h1>
-    <p>가상 고객 프로필과 질문을 입력해 실제 사용자가 받는 AI 답변을 미리 확인하고, 카드 체인이 올바르게 작동하는지 검증합니다.</p>
+    <p>마이데이터 담보 보유 현황과 프롬에이지 위험도를 설정해 카드 체인이 올바르게 작동하는지 검증하고, 배포 전 AI 답변을 미리 확인합니다.</p>
   </div>
 
   <div class="guide-box">
     <i class="fa-solid fa-circle-info" style="margin-right:5px"></i>
-    <strong>배포 결정 도구</strong> — <strong>① 카테고리 → ② 카드</strong> 순서로 선택하세요. 체인 카드(Concept~Policy)는 질문 기반 AI 답변 체인을 검증하고, Playbook은 상담 시나리오 기반 트리거 조건을 확인합니다. 테스트 통과 시 이 페이지에서 바로 배포를 요청하세요.
+    <strong>배포 결정 도구</strong> — <strong>① 카테고리 → ② 카드 → ②-경로 → ③ 테스트 조건</strong> 순서로 설정하세요. 담보코드 보유 여부와 프롬에이지 위험도가 Rule 판정 결과를 결정합니다. 테스트 통과 시 이 페이지에서 바로 배포를 요청하세요.
   </div>
 
   <div class="two-col">
@@ -292,50 +268,14 @@ textarea.form-control{resize:vertical;min-height:80px}
           <div id="chainPathVisual"></div>
         </div>
 
-        <!-- ③ 고객 프로필 -->
+        <!-- ③ 테스트 조건 -->
         <div class="form-group" id="profileGroup" style="display:none">
-          <label>③ 고객 프로필</label>
+          <label>③ 테스트 조건</label>
           <div class="custom-profile-wrap">
-
-            <!-- 기본 정보 -->
-            <div class="cpro-sec">기본 정보</div>
-            <div style="display:grid;grid-template-columns:auto auto 1fr;gap:12px;align-items:start">
-              <div>
-                <div style="font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:5px">나이</div>
-                <div style="display:flex;align-items:center;gap:5px">
-                  <input type="number" class="form-control" id="customAge" min="20" max="80" value="45"
-                    oninput="onCustomBasicChange()" style="width:64px;text-align:center;padding:6px 8px">
-                  <span style="font-size:13px;color:var(--text-secondary)">세</span>
-                </div>
-              </div>
-              <div>
-                <div style="font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:5px">성별</div>
-                <div style="display:flex;gap:10px;padding-top:7px">
-                  <label style="display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer;font-weight:600">
-                    <input type="radio" name="customGender" value="M" checked onchange="onCustomBasicChange()"> 남
-                  </label>
-                  <label style="display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer;font-weight:600">
-                    <input type="radio" name="customGender" value="F" onchange="onCustomBasicChange()"> 여
-                  </label>
-                </div>
-              </div>
-              <div>
-                <div style="font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:5px">직업위험도</div>
-                <select class="form-control" id="customJobRisk" onchange="onCustomBasicChange()" style="padding:7px 10px">
-                  <option value="low">저위험직</option>
-                  <option value="normal" selected>일반직</option>
-                  <option value="high">고위험직</option>
-                </select>
-              </div>
-            </div>
-
-            <!-- 통계 기반 위험도 배너 (카드 선택 후 표시) -->
-            <div id="demoBanner" style="display:none"></div>
 
             <!-- 마이데이터 담보코드 -->
             <div class="cpro-sec">
               <i class="fa-solid fa-database" style="font-size:10px;margin-right:4px"></i>마이데이터 — 보유 담보코드
-              <span id="covImpNote" style="font-weight:400;color:var(--text-hint);font-size:10px;margin-left:6px;text-transform:none;letter-spacing:0"></span>
             </div>
             <div style="font-size:12px;color:var(--text-hint);margin-bottom:8px">
               클릭으로 전환:
@@ -853,87 +793,6 @@ const RESULTS = {
 };
 
 // ============================================================
-// 연령·성별 → 클러스터별 통계 위험도
-// 연령대: 0=30대이하  1=40대  2=50대  3=60대+
-// 위험도: 1=낮음  2=보통  3=높음  4=매우높음
-// ============================================================
-const DEMO_CLUSTER_RISK = {
-  T01: {
-    label: '암',
-    M: {
-      levels: [2, 3, 4, 4],
-      badges: ['보통','높음','매우높음','매우높음'],
-      stats:  ['10만명당 87명','10만명당 213명','10만명당 496명','10만명당 1,200명+'],
-      source: '국가암정보센터 2024'
-    },
-    F: {
-      levels: [3, 4, 4, 3],
-      badges: ['높음','매우높음','매우높음','높음'],
-      stats:  ['10만명당 130명 (유방·갑상선)','10만명당 290명 (유방암 피크)','10만명당 410명','10만명당 510명'],
-      source: '국가암정보센터 2024'
-    }
-  },
-  T02: {
-    label: '뇌혈관',
-    M: {
-      levels: [1, 2, 4, 4],
-      badges: ['낮음','보통','매우높음','매우높음'],
-      stats:  ['인구 대비 0.3%','0.6% — 40대 이후 급격 증가','2.1% — 고혈압·당뇨 동반 시 ×3','4.8% — 뇌졸중 주요 발생 구간'],
-      source: '심사평가원(HIRA) 2024'
-    },
-    F: {
-      levels: [1, 1, 2, 4],
-      badges: ['낮음','낮음','보통','매우높음'],
-      stats:  ['인구 대비 0.2%','0.3%','0.9% — 폐경 이후 위험 상승','3.4% — 남성에 근접한 위험 수준'],
-      source: '심사평가원(HIRA) 2024'
-    }
-  }
-};
-
-function getAgeGroup(age) {
-  if (age < 40) return 0;
-  if (age < 50) return 1;
-  if (age < 60) return 2;
-  return 3;
-}
-
-function getDemoRisk(cluster, gender, age) {
-  var data = DEMO_CLUSTER_RISK[cluster];
-  if (!data) return { level:2, badge:'보통', stat:'', source:'', label:'' };
-  var gd = data[gender] || data['M'];
-  var ag = getAgeGroup(age);
-  return { level: gd.levels[ag], badge: gd.badges[ag], stat: gd.stats[ag], source: gd.source, label: data.label };
-}
-
-function getEffectiveImportance(base, riskLevel) {
-  if (riskLevel >= 3) return base === 'optional' ? 'recommended' : 'required';
-  if (riskLevel <= 1) return base === 'required' ? 'recommended' : 'optional';
-  return base;
-}
-
-function renderDemoBanner(cluster, gender, age) {
-  var risk = getDemoRisk(cluster, gender, age);
-  var ag = getAgeGroup(age);
-  var ageLabel = ['30대 이하','40대','50대','60대 이상'][ag];
-  var gLabel = gender === 'M' ? '남성' : '여성';
-  var lvN = risk.level - 1;
-  var rlvClass = ['rlv1','rlv2','rlv3','rlv4'][lvN];
-  var rbarClass = ['rbar1','rbar2','rbar3','rbar4'][lvN];
-  var banner = document.getElementById('demoBanner');
-  banner.innerHTML =
-    '<div class="demo-banner">' +
-      '<div class="demo-banner-hd">' + ageLabel + ' ' + gLabel + ' 기준 — 통계적 보장 필요도</div>' +
-      '<div class="demo-cluster-row">' +
-        '<div class="demo-cluster-name">' + risk.label + '</div>' +
-        '<div class="demo-risk-bar-wrap"><div class="demo-risk-bar ' + rbarClass + '"></div></div>' +
-        '<span class="demo-risk-badge ' + rlvClass + '">' + risk.badge + '</span>' +
-      '</div>' +
-      '<div class="demo-stat-line">' + risk.stat + ' &nbsp;·&nbsp; ' + risk.source + '</div>' +
-    '</div>';
-  banner.style.display = 'block';
-}
-
-// ============================================================
 // 카드별 테스트 조건
 // importance: required(필수) / recommended(권장) / optional(참고)
 // → 연령·성별 위험도에 따라 실제 표시 중요도가 조정됨
@@ -1001,13 +860,10 @@ const CARD_TEST_CONDITIONS = {
 // 선택된 체인 경로 인덱스
 var selectedPathIdx = 0;
 
-// 커스텀 프로필 상태
+// 테스트 조건 상태
 var customProfile = {
-  age: 45,
-  gender: 'M',
-  jobRisk: 'normal',
-  mydata: {},   // code → true(보유) | false(미보유)
-  promage: {}   // field → 'risk' | 'caution' | 'good' | undefined
+  mydata:  {},   // code → true(보유) | false(미보유)
+  promage: {}    // field → 'risk' | 'caution' | 'good' | undefined
 };
 
 // ============================================================
@@ -1131,47 +987,30 @@ function updateRunBtnState() {
 }
 
 // ============================================================
-// 프로필 UI 빌드 — 나이·성별 반영 중요도·기본값 결정
+// 테스트 조건 UI 빌드
 // ============================================================
 function buildCustomProfileUI(cardId) {
   var conds = CARD_TEST_CONDITIONS[cardId];
   if (!conds) {
     document.getElementById('customMydataFields').innerHTML = '<span style="font-size:13px;color:var(--text-hint)">이 카드 타입의 조건 정의 없음</span>';
     document.getElementById('customPromageFields').innerHTML = '';
-    document.getElementById('demoBanner').style.display = 'none';
     updateCustomSummary();
     return;
   }
 
-  var age    = customProfile.age;
-  var gender = customProfile.gender;
-  var risk   = getDemoRisk(conds.cluster, gender, age);
-
-  // 1. 통계 위험도 배너
-  renderDemoBanner(conds.cluster, gender, age);
-
-  // 2. 중요도 안내 텍스트
-  var impNoteMap = {1:'(이 연령·성별 기준: 참고 수준)', 2:'(이 연령·성별 기준: 권장 수준)', 3:'(이 연령·성별 기준: 필수 수준)', 4:'(이 연령·성별 기준: 매우 중요)'};
-  var impNoteEl = document.getElementById('covImpNote');
-  if (impNoteEl) impNoteEl.textContent = impNoteMap[risk.level] || '';
-
-  // 3. 담보코드 — 중요도·기본값 동적 결정
+  // 마이데이터 담보코드
   var mydataHtml = conds.mydata.map(function(item) {
-    var effImp = getEffectiveImportance(item.importance, risk.level);
-    var impLabel = {required:'필수', recommended:'권장', optional:'참고'}[effImp];
-    var impClass = {required:'imp-r', recommended:'imp-c', optional:'imp-o'}[effImp];
-
-    // 기본값: 아직 미설정이면 위험도+중요도로 결정
+    var impLabel = {required:'필수', recommended:'권장', optional:'참고'}[item.importance];
+    var impClass = {required:'imp-r', recommended:'imp-c', optional:'imp-o'}[item.importance];
+    // 기본값: 필수·권장 → 미보유 (KC 체인 작동 시나리오), 참고 → 보유
     if (customProfile.mydata[item.code] === undefined) {
-      // 위험 높고 중요도 높을수록 → 미보유 기본 (KC 체인이 작동하는 상황)
-      customProfile.mydata[item.code] = (risk.level >= 3 && effImp !== 'optional') ? false : true;
+      customProfile.mydata[item.code] = (item.importance === 'optional') ? true : false;
     }
     var has = customProfile.mydata[item.code] !== false;
     var cls = has ? 'cov-toggle has' : 'cov-toggle none';
     var icon = has ? '✓' : '✗';
     var stateLabel = has ? '보유' : '미보유';
     var shortDesc = item.desc.length > 14 ? item.desc.slice(0,13)+'…' : item.desc;
-
     return '<div class="cov-item-wrap">' +
       '<span class="cov-imp-label ' + impClass + '">' + impLabel + '</span>' +
       '<button class="' + cls + '" onclick="toggleCovCode(\'' + item.code + '\')" title="' + item.desc + '">' +
@@ -1184,7 +1023,7 @@ function buildCustomProfileUI(cardId) {
   }).join('');
   document.getElementById('customMydataFields').innerHTML = mydataHtml || '<span style="font-size:13px;color:var(--text-hint)">해당 없음</span>';
 
-  // 4. 프롬에이지 위험도
+  // 프롬에이지 위험도
   var promageHtml = conds.promage.map(function(field) {
     var val = customProfile.promage[field];
     function gp(grade, label) {
@@ -1217,28 +1056,12 @@ function setPromageGrade(field, grade) {
   buildCustomProfileUI(cardId);
 }
 
-function onCustomBasicChange() {
-  customProfile.age     = parseInt(document.getElementById('customAge').value) || 45;
-  customProfile.gender  = document.querySelector('input[name="customGender"]:checked').value;
-  customProfile.jobRisk = document.getElementById('customJobRisk').value;
-  // 나이·성별 변경 시 담보 기본값 재계산
-  customProfile.mydata  = {};
-  var cardId = document.getElementById('cardSelect').value;
-  if (cardId) buildCustomProfileUI(cardId);
-  else updateCustomSummary();
-}
-
 function updateCustomSummary() {
   var chips = [];
-  var genderLabel = customProfile.gender === 'M' ? '남성' : '여성';
-  var jobLabels = {low:'저위험직', normal:'일반직', high:'고위험직'};
-  chips.push('<span class="psum-chip" style="background:#EEF4FF;color:#1A3A6B">'+customProfile.age+'세 '+genderLabel+' · '+jobLabels[customProfile.jobRisk]+'</span>');
-
   Object.keys(customProfile.mydata).forEach(function(code) {
     var has = customProfile.mydata[code] !== false;
     chips.push('<span class="psum-chip" style="background:'+(has?'rgba(15,110,86,.1)':'rgba(201,75,26,.08)')+';color:'+(has?'#0F6E56':'#C94B1A')+'">'+(has?'✓ ':'✗ ')+code+'</span>');
   });
-
   var gradeLabels = {risk:'위험', caution:'주의', good:'양호'};
   var gradeColors = {risk:'rgba(163,45,45,.12)', caution:'rgba(186,117,23,.12)', good:'rgba(15,110,86,.1)'};
   var gradeFg     = {risk:'#A32D2D', caution:'#BA7517', good:'#0F6E56'};
@@ -1247,15 +1070,17 @@ function updateCustomSummary() {
     if (!g) return;
     chips.push('<span class="psum-chip" style="background:'+gradeColors[g]+';color:'+gradeFg[g]+'">'+field+' '+gradeLabels[g]+'</span>');
   });
-
   if (chips.length === 0) chips.push('<span style="font-size:12px;color:var(--text-hint)">조건을 설정하세요</span>');
   document.getElementById('customProfileSummary').innerHTML = chips.join('');
 }
 
 function getCustomProfileLabel() {
-  var gLabel   = customProfile.gender === 'M' ? '남성' : '여성';
-  var jobLabel = {low:'저위험직', normal:'일반직', high:'고위험직'}[customProfile.jobRisk] || '';
-  return customProfile.age + '세 ' + gLabel + ' · ' + jobLabel;
+  var parts = [];
+  Object.keys(customProfile.mydata).forEach(function(code) {
+    parts.push(code + (customProfile.mydata[code] !== false ? ' 보유' : ' 미보유'));
+  });
+  if (!parts.length) return '조건 미설정';
+  return parts.length <= 3 ? parts.join(', ') : parts.slice(0,3).join(', ') + ' 외 '+(parts.length-3)+'개';
 }
 
 function evaluateCustomProfile(cardId) {
@@ -1378,15 +1203,12 @@ function setQ(q) { document.getElementById('questionInput').value = q; }
 
 function resetBelowCard() {
   document.getElementById('profileGroup').style.display = 'none';
-  document.getElementById('demoBanner').style.display = 'none';
   customProfile.mydata  = {};
   customProfile.promage = {};
   document.getElementById('customMydataFields').innerHTML = '';
   document.getElementById('customPromageFields').innerHTML = '';
   var sumEl = document.getElementById('customProfileSummary');
   if (sumEl) sumEl.innerHTML = '<span style="font-size:12px;color:var(--text-hint)">카드 선택 후 조건을 설정하세요</span>';
-  var noteEl = document.getElementById('covImpNote');
-  if (noteEl) noteEl.textContent = '';
   document.getElementById('chainPathGroup').style.display = 'none';
   document.getElementById('chainInputGroup').style.display = 'none';
   document.getElementById('playbookInputGroup').style.display = 'none';
