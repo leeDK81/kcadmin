@@ -273,6 +273,29 @@ textarea.form-control{resize:vertical;min-height:80px}
           <label>③ 테스트 조건</label>
           <div class="custom-profile-wrap">
 
+            <!-- 사용자 프로파일 -->
+            <div class="cpro-sec" style="margin-top:0;padding-top:0;border-top:none">
+              <i class="fa-solid fa-user" style="font-size:10px;margin-right:4px"></i>사용자 프로파일
+            </div>
+            <div style="display:flex;align-items:center;gap:20px;margin-bottom:4px">
+              <div style="display:flex;align-items:center;gap:6px">
+                <label style="font-size:12px;color:var(--text-secondary);font-weight:600;white-space:nowrap">나이</label>
+                <input id="profileAge" type="number" min="20" max="80" value="45"
+                       style="width:58px;padding:4px 8px;border:1px solid var(--border);border-radius:5px;font-size:13px;font-family:inherit;text-align:center"
+                       oninput="onProfileChange()">
+                <span style="font-size:12px;color:var(--text-secondary)">세</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px">
+                <label style="font-size:12px;color:var(--text-secondary);font-weight:600">성별</label>
+                <label style="font-size:13px;cursor:pointer;display:flex;align-items:center;gap:3px">
+                  <input type="radio" name="profileGender" value="남" checked onchange="onProfileChange()"> 남
+                </label>
+                <label style="font-size:13px;cursor:pointer;display:flex;align-items:center;gap:3px">
+                  <input type="radio" name="profileGender" value="여" onchange="onProfileChange()"> 여
+                </label>
+              </div>
+            </div>
+
             <!-- 마이데이터 담보코드 -->
             <div class="cpro-sec">
               <i class="fa-solid fa-database" style="font-size:10px;margin-right:4px"></i>마이데이터 — 보유 담보코드
@@ -863,7 +886,8 @@ var selectedPathIdx = 0;
 // 테스트 조건 상태
 var customProfile = {
   mydata:  {},   // code → true(보유) | false(미보유)
-  promage: {}    // field → 'risk' | 'caution' | 'good' | undefined
+  promage: {},   // field → 'risk' | 'caution' | 'good' | undefined
+  profile: {age:45, gender:'남'}  // PROFILE 소스 조건용
 };
 
 // ============================================================
@@ -1056,12 +1080,25 @@ function setPromageGrade(field, grade) {
   buildCustomProfileUI(cardId);
 }
 
+function onProfileChange() {
+  var ageEl = document.getElementById('profileAge');
+  var genderEl = document.querySelector('input[name="profileGender"]:checked');
+  if (ageEl)    customProfile.profile.age    = parseInt(ageEl.value) || 45;
+  if (genderEl) customProfile.profile.gender = genderEl.value;
+  updateCustomSummary();
+}
+
 function updateCustomSummary() {
   var chips = [];
+  // 나이·성별 chip
+  var p = customProfile.profile;
+  chips.push('<span class="psum-chip" style="background:#EEF4FF;color:#1A3A6B">'+p.age+'세 '+p.gender+'성</span>');
+  // 마이데이터 담보코드
   Object.keys(customProfile.mydata).forEach(function(code) {
     var has = customProfile.mydata[code] !== false;
     chips.push('<span class="psum-chip" style="background:'+(has?'rgba(15,110,86,.1)':'rgba(201,75,26,.08)')+';color:'+(has?'#0F6E56':'#C94B1A')+'">'+(has?'✓ ':'✗ ')+code+'</span>');
   });
+  // 프롬에이지
   var gradeLabels = {risk:'위험', caution:'주의', good:'양호'};
   var gradeColors = {risk:'rgba(163,45,45,.12)', caution:'rgba(186,117,23,.12)', good:'rgba(15,110,86,.1)'};
   var gradeFg     = {risk:'#A32D2D', caution:'#BA7517', good:'#0F6E56'};
@@ -1070,17 +1107,12 @@ function updateCustomSummary() {
     if (!g) return;
     chips.push('<span class="psum-chip" style="background:'+gradeColors[g]+';color:'+gradeFg[g]+'">'+field+' '+gradeLabels[g]+'</span>');
   });
-  if (chips.length === 0) chips.push('<span style="font-size:12px;color:var(--text-hint)">조건을 설정하세요</span>');
   document.getElementById('customProfileSummary').innerHTML = chips.join('');
 }
 
 function getCustomProfileLabel() {
-  var parts = [];
-  Object.keys(customProfile.mydata).forEach(function(code) {
-    parts.push(code + (customProfile.mydata[code] !== false ? ' 보유' : ' 미보유'));
-  });
-  if (!parts.length) return '조건 미설정';
-  return parts.length <= 3 ? parts.join(', ') : parts.slice(0,3).join(', ') + ' 외 '+(parts.length-3)+'개';
+  var p = customProfile.profile;
+  return p.age + '세 ' + p.gender + '성';
 }
 
 function evaluateCustomProfile(cardId) {
@@ -1203,8 +1235,13 @@ function setQ(q) { document.getElementById('questionInput').value = q; }
 
 function resetBelowCard() {
   document.getElementById('profileGroup').style.display = 'none';
-  customProfile.mydata  = {};
-  customProfile.promage = {};
+  customProfile.mydata   = {};
+  customProfile.promage  = {};
+  customProfile.profile  = {age:45, gender:'남'};
+  var ageEl = document.getElementById('profileAge');
+  if (ageEl) ageEl.value = 45;
+  var genderEl = document.querySelector('input[name="profileGender"][value="남"]');
+  if (genderEl) genderEl.checked = true;
   document.getElementById('customMydataFields').innerHTML = '';
   document.getElementById('customPromageFields').innerHTML = '';
   var sumEl = document.getElementById('customProfileSummary');
