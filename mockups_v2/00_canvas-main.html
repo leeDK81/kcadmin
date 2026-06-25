@@ -671,11 +671,11 @@ function pickerCardHTML(card) {
 
   // ── 테스트 모드 ──
   if (canvasMode === 'test') {
-    var connected  = hasEdge(card.id);
-    var isSelected = testSelection[card.type] === card.id;
-    var cls = 'pk-card' + (!connected ? ' test-disabled' : isSelected ? ' test-selected' : ' test-selectable');
-    var sty = isSelected ? ' style="border-color:' + color + ';background:' + hexToRgba(color,.07) + '"' : '';
-    var checkIcon = isSelected ? '<i class="fa-solid fa-check" style="color:#fff;font-size:8px"></i>' : '';
+    var connected   = hasEdge(card.id);
+    var testChecked = testSelection[card.type] === card.id;
+    var cls = 'pk-card' + (!connected ? ' test-disabled' : testChecked ? ' test-selected' : ' test-selectable');
+    var sty = testChecked ? ' style="border-color:' + color + ';background:' + hexToRgba(color,.07) + '"' : '';
+    var checkIcon = testChecked ? '<i class="fa-solid fa-check" style="color:#fff;font-size:8px"></i>' : '';
     return '<div class="' + cls + '"' + sty + (connected ? ' onclick="onTestPickerClick(\'' + card.id + '\')"' : '') + '>' +
       '<div class="pk-check">' + checkIcon + '</div>' +
       '<span class="pk-card-id">' + card.id + '</span>' +
