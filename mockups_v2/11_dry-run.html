@@ -209,10 +209,12 @@ textarea.form-control{resize:vertical;min-height:80px}
 
 /* ── Chain Path Visual ── */
 .chain-path-pill{display:inline-flex;align-items:center;flex-wrap:wrap;gap:3px;background:#F4F7FF;border:1px solid #C8D8F8;border-radius:6px;padding:7px 12px}
-.cpath-node{display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;font-size:12px;font-weight:700;white-space:nowrap}
-.cpath-node.focus{outline:2px solid currentColor;outline-offset:1px;font-weight:800}
+.cpath-node{display:inline-flex;flex-direction:column;align-items:flex-start;padding:5px 10px;border-radius:4px;font-size:12px;font-weight:700;white-space:nowrap;gap:1px}
+.cpath-node-id{display:flex;align-items:center;gap:4px;font-size:12px;font-weight:800}
+.cpath-node-name{font-size:10px;font-weight:400;opacity:.8}
+.cpath-node.focus{outline:2px solid currentColor;outline-offset:1px}
 .cpath-node.isnew{border:1px dashed currentColor}
-.cpath-arrow{color:var(--text-hint);font-size:10px;flex-shrink:0}
+.cpath-arrow{color:var(--text-hint);font-size:10px;flex-shrink:0;align-self:center}
 </style>
 </head>
 <body>
@@ -462,6 +464,23 @@ textarea.form-control{resize:vertical;min-height:80px}
 <div class="toast" id="toast"></div>
 
 <script>
+// ============================================================
+// 카드 ID → 카드명 매핑 (전체 체인 시각화용)
+// ============================================================
+const CARD_NAMES = {
+  CN001:'암보험 보장 내용',         CN002:'암 진단비 얼마나 받나요',
+  CN003:'뇌졸중 보험 보장',         CN004:'뇌경색 치료비 보장',
+  CN005:'중대질병 보험 범위',
+  RT01:'암·종양 클러스터',          RT02:'뇌혈관질환 클러스터',
+  RT03:'심혈관질환 클러스터',
+  RU001:'암 진단비 산정 기준',      RU002:'뇌혈관 보장 판정 기준',
+  RU003:'심혈관 보장 판정 기준',
+  EV001:'암 평균 입원 진료비',      EV002:'암 5년 생존율',
+  EV003:'뇌졸중 평균 입원 진료비',  EV004:'고혈압 유병률',
+  PO001:'암 보장 면책 고지',        PO002:'뇌혈관 면책 고지',
+  PB002:'뇌혈관 보장 공백 상담 플레이북',
+};
+
 // ============================================================
 // 준비 연결(pending edge) 있는 카드 — 테스트 대상
 // ============================================================
@@ -1006,7 +1025,11 @@ function populateChainPaths(cardId) {
   if (paths.length > 1) {
     badge.textContent = '— ' + paths.length + '개 경로 존재';
     sel.innerHTML = paths.map(function(p, i) {
-      return '<option value="'+i+'">[경로 '+(i+1)+'] '+p.label+'</option>';
+      var ids = p.steps.map(function(id) {
+        return id === card.id ? id+'★' : id;
+      }).join(' → ');
+      var conceptName = CARD_NAMES[p.conceptId] || p.conceptId;
+      return '<option value="'+i+'">[경로 '+(i+1)+'] '+ids+'  — '+conceptName+' 진입</option>';
     }).join('');
     sel.value = '0';
     sel.style.display = 'block';
@@ -1043,26 +1066,32 @@ function renderPathVisual(path, card) {
     var bb  = parseInt(c.slice(5,7),16);
     var isFocus = (id === card.id);
     var isNew   = !!newSet[id];
+    var name    = CARD_NAMES[id] || '';
 
     var cls = 'cpath-node' + (isFocus ? ' focus' : '') + (isNew ? ' isnew' : '');
 
-    var label = id;
+    // ID 줄: 배지/★ 포함
+    var badge = '';
     if (isFocus) {
-      label += ' ★';
+      badge = '<span style="font-size:11px">★</span>';
     } else if (isNew) {
-      label += ' <span style="font-size:9px;font-weight:800;background:rgba('+rr+','+gg+','+bb+',.2);border-radius:2px;padding:0 3px;vertical-align:middle">신규</span>';
+      badge = '<span style="font-size:9px;font-weight:800;background:rgba('+rr+','+gg+','+bb+',.25);border-radius:2px;padding:0 4px">신규</span>';
     }
+    var idLine  = '<span class="cpath-node-id">'+id+badge+'</span>';
+
+    // 카드명 줄
+    var nameLine = name ? '<span class="cpath-node-name">'+name+'</span>' : '';
 
     return (i > 0 ? '<span class="cpath-arrow"><i class="fa-solid fa-arrow-right"></i></span>' : '') +
-      '<span class="'+cls+'" style="background:rgba('+rr+','+gg+','+bb+',.12);color:'+c+'">'+label+'</span>';
+      '<span class="'+cls+'" style="background:rgba('+rr+','+gg+','+bb+',.12);color:'+c+'">'+idLine+nameLine+'</span>';
   }).join('');
 
   // 범례
   var legend =
-    '<div style="display:flex;align-items:center;gap:12px;margin-top:6px;font-size:11px;color:var(--text-secondary)">' +
-      '<span><span style="outline:2px solid #1A4A9A;outline-offset:1px;border-radius:3px;padding:0 4px;font-weight:700;font-size:11px">★</span> 테스트 대상</span>' +
-      '<span><span style="border:1px dashed #666;border-radius:3px;padding:0 4px;font-size:11px">신규</span> 준비 연결(pending)</span>' +
-      '<span>테두리 없음 = 기존 라이브 카드</span>' +
+    '<div style="display:flex;align-items:center;gap:14px;margin-top:7px;font-size:11px;color:var(--text-secondary)">' +
+      '<span><span style="outline:2px solid #1A4A9A;outline-offset:1px;border-radius:3px;padding:0 5px;font-weight:700;font-size:11px">★</span> 테스트 대상 카드</span>' +
+      '<span><span style="border:1px dashed #666;border-radius:3px;padding:0 5px;font-size:11px">신규</span> 준비 연결(pending)</span>' +
+      '<span style="border:1px solid #C8C8C4;border-radius:3px;padding:0 5px;font-size:11px">테두리 없음</span> 기존 라이브 카드' +
     '</div>';
 
   el.innerHTML = '<div class="chain-path-pill">'+nodes+'</div>' + legend;
