@@ -503,6 +503,8 @@ const CARD_DETAILS = {
       { sourceLabel:'마이데이터', source:'MYDATA', label:'암 방사선·항암 담보 미보유', op:'EQ', value:'false', required:false },
       { sourceLabel:'프롬에이지', source:'PROMAGE', label:'암 종합위험도 "위험" 이상', op:'EQ', value:'위험', required:false },
       { sourceLabel:'프롬에이지', source:'PROMAGE', label:'혈액검사 이상 수치 "주의" 이상', op:'GTE', value:'주의', required:false },
+      { sourceLabel:'프롬에이지', source:'PROMAGE', label:'신체나이 실제나이보다 5세 이상 높음', op:'GTE', value:'5', metric:'bodyAge', required:false },
+      { sourceLabel:'마이데이터', source:'MYDATA',  label:'암진단금 담보 갱신 예정 (12개월 이내)', op:'EQ', value:'true', required:false },
       { sourceLabel:'프로파일', source:'PROFILE', label:'나이 40세 이상', op:'GTE', value:'40', required:true },
       { sourceLabel:'프로파일', source:'PROFILE', label:'성별 무관 (남녀 동일 적용)', op:'IN', value:'남,여', required:false },
     ],
@@ -516,6 +518,8 @@ const CARD_DETAILS = {
       { sourceLabel:'마이데이터', source:'MYDATA', label:'간병·요양 담보 합계 30만원 이하', op:'LTE', value:'30만원', required:false },
       { sourceLabel:'프롬에이지', source:'PROMAGE', label:'뇌혈관 위험도 "위험" 등급', op:'EQ', value:'위험', required:false },
       { sourceLabel:'프롬에이지', source:'PROMAGE', label:'혈압 위험도 "주의" 이상', op:'GTE', value:'주의', required:false },
+      { sourceLabel:'프롬에이지', source:'PROMAGE', label:'건강나이 실제나이보다 3세 이상 높음', op:'GTE', value:'3', metric:'healthAge', required:false },
+      { sourceLabel:'마이데이터', source:'MYDATA',  label:'뇌혈관 담보 갱신 예정 (12개월 이내)', op:'EQ', value:'true', required:false },
       { sourceLabel:'프로파일', source:'PROFILE', label:'나이 50세 이상', op:'GTE', value:'50', required:true },
       { sourceLabel:'프로파일', source:'PROFILE', label:'성별 남성 (뇌혈관 고위험군)', op:'EQ', value:'남', required:false },
     ],
@@ -578,7 +582,8 @@ let panelCardId    = null;
 let panelTab       = 'info';
 let testProfile    = {
   conditions: {},    // "RU001_0" → true(충족) | false(미충족)
-  promage:    {},    // "RU001_1" → 'risk'|'caution'|'good'|null
+  promage:    {},    // "RU001_4" → 'risk'|'caution'|'good'|null  (등급형)
+  promageNum: {},    // "RU001_5" → number  (신체나이·건강나이 차이값)
   profile:    { age: 45, gender: '남' }
 };
 let testChain     = {};        // type → cardId (체인 구성 선택)
@@ -1236,18 +1241,23 @@ function initTestChain(cardId) {
 
 function initTestProfile(ruleId) {
   var conds = (CARD_DETAILS[ruleId] || {}).conditions || [];
-  var newConds = {}, newPromage = {};
+  var newConds = {}, newPromage = {}, newPromageNum = {};
   conds.forEach(function(cond, i) {
     var key = ruleId + '_' + i;
     if (cond.source === 'MYDATA') {
       newConds[key] = true;
     } else if (cond.source === 'PROMAGE') {
-      var gMap = {'위험':'risk','주의':'caution','양호':'good'};
-      newPromage[key] = cond.required ? (gMap[cond.value] || null) : null;
+      if (cond.metric) {
+        newPromageNum[key] = parseInt(cond.value) || 0;
+      } else {
+        var gMap = {'위험':'risk','주의':'caution','양호':'good'};
+        newPromage[key] = cond.required ? (gMap[cond.value] || null) : null;
+      }
     }
   });
   testProfile.conditions = newConds;
   testProfile.promage    = newPromage;
+  testProfile.promageNum = newPromageNum;
 }
 
 function renderPanelTest() {
@@ -1481,6 +1491,24 @@ function buildRuleCondRowsHTML(ruleId) {
         ctrlHtml = '<span id="testProfileBadge_' + key + '" class="test-auto-badge ' + (amet ? 'ok' : 'fail') + '">' +
           (amet ? '✓ 충족' : '✗ 미충족') + ' (현재 ' + age + '세)</span>';
       }
+    } else if (cond.source === 'PROMAGE' && cond.metric) {
+      var curNum    = testProfile.promageNum[key] !== undefined ? testProfile.promageNum[key] : (parseInt(cond.value) || 0);
+      var threshold = parseInt(cond.value) || 0;
+      var metNum    = cond.op === 'GTE' ? curNum >= threshold : cond.op === 'LTE' ? curNum <= threshold : false;
+      var metricLbl = cond.metric === 'bodyAge' ? '신체나이 차이' : '건강나이 차이';
+      ctrlHtml =
+        '<div class="test-profile-row" style="margin-top:6px">' +
+          '<div class="test-profile-inline">' +
+            '<span class="test-profile-lbl">' + metricLbl + '</span>' +
+            '<input id="testPromageNumInput_' + key + '" type="number" min="-20" max="30" value="' + curNum + '" ' +
+              'style="width:52px;padding:3px 6px;border:1px solid var(--border);border-radius:5px;font-size:13px;font-family:inherit;text-align:center" ' +
+              'oninput="onTestPromageNumChange(\'' + key + '\')">' +
+            '<span style="font-size:12px;color:var(--text-secondary)">세</span>' +
+          '</div>' +
+          '<span id="testPromageNumBadge_' + key + '" class="test-auto-badge ' + (metNum ? 'ok' : 'fail') + '">' +
+            (metNum ? '✓ 충족' : '✗ 미충족') + ' (현재 +' + curNum + '세)' +
+          '</span>' +
+        '</div>';
     } else if (cond.source === 'PROMAGE') {
       var curGrade = testProfile.promage[key];
       var grades   = [{v:'risk',l:'위험'},{v:'caution',l:'주의'},{v:'good',l:'양호'},{v:null,l:'미설정'}];
@@ -1533,6 +1561,35 @@ function onTestPromageGrade(ruleId, idx, grade) {
   var condSec = document.getElementById('testCondSection');
   if (condSec) condSec.innerHTML = buildRuleCondRowsHTML(ruleId);
   body.scrollTop = st;
+  updateTestSummary(ruleCard);
+  var ra = document.getElementById('testResultArea');
+  if (ra) ra.innerHTML = '';
+}
+
+function onTestPromageNumChange(key) {
+  var inputEl = document.getElementById('testPromageNumInput_' + key);
+  if (!inputEl) return;
+  var val = parseInt(inputEl.value);
+  if (isNaN(val)) val = 0;
+  testProfile.promageNum[key] = val;
+
+  var parts = key.split('_');
+  var idx   = parseInt(parts[parts.length - 1]);
+  var rId   = parts.slice(0, parts.length - 1).join('_');
+  var cond  = ((CARD_DETAILS[rId] || {}).conditions || [])[idx];
+  if (!cond) return;
+
+  var threshold = parseInt(cond.value) || 0;
+  var met = cond.op === 'GTE' ? val >= threshold : cond.op === 'LTE' ? val <= threshold : false;
+  var sign = val >= 0 ? '+' : '';
+
+  var badgeEl = document.getElementById('testPromageNumBadge_' + key);
+  if (badgeEl) {
+    badgeEl.className   = 'test-auto-badge ' + (met ? 'ok' : 'fail');
+    badgeEl.textContent = (met ? '✓ 충족' : '✗ 미충족') + ' (현재 ' + sign + val + '세)';
+  }
+
+  var ruleCard = rId ? CARDS.find(function(c) { return c.id === rId; }) : null;
   updateTestSummary(ruleCard);
   var ra = document.getElementById('testResultArea');
   if (ra) ra.innerHTML = '';
@@ -1598,9 +1655,19 @@ function updateTestSummary(ruleCard) {
           (met ? 'rgba(15,110,86,.1)' : 'rgba(201,75,26,.08)') + ';color:' + (met ? '#0F6E56' : '#C94B1A') + '">' +
           (met ? '✓ ' : '✗ ') + cond.sourceLabel + (cond.required ? ' 필수' : '') + '</span>');
       } else if (cond.source === 'PROMAGE') {
-        var gr = testProfile.promage[key];
-        if (gr) chips.push('<span class="test-sum-chip" style="background:' + gCol[gr] + ';color:' + gFg[gr] + '">' +
-          cond.sourceLabel + ' ' + gLbl[gr] + '</span>');
+        if (cond.metric) {
+          var nv   = testProfile.promageNum[key] !== undefined ? testProfile.promageNum[key] : (parseInt(cond.value) || 0);
+          var thr  = parseInt(cond.value) || 0;
+          var mnm  = cond.op === 'GTE' ? nv >= thr : cond.op === 'LTE' ? nv <= thr : false;
+          var sign = nv >= 0 ? '+' : '';
+          chips.push('<span class="test-sum-chip" style="background:' +
+            (mnm ? 'rgba(15,110,86,.1)' : 'rgba(201,75,26,.08)') + ';color:' + (mnm ? '#0F6E56' : '#C94B1A') + '">' +
+            (mnm ? '✓ ' : '✗ ') + (cond.metric === 'bodyAge' ? '신체나이' : '건강나이') + ' ' + sign + nv + '세</span>');
+        } else {
+          var gr = testProfile.promage[key];
+          if (gr) chips.push('<span class="test-sum-chip" style="background:' + gCol[gr] + ';color:' + gFg[gr] + '">' +
+            cond.sourceLabel + ' ' + gLbl[gr] + '</span>');
+        }
       } else if (cond.source === 'PROFILE') {
         var met2;
         if (cond.op === 'IN') {
@@ -1644,7 +1711,13 @@ function evaluateTestResult() {
             : cond.op === 'GT'  ? age >  val : cond.op === 'LT'  ? age <  val : false;
       }
     } else if (cond.source === 'PROMAGE') {
-      met = cond.op === 'EQ' ? testProfile.promage[key] === gMap[cond.value] : !!testProfile.promage[key];
+      if (cond.metric) {
+        var numVal    = testProfile.promageNum[key] !== undefined ? testProfile.promageNum[key] : (parseInt(cond.value) || 0);
+        var threshold = parseInt(cond.value) || 0;
+        met = cond.op === 'GTE' ? numVal >= threshold : cond.op === 'LTE' ? numVal <= threshold : false;
+      } else {
+        met = cond.op === 'EQ' ? testProfile.promage[key] === gMap[cond.value] : !!testProfile.promage[key];
+      }
     } else {
       met = testProfile.conditions[key] !== false;
     }
