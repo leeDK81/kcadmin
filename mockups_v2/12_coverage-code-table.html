@@ -259,7 +259,7 @@ const COVERAGE_CODES = {
 };
 
 const FROMAGE_SECTIONS = {
-  '암위험도 (위험/주의/양호)': [
+  '위험도 (위험/주의/양호)': [
     {code:'canr_ca',desc:'암 종합 등급'},{code:'lung_ca',desc:'폐암'},{code:'gaca_ca',desc:'위암'},
     {code:'lica_ca',desc:'간암'},{code:'coca_ca',desc:'대장암'},{code:'brca_ca',desc:'유방암'},
     {code:'thca_ca',desc:'갑상선암'},{code:'prca_ca',desc:'전립선암'},{code:'ovca_ca',desc:'난소암'},
@@ -267,17 +267,7 @@ const FROMAGE_SECTIONS = {
     {code:'paca_ca',desc:'췌장암'},{code:'esop_ca',desc:'식도암'},{code:'oral_ca',desc:'구강암'},
     {code:'lary_ca',desc:'후두암'},{code:'rcc_ca',desc:'신장암'},{code:'gall_ca',desc:'담낭암'},
     {code:'lymp_ca',desc:'림프종'},{code:'leuk_ca',desc:'백혈병'},{code:'myel_ca',desc:'골수종'},
-    {code:'skin_ca',desc:'피부암'},{code:'smbl_ca',desc:'소장암'}
-  ],
-  '생체나이 (숫자)': [
-    {code:'metabolic_msa',desc:'대사증후군나이'},{code:'medical_bad',desc:'의학생체나이'},
-    {code:'caa',desc:'심장나이'},{code:'pua',desc:'폐나이'},{code:'hea',desc:'간나이'},
-    {code:'paa',desc:'췌장나이'},{code:'rea',desc:'신장나이'},{code:'baa',desc:'비만체형나이'},
-    {code:'bpa',desc:'혈압나이'},{code:'bla',desc:'혈관나이'},
-    {code:'fsa',desc:'혈당나이'},{code:'msa',desc:'평균혈당나이'},
-    {code:'medical_tle',desc:'기대수명'},{code:'medical_rle',desc:'잔여수명'}
-  ],
-  '질병위험도 (위험/주의/양호)': [
+    {code:'skin_ca',desc:'피부암'},{code:'smbl_ca',desc:'소장암'},
     {code:'고지혈증',desc:'고지혈증'},{code:'당뇨병',desc:'당뇨병'},{code:'고혈압',desc:'고혈압'},
     {code:'치매',desc:'치매'},{code:'비만',desc:'비만'},{code:'만성신부전증',desc:'만성신부전증'},
     {code:'COPD',desc:'만성폐쇄성폐질환'},{code:'골절',desc:'골절'},{code:'골관절염',desc:'골관절염'},
@@ -288,22 +278,12 @@ const FROMAGE_SECTIONS = {
     {code:'류마티스관절염',desc:'류마티스관절염'},{code:'우울증',desc:'우울증'},
     {code:'심부전',desc:'심부전'},{code:'폐렴',desc:'폐렴'},{code:'천식',desc:'천식'},
     {code:'난청',desc:'난청'},{code:'녹내장',desc:'녹내장'},{code:'췌장염',desc:'췌장염'}
-  ],
-  '의료비 예측 (원/일수)': [
-    {code:'me_0y',desc:'금년도 의료비'},{code:'me_5y',desc:'5년후 의료비'},{code:'me_10y',desc:'10년후 의료비'},
-    {code:'me_0y_sa',desc:'동년배 금년도 의료비'},{code:'me_avg',desc:'연평균 의료비'},
-    {code:'me_avg_p',desc:'연평균 의료비상승률(%)'},
-    {code:'ambul',desc:'외래진료일수'},{code:'ambul_10y',desc:'10년후 외래진료일수'},
-    {code:'hospital',desc:'입원일수'},{code:'hospital_10y',desc:'10년후 입원일수'}
   ]
 };
 
 // 프롬에이지 카테고리별 조건 유형 설명
 const FROMAGE_COND = {
-  '암위험도 (위험/주의/양호)': {icon:'fa-circle-dot', color:'#9A1A1A', text:'Rule 조건: <b>위험</b> / <b>주의</b> / <b>양호</b> 등급 선택'},
-  '생체나이 (숫자)': {icon:'fa-clock', color:'#1A4A9A', text:'Rule 조건: 나이 <b>이상</b> · <b>이하</b> — 예) 대사나이가 실제나이보다 5세 초과'},
-  '질병위험도 (위험/주의/양호)': {icon:'fa-heart-pulse', color:'#C94B1A', text:'Rule 조건: <b>위험</b> / <b>주의</b> / <b>양호</b> 등급 선택'},
-  '의료비 예측 (원/일수)': {icon:'fa-receipt', color:'#1A7A4A', text:'Rule 조건: 금액·일수 <b>이상</b> · <b>이하</b> — 예) 10년후 의료비 500만원 이상'}
+  '위험도 (위험/주의/양호)': {icon:'fa-circle-dot', color:'#6B4A9A', text:'Rule 조건: <b>위험</b> / <b>주의</b> / <b>양호</b> 등급 선택 — 암위험도·질병위험도 항목 통합 (총 50개)'}
 };
 
 function switchTab(source) {
@@ -471,7 +451,7 @@ function renderProfileFields() {
             <span style="padding-top:3px">암진단(A4200) 담보금액 <b>≤ 30,000,000원</b></span>
             <span style="padding-top:3px;color:var(--text-hint)">AND</span>
             <span style="padding:3px 10px;border-radius:12px;background:rgba(107,74,154,.1);color:#6B4A9A;font-size:13px;font-weight:600;white-space:nowrap">🧬 프롬에이지</span>
-            <span style="padding-top:3px">암위험도 <b>= 위험</b></span>
+            <span style="padding-top:3px">위험도 <b>= 위험</b></span>
           </div>
           <div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border);font-size:13px;color:var(--text-hint)">
             → T02 암투병생활비 부족형 판정

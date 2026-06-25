@@ -156,7 +156,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
         <div class="flow-step-desc">개인 식별 정보를 제외한 데이터가 Clark AI로 전달됩니다.</div>
         <div class="flow-data-chips">
           <span class="flow-chip chip-mydata"><i class="fa-solid fa-shield-halved fa-fw"></i> 마이데이터 — 보험 보유 현황 (담보 종류·보장 금액 등)</span>
-          <span class="flow-chip chip-fromage"><i class="fa-solid fa-heartbeat fa-fw"></i> 프롬에이지 — 건강 위험도 등급 (암·심혈관·생체나이 등)</span>
+          <span class="flow-chip chip-fromage"><i class="fa-solid fa-heartbeat fa-fw"></i> 프롬에이지 — 위험도 등급 (암·질병 50개 항목, 위험/주의/양호)</span>
           <span class="flow-chip chip-profile"><i class="fa-solid fa-user fa-fw"></i> 프로파일 — 나이·성별·결혼여부 등 기본 정보</span>
         </div>
       </div>
@@ -359,7 +359,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
       <div class="caution-card">
         <div class="caution-icon" style="color:var(--card-rule)"><i class="fa-solid fa-scale-balanced"></i></div>
         <div class="caution-title">유의 ③ Rule 조건의 프롬에이지 — 등급 기준만 가능, 선택 조건으로 설정 권장</div>
-        <div class="caution-body">Rule 조건에서 프롬에이지 항목을 사용할 때는 수치가 아닌 등급(위험/주의/양호)으로만 조건을 설정할 수 있습니다. "암위험도가 위험 등급인 경우"는 가능하지만, "암위험도 점수가 85점 이상인 경우"처럼 원본 수치로 조건을 설정하는 것은 불가합니다.<br><br>
+        <div class="caution-body">Rule 조건에서 프롬에이지 항목을 사용할 때는 수치가 아닌 등급(위험/주의/양호)으로만 조건을 설정할 수 있습니다. "위험도가 위험 등급인 경우"는 가능하지만, "위험도 점수가 85점 이상인 경우"처럼 원본 수치로 조건을 설정하는 것은 불가합니다.<br><br>
         <strong>프롬에이지 조건은 선택 조건으로 설정하세요.</strong> 필수 조건으로 설정하면 프롬에이지 미연동 사용자는 해당 Rule이 발동하지 않습니다. 선택 조건으로 설정하면 미연동 사용자도 Rule이 발동하며, 프롬에이지 충족 여부는 Risk-type 노출 우선순위(2순위: 선택 조건 충족 개수)에만 반영됩니다.</div>
       </div>
 

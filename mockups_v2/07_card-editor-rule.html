@@ -460,58 +460,27 @@ const COVERAGE_CODES_BY_CAT = {
   ]
 };
 
-// Promage 카테고리별 필드 및 조건 타입
-const PROMAGE_FIELDS = {
-  '암위험도': {
-    type:'rating', hint:'등급 선택: 위험 / 주의 / 양호',
-    fields:[
-      {code:'canr_ca',name:'암 종합 등급'},{code:'lung_ca',name:'폐암'},{code:'gaca_ca',name:'위암'},
-      {code:'lica_ca',name:'간암'},{code:'coca_ca',name:'대장암'},{code:'brca_ca',name:'유방암'},
-      {code:'thca_ca',name:'갑상선암'},{code:'prca_ca',name:'전립선암'},{code:'ovca_ca',name:'난소암'},
-      {code:'utca_ca',name:'자궁암'},{code:'bntr_ca',name:'뇌암'},{code:'blca_ca',name:'방광암'},
-      {code:'paca_ca',name:'췌장암'},{code:'esop_ca',name:'식도암'},{code:'oral_ca',name:'구강암'},
-      {code:'lary_ca',name:'후두암'},{code:'rcc_ca',name:'신장암'},{code:'gall_ca',name:'담낭암'},
-      {code:'lymp_ca',name:'림프종'},{code:'leuk_ca',name:'백혈병'},{code:'myel_ca',name:'골수종'},
-      {code:'skin_ca',name:'피부암'},{code:'smbl_ca',name:'소장암'}
-    ]
-  },
-  '생체나이': {
-    type:'age', hint:'숫자 입력 (세). 예: 50 → 50세 이상/이하',
-    fields:[
-      {code:'metabolic_msa',name:'대사나이'},{code:'medical_bad',name:'의학생체나이'},
-      {code:'caa',name:'심장나이'},{code:'pua',name:'폐나이'},{code:'hea',name:'간나이'},
-      {code:'paa',name:'췌장나이'},{code:'rea',name:'신장나이'},{code:'baa',name:'비만체형나이'},
-      {code:'bpa',name:'혈압나이'},{code:'bla',name:'혈관나이'},
-      {code:'fsa',name:'혈당나이'},{code:'msa',name:'평균혈당나이'},
-      {code:'medical_tle',name:'기대수명'},{code:'medical_rle',name:'잔여수명'}
-    ]
-  },
-  '질병위험도': {
-    type:'rating', hint:'등급 선택: 위험 / 주의 / 양호',
-    fields:[
-      {code:'고지혈증',name:'고지혈증'},{code:'당뇨병',name:'당뇨병'},{code:'고혈압',name:'고혈압'},
-      {code:'치매',name:'치매'},{code:'비만',name:'비만'},{code:'만성신부전증',name:'만성신부전증'},
-      {code:'COPD',name:'만성폐쇄성폐질환'},{code:'골절',name:'골절'},{code:'골관절염',name:'골관절염'},
-      {code:'골다공증',name:'골다공증'},{code:'백내장',name:'백내장'},{code:'황반변성',name:'황반변성'},
-      {code:'파킨슨병',name:'파킨슨병'},{code:'전립선비대증',name:'전립선비대증'},
-      {code:'허혈성심장질환',name:'허혈성심장질환'},{code:'급성심근경색증',name:'급성심근경색증'},
-      {code:'뇌혈관질환',name:'뇌혈관질환'},{code:'뇌졸중',name:'뇌졸중'},{code:'부정맥',name:'부정맥'},
-      {code:'류마티스관절염',name:'류마티스관절염'},{code:'우울증',name:'우울증'},
-      {code:'심부전',name:'심부전'},{code:'폐렴',name:'폐렴'},{code:'천식',name:'천식'},
-      {code:'난청',name:'난청'},{code:'녹내장',name:'녹내장'},{code:'췌장염',name:'췌장염'}
-    ]
-  },
-  '의료비예측': {
-    type:'number', hint:'금액(원) 또는 일수 입력. 예: 5000000 → 500만원 이상',
-    fields:[
-      {code:'me_0y',name:'금년도 의료비'},{code:'me_5y',name:'5년후 의료비'},{code:'me_10y',name:'10년후 의료비'},
-      {code:'me_0y_sa',name:'동년배 금년도 의료비'},{code:'me_avg',name:'연평균 의료비'},
-      {code:'me_avg_p',name:'연평균 의료비상승률(%)'},
-      {code:'ambul',name:'외래진료일수'},{code:'ambul_10y',name:'10년후 외래진료일수'},
-      {code:'hospital',name:'입원일수'},{code:'hospital_10y',name:'10년후 입원일수'}
-    ]
-  }
-};
+// 프롬에이지 위험도 항목 (암위험도 + 질병위험도 통합, 위험/주의/양호 3단계)
+const PROMAGE_FIELDS = [
+  {code:'canr_ca',name:'암 종합 등급'},{code:'lung_ca',name:'폐암'},{code:'gaca_ca',name:'위암'},
+  {code:'lica_ca',name:'간암'},{code:'coca_ca',name:'대장암'},{code:'brca_ca',name:'유방암'},
+  {code:'thca_ca',name:'갑상선암'},{code:'prca_ca',name:'전립선암'},{code:'ovca_ca',name:'난소암'},
+  {code:'utca_ca',name:'자궁암'},{code:'bntr_ca',name:'뇌암'},{code:'blca_ca',name:'방광암'},
+  {code:'paca_ca',name:'췌장암'},{code:'esop_ca',name:'식도암'},{code:'oral_ca',name:'구강암'},
+  {code:'lary_ca',name:'후두암'},{code:'rcc_ca',name:'신장암'},{code:'gall_ca',name:'담낭암'},
+  {code:'lymp_ca',name:'림프종'},{code:'leuk_ca',name:'백혈병'},{code:'myel_ca',name:'골수종'},
+  {code:'skin_ca',name:'피부암'},{code:'smbl_ca',name:'소장암'},
+  {code:'고지혈증',name:'고지혈증'},{code:'당뇨병',name:'당뇨병'},{code:'고혈압',name:'고혈압'},
+  {code:'치매',name:'치매'},{code:'비만',name:'비만'},{code:'만성신부전증',name:'만성신부전증'},
+  {code:'COPD',name:'만성폐쇄성폐질환'},{code:'골절',name:'골절'},{code:'골관절염',name:'골관절염'},
+  {code:'골다공증',name:'골다공증'},{code:'백내장',name:'백내장'},{code:'황반변성',name:'황반변성'},
+  {code:'파킨슨병',name:'파킨슨병'},{code:'전립선비대증',name:'전립선비대증'},
+  {code:'허혈성심장질환',name:'허혈성심장질환'},{code:'급성심근경색증',name:'급성심근경색증'},
+  {code:'뇌혈관질환',name:'뇌혈관질환'},{code:'뇌졸중',name:'뇌졸중'},{code:'부정맥',name:'부정맥'},
+  {code:'류마티스관절염',name:'류마티스관절염'},{code:'우울증',name:'우울증'},
+  {code:'심부전',name:'심부전'},{code:'폐렴',name:'폐렴'},{code:'천식',name:'천식'},
+  {code:'난청',name:'난청'},{code:'녹내장',name:'녹내장'},{code:'췌장염',name:'췌장염'}
+];
 
 // 사용자 프로파일 조건 필드 (나이·성별)
 const USER_PROFILE_FIELDS = [
@@ -528,13 +497,6 @@ function opSelectHtml(op) {
   return ops.map(o=>`<option value="${o.v}"${op===o.v?' selected':''}>${o.l}</option>`).join('');
 }
 
-function promageOpSelectHtml(type, op) {
-  const ops = type === 'rating'
-    ? [{v:'EQ',l:'같음 (=)'},{v:'NOT_IN',l:'포함 안 됨'}]
-    : [{v:'GTE',l:'이상 (≥)'},{v:'LTE',l:'이하 (≤)'},{v:'GT',l:'초과 (>'},{v:'LT',l:'미만 (<)'}];
-  const defOp = op || (type === 'rating' ? 'EQ' : 'GTE');
-  return ops.map(o=>`<option value="${o.v}"${defOp===o.v?' selected':''}>${o.l}</option>`).join('');
-}
 
 function profileOpSelectHtml(type, op) {
   const ops = type === 'number'
@@ -556,7 +518,7 @@ const initialConditions = [
   {source:'PROFILE', field:'age',    op:'BETWEEN', value:'40,65',    required:true},
   {source:'PROFILE', field:'gender', op:'EQ',      value:'무관',     required:false},
   {source:'MYDATA',  coverage:'A4200', op:'LTE',   value:'30000000', required:true},
-  {source:'PROMAGE', category:'암위험도', field:'canr_ca', op:'EQ', value:'위험', required:false}
+  {source:'PROMAGE', field:'canr_ca', op:'EQ', value:'위험', required:false}
 ];
 
 function reqRadioHtml(id, isRequired) {
@@ -643,24 +605,11 @@ function addConditionRow(init) {
     }
   } else if (src === 'PROMAGE') {
     row.className = 'cond-row cond-row-promage';
-    const cat = (init && init.category) ? init.category : '암위험도';
-    const catData = PROMAGE_FIELDS[cat] || PROMAGE_FIELDS['암위험도'];
-    const catOptions = Object.keys(PROMAGE_FIELDS).map(c =>
-      `<option value="${c}"${cat===c?' selected':''}>${c}</option>`).join('');
     const pfld = (init && init.field) ? init.field : '';
-    const pfldOptions = catData.fields.map(f =>
+    const pop  = (init && init.op)    ? init.op    : 'EQ';
+    const pval = (init && init.value) ? init.value  : '';
+    const pfldOptions = PROMAGE_FIELDS.map(f =>
       `<option value="${f.code}"${pfld===f.code?' selected':''}>${f.name} (${f.code})</option>`).join('');
-    const pop = (init && init.op) ? init.op : (catData.type === 'rating' ? 'EQ' : 'GTE');
-    const pval = (init && init.value) ? init.value : '';
-    const valHtml = catData.type === 'rating'
-      ? `<select class="form-control" style="font-size:13px" id="val-${id}">
-           <option value="">등급 선택</option>
-           <option value="위험"${pval==='위험'?' selected':''}>위험</option>
-           <option value="주의"${pval==='주의'?' selected':''}>주의</option>
-           <option value="양호"${pval==='양호'?' selected':''}>양호</option>
-         </select>`
-      : `<input class="form-control" style="font-size:13px" id="val-${id}" type="text" value="${pval}" placeholder="${catData.hint}">
-         <div class="cond-hint" style="margin-top:2px">${catData.hint}</div>`;
     row.innerHTML = `
       <div>
         <select class="form-control" style="font-size:13px" onchange="onSrcChange(this,${id})">
@@ -669,24 +618,29 @@ function addConditionRow(init) {
           <option value="PROFILE">프로파일</option>
         </select>
       </div>
-      <div>
-        <select class="form-control" style="font-size:13px" id="cat-${id}" onchange="onPromageCatChange(${id})">
-          ${catOptions}
-        </select>
-      </div>
+      <div style="display:flex;align-items:center;font-size:12px;color:#6B4A9A;font-weight:700;padding:0 4px">위험도</div>
       <div>
         <select class="form-control" style="font-size:13px" id="fld-${id}">
-          ${pfldOptions}
+          <option value="">항목 선택</option>${pfldOptions}
         </select>
       </div>
       <div>
-        <select class="form-control" style="font-size:13px" id="op-${id}">${promageOpSelectHtml(catData.type, pop)}</select>
+        <select class="form-control" style="font-size:13px" id="op-${id}">
+          <option value="EQ"${pop==='EQ'?' selected':''}>같음 (=)</option>
+        </select>
       </div>
-      <div id="val-cell-${id}">${valHtml}</div>
+      <div>
+        <select class="form-control" style="font-size:13px" id="val-${id}">
+          <option value="">등급 선택</option>
+          <option value="위험"${pval==='위험'?' selected':''}>위험</option>
+          <option value="주의"${pval==='주의'?' selected':''}>주의</option>
+          <option value="양호"${pval==='양호'?' selected':''}>양호</option>
+        </select>
+      </div>
       ${reqRadioHtml(id, isRequired)}
       <button class="cond-delete" onclick="removeCondition(this)" title="조건 삭제"><i class="fa fa-trash"></i></button>
       <div style="grid-column:1/-1">
-        <span class="cond-hint">🧬 프롬에이지 — 메디에이지 건강검진 분석 데이터. 미연동 고객은 해당 조건 불충족 처리. <strong style="color:#A32D2D">선택 조건 권장</strong> — 필수로 설정 시 미연동 사용자는 이 Rule이 발동하지 않습니다.</span>
+        <span class="cond-hint">🧬 프롬에이지 — 위험도는 위험/주의/양호 3단계. 미연동 고객은 조건 불충족 처리. <strong style="color:#A32D2D">선택 조건 권장</strong></span>
       </div>`;
   } else {
     row.className = 'cond-row cond-row-mydata';
@@ -737,7 +691,7 @@ function onSrcChange(sel, id) {
   row.remove();
   const saved = conditionCount;
   conditionCount = id - 1;
-  addConditionRow({source:newSrc, coverage:'', category:'암위험도', field:'', op:oldOp, value:oldVal});
+  addConditionRow({source:newSrc, coverage:'', field:'', op:oldOp, value:oldVal});
   conditionCount = Math.max(conditionCount, saved);
 }
 
@@ -751,24 +705,6 @@ function onProfileFldChange(id) {
   conditionCount = Math.max(conditionCount, saved);
 }
 
-function onPromageCatChange(id) {
-  const cat = document.getElementById('cat-' + id).value;
-  const catData = PROMAGE_FIELDS[cat];
-  if (!catData) return;
-  document.getElementById('fld-' + id).innerHTML =
-    catData.fields.map(f => `<option value="${f.code}">${f.name} (${f.code})</option>`).join('');
-  document.getElementById('op-' + id).innerHTML = promageOpSelectHtml(catData.type, '');
-  const valCell = document.getElementById('val-cell-' + id);
-  valCell.innerHTML = catData.type === 'rating'
-    ? `<select class="form-control" style="font-size:13px" id="val-${id}">
-         <option value="">등급 선택</option>
-         <option value="위험">위험</option>
-         <option value="주의">주의</option>
-         <option value="양호">양호</option>
-       </select>`
-    : `<input class="form-control" style="font-size:13px" id="val-${id}" type="text" placeholder="${catData.hint}">
-       <div class="cond-hint" style="margin-top:2px">${catData.hint}</div>`;
-}
 
 function removeCondition(btn) {
   btn.closest('.cond-row').remove();
