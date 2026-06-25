@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=1280">
@@ -309,7 +309,6 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;backg
   <div class="nav-divider"></div>
   <a href="09_review-workflow.html"><i class="fa-solid fa-check-double fa-fw"></i> 검수·승인</a>
   <a href="00_canvas-main.html" class="active"><i class="fa-solid fa-diagram-project fa-fw"></i> 카드 연결</a>
-  <a href="11_dry-run.html"><i class="fa-solid fa-flask fa-fw"></i> 사전 테스트</a>
   <a href="18_system-settings.html"><i class="fa-solid fa-sliders fa-fw"></i> 시스템 설정</a>
   <a href="19_faq-rag.html" style="padding-left:20px"><i class="fa-solid fa-list-check fa-fw"></i> FAQ Q&A</a>
   <div class="nav-divider"></div>
@@ -504,7 +503,7 @@ const CARD_DETAILS = {
       { sourceLabel:'프롬에이지', source:'PROMAGE', label:'암 종합위험도 "위험" 이상', op:'EQ', value:'위험', required:false },
       { sourceLabel:'프롬에이지', source:'PROMAGE', label:'혈액검사 이상 수치 "주의" 이상', op:'GTE', value:'주의', required:false },
       { sourceLabel:'마이데이터', source:'MYDATA',  label:'암진단금 담보 갱신 예정 (12개월 이내)', op:'EQ', value:'true', required:false },
-      { sourceLabel:'프로파일', source:'PROFILE', label:'나이 40세 이상', op:'GTE', value:'40', required:true },
+      { sourceLabel:'프로파일', source:'PROFILE', label:'나이 40~65세', op:'BETWEEN', value:'40,65', required:true },
       { sourceLabel:'프로파일', source:'PROFILE', label:'성별 무관 (남녀 동일 적용)', op:'IN', value:'남,여', required:false },
     ],
   },
@@ -518,7 +517,7 @@ const CARD_DETAILS = {
       { sourceLabel:'프롬에이지', source:'PROMAGE', label:'뇌혈관 위험도 "위험" 등급', op:'EQ', value:'위험', required:false },
       { sourceLabel:'프롬에이지', source:'PROMAGE', label:'혈압 위험도 "주의" 이상', op:'GTE', value:'주의', required:false },
       { sourceLabel:'마이데이터', source:'MYDATA',  label:'뇌혈관 담보 갱신 예정 (12개월 이내)', op:'EQ', value:'true', required:false },
-      { sourceLabel:'프로파일', source:'PROFILE', label:'나이 50세 이상', op:'GTE', value:'50', required:true },
+      { sourceLabel:'프로파일', source:'PROFILE', label:'나이 50~70세', op:'BETWEEN', value:'50,70', required:true },
       { sourceLabel:'프로파일', source:'PROFILE', label:'성별 남성 (뇌혈관 고위험군)', op:'EQ', value:'남', required:false },
     ],
   },
@@ -1475,6 +1474,12 @@ function buildRuleCondRowsHTML(ruleId) {
         var gmet = testProfile.profile.gender === cond.value;
         ctrlHtml = '<span id="testGenderBadge_' + key + '" class="test-auto-badge ' + (gmet ? 'ok' : 'fail') + '">' +
           (gmet ? '✓ 충족' : '✗ 미충족') + ' (현재 ' + testProfile.profile.gender + '성)</span>';
+      } else if (cond.op === 'BETWEEN') {
+        var bpts = cond.value.split(',');
+        var bage = testProfile.profile.age;
+        var bmet = bage >= parseInt(bpts[0]) && bage <= parseInt(bpts[1]);
+        ctrlHtml = '<span id="testProfileBadge_' + key + '" class="test-auto-badge ' + (bmet ? 'ok' : 'fail') + '">' +
+          (bmet ? '✓ 충족' : '✗ 미충족') + ' (현재 ' + bage + '세)</span>';
       } else {
         var age = testProfile.profile.age;
         var val = parseInt(cond.value);
@@ -1555,9 +1560,15 @@ function onTestProfileChange() {
     var cond  = ((CARD_DETAILS[rId] || {}).conditions || [])[idx];
     if (!cond || cond.source !== 'PROFILE') return;
     var age = testProfile.profile.age;
-    var val = parseInt(cond.value);
-    var met = cond.op === 'GTE' ? age >= val : cond.op === 'LTE' ? age <= val
-            : cond.op === 'GT'  ? age >  val : cond.op === 'LT'  ? age <  val : false;
+    var met;
+    if (cond.op === 'BETWEEN') {
+      var bps = cond.value.split(',');
+      met = age >= parseInt(bps[0]) && age <= parseInt(bps[1]);
+    } else {
+      var val = parseInt(cond.value);
+      met = cond.op === 'GTE' ? age >= val : cond.op === 'LTE' ? age <= val
+          : cond.op === 'GT'  ? age >  val : cond.op === 'LT'  ? age <  val : false;
+    }
     el.className  = 'test-auto-badge ' + (met ? 'ok' : 'fail');
     el.textContent = (met ? '✓ 충족' : '✗ 미충족') + ' (현재 ' + age + '세)';
   });
@@ -1609,6 +1620,9 @@ function updateTestSummary(ruleCard) {
           met2 = true;
         } else if (cond.op === 'EQ' && (cond.value === '남' || cond.value === '여')) {
           met2 = p.gender === cond.value;
+        } else if (cond.op === 'BETWEEN') {
+          var bps2 = cond.value.split(',');
+          met2 = p.age >= parseInt(bps2[0]) && p.age <= parseInt(bps2[1]);
         } else {
           var val = parseInt(cond.value);
           met2 = cond.op === 'GTE' ? p.age >= val : cond.op === 'LTE' ? p.age <= val : false;
@@ -1639,6 +1653,9 @@ function evaluateTestResult() {
         met = true;
       } else if (cond.op === 'EQ' && (cond.value === '남' || cond.value === '여')) {
         met = testProfile.profile.gender === cond.value;
+      } else if (cond.op === 'BETWEEN') {
+        var bps3 = cond.value.split(',');
+        met = testProfile.profile.age >= parseInt(bps3[0]) && testProfile.profile.age <= parseInt(bps3[1]);
       } else {
         var age = testProfile.profile.age;
         var val = parseInt(cond.value);

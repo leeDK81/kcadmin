@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
@@ -179,7 +179,6 @@ textarea.form-control{resize:vertical;min-height:80px}
   <div class="nav-divider"></div>
   <a href="09_review-workflow.html"><i class="fa-solid fa-check-double fa-fw"></i> 검수·승인</a>
   <a href="00_canvas-main.html"><i class="fa-solid fa-diagram-project fa-fw"></i> 카드 연결</a>
-  <a href="11_dry-run.html"><i class="fa-solid fa-flask fa-fw"></i> 사전 테스트</a>
   <a href="18_system-settings.html"><i class="fa-solid fa-sliders fa-fw"></i> 시스템 설정</a>
   <a href="19_faq-rag.html" style="padding-left:20px"><i class="fa-solid fa-list-check fa-fw"></i> FAQ Q&A</a>
   <div class="nav-divider"></div>
@@ -261,12 +260,12 @@ textarea.form-control{resize:vertical;min-height:80px}
           <i class="fa fa-circle-info"></i> 아래 선택지는 주요 항목 예시입니다. 검색으로 더 많은 항목을 찾을 수 있습니다.
         </div>
         <div class="cond-header" id="condHeader" style="display:none">
-          <div class="cond-header-cell">① 어디서<br><span style="font-weight:400">(소스)</span></div>
-          <div class="cond-header-cell">② 담보코드 · 카테고리 · 항목<br><span style="font-weight:400">(소스별 다름)</span></div>
-          <div class="cond-header-cell">③ 확인 항목<br><span style="font-weight:400">(항목/속성)</span></div>
-          <div class="cond-header-cell">④ 조건<br><span style="font-weight:400">(비교 방식)</span></div>
-          <div class="cond-header-cell">⑤ 기준값<br><span style="font-weight:400">(비교할 값)</span></div>
-          <div class="cond-header-cell">⑥ 구분<br><span style="font-weight:400">(필수/선택)</span></div>
+          <div class="cond-header-cell">① 소스</div>
+          <div class="cond-header-cell">② 코드 · 카테고리 · 항목</div>
+          <div class="cond-header-cell">③ 항목 / 범위</div>
+          <div class="cond-header-cell">④ 조건</div>
+          <div class="cond-header-cell">⑤ 기준값</div>
+          <div class="cond-header-cell">⑥ 구분</div>
           <div></div>
         </div>
         <div id="conditionList"></div>
@@ -514,31 +513,17 @@ const PROMAGE_FIELDS = {
   }
 };
 
-// 사용자 프로파일 조건 필드 (나이·성별·결혼·자녀·직업위험도·출산·거주지)
+// 사용자 프로파일 조건 필드 (나이·성별)
 const USER_PROFILE_FIELDS = [
-  {field:'age',          label:'나이 (만)',    type:'number', hint:'만 나이. 예: 40 → 40세 이상/이하'},
-  {field:'gender',       label:'성별',         type:'enum',   values:['남','여'],                                                              hint:'남 / 여'},
-  {field:'marital',      label:'결혼 여부',     type:'enum',   values:['기혼','미혼'],                                                          hint:'기혼 / 미혼'},
-  {field:'has_children', label:'자녀 유무',     type:'enum',   values:['Y','N'],                                                               hint:'Y (있음) / N (없음)'},
-  {field:'job_risk',     label:'직업위험도',    type:'enum',   values:['비위험','중위험','고위험'],                                               hint:'비위험(사무직·IT) / 중위험(영업·자영업) / 고위험(단순노무·군인·경찰)'},
-  {field:'expecting',    label:'출산 예정',     type:'enum',   values:['Y','N'],                                                               hint:'Y (예정) / N (해당없음)'},
-  {field:'region',       label:'거주지',        type:'enum',   values:['서울','경기','인천','부산','대구','광주','대전','울산','세종','강원','충북','충남','전북','전남','경북','경남','제주'], hint:'거주 지역'},
-];
-
-// MYDATA에서 담보코드를 지정한 후 확인할 수 있는 항목
-const MYDATA_COV_FIELDS = [
-  {field:'coverage_amt', label:'담보금액(원)', type:'number', hint:'예: 50000000 (5천만원). 담보 미보유 시 0원으로 처리됩니다.'},
-  {field:'renewal_status', label:'갱신 여부', type:'boolean', hint:'true (갱신형) / false (비갱신형)'},
-  {field:'insu_type', label:'보험 유형', type:'code', hint:'예: HEALTH (건강), LIFE (종신), TERM (정기)'},
-  {field:'start_date', label:'보험 시작일', type:'date', hint:'YYYY-MM-DD. 예: 2020-01-01'},
-  {field:'end_date', label:'보험 종료일', type:'date', hint:'YYYY-MM-DD. 예: 2030-12-31'},
+  {field:'age',    label:'나이',  type:'range'},
+  {field:'gender', label:'성별',  type:'enum', values:['무관','남','여']},
 ];
 
 
 function opSelectHtml(op) {
   const ops = [
-    {v:'LTE',l:'이하 (≤)'},{v:'GTE',l:'이상 (≥)'},{v:'LT',l:'미만 (<)'},
-    {v:'GT',l:'초과 (>)'},{v:'EQ',l:'같음 (=)'},{v:'NOT_IN',l:'포함 안 됨'},{v:'IN',l:'포함됨'},
+    {v:'LTE',l:'이하 (≤)'},{v:'GTE',l:'이상 (≥)'},
+    {v:'LT',l:'미만 (<)'},{v:'GT',l:'초과 (>)'},{v:'EQ',l:'같음 (=)'},
   ];
   return ops.map(o=>`<option value="${o.v}"${op===o.v?' selected':''}>${o.l}</option>`).join('');
 }
@@ -567,11 +552,10 @@ const selectedRiskTypesForRule = [{id:'RT01', name:'암·종양'}, {id:'RT02', n
 // ── Evidence 연결: 캔버스에서만 변경 (읽기 전용) ──
 const selectedEv = [{id:'EV001', name:'암 평균 입원 진료비'}, {id:'EV002', name:'암 5년 생존율'}];
 
-// 샘플 조건: 40대 이상 + 암진단 담보금액 3천만원 이하 + 암 종합 위험도 '위험'
-// required:true = 필수 조건 (모두 충족해야 Rule 발동), required:false = 선택 조건 (충족 개수가 우선순위 2순위에 활용)
 const initialConditions = [
-  {source:'PROFILE', field:'age', op:'GTE', value:'40', required:true},
-  {source:'MYDATA',  coverage:'A4200', field:'coverage_amt', op:'LTE', value:'30000000', required:true},
+  {source:'PROFILE', field:'age',    op:'BETWEEN', value:'40,65',    required:true},
+  {source:'PROFILE', field:'gender', op:'EQ',      value:'무관',     required:false},
+  {source:'MYDATA',  coverage:'A4200', op:'LTE',   value:'30000000', required:true},
   {source:'PROMAGE', category:'암위험도', field:'canr_ca', op:'EQ', value:'위험', required:false}
 ];
 
@@ -605,41 +589,58 @@ function addConditionRow(init) {
   if (src === 'PROFILE') {
     row.className = 'cond-row cond-row-profile';
     const pfld = fld || 'age';
-    const profFld = USER_PROFILE_FIELDS.find(f => f.field === pfld) || USER_PROFILE_FIELDS[0];
     const fldOptions = USER_PROFILE_FIELDS.map(f =>
       `<option value="${f.field}"${pfld===f.field?' selected':''}>${f.label}</option>`).join('');
-    const buildValHtml = (f, v) => {
-      if (f.type === 'number') {
-        return `<input class="form-control" style="font-size:13px" id="val-${id}" type="text" value="${v}" placeholder="${f.hint}">
-                <div class="cond-hint" style="margin-top:2px">${f.hint}</div>`;
-      }
-      const opts = f.values.map(vv => `<option value="${vv}"${v===vv?' selected':''}>${vv}</option>`).join('');
-      return `<select class="form-control" style="font-size:13px" id="val-${id}"><option value="">선택</option>${opts}</select>
-              <div class="cond-hint" style="margin-top:2px">${f.hint}</div>`;
-    };
-    row.innerHTML = `
-      <div>
-        <select class="form-control" style="font-size:13px" onchange="onSrcChange(this,${id})">
-          <option value="MYDATA">마이데이터</option>
-          <option value="PROMAGE">프롬에이지</option>
-          <option value="PROFILE" selected>프로파일</option>
-        </select>
-      </div>
-      <div>
-        <select class="form-control" style="font-size:13px" id="pfld-${id}" onchange="onProfileFldChange(${id})">
-          ${fldOptions}
-        </select>
-      </div>
-      <div>—</div>
-      <div>
-        <select class="form-control" style="font-size:13px" id="op-${id}">${profileOpSelectHtml(profFld.type, op)}</select>
-      </div>
-      <div id="val-cell-${id}">${buildValHtml(profFld, val)}</div>
-      ${reqRadioHtml(id, isRequired)}
-      <button class="cond-delete" onclick="removeCondition(this)" title="조건 삭제"><i class="fa fa-trash"></i></button>
-      <div style="grid-column:1/-1">
-        <span class="cond-hint">👤 프로파일 — 나이·성별·직업위험도 등 사용자 기본정보. 동일 담보 기준값을 연령·성별별로 세분화할 때 사용합니다.</span>
-      </div>`;
+    const srcSel = `<select class="form-control" style="font-size:13px" onchange="onSrcChange(this,${id})">
+        <option value="MYDATA">마이데이터</option>
+        <option value="PROMAGE">프롬에이지</option>
+        <option value="PROFILE" selected>프로파일</option>
+      </select>`;
+    const fldSel = `<select class="form-control" style="font-size:13px" id="pfld-${id}" onchange="onProfileFldChange(${id})">${fldOptions}</select>`;
+
+    if (pfld === 'age') {
+      const parts = (val || '40,65').split(',');
+      const fromVal = parts[0] || '40';
+      const toVal   = parts[1] || '65';
+      row.innerHTML = `
+        <div>${srcSel}</div>
+        <div>${fldSel}</div>
+        <div style="display:flex;align-items:center;gap:4px">
+          <input class="form-control" style="font-size:13px;width:52px;text-align:center;padding:4px 2px" id="val-from-${id}" type="number" min="0" max="100" value="${fromVal}">
+          <span style="font-size:12px;color:var(--text-secondary);white-space:nowrap">세 ~</span>
+        </div>
+        <div></div>
+        <div style="display:flex;align-items:center;gap:4px">
+          <input class="form-control" style="font-size:13px;width:52px;text-align:center;padding:4px 2px" id="val-to-${id}" type="number" min="0" max="100" value="${toVal}">
+          <span style="font-size:12px;color:var(--text-secondary)">세</span>
+        </div>
+        ${reqRadioHtml(id, isRequired)}
+        <button class="cond-delete" onclick="removeCondition(this)" title="조건 삭제"><i class="fa fa-trash"></i></button>
+        <div style="grid-column:1/-1">
+          <span class="cond-hint">👤 프로파일 — 나이 범위 조건. Rule을 적용할 대상 연령대를 지정합니다.</span>
+        </div>`;
+    } else {
+      const gv = val || '무관';
+      row.innerHTML = `
+        <div>${srcSel}</div>
+        <div>${fldSel}</div>
+        <div style="grid-column:3/6;display:flex;align-items:center;gap:16px">
+          <label style="display:flex;align-items:center;gap:4px;cursor:pointer;font-size:13px">
+            <input type="radio" name="gender-${id}" id="val-${id}" value="무관" ${gv==='무관'?'checked':''}> 무관
+          </label>
+          <label style="display:flex;align-items:center;gap:4px;cursor:pointer;font-size:13px">
+            <input type="radio" name="gender-${id}" value="남" ${gv==='남'?'checked':''}> 남성
+          </label>
+          <label style="display:flex;align-items:center;gap:4px;cursor:pointer;font-size:13px">
+            <input type="radio" name="gender-${id}" value="여" ${gv==='여'?'checked':''}> 여성
+          </label>
+        </div>
+        ${reqRadioHtml(id, isRequired)}
+        <button class="cond-delete" onclick="removeCondition(this)" title="조건 삭제"><i class="fa fa-trash"></i></button>
+        <div style="grid-column:1/-1">
+          <span class="cond-hint">👤 프로파일 — 성별 조건. 특정 성별에만 Rule을 적용할 때 설정합니다. 무관은 남녀 모두 적용.</span>
+        </div>`;
+    }
   } else if (src === 'PROMAGE') {
     row.className = 'cond-row cond-row-promage';
     const cat = (init && init.category) ? init.category : '암위험도';
@@ -693,10 +694,6 @@ function addConditionRow(init) {
       `<optgroup label="${cat}">${codes.map(c =>
         `<option value="${c.code}"${cov===c.code?' selected':''}>${c.code} ${c.name}</option>`
       ).join('')}</optgroup>`).join('');
-    const fldOptions = MYDATA_COV_FIELDS.map(f =>
-      `<option value="${f.field}"${fld===f.field?' selected':''}>${f.label}</option>`).join('');
-    const selFld = MYDATA_COV_FIELDS.find(f => f.field === fld);
-    const valHintTxt = selFld ? selFld.hint : '담보코드를 먼저 선택하면 입력 예시가 표시됩니다';
     row.innerHTML = `
       <div>
         <select class="form-control" style="font-size:13px" onchange="onSrcChange(this,${id})">
@@ -706,27 +703,23 @@ function addConditionRow(init) {
         </select>
       </div>
       <div>
-        <select class="form-control" style="font-size:13px" id="cov-${id}" onchange="onCovChange(${id})">
+        <select class="form-control" style="font-size:13px" id="cov-${id}">
           <option value="">담보코드 선택</option>${covOptions}
         </select>
         <div class="cond-hint" style="margin-top:2px"><a href="12_coverage-code-table.html" style="color:var(--step-active)">담보코드 목록 보기 →</a></div>
       </div>
-      <div>
-        <select class="form-control" style="font-size:13px" id="fld-${id}" onchange="onFldChange(${id})">
-          ${fldOptions}
-        </select>
-      </div>
+      <div style="display:flex;align-items:center;font-size:12px;color:var(--text-secondary);font-weight:600">담보금액</div>
       <div>
         <select class="form-control" style="font-size:13px" id="op-${id}">${opSelectHtml(op)}</select>
       </div>
       <div>
-        <input class="form-control" style="font-size:13px" id="val-${id}" type="text" value="${val}" placeholder="⑤ 기준값 입력">
-        <div id="val-hint-${id}" class="cond-hint" style="margin-top:2px">${valHintTxt}</div>
+        <input class="form-control" style="font-size:13px" id="val-${id}" type="text" value="${val}" placeholder="기준 금액 (원)">
+        <div class="cond-hint" style="margin-top:2px">예: 30000000 (3천만원). 담보 미보유 시 0원으로 처리됩니다.</div>
       </div>
       ${reqRadioHtml(id, isRequired)}
       <button class="cond-delete" onclick="removeCondition(this)" title="조건 삭제"><i class="fa fa-trash"></i></button>
       <div style="grid-column:1/-1">
-        <span class="cond-hint">📋 마이데이터 — 고객 보험 계약 데이터. 담보코드로 어떤 보험을 볼지 지정 후 확인 항목과 조건을 설정하세요.</span>
+        <span class="cond-hint">📋 마이데이터 — 담보코드를 선택하고 보장 금액 기준을 설정하세요. 담보 미보유 시 0원으로 처리됩니다.</span>
       </div>`;
   }
 
@@ -749,18 +742,13 @@ function onSrcChange(sel, id) {
 }
 
 function onProfileFldChange(id) {
-  const fldCode = document.getElementById('pfld-' + id).value;
-  const profFld = USER_PROFILE_FIELDS.find(f => f.field === fldCode) || USER_PROFILE_FIELDS[0];
-  document.getElementById('op-' + id).innerHTML = profileOpSelectHtml(profFld.type, '');
-  const valCell = document.getElementById('val-cell-' + id);
-  if (profFld.type === 'number') {
-    valCell.innerHTML = `<input class="form-control" style="font-size:13px" id="val-${id}" type="text" placeholder="${profFld.hint}">
-                         <div class="cond-hint" style="margin-top:2px">${profFld.hint}</div>`;
-  } else {
-    const opts = profFld.values.map(v => `<option value="${v}">${v}</option>`).join('');
-    valCell.innerHTML = `<select class="form-control" style="font-size:13px" id="val-${id}"><option value="">선택</option>${opts}</select>
-                         <div class="cond-hint" style="margin-top:2px">${profFld.hint}</div>`;
-  }
+  const newFld = (document.getElementById('pfld-' + id) || {}).value || 'age';
+  const row = document.getElementById('cond-' + id);
+  if (row) row.remove();
+  const saved = conditionCount;
+  conditionCount = id - 1;
+  addConditionRow({source:'PROFILE', field:newFld});
+  conditionCount = Math.max(conditionCount, saved);
 }
 
 function onPromageCatChange(id) {
@@ -781,23 +769,6 @@ function onPromageCatChange(id) {
     : `<input class="form-control" style="font-size:13px" id="val-${id}" type="text" placeholder="${catData.hint}">
        <div class="cond-hint" style="margin-top:2px">${catData.hint}</div>`;
 }
-
-function onCovChange(id) {
-  // 담보코드 변경 시 — 힌트 유지, 별도 처리 없음
-}
-
-function onFldChange(id) {
-  const fldSel = document.getElementById('fld-' + id);
-  if (!fldSel) return;
-  const selFld = MYDATA_COV_FIELDS.find(f => f.field === fldSel.value);
-  const valHint = document.getElementById('val-hint-' + id);
-  const valInput = document.getElementById('val-' + id);
-  if (valHint && selFld) valHint.textContent = selFld.hint;
-  if (valInput && !valInput.value && selFld) {
-    valInput.placeholder = selFld.type === 'number' ? '숫자 입력' : selFld.type === 'boolean' ? 'true / false' : '값 입력';
-  }
-}
-
 
 function removeCondition(btn) {
   btn.closest('.cond-row').remove();
