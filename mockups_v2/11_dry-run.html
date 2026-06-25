@@ -180,6 +180,39 @@ textarea.form-control{resize:vertical;min-height:80px}
 .profile-summary-bar{background:#F4F7FF;border:1px solid #C8D8F8;border-radius:6px;padding:10px 12px;margin-top:12px}
 .psum-chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px}
 .psum-chip{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:4px;font-size:12px;font-weight:600}
+
+/* ── Demographic Risk Banner ── */
+.demo-banner{background:#F0F4FA;border:1px solid #C8D4E8;border-radius:8px;padding:12px 14px;margin:10px 0 6px}
+.demo-banner-hd{font-size:11px;font-weight:700;color:#4A5A8A;letter-spacing:.05em;text-transform:uppercase;margin-bottom:10px}
+.demo-cluster-row{display:flex;align-items:center;gap:10px;padding:5px 0}
+.demo-cluster-row+.demo-cluster-row{border-top:1px solid #DDE4F0}
+.demo-cluster-name{font-size:12px;font-weight:700;width:58px;flex-shrink:0}
+.demo-risk-bar-wrap{flex:1;background:#D8DFEA;border-radius:3px;height:5px;overflow:hidden}
+.demo-risk-bar{height:5px;border-radius:3px;transition:width .4s ease}
+.demo-risk-badge{font-size:11px;font-weight:700;padding:2px 9px;border-radius:8px;white-space:nowrap;flex-shrink:0;min-width:58px;text-align:center}
+.demo-stat-line{font-size:11px;color:var(--text-hint);margin-top:5px;line-height:1.5}
+.rlv1{background:#F0F0EE;color:var(--text-hint)}
+.rlv2{background:rgba(186,117,23,.12);color:#BA7517}
+.rlv3{background:rgba(201,75,26,.12);color:#C94B1A}
+.rlv4{background:rgba(163,45,45,.14);color:#8A1A1A}
+.rbar1{width:18%;background:#C0C0BC}
+.rbar2{width:44%;background:#BA7517}
+.rbar3{width:72%;background:#C94B1A}
+.rbar4{width:100%;background:#8A1A1A}
+
+/* ── Coverage Importance Label ── */
+.cov-item-wrap{display:flex;align-items:flex-start;gap:6px;margin-bottom:7px}
+.cov-imp-label{display:inline-flex;align-items:center;font-size:10px;font-weight:700;padding:2px 7px;border-radius:3px;white-space:nowrap;flex-shrink:0;margin-top:1px}
+.imp-r{background:rgba(163,45,45,.1);color:#A32D2D}
+.imp-c{background:rgba(186,117,23,.1);color:#BA7517}
+.imp-o{background:#F0F0EE;color:var(--text-secondary)}
+
+/* ── Chain Path Visual ── */
+.chain-path-pill{display:inline-flex;align-items:center;flex-wrap:wrap;gap:3px;background:#F4F7FF;border:1px solid #C8D8F8;border-radius:6px;padding:7px 12px}
+.cpath-node{display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;font-size:12px;font-weight:700;white-space:nowrap}
+.cpath-node.focus{outline:2px solid currentColor;outline-offset:1px;font-weight:800}
+.cpath-node.isnew{border:1px dashed currentColor}
+.cpath-arrow{color:var(--text-hint);font-size:10px;flex-shrink:0}
 </style>
 </head>
 <body>
@@ -250,92 +283,77 @@ textarea.form-control{resize:vertical;min-height:80px}
           <div id="cardDetail" style="display:none;margin-top:10px"></div>
         </div>
 
+        <!-- ②-1 체인 경로 선택 -->
+        <div class="form-group" id="chainPathGroup" style="display:none">
+          <label>② - 체인 경로 <span id="chainPathBadge" style="font-size:12px;font-weight:400;color:var(--text-hint)"></span></label>
+          <select class="form-control" id="chainPathSelect" onchange="onPathChange()" style="display:none;margin-bottom:8px"></select>
+          <div id="chainPathVisual"></div>
+        </div>
+
         <!-- ③ 고객 프로필 -->
         <div class="form-group" id="profileGroup" style="display:none">
-          <label>③ 고객 프로필 설정</label>
+          <label>③ 고객 프로필</label>
+          <div class="custom-profile-wrap">
 
-          <!-- 모드 탭 -->
-          <div class="profile-mode-tabs">
-            <button class="pmtab active" data-mode="preset" onclick="switchProfileMode('preset')">프리셋</button>
-            <button class="pmtab" data-mode="custom" onclick="switchProfileMode('custom')">직접 구성</button>
-          </div>
-
-          <!-- 프리셋 모드 -->
-          <div id="presetProfileSection">
-            <select class="form-control" id="profileSelect" onchange="onProfileChange()">
-              <option value="">-- 프리셋 선택 --</option>
-              <option value="A">고객 A — 45세 남성 | 암 진단금 미보유 (T01 암 클러스터)</option>
-              <option value="B">고객 B — 55세 남성 | 뇌혈관 담보 미보유 (T02 뇌혈관 클러스터)</option>
-              <option value="C">고객 C — 52세 남성 | 주요 담보 완비 (KC 미해당 예상)</option>
-            </select>
-            <div id="profileDetail" style="display:none;margin-top:10px">
-              <div class="profile-detail">
-                <div id="profileRows"></div>
-                <div id="profileRiskTag"></div>
+            <!-- 기본 정보 -->
+            <div class="cpro-sec">기본 정보</div>
+            <div style="display:grid;grid-template-columns:auto auto 1fr;gap:12px;align-items:start">
+              <div>
+                <div style="font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:5px">나이</div>
+                <div style="display:flex;align-items:center;gap:5px">
+                  <input type="number" class="form-control" id="customAge" min="20" max="80" value="45"
+                    oninput="onCustomBasicChange()" style="width:64px;text-align:center;padding:6px 8px">
+                  <span style="font-size:13px;color:var(--text-secondary)">세</span>
+                </div>
+              </div>
+              <div>
+                <div style="font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:5px">성별</div>
+                <div style="display:flex;gap:10px;padding-top:7px">
+                  <label style="display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer;font-weight:600">
+                    <input type="radio" name="customGender" value="M" checked onchange="onCustomBasicChange()"> 남
+                  </label>
+                  <label style="display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer;font-weight:600">
+                    <input type="radio" name="customGender" value="F" onchange="onCustomBasicChange()"> 여
+                  </label>
+                </div>
+              </div>
+              <div>
+                <div style="font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:5px">직업위험도</div>
+                <select class="form-control" id="customJobRisk" onchange="onCustomBasicChange()" style="padding:7px 10px">
+                  <option value="low">저위험직</option>
+                  <option value="normal" selected>일반직</option>
+                  <option value="high">고위험직</option>
+                </select>
               </div>
             </div>
-          </div>
 
-          <!-- 직접 구성 모드 -->
-          <div id="customProfileSection" style="display:none">
-            <div class="custom-profile-wrap">
+            <!-- 통계 기반 위험도 배너 (카드 선택 후 표시) -->
+            <div id="demoBanner" style="display:none"></div>
 
-              <!-- 기본 정보 -->
-              <div class="cpro-sec">기본 정보</div>
-              <div style="display:grid;grid-template-columns:auto auto 1fr;gap:12px;align-items:start">
-                <div>
-                  <div style="font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:5px">나이</div>
-                  <div style="display:flex;align-items:center;gap:5px">
-                    <input type="number" class="form-control" id="customAge" min="20" max="80" value="45"
-                      oninput="onCustomBasicChange()" style="width:64px;text-align:center;padding:6px 8px">
-                    <span style="font-size:13px;color:var(--text-secondary)">세</span>
-                  </div>
-                </div>
-                <div>
-                  <div style="font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:5px">성별</div>
-                  <div style="display:flex;gap:10px;padding-top:7px">
-                    <label style="display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer;font-weight:600">
-                      <input type="radio" name="customGender" value="M" checked onchange="onCustomBasicChange()"> 남
-                    </label>
-                    <label style="display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer;font-weight:600">
-                      <input type="radio" name="customGender" value="F" onchange="onCustomBasicChange()"> 여
-                    </label>
-                  </div>
-                </div>
-                <div>
-                  <div style="font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:5px">직업위험도</div>
-                  <select class="form-control" id="customJobRisk" onchange="onCustomBasicChange()" style="padding:7px 10px">
-                    <option value="low">저위험직</option>
-                    <option value="normal" selected>일반직</option>
-                    <option value="high">고위험직</option>
-                  </select>
-                </div>
-              </div>
+            <!-- 마이데이터 담보코드 -->
+            <div class="cpro-sec">
+              <i class="fa-solid fa-database" style="font-size:10px;margin-right:4px"></i>마이데이터 — 보유 담보코드
+              <span id="covImpNote" style="font-weight:400;color:var(--text-hint);font-size:10px;margin-left:6px;text-transform:none;letter-spacing:0"></span>
+            </div>
+            <div style="font-size:12px;color:var(--text-hint);margin-bottom:8px">
+              클릭으로 전환:
+              <span style="background:rgba(15,110,86,.1);color:#0F6E56;padding:1px 6px;border-radius:3px;font-weight:600">✓ 보유</span>
+              <i class="fa fa-arrow-right" style="font-size:10px;color:var(--text-hint);margin:0 4px"></i>
+              <span style="background:rgba(201,75,26,.08);color:#C94B1A;padding:1px 6px;border-radius:3px;font-weight:600">✗ 미보유</span>
+            </div>
+            <div id="customMydataFields"></div>
 
-              <!-- 마이데이터 담보코드 -->
-              <div class="cpro-sec">
-                <i class="fa-solid fa-database" style="font-size:10px;margin-right:4px"></i>마이데이터 — 보유 담보코드
-              </div>
-              <div style="font-size:12px;color:var(--text-hint);margin-bottom:8px">
-                클릭으로 전환:
-                <span style="background:rgba(15,110,86,.1);color:#0F6E56;padding:1px 6px;border-radius:3px;font-weight:600">✓ 보유</span>
-                <i class="fa fa-arrow-right" style="font-size:10px;color:var(--text-hint);margin:0 4px"></i>
-                <span style="background:rgba(201,75,26,.08);color:#C94B1A;padding:1px 6px;border-radius:3px;font-weight:600">✗ 미보유</span>
-              </div>
-              <div id="customMydataFields" class="cov-grid"></div>
+            <!-- 프롬에이지 -->
+            <div class="cpro-sec">
+              <i class="fa-solid fa-dna" style="font-size:10px;color:#6B4A9A;margin-right:4px"></i>프롬에이지 — 질병위험도
+            </div>
+            <div id="customPromageFields"></div>
 
-              <!-- 프롬에이지 -->
-              <div class="cpro-sec">
-                <i class="fa-solid fa-dna" style="font-size:10px;color:#6B4A9A;margin-right:4px"></i>프롬에이지 — 질병위험도
-              </div>
-              <div id="customPromageFields"></div>
-
-              <!-- 프로필 요약 -->
-              <div class="profile-summary-bar">
-                <div style="font-size:11px;font-weight:700;color:var(--text-secondary);letter-spacing:.04em">현재 프로필 요약</div>
-                <div class="psum-chips" id="customProfileSummary">
-                  <span style="font-size:12px;color:var(--text-hint)">카드 선택 후 조건을 설정하세요</span>
-                </div>
+            <!-- 프로필 요약 -->
+            <div class="profile-summary-bar">
+              <div style="font-size:11px;font-weight:700;color:var(--text-secondary);letter-spacing:.04em">현재 프로필 요약</div>
+              <div class="psum-chips" id="customProfileSummary">
+                <span style="font-size:12px;color:var(--text-hint)">카드 선택 후 조건을 설정하세요</span>
               </div>
             </div>
           </div>
@@ -455,6 +473,13 @@ const ALL_PENDING = {
     cluster:'T02', profile:'B', resultKey:'B',
     synonyms:['뇌경색 치료비','뇌경색 보장','뇌경색 보험','뇌경색 치료비 보장 알려줘'],
     queries:['뇌경색 치료비 보장 알려주세요','뇌경색 보험 어떻게 되나요?'],
+    chainPaths:[
+      { pathId:'P1', conceptId:'CN004',
+        label:'CN004 (뇌경색 치료비 보장) ★ → RT02 → RU002 → EV003 → PO002',
+        steps:['CN004','RT02','RU002','EV003','PO002'],
+        newCards:['CN004'],
+        queries:['뇌경색 치료비 보장 알려주세요','뇌경색 보험 어떻게 되나요?'] },
+    ],
   },
   RT03: {
     id:'RT03', type:'risk', typeLabel:'Risk-type', title:'심혈관질환 클러스터',
@@ -463,6 +488,18 @@ const ALL_PENDING = {
     cluster:'T02', profile:'B', resultKey:'B',
     synonyms:['뇌졸중 보험','심혈관 보험','심장 질환 보험'],
     queries:['심혈관질환 보험 있어야 하나요?','심장 보험 보장이 어떻게 되나요?'],
+    chainPaths:[
+      { pathId:'P1', conceptId:'CN003',
+        label:'CN003 (뇌졸중 보험 보장) → RT03 ★ → RU003',
+        steps:['CN003','RT03','RU003'],
+        newCards:['RT03','RU003'],
+        queries:['심혈관질환 보험 있어야 하나요?','심장 보험 보장이 어떻게 되나요?'] },
+      { pathId:'P2', conceptId:'CN005',
+        label:'CN005 (중대질병 보험 범위) → RT03 ★ → RU003',
+        steps:['CN005','RT03','RU003'],
+        newCards:['RT03','RU003'],
+        queries:['중대질병 심혈관 보험 있어야 하나요?','중대질병 보험 심혈관 보장 어떻게 되나요?'] },
+    ],
   },
   RU003: {
     id:'RU003', type:'rule', typeLabel:'Rule', title:'심혈관 보장 판정 기준',
@@ -471,6 +508,18 @@ const ALL_PENDING = {
     cluster:'T02', profile:'B', resultKey:'B',
     synonyms:['뇌졸중 보험','심혈관 보험'],
     queries:['심혈관질환 보험 보장 기준이 어떻게 되나요?'],
+    chainPaths:[
+      { pathId:'P1', conceptId:'CN003',
+        label:'CN003 (뇌졸중 보험 보장) → RT03 → RU003 ★',
+        steps:['CN003','RT03','RU003'],
+        newCards:['RT03','RU003'],
+        queries:['심혈관질환 보험 보장 기준이 어떻게 되나요?','뇌졸중 보험 보장 기준 알려주세요'] },
+      { pathId:'P2', conceptId:'CN005',
+        label:'CN005 (중대질병 보험 범위) → RT03 → RU003 ★',
+        steps:['CN005','RT03','RU003'],
+        newCards:['RT03','RU003'],
+        queries:['중대질병 심혈관 보장 기준 알려주세요','심혈관 중대질병 보험 어떻게 되나요?'] },
+    ],
   },
   PB002: {
     id:'PB002', type:'playbook', typeLabel:'Playbook', title:'뇌혈관 보장 공백 상담 플레이북',
@@ -478,6 +527,13 @@ const ALL_PENDING = {
     upstreamConceptId:'CN003', focusStep:0, focusStepLabel:'① Trigger 조건 충족',
     cluster:'T02', profile:'B', resultKey:'B',
     synonyms:[], queries:[],
+    chainPaths:[
+      { pathId:'P1', conceptId:'CN003',
+        label:'CN003 (뇌졸중 보험 보장) → RT03 → PB002 ★',
+        steps:['CN003','RT03','PB002'],
+        newCards:['RT03','PB002'],
+        queries:[] },
+    ],
     scenarios:[
       '뇌혈관 보장 미보유 — GA 상담 연결 필요',
       '고혈압 기저질환 + 뇌혈관 담보 없음 확인',
@@ -778,15 +834,99 @@ const RESULTS = {
 };
 
 // ============================================================
-// 카드별 테스트 조건 (커스텀 프로필 빌더용)
+// 연령·성별 → 클러스터별 통계 위험도
+// 연령대: 0=30대이하  1=40대  2=50대  3=60대+
+// 위험도: 1=낮음  2=보통  3=높음  4=매우높음
+// ============================================================
+const DEMO_CLUSTER_RISK = {
+  T01: {
+    label: '암',
+    M: {
+      levels: [2, 3, 4, 4],
+      badges: ['보통','높음','매우높음','매우높음'],
+      stats:  ['10만명당 87명','10만명당 213명','10만명당 496명','10만명당 1,200명+'],
+      source: '국가암정보센터 2024'
+    },
+    F: {
+      levels: [3, 4, 4, 3],
+      badges: ['높음','매우높음','매우높음','높음'],
+      stats:  ['10만명당 130명 (유방·갑상선)','10만명당 290명 (유방암 피크)','10만명당 410명','10만명당 510명'],
+      source: '국가암정보센터 2024'
+    }
+  },
+  T02: {
+    label: '뇌혈관',
+    M: {
+      levels: [1, 2, 4, 4],
+      badges: ['낮음','보통','매우높음','매우높음'],
+      stats:  ['인구 대비 0.3%','0.6% — 40대 이후 급격 증가','2.1% — 고혈압·당뇨 동반 시 ×3','4.8% — 뇌졸중 주요 발생 구간'],
+      source: '심사평가원(HIRA) 2024'
+    },
+    F: {
+      levels: [1, 1, 2, 4],
+      badges: ['낮음','낮음','보통','매우높음'],
+      stats:  ['인구 대비 0.2%','0.3%','0.9% — 폐경 이후 위험 상승','3.4% — 남성에 근접한 위험 수준'],
+      source: '심사평가원(HIRA) 2024'
+    }
+  }
+};
+
+function getAgeGroup(age) {
+  if (age < 40) return 0;
+  if (age < 50) return 1;
+  if (age < 60) return 2;
+  return 3;
+}
+
+function getDemoRisk(cluster, gender, age) {
+  var data = DEMO_CLUSTER_RISK[cluster];
+  if (!data) return { level:2, badge:'보통', stat:'', source:'', label:'' };
+  var gd = data[gender] || data['M'];
+  var ag = getAgeGroup(age);
+  return { level: gd.levels[ag], badge: gd.badges[ag], stat: gd.stats[ag], source: gd.source, label: data.label };
+}
+
+function getEffectiveImportance(base, riskLevel) {
+  if (riskLevel >= 3) return base === 'optional' ? 'recommended' : 'required';
+  if (riskLevel <= 1) return base === 'required' ? 'recommended' : 'optional';
+  return base;
+}
+
+function renderDemoBanner(cluster, gender, age) {
+  var risk = getDemoRisk(cluster, gender, age);
+  var ag = getAgeGroup(age);
+  var ageLabel = ['30대 이하','40대','50대','60대 이상'][ag];
+  var gLabel = gender === 'M' ? '남성' : '여성';
+  var lvN = risk.level - 1;
+  var rlvClass = ['rlv1','rlv2','rlv3','rlv4'][lvN];
+  var rbarClass = ['rbar1','rbar2','rbar3','rbar4'][lvN];
+  var banner = document.getElementById('demoBanner');
+  banner.innerHTML =
+    '<div class="demo-banner">' +
+      '<div class="demo-banner-hd">' + ageLabel + ' ' + gLabel + ' 기준 — 통계적 보장 필요도</div>' +
+      '<div class="demo-cluster-row">' +
+        '<div class="demo-cluster-name">' + risk.label + '</div>' +
+        '<div class="demo-risk-bar-wrap"><div class="demo-risk-bar ' + rbarClass + '"></div></div>' +
+        '<span class="demo-risk-badge ' + rlvClass + '">' + risk.badge + '</span>' +
+      '</div>' +
+      '<div class="demo-stat-line">' + risk.stat + ' &nbsp;·&nbsp; ' + risk.source + '</div>' +
+    '</div>';
+  banner.style.display = 'block';
+}
+
+// ============================================================
+// 카드별 테스트 조건
+// importance: required(필수) / recommended(권장) / optional(참고)
+// → 연령·성별 위험도에 따라 실제 표시 중요도가 조정됨
 // ============================================================
 const CARD_TEST_CONDITIONS = {
   CN004: {
+    cluster: 'T02',
     mydata: [
-      {code:'A4601', desc:'중증질환(뇌혈관) 산정특례'},
-      {code:'A6107', desc:'뇌혈관질환 입원일당'},
-      {code:'A5104', desc:'뇌혈관질환 수술'},
-      {code:'A4300', desc:'뇌혈관질환 진단'},
+      {code:'A4601', desc:'중증질환(뇌혈관) 산정특례', importance:'required'},
+      {code:'A6107', desc:'뇌혈관질환 입원일당',       importance:'required'},
+      {code:'A5104', desc:'뇌혈관질환 수술',           importance:'recommended'},
+      {code:'A4300', desc:'뇌혈관질환 진단',           importance:'recommended'},
     ],
     promage: ['뇌혈관질환','뇌졸중','고혈압'],
     evaluate: function(p) {
@@ -795,13 +935,14 @@ const CARD_TEST_CONDITIONS = {
     }
   },
   RT03: {
+    cluster: 'T02',
     mydata: [
-      {code:'A4601', desc:'중증질환(뇌혈관) 산정특례'},
-      {code:'A4602', desc:'중증질환(심장) 산정특례'},
-      {code:'A6107', desc:'뇌혈관질환 입원일당'},
-      {code:'A6109', desc:'허혈성심장질환 입원일당'},
-      {code:'A5104', desc:'뇌혈관질환 수술'},
-      {code:'A5107', desc:'허혈성심장질환 수술'},
+      {code:'A4601', desc:'중증질환(뇌혈관) 산정특례',     importance:'required'},
+      {code:'A4602', desc:'중증질환(심장) 산정특례',       importance:'required'},
+      {code:'A6107', desc:'뇌혈관질환 입원일당',           importance:'required'},
+      {code:'A6109', desc:'허혈성심장질환 입원일당',       importance:'recommended'},
+      {code:'A5104', desc:'뇌혈관질환 수술',               importance:'recommended'},
+      {code:'A5107', desc:'허혈성심장질환 수술',           importance:'optional'},
     ],
     promage: ['뇌혈관질환','허혈성심장질환','뇌졸중','부정맥'],
     evaluate: function(p) {
@@ -810,11 +951,12 @@ const CARD_TEST_CONDITIONS = {
     }
   },
   RU003: {
+    cluster: 'T02',
     mydata: [
-      {code:'A4601', desc:'중증질환(뇌혈관) 산정특례'},
-      {code:'A4602', desc:'중증질환(심장) 산정특례'},
-      {code:'A6107', desc:'뇌혈관질환 입원일당'},
-      {code:'A6109', desc:'허혈성심장질환 입원일당'},
+      {code:'A4601', desc:'중증질환(뇌혈관) 산정특례', importance:'required'},
+      {code:'A4602', desc:'중증질환(심장) 산정특례',   importance:'required'},
+      {code:'A6107', desc:'뇌혈관질환 입원일당',       importance:'required'},
+      {code:'A6109', desc:'허혈성심장질환 입원일당',   importance:'recommended'},
     ],
     promage: ['뇌혈관질환','허혈성심장질환','고혈압'],
     evaluate: function(p) {
@@ -823,10 +965,11 @@ const CARD_TEST_CONDITIONS = {
     }
   },
   PB002: {
+    cluster: 'T02',
     mydata: [
-      {code:'A4601', desc:'중증질환(뇌혈관) 산정특례'},
-      {code:'A6107', desc:'뇌혈관질환 입원일당'},
-      {code:'A5104', desc:'뇌혈관질환 수술'},
+      {code:'A4601', desc:'중증질환(뇌혈관) 산정특례', importance:'required'},
+      {code:'A6107', desc:'뇌혈관질환 입원일당',       importance:'required'},
+      {code:'A5104', desc:'뇌혈관질환 수술',           importance:'recommended'},
     ],
     promage: ['뇌혈관질환','뇌졸중','고혈압'],
     evaluate: function(p) {
@@ -836,6 +979,9 @@ const CARD_TEST_CONDITIONS = {
   }
 };
 
+// 선택된 체인 경로 인덱스
+var selectedPathIdx = 0;
+
 // 커스텀 프로필 상태
 var customProfile = {
   age: 45,
@@ -844,75 +990,182 @@ var customProfile = {
   mydata: {},   // code → true(보유) | false(미보유)
   promage: {}   // field → 'risk' | 'caution' | 'good' | undefined
 };
-var profileMode = 'preset';
 
 // ============================================================
-// 프로필 모드 전환
+// 체인 경로 선택 UI
 // ============================================================
-function switchProfileMode(mode) {
-  profileMode = mode;
-  document.querySelectorAll('.pmtab').forEach(function(t){ t.classList.toggle('active', t.dataset.mode === mode); });
-  document.getElementById('presetProfileSection').style.display  = mode === 'preset'  ? 'block' : 'none';
-  document.getElementById('customProfileSection').style.display  = mode === 'custom'  ? 'block' : 'none';
-  // 결과 초기화
-  document.getElementById('emptyState').style.display   = 'block';
-  document.getElementById('resultContent').style.display = 'none';
-  document.getElementById('resultTitle').textContent    = '사전 테스트 결과';
-  // 카드가 이미 선택돼 있으면 직접 구성 UI 빌드
+function populateChainPaths(cardId) {
+  var card  = ALL_PENDING[cardId];
+  var paths = card.chainPaths || [];
+  var group = document.getElementById('chainPathGroup');
+  var sel   = document.getElementById('chainPathSelect');
+  var badge = document.getElementById('chainPathBadge');
+
+  if (paths.length === 0) { group.style.display = 'none'; return; }
+
+  if (paths.length > 1) {
+    badge.textContent = '— ' + paths.length + '개 경로 존재';
+    sel.innerHTML = paths.map(function(p, i) {
+      return '<option value="'+i+'">[경로 '+(i+1)+'] '+p.label+'</option>';
+    }).join('');
+    sel.value = '0';
+    sel.style.display = 'block';
+  } else {
+    badge.textContent = '';
+    sel.style.display = 'none';
+  }
+
+  group.style.display = 'block';
+  renderPathVisual(paths[0], card);
+}
+
+function renderPathVisual(path, card) {
+  var el = document.getElementById('chainPathVisual');
+  var newSet = {};
+  (path.newCards || []).forEach(function(id){ newSet[id] = true; });
+
+  var typeForId = function(id) {
+    if (/^CN/.test(id)) return 'concept';
+    if (/^RT/.test(id)) return 'risk';
+    if (/^RU/.test(id)) return 'rule';
+    if (/^EV/.test(id)) return 'evidence';
+    if (/^PO/.test(id)) return 'policy';
+    if (/^PB/.test(id)) return 'playbook';
+    return 'concept';
+  };
+  var tColors = {concept:'#1A4A9A',risk:'#C94B1A',rule:'#9A1A1A',evidence:'#1A7A4A',policy:'#5A5A55',playbook:'#6B4A9A'};
+
+  var nodes = path.steps.map(function(id, i) {
+    var t   = typeForId(id);
+    var c   = tColors[t];
+    var rr  = parseInt(c.slice(1,3),16);
+    var gg  = parseInt(c.slice(3,5),16);
+    var bb  = parseInt(c.slice(5,7),16);
+    var isFocus = (id === card.id);
+    var isNew   = !!newSet[id];
+
+    var cls = 'cpath-node' + (isFocus ? ' focus' : '') + (isNew ? ' isnew' : '');
+
+    var label = id;
+    if (isFocus) {
+      label += ' ★';
+    } else if (isNew) {
+      label += ' <span style="font-size:9px;font-weight:800;background:rgba('+rr+','+gg+','+bb+',.2);border-radius:2px;padding:0 3px;vertical-align:middle">신규</span>';
+    }
+
+    return (i > 0 ? '<span class="cpath-arrow"><i class="fa-solid fa-arrow-right"></i></span>' : '') +
+      '<span class="'+cls+'" style="background:rgba('+rr+','+gg+','+bb+',.12);color:'+c+'">'+label+'</span>';
+  }).join('');
+
+  // 범례
+  var legend =
+    '<div style="display:flex;align-items:center;gap:12px;margin-top:6px;font-size:11px;color:var(--text-secondary)">' +
+      '<span><span style="outline:2px solid #1A4A9A;outline-offset:1px;border-radius:3px;padding:0 4px;font-weight:700;font-size:11px">★</span> 테스트 대상</span>' +
+      '<span><span style="border:1px dashed #666;border-radius:3px;padding:0 4px;font-size:11px">신규</span> 준비 연결(pending)</span>' +
+      '<span>테두리 없음 = 기존 라이브 카드</span>' +
+    '</div>';
+
+  el.innerHTML = '<div class="chain-path-pill">'+nodes+'</div>' + legend;
+}
+
+function onPathChange() {
+  var idx = parseInt(document.getElementById('chainPathSelect').value) || 0;
+  selectedPathIdx = idx;
   var cardId = document.getElementById('cardSelect').value;
-  if (mode === 'custom' && cardId) buildCustomProfileUI(cardId);
-  updateRunBtnState();
+  var card   = ALL_PENDING[cardId];
+  var path   = card.chainPaths[idx];
+  if (!path) return;
+
+  renderPathVisual(path, card);
+
+  // 카드 상세의 진입점 안내 텍스트 갱신
+  var noteBox = document.getElementById('upstreamNoteBox');
+  if (noteBox) {
+    var cr2 = CONCEPT_SYNONYMS[path.conceptId] || {};
+    noteBox.innerHTML =
+      '<i class="fa-solid fa-arrow-right" style="color:#1A4A9A;margin-right:5px;font-size:10px"></i>' +
+      '테스트 진입점: <strong>'+path.conceptId+'</strong> '+(cr2.title||'')+' 동의어로 질문 입력' +
+      ' <span style="color:var(--text-hint);font-size:11px">(AI 체인은 항상 Concept에서 시작)</span>';
+  }
+
+  // 빠른 질문 버튼 + 질문 입력창 갱신
+  if (card.type !== 'playbook') {
+    var q = path.queries && path.queries.length ? path.queries : card.queries;
+    updateQuickQButtons(q);
+    if (q.length > 0) document.getElementById('questionInput').value = q[0];
+  }
 }
 
 function updateRunBtnState() {
   var cardId = document.getElementById('cardSelect').value;
-  if (!cardId) { document.getElementById('runBtns').style.display = 'none'; return; }
-  var ready = profileMode === 'custom' || !!document.getElementById('profileSelect').value;
-  document.getElementById('runBtns').style.display = ready ? 'flex' : 'none';
+  document.getElementById('runBtns').style.display = cardId ? 'flex' : 'none';
 }
 
 // ============================================================
-// 직접 구성 — UI 빌드
+// 프로필 UI 빌드 — 나이·성별 반영 중요도·기본값 결정
 // ============================================================
 function buildCustomProfileUI(cardId) {
   var conds = CARD_TEST_CONDITIONS[cardId];
   if (!conds) {
-    document.getElementById('customMydataFields').innerHTML = '<span style="font-size:13px;color:var(--text-hint)">이 카드 타입의 커스텀 조건 정의 없음</span>';
+    document.getElementById('customMydataFields').innerHTML = '<span style="font-size:13px;color:var(--text-hint)">이 카드 타입의 조건 정의 없음</span>';
     document.getElementById('customPromageFields').innerHTML = '';
+    document.getElementById('demoBanner').style.display = 'none';
     updateCustomSummary();
     return;
   }
 
-  // 마이데이터 담보코드 토글
+  var age    = customProfile.age;
+  var gender = customProfile.gender;
+  var risk   = getDemoRisk(conds.cluster, gender, age);
+
+  // 1. 통계 위험도 배너
+  renderDemoBanner(conds.cluster, gender, age);
+
+  // 2. 중요도 안내 텍스트
+  var impNoteMap = {1:'(이 연령·성별 기준: 참고 수준)', 2:'(이 연령·성별 기준: 권장 수준)', 3:'(이 연령·성별 기준: 필수 수준)', 4:'(이 연령·성별 기준: 매우 중요)'};
+  var impNoteEl = document.getElementById('covImpNote');
+  if (impNoteEl) impNoteEl.textContent = impNoteMap[risk.level] || '';
+
+  // 3. 담보코드 — 중요도·기본값 동적 결정
   var mydataHtml = conds.mydata.map(function(item) {
-    var state = customProfile.mydata[item.code] !== false; // default: 미보유(false)
-    var cls = state ? 'cov-toggle has' : 'cov-toggle none';
-    var icon = state ? '✓' : '✗';
-    var stateLabel = state ? '보유' : '미보유';
+    var effImp = getEffectiveImportance(item.importance, risk.level);
+    var impLabel = {required:'필수', recommended:'권장', optional:'참고'}[effImp];
+    var impClass = {required:'imp-r', recommended:'imp-c', optional:'imp-o'}[effImp];
+
+    // 기본값: 아직 미설정이면 위험도+중요도로 결정
+    if (customProfile.mydata[item.code] === undefined) {
+      // 위험 높고 중요도 높을수록 → 미보유 기본 (KC 체인이 작동하는 상황)
+      customProfile.mydata[item.code] = (risk.level >= 3 && effImp !== 'optional') ? false : true;
+    }
+    var has = customProfile.mydata[item.code] !== false;
+    var cls = has ? 'cov-toggle has' : 'cov-toggle none';
+    var icon = has ? '✓' : '✗';
+    var stateLabel = has ? '보유' : '미보유';
     var shortDesc = item.desc.length > 14 ? item.desc.slice(0,13)+'…' : item.desc;
-    return '<button class="'+cls+'" onclick="toggleCovCode(\''+item.code+'\')" title="'+item.desc+'">' +
-      '<span>'+icon+'</span>' +
-      '<code style="font-size:11px;font-weight:800;letter-spacing:.03em">'+item.code+'</code>' +
-      '<span>'+shortDesc+'</span>' +
-      '<span style="font-size:11px;opacity:.7;margin-left:2px">('+stateLabel+')</span>' +
-    '</button>';
+
+    return '<div class="cov-item-wrap">' +
+      '<span class="cov-imp-label ' + impClass + '">' + impLabel + '</span>' +
+      '<button class="' + cls + '" onclick="toggleCovCode(\'' + item.code + '\')" title="' + item.desc + '">' +
+        '<span>' + icon + '</span>' +
+        '<code style="font-size:11px;font-weight:800;letter-spacing:.03em">' + item.code + '</code>' +
+        '<span>' + shortDesc + '</span>' +
+        '<span style="font-size:11px;opacity:.7;margin-left:2px">(' + stateLabel + ')</span>' +
+      '</button>' +
+    '</div>';
   }).join('');
   document.getElementById('customMydataFields').innerHTML = mydataHtml || '<span style="font-size:13px;color:var(--text-hint)">해당 없음</span>';
 
-  // 프롬에이지 위험도
+  // 4. 프롬에이지 위험도
   var promageHtml = conds.promage.map(function(field) {
     var val = customProfile.promage[field];
     function gp(grade, label) {
-      var isActive = val === grade;
-      var activeClass = isActive ? ' active' : '';
-      return '<button class="gpill '+grade+activeClass+'" onclick="setPromageGrade(\''+field+'\',\''+grade+'\')">'+label+'</button>';
+      return '<button class="gpill ' + grade + (val === grade ? ' active' : '') + '" onclick="setPromageGrade(\'' + field + '\',\'' + grade + '\')">' + label + '</button>';
     }
-    var noneActive = !val ? ' active' : '';
     return '<div class="promage-row">' +
-      '<span class="promage-lbl">'+field+'</span>' +
+      '<span class="promage-lbl">' + field + '</span>' +
       '<div class="grade-pills">' +
         gp('risk','위험') + gp('caution','주의') + gp('good','양호') +
-        '<button class="gpill none-set'+noneActive+'" onclick="setPromageGrade(\''+field+'\',null)">미설정</button>' +
+        '<button class="gpill none-set' + (!val ? ' active' : '') + '" onclick="setPromageGrade(\'' + field + '\',null)">미설정</button>' +
       '</div>' +
     '</div>';
   }).join('');
@@ -936,10 +1189,14 @@ function setPromageGrade(field, grade) {
 }
 
 function onCustomBasicChange() {
-  customProfile.age    = parseInt(document.getElementById('customAge').value) || 45;
-  customProfile.gender = document.querySelector('input[name="customGender"]:checked').value;
+  customProfile.age     = parseInt(document.getElementById('customAge').value) || 45;
+  customProfile.gender  = document.querySelector('input[name="customGender"]:checked').value;
   customProfile.jobRisk = document.getElementById('customJobRisk').value;
-  updateCustomSummary();
+  // 나이·성별 변경 시 담보 기본값 재계산
+  customProfile.mydata  = {};
+  var cardId = document.getElementById('cardSelect').value;
+  if (cardId) buildCustomProfileUI(cardId);
+  else updateCustomSummary();
 }
 
 function updateCustomSummary() {
@@ -967,16 +1224,16 @@ function updateCustomSummary() {
 }
 
 function getCustomProfileLabel() {
-  var genderLabel = customProfile.gender === 'M' ? '남성' : '여성';
-  return customProfile.age+'세 '+genderLabel+' (직접 구성)';
+  var gLabel   = customProfile.gender === 'M' ? '남성' : '여성';
+  var jobLabel = {low:'저위험직', normal:'일반직', high:'고위험직'}[customProfile.jobRisk] || '';
+  return customProfile.age + '세 ' + gLabel + ' · ' + jobLabel;
 }
 
 function evaluateCustomProfile(cardId) {
   var conds = CARD_TEST_CONDITIONS[cardId];
   if (!conds) return 'C';
   var card = ALL_PENDING[cardId];
-  var kcMatch = conds.evaluate(customProfile);
-  return kcMatch ? card.resultKey : 'C';
+  return conds.evaluate(customProfile) ? card.resultKey : 'C';
 }
 
 const MOCK_NOTE = '이 결과는 가상 프로필 기반 사전 확인입니다. 실제 Clark AI 답변은 실제 고객 데이터로 평가됩니다.';
@@ -1007,7 +1264,8 @@ function onCardChange() {
   if (!val) { det.style.display = 'none'; return; }
 
   var card = ALL_PENDING[val];
-  var conceptRef = CONCEPT_SYNONYMS[card.upstreamConceptId] || {};
+  var initConceptId = card.chainPaths && card.chainPaths[0] ? card.chainPaths[0].conceptId : card.upstreamConceptId;
+  var conceptRef = CONCEPT_SYNONYMS[initConceptId] || {};
   var tc = typeColor(card.type);
   var r = parseInt(tc.slice(1,3),16), g = parseInt(tc.slice(3,5),16), b = parseInt(tc.slice(5,7),16);
 
@@ -1018,8 +1276,8 @@ function onCardChange() {
       '테스트 방식: 고객 프로필 + 상담 시나리오 → Playbook 트리거 조건 매칭 확인</div>';
   } else if (card.type !== 'concept') {
     upstreamNote =
-      '<div class="upstream-note"><i class="fa-solid fa-arrow-right" style="color:#1A4A9A;margin-right:5px;font-size:10px"></i>' +
-      '테스트 진입점: <strong>'+card.upstreamConceptId+'</strong> '+(conceptRef.title||'')+' 동의어로 질문 입력' +
+      '<div class="upstream-note" id="upstreamNoteBox"><i class="fa-solid fa-arrow-right" style="color:#1A4A9A;margin-right:5px;font-size:10px"></i>' +
+      '테스트 진입점: <strong>'+initConceptId+'</strong> '+(conceptRef.title||'')+' 동의어로 질문 입력' +
       ' <span style="color:var(--text-hint);font-size:11px">(AI 체인은 항상 Concept에서 시작)</span></div>';
   }
 
@@ -1047,7 +1305,9 @@ function onCardChange() {
   det.style.display = 'block';
 
   document.getElementById('profileGroup').style.display = 'block';
-  if (profileMode === 'custom') buildCustomProfileUI(val);
+  buildCustomProfileUI(val);
+  selectedPathIdx = 0;
+  populateChainPaths(val);
 
   if (card.type === 'playbook') {
     var scenSel = document.getElementById('scenarioSelect');
@@ -1060,9 +1320,11 @@ function onCardChange() {
     document.getElementById('playbookInputGroup').style.display = 'none';
     document.getElementById('chainInputGroup').style.display = 'block';
     document.getElementById('quickQCard').style.display = 'block';
-    updateQuickQButtons(card.queries);
-    if (card.queries.length > 0 && !document.getElementById('questionInput').value) {
-      document.getElementById('questionInput').value = card.queries[0];
+    var _ap = card.chainPaths && card.chainPaths[0];
+    var _aq = _ap && _ap.queries && _ap.queries.length ? _ap.queries : card.queries;
+    updateQuickQButtons(_aq);
+    if (_aq.length > 0 && !document.getElementById('questionInput').value) {
+      document.getElementById('questionInput').value = _aq[0];
     }
   }
   document.getElementById('runBtns').style.display = 'flex';
@@ -1083,33 +1345,20 @@ function updateQuickQButtons(queries) {
   }).join('');
 }
 
-function onProfileChange() {
-  const val = document.getElementById('profileSelect').value;
-  const det = document.getElementById('profileDetail');
-  if (!val) { det.style.display = 'none'; return; }
-  const p = PROFILES[val];
-  document.getElementById('profileRows').innerHTML = p.rows.map(function(r) {
-    return '<div class="profile-row"><span class="profile-key">'+r.k+'</span><span class="profile-val">'+r.v+'</span></div>';
-  }).join('');
-  document.getElementById('profileRiskTag').innerHTML = p.hasRisk
-    ? '<span class="profile-risk-tag"><i class="fa-solid fa-triangle-exclamation"></i> '+p.riskLabel+'</span>'
-    : '<span class="profile-ok-tag"><i class="fa-solid fa-circle-check"></i> KC 해당 없음 — RAG·Fallback 경로 예상</span>';
-  det.style.display = 'block';
-}
-
 function setQ(q) { document.getElementById('questionInput').value = q; }
 
 function resetBelowCard() {
   document.getElementById('profileGroup').style.display = 'none';
-  document.getElementById('profileSelect').value = '';
-  document.getElementById('profileDetail').style.display = 'none';
-  customProfile.mydata = {};
+  document.getElementById('demoBanner').style.display = 'none';
+  customProfile.mydata  = {};
   customProfile.promage = {};
   document.getElementById('customMydataFields').innerHTML = '';
   document.getElementById('customPromageFields').innerHTML = '';
-  if (document.getElementById('customProfileSummary')) {
-    document.getElementById('customProfileSummary').innerHTML = '<span style="font-size:12px;color:var(--text-hint)">카드 선택 후 조건을 설정하세요</span>';
-  }
+  var sumEl = document.getElementById('customProfileSummary');
+  if (sumEl) sumEl.innerHTML = '<span style="font-size:12px;color:var(--text-hint)">카드 선택 후 조건을 설정하세요</span>';
+  var noteEl = document.getElementById('covImpNote');
+  if (noteEl) noteEl.textContent = '';
+  document.getElementById('chainPathGroup').style.display = 'none';
   document.getElementById('chainInputGroup').style.display = 'none';
   document.getElementById('playbookInputGroup').style.display = 'none';
   document.getElementById('runBtns').style.display = 'none';
@@ -1143,25 +1392,19 @@ function getResultKey(cardId, profile) {
 }
 
 function runDryRun() {
-  var cardId  = document.getElementById('cardSelect').value;
-  var profile;
-  if (profileMode === 'preset') {
-    profile = document.getElementById('profileSelect').value;
-    if (!profile) { showToast('고객 프로필을 선택해 주세요'); return; }
-  } else {
-    profile = evaluateCustomProfile(cardId);
-  }
+  var cardId = document.getElementById('cardSelect').value;
   if (!cardId) { showToast('테스트 대상 카드를 선택해 주세요'); return; }
 
-  var card = ALL_PENDING[cardId];
+  var profile = evaluateCustomProfile(cardId);
+  var card    = ALL_PENDING[cardId];
   var loadingP = document.getElementById('loadingState').querySelector('p');
 
   if (card.type === 'playbook') {
     var scenario = document.getElementById('scenarioSelect').value;
     if (!scenario) { showToast('상담 시나리오를 선택해 주세요'); return; }
-    document.getElementById('emptyState').style.display = 'none';
+    document.getElementById('emptyState').style.display   = 'none';
     document.getElementById('resultContent').style.display = 'none';
-    document.getElementById('loadingState').style.display = 'block';
+    document.getElementById('loadingState').style.display  = 'block';
     if (loadingP) loadingP.textContent = 'Playbook 매칭 조건 평가 중...';
     setTimeout(function() {
       document.getElementById('loadingState').style.display = 'none';
@@ -1170,9 +1413,9 @@ function runDryRun() {
   } else {
     var q = document.getElementById('questionInput').value.trim();
     if (!q) { showToast('질문을 입력해 주세요'); return; }
-    document.getElementById('emptyState').style.display = 'none';
+    document.getElementById('emptyState').style.display   = 'none';
     document.getElementById('resultContent').style.display = 'none';
-    document.getElementById('loadingState').style.display = 'block';
+    document.getElementById('loadingState').style.display  = 'block';
     if (loadingP) loadingP.textContent = '카드 체인 평가 중...';
     setTimeout(function() {
       document.getElementById('loadingState').style.display = 'none';
@@ -1186,7 +1429,6 @@ function runDryRun() {
 // ============================================================
 function renderPlaybookResult(cardId, profile, scenario) {
   var card = ALL_PENDING[cardId];
-  var p = PROFILES[profile] || {};
   var isMatch = (profile === card.profile);
   var numChars = ['①','②','③','④','⑤'];
 
@@ -1233,7 +1475,7 @@ function renderPlaybookResult(cardId, profile, scenario) {
         '<i class="fa-solid fa-chevron-down" style="font-size:11px;color:var(--text-hint);margin-left:6px;'+(isFocus?'transform:rotate(180deg)':'')+'"></i>' +
       '</div>' +
       '<div class="eval-step-body"'+(isFocus?'':' style="display:none"')+'>' +
-        '<div class="eval-check eval-ok">✓ 프로필 고객 '+profile+' — '+(p.label||'').split('|')[0].trim()+' 조건 확인</div>' +
+        '<div class="eval-check eval-ok">✓ '+getCustomProfileLabel()+' 조건 확인</div>' +
         '<div class="eval-check eval-ok">✓ 선택 시나리오: '+scenario+'</div>' +
         (isFocus ? '<div class="eval-check eval-warn">→ 준비 연결(pending edge): '+card.pendingEdge+' — 배포 후 Playbook 활성화</div>' : '') +
       '</div>' +
@@ -1246,7 +1488,7 @@ function renderPlaybookResult(cardId, profile, scenario) {
     ? card.title+' — 트리거 조건 충족. 배포 후 해당 프로필 상담 시 자동 활성화됩니다.'
     : '선택한 프로필이 Playbook 트리거 조건과 일치하지 않습니다. 권장 프로필 고객 '+card.profile+'로 다시 테스트해보세요.';
   document.getElementById('finalResult').className = 'result-final '+(isMatch?'result-kc':'result-gen');
-  var profileLabel = profileMode === 'custom' ? getCustomProfileLabel() : (p.label ? p.label.split('|')[0].trim() : profile);
+  var profileLabel = getCustomProfileLabel();
   document.getElementById('finalResult').innerHTML =
     '<div class="result-title" style="color:'+finalColor+'">'+finalTitle+'</div>' +
     '<div class="result-desc">'+finalDesc+'</div>' +
@@ -1265,8 +1507,8 @@ function renderPlaybookResult(cardId, profile, scenario) {
         '<button class="btn btn-deploy btn-sm" onclick="openDeployModal()" style="flex-shrink:0"><i class="fa-solid fa-rocket"></i> 배포 요청</button>' +
       '</div>'
     : '<div style="display:flex;align-items:center;justify-content:space-between;gap:12px">' +
-        '<div><div style="font-size:13px;font-weight:700;color:#BA7517;margin-bottom:2px"><i class="fa-solid fa-triangle-exclamation"></i> 프로필 불일치</div>' +
-        '<div style="font-size:12px;color:var(--text-secondary)">권장 프로필로 다시 테스트해보세요.</div></div>' +
+        '<div><div style="font-size:13px;font-weight:700;color:#BA7517;margin-bottom:2px"><i class="fa-solid fa-triangle-exclamation"></i> 트리거 조건 미충족</div>' +
+        '<div style="font-size:12px;color:var(--text-secondary)">담보코드 보유 현황을 조정 후 다시 테스트해보세요.</div></div>' +
         '<a href="00_canvas-main.html" class="btn btn-secondary btn-sm" style="flex-shrink:0;text-decoration:none"><i class="fa-solid fa-diagram-project"></i> 캔버스 확인</a>' +
       '</div>';
   document.getElementById('finalResult').after(deployEl);
@@ -1280,11 +1522,11 @@ function renderPlaybookResult(cardId, profile, scenario) {
 // 체인 카드 결과 렌더링
 // ============================================================
 function renderResult(cardId, profile, question) {
-  var resultKey = getResultKey(cardId, profile);
-  var data = RESULTS[resultKey] || RESULTS['C'];
+  var data = RESULTS[profile] || RESULTS['C'];
   var card = ALL_PENDING[cardId] || {};
-  var conceptRef = CONCEPT_SYNONYMS[card.upstreamConceptId] || {};
-  var p = PROFILES[profile] || {};
+  var _rPath = card.chainPaths && card.chainPaths[selectedPathIdx];
+  var _rConceptId = _rPath ? _rPath.conceptId : card.upstreamConceptId;
+  var conceptRef = CONCEPT_SYNONYMS[_rConceptId] || {};
 
   var evalHd = document.getElementById('chainEvalHd');
   evalHd.innerHTML = '<i class="fa-solid fa-link" style="font-size:10px"></i> 카드 체인 평가';
@@ -1342,7 +1584,7 @@ function renderResult(cardId, profile, question) {
     if (idx === 0 && conceptRef.synonyms) {
       // step ①: 항상 실제 진입점 Concept 정보 표시
       detailsHtml =
-        '<div class="eval-check eval-ok">✓ 질문 키워드 → <strong>'+card.upstreamConceptId+'</strong> '+conceptRef.title+' 매칭 (동의어 '+conceptRef.synonyms.length+'개 중)</div>' +
+        '<div class="eval-check eval-ok">✓ 질문 키워드 → <strong>'+_rConceptId+'</strong> '+conceptRef.title+' 매칭 (동의어 '+conceptRef.synonyms.length+'개 중)</div>' +
         '<div class="eval-check eval-ok">✓ <strong>'+card.cluster.replace('T','RT0')+'</strong> 클러스터 체인 진입</div>' +
         (isFocus ? pendingNote : '');
     } else {
@@ -1382,7 +1624,7 @@ function renderResult(cardId, profile, question) {
   var isKc = data.finalType === 'kc';
   var finalColor = isKc ? 'var(--status-active)' : 'var(--status-draft)';
   document.getElementById('finalResult').className = 'result-final ' + (isKc ? 'result-kc' : 'result-gen');
-  var profileLabel = profileMode === 'custom' ? getCustomProfileLabel() : (p.label ? p.label.split('|')[0].trim() : profile);
+  var profileLabel = getCustomProfileLabel();
   document.getElementById('finalResult').innerHTML =
     '<div class="result-title" style="color:'+finalColor+'">'+data.finalTitle+'</div>' +
     '<div class="result-desc">'+data.finalDesc+'</div>' +
