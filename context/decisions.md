@@ -49,6 +49,8 @@
 
 | 날짜 | 내용 | 진실원 파일 |
 |---|---|---|
+| 2026-06-25 | Rule 조건 빌더 단순화: PROFILE→나이(BETWEEN)+성별(2개), MYDATA→담보금액만(필드 드롭다운 제거), PROMAGE→위험도 단일 카테고리(암위험도+질병위험도 50개 통합, 생체나이·의료비예측 삭제, EQ only). 7개 파일 전수 반영. | `context/card-types.md`, `mockups_v2/07_card-editor-rule.html`, `mockups_v2/12_coverage-code-table.html` 외 |
+| 2026-06-25 | 캔버스 테스트 모드 개선: 체크박스 캔버스 그리드 카드로 이동(피커 패널→카드 직접 선택), PROFILE 나이 BETWEEN 조건 추가(40~65/50~70세), MYDATA 갱신일 EQ bool 조건 추가(RU001/002), PROMAGE 신체나이 삭제. 사이드바 "사전 테스트" 메뉴 26개 파일 전수 제거. | `mockups_v2/00_canvas-main.html`, `mockups_v2/07_card-editor-rule.html` |
 | 2026-06-24 | 약관 RAG 버전 매핑 방법 확정: 보험사+상품명+계약시작일(연도) 조합을 매핑 키로 사용. 크롤러가 effective_start/end 메타데이터 저장 → 계약일 범위 쿼리로 약관 버전 특정. Phase 2에서 보험사 API 직접 연동으로 정확도 개선 예정. | `context/answer-logic.md` |
 | 2026-06-24 | Rule 카드 약관 DB 연동 플래그 제거. 약관 DB는 엔진 자동 처리(있으면 참조, 없으면 없이 답변) → 운영자 제어 불필요. 전수 반영 17개 파일. | `context/card-types.md`, `guides/ux-patterns.md`, `mockups_v2/07_card-editor-rule.html` 외 |
 | 2026-06-24 | 카드 상세 슬라이드 패널 구현: 00_canvas-main.html renderCardDetailHTML() 전면 교체(편집기 필드명 일치), 09_review-workflow.html 모달→슬라이드 패널 전환(pending: 승인완료+반려, 그 외: 닫기만) | `mockups_v2/00_canvas-main.html`, `mockups_v2/09_review-workflow.html` |

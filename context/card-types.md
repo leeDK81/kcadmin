@@ -85,19 +85,20 @@
 
 **PROMAGE 미연동 대응:** 프롬에이지 미연동 사용자는 PROMAGE 조건 평가 불가. 따라서 PROMAGE 조건은 선택 조건으로 설정 권장. 운영자가 필수로 변경하는 것은 허용 (의도적 설계).
 
-**MYDATA 확인항목 5종:** coverage_amt / renewal_status / insu_type / start_date / end_date
+**PROMAGE 조건 구조 (2026-06-25 단순화):**
+- **카테고리 단일화:** 암위험도 + 질병위험도 → **위험도** (50개 항목 통합). 생체나이·의료비예측 삭제.
+- **op:** EQ only — 위험 / 주의 / 양호 등급 선택
+- **편집기 Row:** source select → "위험도" static 레이블 → 항목 select (50개 flat list) → EQ → 등급 select
+- **50개 항목:** 암 23개(canr_ca~smbl_ca) + 질병 27개(고지혈증~췌장염)
 
-**USER_PROFILE_FIELDS (확정):**
+**MYDATA Rule 조건:** 담보코드 select + 담보금액(coverage_amt) LTE/GTE/LT/GT/EQ. 필드 드롭다운 없음.
 
-| 필드코드 | 레이블 | 타입 | 선택값 |
-|---|---|---|---|
-| age | 나이(만) | number | — |
-| gender | 성별 | enum | 남/여 |
-| marital | 결혼여부 | enum | 기혼/미혼 |
-| has_children | 자녀유무 | enum | Y/N |
-| job_risk | 직업위험도 | enum | 비위험/중위험/고위험 |
-| expecting | 출산예정 | enum | Y/N |
-| region | 거주지 | enum | 서울/경기/인천/부산/대구/광주/대전/울산/세종/강원/충북/충남/전북/전남/경북/경남/제주 |
+**USER_PROFILE_FIELDS for Rule 조건 (2026-06-25 단순화):**
+
+| 필드코드 | 레이블 | 타입 | op | 비고 |
+|---|---|---|---|---|
+| age | 나이 | range | BETWEEN | 시작세 ~ 종료세 두 입력값 (예: 40~65세) |
+| gender | 성별 | enum | EQ | 무관/남/여 (무관=전체 적용) |
 
 **등급명:** 위험 / 주의 / 양호 — "상/중/하" "고/중/저" 표기 금지.
 
