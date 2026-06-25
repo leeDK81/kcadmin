@@ -232,6 +232,30 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;backg
 .test-pass-banner.fail{background:#FFF0F0;border-color:#F0C0C0;color:#8A0000}
 .test-fail-list{padding:8px 10px;background:#FFF8F8;border-radius:6px;margin-top:6px;font-size:12px;line-height:1.8;color:#8A4040}
 
+/* ── Chain selector ── */
+.chain-sel-wrap{margin-bottom:2px}
+.chain-sel-row{display:grid;grid-template-columns:18px 62px 1fr 14px;align-items:center;gap:5px;margin-bottom:5px}
+.chain-sel-row.focal{background:rgba(26,74,154,.05);border-radius:5px;padding:3px 6px;margin-left:-6px;margin-right:-6px}
+.chain-sel-type-lbl{font-size:10px;font-weight:700;color:var(--text-secondary);white-space:nowrap;text-transform:uppercase;letter-spacing:.03em}
+.chain-sel-dd{width:100%;padding:4px 6px;border:1px solid var(--border);border-radius:5px;font-size:11px;font-family:inherit;background:#fff;color:var(--text-primary);cursor:pointer;outline:none}
+.chain-sel-dd:focus{border-color:var(--step-active)}
+.chain-sel-single{font-size:11px;color:var(--text-primary);padding:3px 6px;background:var(--bg-page);border:1px solid var(--border);border-radius:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chain-focal-mark{font-size:11px;color:#1A4A9A;font-weight:900;text-align:center}
+/* ── Chat answer preview ── */
+.chat-preview-wrap{background:#EEF3FF;border-radius:10px;padding:12px 12px 10px;margin-top:10px}
+.chat-question{display:flex;justify-content:flex-end;margin-bottom:10px}
+.chat-q-bubble{background:#1A4A9A;color:#fff;padding:8px 12px;border-radius:14px 14px 4px 14px;font-size:12px;line-height:1.55;max-width:88%;word-break:keep-all}
+.chat-ai-row{display:flex;gap:7px;align-items:flex-start}
+.chat-avatar{width:26px;height:26px;border-radius:50%;background:var(--step-active);color:#fff;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:900;flex-shrink:0;margin-top:1px;letter-spacing:-.5px}
+.chat-ai-content{flex:1;min-width:0}
+.chat-agent-name{font-size:10px;font-weight:700;color:var(--text-secondary);margin-bottom:4px;display:flex;align-items:center;gap:5px}
+.chat-kc-tag{background:#1A4A9A;color:#fff;font-size:9px;padding:1px 5px;border-radius:3px;font-weight:700;letter-spacing:.02em}
+.chat-bubble{background:#fff;border:1px solid #CDD8F5;border-radius:4px 12px 12px 12px;padding:11px 13px;font-size:12px;line-height:1.8;color:var(--text-primary)}
+.chat-bubble p{margin:0 0 7px}
+.chat-bubble p:last-child{margin-bottom:0}
+.chat-policy-block{margin-top:10px;padding:8px 10px;background:#FFF8F0;border-left:3px solid #C94B1A;border-radius:0 5px 5px 0;font-size:11px;color:#8A4000;line-height:1.65}
+.chat-used-chips{display:flex;gap:4px;flex-wrap:wrap;margin-top:8px;align-items:center}
+
 /* ── Card Detail (read-only fields) ── */
 .detail-field{margin-bottom:14px}
 .detail-label{font-size:11px;font-weight:700;color:var(--text-secondary);margin-bottom:4px;letter-spacing:.02em;text-transform:uppercase}
@@ -430,16 +454,26 @@ const CARD_DETAILS = {
     description:'마이데이터 보험 현황과 프롬에이지 암 위험도를 종합하여 암 보장 공백 여부를 판정합니다.',
     conditions:[
       { sourceLabel:'마이데이터', source:'MYDATA', label:'암진단금 담보 합계 3,000만원 이하', op:'LTE', value:'3,000만원', required:true },
-      { sourceLabel:'프롬에이지', source:'PROMAGE', label:'암 위험도 "위험" 등급', op:'EQ', value:'위험', required:false },
+      { sourceLabel:'마이데이터', source:'MYDATA', label:'암수술 담보 미보유', op:'EQ', value:'false', required:true },
+      { sourceLabel:'마이데이터', source:'MYDATA', label:'암 입원일당 담보 합계 5만원 이하', op:'LTE', value:'5만원', required:false },
+      { sourceLabel:'마이데이터', source:'MYDATA', label:'암 방사선·항암 담보 미보유', op:'EQ', value:'false', required:false },
+      { sourceLabel:'프롬에이지', source:'PROMAGE', label:'암 종합위험도 "위험" 이상', op:'EQ', value:'위험', required:false },
+      { sourceLabel:'프롬에이지', source:'PROMAGE', label:'혈액검사 이상 수치 "주의" 이상', op:'GTE', value:'주의', required:false },
       { sourceLabel:'프로파일', source:'PROFILE', label:'나이 40세 이상', op:'GTE', value:'40', required:true },
+      { sourceLabel:'프로파일', source:'PROFILE', label:'성별 무관 (남녀 동일 적용)', op:'IN', value:'남,여', required:false },
     ],
   },
   'RU002':{
     description:'마이데이터 뇌혈관 담보 현황과 프롬에이지 뇌혈관 위험도를 기준으로 보장 공백을 판정합니다.',
     conditions:[
       { sourceLabel:'마이데이터', source:'MYDATA', label:'뇌졸중 진단금 담보 합계 2,000만원 이하', op:'LTE', value:'2,000만원', required:true },
+      { sourceLabel:'마이데이터', source:'MYDATA', label:'뇌혈관 수술 담보 미보유', op:'EQ', value:'false', required:true },
+      { sourceLabel:'마이데이터', source:'MYDATA', label:'뇌혈관 후유장해 담보 미보유', op:'EQ', value:'false', required:false },
+      { sourceLabel:'마이데이터', source:'MYDATA', label:'간병·요양 담보 합계 30만원 이하', op:'LTE', value:'30만원', required:false },
       { sourceLabel:'프롬에이지', source:'PROMAGE', label:'뇌혈관 위험도 "위험" 등급', op:'EQ', value:'위험', required:false },
+      { sourceLabel:'프롬에이지', source:'PROMAGE', label:'혈압 위험도 "주의" 이상', op:'GTE', value:'주의', required:false },
       { sourceLabel:'프로파일', source:'PROFILE', label:'나이 50세 이상', op:'GTE', value:'50', required:true },
+      { sourceLabel:'프로파일', source:'PROFILE', label:'성별 남성 (뇌혈관 고위험군)', op:'EQ', value:'남', required:false },
     ],
   },
   // ── Policy ──
@@ -503,6 +537,7 @@ let testProfile    = {
   promage:    {},    // "RU001_1" → 'risk'|'caution'|'good'|null
   profile:    { age: 45, gender: '남' }
 };
+let testChain = {};  // type → cardId (체인 구성 선택)
 
 // ============================================================
 // HELPERS
@@ -990,8 +1025,16 @@ function renderPanelInfo() {
 // 사전 테스트 탭
 // ────────────────────────────────────────────────────────────────
 
-function getRuleFromChain(chain) {
-  return CARDS.find(function(c) { return chain.has(c.id) && c.type === 'rule'; }) || null;
+function initTestChain(cardId) {
+  var chain      = computeChain(cardId);
+  var chainCards = CARDS.filter(function(c) { return chain.has(c.id); });
+  testChain = {};
+  ['concept','risk','rule','evidence','policy','playbook'].forEach(function(type) {
+    var available = chainCards.filter(function(c) { return c.type === type; });
+    if (available.length) {
+      testChain[type] = (available.find(function(c) { return c.id === cardId; }) || available[0]).id;
+    }
+  });
 }
 
 function initTestProfile(ruleId) {
@@ -1000,7 +1043,7 @@ function initTestProfile(ruleId) {
   conds.forEach(function(cond, i) {
     var key = ruleId + '_' + i;
     if (cond.source === 'MYDATA') {
-      newConds[key] = true;  // 기본: 조건 충족 (체인 발동 시나리오)
+      newConds[key] = true;
     } else if (cond.source === 'PROMAGE') {
       var gMap = {'위험':'risk','주의':'caution','양호':'good'};
       newPromage[key] = cond.required ? (gMap[cond.value] || null) : null;
@@ -1013,23 +1056,43 @@ function initTestProfile(ruleId) {
 function renderPanelTest() {
   var card = CARDS.find(function(c) { return c.id === panelCardId; });
   if (!card) return;
-  var chain    = computeChain(card.id);
-  var ruleCard = getRuleFromChain(chain);
+
+  initTestChain(card.id);
+  var ruleId = testChain.rule;
+  if (ruleId) initTestProfile(ruleId);
 
   document.getElementById('panelTitle').innerHTML =
     '<i class="fa-solid fa-flask" style="color:var(--step-active);margin-right:6px"></i>사전 테스트';
 
-  if (ruleCard) initTestProfile(ruleCard.id);
+  var defaultQuery = TEST_QUERIES[testChain.concept] || TEST_QUERIES[card.id] || card.title + '에 대해 알려주세요';
 
-  var html = buildChainVisual(card, chain);
-  html += buildTestCondUI(card, ruleCard);
-  html += '<div id="testResultArea" style="margin-top:8px"></div>';
+  var html = buildChainVisual(card, computeChain(card.id));
+  html += buildChainSelectorHTML(card);
+  html +=
+    '<div style="margin:12px 0 4px">' +
+      '<label style="font-size:10px;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.05em">' +
+        '테스트 질문 <span style="font-weight:400;text-transform:none;font-size:10px">(편집 가능)</span>' +
+      '</label>' +
+    '</div>' +
+    '<textarea id="testQueryInput" class="test-query">' + defaultQuery + '</textarea>';
+  html +=
+    '<div class="test-cond-section">' +
+      '<i class="fa-solid fa-user" style="font-size:9px;margin-right:3px"></i>② 테스트 조건 설정' +
+    '</div>' +
+    '<div id="testProfileSection">' + buildProfileInputHTML() + '</div>' +
+    '<div style="font-size:10px;font-weight:700;color:var(--text-secondary);margin:10px 0 6px;letter-spacing:.04em;text-transform:uppercase">' +
+      '<i class="fa-solid fa-scale-balanced" style="font-size:9px;margin-right:3px;color:#9A1A1A"></i>Rule 판단 조건' +
+    '</div>' +
+    '<div id="testCondSection">' + buildRuleCondRowsHTML(ruleId) + '</div>' +
+    '<div class="test-summary-bar">' +
+      '<div style="font-size:10px;font-weight:700;color:var(--text-secondary);letter-spacing:.04em">③ 현재 조건 요약</div>' +
+      '<div class="test-sum-chips" id="testSummaryChips"></div>' +
+    '</div>' +
+    '<div id="testResultArea" style="margin-top:8px"></div>';
 
-  var body = document.getElementById('panelBody');
-  var st   = body.scrollTop;
-  body.innerHTML = html;
-  body.scrollTop = st;
+  document.getElementById('panelBody').innerHTML = html;
 
+  var ruleCard = ruleId ? CARDS.find(function(c) { return c.id === ruleId; }) : null;
   updateTestSummary(ruleCard);
 
   document.getElementById('panelFooter').innerHTML =
@@ -1041,10 +1104,72 @@ function renderPanelTest() {
     '</button>';
 }
 
+function buildChainSelectorHTML(card) {
+  var chain      = computeChain(card.id);
+  var chainCards = CARDS.filter(function(c) { return chain.has(c.id); });
+  var TYPE_CONFIG = [
+    { type:'concept',  icon:'fa-lightbulb',         label:'Concept',   color:'#1A4A9A' },
+    { type:'risk',     icon:'fa-circle-exclamation', label:'Risk-type', color:'#C94B1A' },
+    { type:'rule',     icon:'fa-scale-balanced',     label:'Rule',      color:'#9A1A1A' },
+    { type:'evidence', icon:'fa-database',           label:'Evidence',  color:'#1A7A4A' },
+    { type:'policy',   icon:'fa-file-shield',        label:'Policy',    color:'#5A5A55' },
+    { type:'playbook', icon:'fa-handshake',          label:'Playbook',  color:'#6B4A9A' },
+  ];
+
+  var html = '<div class="test-cond-section first">' +
+    '<i class="fa-solid fa-sitemap" style="font-size:9px;margin-right:3px;color:#1A4A9A"></i>① 테스트 체인 구성' +
+  '</div><div class="chain-sel-wrap">';
+
+  TYPE_CONFIG.forEach(function(tc) {
+    var available = chainCards.filter(function(c) { return c.type === tc.type; });
+    if (!available.length) return;
+    var selected = testChain[tc.type];
+    var isFocal  = available.some(function(c) { return c.id === card.id; });
+    var single   = available.length === 1;
+
+    html += '<div class="chain-sel-row' + (isFocal ? ' focal' : '') + '">';
+    html += '<i class="fa-solid ' + tc.icon + '" style="font-size:10px;color:' + tc.color + ';text-align:center"></i>';
+    html += '<span class="chain-sel-type-lbl">' + tc.label + '</span>';
+    if (single) {
+      html += '<div class="chain-sel-single"><strong style="color:' + tc.color + '">' + available[0].id + '</strong> ' + available[0].title + '</div>';
+    } else {
+      html += '<select class="chain-sel-dd" onchange="onTestChainSelect(\'' + tc.type + '\', this.value)">';
+      available.forEach(function(c) {
+        html += '<option value="' + c.id + '"' + (selected === c.id ? ' selected' : '') + '>' + c.id + ' — ' + c.title + '</option>';
+      });
+      html += '</select>';
+    }
+    html += isFocal ? '<span class="chain-focal-mark">★</span>' : '<span></span>';
+    html += '</div>';
+  });
+
+  html += '</div>';
+  return html;
+}
+
+function onTestChainSelect(type, id) {
+  testChain[type] = id;
+  if (type === 'rule') initTestProfile(id);
+  if (type === 'concept') {
+    var qEl = document.getElementById('testQueryInput');
+    if (qEl) {
+      var c = CARDS.find(function(cc) { return cc.id === id; });
+      qEl.value = TEST_QUERIES[id] || (c ? c.title + '에 대해 알려주세요' : qEl.value);
+    }
+  }
+  var ruleId   = testChain.rule;
+  var ruleCard = ruleId ? CARDS.find(function(c) { return c.id === ruleId; }) : null;
+  var condSec  = document.getElementById('testCondSection');
+  if (condSec) condSec.innerHTML = buildRuleCondRowsHTML(ruleId);
+  updateTestSummary(ruleCard);
+  var ra = document.getElementById('testResultArea');
+  if (ra) ra.innerHTML = '';
+}
+
 function buildChainVisual(card, chain) {
-  var TYPE_ORDER  = ['concept','risk','rule','evidence','policy','playbook'];
-  var chainCards  = CARDS.filter(function(c) { return chain.has(c.id); });
-  var groups      = TYPE_ORDER
+  var TYPE_ORDER = ['concept','risk','rule','evidence','policy','playbook'];
+  var chainCards = CARDS.filter(function(c) { return chain.has(c.id); });
+  var groups     = TYPE_ORDER
     .map(function(t) { return chainCards.filter(function(c) { return c.type === t; }); })
     .filter(function(g) { return g.length; });
 
@@ -1056,13 +1181,10 @@ function buildChainVisual(card, chain) {
       var color   = TYPE_COLORS[c.type];
       var isFocal = c.id === panelCardId;
       html += '<span class="test-chain-badge" style="' +
-        'background:' + hexToRgba(color, isFocal ? 0.18 : 0.08) + ';' +
-        'color:' + color + ';' +
-        (isFocal ? 'outline:1.5px solid ' + color + ';font-weight:800;' : '') +
-      '">' +
+        'background:' + hexToRgba(color, isFocal ? 0.18 : 0.08) + ';color:' + color + ';' +
+        (isFocal ? 'outline:1.5px solid ' + color + ';font-weight:800;' : '') + '">' +
         '<i class="fa-solid ' + TYPE_ICONS[c.type] + '" style="font-size:8px"></i> ' + c.id +
-        (isFocal ? ' ★' : '') +
-      '</span>';
+        (isFocal ? ' ★' : '') + '</span>';
     });
     html += '</div>';
   });
@@ -1070,108 +1192,92 @@ function buildChainVisual(card, chain) {
   return html;
 }
 
-function buildTestCondUI(card, ruleCard) {
-  var html = '';
-
-  // ① 사용자 프로파일
-  html +=
-    '<div class="test-cond-section first">' +
-      '<i class="fa-solid fa-user" style="font-size:9px;margin-right:3px"></i>① 사용자 프로파일' +
+function buildProfileInputHTML() {
+  return '<div class="test-profile-row">' +
+    '<div class="test-profile-inline">' +
+      '<span class="test-profile-lbl">나이</span>' +
+      '<input id="testAge" type="number" min="20" max="80" value="' + testProfile.profile.age + '" ' +
+        'style="width:52px;padding:3px 6px;border:1px solid var(--border);border-radius:5px;font-size:13px;font-family:inherit;text-align:center" ' +
+        'oninput="onTestProfileChange()">' +
+      '<span style="font-size:12px;color:var(--text-secondary)">세</span>' +
     '</div>' +
-    '<div class="test-profile-row">' +
-      '<div class="test-profile-inline">' +
-        '<span class="test-profile-lbl">나이</span>' +
-        '<input id="testAge" type="number" min="20" max="80" value="' + testProfile.profile.age + '" ' +
-          'style="width:52px;padding:3px 6px;border:1px solid var(--border);border-radius:5px;font-size:13px;font-family:inherit;text-align:center" ' +
-          'oninput="onTestProfileChange()">' +
-        '<span style="font-size:12px;color:var(--text-secondary)">세</span>' +
-      '</div>' +
-      '<div class="test-profile-inline">' +
-        '<span class="test-profile-lbl">성별</span>' +
-        '<label style="font-size:12px;cursor:pointer;display:flex;align-items:center;gap:3px">' +
-          '<input type="radio" name="testGender" value="남" ' + (testProfile.profile.gender === '남' ? 'checked' : '') + ' onchange="onTestProfileChange()"> 남' +
-        '</label>' +
-        '<label style="font-size:12px;cursor:pointer;display:flex;align-items:center;gap:3px">' +
-          '<input type="radio" name="testGender" value="여" ' + (testProfile.profile.gender === '여' ? 'checked' : '') + ' onchange="onTestProfileChange()"> 여' +
-        '</label>' +
-      '</div>' +
-    '</div>';
-
-  // ② Rule 판단 조건
-  html += '<div class="test-cond-section">' +
-    '<i class="fa-solid fa-scale-balanced" style="font-size:9px;margin-right:3px;color:#9A1A1A"></i>② Rule 판단 조건' +
+    '<div class="test-profile-inline">' +
+      '<span class="test-profile-lbl">성별</span>' +
+      '<label style="font-size:12px;cursor:pointer;display:flex;align-items:center;gap:3px">' +
+        '<input type="radio" name="testGender" value="남" ' + (testProfile.profile.gender === '남' ? 'checked' : '') + ' onchange="onTestProfileChange()"> 남' +
+      '</label>' +
+      '<label style="font-size:12px;cursor:pointer;display:flex;align-items:center;gap:3px">' +
+        '<input type="radio" name="testGender" value="여" ' + (testProfile.profile.gender === '여' ? 'checked' : '') + ' onchange="onTestProfileChange()"> 여' +
+      '</label>' +
+    '</div>' +
   '</div>';
+}
 
-  if (!ruleCard) {
-    html += '<div style="font-size:12px;color:var(--text-hint);padding:8px 10px;background:var(--bg-page);border-radius:6px;margin-bottom:6px">' +
-      '이 체인에 연결된 Rule 카드가 없습니다.' +
-    '</div>';
-  } else {
-    var rDet  = CARD_DETAILS[ruleCard.id] || {};
-    var conds = rDet.conditions || [];
+function buildRuleCondRowsHTML(ruleId) {
+  if (!ruleId) {
+    return '<div style="font-size:12px;color:var(--text-hint);padding:8px 10px;background:var(--bg-page);border-radius:6px;margin-bottom:6px">' +
+      '이 체인에 연결된 Rule 카드가 없습니다.</div>';
+  }
+  var ruleCard = CARDS.find(function(c) { return c.id === ruleId; });
+  if (!ruleCard) return '';
 
-    html += '<div style="font-size:11px;color:var(--text-secondary);margin-bottom:6px">' +
-      '<span style="font-weight:700;color:#9A1A1A">' + ruleCard.id + '</span> ' + ruleCard.title +
-    '</div>';
+  var conds = (CARD_DETAILS[ruleCard.id] || {}).conditions || [];
+  var html  = '<div style="font-size:11px;color:var(--text-secondary);margin-bottom:6px">' +
+    '<span style="font-weight:700;color:#9A1A1A">' + ruleCard.id + '</span> ' + ruleCard.title + '</div>';
 
-    conds.forEach(function(cond, i) {
-      var key    = ruleCard.id + '_' + i;
-      var srcCls = {MYDATA:'mydata', PROMAGE:'promage', PROFILE:'profile'}[cond.source] || 'mydata';
-      var reqTag = cond.required
-        ? '<span class="test-cond-req" style="color:#C94B1A;font-weight:700">필수</span>'
-        : '<span class="test-cond-req">선택</span>';
-      var ctrlHtml = '';
-
-      if (cond.source === 'PROFILE') {
-        var age = testProfile.profile.age;
-        var val = parseInt(cond.value);
-        var met = cond.op === 'GTE' ? age >= val
-                : cond.op === 'LTE' ? age <= val
-                : cond.op === 'GT'  ? age >  val
-                : cond.op === 'LT'  ? age <  val : false;
-        ctrlHtml = '<span id="testProfileBadge_' + key + '" class="test-auto-badge ' + (met ? 'ok' : 'fail') + '">' +
-          (met ? '✓ 충족' : '✗ 미충족') + ' (현재 ' + age + '세)' +
-        '</span>';
-      } else if (cond.source === 'PROMAGE') {
-        var curGrade = testProfile.promage[key];
-        var grades   = [{v:'risk',l:'위험'},{v:'caution',l:'주의'},{v:'good',l:'양호'},{v:null,l:'미설정'}];
-        ctrlHtml = '<div class="test-cond-ctrl">';
-        grades.forEach(function(g) {
-          var isAct = g.v === null ? (curGrade === null || curGrade === undefined) : curGrade === g.v;
-          ctrlHtml += '<button class="test-gpill ' + (g.v || 'none-set') + (isAct ? ' active' : '') + '" ' +
-            'onclick="onTestPromageGrade(\'' + ruleCard.id + '\',' + i + ',' + (g.v ? '\'' + g.v + '\'' : 'null') + ')">' +
-            g.l + '</button>';
-        });
-        ctrlHtml += '</div>';
-      } else {
-        var isMet = testProfile.conditions[key] !== false;
-        ctrlHtml = '<button class="test-toggle ' + (isMet ? 'on' : 'off') + '" ' +
-          'onclick="onTestCondToggle(\'' + ruleCard.id + '\',' + i + ')">' +
-          (isMet ? '✓ 충족' : '✗ 미충족') + '</button>';
-      }
-
-      html += '<div class="test-cond-row">' +
-        '<div class="test-cond-row-top">' +
-          '<span class="test-src-badge ' + srcCls + '">' + cond.sourceLabel + '</span>' +
-          '<span class="test-cond-lbl">' + cond.label + '</span>' +
-          reqTag +
-        '</div>' +
-        ctrlHtml +
-      '</div>';
-    });
-
-    if (!conds.length) {
-      html += '<div style="font-size:12px;color:var(--text-hint);padding:8px 10px;background:var(--bg-page);border-radius:6px">' +
-        '이 Rule의 조건이 정의되어 있지 않습니다.' +
-      '</div>';
-    }
+  if (!conds.length) {
+    return html + '<div style="font-size:12px;color:var(--text-hint);padding:8px 10px;background:var(--bg-page);border-radius:6px">' +
+      '이 Rule의 조건이 정의되어 있지 않습니다.</div>';
   }
 
-  // ③ 조건 요약
-  html += '<div class="test-summary-bar">' +
-    '<div style="font-size:10px;font-weight:700;color:var(--text-secondary);letter-spacing:.04em">③ 현재 조건 요약</div>' +
-    '<div class="test-sum-chips" id="testSummaryChips"></div>' +
-  '</div>';
+  conds.forEach(function(cond, i) {
+    var key    = ruleCard.id + '_' + i;
+    var srcCls = {MYDATA:'mydata', PROMAGE:'promage', PROFILE:'profile'}[cond.source] || 'mydata';
+    var reqTag = cond.required
+      ? '<span class="test-cond-req" style="color:#C94B1A;font-weight:700">필수</span>'
+      : '<span class="test-cond-req">선택</span>';
+    var ctrlHtml = '';
+
+    if (cond.source === 'PROFILE') {
+      if (cond.op === 'IN') {
+        ctrlHtml = '<span class="test-auto-badge ok">✓ 전 성별 해당</span>';
+      } else if (cond.op === 'EQ' && (cond.value === '남' || cond.value === '여')) {
+        var gmet = testProfile.profile.gender === cond.value;
+        ctrlHtml = '<span id="testGenderBadge_' + key + '" class="test-auto-badge ' + (gmet ? 'ok' : 'fail') + '">' +
+          (gmet ? '✓ 충족' : '✗ 미충족') + ' (현재 ' + testProfile.profile.gender + '성)</span>';
+      } else {
+        var age = testProfile.profile.age;
+        var val = parseInt(cond.value);
+        var amet = cond.op === 'GTE' ? age >= val : cond.op === 'LTE' ? age <= val
+                 : cond.op === 'GT'  ? age >  val : cond.op === 'LT'  ? age <  val : false;
+        ctrlHtml = '<span id="testProfileBadge_' + key + '" class="test-auto-badge ' + (amet ? 'ok' : 'fail') + '">' +
+          (amet ? '✓ 충족' : '✗ 미충족') + ' (현재 ' + age + '세)</span>';
+      }
+    } else if (cond.source === 'PROMAGE') {
+      var curGrade = testProfile.promage[key];
+      var grades   = [{v:'risk',l:'위험'},{v:'caution',l:'주의'},{v:'good',l:'양호'},{v:null,l:'미설정'}];
+      ctrlHtml = '<div class="test-cond-ctrl">';
+      grades.forEach(function(g) {
+        var isAct = g.v === null ? (curGrade === null || curGrade === undefined) : curGrade === g.v;
+        ctrlHtml += '<button class="test-gpill ' + (g.v || 'none-set') + (isAct ? ' active' : '') + '" ' +
+          'onclick="onTestPromageGrade(\'' + ruleCard.id + '\',' + i + ',' + (g.v ? '\'' + g.v + '\'' : 'null') + ')">' +
+          g.l + '</button>';
+      });
+      ctrlHtml += '</div>';
+    } else {
+      var isMet = testProfile.conditions[key] !== false;
+      ctrlHtml = '<button class="test-toggle ' + (isMet ? 'on' : 'off') + '" ' +
+        'onclick="onTestCondToggle(\'' + ruleCard.id + '\',' + i + ')">' +
+        (isMet ? '✓ 충족' : '✗ 미충족') + '</button>';
+    }
+
+    html += '<div class="test-cond-row">' +
+      '<div class="test-cond-row-top">' +
+        '<span class="test-src-badge ' + srcCls + '">' + cond.sourceLabel + '</span>' +
+        '<span class="test-cond-lbl">' + cond.label + '</span>' +
+        reqTag +
+      '</div>' + ctrlHtml + '</div>';
+  });
 
   return html;
 }
@@ -1179,31 +1285,29 @@ function buildTestCondUI(card, ruleCard) {
 function onTestCondToggle(ruleId, idx) {
   var key = ruleId + '_' + idx;
   testProfile.conditions[key] = testProfile.conditions[key] === false ? true : false;
-  var card = CARDS.find(function(c) { return c.id === panelCardId; });
-  if (!card) return;
-  var chain    = computeChain(card.id);
-  var ruleCard = getRuleFromChain(chain);
-  var body     = document.getElementById('panelBody');
-  var st       = body.scrollTop;
-  body.innerHTML = buildChainVisual(card, chain) + buildTestCondUI(card, ruleCard) +
-    '<div id="testResultArea" style="margin-top:8px"></div>';
+  var ruleCard = CARDS.find(function(c) { return c.id === ruleId; });
+  var body = document.getElementById('panelBody');
+  var st   = body.scrollTop;
+  var condSec = document.getElementById('testCondSection');
+  if (condSec) condSec.innerHTML = buildRuleCondRowsHTML(ruleId);
   body.scrollTop = st;
   updateTestSummary(ruleCard);
+  var ra = document.getElementById('testResultArea');
+  if (ra) ra.innerHTML = '';
 }
 
 function onTestPromageGrade(ruleId, idx, grade) {
   var key = ruleId + '_' + idx;
   testProfile.promage[key] = grade === null ? null : grade;
-  var card = CARDS.find(function(c) { return c.id === panelCardId; });
-  if (!card) return;
-  var chain    = computeChain(card.id);
-  var ruleCard = getRuleFromChain(chain);
-  var body     = document.getElementById('panelBody');
-  var st       = body.scrollTop;
-  body.innerHTML = buildChainVisual(card, chain) + buildTestCondUI(card, ruleCard) +
-    '<div id="testResultArea" style="margin-top:8px"></div>';
+  var ruleCard = CARDS.find(function(c) { return c.id === ruleId; });
+  var body = document.getElementById('panelBody');
+  var st   = body.scrollTop;
+  var condSec = document.getElementById('testCondSection');
+  if (condSec) condSec.innerHTML = buildRuleCondRowsHTML(ruleId);
   body.scrollTop = st;
   updateTestSummary(ruleCard);
+  var ra = document.getElementById('testResultArea');
+  if (ra) ra.innerHTML = '';
 }
 
 function onTestProfileChange() {
@@ -1211,27 +1315,42 @@ function onTestProfileChange() {
   var genderEl = document.querySelector('input[name="testGender"]:checked');
   if (ageEl)    testProfile.profile.age    = parseInt(ageEl.value) || 45;
   if (genderEl) testProfile.profile.gender = genderEl.value;
-  // PROFILE 자동 판정 배지 in-place 업데이트
+
+  // 나이 배지 in-place 업데이트 (age input 포커스 유지)
   document.querySelectorAll('[id^="testProfileBadge_"]').forEach(function(el) {
     var key   = el.id.replace('testProfileBadge_', '');
     var parts = key.split('_');
     var idx   = parseInt(parts[parts.length - 1]);
     var rId   = parts.slice(0, parts.length - 1).join('_');
-    var conds = (CARD_DETAILS[rId] || {}).conditions || [];
-    var cond  = conds[idx];
+    var cond  = ((CARD_DETAILS[rId] || {}).conditions || [])[idx];
     if (!cond || cond.source !== 'PROFILE') return;
     var age = testProfile.profile.age;
     var val = parseInt(cond.value);
     var met = cond.op === 'GTE' ? age >= val : cond.op === 'LTE' ? age <= val
             : cond.op === 'GT'  ? age >  val : cond.op === 'LT'  ? age <  val : false;
-    el.className = 'test-auto-badge ' + (met ? 'ok' : 'fail');
+    el.className  = 'test-auto-badge ' + (met ? 'ok' : 'fail');
     el.textContent = (met ? '✓ 충족' : '✗ 미충족') + ' (현재 ' + age + '세)';
   });
-  var card = CARDS.find(function(c) { return c.id === panelCardId; });
-  if (!card) return;
-  var chain    = computeChain(card.id);
-  var ruleCard = getRuleFromChain(chain);
+
+  // 성별 배지 in-place 업데이트
+  document.querySelectorAll('[id^="testGenderBadge_"]').forEach(function(el) {
+    var key   = el.id.replace('testGenderBadge_', '');
+    var parts = key.split('_');
+    var idx   = parseInt(parts[parts.length - 1]);
+    var rId   = parts.slice(0, parts.length - 1).join('_');
+    var cond  = ((CARD_DETAILS[rId] || {}).conditions || [])[idx];
+    if (!cond || cond.source !== 'PROFILE') return;
+    var gender = testProfile.profile.gender;
+    var met    = cond.op === 'EQ' ? gender === cond.value : false;
+    el.className  = 'test-auto-badge ' + (met ? 'ok' : 'fail');
+    el.textContent = (met ? '✓ 충족' : '✗ 미충족') + ' (현재 ' + gender + '성)';
+  });
+
+  var ruleId   = testChain.rule;
+  var ruleCard = ruleId ? CARDS.find(function(c) { return c.id === ruleId; }) : null;
   updateTestSummary(ruleCard);
+  var ra = document.getElementById('testResultArea');
+  if (ra) ra.innerHTML = '';
 }
 
 function updateTestSummary(ruleCard) {
@@ -1255,12 +1374,18 @@ function updateTestSummary(ruleCard) {
         if (gr) chips.push('<span class="test-sum-chip" style="background:' + gCol[gr] + ';color:' + gFg[gr] + '">' +
           cond.sourceLabel + ' ' + gLbl[gr] + '</span>');
       } else if (cond.source === 'PROFILE') {
-        var age = testProfile.profile.age;
-        var val = parseInt(cond.value);
-        var met2 = cond.op === 'GTE' ? age >= val : cond.op === 'LTE' ? age <= val : false;
+        var met2;
+        if (cond.op === 'IN') {
+          met2 = true;
+        } else if (cond.op === 'EQ' && (cond.value === '남' || cond.value === '여')) {
+          met2 = p.gender === cond.value;
+        } else {
+          var val = parseInt(cond.value);
+          met2 = cond.op === 'GTE' ? p.age >= val : cond.op === 'LTE' ? p.age <= val : false;
+        }
         chips.push('<span class="test-sum-chip" style="background:' +
           (met2 ? 'rgba(15,110,86,.1)' : 'rgba(201,75,26,.08)') + ';color:' + (met2 ? '#0F6E56' : '#C94B1A') + '">' +
-          (met2 ? '✓ ' : '✗ ') + '나이 조건</span>');
+          (met2 ? '✓ ' : '✗ ') + (cond.op === 'IN' ? '성별 무관' : cond.op === 'EQ' ? '성별 조건' : '나이 조건') + '</span>');
       }
     });
   }
@@ -1268,10 +1393,10 @@ function updateTestSummary(ruleCard) {
   if (el) el.innerHTML = chips.join('');
 }
 
-function evaluateTestResult(cardId) {
-  var chain    = computeChain(cardId);
-  var ruleCard = getRuleFromChain(chain);
-  if (!ruleCard) return {pass: true, failed: [], ruleCard: null};
+function evaluateTestResult() {
+  var ruleId   = testChain.rule;
+  var ruleCard = ruleId ? CARDS.find(function(c) { return c.id === ruleId; }) : null;
+  if (!ruleCard) return {pass: true, failed: []};
   var conds  = (CARD_DETAILS[ruleCard.id] || {}).conditions || [];
   var failed = [];
   var gMap   = {'위험':'risk','주의':'caution','양호':'good'};
@@ -1280,10 +1405,16 @@ function evaluateTestResult(cardId) {
     var key = ruleCard.id + '_' + i;
     var met = false;
     if (cond.source === 'PROFILE') {
-      var age = testProfile.profile.age;
-      var val = parseInt(cond.value);
-      met = cond.op === 'GTE' ? age >= val : cond.op === 'LTE' ? age <= val
-          : cond.op === 'GT'  ? age >  val : cond.op === 'LT'  ? age <  val : false;
+      if (cond.op === 'IN') {
+        met = true;
+      } else if (cond.op === 'EQ' && (cond.value === '남' || cond.value === '여')) {
+        met = testProfile.profile.gender === cond.value;
+      } else {
+        var age = testProfile.profile.age;
+        var val = parseInt(cond.value);
+        met = cond.op === 'GTE' ? age >= val : cond.op === 'LTE' ? age <= val
+            : cond.op === 'GT'  ? age >  val : cond.op === 'LT'  ? age <  val : false;
+      }
     } else if (cond.source === 'PROMAGE') {
       met = cond.op === 'EQ' ? testProfile.promage[key] === gMap[cond.value] : !!testProfile.promage[key];
     } else {
@@ -1291,7 +1422,65 @@ function evaluateTestResult(cardId) {
     }
     if (!met) failed.push('[' + cond.sourceLabel + '] ' + cond.label);
   });
-  return {pass: failed.length === 0, failed: failed, ruleCard: ruleCard};
+  return {pass: failed.length === 0, failed: failed};
+}
+
+function buildChatAnswerHTML() {
+  var rtCard = testChain.risk     ? CARDS.find(function(c) { return c.id === testChain.risk; })     : null;
+  var evCard = testChain.evidence ? CARDS.find(function(c) { return c.id === testChain.evidence; }) : null;
+  var poCard = testChain.policy   ? CARDS.find(function(c) { return c.id === testChain.policy; })   : null;
+  var ruCard = testChain.rule     ? CARDS.find(function(c) { return c.id === testChain.rule; })     : null;
+
+  var rtDet = rtCard ? (CARD_DETAILS[rtCard.id] || {}) : {};
+  var evDet = evCard ? (CARD_DETAILS[evCard.id] || {}) : {};
+  var poDet = poCard ? (CARD_DETAILS[poCard.id] || {}) : {};
+
+  var paras = [];
+  if (rtCard) {
+    if (rtCard.id === 'RT01') paras.push('암·종양 관련 보장에 대해 안내드릴게요.');
+    else if (rtCard.id === 'RT02') paras.push('뇌혈관 질환 관련 보장에 대해 안내드릴게요.');
+    else paras.push((rtDet.description || rtCard.title).split('.')[0] + '에 대해 안내드릴게요.');
+  }
+  if (evCard && evDet.indicator && evDet.value) {
+    paras.push(evDet.indicator + '은(는) <strong>' + evDet.value + '</strong>이에요' +
+      (evDet.orgLabel ? ' <span style="font-size:10px;color:var(--text-hint)">(' + evDet.orgLabel + ' ' + (evDet.year || '') + ')</span>' : '') + '.');
+  }
+  if (rtDet.warningMsg) {
+    paras.push(rtDet.warningMsg + ' 보장 공백을 함께 확인해 드릴게요.');
+  }
+  paras.push('상담을 통해 딱 맞는 보장 금액을 함께 살펴봐 드릴게요.');
+
+  var bodyHTML   = paras.map(function(p) { return '<p>' + p + '</p>'; }).join('');
+  var policyHTML = poDet.appDisplayText
+    ? '<div class="chat-policy-block"><strong>⚠ 유의사항</strong> ' + poDet.appDisplayText + '</div>'
+    : '';
+
+  var usedIds  = [testChain.rule, testChain.evidence, testChain.policy].filter(Boolean);
+  var usedHTML = usedIds.map(function(id) {
+    var c = CARDS.find(function(cc) { return cc.id === id; });
+    if (!c) return '';
+    var color = TYPE_COLORS[c.type];
+    return '<span class="test-used-chip" style="color:' + color + ';border-color:' + hexToRgba(color,.3) + ';background:' + hexToRgba(color,.06) + '">' +
+      '<i class="fa-solid ' + TYPE_ICONS[c.type] + '" style="font-size:8px"></i> ' + c.id + '</span>';
+  }).join('');
+
+  var qEl      = document.getElementById('testQueryInput');
+  var question = (qEl ? qEl.value.trim() : '') || '보험 보장 내용을 알려주세요';
+
+  return '<div class="chat-preview-wrap">' +
+    '<div class="chat-question"><div class="chat-q-bubble">' + question + '</div></div>' +
+    '<div class="chat-ai-row">' +
+      '<div class="chat-avatar">AI</div>' +
+      '<div class="chat-ai-content">' +
+        '<div class="chat-agent-name">Clark AI<span class="chat-kc-tag">KC 체인</span></div>' +
+        '<div class="chat-bubble">' + bodyHTML + policyHTML + '</div>' +
+        '<div class="chat-used-chips">' +
+          '<span style="font-size:10px;color:var(--text-hint);font-weight:700;margin-right:3px;flex-shrink:0">적용 카드</span>' +
+          usedHTML +
+        '</div>' +
+      '</div>' +
+    '</div>' +
+  '</div>';
 }
 
 function runTest(cardId) {
@@ -1304,12 +1493,7 @@ function runTest(cardId) {
     '<i class="fa-solid fa-spinner fa-spin" style="margin-right:6px"></i>평가 중…</div>';
 
   setTimeout(function() {
-    var evResult = evaluateTestResult(cardId);
-    var chain    = computeChain(cardId);
-    var inChain  = CARDS.filter(function(c) { return chain.has(c.id); });
-    var evCards  = inChain.filter(function(c) { return c.type === 'evidence'; });
-    var poCards  = inChain.filter(function(c) { return c.type === 'policy'; });
-    var ruCards  = inChain.filter(function(c) { return c.type === 'rule'; });
+    var evResult = evaluateTestResult();
     var html     = '';
 
     if (evResult.pass) {
@@ -1318,45 +1502,7 @@ function runTest(cardId) {
         '<div><div>체인 발동 ✓</div>' +
         '<div style="font-size:11px;font-weight:400;margin-top:2px;opacity:.85">필수 조건 모두 충족 — Clark AI가 이 체인을 활성화합니다</div>' +
         '</div></div>';
-
-      var lines = [];
-      if (chain.has('RT01') && chain.has('RT02')) lines.push('중대질병(암·뇌혈관) 보장 범위에 대해 안내드립니다.');
-      else if (chain.has('RT01')) lines.push('암·종양 관련 보장에 대해 안내드립니다.');
-      else if (chain.has('RT02')) lines.push('뇌혈관 질환 관련 보장에 대해 안내드립니다.');
-      else lines.push(card.title + '에 대해 안내드립니다.');
-
-      if (evCards.length) {
-        lines.push('');
-        lines.push('<strong style="font-size:11px;color:var(--text-secondary);letter-spacing:.05em">참고 통계</strong>');
-        evCards.forEach(function(ev) {
-          var det = CARD_DETAILS[ev.id] || {};
-          lines.push('• <strong>' + ev.title + '</strong> — ' + (det.value || '') +
-            ' <span style="font-size:11px;color:var(--text-hint)">(' + (det.orgLabel || '') + ' ' + (det.year || '') + ')</span>');
-        });
-      }
-      if (poCards.length) {
-        lines.push('');
-        lines.push('<strong style="font-size:11px;color:var(--text-secondary);letter-spacing:.05em">⚠ 유의사항</strong>');
-        poCards.forEach(function(po) {
-          var det = CARD_DETAILS[po.id] || {};
-          lines.push('• ' + (det.appDisplayText || po.title));
-        });
-      }
-      var usedCards = ruCards.concat(evCards).concat(poCards);
-      var usedChips = usedCards.map(function(c) {
-        var color = TYPE_COLORS[c.type];
-        return '<span class="test-used-chip" style="color:' + color + ';border-color:' + hexToRgba(color,.3) + ';background:' + hexToRgba(color,.06) + '">' +
-          '<i class="fa-solid ' + TYPE_ICONS[c.type] + '" style="font-size:8px"></i> ' + c.id + '</span>';
-      }).join('');
-      html +=
-        '<div class="test-result-wrap">' +
-          '<div class="test-result-hd"><i class="fa-solid fa-robot" style="color:var(--step-active)"></i> 답변 미리보기</div>' +
-          '<div class="test-result-body">' + lines.join('<br>') + '</div>' +
-          '<div class="test-used-cards">' +
-            '<span style="font-size:10px;color:var(--text-hint);font-weight:700;margin-right:4px;flex-shrink:0">적용 카드</span>' +
-            usedChips +
-          '</div>' +
-        '</div>';
+      html += buildChatAnswerHTML();
     } else {
       html += '<div class="test-pass-banner fail">' +
         '<i class="fa-solid fa-circle-xmark" style="margin-top:1px;flex-shrink:0"></i>' +
@@ -1369,6 +1515,7 @@ function runTest(cardId) {
         '</div>';
     }
     area.innerHTML = html;
+    area.scrollIntoView({behavior:'smooth', block:'nearest'});
   }, 600);
 }
 
