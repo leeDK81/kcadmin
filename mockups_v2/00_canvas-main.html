@@ -274,6 +274,13 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;backg
 .test-float-chips{display:flex;gap:5px;flex-wrap:wrap;flex:1;min-width:0;align-items:center}
 .test-float-chip{display:inline-flex;align-items:center;gap:3px;padding:3px 9px;border-radius:5px;font-size:11px;font-weight:700;border:1px solid;white-space:nowrap}
 .test-float-empty{font-size:11px;color:var(--text-hint);font-style:italic}
+/* ── Grid card test mode ── */
+.gc-test-check{width:17px;height:17px;border-radius:4px;border:1.5px solid #B0BBC6;background:#fff;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0;margin-left:auto}
+.gc-test-check.checked{background:var(--step-active);border-color:var(--step-active)}
+.gc-card.test-checked{border-color:var(--step-active)!important;box-shadow:0 0 0 2px rgba(15,110,86,.12)}
+.gc-focal.test-checked{border:2px solid var(--step-active)!important;box-shadow:0 0 0 2px rgba(15,110,86,.12)}
+.gc-card.test-mode-card{cursor:pointer}
+.gc-focal.test-mode-card{cursor:pointer}
 
 /* ── Card Detail (read-only fields) ── */
 .detail-field{margin-bottom:14px}
@@ -669,21 +676,7 @@ function renderPicker() {
 function pickerCardHTML(card) {
   const color = TYPE_COLORS[card.type];
 
-  // ── 테스트 모드 ──
-  if (canvasMode === 'test') {
-    var connected   = hasEdge(card.id);
-    var testChecked = testSelection[card.type] === card.id;
-    var cls = 'pk-card' + (!connected ? ' test-disabled' : testChecked ? ' test-selected' : ' test-selectable');
-    var sty = testChecked ? ' style="border-color:' + color + ';background:' + hexToRgba(color,.07) + '"' : '';
-    var checkIcon = testChecked ? '<i class="fa-solid fa-check" style="color:#fff;font-size:8px"></i>' : '';
-    return '<div class="' + cls + '"' + sty + (connected ? ' onclick="onTestPickerClick(\'' + card.id + '\')"' : '') + '>' +
-      '<div class="pk-check">' + checkIcon + '</div>' +
-      '<span class="pk-card-id">' + card.id + '</span>' +
-      '<span class="pk-card-title">' + card.title + '</span>' +
-    '</div>';
-  }
-
-  // ── 연결 모드 (기존) ──
+  // ── 연결 모드 / 테스트 모드 탐색 (동일 렌더링) ──
   const isSelected = card.id === selectedCardId;
   const statusDot = card.status === 'active'
     ? '<span class="pk-card-status active" title="라이브"></span>'
@@ -725,8 +718,8 @@ function switchCanvasMode(mode) {
   var labelEl = document.getElementById('pickerLabel');
   var hintEl  = document.getElementById('pickerHint');
   if (mode === 'test') {
-    if (labelEl) labelEl.textContent = '① 카드 체크';
-    if (hintEl)  hintEl.textContent  = '— 테스트할 카드를 체크하세요 (연결된 카드만 가능)';
+    if (labelEl) labelEl.textContent = '① 체인 탐색';
+    if (hintEl)  hintEl.textContent  = '— 클릭해 체인 구조 확인 후 캔버스에서 카드를 체크하세요';
     testSelection = {};
     updateTestFloatBar();
     document.getElementById('slidePanel').classList.remove('open');
@@ -737,6 +730,7 @@ function switchCanvasMode(mode) {
     document.getElementById('testFloatBar').classList.remove('visible');
   }
   renderPicker();
+  renderGrid();
 }
 
 function onTestPickerClick(cardId) {
@@ -751,6 +745,18 @@ function onTestPickerClick(cardId) {
   updateTestFloatBar();
 }
 
+function onTestGridClick(cardId) {
+  var card = CARDS.find(function(c) { return c.id === cardId; });
+  if (!card) return;
+  if (testSelection[card.type] === cardId) {
+    delete testSelection[card.type];
+  } else {
+    testSelection[card.type] = cardId;
+  }
+  renderGrid();
+  updateTestFloatBar();
+}
+
 function updateTestFloatBar() {
   var bar    = document.getElementById('testFloatBar');
   var chips  = document.getElementById('testFloatChips');
@@ -759,7 +765,7 @@ function updateTestFloatBar() {
   var selected = order.map(function(t) { return testSelection[t]; }).filter(Boolean);
 
   if (!selected.length) {
-    if (chips) chips.innerHTML = '<span class="test-float-empty">위에서 카드를 체크하세요</span>';
+    if (chips) chips.innerHTML = '<span class="test-float-empty">캔버스에서 카드를 체크하세요</span>';
     if (runBtn) runBtn.disabled = true;
     if (bar)    bar.classList.remove('visible');
     return;
@@ -830,8 +836,7 @@ function selectCard(id) {
   chip.classList.add('visible');
   document.getElementById('focalChipLabel').textContent = card.id + ' · ' + card.title;
 
-  // 패널 자동 열기 (카드 정보 탭)
-  openPanel(id, 'info');
+  if (canvasMode !== 'test') openPanel(id, 'info');
 }
 
 function clearSelection() {
@@ -874,7 +879,9 @@ function renderGrid() {
       (availableCount > 0
         ? '<div class="grid-stat-chip" style="color:var(--step-active)"><i class="fa-solid fa-circle-plus" style="font-size:10px"></i> 연결 가능 ' + availableCount + '개</div>'
         : '') +
-      '<button class="btn btn-secondary btn-sm" onclick="openTest(\'' + focalCard.id + '\')"><i class="fa-solid fa-flask"></i> 답변 테스트</button>' +
+      (canvasMode !== 'test'
+        ? '<button class="btn btn-secondary btn-sm" onclick="openTest(\'' + focalCard.id + '\')"><i class="fa-solid fa-flask"></i> 답변 테스트</button>'
+        : '') +
       '<a href="' + EDITOR_MAP[focalCard.type] + '" class="btn btn-secondary btn-sm" style="text-decoration:none"><i class="fa-solid fa-pen-to-square"></i> 카드 편집</a>' +
     '</div>';
 
@@ -907,7 +914,7 @@ function renderGrid() {
         bodyEl.innerHTML += sectionHTML('연결됨', 'connected', inChain.length);
         inChain.forEach(c => { bodyEl.innerHTML += chainCardHTML(c, chain, selectedCardId); });
       }
-      if (available.length) {
+      if (available.length && canvasMode !== 'test') {
         bodyEl.innerHTML += sectionHTML('연결 가능', 'available', available.length);
         available.forEach(c => { bodyEl.innerHTML += availableCardHTML(c, focalCard); });
       }
@@ -933,6 +940,20 @@ function sectionHTML(label, type, count) {
 
 function focalCardHTML(card) {
   const color = TYPE_COLORS[card.type];
+  if (canvasMode === 'test') {
+    var isChecked = testSelection[card.type] === card.id;
+    return '<div class="gc-focal test-mode-card' + (isChecked ? ' test-checked' : '') + '" data-card-id="' + card.id + '" onclick="onTestGridClick(\'' + card.id + '\')" style="cursor:pointer">' +
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">' +
+        '<div class="gc-focal-badge"><i class="fa-solid fa-star" style="font-size:9px"></i> 탐색 중</div>' +
+        '<div class="gc-test-check' + (isChecked ? ' checked' : '') + '">' +
+          (isChecked ? '<i class="fa-solid fa-check" style="color:#fff;font-size:9px"></i>' : '') +
+        '</div>' +
+      '</div>' +
+      '<div class="gc-focal-type" style="color:' + color + '">' + TYPE_NAMES[card.type] + '</div>' +
+      '<div class="gc-focal-id">' + card.id + ' · ' + card.cluster + '</div>' +
+      '<div class="gc-focal-title">' + card.title + '</div>' +
+    '</div>';
+  }
   return '<div class="gc-focal" data-card-id="' + card.id + '">' +
     '<div class="gc-focal-badge"><i class="fa-solid fa-star" style="font-size:9px"></i> 선택된 카드</div>' +
     '<div class="gc-focal-type" style="color:' + color + '">' + TYPE_NAMES[card.type] + '</div>' +
@@ -975,6 +996,23 @@ function chainCardHTML(card, chainSet, focalId) {
       ? '<span class="gc-status-badge gc-badge-approved">승인완료</span>'
       : '<span class="gc-status-badge gc-badge-review">승인요청</span>';
 
+  if (canvasMode === 'test') {
+    var isChecked = testSelection[card.type] === card.id;
+    return '<div class="gc-card gc-connected test-mode-card' + (isChecked ? ' test-checked' : '') + '" data-card-id="' + card.id + '" ' +
+      'style="border-color:' + (isChecked ? 'var(--step-active)' : color) + ';cursor:pointer" onclick="onTestGridClick(\'' + card.id + '\')">' +
+      '<div class="gc-card-header">' +
+        '<span class="gc-card-type" style="color:' + color + '">' + TYPE_NAMES[card.type] + '</span>' +
+        '<span class="gc-card-id">' + card.id + '</span>' +
+        sBadge +
+        '<div class="gc-test-check' + (isChecked ? ' checked' : '') + '">' +
+          (isChecked ? '<i class="fa-solid fa-check" style="color:#fff;font-size:9px"></i>' : '') +
+        '</div>' +
+      '</div>' +
+      viaLabel +
+      '<div class="gc-card-title">' + card.title + '</div>' +
+      '<span class="gc-card-cluster">' + card.cluster + '</span>' +
+    '</div>';
+  }
   return '<div class="gc-card gc-connected" data-card-id="' + card.id + '" style="border-color:' + color + '" onclick="selectCard(\'' + card.id + '\')">' +
     '<div class="gc-card-header">' +
       '<span class="gc-card-type" style="color:' + color + '">' + TYPE_NAMES[card.type] + '</span>' +
