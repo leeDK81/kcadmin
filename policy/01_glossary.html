@@ -148,16 +148,16 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
     <div class="section-title">데이터 소스</div>
     <div class="term-row">
       <div class="term-name">마이데이터 <span style="font-size:12px;color:var(--text-hint)">MyData</span></div>
-      <div class="term-def">고객의 보험 가입 현황 데이터(담보코드·가입금액·갱신여부·보험유형 등). 상담 시 KC 엔진에 자동 전달. Rule 조건 빌더에서 직접 참조. Evidence 카드 등록 불필요.</div>
+      <div class="term-def">고객의 보험 가입 현황 데이터. Rule 조건 빌더에서 <strong>담보코드 + 담보금액(coverage_amt)</strong> 조건만 허용. 상담 시 Clark AI에 자동 전달. Evidence 카드 등록 불필요.</div>
       <div class="term-note">화면 표기: "마이데이터" (MYDATA 영문 표기 금지)</div>
     </div>
     <div class="term-row">
       <div class="term-name">프롬에이지 <span style="font-size:12px;color:var(--text-hint)">Promage</span></div>
-      <div class="term-def">개인 건강 위험도 분석 데이터(암위험도·생체나이·심혈관위험도·의료비예측 등). 상담 시 자동 전달. Clark 앱 출력 시 위험/주의/양호 3단계 등급명만 표시(수치·percentile 노출 금지).</div>
+      <div class="term-def">개인 건강 위험도 분석 데이터. <strong>암위험도(23개) + 질병위험도(27개) = 50개 항목</strong> (optgroup 2개 구분). 생체나이·의료비예측 항목은 Rule 조건 빌더에서 사용 불가. 상담 시 자동 전달. Clark 앱 출력 시 위험/주의/양호 3단계 등급명만 표시(수치·percentile 노출 금지).</div>
     </div>
     <div class="term-row">
       <div class="term-name">사용자 프로파일 <span style="font-size:12px;color:var(--text-hint)">User Profile</span></div>
-      <div class="term-def">나이·성별·결혼여부·자녀유무·직업위험도·출산예정·거주지 7개 필드. Rule 조건 빌더에서 직접 참조.</div>
+      <div class="term-def"><strong>나이·성별·결혼여부·자녀유무 4개 필드</strong>. 나이는 BETWEEN(시작세~종료세 범위), 나머지 3개는 EQ 조건. Rule 조건 빌더에서 직접 참조. 직업위험도·출산예정·거주지는 삭제됨.</div>
     </div>
   </div>
 

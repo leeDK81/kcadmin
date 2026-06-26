@@ -200,7 +200,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
           <td><span class="file-code">11_dry-run.html</span></td>
           <td>사전 테스트</td>
           <td>가상 고객 프로필(나이·성별·마이데이터·프롬에이지 등 입력)을 기반으로 Rule 조건 매칭 결과 및 예상 AI 답변 경로를 미리 확인하는 화면. Case 1~4 중 어떤 경로로 분기되는지 테스트 결과로 표시.</td>
-          <td>화면명 "사전 테스트" 사용. "시뮬레이션" 금지. 결과 표기: "테스트 결과" (시뮬레이션 결과 금지). 테스트 입력: 가상 프로필(마이데이터 담보코드·가입금액·갱신여부·프롬에이지 등급·프로파일 7종). 결과 표시: 매칭된 Concept·Risk-type·Rule·Evidence·Policy 체인 경로 및 Case 번호.</td>
+          <td>화면명 "사전 테스트" 사용. "시뮬레이션" 금지. 결과 표기: "테스트 결과" (시뮬레이션 결과 금지). 테스트 입력: 가상 프로필(마이데이터 담보금액(coverage_amt) 입력·프롬에이지 등급·프로파일 4종(나이·성별·결혼여부·자녀유무)). 결과 표시: 매칭된 Concept·Risk-type·Rule·Evidence·Policy 체인 경로 및 Case 번호.</td>
         </tr>
         <tr>
           <td><span class="file-code">18_system-settings.html</span></td>
@@ -227,7 +227,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
           <td><span class="file-code">16_card-editor-playbook.html</span></td>
           <td>Playbook 편집기</td>
           <td>5-card 구조: 기본정보 / 리드 전환 레이어(발화 키워드·CTA·Standalone 가이드) / 리드 스코어링(Phase 1.5 잠금) / 배정 최적화(Phase 2 잠금) / 액션.</td>
-          <td>공개범위 필드 표시 금지(내부 전용 고정). Standalone 링크: <code>14_answer-logic-guide.html</code>.</td>
+          <td>공개범위 필드 표시 금지(내부 전용 고정). Standalone 답변 가이드 작성 참조: <code>13_answer-logic.html</code>.</td>
         </tr>
 
         <!-- 참조 -->
@@ -243,12 +243,6 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
           <td>AI 답변 생성 로직</td>
           <td>Clark AI 답변 생성 전체 흐름 스펙. Case 1~4 정의, Risk-type 우선순위 공식(Step 2-B), 출력 필드 연결 범위.</td>
           <td>체인 번호 순서: ①Concept→②Risk→③Rule→④Evidence→⑤Policy 고정.</td>
-        </tr>
-        <tr>
-          <td><span class="file-code">14_answer-logic-guide.html</span></td>
-          <td>AI 답변 생성 예시</td>
-          <td>실제 상담 시나리오 기반 AI 답변 예시. Standalone 답변 가이드 작성 참조용.</td>
-          <td>사이드바에서 독립 항목으로 표시. 13번이 아닌 14번 링크 사용(Playbook Standalone 배너 포함).</td>
         </tr>
         <tr>
           <td><span class="file-code">15_aio-guide.html</span></td>
@@ -278,9 +272,14 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
           <td><span class="file-code">00_canvas-main.html</span>으로 대체. 신규 구현·링크에서 10_chain-visualizer 참조 금지.</td>
         </tr>
         <tr>
+          <td><span class="file-code">14_answer-logic-guide.html</span></td>
+          <td>삭제된 파일 — 사용 금지</td>
+          <td>2026-06-24 삭제됨. Standalone 답변 가이드 작성 참조는 <span class="file-code">13_answer-logic.html</span> 사용.</td>
+        </tr>
+        <tr>
           <td><span class="file-code">17_playbook-answer-guide.html</span></td>
           <td>삭제된 파일 — 사용 금지</td>
-          <td>Playbook Standalone 배너 링크는 <span class="file-code">14_answer-logic-guide.html</span> 사용.</td>
+          <td>14_answer-logic-guide.html로 대체되었으며 해당 파일도 삭제됨. 모든 참조 제거.</td>
         </tr>
       </tbody>
     </table>

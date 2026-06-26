@@ -159,7 +159,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
   <!-- Evidence -->
   <div class="type-block" style="border-left-color:var(--card-evidence)">
     <h3 style="color:var(--card-evidence)"><i class="fa-solid fa-database fa-fw"></i> Evidence — 근거 자료</h3>
-    <p><strong>역할:</strong> Rule 카드가 사용하는 공인 외부 통계를 등록하는 카드. KC 엔진이 자동 접근할 수 없는 공인 기관 통계 수치를 운영자가 직접 입력한다.</p>
+    <p><strong>역할:</strong> Rule 카드가 사용하는 공인 외부 통계를 등록하는 카드. Clark AI가 직접 활용할 수 없는 공인 기관 통계 수치를 운영자가 직접 입력한다.</p>
     <p><strong>단일 유형:</strong> 공인 외부 통계 기반(<code>external</code>) 단일 유형. 마이데이터·프롬에이지는 상담 시 자동 전달되므로 Evidence 카드 불필요.</p>
     <p><strong>허용 출처:</strong> HIRA(건강보험심사평가원), NHIS(국민건강보험공단), 통계청(KOSTAT), FSS(금융감독원), 기타 공인 기관.</p>
     <div class="meta">
@@ -185,9 +185,9 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
     <h3 style="color:var(--card-rule)"><i class="fa-solid fa-scale-balanced fa-fw"></i> Rule — 판단 규칙</h3>
     <p><strong>역할:</strong> 고객의 보험 보장 공백 여부를 실제로 판단하는 조건 집합. 마이데이터·프롬에이지·사용자 프로파일 3개 데이터 소스를 조건 빌더로 설정.</p>
     <p><strong>조건 빌더 데이터 소스 3종:</strong><br>
-    · <strong>마이데이터(MyData):</strong> 담보코드 + 확인항목(가입금액·갱신여부·보험유형·시작일·종료일) + 조건 + 기준값<br>
-    · <strong>프롬에이지(Promage):</strong> 카테고리(암위험도/생체나이/질병위험도/의료비예측) + 항목 + 조건 + 기준값<br>
-    · <strong>사용자 프로파일:</strong> 나이·성별·결혼여부·자녀유무·직업위험도·출산예정·거주지</p>
+    · <strong>마이데이터(MyData):</strong> 담보코드 select + 담보금액(coverage_amt) + 조건(LTE/GTE/LT/GT/EQ) + 기준값. 존재여부·갱신여부·보험유형·날짜 조건 불가.<br>
+    · <strong>프롬에이지(Promage):</strong> 위험도 항목 select(암위험도 23개 + 질병위험도 27개 = 50개, optgroup 2개 구분) + 같음(EQ 고정) + 등급(위험/주의/양호). 생체나이·의료비예측 사용 불가.<br>
+    · <strong>사용자 프로파일:</strong> 나이(BETWEEN, 시작세~종료세) / 성별(무관/남/여) / 결혼여부(무관/기혼/미혼) / 자녀유무(무관/있음/없음) 4개 항목. 직업위험도·출산예정·거주지 삭제됨.</p>
     <p><strong>약관 DB:</strong> 약관 DB 확보 시 Rule 조건 충족 → 담보코드 기준으로 자동 조회 → Clark 답변에 면책조항 섹션 자동 포함. (별도 플래그 없이 엔진이 자동 처리)</p>
     <div class="meta">
       <span class="meta-item"><strong>공개범위:</strong> <span class="chip chip-base">공통 기준</span></span>
@@ -215,7 +215,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
     · KC 체인 매칭 + Playbook 발화 키워드 감지 → KC 답변 + CTA 버튼 추가 (Case 2)<br>
     · KC 체인 미매칭 + Playbook 발화 키워드 감지 → Standalone 가이드 기반 답변 + CTA (Case 4)</p>
     <p><strong>CTA 버튼 유형:</strong> 상담 연결(consult) / 앱 내 이동(deeplink) / 외부 링크(external). "상담 연결"이 기본 버튼(필수).</p>
-    <p><strong>Standalone 답변 가이드:</strong> Playbook 편집기 Card ② 내 "Standalone 답변 가이드" 텍스트 필드(선택 — 비워두면 Clark 기본 안내 문구 사용). Case 4(KC 미매칭 + Playbook 키워드 감지) 발생 시 LLM 시스템 프롬프트에 주입되어 답변 방향을 가이드. 작성 참조: <code>14_answer-logic-guide.html</code>.</p>
+    <p><strong>Standalone 답변 가이드:</strong> Playbook 편집기 Card ② 내 "Standalone 답변 가이드" 텍스트 필드(선택 — 비워두면 Clark 기본 안내 문구 사용). Case 4(KC 미매칭 + Playbook 키워드 감지) 발생 시 LLM 시스템 프롬프트에 주입되어 답변 방향을 가이드.</p>
     <p><strong>라이브 전환 경로:</strong> Playbook은 캔버스 연결 없이 approved 상태에서 직접 "라이브 전환" 가능. 사전 테스트 불필요.</p>
     <p><strong>병렬 체인 4단계 (P1~P4):</strong><br>
     · <strong>P1 — 발화 키워드 감지:</strong> 사용자 발화에서 Playbook 등록 키워드 부분 매칭. 미감지 시 전환 없음<br>
