@@ -221,16 +221,16 @@ var CARD_DETAILS = {
     description:'마이데이터 보험 현황과 프롬에이지 위험도를 종합하여 암 보장 공백 여부를 판정합니다.',
     conditions:[
       { sourceLabel:'마이데이터', source:'MYDATA', label:'암진단금 담보 합계 3,000만원 이하', required:true },
-      { sourceLabel:'프롬에이지', source:'PROMAGE', label:'위험도 (암 종합) "위험" 등급', required:false },
-      { sourceLabel:'프로파일', source:'PROFILE', label:'나이 40세 이상', required:true },
+      { sourceLabel:'프롬에이지', source:'PROMAGE', label:'암 종합 등급 "위험" 등급', required:false },
+      { sourceLabel:'프로파일', source:'PROFILE', label:'나이 40~65세 (BETWEEN)', required:true },
     ],
   },
   'RU002':{
     description:'마이데이터 뇌혈관 담보 현황과 프롬에이지 위험도를 기준으로 보장 공백을 판정합니다.',
     conditions:[
       { sourceLabel:'마이데이터', source:'MYDATA', label:'뇌졸중 진단금 담보 합계 2,000만원 이하', required:true },
-      { sourceLabel:'프롬에이지', source:'PROMAGE', label:'위험도 (뇌혈관질환) "위험" 등급', required:false },
-      { sourceLabel:'프로파일', source:'PROFILE', label:'나이 50세 이상', required:true },
+      { sourceLabel:'프롬에이지', source:'PROMAGE', label:'뇌혈관질환 위험도 "위험" 등급', required:false },
+      { sourceLabel:'프로파일', source:'PROFILE', label:'나이 50~75세 (BETWEEN)', required:true },
     ],
   },
   // ── Evidence ──

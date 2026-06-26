@@ -85,20 +85,33 @@
 
 **PROMAGE 미연동 대응:** 프롬에이지 미연동 사용자는 PROMAGE 조건 평가 불가. 따라서 PROMAGE 조건은 선택 조건으로 설정 권장. 운영자가 필수로 변경하는 것은 허용 (의도적 설계).
 
-**PROMAGE 조건 구조 (2026-06-25 단순화):**
+**조건 빌더 컬럼 구조 (2026-06-26 6열 통일):**
+
+| 열 | 헤더 | 소스별 내용 |
+|---|---|---|
+| 1 | 소스 | 마이데이터 / 프롬에이지 / 프로파일 select |
+| 2 | 담보코드·카테고리·항목 | MYDATA: 담보코드 select / PROMAGE: 위험도 항목 select / PROFILE: 나이·성별·결혼여부·자녀유무 select |
+| 3 | 조건 | MYDATA: op select(LTE/GTE 등) / PROMAGE: 같음(=) static / PROFILE 나이: 사이(∈) static / PROFILE 나머지: 같음(=) static |
+| 4 | 기준값 | MYDATA: 금액 input / PROMAGE: 위험·주의·양호 select / PROFILE 나이: 시작세~종료세 dual input / PROFILE 나머지: 값 select |
+| 5 | 필수여부 | 필수 / 선택 radio |
+| 6 | (삭제) | 삭제 버튼 |
+
+**PROMAGE 조건 구조 (2026-06-25 단순화 / 2026-06-26 optgroup 적용):**
 - **카테고리 단일화:** 암위험도 + 질병위험도 → **위험도** (50개 항목 통합). 생체나이·의료비예측 삭제.
 - **op:** EQ only — 위험 / 주의 / 양호 등급 선택
-- **편집기 Row:** source select → "위험도" static 레이블 → 항목 select (50개 flat list) → EQ → 등급 select
-- **50개 항목:** 암 23개(canr_ca~smbl_ca) + 질병 27개(고지혈증~췌장염)
+- **편집기 Row:** source select → 항목 select (optgroup 2개) → EQ select → 등급 select
+- **optgroup 구분:** `<optgroup label="암위험도">` 23개(canr_ca~smbl_ca) + `<optgroup label="질병위험도">` 27개(고지혈증~췌장염)
 
 **MYDATA Rule 조건:** 담보코드 select + 담보금액(coverage_amt) LTE/GTE/LT/GT/EQ. 필드 드롭다운 없음.
 
-**USER_PROFILE_FIELDS for Rule 조건 (2026-06-25 단순화):**
+**USER_PROFILE_FIELDS for Rule 조건 (2026-06-26 업데이트):**
 
-| 필드코드 | 레이블 | 타입 | op | 비고 |
+| 필드코드 | 레이블 | op | 기준값 | 비고 |
 |---|---|---|---|---|
-| age | 나이 | range | BETWEEN | 시작세 ~ 종료세 두 입력값 (예: 40~65세) |
-| gender | 성별 | enum | EQ | 무관/남/여 (무관=전체 적용) |
+| age | 나이 | BETWEEN | 시작세 ~ 종료세 dual input (예: 40~65세) | 범위 조건 |
+| gender | 성별 | EQ | 무관/남/여 select | 무관=전체 적용 |
+| married | 결혼여부 | EQ | 무관/기혼/미혼 select | 무관=전체 적용 |
+| has_child | 자녀유무 | EQ | 무관/있음/없음 select | 무관=전체 적용 |
 
 **등급명:** 위험 / 주의 / 양호 — "상/중/하" "고/중/저" 표기 금지.
 

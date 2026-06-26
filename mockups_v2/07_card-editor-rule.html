@@ -59,7 +59,7 @@ textarea.form-control{resize:vertical;min-height:80px}
 .toast{position:fixed;bottom:24px;right:24px;background:#1A1A18;color:#fff;padding:12px 20px;border-radius:8px;font-size:14px;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none}
 .toast.show{opacity:1}
 /* Condition Builder */
-.cond-row{display:grid;grid-template-columns:90px 120px 1fr 75px 1fr 72px 36px;gap:6px;align-items:start;padding:10px;background:#F8F8F6;border:1px solid var(--border);border-radius:6px;margin-bottom:8px;position:relative}
+.cond-row{display:grid;grid-template-columns:110px 1fr 90px 1fr 72px 36px;gap:6px;align-items:start;padding:10px;background:#F8F8F6;border:1px solid var(--border);border-radius:6px;margin-bottom:8px;position:relative}
 .cond-row-promage{border-color:rgba(107,74,154,.3);background:#FAF8FD}
 .cond-row-promage .cond-hint{color:#6B4A9A}
 .cond-row-profile{border-color:rgba(15,110,86,.3);background:#F4FBF8}
@@ -141,7 +141,7 @@ textarea.form-control{resize:vertical;min-height:80px}
 .rel-empty{font-size:13px;color:var(--text-hint);padding:6px 0;line-height:1.6}
 .rel-divider{height:1px;background:var(--border);margin:12px 0}
 /* Condition column headers */
-.cond-header{display:grid;grid-template-columns:90px 120px 1fr 75px 1fr 72px 36px;gap:6px;padding:0 10px 6px;margin-bottom:2px}
+.cond-header{display:grid;grid-template-columns:110px 1fr 90px 1fr 72px 36px;gap:6px;padding:0 10px 6px;margin-bottom:2px}
 .cond-header-cell{font-size:12px;color:var(--text-hint);font-weight:700}
 /* Submit gate checklist */
 .check-gate{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:14px 18px;margin-bottom:14px;box-shadow:var(--shadow)}
@@ -260,12 +260,11 @@ textarea.form-control{resize:vertical;min-height:80px}
           <i class="fa fa-circle-info"></i> 아래 선택지는 주요 항목 예시입니다. 검색으로 더 많은 항목을 찾을 수 있습니다.
         </div>
         <div class="cond-header" id="condHeader" style="display:none">
-          <div class="cond-header-cell">① 소스</div>
-          <div class="cond-header-cell">② 코드 · 카테고리 · 항목</div>
-          <div class="cond-header-cell">③ 항목 / 범위</div>
-          <div class="cond-header-cell">④ 조건</div>
-          <div class="cond-header-cell">⑤ 기준값</div>
-          <div class="cond-header-cell">⑥ 구분</div>
+          <div class="cond-header-cell">소스</div>
+          <div class="cond-header-cell">담보코드 · 카테고리 · 항목</div>
+          <div class="cond-header-cell">조건</div>
+          <div class="cond-header-cell">기준값</div>
+          <div class="cond-header-cell">필수여부</div>
           <div></div>
         </div>
         <div id="conditionList"></div>
@@ -482,10 +481,12 @@ const PROMAGE_FIELDS = [
   {code:'난청',name:'난청'},{code:'녹내장',name:'녹내장'},{code:'췌장염',name:'췌장염'}
 ];
 
-// 사용자 프로파일 조건 필드 (나이·성별)
+// 사용자 프로파일 조건 필드 (나이·성별·결혼여부·자녀유무)
 const USER_PROFILE_FIELDS = [
-  {field:'age',    label:'나이',  type:'range'},
-  {field:'gender', label:'성별',  type:'enum', values:['무관','남','여']},
+  {field:'age',       label:'나이',     type:'range'},
+  {field:'gender',    label:'성별',     type:'enum', values:['무관','남','여']},
+  {field:'married',   label:'결혼여부', type:'enum', values:['무관','기혼','미혼']},
+  {field:'has_child', label:'자녀유무', type:'enum', values:['무관','있음','없음']},
 ];
 
 
@@ -551,6 +552,7 @@ function addConditionRow(init) {
   if (src === 'PROFILE') {
     row.className = 'cond-row cond-row-profile';
     const pfld = fld || 'age';
+    const fieldDef = USER_PROFILE_FIELDS.find(f => f.field === pfld) || USER_PROFILE_FIELDS[0];
     const fldOptions = USER_PROFILE_FIELDS.map(f =>
       `<option value="${f.field}"${pfld===f.field?' selected':''}>${f.label}</option>`).join('');
     const srcSel = `<select class="form-control" style="font-size:13px" onchange="onSrcChange(this,${id})">
@@ -559,56 +561,45 @@ function addConditionRow(init) {
         <option value="PROFILE" selected>프로파일</option>
       </select>`;
     const fldSel = `<select class="form-control" style="font-size:13px" id="pfld-${id}" onchange="onProfileFldChange(${id})">${fldOptions}</select>`;
-
+    let opHtml, valHtml, hint;
     if (pfld === 'age') {
       const parts = (val || '40,65').split(',');
       const fromVal = parts[0] || '40';
       const toVal   = parts[1] || '65';
-      row.innerHTML = `
-        <div>${srcSel}</div>
-        <div>${fldSel}</div>
-        <div style="display:flex;align-items:center;gap:4px">
-          <input class="form-control" style="font-size:13px;width:52px;text-align:center;padding:4px 2px" id="val-from-${id}" type="number" min="0" max="100" value="${fromVal}">
-          <span style="font-size:12px;color:var(--text-secondary);white-space:nowrap">세 ~</span>
-        </div>
-        <div></div>
-        <div style="display:flex;align-items:center;gap:4px">
-          <input class="form-control" style="font-size:13px;width:52px;text-align:center;padding:4px 2px" id="val-to-${id}" type="number" min="0" max="100" value="${toVal}">
-          <span style="font-size:12px;color:var(--text-secondary)">세</span>
-        </div>
-        ${reqRadioHtml(id, isRequired)}
-        <button class="cond-delete" onclick="removeCondition(this)" title="조건 삭제"><i class="fa fa-trash"></i></button>
-        <div style="grid-column:1/-1">
-          <span class="cond-hint">👤 프로파일 — 나이 범위 조건. Rule을 적용할 대상 연령대를 지정합니다.</span>
-        </div>`;
+      opHtml  = `<div style="display:flex;align-items:center;padding:0 4px;font-size:12px;color:var(--text-secondary);font-weight:600">사이 (∈)</div>`;
+      valHtml = `<div style="display:flex;align-items:center;gap:4px">
+        <input class="form-control" style="font-size:13px;width:52px;text-align:center;padding:4px 2px" id="val-from-${id}" type="number" min="0" max="100" value="${fromVal}">
+        <span style="font-size:12px;color:var(--text-secondary);white-space:nowrap">세 ~</span>
+        <input class="form-control" style="font-size:13px;width:52px;text-align:center;padding:4px 2px" id="val-to-${id}" type="number" min="0" max="100" value="${toVal}">
+        <span style="font-size:12px;color:var(--text-secondary)">세</span>
+      </div>`;
+      hint = '👤 프로파일 — 나이 범위 조건. Rule을 적용할 대상 연령대를 지정합니다.';
     } else {
-      const gv = val || '무관';
-      row.innerHTML = `
-        <div>${srcSel}</div>
-        <div>${fldSel}</div>
-        <div style="grid-column:3/6;display:flex;align-items:center;gap:16px">
-          <label style="display:flex;align-items:center;gap:4px;cursor:pointer;font-size:13px">
-            <input type="radio" name="gender-${id}" id="val-${id}" value="무관" ${gv==='무관'?'checked':''}> 무관
-          </label>
-          <label style="display:flex;align-items:center;gap:4px;cursor:pointer;font-size:13px">
-            <input type="radio" name="gender-${id}" value="남" ${gv==='남'?'checked':''}> 남성
-          </label>
-          <label style="display:flex;align-items:center;gap:4px;cursor:pointer;font-size:13px">
-            <input type="radio" name="gender-${id}" value="여" ${gv==='여'?'checked':''}> 여성
-          </label>
-        </div>
-        ${reqRadioHtml(id, isRequired)}
-        <button class="cond-delete" onclick="removeCondition(this)" title="조건 삭제"><i class="fa fa-trash"></i></button>
-        <div style="grid-column:1/-1">
-          <span class="cond-hint">👤 프로파일 — 성별 조건. 특정 성별에만 Rule을 적용할 때 설정합니다. 무관은 남녀 모두 적용.</span>
-        </div>`;
+      const curVal = val || (fieldDef.values ? fieldDef.values[0] : '');
+      const opts = (fieldDef.values || []).map(v => `<option value="${v}"${curVal===v?' selected':''}>${v}</option>`).join('');
+      opHtml  = `<div style="display:flex;align-items:center;padding:0 4px;font-size:12px;color:var(--text-secondary);font-weight:600">같음 (=)</div>`;
+      valHtml = `<div><select class="form-control" style="font-size:13px" id="val-${id}">${opts}</select></div>`;
+      hint = pfld === 'gender'    ? '👤 프로파일 — 성별 조건. 무관은 남녀 모두 적용.'
+           : pfld === 'married'   ? '👤 프로파일 — 결혼여부 조건. 무관은 기혼·미혼 모두 적용.'
+           : pfld === 'has_child' ? '👤 프로파일 — 자녀유무 조건. 무관은 자녀 있음·없음 모두 적용.'
+           : '';
     }
+    row.innerHTML = `
+      <div>${srcSel}</div>
+      <div>${fldSel}</div>
+      ${opHtml}
+      ${valHtml}
+      ${reqRadioHtml(id, isRequired)}
+      <button class="cond-delete" onclick="removeCondition(this)" title="조건 삭제"><i class="fa fa-trash"></i></button>
+      <div style="grid-column:1/-1"><span class="cond-hint">${hint}</span></div>`;
   } else if (src === 'PROMAGE') {
     row.className = 'cond-row cond-row-promage';
     const pfld = (init && init.field) ? init.field : '';
     const pop  = (init && init.op)    ? init.op    : 'EQ';
     const pval = (init && init.value) ? init.value  : '';
-    const pfldOptions = PROMAGE_FIELDS.map(f =>
+    const cancerOpts = PROMAGE_FIELDS.slice(0, 23).map(f =>
+      `<option value="${f.code}"${pfld===f.code?' selected':''}>${f.name} (${f.code})</option>`).join('');
+    const diseaseOpts = PROMAGE_FIELDS.slice(23).map(f =>
       `<option value="${f.code}"${pfld===f.code?' selected':''}>${f.name} (${f.code})</option>`).join('');
     row.innerHTML = `
       <div>
@@ -618,10 +609,11 @@ function addConditionRow(init) {
           <option value="PROFILE">프로파일</option>
         </select>
       </div>
-      <div style="display:flex;align-items:center;font-size:12px;color:#6B4A9A;font-weight:700;padding:0 4px">위험도</div>
       <div>
         <select class="form-control" style="font-size:13px" id="fld-${id}">
-          <option value="">항목 선택</option>${pfldOptions}
+          <option value="">항목 선택</option>
+          <optgroup label="암위험도">${cancerOpts}</optgroup>
+          <optgroup label="질병위험도">${diseaseOpts}</optgroup>
         </select>
       </div>
       <div>
@@ -662,7 +654,6 @@ function addConditionRow(init) {
         </select>
         <div class="cond-hint" style="margin-top:2px"><a href="12_coverage-code-table.html" style="color:var(--step-active)">담보코드 목록 보기 →</a></div>
       </div>
-      <div style="display:flex;align-items:center;font-size:12px;color:var(--text-secondary);font-weight:600">담보금액</div>
       <div>
         <select class="form-control" style="font-size:13px" id="op-${id}">${opSelectHtml(op)}</select>
       </div>

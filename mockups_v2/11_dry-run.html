@@ -294,16 +294,31 @@ textarea.form-control{resize:vertical;min-height:80px}
                 </label>
               </div>
             </div>
+            <div style="display:flex;align-items:center;gap:20px;margin-bottom:4px">
+              <div style="display:flex;align-items:center;gap:6px">
+                <label style="font-size:12px;color:var(--text-secondary);font-weight:600;white-space:nowrap">결혼여부</label>
+                <select id="profileMarried" style="padding:3px 6px;border:1px solid var(--border);border-radius:5px;font-size:13px;font-family:inherit" onchange="onProfileChange()">
+                  <option value="무관">무관</option>
+                  <option value="기혼">기혼</option>
+                  <option value="미혼">미혼</option>
+                </select>
+              </div>
+              <div style="display:flex;align-items:center;gap:6px">
+                <label style="font-size:12px;color:var(--text-secondary);font-weight:600;white-space:nowrap">자녀유무</label>
+                <select id="profileHasChild" style="padding:3px 6px;border:1px solid var(--border);border-radius:5px;font-size:13px;font-family:inherit" onchange="onProfileChange()">
+                  <option value="무관">무관</option>
+                  <option value="있음">있음</option>
+                  <option value="없음">없음</option>
+                </select>
+              </div>
+            </div>
 
-            <!-- 마이데이터 담보코드 -->
+            <!-- 마이데이터 담보금액 -->
             <div class="cpro-sec">
-              <i class="fa-solid fa-database" style="font-size:10px;margin-right:4px"></i>마이데이터 — 보유 담보코드
+              <i class="fa-solid fa-database" style="font-size:10px;margin-right:4px"></i>마이데이터 — 담보금액
             </div>
             <div style="font-size:12px;color:var(--text-hint);margin-bottom:8px">
-              클릭으로 전환:
-              <span style="background:rgba(15,110,86,.1);color:#0F6E56;padding:1px 6px;border-radius:3px;font-weight:600">✓ 보유</span>
-              <i class="fa fa-arrow-right" style="font-size:10px;color:var(--text-hint);margin:0 4px"></i>
-              <span style="background:rgba(201,75,26,.08);color:#C94B1A;padding:1px 6px;border-radius:3px;font-weight:600">✗ 미보유</span>
+              담보금액을 입력하세요. <span style="background:#F0F0EC;color:var(--text-secondary);padding:1px 6px;border-radius:3px;font-weight:600">0원</span> = 미보유
             </div>
             <div id="customMydataFields"></div>
 
@@ -823,58 +838,66 @@ const CARD_TEST_CONDITIONS = {
   CN004: {
     cluster: 'T02',
     mydata: [
-      {code:'A4601', desc:'중증질환(뇌혈관) 산정특례', importance:'required'},
-      {code:'A6107', desc:'뇌혈관질환 입원일당',       importance:'required'},
-      {code:'A5104', desc:'뇌혈관질환 수술',           importance:'recommended'},
-      {code:'A4300', desc:'뇌혈관질환 진단',           importance:'recommended'},
+      {code:'A4601', desc:'중증질환(뇌혈관) 산정특례', op:'LTE', threshold:10000000},
+      {code:'A6107', desc:'뇌혈관질환 입원일당',       op:'LTE', threshold:50000},
+      {code:'A5104', desc:'뇌혈관질환 수술',           op:'LTE', threshold:5000000},
+      {code:'A4300', desc:'뇌혈관질환 진단',           op:'LTE', threshold:20000000},
     ],
     promage: ['뇌혈관질환','뇌졸중','고혈압'],
     evaluate: function(p) {
-      var codes = ['A4601','A6107','A5104','A4300'];
-      return !codes.some(function(c){ return p.mydata[c] !== false; });
+      return CARD_TEST_CONDITIONS.CN004.mydata.some(function(item) {
+        var amt = p.mydata[item.code] || 0;
+        return item.op === 'LTE' ? amt <= item.threshold : amt >= item.threshold;
+      });
     }
   },
   RT03: {
     cluster: 'T02',
     mydata: [
-      {code:'A4601', desc:'중증질환(뇌혈관) 산정특례',     importance:'required'},
-      {code:'A4602', desc:'중증질환(심장) 산정특례',       importance:'required'},
-      {code:'A6107', desc:'뇌혈관질환 입원일당',           importance:'required'},
-      {code:'A6109', desc:'허혈성심장질환 입원일당',       importance:'recommended'},
-      {code:'A5104', desc:'뇌혈관질환 수술',               importance:'recommended'},
-      {code:'A5107', desc:'허혈성심장질환 수술',           importance:'optional'},
+      {code:'A4601', desc:'중증질환(뇌혈관) 산정특례', op:'LTE', threshold:10000000},
+      {code:'A4602', desc:'중증질환(심장) 산정특례',   op:'LTE', threshold:10000000},
+      {code:'A6107', desc:'뇌혈관질환 입원일당',       op:'LTE', threshold:50000},
+      {code:'A6109', desc:'허혈성심장질환 입원일당',   op:'LTE', threshold:50000},
+      {code:'A5104', desc:'뇌혈관질환 수술',           op:'LTE', threshold:5000000},
+      {code:'A5107', desc:'허혈성심장질환 수술',       op:'LTE', threshold:5000000},
     ],
     promage: ['뇌혈관질환','허혈성심장질환','뇌졸중','부정맥'],
     evaluate: function(p) {
-      var codes = ['A4601','A4602','A6107','A6109','A5104','A5107'];
-      return !codes.some(function(c){ return p.mydata[c] !== false; });
+      return CARD_TEST_CONDITIONS.RT03.mydata.some(function(item) {
+        var amt = p.mydata[item.code] || 0;
+        return item.op === 'LTE' ? amt <= item.threshold : amt >= item.threshold;
+      });
     }
   },
   RU003: {
     cluster: 'T02',
     mydata: [
-      {code:'A4601', desc:'중증질환(뇌혈관) 산정특례', importance:'required'},
-      {code:'A4602', desc:'중증질환(심장) 산정특례',   importance:'required'},
-      {code:'A6107', desc:'뇌혈관질환 입원일당',       importance:'required'},
-      {code:'A6109', desc:'허혈성심장질환 입원일당',   importance:'recommended'},
+      {code:'A4601', desc:'중증질환(뇌혈관) 산정특례', op:'LTE', threshold:10000000},
+      {code:'A4602', desc:'중증질환(심장) 산정특례',   op:'LTE', threshold:10000000},
+      {code:'A6107', desc:'뇌혈관질환 입원일당',       op:'LTE', threshold:50000},
+      {code:'A6109', desc:'허혈성심장질환 입원일당',   op:'LTE', threshold:50000},
     ],
     promage: ['뇌혈관질환','허혈성심장질환','고혈압'],
     evaluate: function(p) {
-      var codes = ['A4601','A4602','A6107','A6109'];
-      return !codes.some(function(c){ return p.mydata[c] !== false; });
+      return CARD_TEST_CONDITIONS.RU003.mydata.some(function(item) {
+        var amt = p.mydata[item.code] || 0;
+        return item.op === 'LTE' ? amt <= item.threshold : amt >= item.threshold;
+      });
     }
   },
   PB002: {
     cluster: 'T02',
     mydata: [
-      {code:'A4601', desc:'중증질환(뇌혈관) 산정특례', importance:'required'},
-      {code:'A6107', desc:'뇌혈관질환 입원일당',       importance:'required'},
-      {code:'A5104', desc:'뇌혈관질환 수술',           importance:'recommended'},
+      {code:'A4601', desc:'중증질환(뇌혈관) 산정특례', op:'LTE', threshold:10000000},
+      {code:'A6107', desc:'뇌혈관질환 입원일당',       op:'LTE', threshold:50000},
+      {code:'A5104', desc:'뇌혈관질환 수술',           op:'LTE', threshold:5000000},
     ],
     promage: ['뇌혈관질환','뇌졸중','고혈압'],
     evaluate: function(p) {
-      var codes = ['A4601','A6107','A5104'];
-      return !codes.some(function(c){ return p.mydata[c] !== false; });
+      return CARD_TEST_CONDITIONS.PB002.mydata.some(function(item) {
+        var amt = p.mydata[item.code] || 0;
+        return item.op === 'LTE' ? amt <= item.threshold : amt >= item.threshold;
+      });
     }
   }
 };
@@ -884,9 +907,9 @@ var selectedPathIdx = 0;
 
 // 테스트 조건 상태
 var customProfile = {
-  mydata:  {},   // code → true(보유) | false(미보유)
+  mydata:  {},   // code → number (담보금액, 원) ; 0 = 미보유
   promage: {},   // field → 'risk' | 'caution' | 'good' | undefined
-  profile: {age:45, gender:'남'}  // PROFILE 소스 조건용
+  profile: {age:45, gender:'남', married:'무관', has_child:'무관'}
 };
 
 // ============================================================
@@ -1021,27 +1044,23 @@ function buildCustomProfileUI(cardId) {
     return;
   }
 
-  // 마이데이터 담보코드
+  // 마이데이터 담보금액
   var mydataHtml = conds.mydata.map(function(item) {
-    var impLabel = {required:'필수', recommended:'권장', optional:'참고'}[item.importance];
-    var impClass = {required:'imp-r', recommended:'imp-c', optional:'imp-o'}[item.importance];
-    // 기본값: 필수·권장 → 미보유 (KC 체인 작동 시나리오), 참고 → 보유
     if (customProfile.mydata[item.code] === undefined) {
-      customProfile.mydata[item.code] = (item.importance === 'optional') ? true : false;
+      customProfile.mydata[item.code] = 0;
     }
-    var has = customProfile.mydata[item.code] !== false;
-    var cls = has ? 'cov-toggle has' : 'cov-toggle none';
-    var icon = has ? '✓' : '✗';
-    var stateLabel = has ? '보유' : '미보유';
-    var shortDesc = item.desc.length > 14 ? item.desc.slice(0,13)+'…' : item.desc;
-    return '<div class="cov-item-wrap">' +
-      '<span class="cov-imp-label ' + impClass + '">' + impLabel + '</span>' +
-      '<button class="' + cls + '" onclick="toggleCovCode(\'' + item.code + '\')" title="' + item.desc + '">' +
-        '<span>' + icon + '</span>' +
-        '<code style="font-size:11px;font-weight:800;letter-spacing:.03em">' + item.code + '</code>' +
-        '<span>' + shortDesc + '</span>' +
-        '<span style="font-size:11px;opacity:.7;margin-left:2px">(' + stateLabel + ')</span>' +
-      '</button>' +
+    var amt = customProfile.mydata[item.code];
+    var opLabel = item.op === 'LTE' ? '≤' : '≥';
+    var thr = item.threshold >= 10000 ? Math.round(item.threshold/10000).toLocaleString()+'만원' : item.threshold.toLocaleString()+'원';
+    return '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;padding:7px 10px;background:#F8F8F6;border:1px solid var(--border);border-radius:6px">' +
+      '<div style="flex:1;min-width:0">' +
+        '<div style="font-size:12px;font-weight:700"><code style="font-size:11px">' + item.code + '</code> ' + item.desc + '</div>' +
+        '<div style="font-size:11px;color:var(--text-hint);margin-top:2px">기준 ' + opLabel + ' ' + thr + '</div>' +
+      '</div>' +
+      '<input type="number" id="amt-' + item.code + '" min="0" step="1000000" value="' + amt + '" placeholder="0" ' +
+        'style="width:110px;padding:4px 6px;border:1px solid var(--border);border-radius:5px;font-size:12px;text-align:right" ' +
+        'oninput="setMydataAmt(\'' + item.code + '\',this.value)">' +
+      '<span style="font-size:12px;color:var(--text-secondary)">원</span>' +
     '</div>';
   }).join('');
   document.getElementById('customMydataFields').innerHTML = mydataHtml || '<span style="font-size:13px;color:var(--text-hint)">해당 없음</span>';
@@ -1066,10 +1085,9 @@ function buildCustomProfileUI(cardId) {
   document.getElementById('runBtns').style.display = 'flex';
 }
 
-function toggleCovCode(code) {
-  customProfile.mydata[code] = customProfile.mydata[code] === false ? true : false;
-  var cardId = document.getElementById('cardSelect').value;
-  buildCustomProfileUI(cardId);
+function setMydataAmt(code, value) {
+  customProfile.mydata[code] = parseInt(value) || 0;
+  updateCustomSummary();
 }
 
 function setPromageGrade(field, grade) {
@@ -1080,22 +1098,29 @@ function setPromageGrade(field, grade) {
 }
 
 function onProfileChange() {
-  var ageEl = document.getElementById('profileAge');
-  var genderEl = document.querySelector('input[name="profileGender"]:checked');
-  if (ageEl)    customProfile.profile.age    = parseInt(ageEl.value) || 45;
-  if (genderEl) customProfile.profile.gender = genderEl.value;
+  var ageEl     = document.getElementById('profileAge');
+  var genderEl  = document.querySelector('input[name="profileGender"]:checked');
+  var marriedEl = document.getElementById('profileMarried');
+  var childEl   = document.getElementById('profileHasChild');
+  if (ageEl)     customProfile.profile.age       = parseInt(ageEl.value) || 45;
+  if (genderEl)  customProfile.profile.gender    = genderEl.value;
+  if (marriedEl) customProfile.profile.married   = marriedEl.value;
+  if (childEl)   customProfile.profile.has_child = childEl.value;
   updateCustomSummary();
 }
 
 function updateCustomSummary() {
   var chips = [];
-  // 나이·성별 chip
+  // 나이·성별·결혼여부·자녀유무 chip
   var p = customProfile.profile;
   chips.push('<span class="psum-chip" style="background:#EEF4FF;color:#1A3A6B">'+p.age+'세 '+p.gender+'성</span>');
-  // 마이데이터 담보코드
+  if (p.married && p.married !== '무관') chips.push('<span class="psum-chip" style="background:#EEF4FF;color:#1A3A6B">결혼 '+p.married+'</span>');
+  if (p.has_child && p.has_child !== '무관') chips.push('<span class="psum-chip" style="background:#EEF4FF;color:#1A3A6B">자녀 '+p.has_child+'</span>');
+  // 마이데이터 담보금액
   Object.keys(customProfile.mydata).forEach(function(code) {
-    var has = customProfile.mydata[code] !== false;
-    chips.push('<span class="psum-chip" style="background:'+(has?'rgba(15,110,86,.1)':'rgba(201,75,26,.08)')+';color:'+(has?'#0F6E56':'#C94B1A')+'">'+(has?'✓ ':'✗ ')+code+'</span>');
+    var amt = customProfile.mydata[code] || 0;
+    var fmtAmt = amt === 0 ? '0원' : (amt >= 10000 ? Math.round(amt/10000).toLocaleString()+'만원' : amt.toLocaleString()+'원');
+    chips.push('<span class="psum-chip" style="background:rgba(26,74,154,.08);color:#1A4A9A">'+code+' '+fmtAmt+'</span>');
   });
   // 프롬에이지
   var gradeLabels = {risk:'위험', caution:'주의', good:'양호'};

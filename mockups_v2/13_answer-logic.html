@@ -408,7 +408,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
       <thead><tr><th style="width:130px">소스</th><th>평가 방법</th></tr></thead>
       <tbody>
         <tr><td><strong>마이데이터</strong></td><td>고객 마이데이터에서 지정 담보코드(<span class="out-field">coverage_code</span>)의 확인 항목(<span class="out-field">field</span>)이 기준값(<span class="out-field">value</span>)을 조건 연산자(<span class="out-field">op</span>)로 충족하는지 평가</td></tr>
-        <tr><td><strong>프로파일</strong></td><td>사용자 프로파일 데이터(나이·성별·결혼·자녀·직업위험도·출산예정·거주지 7개 항목)에서 지정 필드가 조건을 충족하는지 평가. number 타입: GTE/LTE/GT/LT/EQ, enum 타입: EQ/IN/NOT_IN 조건</td></tr>
+        <tr><td><strong>프로파일</strong></td><td>사용자 프로파일 데이터(나이·성별·결혼여부·자녀유무 4개 항목)에서 지정 필드가 조건을 충족하는지 평가. 나이: BETWEEN (시작세~종료세 범위), 나머지 enum 타입: EQ 조건</td></tr>
         <tr><td><strong>프롬에이지</strong></td><td>상담 시 수집된 건강검진 데이터(위험도 — 암·질병 50개 항목)를 3단계 등급(위험/주의/양호)으로 변환 후 조건 평가. 수치 직접 비교 금지 [§3-8].</td></tr>
         <tr><td><strong>프롬에이지 미연동</strong></td><td>프롬에이지 데이터 없는 사용자 — 해당 조건 "미충족" 처리. 필수 조건이면 Rule 미발동. 선택 조건이면 Rule은 발동하되 충족 개수에서 제외됨 → 선택 조건 설정 권장</td></tr>
         <tr><td><strong>기타 소스 없음</strong></td><td>해당 소스 데이터 취득 불가 시, 해당 조건은 "미충족"으로 처리</td></tr>
@@ -982,7 +982,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
         <td><span style="background:rgba(154,26,26,.1);color:var(--card-rule);padding:2px 8px;border-radius:4px;font-size:12px;font-weight:700">③ Rule</span></td>
         <td><span class="uses">Clark 경고 메시지</span></td>
         <td style="font-size:13px"><strong>경고 메시지</strong> → 핵심 안내 문구로 출력<br><span style="color:var(--text-hint)">예: "암진단금이 5,000만원 미만입니다. 보완을 검토해보세요."</span></td>
-        <td style="font-size:12px;line-height:1.7"><span class="ds-chip ds-mydata">마이데이터</span> 담보 금액·보유 여부<br><span class="ds-chip ds-fromage">프롬에이지</span> 건강위험도 등급<br><span class="ds-chip ds-card">프로파일</span> 나이·성별 등 7개</td>
+        <td style="font-size:12px;line-height:1.7"><span class="ds-chip ds-mydata">마이데이터</span> 담보 금액<br><span class="ds-chip ds-fromage">프롬에이지</span> 건강위험도 등급<br><span class="ds-chip ds-card">프로파일</span> 나이·성별·결혼여부·자녀유무 4개</td>
         <td style="font-size:13px;color:var(--text-hint)">판단 조건 (마이데이터 필드명, 연산자, 기준값) — 내부 판단용으로만 사용</td>
       </tr>
       <tr>

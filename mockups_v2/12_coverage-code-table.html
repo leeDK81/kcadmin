@@ -299,19 +299,18 @@ function renderCoverageCodes() {
     <div class="banner-info" style="margin-bottom:20px">
       <i class="fa fa-sliders fa-fw"></i>
       <strong>담보코드별 Rule 조건 유형</strong>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 24px;margin-top:10px;font-size:14px">
-        <div><i class="fa fa-circle-check fa-fw" style="color:var(--status-active);font-size:12px"></i> 담보 <b>존재 여부</b> — 있음 / 없음</div>
-        <div><i class="fa fa-circle-check fa-fw" style="color:var(--status-active);font-size:12px"></i> <b>갱신형 여부</b> — 갱신형 / 비갱신형</div>
-        <div><i class="fa fa-circle-check fa-fw" style="color:var(--status-active);font-size:12px"></i> 담보금액 <b>이상 · 이하</b></div>
-        <div><i class="fa fa-circle-check fa-fw" style="color:var(--status-active);font-size:12px"></i> <b>보험 유형</b> — 종신 / 정기 / 건강보험 등</div>
-        <div><i class="fa fa-circle-check fa-fw" style="color:var(--status-active);font-size:12px"></i> 계약 <b>시작일 · 종료일</b> 이상 · 이하</div>
+      <div style="margin-top:10px;font-size:14px">
+        <div style="display:flex;align-items:center;gap:8px">
+          <i class="fa fa-circle-check fa-fw" style="color:var(--status-active);font-size:12px"></i>
+          담보금액 <b>이상 (≥) · 이하 (≤)</b> — 담보 미보유 시 0원으로 처리
+        </div>
       </div>
       <div style="margin-top:10px;padding-top:10px;border-top:1px solid #C0D0F0;font-size:13px;color:var(--text-hint)">
-        예) 암진단(A4200) 담보 없음 → T01 무보장형 &nbsp;/&nbsp; 암진단금 3,000만원 미만 → T02 생활비 부족형 &nbsp;/&nbsp; 갱신형 비율 높음 → T06 납입여력부족형
+        예) 암진단(A4200) 담보금 3,000만원 이하 → T02 암투병생활비 부족형
       </div>
       <div style="margin-top:8px;padding:8px 10px;background:rgba(15,110,86,.07);border-radius:6px;font-size:13px;color:#0F6E56">
-        <i class="fa fa-user fa-fw"></i> <strong>프로파일 조건 연계:</strong> 동일 담보코드라도 <b>연령·성별·직업위험도</b> 등 사용자 프로파일 조건을 함께 설정하면 기준값을 세분화할 수 있습니다.
-        예) "40세 이상 AND 암진단(A4200) 담보금 3천만원 이하" — <a href="07_card-editor-rule.html" style="color:#0F6E56">Rule 카드 조건 빌더 →</a>
+        <i class="fa fa-user fa-fw"></i> <strong>프로파일 조건 연계:</strong> 동일 담보코드라도 <b>나이·성별·결혼여부·자녀유무</b> 프로파일 조건을 함께 설정하면 기준값을 세분화할 수 있습니다.
+        예) "40세 이상 AND 암진단(A4200) 담보금 3천만원 이하" — <a href="07_card-editor-rule.html" style="color:#0F6E56">Rule 카드 편집기 →</a>
       </div>
     </div>
     <div style="font-size:13px;color:var(--text-hint);margin-bottom:12px">전체 ${total}개 담보코드</div>`;
@@ -380,13 +379,10 @@ function showToast(msg) {
 
 // 사용자 프로파일 필드 정의
 const USER_PROFILE_FIELDS = [
-  {field:'age',          label:'나이 (만)',  type:'number', opType:'range',  hint:'만 나이 기준. 예: 40 → 40세 이상/이하', values:[], example:'40세 이상'},
-  {field:'gender',       label:'성별',       type:'enum',   opType:'select', hint:'남 / 여',                              values:['남','여'], example:'남'},
-  {field:'marital',      label:'결혼 여부',  type:'enum',   opType:'select', hint:'기혼 / 미혼',                          values:['기혼','미혼'], example:'기혼'},
-  {field:'has_children', label:'자녀 유무',  type:'enum',   opType:'select', hint:'Y (있음) / N (없음)',                  values:['Y','N'], example:'Y'},
-  {field:'job_risk',     label:'직업위험도', type:'enum',   opType:'select', hint:'비위험(사무직·IT) / 중위험(영업·자영업) / 고위험(단순노무·군인·경찰)', values:['비위험','중위험','고위험'], example:'고위험'},
-  {field:'expecting',    label:'출산 예정',  type:'enum',   opType:'select', hint:'Y (예정) / N (해당없음)',              values:['Y','N'], example:'Y'},
-  {field:'region',       label:'거주지',     type:'enum',   opType:'multi',  hint:'거주 지역 — 단일 또는 복수 선택 가능', values:['서울','경기','인천','부산','대구','광주','대전','울산','세종','강원','충북','충남','전북','전남','경북','경남','제주'], example:'서울, 경기'},
+  {field:'age',       label:'나이',     type:'number', opType:'between', hint:'시작세~종료세 범위 설정 (예: 40세~65세)', values:[], example:'40세~65세'},
+  {field:'gender',    label:'성별',     type:'enum',   opType:'select', hint:'무관 / 남 / 여',                  values:['무관','남','여'], example:'남'},
+  {field:'married',   label:'결혼여부', type:'enum',   opType:'select', hint:'무관 / 기혼 / 미혼',              values:['무관','기혼','미혼'], example:'기혼'},
+  {field:'has_child', label:'자녀유무', type:'enum',   opType:'select', hint:'무관 / 있음 / 없음',              values:['무관','있음','없음'], example:'있음'},
 ];
 
 function renderProfileFields() {
@@ -395,7 +391,7 @@ function renderProfileFields() {
       <i class="fa fa-user fa-fw"></i>
       <strong>사용자 프로파일 — Rule 조건 3번째 소스</strong>
       <div style="margin-top:8px;font-size:14px;line-height:1.7">
-        마이데이터 담보 기준값을 <b>연령·성별·직업위험도</b> 등으로 세분화할 때 사용합니다.<br>
+        마이데이터 담보 기준값을 <b>나이·성별·결혼여부·자녀유무</b> 등으로 세분화할 때 사용합니다.<br>
         예) <b>40세 이상</b> AND 암진단(A4200) 담보금 <b>3천만원 이하</b> → T02 암투병생활비 부족형
       </div>
       <div style="margin-top:8px;padding-top:8px;border-top:1px solid #C0D0F0;font-size:13px;color:var(--text-hint)">
@@ -405,7 +401,7 @@ function renderProfileFields() {
     </div>`;
 
   const opBadge = (opType) => {
-    if (opType === 'range') return `<span style="font-size:12px;padding:2px 7px;border-radius:10px;background:rgba(26,74,154,.1);color:#1A4A9A;font-weight:600">이상 · 이하</span>`;
+    if (opType === 'between') return `<span style="font-size:12px;padding:2px 7px;border-radius:10px;background:rgba(26,74,154,.1);color:#1A4A9A;font-weight:600">A세 ~ B세 (범위)</span>`;
     if (opType === 'multi') return `<span style="font-size:12px;padding:2px 7px;border-radius:10px;background:rgba(26,122,74,.1);color:#1A7A4A;font-weight:600">같음 · 포함됨 · 포함 안 됨</span>`;
     return `<span style="font-size:12px;padding:2px 7px;border-radius:10px;background:rgba(15,110,86,.1);color:#0F6E56;font-weight:600">같음 · 포함됨 · 포함 안 됨</span>`;
   };
@@ -445,7 +441,7 @@ function renderProfileFields() {
         <div style="padding:12px 16px;background:#F8F8F6;border:1px solid var(--border);border-radius:8px;font-size:14px">
           <div style="display:flex;gap:8px;align-items:flex-start;flex-wrap:wrap">
             <span style="padding:3px 10px;border-radius:12px;background:rgba(15,110,86,.1);color:#0F6E56;font-size:13px;font-weight:600;white-space:nowrap">👤 프로파일</span>
-            <span style="padding-top:3px">나이 (만) <b>≥ 40</b></span>
+            <span style="padding-top:3px">나이 <b>40세 ~ 65세</b></span>
             <span style="padding-top:3px;color:var(--text-hint)">AND</span>
             <span style="padding:3px 10px;border-radius:12px;background:rgba(26,74,154,.1);color:#1A4A9A;font-size:13px;font-weight:600;white-space:nowrap">📋 마이데이터</span>
             <span style="padding-top:3px">암진단(A4200) 담보금액 <b>≤ 30,000,000원</b></span>
@@ -455,18 +451,6 @@ function renderProfileFields() {
           </div>
           <div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border);font-size:13px;color:var(--text-hint)">
             → T02 암투병생활비 부족형 판정
-          </div>
-        </div>
-        <div style="padding:12px 16px;background:#F8F8F6;border:1px solid var(--border);border-radius:8px;font-size:14px">
-          <div style="display:flex;gap:8px;align-items:flex-start;flex-wrap:wrap">
-            <span style="padding:3px 10px;border-radius:12px;background:rgba(15,110,86,.1);color:#0F6E56;font-size:13px;font-weight:600;white-space:nowrap">👤 프로파일</span>
-            <span style="padding-top:3px">직업위험도 <b>= 고위험</b></span>
-            <span style="padding-top:3px;color:var(--text-hint)">AND</span>
-            <span style="padding:3px 10px;border-radius:12px;background:rgba(26,74,154,.1);color:#1A4A9A;font-size:13px;font-weight:600;white-space:nowrap">📋 마이데이터</span>
-            <span style="padding-top:3px">상해후유장해(A3200) 담보금액 <b>= 0원</b> (미보유)</span>
-          </div>
-          <div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border);font-size:13px;color:var(--text-hint)">
-            → 직업 특성 고려 상해 담보 공백 판정
           </div>
         </div>
       </div>
