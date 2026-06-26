@@ -113,7 +113,7 @@ HTML 패턴 → `guides/ux-patterns.md` 참조.
 - [ ] Rule 편집기: Risk-type·Evidence 연결 — 읽기 전용 배지 표시 (선택 UI 없음)
 - [ ] Policy 편집기: Rule 연결 — 읽기 전용 배지 + "캔버스에서 변경" 버튼 (선택 UI 없음)
 - [ ] Risk-type·Evidence·Playbook 편집기: outgoing 연결 UI 없음
-- [ ] Risk-type 편집기: 중요도 라디오 그룹 (높음/보통 기본값/낮음) — options = high/mid/low ONLY, 가중치 값(×3/×2/×1) 없음. 설명 필드와 리드스코어 필드 사이에 위치. 힌트: "다중 감지 시 노출 순서: ①중요도 서열(높음>보통>낮음) → ②선택 조건 충족 개수(시스템 자동) → ③카드코드 오름차순"
+- [ ] Risk-type 편집기: 중요도 라디오 그룹 (높음/보통 기본값/낮음) — options = high/mid/low ONLY, 가중치 값(×3/×2/×1) 없음. 설명 필드와 리드스코어 필드 사이에 위치. 힌트: "다중 감지 시 노출 순서: ①중요도 서열(높음>보통>낮음) → ②선택 조건 충족 개수(시스템 자동) → ③최근 배포순"
 - [ ] 편집기 연결 카드: "캔버스에서 변경" 버튼이 `00_canvas-main.html`로 링크됨
 
 **캔버스 (00_canvas-main.html)**

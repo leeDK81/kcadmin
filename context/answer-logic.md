@@ -96,6 +96,9 @@ KC 매칭 × Playbook 감지 2×2 매트릭스로 모든 답변 경로를 정의
 | **KC Concept 매칭** | **Case 1**: KC 구조화 답변 | **Case 2**: KC 구조화 답변 + CTA 버튼 |
 | **KC 미매칭** | **Case 3**: RAG(약관→FAQ) → Fallback 생성형 | **Case 4**: Standalone 가이드 주입 + CTA 버튼 |
 
+- **KC 구조화 답변 포함 내용 (Case 1·2)**: Risk-type 유형명·설명 + Rule clarkMessage + Evidence(LLM이 맥락에 맞게 선택·인용) + Policy appDisplayText. **RAG·LLM 별도 호출 없음.**
+- **KC 체인과 RAG·LLM은 대체(fallback) 관계**: KC 매칭 성공 → KC 구조화 답변만 반환. KC 미매칭 → 약관 RAG → FAQ RAG → LLM Fallback 순 전환. 동시 출력 없음.
+- **CTA 버튼만 가산(additive)**: Playbook 감지 시 KC 구조화 답변 또는 RAG/LLM 답변 아래에 CTA 버튼 추가. KC 체인 성패와 무관.
 - Concept Standalone 기능 없음 — Case 4(Playbook)가 미매칭 시나리오 전담
 - Case 3·4 Fallback: `18_system-settings.html` 설정 적용 (경쟁사/외부 서비스 언급 금지 등)
 - KC 체인 진입 조건: **Concept → Risk-type 연결 필수** (미연결 시 KC 체인 자체가 시작되지 않음)

@@ -354,13 +354,13 @@ playbook → (단말, 독립 체인)
 ## Risk-type 중요도 라디오 패턴
 
 다중 Risk-type이 동시 감지될 때 노출 순서를 결정하는 중요도 설정 UI.
-우선순위: ①중요도 서열(높음 > 보통 > 낮음) → ②선택 조건 충족 개수(시스템 자동) → ③카드 코드 오름차순.
+우선순위: ①중요도 서열(높음 > 보통 > 낮음) → ②선택 조건 충족 개수(시스템 자동) → ③최근 배포순.
 가중치(×3/×2/×1) 완전 제거됨 — 코드·문서에서 사용 금지. 중요도는 서열로만 판단.
 
 ```html
 <div class="form-group">
   <label>중요도 <span style="color:var(--card-risk)">*</span>
-    <span class="field-hint">다중 감지 시 노출 순서: ①중요도 → ②선택 조건 충족 개수(시스템 자동) → ③카드코드 오름차순. 운영자는 이 중요도만 설정합니다.</span>
+    <span class="field-hint">다중 감지 시 노출 순서: ①중요도 → ②선택 조건 충족 개수(시스템 자동) → ③최근 배포순. 운영자는 이 중요도만 설정합니다.</span>
   </label>
   <div style="display:flex;gap:24px;margin-top:8px;padding:12px 14px;background:#FAFAF8;border:1px solid var(--border);border-radius:6px">
     <label style="display:flex;align-items:center;gap:6px;cursor:pointer">

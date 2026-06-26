@@ -104,13 +104,13 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
           <td><strong>Case 1</strong></td>
           <td style="color:#0F6E56;font-weight:700">✓ 매칭</td>
           <td style="color:var(--text-hint)">— 미감지</td>
-          <td>KC 구조화 답변 (Concept → Risk-type → Rule → Evidence → Policy 체인)</td>
+          <td>KC 구조화 답변 (Risk-type 유형명·설명 + Rule 경고 메시지 + Evidence 인용 + Policy 문구) — RAG·LLM 호출 없음</td>
         </tr>
         <tr>
           <td><strong>Case 2</strong></td>
           <td style="color:#0F6E56;font-weight:700">✓ 매칭</td>
           <td style="color:#6B4A9A;font-weight:700">✓ 감지</td>
-          <td>KC 구조화 답변 <strong>+</strong> CTA 버튼 (두 체인 동시 출력)</td>
+          <td>KC 구조화 답변 <strong>+</strong> CTA 버튼 — Evidence·Policy는 KC 답변에 포함. CTA만 Playbook이 가산 추가</td>
         </tr>
         <tr>
           <td><strong>Case 3</strong></td>
@@ -147,7 +147,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
     <h3 style="color:var(--card-risk)"><i class="fa-solid fa-circle-exclamation fa-fw"></i> Risk-type — 리스크 유형</h3>
     <p><strong>역할:</strong> 사용자의 보험 보장 공백 유형을 분류하는 카드. Clark AI 답변 체인의 핵심 분류 기준이며, 사용자가 어떤 보장 공백 상황에 있는지를 정의한다.</p>
     <p><strong>체인 위치:</strong> Concept → <strong>Risk-type</strong> → Rule. Concept이 질문의 주제를 잡고, Risk-type이 해당 주제에서 어떤 위험 유형인지를 분류한다.</p>
-    <p><strong>다중 감지:</strong> 하나의 사용자 진단에서 복수의 Risk-type이 동시에 감지될 수 있다. 노출 우선순위는 ①중요도(높음>보통>낮음) → ②선택 조건 충족 개수(시스템 자동) → ③카드 코드 오름차순으로 결정된다.</p>
+    <p><strong>다중 감지:</strong> 하나의 사용자 진단에서 복수의 Risk-type이 동시에 감지될 수 있다. 노출 우선순위는 ①중요도(높음>보통>낮음) → ②선택 조건 충족 개수(시스템 자동) → ③최근 배포순으로 결정된다.</p>
     <div class="meta">
       <span class="meta-item"><strong>공개범위:</strong> <span class="chip chip-pub">고객 공개</span></span>
       <span class="meta-item"><strong>코드 형식:</strong> T01 ~ T10</span>

@@ -49,6 +49,9 @@
 
 | 날짜 | 내용 | 진실원 파일 |
 |---|---|---|
+| 2026-06-26 | 전수 검사 완료: 분기(fallback) 구조 전파 — KC·RAG·LLM은 순차 누적 아님, 앞 단계 성공 시 뒤 단계 호출 없음. "두 체인 동시 출력" 오표현 제거(policy/02_card-purpose.html, mockups/13_answer-logic.html). 나머지 17개 md·14개 html 파일은 이미 올바른 분기 구조로 기술 확인. | `policy/02_card-purpose.html`, `mockups/13_answer-logic.html` |
+| 2026-06-26 | Case 1~4 출력 구조 명시: KC 체인(Case 1·2)과 RAG·LLM(Case 3·4)은 대체(fallback) 관계 — 동시 출력 없음. KC 구조화 답변에 Evidence(LLM 선택·인용)·Policy(appDisplayText) 포함. CTA 버튼만 Playbook 감지 시 가산(additive). Evidence "전부 참조" → "LLM 선택·인용" 오류 수정. | `context/answer-logic.md`, `mockups_v2/13_answer-logic.html` |
+| 2026-06-26 | Risk-type 3순위 타이브레이크 변경: 카드코드 오름차순 → 최근 배포순(가장 최근 라이브 전환일 우선). 11개 파일 전수 반영. | `context/card-types.md`, `agents/01·03·04·06·08_*.md`, `guides/ux-patterns.md`, `policy/02·06_*.html`, `mockups_v2/13_answer-logic.html`, `CLAUDE.md` |
 | 2026-06-26 | 사용자 상태 3→4가지로 확장: ①미가입(전체null) / ②회원+마이데이터·프롬에이지미연동(mydata·promage null) / ③마이데이터연동+프롬에이지미이용(promage null) / ④전체데이터(메인 이용). PROMAGE가 MYDATA와 독립 축으로 확정. Case 1~4는 MYDATA 있는 ③④ 전용. | `context/answer-logic.md`, `mockups_v2/13_answer-logic.html` |
 | 2026-06-26 | Playbook 데이터 미보유 감지 조건 확정: user_state 파라미터 방식 → null 체크 방식으로 전면 교체. Clark은 profile/mydata/promage를 null 포함 그대로 전달. KC Engine이 null 여부로 상태 판단. Playbook 카드에 "PROFILE 없음/MYDATA 없음/PROMAGE 없음" 체크박스 추가(선택), 해당 데이터 null 사용자에게만 감지. 16_card-editor-playbook.html UI 추가. | `context/answer-logic.md`, `mockups_v2/13_answer-logic.html`, `mockups_v2/16_card-editor-playbook.html` |
 | 2026-06-26 | 사용자 데이터 상태 3-분기 확정: ①미가입(데이터 없음→FAQ RAG→Fallback+회원가입CTA) / ②가입+마이데이터미연결(PROFILE Rule만 평가→KC부분답변 또는 FAQ RAG→Fallback+마이데이터연결유도) / ③가입+마이데이터연결(전체평가→Case 1~4). 약관 RAG는 ③ 상태에서만 가능. Clark과 KC Engine 별개 법인 구조 명시. | `context/answer-logic.md`, `mockups_v2/13_answer-logic.html` |

@@ -66,7 +66,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
         <tr><td>카드 코드</td><td><code>code</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>T01~T10 형식. 시스템 자동 부여. 편집 불가</td></tr>
         <tr><td>명칭</td><td><code>name</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>최대 30자. 예: "암투병생활비 부족형"</td></tr>
         <tr><td>설명</td><td><code>desc</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>최대 200자. 이 위험 유형이 발생하는 상황 설명</td></tr>
-        <tr><td>중요도</td><td><code>priority</code></td><td><span class="chip chip-req">필수</span></td><td>enum</td><td>high / mid / low. 기본값: mid(보통). 다중 감지 시 노출 우선순위 1순위 기준: 높음 > 보통 > 낮음 (동점 시 → 2순위: 선택 조건 충족 개수 / 3순위: 카드 코드 오름차순)</td></tr>
+        <tr><td>중요도</td><td><code>priority</code></td><td><span class="chip chip-req">필수</span></td><td>enum</td><td>high / mid / low. 기본값: mid(보통). 다중 감지 시 노출 우선순위 1순위 기준: 높음 > 보통 > 낮음 (동점 시 → 2순위: 선택 조건 충족 개수 / 3순위: 최근 배포순)</td></tr>
         <tr><td>리드 스코어</td><td><code>leadScore</code></td><td><span class="chip chip-opt">선택</span></td><td>number</td><td>Phase 1.5 이후 활성화. 현재 미사용</td></tr>
         <tr><td>공개범위</td><td><code>scope</code></td><td>자동</td><td>string</td><td>"public" 고정. 운영자 변경 불가</td></tr>
         <tr><td>상태</td><td><code>status</code></td><td>자동</td><td>enum</td><td>draft / review / approved / active / paused / rejected</td></tr>
