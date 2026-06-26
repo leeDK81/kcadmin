@@ -393,6 +393,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;backg
   <div class="modal-box">
     <h3 id="modalTitle">연결 추가</h3>
     <p id="modalDesc"></p>
+    <div id="modalWarn" style="display:none;background:#FFF9EC;border:1px solid #F0D880;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:13px;color:#7A5A00;line-height:1.5"></div>
     <div class="modal-conn-row">
       <div class="modal-conn-card" id="modalFrom"></div>
       <div class="modal-conn-arrow"><i class="fa-solid fa-arrow-right"></i></div>
@@ -624,6 +625,11 @@ function findChainEdge(cardId, chainSet, focalId) {
 }
 
 // 선택된 카드(focalCard)와 직접 연결 가능한지만 체크 (체인 경유 X)
+// Rule에 연결된 Evidence 개수 반환
+function getRuleEvidenceCount(ruleId) {
+  return EDGES.filter(e => e.from === ruleId && CARDS.find(c => c.id === e.to && c.type === 'evidence')).length;
+}
+
 // Risk-type ↔ Rule은 1:1 전속 — 어느 한쪽이 이미 연결돼 있으면 차단
 function riskRuleBlocked(riskId, ruleId) {
   const riskAlreadyHasRule = EDGES.some(e => e.from === riskId && CARDS.find(c => c.id === e.to && c.type === 'rule'));
@@ -1085,6 +1091,23 @@ function openConnect(fromId, toId) {
   document.getElementById('modalDesc').textContent = hasPending
     ? '승인완료 카드를 연결합니다. 캔버스에 준비 연결(점선)로 표시되며, 라이브 전환 후 KC Engine에 반영됩니다.'
     : '아래 두 카드를 연결합니다. 확인 후 캔버스 및 KC Engine에 즉시 반영됩니다.';
+
+  // Rule → Evidence 3개 초과 시 경고
+  const warnEl   = document.getElementById('modalWarn');
+  const ruleCard = fromCard.type === 'rule' ? fromCard : (toCard.type === 'rule' ? toCard : null);
+  const evCard   = fromCard.type === 'evidence' ? fromCard : (toCard.type === 'evidence' ? toCard : null);
+  if (ruleCard && evCard) {
+    const evCount = getRuleEvidenceCount(ruleCard.id);
+    if (evCount >= 3) {
+      warnEl.innerHTML = '<i class="fa-solid fa-triangle-exclamation" style="margin-right:6px"></i>이 Rule에 이미 Evidence <strong>' + evCount + '개</strong>가 연결되어 있습니다. 3개 이하 권장 — Evidence가 많을수록 Clark AI의 맥락 선택 품질이 저하될 수 있습니다.';
+      warnEl.style.display = 'block';
+    } else {
+      warnEl.style.display = 'none';
+    }
+  } else {
+    warnEl.style.display = 'none';
+  }
+
   renderModalCards(fromCard, toCard);
   document.getElementById('modalConfirmBtn').innerHTML = '<i class="fa-solid fa-plus"></i> 연결 추가';
   document.getElementById('modalConfirmBtn').className = 'btn btn-primary';
@@ -1119,6 +1142,7 @@ function renderModalCards(fromCard, toCard) {
 function closeModal() {
   document.getElementById('actionModal').classList.remove('open');
   document.getElementById('modalConfirmBtn').style.background = '';
+  document.getElementById('modalWarn').style.display = 'none';
   pendingAction = null;
 }
 
