@@ -379,27 +379,15 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
   <!-- Step 2: Rule 평가 -->
   <div class="section">
     <div class="section-title"><i class="fa-solid fa-scale-balanced fa-fw" style="color:var(--card-rule)"></i> Step 2 — Rule 카드 평가 기준</div>
-    <p style="font-size:14px;color:var(--text-secondary);margin-bottom:14px">선택된 Concept → 연결된 Risk-type에 속한 <strong>모든 라이브 Rule</strong>의 조건을 독립적으로 평가합니다.</p>
+    <p style="font-size:14px;color:var(--text-secondary);margin-bottom:14px">선택된 Concept → 연결된 Risk-type에 <strong>1:1로 전속된 라이브 Rule(1개)</strong>의 조건을 평가합니다. Risk-type과 Rule은 1:1 관계이므로 복수 Rule 평가·선택 과정이 없습니다.</p>
 
-    <div class="section-sub">복수 Rule 처리 방식 (OR 관계)</div>
+    <div class="section-sub">Rule 조건 평가</div>
     <table class="spec-table">
       <thead><tr><th style="width:160px">항목</th><th>기준</th></tr></thead>
       <tbody>
-        <tr><td><strong>평가 관계</strong></td><td>OR — 조건을 충족하는 Rule이 하나라도 있으면 KC 기반 답변으로 진행</td></tr>
-        <tr><td><strong>Rule 내 조건</strong></td><td><strong>필수 조건</strong>은 AND — 모두 충족되어야 Rule 발동. <strong>선택 조건</strong>은 미충족 시에도 Rule 발동 — 충족 개수는 Risk-type 우선순위 2순위에 활용됨</td></tr>
-        <tr><td><strong>미충족 Rule</strong></td><td>해당 Rule은 답변에 반영하지 않음. 나머지 충족 Rule만 이후 단계에 전달</td></tr>
-        <tr><td><strong>복수 충족 시</strong></td><td>우선순위 기준(아래)으로 Rule 1개 선택</td></tr>
-        <tr><td><strong>전체 미충족</strong></td><td>모든 Rule 조건 미충족 → RAG 레이어 우선 시도 → RAG 결과 없으면 Fallback 제한 생성형으로 전환</td></tr>
-      </tbody>
-    </table>
-
-    <div class="section-sub">복수 Rule 충족 시 — 선택 우선순위</div>
-    <table class="spec-table">
-      <thead><tr><th style="width:60px">순서</th><th style="width:200px">기준</th><th>설명</th></tr></thead>
-      <tbody>
-        <tr><td>①</td><td>조건 충족률</td><td>Rule 전체 조건 수 대비 실제 충족된 조건 비율이 높은 Rule 우선 (더 정밀한 매칭)</td></tr>
-        <tr><td>②</td><td>조건 수</td><td>충족률 동점 시, 조건 수가 많은 Rule 우선 (더 구체적인 Rule)</td></tr>
-        <tr><td>③</td><td>최근 라이브 전환일</td><td>가장 최근에 라이브 전환된 Rule. 동점이면 카드 코드 오름차순(RU001 우선)</td></tr>
+        <tr><td><strong>필수 조건</strong></td><td>AND — 모두 충족되어야 Rule 발동. 하나라도 미충족 시 KC 미매칭 처리</td></tr>
+        <tr><td><strong>선택 조건</strong></td><td>미충족 시에도 Rule 발동. 충족 개수는 복수 Risk-type 동시 감지 시 노출 우선순위 2순위에 활용됨</td></tr>
+        <tr><td><strong>Rule 미발동</strong></td><td>필수 조건 미충족 → RAG 레이어(약관 RAG → Clark 서비스 FAQ RAG) 우선 시도 → RAG 결과 없으면 Fallback 제한 생성형으로 전환</td></tr>
       </tbody>
     </table>
 

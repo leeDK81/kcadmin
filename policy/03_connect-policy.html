@@ -108,7 +108,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
           <td style="color:var(--card-risk);font-weight:700">Risk-type</td>
           <td style="color:var(--card-rule);font-weight:700">Rule</td>
           <td><span class="chip chip-req">필수</span></td>
-          <td>이 위험 유형에 적용할 판단 Rule 지정. 최소 1개 연결 권장</td>
+          <td>이 위험 유형에 적용할 판단 Rule 지정. <strong>정확히 1개 (1:1 전속)</strong> — 이미 다른 Risk-type에 연결된 Rule은 연결 불가. Rule 카드 내 조건 Row를 추가하여 복수 조건 구성</td>
         </tr>
         <tr>
           <td style="color:var(--card-rule);font-weight:700">Rule</td>
@@ -262,7 +262,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
         <thead><tr><th style="width:80px">방향</th><th style="width:160px">대상 카드</th><th style="width:100px">필수/선택</th><th style="width:120px">개수 제한</th><th>설명</th></tr></thead>
         <tbody>
           <tr><td>← 유입</td><td style="color:var(--card-concept);font-weight:600">Concept</td><td><span class="chip chip-req">필수</span></td><td>N:1 (제한 없음)</td><td>여러 Concept이 동일 Risk-type을 가리킬 수 있음</td></tr>
-          <tr><td>→ 유출</td><td style="color:var(--card-rule);font-weight:600">Rule</td><td><span class="chip chip-req">필수</span></td><td>1:N (최소 1개)</td><td>이 위험 유형에 적용할 Rule을 1개 이상 연결해야 함. 복수 Rule 연결 가능</td></tr>
+          <tr><td>→ 유출</td><td style="color:var(--card-rule);font-weight:600">Rule</td><td><span class="chip chip-req">필수</span></td><td><strong>1:1 (정확히 1개)</strong></td><td>이 위험 유형에 적용할 Rule을 정확히 1개 연결. 복수 연결 불가. 조건이 여러 개이면 Rule 카드 내 조건 Row 추가로 해결</td></tr>
         </tbody>
       </table>
     </div>
@@ -276,7 +276,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
       <table class="tbl" style="margin-bottom:0">
         <thead><tr><th style="width:80px">방향</th><th style="width:160px">대상 카드</th><th style="width:100px">필수/선택</th><th style="width:120px">개수 제한</th><th>설명</th></tr></thead>
         <tbody>
-          <tr><td>← 유입</td><td style="color:var(--card-risk);font-weight:600">Risk-type</td><td><span class="chip chip-req">필수</span></td><td>N:1 (제한 없음)</td><td>여러 Risk-type이 동일 Rule을 공유 가능</td></tr>
+          <tr><td>← 유입</td><td style="color:var(--card-risk);font-weight:600">Risk-type</td><td><span class="chip chip-req">필수</span></td><td><strong>1:1 (정확히 1개)</strong></td><td>Rule은 하나의 Risk-type에만 전속 소속. 이미 연결된 Rule에 다른 Risk-type 연결 불가</td></tr>
           <tr><td>→ 유출</td><td style="color:var(--card-evidence);font-weight:600">Evidence</td><td><span class="chip chip-req">필수</span></td><td>1:N (최소 1개)</td><td>판단 근거 통계를 1개 이상 연결해야 함. 여러 Evidence 공유 가능</td></tr>
           <tr><td>→ 유출</td><td style="color:var(--card-policy);font-weight:600">Policy</td><td><span class="chip chip-opt">선택</span></td><td>1:N (제한 없음)</td><td>Clark 앱 표시용 면책 고지 문구가 필요한 경우에만 연결. 운영자가 직접 고지 문구를 작성한 Policy 카드를 연결</td></tr>
         </tbody>

@@ -624,11 +624,20 @@ function findChainEdge(cardId, chainSet, focalId) {
 }
 
 // 선택된 카드(focalCard)와 직접 연결 가능한지만 체크 (체인 경유 X)
+// Risk-type ↔ Rule은 1:1 전속 — 어느 한쪽이 이미 연결돼 있으면 차단
+function riskRuleBlocked(riskId, ruleId) {
+  const riskAlreadyHasRule = EDGES.some(e => e.from === riskId && CARDS.find(c => c.id === e.to && c.type === 'rule'));
+  const ruleAlreadyHasRisk = EDGES.some(e => e.to === ruleId && CARDS.find(c => c.id === e.from && c.type === 'risk'));
+  return riskAlreadyHasRule || ruleAlreadyHasRisk;
+}
+
 function findDirectTarget(card, focalCard) {
   if (CONNECT_RULES[focalCard.type]?.includes(card.type) && !edgeExists(focalCard.id, card.id)) {
+    if (focalCard.type === 'risk' && card.type === 'rule' && riskRuleBlocked(focalCard.id, card.id)) return null;
     return {from: focalCard.id, to: card.id};
   }
   if (CONNECT_RULES[card.type]?.includes(focalCard.type) && !edgeExists(card.id, focalCard.id)) {
+    if (card.type === 'risk' && focalCard.type === 'rule' && riskRuleBlocked(card.id, focalCard.id)) return null;
     return {from: card.id, to: focalCard.id};
   }
   return null;
@@ -1939,7 +1948,7 @@ function renderCardDetailHTML(cardId) {
     html += roField('Rule 이름', card.title);
     html += roField('Clark 경고 메시지 (선택)', detail.warningMsg || '—');
 
-    var rtConn = EDGES.filter(function(e){ return e.to===cardId; }).map(function(e){ return CARDS.find(function(c){ return c.id===e.from&&c.type==='risk'; }); }).filter(Boolean);
+    var rtConn = EDGES.filter(function(e){ return e.to===cardId; }).map(function(e){ return CARDS.find(function(c){ return c.id===e.from&&c.type==='risk'; }); }).filter(Boolean); // 1:1 정책 — 최대 1개
     html += '<div class="detail-field"><div class="detail-label">Risk-type 연결 <span style="font-weight:400;color:var(--text-hint)">읽기 전용</span></div>';
     if (rtConn.length) {
       html += '<div style="display:flex;flex-wrap:wrap;margin-top:4px">'+rtConn.map(function(c){ return '<span style="display:inline-flex;gap:4px;padding:3px 9px;border-radius:4px;font-size:12px;font-weight:700;background:rgba(201,75,26,.1);color:#C94B1A;margin:2px">'+c.id+' '+c.title+'</span>'; }).join('')+'</div>';

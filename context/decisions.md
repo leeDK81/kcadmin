@@ -49,6 +49,7 @@
 
 | 날짜 | 내용 | 진실원 파일 |
 |---|---|---|
+| 2026-06-26 | **카드 연결 카디널리티 재확정**: Concept:Risk-type=N:N / Risk-type:Rule=**1:1** (핵심변경, 전속 소속, 공유 불가) / Rule:Evidence=N:N / Rule:Policy=N:N. 전체 파일 전수 반영. | `context/card-policy.md`, `policy/02·03·06_*.html`, `mockups_v2/00·01·04·07·10·11·13_*.html` |
 | 2026-06-26 | PROFILE 4개 필드 확정: age(BETWEEN)+gender(EQ 무관/남/여)+married(EQ 무관/기혼/미혼)+has_child(EQ 무관/있음/없음). 9개 파일 전수 반영(mockups_v2/). policy/ 5개 파일 최신 정책 동기화 완료. | `context/card-types.md`, `policy/01~02·06·08_*.html`, `mockups_v2/11·13·17·00·09_*.html` |
 | 2026-06-25 | Rule 조건 빌더 단순화 1차: PROFILE→나이(BETWEEN)+성별(2개), MYDATA→담보금액만(필드 드롭다운 제거), PROMAGE→위험도 단일 카테고리(암위험도+질병위험도 50개 통합, 생체나이·의료비예측 삭제, EQ only). 7개 파일 전수 반영. | `context/card-types.md`, `mockups_v2/07_card-editor-rule.html`, `mockups_v2/12_coverage-code-table.html` 외 |
 | 2026-06-25 | 캔버스 테스트 모드 개선: 체크박스 캔버스 그리드 카드로 이동(피커 패널→카드 직접 선택), PROFILE 나이 BETWEEN 조건 추가(40~65/50~70세), MYDATA 갱신일 EQ bool 조건 추가(RU001/002), PROMAGE 신체나이 삭제. 사이드바 "사전 테스트" 메뉴 26개 파일 전수 제거. | `mockups_v2/00_canvas-main.html`, `mockups_v2/07_card-editor-rule.html` |

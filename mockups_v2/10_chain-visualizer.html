@@ -395,7 +395,7 @@ function applyFilters() {
   const nodes = document.querySelectorAll('.chain-node');
   const CHAIN_MAP = {
     T01: [],
-    T02: ['CON001','T02','RU001','RU003','EV001','EV002','POL001'],
+    T02: ['CON001','T02','RU001','EV001','EV002','POL001'],
     T03: ['CON002','T03','RU002','EV003','EV005','POL001'],
     T04: ['CON003','T04'],
     T05: ['T05'], T06: ['T06'], T07: ['T07'], T08: ['T08']
@@ -461,7 +461,6 @@ function drawLines() {
     {from:'CON002',to:'T03',style:'solid',color:'#1A4A9A'},
     {from:'CON003',to:'T04',style:'dashed',color:'#BA7517'},
     {from:'T02',to:'RU001',style:'solid',color:'#C94B1A'},
-    {from:'T02',to:'RU003',style:'dashed',color:'#C94B1A'},
     {from:'T03',to:'RU002',style:'dashed',color:'#C94B1A'},
     {from:'RU001',to:'EV001',style:'solid',color:'#9A1A1A'},
     {from:'RU001',to:'EV002',style:'solid',color:'#9A1A1A'},

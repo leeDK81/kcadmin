@@ -213,7 +213,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
     </div>
     <div class="term-row">
       <div class="term-name">카디널리티 <span style="font-size:12px;color:var(--text-hint)">Cardinality</span></div>
-      <div class="term-def">카드 간 연결의 최대·최소 개수 관계. 예: Concept → Risk-type은 1:N (Concept 1개가 여러 Risk-type 연결 가능), Risk-type → Rule은 N:1 (여러 Risk-type이 동일 Rule 공유 가능). 자세한 카드 유형별 카디널리티는 <a href="03_connect-policy.html" style="color:var(--step-active)">03 연결 정책</a> 참조.</div>
+      <div class="term-def">카드 간 연결의 개수 관계. Concept:Risk-type=N:N (양방향 다대다), <strong>Risk-type:Rule=1:1 (전속 — Risk-type 1개에 Rule 1개, 공유 불가)</strong>, Rule:Evidence=N:N, Rule:Policy=N:N. 자세한 카드 유형별 카디널리티는 <a href="03_connect-policy.html" style="color:var(--step-active)">03 연결 정책</a> 참조.</div>
     </div>
   </div>
 

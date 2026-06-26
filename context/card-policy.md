@@ -10,7 +10,7 @@
 ```javascript
 const CONNECT_RULES = {
   concept:  ['risk'],               // 필수 (미연결 시 KC 체인 진입 불가)
-  risk:     ['rule'],               // 필수, 최소 1개
+  risk:     ['rule'],               // 필수, 정확히 1개 (1:1)
   rule:     ['evidence', 'policy'], // evidence 필수/최소 1개, policy 선택
   evidence: [],                     // 단말
   policy:   [],                     // 단말
@@ -21,7 +21,7 @@ const CONNECT_RULES = {
 | 연결 | 필수/선택 | 비고 |
 |---|---|---|
 | concept → risk-type | **필수** (최소 1개) | 미연결 시 KC 체인 진입 불가 |
-| risk → rule | **필수** (최소 1개) | |
+| risk → rule | **필수** (정확히 1개) | 1:1 — 공유 불가. Rule이 이미 다른 Risk-type에 연결돼 있으면 연결 차단 |
 | rule → evidence | **필수** (최소 1개) | |
 | rule → policy | 선택 | |
 | evidence → (단말) | — | outgoing 연결 없음 |
@@ -32,12 +32,12 @@ const CONNECT_RULES = {
 
 ## 카드 연결 카디널리티 (2026-06-21 확정)
 
-| 연결 | 출발 카드 기준 (유출) | 도착 카드 기준 (유입) |
+| 연결 | 카디널리티 | 설명 |
 |---|---|---|
-| Concept → Risk-type | 1:N (최소 1개, 필수) | N:1 (여러 Concept 허용) |
-| Risk-type → Rule | 1:N (최소 1개, 필수) | N:1 (여러 Risk-type 허용) |
-| Rule → Evidence | 1:N (최소 1개, 필수) | N:1 (여러 Rule이 공유 가능) |
-| Rule → Policy | 1:N (제한 없음, 선택) | N:1 (여러 Rule이 공유 가능) |
+| Concept ↔ Risk-type | **N:N** | 여러 Concept이 같은 Risk-type을 트리거 가능. 하나의 Concept이 여러 Risk-type을 동시에 트리거 가능 |
+| Risk-type ↔ Rule | **1:1** | Risk-type 1개에 Rule 1개 전속. 공유 불가. 조건이 여러 개이면 Rule 카드 내 Row를 추가 |
+| Rule ↔ Evidence | **N:N** | 하나의 Rule이 여러 Evidence를 근거로 인용 가능. 동일 Evidence를 여러 Rule이 공유 가능 |
+| Rule ↔ Policy | **N:N** | 하나의 Rule에 여러 Policy 고지 연결 가능. 동일 Policy를 여러 Rule이 공유 가능 |
 
 ---
 
