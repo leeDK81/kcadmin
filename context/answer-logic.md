@@ -8,7 +8,23 @@
 ## 사용자 데이터 상태 — 선행 분기 (2026-06-26 확정)
 
 > **Clark과 KC Engine은 별개 서비스·별개 법인이다.**
-> Clark(마이데이터 사업자 보험앱)이 사용자 상태에 따라 KC Engine에 전달하는 데이터가 달라진다. KC Engine은 수신한 데이터 범위 내에서만 Rule을 평가할 수 있다.
+> KC Engine은 Clark의 회원 DB에 접근할 수 없다. Clark이 API 호출 시 `user_state` 파라미터를 명시적으로 전달해야 KC Engine이 분기를 결정할 수 있다.
+
+### Clark → KC Engine API 호출 구조
+
+```json
+{
+  "query": "암진단금 얼마야",
+  "user_state": "ANONYMOUS" | "MEMBER_NO_MYDATA" | "MEMBER_WITH_MYDATA",
+  "profile": { ... } or null,
+  "mydata":   { ... } or null,
+  "promage":  { ... } or null
+}
+```
+
+KC Engine은 `user_state` 값으로 두 가지를 결정한다:
+1. **Rule 평가 범위** — 어떤 데이터 조건을 평가할 수 있는지
+2. **Playbook CTA 타입** — 감지 시 어떤 전환 액션을 반환할지
 
 ### Clark → KC Engine 전달 데이터 (상태별)
 
@@ -23,27 +39,35 @@
 ### 상태별 답변 흐름
 
 ```
-[상태 ① — 미가입]
+[상태 ① — ANONYMOUS]
 KC 체인 평가 전체 불가 (전달 데이터 없음)
   └─ FAQ RAG → 결과 없으면 → Fallback LLM
-     + Playbook 병렬: 감지 시 회원가입 유도 CTA
+     + Playbook 병렬: 감지 시 → user_state=ANONYMOUS → 회원가입 유도 CTA
 
-[상태 ② — 가입 + 마이데이터 미연결]
+[상태 ② — MEMBER_NO_MYDATA]
 KC 체인 → PROFILE 조건 Rule만 평가
   ├─ PROFILE Rule 통과
   │    └─ KC 구조화 답변 + 마이데이터 연결 유도 문구 *
   └─ PROFILE Rule 미통과
-       └─ FAQ RAG → 결과 없으면 → Fallback LLM + 마이데이터 연결 유도 문구 *
-  + Playbook 병렬: 감지 시 보험 상담 CTA + 마이데이터 연결 유도
+       └─ FAQ RAG → 결과 없으면 → Fallback LLM
+          (모든 ② 답변에 마이데이터 연결 유도 문구 공통 포함)
+  + Playbook 병렬: 감지 시 → user_state=MEMBER_NO_MYDATA → 마이데이터 연결 유도 CTA
 
-* 마이데이터 연결 유도 문구: 모든 상태 ② 답변에 공통 포함
-  예: "마이데이터를 연결하면 내 보험 계약 기반의 정확한 진단을 받을 수 있습니다"
-
-[상태 ③ — 가입 + 마이데이터 연결]
+[상태 ③ — MEMBER_WITH_MYDATA]
 KC 체인 전체 평가 → Case 1~4 매트릭스 적용 (하단 참조)
 RAG 순서: 약관 RAG → FAQ RAG → Fallback LLM
-+ Playbook 병렬: 감지 시 보험 상담 CTA
++ Playbook 병렬: 감지 시 → user_state=MEMBER_WITH_MYDATA → Playbook 카드 정의 CTA (리드 전환)
 ```
+
+### Playbook CTA — user_state별 매핑
+
+| user_state | Playbook 감지 시 CTA |
+|---|---|
+| `ANONYMOUS` | 회원가입 유도 ("무료로 가입하고 내 보험을 진단받아보세요") |
+| `MEMBER_NO_MYDATA` | 마이데이터 연결 유도 ("마이데이터를 연결하면 맞춤 상담이 가능합니다") |
+| `MEMBER_WITH_MYDATA` | Playbook 카드에 운영자가 설정한 리드 전환 CTA |
+
+KC Engine은 `user_state` 파라미터만으로 CTA를 결정. Clark 회원 DB 직접 조회 없음.
 
 ---
 

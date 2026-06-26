@@ -49,6 +49,7 @@
 
 | 날짜 | 내용 | 진실원 파일 |
 |---|---|---|
+| 2026-06-26 | user_state API 파라미터 확정: Clark→KC Engine 호출 시 user_state(ANONYMOUS/MEMBER_NO_MYDATA/MEMBER_WITH_MYDATA) 명시 전달. KC Engine은 이 값으로 Rule 평가 범위 + Playbook CTA 타입을 결정. KC Engine은 Clark 회원 DB 직접 조회 없음. | `context/answer-logic.md`, `mockups_v2/13_answer-logic.html` |
 | 2026-06-26 | 사용자 데이터 상태 3-분기 확정: ①미가입(데이터 없음→FAQ RAG→Fallback+회원가입CTA) / ②가입+마이데이터미연결(PROFILE Rule만 평가→KC부분답변 또는 FAQ RAG→Fallback+마이데이터연결유도) / ③가입+마이데이터연결(전체평가→Case 1~4). 약관 RAG는 ③ 상태에서만 가능. Clark과 KC Engine 별개 법인 구조 명시. | `context/answer-logic.md`, `mockups_v2/13_answer-logic.html` |
 | 2026-06-26 | Evidence 활용 방식 확정: LLM이 "활용 방법" 필드 기준으로 맥락에 맞는 Evidence 선택·인용 (전부 나열 아님). Rule당 Evidence 3개 이하 권장(하드 제한 없음). Policy는 연결된 전부 적용(AND), Rule당 1~2개 권장. | `context/answer-logic.md` |
 | 2026-06-26 | **카드 연결 카디널리티 재확정**: Concept:Risk-type=N:N / Risk-type:Rule=**1:1** (핵심변경, 전속 소속, 공유 불가) / Rule:Evidence=N:N / Rule:Policy=N:N. 전체 파일 전수 반영. | `context/card-policy.md`, `policy/02·03·06_*.html`, `mockups_v2/00·01·04·07·10·11·13_*.html` |

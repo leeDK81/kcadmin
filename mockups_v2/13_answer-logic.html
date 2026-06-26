@@ -192,7 +192,24 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
     <div class="section-title"><i class="fa-solid fa-user-check fa-fw" style="color:#1A4A9A"></i> 사용자 데이터 상태 — 선행 분기 <span style="font-size:12px;font-weight:400;color:var(--text-hint);margin-left:8px">2026-06-26 확정</span></div>
     <div class="note-box" style="margin-bottom:14px">
       <strong>Clark과 KC Engine은 별개 서비스·별개 법인입니다.</strong><br>
-      Clark(마이데이터 사업자 보험앱)이 사용자 상태에 따라 KC Engine에 전달하는 데이터가 달라집니다. KC Engine은 수신한 데이터 범위 내에서만 Rule을 평가할 수 있습니다.
+      KC Engine은 Clark의 회원 DB에 접근할 수 없습니다. Clark이 API 호출 시 <code style="background:#FFF0D0;padding:1px 5px;border-radius:3px;font-size:12px">user_state</code> 파라미터를 명시적으로 전달해야 KC Engine이 Rule 평가 범위와 Playbook CTA 타입을 결정할 수 있습니다.
+    </div>
+
+    <!-- API 호출 구조 -->
+    <div class="section-sub">Clark → KC Engine API 호출 구조</div>
+    <div style="background:#1E1E1E;border-radius:8px;padding:16px 20px;margin-bottom:16px;font-family:monospace;font-size:13px;line-height:1.8;color:#D4D4D4">
+      <span style="color:#569CD6">{</span><br>
+      &nbsp;&nbsp;<span style="color:#9CDCFE">"query"</span><span style="color:#D4D4D4">: </span><span style="color:#CE9178">"암진단금 얼마야"</span><span style="color:#D4D4D4">,</span><br>
+      &nbsp;&nbsp;<span style="color:#9CDCFE">"user_state"</span><span style="color:#D4D4D4">: </span><span style="color:#CE9178">"ANONYMOUS"</span><span style="color:#D4D4D4"> | </span><span style="color:#CE9178">"MEMBER_NO_MYDATA"</span><span style="color:#D4D4D4"> | </span><span style="color:#CE9178">"MEMBER_WITH_MYDATA"</span><span style="color:#D4D4D4">,</span><br>
+      &nbsp;&nbsp;<span style="color:#9CDCFE">"profile"</span><span style="color:#D4D4D4">: </span><span style="color:#569CD6">{ ... }</span><span style="color:#D4D4D4"> or </span><span style="color:#569CD6">null</span><span style="color:#D4D4D4">,</span><br>
+      &nbsp;&nbsp;<span style="color:#9CDCFE">"mydata"</span><span style="color:#D4D4D4">:   </span><span style="color:#569CD6">{ ... }</span><span style="color:#D4D4D4"> or </span><span style="color:#569CD6">null</span><span style="color:#D4D4D4">,</span><br>
+      &nbsp;&nbsp;<span style="color:#9CDCFE">"promage"</span><span style="color:#D4D4D4">:  </span><span style="color:#569CD6">{ ... }</span><span style="color:#D4D4D4"> or </span><span style="color:#569CD6">null</span><br>
+      <span style="color:#569CD6">}</span>
+    </div>
+    <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;line-height:1.7">
+      KC Engine은 <code style="background:#F0F0EC;padding:1px 5px;border-radius:3px">user_state</code> 값으로 두 가지를 결정합니다:<br>
+      <strong>① Rule 평가 범위</strong> — 어떤 데이터 조건을 평가할 수 있는지<br>
+      <strong>② Playbook CTA 타입</strong> — 키워드 감지 시 어떤 전환 액션을 반환할지
     </div>
     <table class="spec-table" style="margin-bottom:16px">
       <thead>
@@ -237,22 +254,22 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
     <div style="display:grid;gap:10px;margin-top:8px">
       <!-- 상태 ① -->
       <div style="background:#FFF4F2;border:1.5px solid #F0B0A0;border-radius:8px;padding:14px 16px">
-        <div style="font-weight:700;color:#A32D2D;margin-bottom:8px;font-size:14px"><i class="fa-solid fa-user-slash fa-fw"></i> ① 미가입</div>
+        <div style="font-weight:700;color:#A32D2D;margin-bottom:8px;font-size:14px"><i class="fa-solid fa-user-slash fa-fw"></i> ① 미가입 <code style="font-size:11px;background:#F0D0C8;padding:1px 6px;border-radius:3px;margin-left:6px">ANONYMOUS</code></div>
         <div style="font-size:13px;line-height:1.8;color:var(--text-primary);font-family:monospace">
           KC 체인 평가 불가 (전달 데이터 없음)<br>
           &nbsp;→ FAQ RAG → 결과 없으면 → Fallback LLM<br>
-          &nbsp;+ Playbook 병렬: 감지 시 <strong>회원가입 유도 CTA</strong>
+          &nbsp;+ Playbook 병렬: 감지 시 → user_state=ANONYMOUS → <strong>회원가입 유도 CTA</strong>
         </div>
       </div>
       <!-- 상태 ② -->
       <div style="background:#FFFBEE;border:1.5px solid #F0D880;border-radius:8px;padding:14px 16px">
-        <div style="font-weight:700;color:#BA7517;margin-bottom:8px;font-size:14px"><i class="fa-solid fa-link-slash fa-fw"></i> ② 가입 + 마이데이터 미연결</div>
+        <div style="font-weight:700;color:#BA7517;margin-bottom:8px;font-size:14px"><i class="fa-solid fa-link-slash fa-fw"></i> ② 가입 + 마이데이터 미연결 <code style="font-size:11px;background:#F5E8A0;padding:1px 6px;border-radius:3px;margin-left:6px">MEMBER_NO_MYDATA</code></div>
         <div style="font-size:13px;line-height:1.8;color:var(--text-primary);font-family:monospace">
           KC 체인 → PROFILE 조건 Rule만 평가<br>
           &nbsp;├─ PROFILE Rule 통과 → KC 구조화 답변 + 마이데이터 연결 유도 문구<br>
           &nbsp;└─ Rule 미통과 → FAQ RAG → 결과 없으면 → Fallback LLM<br>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ 마이데이터 연결 유도 문구 (공통)<br>
-          &nbsp;+ Playbook 병렬: 감지 시 보험 상담 CTA + 마이데이터 연결 유도
+          &nbsp;+ Playbook 병렬: 감지 시 → user_state=MEMBER_NO_MYDATA → <strong>마이데이터 연결 유도 CTA</strong>
         </div>
         <div style="font-size:12px;color:#7A5A00;background:#FFF9EC;border:1px solid #F0D880;border-radius:4px;padding:6px 10px;margin-top:8px;line-height:1.5">
           <strong>마이데이터 연결 유도 예시:</strong> "마이데이터를 연결하면 내 보험 계약 기반의 정확한 진단을 받을 수 있습니다"<br>
@@ -261,14 +278,40 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
       </div>
       <!-- 상태 ③ -->
       <div style="background:#F0FAF5;border:1.5px solid #7ABCAA;border-radius:8px;padding:14px 16px">
-        <div style="font-weight:700;color:#0F6E56;margin-bottom:8px;font-size:14px"><i class="fa-solid fa-circle-check fa-fw"></i> ③ 가입 + 마이데이터 연결</div>
+        <div style="font-weight:700;color:#0F6E56;margin-bottom:8px;font-size:14px"><i class="fa-solid fa-circle-check fa-fw"></i> ③ 가입 + 마이데이터 연결 <code style="font-size:11px;background:#B8E8D8;padding:1px 6px;border-radius:3px;margin-left:6px">MEMBER_WITH_MYDATA</code></div>
         <div style="font-size:13px;line-height:1.8;color:var(--text-primary);font-family:monospace">
           KC 체인 전체 평가 → Case 1~4 매트릭스 적용 (하단 참조)<br>
           &nbsp;RAG 순서: 약관 RAG → FAQ RAG → Fallback LLM<br>
-          &nbsp;+ Playbook 병렬: 감지 시 보험 상담 CTA
+          &nbsp;+ Playbook 병렬: 감지 시 → user_state=MEMBER_WITH_MYDATA → <strong>Playbook 카드 설정 CTA</strong> (리드 전환)
         </div>
       </div>
     </div>
+
+    <!-- Playbook CTA 매핑 테이블 -->
+    <div class="section-sub" style="margin-top:18px">Playbook CTA — user_state별 매핑</div>
+    <table class="spec-table" style="margin-top:8px">
+      <thead>
+        <tr><th style="width:220px">user_state</th><th>Playbook 감지 시 CTA</th><th>비고</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code style="font-size:12px;background:#F0D0C8;padding:1px 6px;border-radius:3px">ANONYMOUS</code></td>
+          <td>회원가입 유도 CTA<br><span style="font-size:12px;color:var(--text-hint)">"무료로 가입하고 내 보험을 진단받아보세요"</span></td>
+          <td><span style="font-size:12px;color:var(--text-hint)">Clark이 전달한 user_state 기준. KC Engine이 CTA 타입 결정</span></td>
+        </tr>
+        <tr>
+          <td><code style="font-size:12px;background:#F5E8A0;padding:1px 6px;border-radius:3px">MEMBER_NO_MYDATA</code></td>
+          <td>마이데이터 연결 유도 CTA<br><span style="font-size:12px;color:var(--text-hint)">"마이데이터를 연결하면 맞춤 상담이 가능합니다"</span></td>
+          <td><span style="font-size:12px;color:var(--text-hint)">KC Engine이 CTA 타입 결정</span></td>
+        </tr>
+        <tr>
+          <td><code style="font-size:12px;background:#B8E8D8;padding:1px 6px;border-radius:3px">MEMBER_WITH_MYDATA</code></td>
+          <td>Playbook 카드에 운영자가 설정한 리드 전환 CTA</td>
+          <td><span style="font-size:12px;color:var(--text-hint)">Playbook 카드 설정값 사용</span></td>
+        </tr>
+      </tbody>
+    </table>
+
     <div class="note-box" style="margin-top:12px">
       <strong>약관 RAG는 ③ 상태에서만 가능:</strong> 마이데이터에서 가입 보험 상품 목록을 알아야 어떤 약관을 검색할지 특정 가능. ①② 상태에서는 FAQ RAG → Fallback LLM만 실행됩니다.
     </div>
