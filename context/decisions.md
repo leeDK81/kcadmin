@@ -49,6 +49,7 @@
 
 | 날짜 | 내용 | 진실원 파일 |
 |---|---|---|
+| 2026-06-26 | 사용자 상태 3→4가지로 확장: ①미가입(전체null) / ②회원+마이데이터·프롬에이지미연동(mydata·promage null) / ③마이데이터연동+프롬에이지미이용(promage null) / ④전체데이터(메인 이용). PROMAGE가 MYDATA와 독립 축으로 확정. Case 1~4는 MYDATA 있는 ③④ 전용. | `context/answer-logic.md`, `mockups_v2/13_answer-logic.html` |
 | 2026-06-26 | Playbook 데이터 미보유 감지 조건 확정: user_state 파라미터 방식 → null 체크 방식으로 전면 교체. Clark은 profile/mydata/promage를 null 포함 그대로 전달. KC Engine이 null 여부로 상태 판단. Playbook 카드에 "PROFILE 없음/MYDATA 없음/PROMAGE 없음" 체크박스 추가(선택), 해당 데이터 null 사용자에게만 감지. 16_card-editor-playbook.html UI 추가. | `context/answer-logic.md`, `mockups_v2/13_answer-logic.html`, `mockups_v2/16_card-editor-playbook.html` |
 | 2026-06-26 | 사용자 데이터 상태 3-분기 확정: ①미가입(데이터 없음→FAQ RAG→Fallback+회원가입CTA) / ②가입+마이데이터미연결(PROFILE Rule만 평가→KC부분답변 또는 FAQ RAG→Fallback+마이데이터연결유도) / ③가입+마이데이터연결(전체평가→Case 1~4). 약관 RAG는 ③ 상태에서만 가능. Clark과 KC Engine 별개 법인 구조 명시. | `context/answer-logic.md`, `mockups_v2/13_answer-logic.html` |
 | 2026-06-26 | Evidence 활용 방식 확정: LLM이 "활용 방법" 필드 기준으로 맥락에 맞는 Evidence 선택·인용 (전부 나열 아님). Rule당 Evidence 3개 이하 권장(하드 제한 없음). Policy는 연결된 전부 적용(AND), Rule당 1~2개 권장. | `context/answer-logic.md` |

@@ -232,7 +232,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
           <td><span style="color:#A32D2D;font-weight:700">전체 불가</span></td>
         </tr>
         <tr>
-          <td><strong>② 가입 + 마이데이터 미연동</strong></td>
+          <td><strong>② 회원 + 마이데이터·프롬에이지 미연동</strong></td>
           <td><span style="color:#0F6E56;font-weight:700">있음</span></td>
           <td><code style="font-size:12px;color:#A32D2D">null</code></td>
           <td><code style="font-size:12px;color:#A32D2D">null</code></td>
@@ -240,12 +240,20 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
           <td><span style="color:#BA7517;font-weight:700">PROFILE 조건만</span></td>
         </tr>
         <tr>
-          <td><strong>③ 가입 + 마이데이터 연동</strong></td>
+          <td><strong>③ 마이데이터 연동 + 프롬에이지 미이용</strong></td>
           <td><span style="color:#0F6E56;font-weight:700">있음</span></td>
           <td><span style="color:#0F6E56;font-weight:700">있음</span></td>
-          <td><span style="color:#BA7517;font-weight:700">연동 시</span></td>
+          <td><code style="font-size:12px;color:#A32D2D">null</code></td>
           <td><span style="color:#0F6E56;font-weight:700">가능</span></td>
-          <td><span style="color:#0F6E56;font-weight:700">전체 → Case 1~4</span></td>
+          <td><span style="color:#BA7517;font-weight:700">PROFILE+MYDATA (PROMAGE 스킵) → Case 1~4</span></td>
+        </tr>
+        <tr>
+          <td><strong>④ 메인 서비스 이용 (전체 데이터)</strong></td>
+          <td><span style="color:#0F6E56;font-weight:700">있음</span></td>
+          <td><span style="color:#0F6E56;font-weight:700">있음</span></td>
+          <td><span style="color:#0F6E56;font-weight:700">있음</span></td>
+          <td><span style="color:#0F6E56;font-weight:700">가능</span></td>
+          <td><span style="color:#0F6E56;font-weight:700">전체 평가 → Case 1~4</span></td>
         </tr>
       </tbody>
     </table>
@@ -263,7 +271,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
       </div>
       <!-- 상태 ② -->
       <div style="background:#FFFBEE;border:1.5px solid #F0D880;border-radius:8px;padding:14px 16px">
-        <div style="font-weight:700;color:#BA7517;margin-bottom:8px;font-size:14px"><i class="fa-solid fa-link-slash fa-fw"></i> ② 가입 + 마이데이터 미연동 <code style="font-size:11px;background:#F5E8A0;padding:1px 6px;border-radius:3px;margin-left:6px">mydata: null</code></div>
+        <div style="font-weight:700;color:#BA7517;margin-bottom:8px;font-size:14px"><i class="fa-solid fa-link-slash fa-fw"></i> ② 회원 + 마이데이터·프롬에이지 미연동 <code style="font-size:11px;background:#F5E8A0;padding:1px 6px;border-radius:3px;margin-left:6px">mydata: null</code></div>
         <div style="font-size:13px;line-height:1.8;color:var(--text-primary);font-family:monospace">
           KC 체인 → PROFILE 조건 Rule만 평가<br>
           &nbsp;├─ PROFILE Rule 통과 → KC 구조화 답변 + 마이데이터 연동 유도 문구<br>
@@ -277,10 +285,21 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
         </div>
       </div>
       <!-- 상태 ③ -->
-      <div style="background:#F0FAF5;border:1.5px solid #7ABCAA;border-radius:8px;padding:14px 16px">
-        <div style="font-weight:700;color:#0F6E56;margin-bottom:8px;font-size:14px"><i class="fa-solid fa-circle-check fa-fw"></i> ③ 가입 + 마이데이터 연동 <code style="font-size:11px;background:#B8E8D8;padding:1px 6px;border-radius:3px;margin-left:6px">전체 데이터 있음</code></div>
+      <div style="background:#EEF9F5;border:1.5px solid #A0D8C0;border-radius:8px;padding:14px 16px">
+        <div style="font-weight:700;color:#0A5A46;margin-bottom:8px;font-size:14px"><i class="fa-solid fa-circle-half-stroke fa-fw"></i> ③ 마이데이터 연동 + 프롬에이지 미이용 <code style="font-size:11px;background:#B8E8D8;padding:1px 6px;border-radius:3px;margin-left:6px">promage: null</code></div>
         <div style="font-size:13px;line-height:1.8;color:var(--text-primary);font-family:monospace">
-          KC 체인 전체 평가 → Case 1~4 매트릭스 적용 (하단 참조)<br>
+          KC 체인 → PROFILE + MYDATA 조건 평가 (PROMAGE 선택 조건은 스킵)<br>
+          &nbsp;→ Case 1~4 매트릭스 적용 (하단 참조)<br>
+          &nbsp;RAG 순서: 약관 RAG → FAQ RAG → Fallback LLM<br>
+          &nbsp;+ Playbook 병렬: "PROMAGE 없음" 조건 카드 or 일반 감지 → <strong>PROMAGE 연동 유도 or 리드 전환 CTA</strong>
+        </div>
+      </div>
+      <!-- 상태 ④ -->
+      <div style="background:#F0FAF5;border:1.5px solid #7ABCAA;border-radius:8px;padding:14px 16px">
+        <div style="font-weight:700;color:#0F6E56;margin-bottom:8px;font-size:14px"><i class="fa-solid fa-circle-check fa-fw"></i> ④ 메인 서비스 이용 (전체 데이터) <code style="font-size:11px;background:#B8E8D8;padding:1px 6px;border-radius:3px;margin-left:6px">전체 있음</code></div>
+        <div style="font-size:13px;line-height:1.8;color:var(--text-primary);font-family:monospace">
+          KC 체인 전체 평가 (PROFILE + MYDATA + PROMAGE)<br>
+          &nbsp;→ Case 1~4 매트릭스 적용 (하단 참조)<br>
           &nbsp;RAG 순서: 약관 RAG → FAQ RAG → Fallback LLM<br>
           &nbsp;+ Playbook 병렬: 일반 키워드 감지 → <strong>Playbook 카드에 설정된 리드 전환 CTA</strong>
         </div>
@@ -331,7 +350,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 
   <!-- 답변 케이스 결정 분기 -->
   <div class="section">
-    <div class="section-title"><i class="fa-solid fa-code-branch fa-fw" style="color:var(--card-playbook)"></i> 답변 케이스 결정 — KC 매칭 × Playbook 감지 <span style="font-size:12px;font-weight:400;color:var(--text-hint);margin-left:8px">상태 ③(마이데이터 연결) 전용</span></div>
+    <div class="section-title"><i class="fa-solid fa-code-branch fa-fw" style="color:var(--card-playbook)"></i> 답변 케이스 결정 — KC 매칭 × Playbook 감지 <span style="font-size:12px;font-weight:400;color:var(--text-hint);margin-left:8px">MYDATA 있는 상태 ③④ 전용</span></div>
     <p style="font-size:14px;color:var(--text-secondary);margin-bottom:14px">
       사용자 발화는 KC 메인 체인과 Playbook 체인이 <strong>동시에 독립 분석</strong>합니다. 두 결과의 조합에 따라 4가지 답변 케이스 중 하나가 결정됩니다.
     </p>
