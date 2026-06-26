@@ -204,4 +204,4 @@ KC 카드 미매칭(Case 3/4) 발생 시 RAG 레이어가 동작한다.
 | 07_permission.html | 권한 정책 |
 | 08_screen-policy.html | 화면별 정책 (19_faq-rag.html 스펙 포함) |
 
-**2026-06-22 policy/ 전수검사 완료:** 8개 파일 수정, 22건 변경 (Concept→Risk-type 필수 연결, Policy 필드 2개 확정, 가중치 제거, 금지어 교체, Playbook Standalone 선택사항 등 반영)
+**2026-06-26 policy/ 전수검사 완료:** 5개 파일 수정 (PROFILE 4개 필드·MYDATA coverage_amt 1종·PROMAGE 50개 항목·14_answer-logic-guide 삭제 처리 반영). 03·04·05·07은 이상 없음.

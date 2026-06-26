@@ -183,7 +183,7 @@
 | active | 일시중지 + 편집 |
 | paused | 재시작 + 편집 |
 
-**참조 파일:** `14_answer-logic-guide.html` (`17_playbook-answer-guide.html`은 삭제된 파일 — 사용 금지)
+**참조 파일:** `13_answer-logic.html` (`14_answer-logic-guide.html`, `17_playbook-answer-guide.html`은 삭제된 파일 — 사용 금지)
 
 ---
 

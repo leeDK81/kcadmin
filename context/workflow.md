@@ -124,11 +124,12 @@
 - "카드 캔버스" 메뉴 항목 추가 → `00_canvas-main.html`
 - "카드 연결 현황" (10_chain-visualizer.html) 메뉴 **제거** — deprecated
 - **`<div class="nav-section">` 섹션 레이블 완전 제거** — `nav-divider`만 사용
-- **사이드바 순서 (2026-06-24 확정):**
-- 카드 라이브러리 그룹 (divider) → 검수·승인 → **카드 연결** → 사전 테스트 → 시스템 설정 → FAQ Q&A (divider) → 참조 섹션
+- **사이드바 순서 (2026-06-25 업데이트):**
+- 카드 라이브러리 그룹 (divider) → 검수·승인 → **카드 연결** → 시스템 설정 → FAQ Q&A (divider) → 참조 섹션
+- "사전 테스트" 메뉴 완전 제거됨 (2026-06-25, 26개 파일 전수 반영)
 - 카드 연결은 승인된 카드만 연결 가능하므로 검수·승인 하단에 위치
 
-**참조 섹션 구성 (nav-divider 아래 4항목 순서):**
+**참조 섹션 구성 (nav-divider 아래 3항목 순서):**
   1. `13_answer-logic.html` — AI 답변 생성 로직
   2. `15_aio-guide.html` — AIO 가이드
   3. `12_coverage-code-table.html` — 담보코드
