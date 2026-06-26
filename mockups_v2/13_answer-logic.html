@@ -237,7 +237,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
           <td><code style="font-size:12px;color:#A32D2D">null</code></td>
           <td><code style="font-size:12px;color:#A32D2D">null</code></td>
           <td><span style="color:#A32D2D;font-weight:700">불가</span></td>
-          <td><span style="color:#BA7517;font-weight:700">PROFILE 조건만</span></td>
+          <td><span style="color:#BA7517;font-weight:700">PROFILE 조건만 통과 가능</span><br><span style="font-size:12px;color:var(--text-hint)">MYDATA·PROMAGE 필수 → 미통과 / 선택 → 스킵</span></td>
         </tr>
         <tr>
           <td><strong>③ 마이데이터 연동 + 프롬에이지 미이용</strong></td>
@@ -273,10 +273,12 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
       <div style="background:#FFFBEE;border:1.5px solid #F0D880;border-radius:8px;padding:14px 16px">
         <div style="font-weight:700;color:#BA7517;margin-bottom:8px;font-size:14px"><i class="fa-solid fa-link-slash fa-fw"></i> ② 회원 + 마이데이터·프롬에이지 미연동 <code style="font-size:11px;background:#F5E8A0;padding:1px 6px;border-radius:3px;margin-left:6px">mydata: null</code></div>
         <div style="font-size:13px;line-height:1.8;color:var(--text-primary);font-family:monospace">
-          KC 체인 → PROFILE 조건 Rule만 평가<br>
-          &nbsp;├─ PROFILE Rule 통과 → KC 구조화 답변 + 마이데이터 연동 유도 문구<br>
-          &nbsp;└─ Rule 미통과 → FAQ RAG → 결과 없으면 → Fallback LLM<br>
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ 마이데이터 연동 유도 문구 (공통)<br>
+          KC 체인 → 모든 Rule 평가 시도<br>
+          &nbsp;├─ MYDATA·PROMAGE 조건이 <strong>필수</strong>인 Rule → 데이터 null = 미통과<br>
+          &nbsp;├─ MYDATA·PROMAGE 조건이 <strong>선택</strong>인 Rule → 해당 조건 스킵, 나머지로 평가<br>
+          &nbsp;└─ PROFILE 조건만 있는 Rule → 정상 평가<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;├─ 통과 → KC 구조화 답변 + 마이데이터 연동 유도 문구<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;└─ 미통과 → FAQ RAG → 결과 없으면 → Fallback LLM<br>
           &nbsp;+ Playbook 병렬: "MYDATA 없음" 조건 카드 감지 → <strong>마이데이터 연동 유도 CTA</strong>
         </div>
         <div style="font-size:12px;color:#7A5A00;background:#FFF9EC;border:1px solid #F0D880;border-radius:4px;padding:6px 10px;margin-top:8px;line-height:1.5">
