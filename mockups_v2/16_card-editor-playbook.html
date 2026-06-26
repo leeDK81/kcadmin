@@ -205,6 +205,50 @@ textarea.form-control{resize:vertical;min-height:72px}
           <p class="field-hint">Playbook 카드는 현재 다른 카드와 직접 연결되지 않습니다. (Phase 1.5+ 검토 중 — 리드 스코어링 스펙 확정 시 결정)</p>
         </div>
 
+        <!-- 카드: 데이터 미보유 감지 조건 -->
+        <div class="card">
+          <div class="section-title">
+            <i class="fa-solid fa-database fa-fw" style="color:var(--card-playbook);font-size:15px"></i>
+            데이터 미보유 감지 조건
+            <span style="font-size:12px;font-weight:400;color:var(--text-hint);margin-left:4px">— 선택</span>
+          </div>
+
+          <div class="banner banner-purple" style="margin-bottom:14px">
+            <i class="fa-solid fa-circle-info" style="margin-right:6px"></i>
+            체크된 데이터가 <strong>없는</strong> 사용자에게만 이 Playbook이 감지됩니다. 아무것도 체크하지 않으면 데이터 보유 여부에 관계없이 키워드 발화만으로 감지됩니다.
+          </div>
+
+          <div class="form-group" style="margin-bottom:0">
+            <label>데이터 미보유 조건 <span class="field-hint">중복 선택 가능 — 동일 키워드에 상태별로 별도 Playbook을 등록하면 각 사용자에게 맞는 CTA를 노출할 수 있습니다</span></label>
+
+            <div style="display:flex;flex-direction:column;gap:8px;margin-top:10px">
+              <label style="display:flex;align-items:flex-start;gap:12px;cursor:pointer;padding:12px 14px;background:#FFF4F2;border:1.5px solid #F0C0B0;border-radius:6px;font-weight:400">
+                <input type="checkbox" style="width:16px;height:16px;margin-top:2px;accent-color:var(--card-playbook);flex-shrink:0">
+                <div>
+                  <div style="font-size:14px;font-weight:600;color:#A32D2D;margin-bottom:2px">PROFILE 없음</div>
+                  <div style="font-size:13px;color:var(--text-hint)">미가입 또는 미로그인 사용자 — 회원가입 유도 CTA에 적합</div>
+                </div>
+              </label>
+
+              <label style="display:flex;align-items:flex-start;gap:12px;cursor:pointer;padding:12px 14px;background:#FFFBEE;border:1.5px solid #F0D880;border-radius:6px;font-weight:400">
+                <input type="checkbox" style="width:16px;height:16px;margin-top:2px;accent-color:var(--card-playbook);flex-shrink:0">
+                <div>
+                  <div style="font-size:14px;font-weight:600;color:#BA7517;margin-bottom:2px">MYDATA 없음</div>
+                  <div style="font-size:13px;color:var(--text-hint)">마이데이터 미연동 사용자 — 마이데이터 연동 유도 CTA에 적합</div>
+                </div>
+              </label>
+
+              <label style="display:flex;align-items:flex-start;gap:12px;cursor:pointer;padding:12px 14px;background:#F4F0FA;border:1.5px solid #C8B0E8;border-radius:6px;font-weight:400">
+                <input type="checkbox" style="width:16px;height:16px;margin-top:2px;accent-color:var(--card-playbook);flex-shrink:0">
+                <div>
+                  <div style="font-size:14px;font-weight:600;color:#6B4A9A;margin-bottom:2px">PROMAGE 없음</div>
+                  <div style="font-size:13px;color:var(--text-hint)">건강정보 미연동 사용자 — PROMAGE 연동 유도 CTA에 적합</div>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+
         <!-- 카드 ②: 리드 전환 레이어 -->
         <div class="card">
           <div class="section-title">

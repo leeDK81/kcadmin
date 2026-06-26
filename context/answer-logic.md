@@ -8,66 +8,66 @@
 ## 사용자 데이터 상태 — 선행 분기 (2026-06-26 확정)
 
 > **Clark과 KC Engine은 별개 서비스·별개 법인이다.**
-> KC Engine은 Clark의 회원 DB에 접근할 수 없다. Clark이 API 호출 시 `user_state` 파라미터를 명시적으로 전달해야 KC Engine이 분기를 결정할 수 있다.
+> KC Engine은 Clark의 회원 DB에 접근할 수 없다. Clark은 가용한 데이터만 전달하고, KC Engine은 null 여부로 상태를 판단한다. 별도 `user_state` 파라미터 불필요.
 
 ### Clark → KC Engine API 호출 구조
 
 ```json
 {
   "query": "암진단금 얼마야",
-  "user_state": "ANONYMOUS" | "MEMBER_NO_MYDATA" | "MEMBER_WITH_MYDATA",
-  "profile": { ... } or null,
-  "mydata":   { ... } or null,
-  "promage":  { ... } or null
+  "profile": { ... } or null,   // null = 미가입 또는 미로그인
+  "mydata":   { ... } or null,  // null = 마이데이터 미연동
+  "promage":  { ... } or null   // null = 건강정보 미연동
 }
 ```
 
-KC Engine은 `user_state` 값으로 두 가지를 결정한다:
-1. **Rule 평가 범위** — 어떤 데이터 조건을 평가할 수 있는지
-2. **Playbook CTA 타입** — 감지 시 어떤 전환 액션을 반환할지
+KC Engine은 각 필드의 null 여부로 두 가지를 결정한다:
+1. **Rule 평가 범위** — null인 데이터 소스의 조건은 평가 생략
+2. **Playbook 감지 조건 대조** — 카드에 설정된 데이터 미보유 조건과 비교
 
 ### Clark → KC Engine 전달 데이터 (상태별)
 
 | 사용자 상태 | PROFILE | MYDATA | PROMAGE | 약관 RAG | KC 체인 평가 범위 |
 |---|---|---|---|---|---|
-| ① 미가입 | 없음 | 없음 | 없음 | 불가 | 전체 불가 |
-| ② 가입 + 마이데이터 미연결 | 있음 | 없음 | 없음 | 불가 | PROFILE 조건만 |
-| ③ 가입 + 마이데이터 연결 | 있음 | 있음 | 연동 시 | 가능 | 전체 가능 → Case 1~4 |
+| ① 미가입/미로그인 | null | null | null | 불가 | 전체 불가 |
+| ② 가입 + 마이데이터 미연동 | 있음 | null | null | 불가 | PROFILE 조건만 |
+| ③ 가입 + 마이데이터 연동 | 있음 | 있음 | 연동 시 | 가능 | 전체 가능 → Case 1~4 |
 
 **약관 RAG 가능 조건**: 마이데이터에서 가입 상품 목록을 알아야 어떤 약관을 검색할지 특정 가능. ①② 상태에서는 불가.
 
 ### 상태별 답변 흐름
 
 ```
-[상태 ① — ANONYMOUS]
+[상태 ① — profile: null]
 KC 체인 평가 전체 불가 (전달 데이터 없음)
   └─ FAQ RAG → 결과 없으면 → Fallback LLM
-     + Playbook 병렬: 감지 시 → user_state=ANONYMOUS → 회원가입 유도 CTA
+     + Playbook 병렬: "PROFILE 없음" 조건 Playbook 감지 → 해당 CTA
 
-[상태 ② — MEMBER_NO_MYDATA]
+[상태 ② — mydata: null]
 KC 체인 → PROFILE 조건 Rule만 평가
-  ├─ PROFILE Rule 통과
-  │    └─ KC 구조화 답변 + 마이데이터 연결 유도 문구 *
-  └─ PROFILE Rule 미통과
-       └─ FAQ RAG → 결과 없으면 → Fallback LLM
-          (모든 ② 답변에 마이데이터 연결 유도 문구 공통 포함)
-  + Playbook 병렬: 감지 시 → user_state=MEMBER_NO_MYDATA → 마이데이터 연결 유도 CTA
+  ├─ PROFILE Rule 통과 → KC 구조화 답변 + 마이데이터 연동 유도 문구
+  └─ Rule 미통과 → FAQ RAG → 결과 없으면 → Fallback LLM
+     (모든 ② 답변에 마이데이터 연동 유도 문구 공통 포함)
+  + Playbook 병렬: "MYDATA 없음" 조건 Playbook 감지 → 해당 CTA
 
-[상태 ③ — MEMBER_WITH_MYDATA]
+[상태 ③ — 전체 데이터 있음]
 KC 체인 전체 평가 → Case 1~4 매트릭스 적용 (하단 참조)
 RAG 순서: 약관 RAG → FAQ RAG → Fallback LLM
-+ Playbook 병렬: 감지 시 → user_state=MEMBER_WITH_MYDATA → Playbook 카드 정의 CTA (리드 전환)
++ Playbook 병렬: 일반 키워드 감지 → Playbook 카드 설정 CTA (리드 전환)
 ```
 
-### Playbook CTA — user_state별 매핑
+### Playbook 데이터 미보유 감지 조건
 
-| user_state | Playbook 감지 시 CTA |
-|---|---|
-| `ANONYMOUS` | 회원가입 유도 ("무료로 가입하고 내 보험을 진단받아보세요") |
-| `MEMBER_NO_MYDATA` | 마이데이터 연결 유도 ("마이데이터를 연결하면 맞춤 상담이 가능합니다") |
-| `MEMBER_WITH_MYDATA` | Playbook 카드에 운영자가 설정한 리드 전환 CTA |
+Playbook 카드 편집기에서 아래 조건을 선택적으로 설정할 수 있다. 체크된 조건에 해당하는 사용자에게만 이 Playbook이 감지된다. 아무 조건도 체크하지 않으면 데이터 보유 여부에 관계없이 키워드 발화만으로 감지된다.
 
-KC Engine은 `user_state` 파라미터만으로 CTA를 결정. Clark 회원 DB 직접 조회 없음.
+| 체크 조건 | 감지 대상 | 활용 예 |
+|---|---|---|
+| PROFILE 없음 | 미가입/미로그인 | 회원가입 유도 CTA |
+| MYDATA 없음 | 마이데이터 미연동 | 마이데이터 연결 유도 CTA |
+| PROMAGE 없음 | 건강정보 미연동 | PROMAGE 연동 유도 CTA |
+| (없음) | 전체 사용자 | 일반 리드 전환 CTA |
+
+동일 키워드에 대해 데이터 상태별로 별도 Playbook 카드를 등록하면 상태에 맞는 CTA를 각각 노출할 수 있다.
 
 ---
 
