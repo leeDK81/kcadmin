@@ -1089,8 +1089,8 @@ function openConnect(fromId, toId) {
   const hasPending = fromCard.status === 'approved' || toCard.status === 'approved';
   document.getElementById('modalTitle').textContent = hasPending ? '준비 연결 추가' : '연결 추가';
   document.getElementById('modalDesc').textContent = hasPending
-    ? '승인완료 카드를 연결합니다. 캔버스에 준비 연결(점선)로 표시되며, 라이브 전환 후 KC Engine에 반영됩니다.'
-    : '아래 두 카드를 연결합니다. 확인 후 캔버스 및 KC Engine에 즉시 반영됩니다.';
+    ? '승인완료 카드를 연결합니다. 캔버스에 준비 연결(점선)로 표시되며, 라이브 전환 후 Clark AI에 반영됩니다.'
+    : '아래 두 카드를 연결합니다. 확인 후 캔버스 및 Clark AI에 즉시 반영됩니다.';
 
   // Rule → Evidence 3개 초과 시 경고
   const warnEl   = document.getElementById('modalWarn');

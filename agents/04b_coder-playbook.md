@@ -128,7 +128,7 @@ function act(type, id) {
 - [ ] Card ②: `btnPreview` div에 `updatePreview()` 실시간 렌더링
 - [ ] Card ②: Standalone 답변 가이드 textarea — border-top 구분선으로 구분. chip-opt(선택) 배지. placeholder="비워두면 Clark 기본 안내 문구 사용". minlength 없음.
 - [ ] Card ②: Standalone 발동 조건 배너 (`.banner-info`, "KC 카드 미매칭 + Playbook 키워드 감지 시(Case 4)")
-- [ ] Card ②: Standalone 배너 링크 → `14_answer-logic-guide.html` (`17` 파일 사용 금지)
+- [ ] Card ②: Standalone 배너 링크 → `13_answer-logic.html` (`14_answer-logic-guide.html` 삭제된 파일 — 연결 금지)
 - [ ] Card ②: `standaloneCount` span + `updateStandaloneCounter()` 함수 (20자 미만 빨간색 로직 없음)
 - [ ] Card ②: `requestReview()`는 standaloneGuide 길이로 차단하지 않음 (선택 항목)
 - [ ] Card ③: `scoring-inactive` / `scoring-active` 토글 구현

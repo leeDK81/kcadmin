@@ -103,7 +103,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
   <div class="guide-box">
     <h3>이 문서의 목적</h3>
     <p>KC Admin은 Clark AI가 사용자 질문에 정확하게 답변하도록 판단 기준(KC 카드)을 등록·관리하는 도구입니다. 카드가 없거나 매칭이 안 되면 RAG 레이어가 먼저 동작합니다. 약관 RAG(가입 상품 약관 자동 파싱)와 FAQ RAG(Clark 서비스 전용 Q&A)가 순서대로 검색되며, RAG 결과도 없을 때만 제한된 Fallback 생성형 AI 답변이 나옵니다. 이 가이드를 읽고 순서대로 따라하면 Clark AI의 KC 기반 답변이 사용 가능해집니다.</p>
-    <p style="margin-top:8px;font-size:13px;color:var(--text-secondary)"><strong>답변 우선순위:</strong> KC 체인 기반 정밀 답변 (Case 1·2) → RAG 기반 답변 (Case 3 RAG 성공) → Fallback 제한 생성형 (Case 3 RAG 실패) / Playbook Standalone (Case 4)</p>
+    <p style="margin-top:8px;font-size:13px;color:var(--text-secondary)"><strong>답변 우선순위:</strong> KC 체인 기반 정밀 답변 (Case 1·2) → RAG 기반 답변 (Case 3 RAG 성공) → Fallback 제한 생성형 (Case 3 RAG 실패) / Playbook Standalone (Case 4) <span style="color:#A32D2D;font-weight:600">— Case 1~4는 마이데이터 연동 상태(③④)에서만 적용</span></p>
   </div>
 
   <!-- AI 답변 로직 링크 -->

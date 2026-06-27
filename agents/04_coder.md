@@ -150,13 +150,13 @@ HTML 패턴 → `guides/ux-patterns.md` 참조.
 - [ ] LEFT 컬럼 5개 독립 `.card` (①기본정보→②Risk-type→③판단조건→④Evidence→⑤액션)
 - [ ] 게이트 카드: Risk-type ☑ + 판단조건 ☑ + Evidence ☑ 충족 시 버튼 활성
 - [ ] MYDATA 행: 담보코드+확인항목+조건+기준값+힌트+구분(필수/선택)+삭제 7열. required=true 기본값 (필수). 화면 표기: "마이데이터"
-- [ ] Promage 행: 카테고리+항목+조건+기준값+구분(필수/선택)+삭제. required=false 기본값 (선택). 화면 표기: "프롬에이지". 힌트: "선택 조건 권장 — 필수 설정 시 미연동 사용자 Rule 미발동"
+- [ ] Promage 행: 위험도 select(50개 항목)+조건(같음 고정)+기준값(위험/주의/양호)+구분(필수/선택)+삭제. required=false 기본값 (선택). 화면 표기: "프롬에이지". 힌트: "선택 조건 권장 — 필수 설정 시 미연동 사용자 Rule 미발동"
 - [ ] 프로파일 행: 항목+조건+기준값+구분(필수/선택)+삭제. required=true 기본값 (필수). 화면 표기: "프로파일"
 - [ ] ConditionRow 데이터 구조에 required:boolean 속성 포함 (소스별 기본값 다름)
 - [ ] 구분 라디오: 필수(빨간 텍스트) / 선택(회색 텍스트). `name="req-${id}"` 패턴
 - [ ] AMPLITUDE 행 없음
 - [ ] 소스 3종만: MYDATA / PROMAGE / PROFILE (Amplitude 없음)
-- [ ] useContractDb 옵션: Rule 카드의 선택 옵션 — 활성 시 담보코드 기준 약관 자동 조회 → 면책조항 자동 포함 (Policy 카드와 별개)
+- [ ] useContractDb 체크박스 없음: 약관 DB는 엔진 자동 처리(있으면 참조, 없으면 없이 답변) — 운영자 제어 불필요. 이 옵션이 코드에 남아 있으면 제거
 
 **목록 테이블**
 - [ ] `.list-table`: `table-layout:fixed`

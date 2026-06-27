@@ -170,7 +170,7 @@ HTML/CSS 패턴 → `guides/ux-patterns.md` 캔버스 섹션 참조.
 | 열 | MYDATA 행 | Promage 행 | 프로파일 행 |
 |---|---|---|---|
 | ① 소스 | MYDATA select | Promage select | 프로파일 select |
-| ② 대상 | 담보코드 select (9종) | 카테고리 select (암위험도/생체나이/질병위험도/의료비예측) | 항목 select (나이/성별/결혼/자녀/직업위험도/출산예정/거주지) |
+| ② 대상 | 담보코드 select (9종) | 위험도 (단일 카테고리 — 암위험도+질병위험도 50개 항목 통합, EQ only) | 항목 select (나이/성별/결혼/자녀 4개) |
 | ③ 확인항목 | coverage_amt 등 5종 | 세부 항목 select | — (②에 통합) |
 | ④ 조건 | 이하(≤)/이상(≥)/같음 등 | 같음/포함안됨 또는 이상/이하 | number→이상/이하/초과/미만/같음, enum→같음/포함됨/포함안됨 |
 | ⑤ 기준값 | 숫자 input + 힌트 | 위험/주의/양호 select 또는 수치 | 수치 input 또는 값 select |
@@ -202,7 +202,7 @@ HTML/CSS 패턴 → `guides/ux-patterns.md` 캔버스 섹션 참조.
 
 ## Playbook 편집기 확정 규칙 (2026-06-22)
 
-**참조 파일:** `14_answer-logic-guide.html`
+**참조 파일:** `13_answer-logic.html`
 
 | 필드 | 구분 | 규칙 |
 |---|---|---|

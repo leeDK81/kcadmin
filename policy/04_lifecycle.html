@@ -119,7 +119,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 
     <div class="state-block" style="border-left:4px solid var(--status-approved)">
       <h3><span class="badge badge-approved">승인완료 (approved)</span></h3>
-      <p>검수자가 내용을 승인한 상태. 캔버스에서 연결 가능(준비 연결, pending 엣지). Clark AI에는 아직 미반영. 사전 테스트(Dry-run) 후 배포 요청으로 라이브 전환 가능.</p>
+      <p>검수자가 내용을 승인한 상태. 캔버스에서 연결 가능(준비 연결, pending 엣지). Clark AI에는 아직 미반영. 사전 테스트 후 배포 요청으로 라이브 전환 가능.</p>
       <p style="margin-top:6px"><strong>Policy 카드 특이사항:</strong> 도메인 검수자 승인 후 준법감시인 추가 승인 필요. 두 단계 모두 완료해야 approved 상태.</p>
       <p style="margin-top:6px"><strong>Playbook 카드 특이사항:</strong> Playbook은 다른 카드와 캔버스 연결을 하지 않는다(CONNECT_RULES 미적용, 독립 체인). 따라서 approved 상태에서 캔버스 연결 없이 <strong>바로 "라이브 전환" 버튼</strong>이 노출된다. 사전 테스트 단계도 생략 가능.</p>
       <p style="margin-top:6px"><strong>전환 조건 (일반 카드):</strong> 캔버스 연결 → 사전 테스트 통과 → 배포 요청 → active<br><strong>전환 조건 (Playbook):</strong> 승인완료 → "라이브 전환" 버튼 클릭 → active (캔버스 연결·사전 테스트 불필요)</p>

@@ -122,7 +122,7 @@
 | Standalone 글자 수 카운터 | textarea 하단에 `standaloneCount` span + "N자 / 150자 이내 권장" 표시. "20자 이상 필수" 문구 완전 삭제 확인 |
 | Standalone 빈칸 처리 | 비워두면 Clark 기본 안내 문구 사용 — 이 안내 힌트 있는가? |
 | Standalone 발동 조건 배너 | `.banner-info`로 "KC 카드 미매칭 + Playbook 키워드 감지 시(Case 4)" 안내 있는가? |
-| Standalone 배너 링크 | `14_answer-logic-guide.html`로 연결. `17_playbook-answer-guide.html` 링크는 삭제된 파일이므로 즉시 수정 필요 |
+| Standalone 배너 링크 | `13_answer-logic.html`로 연결. `14_answer-logic-guide.html` 및 `17_playbook-answer-guide.html`은 삭제된 파일이므로 즉시 수정 필요 |
 | Card ③ 비활성 | 상담 연결 버튼 없을 때: fa-ban 아이콘 + 회색 텍스트 + 배지 배경 회색 |
 | Card ③ 활성 | 상담 연결 버튼 있을 때: 보라색 배지 + "GA 수신 스펙 확정 후 구성 예정" 안내 |
 | sum-box | "리드 스코어링·GA 전달 / GA 수신 스펙 확정 후" 텍스트 표시 |

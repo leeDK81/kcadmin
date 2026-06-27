@@ -191,12 +191,12 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
   <div class="section">
     <div class="section-title"><i class="fa-solid fa-user-check fa-fw" style="color:#1A4A9A"></i> 사용자 데이터 상태 — 선행 분기 <span style="font-size:12px;font-weight:400;color:var(--text-hint);margin-left:8px">2026-06-26 확정</span></div>
     <div class="note-box" style="margin-bottom:14px">
-      <strong>Clark과 KC Engine은 별개 서비스·별개 법인입니다.</strong><br>
-      KC Engine은 Clark의 회원 DB에 접근할 수 없습니다. Clark은 가용한 데이터만 전달하고 KC Engine은 <code style="background:#FFF0D0;padding:1px 5px;border-radius:3px;font-size:12px">null</code> 여부로 상태를 판단합니다. 별도 user_state 파라미터 불필요.
+      <strong>Clark과 KC 엔진은 별개 서비스·별개 법인입니다.</strong><br>
+      KC 엔진은 Clark의 회원 DB에 접근할 수 없습니다. Clark은 가용한 데이터만 전달하고 KC 엔진은 <code style="background:#FFF0D0;padding:1px 5px;border-radius:3px;font-size:12px">null</code> 여부로 상태를 판단합니다. 별도 user_state 파라미터 불필요.
     </div>
 
     <!-- API 호출 구조 -->
-    <div class="section-sub">Clark → KC Engine API 호출 구조</div>
+    <div class="section-sub">Clark → KC 엔진 API 호출 구조</div>
     <div style="background:#1E1E1E;border-radius:8px;padding:16px 20px;margin-bottom:16px;font-family:monospace;font-size:13px;line-height:1.9;color:#D4D4D4">
       <span style="color:#569CD6">{</span><br>
       &nbsp;&nbsp;<span style="color:#9CDCFE">"query"</span><span style="color:#D4D4D4">: </span><span style="color:#CE9178">"암진단금 얼마야"</span><span style="color:#D4D4D4">,</span><br>
@@ -206,7 +206,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
       <span style="color:#569CD6">}</span>
     </div>
     <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;line-height:1.7">
-      KC Engine은 각 필드의 null 여부로 두 가지를 결정합니다:<br>
+      KC 엔진은 각 필드의 null 여부로 두 가지를 결정합니다:<br>
       <strong>① Rule 평가 범위</strong> — null인 데이터 소스의 조건은 평가 생략<br>
       <strong>② Playbook 감지 조건 대조</strong> — 카드에 설정된 데이터 미보유 조건과 비교
     </div>
@@ -237,7 +237,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
           <td><code style="font-size:12px;color:#A32D2D">null</code></td>
           <td><code style="font-size:12px;color:#A32D2D">null</code></td>
           <td><span style="color:#A32D2D;font-weight:700">불가</span></td>
-          <td><span style="color:#BA7517;font-weight:700">PROFILE 조건만 통과 가능</span><br><span style="font-size:12px;color:var(--text-hint)">MYDATA·PROMAGE 필수 → 미통과 / 선택 → 스킵</span></td>
+          <td><span style="color:#BA7517;font-weight:700">PROFILE 조건만 통과 가능</span><br><span style="font-size:12px;color:var(--text-hint)">마이데이터·프롬에이지 필수 → 미통과 / 선택 → 스킵</span></td>
         </tr>
         <tr>
           <td><strong>③ 마이데이터 연동 + 프롬에이지 미이용</strong></td>
@@ -274,8 +274,8 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
         <div style="font-weight:700;color:#BA7517;margin-bottom:8px;font-size:14px"><i class="fa-solid fa-link-slash fa-fw"></i> ② 회원 + 마이데이터·프롬에이지 미연동 <code style="font-size:11px;background:#F5E8A0;padding:1px 6px;border-radius:3px;margin-left:6px">mydata: null</code></div>
         <div style="font-size:13px;line-height:1.8;color:var(--text-primary);font-family:monospace">
           KC 체인 → 모든 Rule 평가 시도<br>
-          &nbsp;├─ MYDATA·PROMAGE 조건이 <strong>필수</strong>인 Rule → 데이터 null = 미통과<br>
-          &nbsp;├─ MYDATA·PROMAGE 조건이 <strong>선택</strong>인 Rule → 해당 조건 스킵, 나머지로 평가<br>
+          &nbsp;├─ 마이데이터·프롬에이지 조건이 <strong>필수</strong>인 Rule → 데이터 null = 미통과<br>
+          &nbsp;├─ 마이데이터·프롬에이지 조건이 <strong>선택</strong>인 Rule → 해당 조건 스킵, 나머지로 평가<br>
           &nbsp;└─ PROFILE 조건만 있는 Rule → 정상 평가<br>
           &nbsp;&nbsp;&nbsp;&nbsp;├─ 통과 → KC 구조화 답변 + 마이데이터 연동 유도 문구<br>
           &nbsp;&nbsp;&nbsp;&nbsp;└─ 미통과 → FAQ RAG → 결과 없으면 → Fallback LLM<br>

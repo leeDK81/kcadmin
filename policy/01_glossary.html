@@ -180,7 +180,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 
   <!-- AI 답변 케이스 -->
   <div class="card">
-    <div class="section-title">AI 답변 케이스</div>
+    <div class="section-title">AI 답변 케이스 <span style="font-size:12px;font-weight:400;color:#A32D2D;margin-left:8px">Case 1~4는 마이데이터 연동 상태(③④) 전용</span></div>
     <div class="term-row">
       <div class="term-name">Case 1 — KC 기반 정밀 답변</div>
       <div class="term-def">KC Concept 매칭O + Playbook 미감지. KC 카드 체인(Concept→Risk-type→Rule→Evidence/Policy)을 완전 통과하여 Clark AI가 맞춤형 구조화 답변 생성.</div>
@@ -243,11 +243,11 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
     </div>
     <div class="term-row">
       <div class="term-name">RAG <span class="tag" style="background:rgba(26,74,154,.08);color:#1A3A6B">Retrieval-Augmented Generation</span></div>
-      <div class="term-def">KC 미매칭 시 내부 문서를 벡터 검색해 답변 근거를 보강하는 레이어. KC 체인보다 낮은 우선순위로 동작하며, 유사도 임계값 이상 결과가 있을 때만 RAG 기반 답변을 출력한다. 소스는 약관 RAG(가입 상품 약관 자동 파싱)와 FAQ RAG(Clark 서비스 전용 Q&A) 2종. 모두 보닥 내부 데이터이며 외부 공개 정보를 소스로 사용하지 않는다.</div>
+      <div class="term-def">KC 미매칭 시 내부 문서를 벡터 검색해 답변 근거를 보강하는 레이어. KC 체인보다 낮은 우선순위로 동작하며, 유사도 기준값 이상 결과가 있을 때만 RAG 기반 답변을 출력한다. 소스는 약관 RAG(가입 상품 약관 자동 파싱)와 FAQ RAG(Clark 서비스 전용 Q&A) 2종. 모두 보닥 내부 데이터이며 외부 공개 정보를 소스로 사용하지 않는다.</div>
     </div>
     <div class="term-row">
       <div class="term-name">약관 RAG</div>
-      <div class="term-def">보험 약관을 자동 파싱하여 인덱스를 구성하는 RAG 소스. 크롤러 감지 → 재파싱 → 인덱스 갱신 파이프라인으로 운영자 개입 없이 자동화. 설정은 관리자가 시스템 설정에서 관리.</div>
+      <div class="term-def">보험 약관을 자동 파싱하여 인덱스를 구성하는 RAG 소스. <strong>마이데이터 연동 상태(③④)에서만 가능</strong> — 미연동 시 건너뜀. 크롤러 감지 → 재파싱 → 인덱스 갱신 파이프라인으로 운영자 개입 없이 자동화. 설정은 관리자가 시스템 설정에서 관리.</div>
     </div>
     <div class="term-row">
       <div class="term-name">FAQ RAG</div>
