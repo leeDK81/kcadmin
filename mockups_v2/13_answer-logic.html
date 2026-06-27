@@ -350,6 +350,78 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
     </div>
   </div>
 
+  <!-- 답변 제공 조건 요약 -->
+  <div class="section">
+    <div class="section-title"><i class="fa-solid fa-table-list fa-fw" style="color:var(--card-concept)"></i> 답변 제공 조건 — 사용자 데이터 상태별 요약</div>
+    <p style="font-size:14px;color:var(--text-secondary);margin-bottom:14px">
+      사용자가 보유한 데이터 조합에 따라 가용한 답변 경로와 Playbook 감지 조건이 달라집니다.<br>
+      앞 단계 성공 시 뒤 단계는 호출하지 않습니다(분기). Playbook CTA는 어느 경로든 키워드 감지 시 가산됩니다.
+    </p>
+    <table class="spec-table">
+      <thead>
+        <tr>
+          <th style="text-align:center;width:72px">프로파일</th>
+          <th style="text-align:center;width:80px">마이데이터</th>
+          <th style="text-align:center;width:80px">프롬에이지</th>
+          <th style="width:220px">상태</th>
+          <th>답변 우선순위</th>
+          <th style="width:220px">Playbook</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="text-align:center;font-size:16px;font-weight:700;color:#0F6E56">O</td>
+          <td style="text-align:center;font-size:16px;font-weight:700;color:#0F6E56">O</td>
+          <td style="text-align:center;font-size:16px;font-weight:700;color:#0F6E56">O</td>
+          <td><strong>④ 회원 + 마이데이터 + 프롬에이지 이용</strong></td>
+          <td style="font-size:13px;line-height:1.8">
+            KC 기반 답변(전체 평가)<br>
+            <span style="color:var(--text-hint)">&nbsp;→ 실패 시</span> 약관 RAG<br>
+            <span style="color:var(--text-hint)">&nbsp;→ 실패 시</span> FAQ RAG<br>
+            <span style="color:var(--text-hint)">&nbsp;→ 실패 시</span> LLM
+          </td>
+          <td style="font-size:13px;line-height:1.7">일반 키워드 감지<br>→ 리드 전환 CTA</td>
+        </tr>
+        <tr>
+          <td style="text-align:center;font-size:16px;font-weight:700;color:#0F6E56">O</td>
+          <td style="text-align:center;font-size:16px;font-weight:700;color:#0F6E56">O</td>
+          <td style="text-align:center;font-size:16px;font-weight:700;color:#A32D2D">X</td>
+          <td><strong>③ 회원 + 마이데이터 연동 + 프롬에이지 미이용</strong></td>
+          <td style="font-size:13px;line-height:1.8">
+            KC 기반 답변(PROMAGE 조건 스킵)<br>
+            <span style="color:var(--text-hint)">&nbsp;→ 실패 시</span> 약관 RAG<br>
+            <span style="color:var(--text-hint)">&nbsp;→ 실패 시</span> FAQ RAG<br>
+            <span style="color:var(--text-hint)">&nbsp;→ 실패 시</span> LLM
+          </td>
+          <td style="font-size:13px;line-height:1.7">PROMAGE 없음 조건 감지<br>→ 프롬에이지 연동 CTA</td>
+        </tr>
+        <tr>
+          <td style="text-align:center;font-size:16px;font-weight:700;color:#0F6E56">O</td>
+          <td style="text-align:center;font-size:16px;font-weight:700;color:#A32D2D">X</td>
+          <td style="text-align:center;font-size:16px;font-weight:700;color:#A32D2D">X</td>
+          <td><strong>② 회원 + 마이데이터·프롬에이지 미연동</strong></td>
+          <td style="font-size:13px;line-height:1.8">
+            KC 기반 답변(PROFILE 조건만)<br>
+            <span style="color:var(--text-hint)">&nbsp;→ 실패 시</span> FAQ RAG <span style="color:#A32D2D;font-size:12px">(약관 RAG 불가)</span><br>
+            <span style="color:var(--text-hint)">&nbsp;→ 실패 시</span> LLM
+          </td>
+          <td style="font-size:13px;line-height:1.7">MYDATA 없음 조건 감지<br>→ 마이데이터 연동 CTA</td>
+        </tr>
+        <tr>
+          <td style="text-align:center;font-size:16px;font-weight:700;color:#A32D2D">X</td>
+          <td style="text-align:center;font-size:16px;font-weight:700;color:#A32D2D">X</td>
+          <td style="text-align:center;font-size:16px;font-weight:700;color:#A32D2D">X</td>
+          <td><strong>① 미가입 / 미로그인</strong></td>
+          <td style="font-size:13px;line-height:1.8">
+            FAQ RAG <span style="color:#A32D2D;font-size:12px">(KC·약관 RAG 전체 불가)</span><br>
+            <span style="color:var(--text-hint)">&nbsp;→ 실패 시</span> LLM
+          </td>
+          <td style="font-size:13px;line-height:1.7">PROFILE 없음 조건 감지<br>→ 회원가입 유도 CTA</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
   <!-- 답변 케이스 결정 분기 -->
   <div class="section">
     <div class="section-title"><i class="fa-solid fa-code-branch fa-fw" style="color:var(--card-playbook)"></i> 답변 케이스 결정 — KC 매칭 × Playbook 감지 <span style="font-size:12px;font-weight:400;color:var(--text-hint);margin-left:8px">MYDATA 있는 상태 ③④ 전용</span></div>

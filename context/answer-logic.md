@@ -27,14 +27,15 @@ KC Engine은 각 필드의 null 여부로 두 가지를 결정한다:
 
 ### Clark → KC Engine 전달 데이터 (상태별)
 
-| 사용자 상태 | PROFILE | MYDATA | PROMAGE | 약관 RAG | KC 체인 평가 범위 |
-|---|---|---|---|---|---|
-| ① 미가입/미로그인 | null | null | null | 불가 | 전체 불가 |
-| ② 회원 + 마이데이터·프롬에이지 미연동 | 있음 | null | null | 불가 | PROFILE 조건만 통과 가능 *주1 |
-| ③ 마이데이터 연동 + 프롬에이지 미이용 | 있음 | 있음 | null | 가능 | PROFILE + MYDATA (PROMAGE 선택 조건 스킵) → Case 1~4 |
-| ④ 메인 서비스 이용 (전체 데이터) | 있음 | 있음 | 있음 | 가능 | 전체 평가 → Case 1~4 |
+| 사용자 상태 | PROFILE | MYDATA | PROMAGE | 약관 RAG | 답변 우선순위 | Playbook |
+|---|---|---|---|---|---|---|
+| ① 미가입/미로그인 | null | null | null | 불가 | FAQ RAG → LLM | PROFILE 없음 → 회원가입 CTA |
+| ② 회원 + 마이데이터·프롬에이지 미연동 | 있음 | null | null | 불가 | KC(PROFILE만) → FAQ RAG → LLM | MYDATA 없음 → 마이데이터 연동 CTA |
+| ③ 마이데이터 연동 + 프롬에이지 미이용 | 있음 | 있음 | null | 가능 | KC(PROMAGE 스킵) → 약관 RAG → FAQ RAG → LLM | PROMAGE 없음 → 프롬에이지 연동 CTA |
+| ④ 메인 서비스 이용 (전체 데이터) | 있음 | 있음 | 있음 | 가능 | KC(전체 평가) → 약관 RAG → FAQ RAG → LLM | 일반 키워드 → 리드 전환 CTA |
 
 **약관 RAG 가능 조건**: 마이데이터에서 가입 상품 목록을 알아야 어떤 약관을 검색할지 특정 가능. ①② 상태에서는 불가. ③④ 가능.
+**답변 우선순위 공통 원칙**: 앞 단계 성공 시 뒤 단계 호출 없음(분기). Playbook은 어느 단계든 키워드 감지 시 CTA 가산.
 
 *주1 — 상태 ② Rule 평가 방식:* KC Engine은 모든 Rule을 대상으로 평가를 시도한다. 단, 각 Rule의 조건별로:
 - MYDATA·PROMAGE 조건이 **필수**인 경우 → 데이터 null = 조건 불충족 → Rule 미통과

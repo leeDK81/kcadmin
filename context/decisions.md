@@ -49,6 +49,7 @@
 
 | 날짜 | 내용 | 진실원 파일 |
 |---|---|---|
+| 2026-06-27 | "답변 제공 조건" 종합 테이블 추가: 프로파일·마이데이터·프롬에이지 O/X 조합 × 상태·답변 우선순위·Playbook 6컬럼 구성. context/answer-logic.md 기존 5컬럼 테이블을 7컬럼(답변 우선순위·Playbook 추가)으로 확장. mockups_v2/13_answer-logic.html에 전용 섹션("답변 제공 조건 — 사용자 데이터 상태별 요약") 신규 추가(Playbook 감지 조건 테이블 아래). | `context/answer-logic.md`, `mockups_v2/13_answer-logic.html` |
 | 2026-06-26 | 전수 검사 완료: 분기(fallback) 구조 전파 — KC·RAG·LLM은 순차 누적 아님, 앞 단계 성공 시 뒤 단계 호출 없음. "두 체인 동시 출력" 오표현 제거(policy/02_card-purpose.html, mockups/13_answer-logic.html). 나머지 17개 md·14개 html 파일은 이미 올바른 분기 구조로 기술 확인. | `policy/02_card-purpose.html`, `mockups/13_answer-logic.html` |
 | 2026-06-26 | Case 1~4 출력 구조 명시: KC 체인(Case 1·2)과 RAG·LLM(Case 3·4)은 대체(fallback) 관계 — 동시 출력 없음. KC 구조화 답변에 Evidence(LLM 선택·인용)·Policy(appDisplayText) 포함. CTA 버튼만 Playbook 감지 시 가산(additive). Evidence "전부 참조" → "LLM 선택·인용" 오류 수정. | `context/answer-logic.md`, `mockups_v2/13_answer-logic.html` |
 | 2026-06-26 | Risk-type 3순위 타이브레이크 변경: 카드코드 오름차순 → 최근 배포순(가장 최근 라이브 전환일 우선). 11개 파일 전수 반영. | `context/card-types.md`, `agents/01·03·04·06·08_*.md`, `guides/ux-patterns.md`, `policy/02·06_*.html`, `mockups_v2/13_answer-logic.html`, `CLAUDE.md` |
