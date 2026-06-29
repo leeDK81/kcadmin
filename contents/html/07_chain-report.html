@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>체인 연결 검토 보고서 — KC Admin</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #F5F7FA; color: #1A1A2E; min-height: 100vh; }
+header { background: #1A2B5F; color: #fff; padding: 24px 40px; }
+header .nav { font-size: 12px; color: rgba(255,255,255,0.6); margin-bottom: 8px; }
+header .nav a { color: rgba(255,255,255,0.8); text-decoration: none; }
+header h1 { font-size: 20px; font-weight: 700; }
+header p { font-size: 13px; color: rgba(255,255,255,0.65); margin-top: 5px; }
+main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
+.ready-banner { background: #F0FDF4; border: 1.5px solid #0F6E56; border-radius: 12px; padding: 20px 28px; margin-bottom: 28px; display: flex; align-items: center; gap: 16px; }
+.ready-icon { font-size: 32px; }
+.ready-text h2 { font-size: 17px; font-weight: 700; color: #0F6E56; margin-bottom: 4px; }
+.ready-text p { font-size: 13px; color: #065F46; line-height: 1.5; }
+.warn-banner { background: #FFFBEB; border: 1.5px solid #D97706; border-radius: 12px; padding: 20px 28px; margin-bottom: 28px; display: flex; align-items: center; gap: 16px; }
+.warn-text h2 { font-size: 17px; font-weight: 700; color: #D97706; margin-bottom: 4px; }
+.warn-text p { font-size: 13px; color: #92400E; line-height: 1.5; }
+.summary-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; margin-bottom: 32px; }
+.summary-card { background: #fff; border: 1px solid #E5E9F0; border-radius: 10px; padding: 16px; text-align: center; }
+.summary-num { font-size: 28px; font-weight: 800; line-height: 1; margin-bottom: 4px; }
+.summary-label { font-size: 12px; color: #6B7280; font-weight: 500; }
+.num-green { color: #0F6E56; }
+.num-yellow { color: #D97706; }
+.num-red { color: #DC2626; }
+.num-blue { color: #1A4A9A; }
+.section-label { font-size: 11px; font-weight: 700; color: #9CA3AF; text-transform: uppercase; letter-spacing: 1px; margin: 32px 0 12px; padding-bottom: 8px; border-bottom: 2px solid #E5E9F0; }
+table.chain-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 10px; overflow: hidden; border: 1px solid #E5E9F0; margin-bottom: 32px; }
+.chain-table th { background: #F8FAFC; font-size: 11px; font-weight: 700; color: #6B7280; padding: 10px 14px; text-align: left; border-bottom: 2px solid #E5E9F0; white-space: nowrap; }
+.chain-table td { font-size: 13px; color: #1A1A2E; padding: 10px 14px; border-bottom: 1px solid #F0F0F5; vertical-align: top; }
+.chain-table tr:last-child td { border-bottom: none; }
+.chain-table tr:hover td { background: #F8FAFC; }
+.badge { font-size: 11px; font-weight: 700; border-radius: 20px; padding: 3px 10px; white-space: nowrap; }
+.badge-complete { background: #D1FAE5; color: #0F6E56; }
+.badge-warning { background: #FEF3C7; color: #D97706; }
+.badge-critical { background: #FEE2E2; color: #DC2626; }
+.domain-tag { font-size: 11px; background: #EFF6FF; color: #1A4A9A; border-radius: 4px; padding: 2px 7px; white-space: nowrap; }
+.id-list { display: flex; flex-wrap: wrap; gap: 4px; }
+.id-chip { font-size: 11px; background: #F3F4F6; color: #374151; border-radius: 3px; padding: 2px 6px; }
+.id-chip-ev { background: #FEF9C3; color: #854D0E; }
+.id-chip-cn { background: #EDE9FE; color: #5B21B6; }
+.id-chip-po { background: #FCE7F3; color: #9D174D; }
+.issue-card { background: #FFFBEB; border: 1px solid #FCD34D; border-radius: 10px; padding: 16px 20px; margin-bottom: 12px; }
+.issue-card h3 { font-size: 13px; font-weight: 700; color: #92400E; margin-bottom: 8px; }
+.issue-card p { font-size: 13px; color: #78350F; line-height: 1.6; }
+.resolved-section { background: #F0FDF4; border: 1px solid #A7F3D0; border-radius: 10px; padding: 16px 20px; margin-bottom: 12px; }
+.resolved-section h3 { font-size: 13px; font-weight: 700; color: #0F6E56; margin-bottom: 10px; }
+.resolved-list { list-style: none; }
+.resolved-list li { font-size: 13px; color: #065F46; padding: 3px 0; line-height: 1.5; }
+.resolved-list li::before { content: "✅ "; }
+.playbook-row td:first-child { color: #6B7280; font-style: italic; }
+.meta-row { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; font-size: 13px; color: #6B7280; }
+.meta-row span strong { color: #1A1A2E; }
+</style>
+</head>
+<body>
+<header>
+  <div class="nav"><a href="00_index.html">← 인덱스로 돌아가기</a></div>
+  <h1>체인 연결 검토 보고서</h1>
+  <p>STEP 7 · 04_content-po 검토 · v1.4 최종본 · 2026-06-29</p>
+</header>
+<main>
+
+<div class="ready-banner">
+  <div class="ready-icon">✅</div>
+  <div class="ready-text">
+    <h2>KC Admin 등록 준비 완료 (ready_to_register: true)</h2>
+    <p>23개 체인 전체 검토 완료 (T20 후유장해·T21 치과·T22 상해 특화·T23 골절 신규 추가 / T14 RU 담보코드 A3001→A9607+A9604 교체 / T17·T18·T19 신규 포함). Critical 0건 · Warning 0건 — 전체 23개 체인 완성. KC Admin에 등록 진행 가능합니다.</p>
+  </div>
+</div>
+
+<div class="meta-row">
+  <span><strong>버전:</strong> 1.4</span>
+  <span><strong>생성일:</strong> 2026-06-29</span>
+  <span><strong>담당 에이전트:</strong> 04_content-po</span>
+  <span><strong>체인 수:</strong> 23개</span>
+</div>
+
+<div class="summary-grid">
+  <div class="summary-card"><div class="summary-num num-blue">23</div><div class="summary-label">Risk-type</div></div>
+  <div class="summary-card"><div class="summary-num num-blue">23</div><div class="summary-label">Rule</div></div>
+  <div class="summary-card"><div class="summary-num num-blue">29</div><div class="summary-label">Evidence</div></div>
+  <div class="summary-card"><div class="summary-num num-blue">24</div><div class="summary-label">Concept</div></div>
+  <div class="summary-card"><div class="summary-num num-blue">23</div><div class="summary-label">Policy</div></div>
+  <div class="summary-card"><div class="summary-num num-blue">10</div><div class="summary-label">Playbook</div></div>
+  <div class="summary-card"><div class="summary-num num-green">23</div><div class="summary-label">완성 체인</div></div>
+  <div class="summary-card"><div class="summary-num num-green">0</div><div class="summary-label">경고 체인</div></div>
+  <div class="summary-card"><div class="summary-num num-red">0</div><div class="summary-label">Critical</div></div>
+  <div class="summary-card"><div class="summary-num num-green">0</div><div class="summary-label">Warning</div></div>
+</div>
+
+<div class="ready-banner" style="background:#F0FDF4;border-color:#A7F3D0;">
+  <div class="ready-icon">🎉</div>
+  <div class="ready-text">
+    <h2 style="color:#065F46;">Warning 0건 · 23개 체인 전체 완성</h2>
+    <p style="color:#065F46;">T20~T23 신규 4개 체인(후유장해·치과·상해 특화·골절) 추가 및 T14 Rule 담보코드 교체 완료. Critical 0건 · Warning 0건.</p>
+  </div>
+</div>
+
+<div class="section-label">체인 전체 목록 · 23개</div>
+
+<table class="chain-table">
+  <thead>
+    <tr>
+      <th>체인 ID</th>
+      <th>도메인</th>
+      <th>Risk-type</th>
+      <th>Concept</th>
+      <th>Rule</th>
+      <th>Evidence</th>
+      <th>Policy</th>
+      <th>상태</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>CHAIN-001</strong></td>
+      <td><span class="domain-tag">건강보험</span></td>
+      <td><strong>T01</strong> 무보장형</td>
+      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T01</span></div></td>
+      <td><span class="id-chip">RU-T01</span></td>
+      <td><div class="id-list"><span class="id-chip id-chip-ev">EV016</span></div></td>
+      <td><div class="id-list"><span class="id-chip id-chip-po">PO-T01</span></div></td>
+      <td><span class="badge badge-complete">완성</span></td>
+    </tr>
+    <tr>
+      <td><strong>CHAIN-002</strong></td>
+      <td><span class="domain-tag">건강보험</span></td>
+      <td><strong>T02</strong> 암투병생활비 부족형</td>
+      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T02A</span><span class="id-chip id-chip-cn">CN-T02B</span></div></td>
+      <td><span class="id-chip">RU-T02</span></td>
+      <td><div class="id-list"><span class="id-chip id-chip-ev">EV001</span><span class="id-chip id-chip-ev">EV002</span><span class="id-chip id-chip-ev">EV003</span></div></td>
+      <td><div class="id-list"><span class="id-chip id-chip-po">PO-T02</span></div></td>
+      <td><span class="badge badge-complete">완성</span></td>
+    </tr>
+    <tr>
+      <td><strong>CHAIN-003</strong></td>
+      <td><span class="domain-tag">건강보험</span></td>
+      <td><strong>T03</strong> 심혈관질환보장 협소형</td>
+      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T03</span></div></td>
+      <td><span class="id-chip">RU-T03</span></td>
+      <td><div class="id-list"><span class="id-chip id-chip-ev">EV004</span></div></td>
+      <td><div class="id-list"><span class="id-chip id-chip-po">PO-T03</span></div></td>
+      <td><span class="badge badge-complete">완성</span></td>
+    </tr>
+    <tr>
+      <td><strong>CHAIN-004</strong></td>
+      <td><span class="domain-tag">건강보험</span></td>
+      <td><strong>T04</strong> 뇌혈관질환보장 협소형</td>
+      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T04</span></div></td>
+      <td><span class="id-chip">RU-T04</span></td>
+      <td><div class="id-list"><span class="id-chip id-chip-ev">EV004</span><span class="id-chip id-chip-ev">EV005</span></div></td>
+      <td><div class="id-list"><span class="id-chip id-chip-po">PO-T04</span></div></td>
+      <td><span class="badge badge-complete">완성</span></td>
+    </tr>
+    <tr>
+      <td><strong>CHAIN-005</strong></td>
+      <td><span class="domain-tag">건강보험</span></td>
+      <td><strong>T05</strong> 노후돌봄보장 공백형</td>
+      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T05</span></div></td>
+      <td><span class="id-chip">RU-T05</span></td>
+      <td><div class="id-list"><span class="id-chip id-chip-ev">EV006</span><span class="id-chip id-chip-ev">EV007</span><span class="id-chip id-chip-ev">EV008</span><span class="id-chip id-chip-ev">EV009</span></div></td>
+      <td><div class="id-list"><span class="id-chip id-chip-po">PO-T05</span></div></td>
+      <td><span class="badge badge-complete">완성</span></td>
+    </tr>
+    <tr>
+      <td><strong>CHAIN-006</strong></td>
+      <td><span class="domain-tag">건강보험</span></td>
+      <td><strong>T06</strong> 납입여력부족 우려형</td>
+      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T06</span></div></td>
+      <td><span class="id-chip">RU-T06</span></td>
+      <td><div class="id-list"><span class="id-chip id-chip-ev">EV017</span></div></td>
+      <td><div class="id-list"><span class="id-chip id-chip-po">PO-T06</span></div></td>
+      <td><span class="badge badge-complete">완성</span></td>
+    </tr>
+    <tr>
+      <td><strong>CHAIN-007</strong></td>
+      <td><span class="domain-tag">건강보험</span></td>
+      <td><strong>T07</strong> 비용 대비 보장 비효율형</td>
+      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T07</span></div></td>
+      <td><span class="id-chip">RU-T07</span></td>
+      <td><div class="id-list"><span class="id-chip id-chip-ev">EV014</span></div></td>
+      <td><div class="id-list"><span class="id-chip id-chip-po">PO-T07</span></div></td>
+      <td><span class="badge badge-complete">완성</span></td>
+    </tr>
+    <tr>
+      <td><strong>CHAIN-008</strong></td>
+      <td><span class="domain-tag">건강보험</span></td>
+      <td><strong>T08</strong> 생애주기 적합도 저조형</td>
+      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T08</span></div></td>
+      <td><span class="id-chip">RU-T08</span></td>
+      <td><div class="id-list"><span class="id-chip id-chip-ev">EV018</span></div></td>
+      <td><div class="id-list"><span class="id-chip id-chip-po">PO-T08</span></div></td>
+      <td><span class="badge badge-complete">완성</span></td>
+    </tr>
+    <tr>
+      <td><strong>CHAIN-009</strong></td>
+      <td><span class="domain-tag">생명보험</span></td>
+      <td><strong>T09</strong> 단기납 만기 후 공백형</td>
+      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T09</span></div></td>
+      <td><span class="id-chip">RU-T09</span></td>
+      <td><div class="id-list"><span class="id-chip id-chip-ev">EV019</span></div></td>
+      <td><div class="id-list"><span class="id-chip id-chip-po">PO-T09</span></div></td>
+      <td><span class="badge badge-complete">완성</span></td>
+    </tr>
+    <tr>
+      <td><strong>CHAIN-010</strong></td>
+      <td><span class="domain-tag">생명보험</span></td>
+      <td><strong>T11</strong> 사망보장 미비형</td>
+      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T11</span></div></td>
+      <td><span class="id-chip">RU-T11</span></td>
+      <td><div class="id-list"><span class="id-chip id-chip-ev">EV011</span></div></td>
+      <td><div class="id-list"><span class="id-chip id-chip-po">PO-T11</span></div></td>
+      <td><span class="badge badge-complete">완성</span></td>
+    </tr>
+    <tr>
+      <td><strong>CHAIN-011</strong></td>
+      <td><span class="domain-tag">건강보험</span></td>
+      <td><strong>T12</strong> 수술·입원 보장 미비형</td>
+      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T12</span></div></td>
+      <td><span class="id-chip">RU-T12</span></td>
+      <td><div class="id-list"><span class="id-chip id-chip-ev">EV010</span></div></td>
+      <td><div class="id-list"><span class="id-chip id-chip-po">PO-T12</span></div></td>
+      <td><span class="badge badge-complete">완성</span></td>
+    </tr>
+    <tr>
+      <td><strong>CHAIN-012</strong></td>
+      <td><span class="domain-tag">노후·연금</span></td>
+      <td><strong>T13</strong> 노후자금 준비 미흡형</td>
+      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T13</span></div></td>
+      <td><span class="id-chip">RU-T13</span></td>
+      <td><div class="id-list"><span class="id-chip id-chip-ev">EV011</span><span class="id-chip id-chip-ev">EV012</span><span class="id-chip id-chip-ev">EV013</span></div></td>
+      <td><div class="id-list"><span class="id-chip id-chip-po">PO-T13</span></div></td>
+      <td><span class="badge badge-complete">완성</span></td>
+    </tr>
+    <tr>
+      <td><strong>CHAIN-013</strong></td>
+      <td><span class="domain-tag">특종</span></td>
+      <td><strong>T14</strong> 운전자보험 미가입형</td>
+      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T14</span></div></td>
+      <td><span class="id-chip">RU-T14</span></td>
+      <td><div class="id-list"><span class="id-chip id-chip-ev">EV015</span></div></td>
+      <td><div class="id-list"><span class="id-chip id-chip-po">PO-T14</span></div></td>
+      <td><span class="badge badge-complete">완성</span></td>
+    </tr>
+    <tr>
+      <td><strong>CHAIN-014</strong></td>
+      <td><span class="domain-tag">특종</span></td>
+      <td><strong>T15</strong> 자녀 건강보장 공백형</td>
+      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T15</span></div></td>
+      <td><span class="id-chip">RU-T15</span></td>
+      <td><div class="id-list"><span class="id-chip id-chip-ev">EV020</span></div></td>
+      <td><div class="id-list"><span class="id-chip id-chip-po">PO-T15</span></div></td>
+      <td><span class="badge badge-complete">완성</span></td>
+    </tr>
+    <tr>
+      <td><strong>CHAIN-015</strong></td>
+      <td><span class="domain-tag">건강보험</span></td>
+      <td><strong>T16</strong> 실손보험 노후화형</td>
+      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T16</span></div></td>
+      <td><span class="id-chip">RU-T16</span></td>
+      <td><div class="id-list"><span class="id-chip id-chip-ev">EV010</span><span class="id-chip id-chip-ev">EV025</span></div></td>
+      <td><div class="id-list"><span class="id-chip id-chip-po">PO-T16</span></div></td>
+      <td><span class="badge badge-complete">완성</span></td>
+    </tr>
+    <tr>
+      <td><strong>CHAIN-016</strong></td>
+      <td><span class="domain-tag">건강보험</span></td>
+      <td><strong>T10</strong> 여성 암 보장 공백형</td>
+      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T10</span></div></td>
+      <td><span class="id-chip">RU-T10</span></td>
+      <td><div class="id-list"><span class="id-chip id-chip-ev">EV021</span></div></td>
+      <td><div class="id-list"><span class="id-chip id-chip-po">PO-T10</span></div></td>
+      <td><span class="badge badge-complete">완성</span></td>
+    </tr>
+    <tr>
+      <td><strong>CHAIN-017</strong></td>
+      <td><span class="domain-tag">건강보험</span></td>
+      <td><strong>T17</strong> 치매 진단 보장 공백형</td>
+      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T17</span></div></td>
+      <td><span class="id-chip">RU-T17</span></td>
+      <td><div class="id-list"><span class="id-chip id-chip-ev">EV022</span></div></td>
+      <td><div class="id-list"><span class="id-chip id-chip-po">PO-T17</span></div></td>
+      <td><span class="badge badge-complete">완성</span></td>
+    </tr>
+    <tr>
+      <td><strong>CHAIN-018</strong></td>
+      <td><span class="domain-tag">건강보험</span></td>
+      <td><strong>T18</strong> 항암치료비 미보장형</td>
+      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T18</span></div></td>
+      <td><span class="id-chip">RU-T18</span></td>
+      <td><div class="id-list"><span class="id-chip id-chip-ev">EV023</span></div></td>
+      <td><div class="id-list"><span class="id-chip id-chip-po">PO-T18</span></div></td>
+      <td><span class="badge badge-complete">완성</span></td>
+    </tr>
+    <tr>
+      <td><strong>CHAIN-019</strong></td>
+      <td><span class="domain-tag">건강보험</span></td>
+      <td><strong>T19</strong> 수술비 미보장형</td>
+      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T19</span></div></td>
+      <td><span class="id-chip">RU-T19</span></td>
+      <td><div class="id-list"><span class="id-chip id-chip-ev">EV024</span></div></td>
+      <td><div class="id-list"><span class="id-chip id-chip-po">PO-T19</span></div></td>
+      <td><span class="badge badge-complete">완성</span></td>
+    </tr>
+    <tr>
+      <td><strong>CHAIN-020</strong></td>
+      <td><span class="domain-tag">건강보험</span></td>
+      <td><strong>T20</strong> 후유장해 보장 공백형</td>
+      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T20</span></div></td>
+      <td><span class="id-chip">RU-T20</span></td>
+      <td><div class="id-list"><span class="id-chip id-chip-ev">EV026</span></div></td>
+      <td><div class="id-list"><span class="id-chip id-chip-po">PO-T20</span></div></td>
+      <td><span class="badge badge-complete">완성</span></td>
+    </tr>
+    <tr>
+      <td><strong>CHAIN-021</strong></td>
+      <td><span class="domain-tag">건강보험</span></td>
+      <td><strong>T21</strong> 치과 보장 공백형</td>
+      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T21</span></div></td>
+      <td><span class="id-chip">RU-T21</span></td>
+      <td><div class="id-list"><span class="id-chip id-chip-ev">EV027</span></div></td>
+      <td><div class="id-list"><span class="id-chip id-chip-po">PO-T21</span></div></td>
+      <td><span class="badge badge-complete">완성</span></td>
+    </tr>
+    <tr>
+      <td><strong>CHAIN-022</strong></td>
+      <td><span class="domain-tag">건강보험</span></td>
+      <td><strong>T22</strong> 상해 특화 보장 공백형</td>
+      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T22</span></div></td>
+      <td><span class="id-chip">RU-T22</span></td>
+      <td><div class="id-list"><span class="id-chip id-chip-ev">EV028</span></div></td>
+      <td><div class="id-list"><span class="id-chip id-chip-po">PO-T22</span></div></td>
+      <td><span class="badge badge-complete">완성</span></td>
+    </tr>
+    <tr>
+      <td><strong>CHAIN-023</strong></td>
+      <td><span class="domain-tag">건강보험</span></td>
+      <td><strong>T23</strong> 골절·상해진단금 공백형</td>
+      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T23</span></div></td>
+      <td><span class="id-chip">RU-T23</span></td>
+      <td><div class="id-list"><span class="id-chip id-chip-ev">EV029</span></div></td>
+      <td><div class="id-list"><span class="id-chip id-chip-po">PO-T23</span></div></td>
+      <td><span class="badge badge-complete">완성</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="section-label">Playbook 검토 · 10장 (독립 체인)</div>
+
+<table class="chain-table">
+  <thead>
+    <tr>
+      <th>Playbook ID</th>
+      <th>이름</th>
+      <th>발화 키워드 수</th>
+      <th>consult 포함</th>
+      <th>상태</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>PB01</td><td>무보장 긴급 상담 전환</td><td>5개</td><td>✅</td><td><span class="badge badge-complete">완성</span></td></tr>
+    <tr><td>PB02</td><td>암보험 보장 공백 상담 전환</td><td>6개</td><td>✅</td><td><span class="badge badge-complete">완성</span></td></tr>
+    <tr><td>PB03</td><td>심뇌혈관 보장 상담 전환</td><td>5개</td><td>✅</td><td><span class="badge badge-complete">완성</span></td></tr>
+    <tr><td>PB04</td><td>간병보험 상담 전환</td><td>5개</td><td>✅</td><td><span class="badge badge-complete">완성</span></td></tr>
+    <tr><td>PB05</td><td>종신·정기보험 상담 전환</td><td>5개</td><td>✅</td><td><span class="badge badge-complete">완성</span></td></tr>
+    <tr><td>PB06</td><td>노후연금 상담 전환</td><td>5개</td><td>✅</td><td><span class="badge badge-complete">완성</span></td></tr>
+    <tr><td>PB07</td><td>보험 리모델링 상담 전환</td><td>5개</td><td>✅</td><td><span class="badge badge-complete">완성</span></td></tr>
+    <tr><td>PB08</td><td>운전자보험 상담 전환</td><td>4개</td><td>✅</td><td><span class="badge badge-complete">완성</span></td></tr>
+    <tr><td>PB09</td><td>어린이보험 상담 전환</td><td>5개</td><td>✅</td><td><span class="badge badge-complete">완성</span></td></tr>
+    <tr><td>PB10</td><td>실손보험 전환 상담</td><td>5개</td><td>✅</td><td><span class="badge badge-complete">완성</span></td></tr>
+  </tbody>
+</table>
+
+<div class="section-label">v1.4 업데이트 이력 · 신규 체인 추가 + T14 Rule 교체</div>
+
+<div class="resolved-section">
+  <h3>v1.4 신규 추가 · T20~T23 체인 4개 + T14 Rule 교체</h3>
+  <ul class="resolved-list">
+    <li>T20 후유장해 보장 공백형 체인 완성: CN-T20 → RU-T20(A3100+A3300) → EV026(보건복지부 2023 등록장애인 현황) → PO-T20</li>
+    <li>T21 치과 보장 공백형 체인 완성: CN-T21 → RU-T21(A9500+A9509) → EV027(NHIS 2024 건강보험 통계연보) → PO-T21</li>
+    <li>T22 상해 특화 보장 공백형 체인 완성: CN-T22 → RU-T22(A5100+A5300+A6300) → EV028(HIRA 2023 상해환자 의료이용 통계) → PO-T22</li>
+    <li>T23 골절·상해진단금 공백형 체인 완성: CN-T23 → RU-T23(A4301) → EV029(HIRA 2023 주요 상해 의료이용 비용 분석) → PO-T23</li>
+    <li>T14 RU Rule 교체: A3001(상해후유장해, 운전자보험과 연관성 없음) → A9607(형사합의지원금) + A9604(벌금비용) + A9605(변호사선임비용·선택). 오진단 위험 완전 해소.</li>
+  </ul>
+</div>
+
+<div class="section-label">v1.1 해결된 이슈 목록</div>
+
+<div class="resolved-section">
+  <h3>Critical 6건 해결 완료</h3>
+  <ul class="resolved-list">
+    <li>T01 Evidence 추가 완료: EV016(실손보험 미가입 인구 현황) 신규 작성</li>
+    <li>T02 Rule 카디널리티 1:1 준수: RU-T02A·RU-T02B → RU-T02 단일 병합</li>
+    <li>T07 Concept 추가 완료: CN-T07(중복보험) 신규 작성</li>
+    <li>T08 Concept 추가 완료: CN-T08(보험 재설계) 신규 작성</li>
+    <li>T09 Concept 추가 완료: CN-T09(납입 완료 보험) 신규 작성</li>
+    <li>T12 Concept 추가 완료: CN-T12(수술보험) 신규 작성</li>
+  </ul>
+</div>
+
+<div class="resolved-section">
+  <h3>Warning 10건 해결 완료</h3>
+  <ul class="resolved-list">
+    <li>T06 Evidence 추가 완료: EV017(갱신형 보험 계약 유지율)</li>
+    <li>T07 Policy 추가 완료: PO-T07(보장 비효율 분석 안내)</li>
+    <li>T08 Evidence 추가 완료: EV018(생애주기별 보험 부적합 비율)</li>
+    <li>T08 Policy 추가 완료: PO-T08(생애주기 적합도 분석 안내)</li>
+    <li>T09 Evidence 추가 완료: EV019(단기납 보험 납입 완료 후 추가 설계 미비율)</li>
+    <li>T09 Policy 추가 완료: PO-T09(단기납 만기 보장 점검 안내)</li>
+    <li>T12 Policy 추가 완료: PO-T12(수술·입원 보장 분석 안내)</li>
+    <li>T15 Evidence 추가 완료: EV020(어린이 연간 의료비)</li>
+    <li>T16 Policy 추가 완료: PO-T16(실손보험 노후화 분석 안내)</li>
+    <li>T16 Evidence 공유 경고 해소 완료: EV025(FSS 실손보험 세대별 보험료 인상률) 전용 추가 → EV010 단독 의존 탈피</li>
+  </ul>
+</div>
+
+</main>
+</body>
+</html>

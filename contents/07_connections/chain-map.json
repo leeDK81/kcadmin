@@ -1,0 +1,243 @@
+{
+  "version": "1.1",
+  "generated_at": "2026-06-29",
+  "agent": "04_content-po",
+  "summary": {
+    "total_risk_types": 15,
+    "total_rules": 15,
+    "total_evidence": 20,
+    "total_concepts": 16,
+    "total_policies": 15,
+    "total_playbooks": 10,
+    "chains_complete": 14,
+    "chains_with_warning": 1,
+    "chains_incomplete": 0,
+    "critical_issues": 0,
+    "warning_issues": 1,
+    "ready_to_register": true
+  },
+  "chains": [
+    {
+      "chain_id": "CHAIN-001",
+      "domain": "건강보험",
+      "risk_type_id": "T01",
+      "risk_type_name": "무보장형",
+      "concept_ids": ["CN-T01"],
+      "rule_id": "RU-T01",
+      "evidence_ids": ["EV016"],
+      "policy_ids": ["PO-T01"],
+      "status": "완성",
+      "issues": []
+    },
+    {
+      "chain_id": "CHAIN-002",
+      "domain": "건강보험",
+      "risk_type_id": "T02",
+      "risk_type_name": "암투병생활비 부족형",
+      "concept_ids": ["CN-T02A", "CN-T02B"],
+      "rule_id": "RU-T02",
+      "evidence_ids": ["EV001", "EV002", "EV003"],
+      "policy_ids": ["PO-T02"],
+      "status": "완성",
+      "issues": []
+    },
+    {
+      "chain_id": "CHAIN-003",
+      "domain": "건강보험",
+      "risk_type_id": "T03",
+      "risk_type_name": "심혈관질환보장 협소형",
+      "concept_ids": ["CN-T03"],
+      "rule_id": "RU-T03",
+      "evidence_ids": ["EV004"],
+      "policy_ids": ["PO-T03"],
+      "status": "완성",
+      "issues": []
+    },
+    {
+      "chain_id": "CHAIN-004",
+      "domain": "건강보험",
+      "risk_type_id": "T04",
+      "risk_type_name": "뇌혈관질환보장 협소형",
+      "concept_ids": ["CN-T04"],
+      "rule_id": "RU-T04",
+      "evidence_ids": ["EV004", "EV005"],
+      "policy_ids": ["PO-T04"],
+      "status": "완성",
+      "issues": []
+    },
+    {
+      "chain_id": "CHAIN-005",
+      "domain": "건강보험",
+      "risk_type_id": "T05",
+      "risk_type_name": "노후돌봄보장 공백형",
+      "concept_ids": ["CN-T05"],
+      "rule_id": "RU-T05",
+      "evidence_ids": ["EV006", "EV007", "EV008", "EV009"],
+      "policy_ids": ["PO-T05"],
+      "status": "완성",
+      "issues": []
+    },
+    {
+      "chain_id": "CHAIN-006",
+      "domain": "건강보험",
+      "risk_type_id": "T06",
+      "risk_type_name": "납입여력부족 우려형",
+      "concept_ids": ["CN-T06"],
+      "rule_id": "RU-T06",
+      "evidence_ids": ["EV017"],
+      "policy_ids": ["PO-T06"],
+      "status": "완성",
+      "issues": []
+    },
+    {
+      "chain_id": "CHAIN-007",
+      "domain": "건강보험",
+      "risk_type_id": "T07",
+      "risk_type_name": "비용 대비 보장 비효율형",
+      "concept_ids": ["CN-T07"],
+      "rule_id": "RU-T07",
+      "evidence_ids": ["EV014"],
+      "policy_ids": ["PO-T07"],
+      "status": "완성",
+      "issues": []
+    },
+    {
+      "chain_id": "CHAIN-008",
+      "domain": "건강보험",
+      "risk_type_id": "T08",
+      "risk_type_name": "생애주기 적합도 저조형",
+      "concept_ids": ["CN-T08"],
+      "rule_id": "RU-T08",
+      "evidence_ids": ["EV018"],
+      "policy_ids": ["PO-T08"],
+      "status": "완성",
+      "issues": []
+    },
+    {
+      "chain_id": "CHAIN-009",
+      "domain": "생명보험",
+      "risk_type_id": "T09",
+      "risk_type_name": "단기납 만기 후 공백형",
+      "concept_ids": ["CN-T09"],
+      "rule_id": "RU-T09",
+      "evidence_ids": ["EV019"],
+      "policy_ids": ["PO-T09"],
+      "status": "완성",
+      "issues": []
+    },
+    {
+      "chain_id": "CHAIN-010",
+      "domain": "생명보험",
+      "risk_type_id": "T11",
+      "risk_type_name": "사망보장 미비형",
+      "concept_ids": ["CN-T11"],
+      "rule_id": "RU-T11",
+      "evidence_ids": ["EV011"],
+      "policy_ids": ["PO-T11"],
+      "status": "완성",
+      "issues": []
+    },
+    {
+      "chain_id": "CHAIN-011",
+      "domain": "건강보험",
+      "risk_type_id": "T12",
+      "risk_type_name": "수술·입원 보장 미비형",
+      "concept_ids": ["CN-T12"],
+      "rule_id": "RU-T12",
+      "evidence_ids": ["EV010"],
+      "policy_ids": ["PO-T12"],
+      "status": "완성",
+      "issues": []
+    },
+    {
+      "chain_id": "CHAIN-012",
+      "domain": "노후·연금",
+      "risk_type_id": "T13",
+      "risk_type_name": "노후자금 준비 미흡형",
+      "concept_ids": ["CN-T13"],
+      "rule_id": "RU-T13",
+      "evidence_ids": ["EV011", "EV012", "EV013"],
+      "policy_ids": ["PO-T13"],
+      "status": "완성",
+      "issues": []
+    },
+    {
+      "chain_id": "CHAIN-013",
+      "domain": "특종",
+      "risk_type_id": "T14",
+      "risk_type_name": "운전자보험 미가입형",
+      "concept_ids": ["CN-T14"],
+      "rule_id": "RU-T14",
+      "evidence_ids": ["EV015"],
+      "policy_ids": ["PO-T14"],
+      "status": "완성",
+      "issues": []
+    },
+    {
+      "chain_id": "CHAIN-014",
+      "domain": "특종",
+      "risk_type_id": "T15",
+      "risk_type_name": "자녀 건강보장 공백형",
+      "concept_ids": ["CN-T15"],
+      "rule_id": "RU-T15",
+      "evidence_ids": ["EV020"],
+      "policy_ids": ["PO-T15"],
+      "status": "완성",
+      "issues": []
+    },
+    {
+      "chain_id": "CHAIN-015",
+      "domain": "건강보험",
+      "risk_type_id": "T16",
+      "risk_type_name": "실손보험 노후화형",
+      "concept_ids": ["CN-T16"],
+      "rule_id": "RU-T16",
+      "evidence_ids": ["EV010"],
+      "policy_ids": ["PO-T16"],
+      "status": "완성(경고)",
+      "issues": [
+        {
+          "severity": "warning",
+          "item": "Evidence 공유",
+          "message": "EV010(실손보험 지급보험금)이 T12와 공유됩니다. Rule→Evidence N:N 정책상 허용이나, T16 전용 Evidence(실손 세대별 보험료 비교 등)를 별도 추가하면 체인 품질이 향상됩니다."
+        }
+      ]
+    }
+  ],
+  "playbooks": [
+    {"playbook_id": "PB01", "name": "무보장 긴급 상담 전환", "keyword_count": 5, "has_consult": true, "status": "완성"},
+    {"playbook_id": "PB02", "name": "암보험 보장 공백 상담 전환", "keyword_count": 6, "has_consult": true, "status": "완성"},
+    {"playbook_id": "PB03", "name": "심뇌혈관 보장 상담 전환", "keyword_count": 5, "has_consult": true, "status": "완성"},
+    {"playbook_id": "PB04", "name": "간병보험 상담 전환", "keyword_count": 5, "has_consult": true, "status": "완성"},
+    {"playbook_id": "PB05", "name": "종신·정기보험 상담 전환", "keyword_count": 5, "has_consult": true, "status": "완성"},
+    {"playbook_id": "PB06", "name": "노후연금 상담 전환", "keyword_count": 5, "has_consult": true, "status": "완성"},
+    {"playbook_id": "PB07", "name": "보험 리모델링 상담 전환", "keyword_count": 5, "has_consult": true, "status": "완성"},
+    {"playbook_id": "PB08", "name": "운전자보험 상담 전환", "keyword_count": 4, "has_consult": true, "status": "완성"},
+    {"playbook_id": "PB09", "name": "어린이보험 상담 전환", "keyword_count": 5, "has_consult": true, "status": "완성"},
+    {"playbook_id": "PB10", "name": "실손보험 전환 상담", "keyword_count": 5, "has_consult": true, "status": "완성"}
+  ],
+  "resolved_issues": {
+    "critical_fixed": [
+      "T01 Evidence 추가 완료: EV016(실손보험 미가입 인구 현황)",
+      "T02 Rule 카디널리티 1:1 준수: RU-T02A·RU-T02B → RU-T02 단일 병합",
+      "T07 Concept 추가 완료: CN-T07(중복보험)",
+      "T08 Concept 추가 완료: CN-T08(보험 재설계)",
+      "T09 Concept 추가 완료: CN-T09(납입 완료 보험)",
+      "T12 Concept 추가 완료: CN-T12(수술보험)"
+    ],
+    "warning_fixed": [
+      "T06 Evidence 추가 완료: EV017(갱신형 보험 계약 유지율)",
+      "T07 Policy 추가 완료: PO-T07(보장 비효율 분석 안내)",
+      "T08 Evidence 추가 완료: EV018(생애주기별 보험 부적합 비율)",
+      "T08 Policy 추가 완료: PO-T08(생애주기 적합도 분석 안내)",
+      "T09 Evidence 추가 완료: EV019(단기납 보험 납입 완료 후 추가 설계 미비율)",
+      "T09 Policy 추가 완료: PO-T09(단기납 만기 보장 점검 안내)",
+      "T12 Policy 추가 완료: PO-T12(수술·입원 보장 분석 안내)",
+      "T15 Evidence 추가 완료: EV020(어린이 연간 의료비)",
+      "T16 Policy 추가 완료: PO-T16(실손보험 노후화 분석 안내)"
+    ],
+    "remaining_warning": [
+      "T16: EV010 공유 (T12와 실손보험 지급보험금 통계 공유) — N:N 허용 범위, 선택적 개선 가능"
+    ]
+  }
+}

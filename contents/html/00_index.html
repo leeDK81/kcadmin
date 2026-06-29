@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KC Admin 카드 콘텐츠 — 입력 가이드 인덱스</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #F5F7FA; color: #1A1A2E; min-height: 100vh; }
+header { background: #1A2B5F; color: #fff; padding: 28px 40px; }
+header h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.3px; }
+header p { font-size: 13px; color: rgba(255,255,255,0.65); margin-top: 6px; }
+main { max-width: 960px; margin: 40px auto; padding: 0 24px; }
+.section-title { font-size: 13px; font-weight: 600; color: #6B7280; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 16px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-bottom: 40px; }
+.card { background: #fff; border-radius: 12px; border: 1px solid #E5E9F0; padding: 24px; text-decoration: none; color: inherit; transition: box-shadow 0.15s, border-color 0.15s; display: block; }
+.card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); border-color: #C5CEE0; }
+.card-num { font-size: 11px; font-weight: 600; color: #6B7280; margin-bottom: 8px; }
+.card-title { font-size: 16px; font-weight: 700; color: #1A1A2E; margin-bottom: 6px; }
+.card-desc { font-size: 13px; color: #6B7280; line-height: 1.5; }
+.card-count { margin-top: 14px; font-size: 12px; font-weight: 600; color: #fff; background: #1A2B5F; border-radius: 20px; padding: 3px 10px; display: inline-block; }
+.badge-complete { background: #0F6E56; }
+.badge-warning { background: #D97706; }
+.badge-critical { background: #DC2626; }
+.alert { background: #FEF3C7; border: 1px solid #FCD34D; border-radius: 10px; padding: 16px 20px; margin-bottom: 32px; }
+.alert h3 { font-size: 14px; font-weight: 700; color: #92400E; margin-bottom: 8px; }
+.alert p { font-size: 13px; color: #92400E; line-height: 1.6; }
+.status-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 32px; }
+.status-chip { background: #fff; border: 1px solid #E5E9F0; border-radius: 20px; padding: 6px 14px; font-size: 13px; font-weight: 600; }
+.chip-ok { color: #0F6E56; border-color: #0F6E56; }
+.chip-warn { color: #D97706; border-color: #D97706; }
+.chip-err { color: #DC2626; border-color: #DC2626; }
+</style>
+</head>
+<body>
+<header>
+  <h1>KC Admin 카드 콘텐츠 입력 가이드</h1>
+  <p>2026-06-29 완성 · 총 23개 Risk-type · 카드 총 132장 (EV 29 + RT 23 + RU 23 + CN 24 + PO 23 + PB 10)</p>
+</header>
+<main>
+
+  <div class="alert" style="background:#F0FDF4;border-color:#A7F3D0;">
+    <h3 style="color:#065F46;">✅ KC Admin 등록 준비 완료 (v1.4)</h3>
+    <p style="color:#065F46;">23개 체인 전체 완성 (T20~T23 신규 추가 / T14 Rule 담보코드 교체). Critical 0건 · Warning 0건. <strong>07_chain-report.html</strong>에서 전체 검토 결과를 확인하세요.</p>
+  </div>
+
+  <div class="status-row">
+    <span class="status-chip chip-ok">✅ 완성 체인 23개</span>
+    <span class="status-chip chip-ok">✅ 경고 체인 0개</span>
+    <span class="status-chip chip-ok">🟢 Critical 0건</span>
+    <span class="status-chip chip-ok">🟢 Warning 0건</span>
+    <span class="status-chip chip-ok">ready_to_register: true</span>
+  </div>
+
+  <div class="section-title">카드 타입별 입력 가이드</div>
+  <div class="grid">
+
+    <a href="01_evidence.html" class="card">
+      <div class="card-num">STEP 2 · 01_evidence</div>
+      <div class="card-title">Evidence 카드</div>
+      <div class="card-desc">공인 통계 기반 근거 카드. 출처 기관·보고서명·기준값 입력.</div>
+      <span class="card-count badge-complete">EV001 ~ EV029 · 29장</span>
+    </a>
+
+    <a href="02_risk-type.html" class="card">
+      <div class="card-num">STEP 1 · 02_risk-type</div>
+      <div class="card-title">Risk-type 카드</div>
+      <div class="card-desc">위험 유형 정의 카드. 위험 유형명·중요도·설명 입력.</div>
+      <span class="card-count badge-complete">T01 ~ T23 · 23장</span>
+    </a>
+
+    <a href="03_rule.html" class="card">
+      <div class="card-num">STEP 3 · 03_rule</div>
+      <div class="card-title">Rule 카드</div>
+      <div class="card-desc">마이데이터·프롬에이지·프로파일 조건 빌더 입력.</div>
+      <span class="card-count badge-complete">RU-T01 ~ RU-T23 · 23장 (1:1 카디널리티 준수)</span>
+    </a>
+
+    <a href="04_concept.html" class="card">
+      <div class="card-num">STEP 4 · 04_concept</div>
+      <div class="card-title">Concept 카드</div>
+      <div class="card-desc">사용자 발화 키워드 매핑. 용어명·동의어 입력.</div>
+      <span class="card-count badge-complete">CN-T01 ~ CN-T23 · 24장 (T02 A·B 2개, T17~T23 신규)</span>
+    </a>
+
+    <a href="05_policy.html" class="card">
+      <div class="card-num">STEP 5 · 05_policy</div>
+      <div class="card-title">Policy 카드</div>
+      <div class="card-desc">Clark 앱 표시 면책 문구. 준법감시인 2단계 승인 필요.</div>
+      <span class="card-count badge-complete">PO-T01 ~ PO-T23 · 23장 (준법감시인 승인 필요)</span>
+    </a>
+
+    <a href="06_playbook.html" class="card">
+      <div class="card-num">STEP 6 · 06_playbook</div>
+      <div class="card-title">Playbook 카드</div>
+      <div class="card-desc">상담 전환 시나리오. 발화 키워드·전환 액션 입력.</div>
+      <span class="card-count badge-complete">PB01 ~ PB10 · 10장</span>
+    </a>
+
+  </div>
+
+  <div class="section-title">PO 검토 보고서</div>
+  <div class="grid">
+    <a href="07_chain-report.html" class="card">
+      <div class="card-num">STEP 7 · 04_content-po</div>
+      <div class="card-title">체인 연결 검토 보고서</div>
+      <div class="card-desc">Concept → Risk-type → Rule → Evidence → Policy 전체 체인 정합성 검토 결과. 이슈 목록 및 등록 준비 상태 확인.</div>
+      <span class="card-count badge-complete">ready_to_register: true · Critical 0 · Warning 0</span>
+    </a>
+  </div>
+
+</main>
+</body>
+</html>

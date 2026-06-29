@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Policy 카드 입력 가이드 — KC Admin</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #F5F7FA; color: #1A1A2E; min-height: 100vh; }
+header { background: #1A2B5F; color: #fff; padding: 24px 40px; }
+header .nav { font-size: 12px; color: rgba(255,255,255,0.6); margin-bottom: 8px; }
+header .nav a { color: rgba(255,255,255,0.8); text-decoration: none; }
+header h1 { font-size: 20px; font-weight: 700; }
+header p { font-size: 13px; color: rgba(255,255,255,0.65); margin-top: 5px; }
+main { max-width: 960px; margin: 36px auto; padding: 0 24px 60px; }
+.stats { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 24px; }
+.chip { background: #fff; border: 1px solid #E5E9F0; border-radius: 20px; padding: 5px 14px; font-size: 13px; font-weight: 600; color: #374151; }
+.info-box { background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 10px; padding: 14px 18px; margin-bottom: 28px; font-size: 13px; color: #1E40AF; line-height: 1.7; }
+.warn-box { background: #FFFBEB; border: 1px solid #FCD34D; border-radius: 10px; padding: 14px 18px; margin-bottom: 28px; font-size: 13px; color: #92400E; line-height: 1.7; }
+.section-label { font-size: 11px; font-weight: 700; color: #9CA3AF; text-transform: uppercase; letter-spacing: 1px; margin: 32px 0 12px; padding-bottom: 8px; border-bottom: 2px solid #E5E9F0; }
+.card { background: #fff; border: 1px solid #E5E9F0; border-radius: 12px; margin-bottom: 14px; overflow: hidden; }
+.card-head { display: flex; align-items: center; gap: 12px; padding: 13px 20px; border-bottom: 1px solid #E5E9F0; background: #F8FAFC; flex-wrap: wrap; }
+.po-id { font-size: 11px; font-weight: 700; color: #fff; background: #1A2B5F; padding: 3px 10px; border-radius: 4px; }
+.card-name { font-size: 15px; font-weight: 700; color: #1A1A2E; }
+.rt-tag { font-size: 11px; font-weight: 600; background: #EFF6FF; color: #1A4A9A; border-radius: 4px; padding: 2px 8px; margin-left: auto; }
+.card-body { padding: 16px 20px; }
+.field-row { margin-bottom: 14px; }
+.field-row:last-child { margin-bottom: 0; }
+.field-label { font-size: 11px; font-weight: 600; color: #6B7280; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+.field-value { font-size: 13px; color: #1A1A2E; line-height: 1.6; }
+.display-text { font-size: 13px; color: #374151; background: #FEF3C7; border-left: 3px solid #D97706; padding: 10px 14px; border-radius: 0 6px 6px 0; line-height: 1.7; }
+.approval-badge { font-size: 11px; font-weight: 600; background: #F3F4F6; color: #6B7280; border-radius: 4px; padding: 2px 8px; margin-left: 8px; }
+</style>
+</head>
+<body>
+<header>
+  <div class="nav"><a href="00_index.html">← 인덱스로 돌아가기</a></div>
+  <h1>Policy 카드 입력 가이드</h1>
+  <p>STEP 5 · Clark 앱 표시 면책 문구 카드 · 총 19장</p>
+</header>
+<main>
+
+<div class="stats">
+  <span class="chip">📋 총 19장</span>
+  <span class="chip">건강보험 10장</span>
+  <span class="chip">생명·노후·특종 5장</span>
+  <span class="chip">신규 미커버 영역 4장</span>
+</div>
+
+<div class="warn-box">
+  <strong>⚠ 준법감시인 2단계 승인 필수</strong><br>
+  Policy 카드는 도메인 검수자 → 준법감시인 순서로 2단계 승인이 필요합니다. Clark 앱 표시 문구가 비어 있으면 검수 요청이 불가합니다. 문구 등록 후 반드시 승인 절차를 거쳐 라이브 전환하세요.
+</div>
+
+<div class="info-box">
+  <strong>입력 순서:</strong> Policy 이름 → Clark 앱 표시 문구 (2개 필드만 입력)<br>
+  Rule 연결은 캔버스에서 별도 처리합니다. 각 Policy는 해당 Risk-type의 체인에 전속됩니다.
+</div>
+
+<div class="section-label">건강보험 영역 · PO-T01 ~ PO-T08, PO-T12, PO-T16</div>
+
+<div class="card">
+  <div class="card-head"><span class="po-id">PO-T01</span><span class="card-name">무보장 분석 안내</span><span class="rt-tag">→ T01 무보장형</span></div>
+  <div class="card-body">
+    <div class="field-row"><div class="field-label">Policy 이름</div><div class="field-value">무보장 분석 안내</div></div>
+    <div class="field-row">
+      <div class="field-label">Clark 앱 표시 문구 <span class="approval-badge">준법감시인 승인 필요</span></div>
+      <div class="display-text">이 분석은 마이데이터 기반 보험 가입 현황을 토대로 한 일반적인 보장 진단 결과입니다. 실제 보험 필요성과 적정 보장 금액은 개인의 소득·자산·건강 상태에 따라 달라질 수 있습니다. 정확한 보장 설계는 보닥 플래너와 상담하시기 바랍니다.</div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="po-id">PO-T02</span><span class="card-name">암진단금 분석 안내</span><span class="rt-tag">→ T02 암투병생활비 부족형</span></div>
+  <div class="card-body">
+    <div class="field-row"><div class="field-label">Policy 이름</div><div class="field-value">암진단금 분석 안내</div></div>
+    <div class="field-row">
+      <div class="field-label">Clark 앱 표시 문구 <span class="approval-badge">준법감시인 승인 필요</span></div>
+      <div class="display-text">이 분석은 마이데이터 기반 보험 가입 현황을 활용한 보장 진단 결과입니다. 암 보험금 지급 여부와 금액은 가입하신 보험 약관 및 보험사 심사 기준에 따라 달라질 수 있습니다. 더 정확한 보장 내용은 가입 보험사 또는 보닥 플래너에게 확인하시기 바랍니다.</div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="po-id">PO-T03</span><span class="card-name">심혈관 보장 분석 안내</span><span class="rt-tag">→ T03 심혈관질환보장 협소형</span></div>
+  <div class="card-body">
+    <div class="field-row"><div class="field-label">Policy 이름</div><div class="field-value">심혈관 보장 분석 안내</div></div>
+    <div class="field-row">
+      <div class="field-label">Clark 앱 표시 문구 <span class="approval-badge">준법감시인 승인 필요</span></div>
+      <div class="display-text">이 분석은 마이데이터 기반 보험 가입 현황을 토대로 한 심혈관 보장 진단 결과입니다. 보험 약관상 보장 질병의 범위(급성심근경색·허혈성심장질환 등)는 가입 시점과 상품에 따라 다를 수 있으며, 실제 보험금 지급 여부는 가입 보험사의 심사 기준을 따릅니다.</div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="po-id">PO-T04</span><span class="card-name">뇌혈관 보장 분석 안내</span><span class="rt-tag">→ T04 뇌혈관질환보장 협소형</span></div>
+  <div class="card-body">
+    <div class="field-row"><div class="field-label">Policy 이름</div><div class="field-value">뇌혈관 보장 분석 안내</div></div>
+    <div class="field-row">
+      <div class="field-label">Clark 앱 표시 문구 <span class="approval-badge">준법감시인 승인 필요</span></div>
+      <div class="display-text">이 분석은 마이데이터 기반 보험 가입 현황을 토대로 한 뇌혈관 보장 진단 결과입니다. 보험 약관상 뇌졸중 보장 범위(뇌출혈·뇌경색 포함 여부)는 가입 시점과 상품에 따라 다를 수 있으며, 실제 보험금 지급 여부는 가입 보험사의 심사 기준을 따릅니다.</div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="po-id">PO-T05</span><span class="card-name">간병 보장 분석 안내</span><span class="rt-tag">→ T05 노후돌봄보장 공백형</span></div>
+  <div class="card-body">
+    <div class="field-row"><div class="field-label">Policy 이름</div><div class="field-value">간병 보장 분석 안내</div></div>
+    <div class="field-row">
+      <div class="field-label">Clark 앱 표시 문구 <span class="approval-badge">준법감시인 승인 필요</span></div>
+      <div class="display-text">이 분석은 마이데이터 기반 보험 가입 현황을 토대로 한 노후 돌봄 보장 진단 결과입니다. 간병보험 보장 조건(장기요양등급 기준·치매 진단 기준 등)은 가입 상품에 따라 다를 수 있습니다. 정확한 보장 내용은 가입 보험사 또는 보닥 플래너에게 확인하시기 바랍니다.</div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="po-id">PO-T06</span><span class="card-name">갱신형 보험료 급등 위험 분석 안내</span><span class="rt-tag">→ T06 갱신형 보험료 급등 위험형</span></div>
+  <div class="card-body">
+    <div class="field-row"><div class="field-label">Policy 이름</div><div class="field-value">갱신형 보험료 급등 위험 분석 안내</div></div>
+    <div class="field-row">
+      <div class="field-label">Clark 앱 표시 문구 <span class="approval-badge">준법감시인 승인 필요</span></div>
+      <div class="display-text">이 분석은 마이데이터 기반 보험 가입 현황을 토대로 한 갱신형 보험료 급등 위험 진단 결과입니다. 갱신형 보험의 갱신 시 보험료는 보험사·나이·건강 상태에 따라 달라지며, 실제 보험료 인상 폭은 가입 보험사에 문의하시기 바랍니다. 갱신형 여부 직접 확인이 어려우므로 정확한 점검은 보닥 플래너와 상담하시기 바랍니다.</div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="po-id">PO-T07</span><span class="card-name">보장 비효율 분석 안내</span><span class="rt-tag">→ T07 비용 대비 보장 비효율형</span></div>
+  <div class="card-body">
+    <div class="field-row"><div class="field-label">Policy 이름</div><div class="field-value">보장 비효율 분석 안내</div></div>
+    <div class="field-row">
+      <div class="field-label">Clark 앱 표시 문구 <span class="approval-badge">준법감시인 승인 필요</span></div>
+      <div class="display-text">이 분석은 마이데이터 기반 보험 가입 현황을 토대로 한 보장 효율성 진단 결과입니다. 중복 보장이나 과다 보험료 여부는 개인의 자산·소득·건강 상태에 따라 판단이 달라질 수 있습니다. 보험 구조 최적화를 위한 정확한 분석은 보닥 플래너와 상담하시기 바랍니다.</div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="po-id">PO-T08</span><span class="card-name">생애주기 적합도 분석 안내</span><span class="rt-tag">→ T08 생애주기 적합도 저조형</span></div>
+  <div class="card-body">
+    <div class="field-row"><div class="field-label">Policy 이름</div><div class="field-value">생애주기 적합도 분석 안내</div></div>
+    <div class="field-row">
+      <div class="field-label">Clark 앱 표시 문구 <span class="approval-badge">준법감시인 승인 필요</span></div>
+      <div class="display-text">이 분석은 마이데이터 기반 보험 가입 현황과 프로파일 정보를 토대로 한 생애주기 적합성 진단 결과입니다. 보험 구성의 적합성은 소득·자산·가족 구성 등 다양한 요소를 종합적으로 고려해야 합니다. 나이와 생애주기에 맞는 보장 재설계는 보닥 플래너와 상담하시기 바랍니다.</div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="po-id">PO-T12</span><span class="card-name">수술·입원 보장 분석 안내</span><span class="rt-tag">→ T12 수술·입원 보장 미비형</span></div>
+  <div class="card-body">
+    <div class="field-row"><div class="field-label">Policy 이름</div><div class="field-value">수술·입원 보장 분석 안내</div></div>
+    <div class="field-row">
+      <div class="field-label">Clark 앱 표시 문구 <span class="approval-badge">준법감시인 승인 필요</span></div>
+      <div class="display-text">이 분석은 마이데이터 기반 보험 가입 현황을 토대로 한 수술·입원 보장 진단 결과입니다. 수술비·입원일당 보장 범위는 가입하신 보험 약관에 따라 다르며, 실손보험과의 중복 지급 조건도 확인이 필요합니다. 정확한 보장 내용은 가입 보험사 또는 보닥 플래너에게 문의하시기 바랍니다.</div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="po-id">PO-T16</span><span class="card-name">실손보험 노후화 분석 안내</span><span class="rt-tag">→ T16 실손보험 노후화형</span></div>
+  <div class="card-body">
+    <div class="field-row"><div class="field-label">Policy 이름</div><div class="field-value">실손보험 노후화 분석 안내</div></div>
+    <div class="field-row">
+      <div class="field-label">Clark 앱 표시 문구 <span class="approval-badge">준법감시인 승인 필요</span></div>
+      <div class="display-text">이 분석은 마이데이터 기반 보험 가입 현황을 토대로 한 실손보험 세대 진단 결과입니다. 실손보험 세대별 보장 내용·보험료는 가입 보험사의 약관 기준을 따르며, 세대 전환 여부는 현재 건강 상태와 갱신 보험료를 종합적으로 고려해야 합니다. 세대 전환 상담은 보닥 플래너에게 문의하시기 바랍니다.</div>
+    </div>
+  </div>
+</div>
+
+<div class="section-label">생명보험 영역 · PO-T09, PO-T11</div>
+
+<div class="card">
+  <div class="card-head"><span class="po-id">PO-T09</span><span class="card-name">건강보험 편중 노후전환 점검 안내</span><span class="rt-tag">→ T09 건강보험 편중 노후전환 미비형</span></div>
+  <div class="card-body">
+    <div class="field-row"><div class="field-label">Policy 이름</div><div class="field-value">건강보험 편중 노후전환 점검 안내</div></div>
+    <div class="field-row">
+      <div class="field-label">Clark 앱 표시 문구 <span class="approval-badge">준법감시인 승인 필요</span></div>
+      <div class="display-text">이 분석은 마이데이터 기반 보험 가입 현황을 토대로 한 노후 돌봄 전환 미비 진단 결과입니다. 건강보험(암진단금)은 있으나 노후 간병보험이 없는 경우, 향후 장기 요양 비용 발생 시 전액 자부담 위험이 있습니다. 노후 보장 전환 설계는 보닥 플래너와 상담하시기 바랍니다.</div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="po-id">PO-T11</span><span class="card-name">사망 보장 분석 안내</span><span class="rt-tag">→ T11 사망보장 미비형</span></div>
+  <div class="card-body">
+    <div class="field-row"><div class="field-label">Policy 이름</div><div class="field-value">사망 보장 분석 안내</div></div>
+    <div class="field-row">
+      <div class="field-label">Clark 앱 표시 문구 <span class="approval-badge">준법감시인 승인 필요</span></div>
+      <div class="display-text">이 분석은 마이데이터 기반 보험 가입 현황을 토대로 한 사망 보장 진단 결과입니다. 적정 사망보험금은 소득·부채·부양가족 수에 따라 다르며, 정확한 보장 설계는 보닥 플래너와 상담하시기 바랍니다.</div>
+    </div>
+  </div>
+</div>
+
+<div class="section-label">노후·연금 영역 · PO-T13</div>
+
+<div class="card">
+  <div class="card-head"><span class="po-id">PO-T13</span><span class="card-name">사망·노후 이중 무대비 분석 안내</span><span class="rt-tag">→ T13 사망·노후 이중 무대비형</span></div>
+  <div class="card-body">
+    <div class="field-row"><div class="field-label">Policy 이름</div><div class="field-value">사망·노후 이중 무대비 분석 안내</div></div>
+    <div class="field-row">
+      <div class="field-label">Clark 앱 표시 문구 <span class="approval-badge">준법감시인 승인 필요</span></div>
+      <div class="display-text">이 분석은 마이데이터 기반 보험 가입 현황을 토대로 한 사망·노후 이중 무대비 진단 결과입니다. 사망보장이 없는 상태이며, 연금보험 가입 현황도 별도로 점검이 필요합니다. 노후 필요 자금은 생활 방식·건강 상태·기대수명에 따라 달라질 수 있으며, 사망보장과 노후자금을 함께 설계하시려면 보닥 플래너와 상담하시기 바랍니다.</div>
+    </div>
+  </div>
+</div>
+
+<div class="section-label">특종 영역 · PO-T14, PO-T15</div>
+
+<div class="card">
+  <div class="card-head"><span class="po-id">PO-T14</span><span class="card-name">운전자보험 분석 안내</span><span class="rt-tag">→ T14 운전자보험 미가입형</span></div>
+  <div class="card-body">
+    <div class="field-row"><div class="field-label">Policy 이름</div><div class="field-value">운전자보험 분석 안내</div></div>
+    <div class="field-row">
+      <div class="field-label">Clark 앱 표시 문구 <span class="approval-badge">준법감시인 승인 필요</span></div>
+      <div class="display-text">이 분석은 마이데이터 기반 보험 가입 현황을 토대로 한 운전자 보장 진단 결과입니다. 운전자보험은 자동차보험과 별개이며, 형사합의금·벌금 등의 보장 한도는 상품에 따라 다릅니다. 정확한 보장 내용은 보닥 플래너에게 확인하시기 바랍니다.</div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="po-id">PO-T15</span><span class="card-name">자녀보장 분석 안내</span><span class="rt-tag">→ T15 자녀 건강보장 공백형</span></div>
+  <div class="card-body">
+    <div class="field-row"><div class="field-label">Policy 이름</div><div class="field-value">자녀보장 분석 안내</div></div>
+    <div class="field-row">
+      <div class="field-label">Clark 앱 표시 문구 <span class="approval-badge">준법감시인 승인 필요</span></div>
+      <div class="display-text">이 분석은 마이데이터 기반 보험 가입 현황을 토대로 한 자녀 보장 진단 결과입니다. 어린이보험 가입 연령 제한 및 보장 범위는 상품에 따라 다르며, 태아보험은 출산 전 가입이 필요합니다. 정확한 가입 조건은 보닥 플래너와 확인하시기 바랍니다.</div>
+    </div>
+  </div>
+</div>
+
+<div class="section-label">여성 보건 영역 · PO-T10</div>
+
+<div class="card">
+  <div class="card-head"><span class="po-id">PO-T10</span><span class="card-name">여성 암 보장 분석 안내</span><span class="rt-tag">→ T10 여성 암 보장 공백형</span></div>
+  <div class="card-body">
+    <div class="field-row"><div class="field-label">Policy 이름</div><div class="field-value">여성 암 보장 분석 안내</div></div>
+    <div class="field-row">
+      <div class="field-label">Clark 앱 표시 문구 <span class="approval-badge">준법감시인 승인 필요</span></div>
+      <div class="display-text">이 분석은 마이데이터 기반 보험 가입 현황을 토대로 한 여성 암 보장 진단 결과입니다. 유방암·자궁경부암 등 여성 특화 암의 평균 직접 의료비는 약 2,800만원이며, 5년 생존율이 90% 이상으로 치료 후 생활비 보장이 장기간 필요합니다. 현재 암진단금이 3천만원 미만인 경우 추가 보장을 검토하시기 바랍니다. 정확한 보장 설계는 보닥 플래너와 상담하시기 바랍니다.</div>
+    </div>
+  </div>
+</div>
+
+<div class="section-label">신규 미커버 영역 · PO-T17 ~ PO-T23</div>
+
+<div class="card">
+  <div class="card-head"><span class="po-id">PO-T17</span><span class="card-name">치매 진단 보장 분석 안내</span><span class="rt-tag">→ T17 치매 진단 보장 공백형</span></div>
+  <div class="card-body">
+    <div class="field-row"><div class="field-label">Policy 이름</div><div class="field-value">치매 진단 보장 분석 안내</div></div>
+    <div class="field-row">
+      <div class="field-label">Clark 앱 표시 문구 <span class="approval-badge">준법감시인 승인 필요</span></div>
+      <div class="display-text">이 분석은 마이데이터 기반 보험 가입 현황을 토대로 한 치매 진단 보장 진단 결과입니다. 치매 환자의 중증 진행 시 월 요양 비용이 250~400만원에 달하며, 진단 후 평균 생존 기간이 8~10년임을 고려하면 치매 진단금이 없을 경우 장기 경제적 부담이 발생합니다. 치매 진단 보장 여부를 별도로 확인하시고, 정확한 보장 설계는 보닥 플래너와 상담하시기 바랍니다.</div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="po-id">PO-T18</span><span class="card-name">항암치료비 보장 분석 안내</span><span class="rt-tag">→ T18 항암치료비 미보장형</span></div>
+  <div class="card-body">
+    <div class="field-row"><div class="field-label">Policy 이름</div><div class="field-value">항암치료비 보장 분석 안내</div></div>
+    <div class="field-row">
+      <div class="field-label">Clark 앱 표시 문구 <span class="approval-badge">준법감시인 승인 필요</span></div>
+      <div class="display-text">이 분석은 마이데이터 기반 보험 가입 현황을 토대로 한 항암치료비 보장 진단 결과입니다. 암 환자의 연간 평균 항암약물치료비는 약 1,900만원이며, 표적치료제·면역항암제 포함 시 3,000만원을 초과하는 경우도 있습니다. 암진단금 외 항암치료비 담보 가입 여부를 별도로 확인하시기 바랍니다. 정확한 보장 내용은 보닥 플래너에게 문의하시기 바랍니다.</div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="po-id">PO-T19</span><span class="card-name">수술비 보장 분석 안내</span><span class="rt-tag">→ T19 수술비 미보장형</span></div>
+  <div class="card-body">
+    <div class="field-row"><div class="field-label">Policy 이름</div><div class="field-value">수술비 보장 분석 안내</div></div>
+    <div class="field-row">
+      <div class="field-label">Clark 앱 표시 문구 <span class="approval-badge">준법감시인 승인 필요</span></div>
+      <div class="display-text">이 분석은 마이데이터 기반 보험 가입 현황을 토대로 한 수술비 보장 진단 결과입니다. 실손보험이 있어도 비급여 수술비·정액형 수술비는 별도의 수술 담보가 있어야 보장됩니다. 심장수술 평균 비용 500~2,000만원, 인공관절 수술 400~700만원을 감안할 때 수술비 담보 공백은 실질적인 재정 위험입니다. 정확한 보장 내용은 보닥 플래너에게 문의하시기 바랍니다.</div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="po-id">PO-T20</span><span class="card-name">후유장해 보장 분석 안내</span><span class="rt-tag">→ T20 후유장해 보장 공백형</span></div>
+  <div class="card-body">
+    <div class="field-row"><div class="field-label">Policy 이름</div><div class="field-value">후유장해 보장 분석 안내</div></div>
+    <div class="field-row">
+      <div class="field-label">Clark 앱 표시 문구 <span class="approval-badge">준법감시인 승인 필요</span></div>
+      <div class="display-text">이 분석은 마이데이터 기반 보험 가입 현황을 토대로 한 후유장해 보장 진단 결과입니다. 등록 장애인 263만명 중 88.1%가 질환·사고 등 후천적 원인으로 장애를 얻었습니다. 후유장해는 완치되지 않고 영구적인 소득 손실과 의료비 부담으로 이어질 수 있습니다. 현재 질병후유장해·상해후유장해 담보가 확인되지 않아 보장 공백이 우려됩니다. 정확한 보장 내용은 보닥 플래너에게 문의하시기 바랍니다.</div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="po-id">PO-T21</span><span class="card-name">치과 보장 분석 안내</span><span class="rt-tag">→ T21 치과 보장 공백형</span></div>
+  <div class="card-body">
+    <div class="field-row"><div class="field-label">Policy 이름</div><div class="field-value">치과 보장 분석 안내</div></div>
+    <div class="field-row">
+      <div class="field-label">Clark 앱 표시 문구 <span class="approval-badge">준법감시인 승인 필요</span></div>
+      <div class="display-text">이 분석은 마이데이터 기반 보험 가입 현황을 토대로 한 치과 보장 진단 결과입니다. 연간 치과 이용자는 2,424만명에 달하며, 임플란트 1개 평균 100~150만원, 틀니 70~130만원 수준으로 치과 비급여 치료비는 건강보험이 거의 적용되지 않습니다. 현재 치과 보존치료·보철치료 담보가 확인되지 않아 치과 치료 발생 시 전액 자부담이 우려됩니다. 정확한 보장 내용은 보닥 플래너에게 문의하시기 바랍니다.</div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="po-id">PO-T22</span><span class="card-name">상해 보장 분석 안내</span><span class="rt-tag">→ T22 상해 특화 보장 공백형</span></div>
+  <div class="card-body">
+    <div class="field-row"><div class="field-label">Policy 이름</div><div class="field-value">상해 보장 분석 안내</div></div>
+    <div class="field-row">
+      <div class="field-label">Clark 앱 표시 문구 <span class="approval-badge">준법감시인 승인 필요</span></div>
+      <div class="display-text">이 분석은 마이데이터 기반 보험 가입 현황을 토대로 한 상해 보장 진단 결과입니다. 상해 입원 환자는 연 123만명이며 1일 비급여 비용 28.5만원, 평균 입원 13일 기준 1회 입원에 약 370만원의 비급여 부담이 발생합니다. 질병 수술 보장은 있으나 상해수술·상해입원 담보가 확인되지 않아 사고 시 보장 공백이 우려됩니다. 정확한 보장 내용은 보닥 플래너에게 문의하시기 바랍니다.</div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="po-id">PO-T23</span><span class="card-name">골절·상해진단금 보장 분석 안내</span><span class="rt-tag">→ T23 골절·상해진단금 공백형</span></div>
+  <div class="card-body">
+    <div class="field-row"><div class="field-label">Policy 이름</div><div class="field-value">골절·상해진단금 보장 분석 안내</div></div>
+    <div class="field-row">
+      <div class="field-label">Clark 앱 표시 문구 <span class="approval-badge">준법감시인 승인 필요</span></div>
+      <div class="display-text">이 분석은 마이데이터 기반 보험 가입 현황을 토대로 한 골절·상해진단금 보장 진단 결과입니다. 골절 환자는 연 230만명이며 수술 평균 423만원 중 73.9%가 비급여 본인부담으로 발생합니다. 현재 골절진단금 담보가 확인되지 않아 골절 발생 시 수백만 원의 자부담이 우려됩니다. 스포츠·레저 활동이 잦을수록 위험도는 더 높습니다. 정확한 보장 내용은 보닥 플래너에게 문의하시기 바랍니다.</div>
+    </div>
+  </div>
+</div>
+
+</main>
+</body>
+</html>
