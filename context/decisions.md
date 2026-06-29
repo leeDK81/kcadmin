@@ -28,6 +28,9 @@
 | 항목 | 논의 내용 | 미결 이유 | 등록일 |
 |---|---|---|---|
 | Playbook ← Risk-type 연결 | Risk-type 관점의 리드 전환·배정 최적화. CONNECT_RULES.risk에 'playbook' 추가 필요 | Phase 1.5+ 이관 (리드 스코어링 스펙 확정 시 추가) | 2026-06-17 |
+| **T15 제거** | 마이데이터 사업자는 본인 데이터만 조회 가능 → 자녀 보험 계약 데이터 접근 불가. "자녀 건강보장 공백" 감지는 구조적으로 불가능. 제거 범위: T15(Risk-type)·RU-T15(Rule)·CN-T15(Concept)·PO-T15(Policy)·EV020(Evidence, T15 전용 어린이 연간 의료비). 체인 23→22개, 카드 132→127장. HTML 7개 카운트 일괄 조정 필요. | 다음 컨텐츠 업데이트 세션에서 처리 | 2026-06-29 |
+| **RU-T16 재설계** | ① A3201이 담보코드 테이블상 A3xxx(후유장해) 계열인데 입원일당 대리 지표로 사용 중 — MYDATA 실제 분류 확인 필요. ② "입원일당 있음=실손보험 보유" 논리 비약 (입원일당은 별도 정액 담보). 대안 A: 개발팀이 A3201 분류 확인 후 코드 교체. 대안 B: MYDATA 조건 제거 + 40세 이상 프로파일 기반으로 단순화. | 개발팀 MYDATA 스펙 확인 선행 필요. 다음 컨텐츠 업데이트 세션에서 처리 | 2026-06-29 |
+| **A3201 공통 이슈** | A3201을 입원일당 대리 지표로 사용하는 Rule: T01·T06·T12·T16·T19 (T15는 제거 예정). A3xxx는 담보코드 테이블상 후유장해 계열이나 실제 MYDATA 스펙 미확인. 개발팀 확인 후 전수 교체 or 유지 결정 필요. | 개발팀 MYDATA 스펙 확인 선행 필요 | 2026-06-29 |
 
 ---
 
@@ -49,6 +52,9 @@
 
 | 날짜 | 내용 | 진실원 파일 |
 |---|---|---|
+| 2026-06-29 | **컨텐츠 업데이트 v1.4**: T20~T23 신규 4개 체인 추가 (후유장해·치과·상해 특화·골절), T14 Rule 담보코드 교체(A3001→A9607+A9604+A9605), 전수 감사(T01~T23) 완료. 체인 19→23개, 카드 112→132장. MD 6개+HTML 7개 업데이트. commit c0a44ee. | `contents/` 전체 |
+| 2026-06-29 | **T15 제거 결정**: 마이데이터 사업자는 본인 데이터만 조회 가능 — 자녀 보험 계약 데이터 접근 구조적 불가. "자녀 건강보장 공백" 감지는 개인화 오해 소지. 미결 항목 등록, 다음 컨텐츠 업데이트 세션에서 처리. | `context/decisions.md` (미결) |
+| 2026-06-29 | **RU-T16·A3201 이슈 식별**: RU-T16 — A3201 분류 불확실 + 입원일당=실손보험 논리 비약. A3201 공통 이슈 — T01·T06·T12·T16·T19 5개 Rule에서 입원일당 대리 지표 사용. 모두 개발팀 MYDATA 스펙 확인 후 처리. 미결 항목 등록. | `context/decisions.md` (미결) |
 | 2026-06-27 | "답변 제공 조건" 종합 테이블 추가: 프로파일·마이데이터·프롬에이지 O/X 조합 × 상태·답변 우선순위·Playbook 6컬럼 구성. context/answer-logic.md 기존 5컬럼 테이블을 7컬럼(답변 우선순위·Playbook 추가)으로 확장. mockups_v2/13_answer-logic.html에 전용 섹션("답변 제공 조건 — 사용자 데이터 상태별 요약") 신규 추가(Playbook 감지 조건 테이블 아래). | `context/answer-logic.md`, `mockups_v2/13_answer-logic.html` |
 | 2026-06-26 | 전수 검사 완료: 분기(fallback) 구조 전파 — KC·RAG·LLM은 순차 누적 아님, 앞 단계 성공 시 뒤 단계 호출 없음. "두 체인 동시 출력" 오표현 제거(policy/02_card-purpose.html, mockups/13_answer-logic.html). 나머지 17개 md·14개 html 파일은 이미 올바른 분기 구조로 기술 확인. | `policy/02_card-purpose.html`, `mockups/13_answer-logic.html` |
 | 2026-06-26 | Case 1~4 출력 구조 명시: KC 체인(Case 1·2)과 RAG·LLM(Case 3·4)은 대체(fallback) 관계 — 동시 출력 없음. KC 구조화 답변에 Evidence(LLM 선택·인용)·Policy(appDisplayText) 포함. CTA 버튼만 Playbook 감지 시 가산(additive). Evidence "전부 참조" → "LLM 선택·인용" 오류 수정. | `context/answer-logic.md`, `mockups_v2/13_answer-logic.html` |
