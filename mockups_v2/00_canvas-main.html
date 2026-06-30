@@ -5,31 +5,12 @@
 <title>KC Admin v2 — 연결·테스트·배포</title>
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="../shared.css">
 <style>
-:root {
-  --card-risk:#C94B1A;--card-evidence:#1A7A4A;--card-concept:#1A4A9A;
-  --card-rule:#9A1A1A;--card-policy:#5A5A55;--card-playbook:#6B4A9A;
-  --status-active:#0F6E56;--status-approved:#1A4A9A;--status-review:#BA7517;--status-draft:#9C9C94;--status-rejected:#A32D2D;
-  --sidebar-w:220px;--panel-w:480px;
-  --bg-page:#F4F4F5;--bg-card:#FFFFFF;
-  --text-primary:#171719;--text-secondary:#70737C;--text-hint:#989BA2;
-  --border:#E1E2E4;--radius:8px;
-  --shadow:0 2px 4px -2px rgba(23,23,23,.06),0 4px 6px -1px rgba(23,23,23,.06);
-  --shadow-md:0 4px 12px -2px rgba(23,23,23,.1),0 8px 20px -4px rgba(23,23,23,.07);
-  --step-active:#1A3A6B;
-}
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;background:var(--bg-page);color:var(--text-primary);min-width:1280px;font-size:15px;line-height:1.5;overflow:hidden;height:100vh}
+body{overflow:hidden;height:100vh}
 
 /* ── Layout ── */
-.layout{display:flex;height:100vh;overflow:hidden}
-.sidebar{width:var(--sidebar-w);background:#1A1A18;flex-shrink:0;padding:20px 0;height:100vh;overflow-y:auto;z-index:100}
-.sidebar-logo{padding:0 16px 20px;font-size:16px;font-weight:700;color:#fff;border-bottom:1px solid #333;margin-bottom:12px}
-.sidebar a,.nav-locked{display:flex;align-items:center;gap:8px;padding:8px 16px;color:#C8C8C4;text-decoration:none;font-size:14px;transition:background .15s}
-.sidebar a:hover{background:rgba(255,255,255,.08);color:#fff}
-.sidebar a.active{background:rgba(255,255,255,.15);color:#fff;font-weight:600;border-left:3px solid #5A8AE0}
-.nav-divider{border-top:1px solid #333;margin:8px 0}
-.nav-locked{color:#555!important;cursor:not-allowed}
+.layout{height:100vh;overflow:hidden}
 
 /* ── Workspace ── */
 .workspace{flex:1;display:flex;flex-direction:column;height:100vh;overflow:hidden}
@@ -38,11 +19,6 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;backg
 .toolbar{background:var(--bg-card);border-bottom:1px solid var(--border);padding:0 16px;display:flex;align-items:center;gap:10px;flex-shrink:0;height:48px;z-index:50}
 .toolbar-title{font-size:14px;font-weight:700;color:var(--text-primary);white-space:nowrap}
 .tb-divider{width:1px;height:22px;background:var(--border);flex-shrink:0}
-.btn{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;border:none;font-family:inherit;transition:all .15s;line-height:1;white-space:nowrap;text-decoration:none;color:inherit}
-.btn:hover{opacity:.85}
-.btn-primary{background:var(--step-active);color:#fff}
-.btn-secondary{background:var(--bg-card);color:var(--text-primary);border:1px solid var(--border)}
-.btn-sm{padding:5px 10px;font-size:12px}
 .focal-chip{display:none;align-items:center;gap:7px;padding:3px 8px 3px 10px;border-radius:6px;font-size:12px;font-weight:700;color:#fff}
 .focal-chip.visible{display:inline-flex}
 .focal-chip-x{width:18px;height:18px;border-radius:3px;border:none;background:rgba(255,255,255,.25);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:10px;transition:background .15s}
@@ -156,9 +132,6 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;backg
 .modal-conn-arrow{color:var(--text-hint);font-size:14px;flex-shrink:0}
 .modal-actions{display:flex;gap:8px;justify-content:flex-end}
 
-/* Toast */
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1A1A18;color:#fff;padding:10px 22px;border-radius:8px;font-size:13px;font-weight:500;z-index:9999;opacity:0;transition:opacity .25s;pointer-events:none;white-space:nowrap}
-.toast.show{opacity:1}
 .toast.success{background:#0A5A3C}.toast.warn{background:#7A3A00}
 .gc-review-badge{font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;background:rgba(184,119,34,.15);color:#B87722;margin-left:4px}
 
@@ -175,7 +148,6 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;backg
 .panel-close:hover{background:var(--bg-page)}
 .panel-bd{flex:1;overflow-y:auto;padding:20px}
 .panel-ft{padding:14px 20px;border-top:1px solid var(--border);display:flex;gap:8px;flex-shrink:0}
-.form-group{margin-bottom:16px}
 .form-label{display:block;font-size:13px;font-weight:600;margin-bottom:5px}
 .chip{display:inline-flex;align-items:center;background:var(--bg-page);border:1px solid var(--border);border-radius:4px;padding:2px 8px;font-size:12px;font-weight:600;margin:2px}
 
@@ -323,30 +295,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;backg
 <div class="layout">
 
 <!-- Sidebar -->
-<nav class="sidebar">
-  <div class="sidebar-logo">&#9889; KC Admin <span style="font-size:10px;background:#5A8AE0;color:#fff;padding:1px 6px;border-radius:3px;margin-left:4px;font-weight:600">v2</span></div>
-  <a href="01_guide.html"><i class="fa-solid fa-clipboard-list fa-fw"></i> 업무 가이드</a>
-  <a href="02_dashboard.html"><i class="fa-solid fa-chart-bar fa-fw"></i> 대시보드</a>
-  <div class="nav-divider"></div>
-  <a href="03_card-library.html"><i class="fa-solid fa-folder-open fa-fw"></i> 카드 라이브러리</a>
-  <a href="04_risk-type-list.html" style="padding-left:20px"><i class="fa-solid fa-circle-exclamation fa-fw"></i> ① Risk-type</a>
-  <a href="05_evidence-list.html" style="padding-left:20px"><i class="fa-solid fa-database fa-fw"></i> ② Evidence</a>
-  <a href="06_concept-list.html" style="padding-left:20px"><i class="fa-solid fa-lightbulb fa-fw"></i> ③ Concept</a>
-  <a href="07_rule-list.html" style="padding-left:20px"><i class="fa-solid fa-scale-balanced fa-fw"></i> ④ Rule</a>
-  <a href="08_policy-list.html" style="padding-left:20px"><i class="fa-solid fa-file-shield fa-fw"></i> ⑤ Policy</a>
-  <a href="16_playbook-list.html" style="padding-left:20px"><i class="fa-solid fa-bullseye fa-fw"></i> ⑥ Playbook</a>
-  <span class="nav-locked" style="padding-left:20px"><i class="fa-solid fa-lock fa-fw"></i> ⑦ Case 🔒</span>
-  <div class="nav-divider"></div>
-  <a href="09_review-workflow.html"><i class="fa-solid fa-check-double fa-fw"></i> 검수·승인</a>
-  <a href="00_canvas-main.html" class="active"><i class="fa-solid fa-diagram-project fa-fw"></i> 연결·테스트·배포</a>
-  <a href="18_system-settings.html"><i class="fa-solid fa-sliders fa-fw"></i> 시스템 설정</a>
-  <a href="19_faq-rag.html" style="padding-left:20px"><i class="fa-solid fa-list-check fa-fw"></i> FAQ Q&A</a>
-  <div class="nav-divider"></div>
-  <a href="00_design-system.html"><i class="fa-solid fa-palette fa-fw"></i> 디자인 시스템</a>
-  <a href="13_answer-logic.html"><i class="fa-solid fa-sitemap fa-fw"></i> AI 답변 생성 로직</a>
-  <a href="15_aio-guide.html"><i class="fa-solid fa-magnifying-glass fa-fw"></i> AIO 가이드</a>
-  <a href="12_coverage-code-table.html"><i class="fa-solid fa-table-list fa-fw"></i> 담보코드</a>
-</nav>
+<nav class="sidebar" id="sidebar"></nav>
 
 <!-- Workspace -->
 <div class="workspace">
@@ -467,9 +416,9 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;backg
   <div class="panel-ft" id="panelFooter"></div>
 </div>
 
-<div class="toast" id="toast"></div>
-
+<script src="../shared.js"></script>
 <script>
+renderSidebar();
 // ============================================================
 // DATA
 // ============================================================
@@ -2356,18 +2305,6 @@ function renderCardDetailHTML(cardId) {
 
 function detailSection(title) {
   return '<div style="font-size:11px;font-weight:700;color:var(--text-secondary);letter-spacing:.05em;text-transform:uppercase;padding:8px 0 6px;border-bottom:1px solid var(--border);margin-bottom:12px;margin-top:4px">'+title+'</div>';
-}
-
-// ============================================================
-// TOAST
-// ============================================================
-function showToast(msg, type) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = 'toast ' + (type||'');
-  t.classList.add('show');
-  clearTimeout(t._timer);
-  t._timer = setTimeout(() => t.classList.remove('show'), 2600);
 }
 
 // ============================================================

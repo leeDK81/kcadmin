@@ -6,48 +6,9 @@
 <title>시스템 설정 — KC Admin</title>
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="../shared.css">
 <style>
-:root {
-  --status-draft:#9C9C94; --status-review:#BA7517; --status-active:#0F6E56; --status-approved:#1A4A9A; --status-paused:#7A4A00; --status-rejected:#A32D2D;
-  --step-done:#0F6E56; --step-active:#1A3A6B; --step-pending:#D0CFC9;
-  --sidebar-w:220px; --bg-page:#F4F4F5; --bg-card:#FFFFFF;
-  --text-primary:#171719; --text-secondary:#70737C; --text-hint:#989BA2;
-  --border:#E1E2E4; --radius:8px; --shadow:0px 2px 4px -2px rgba(23,23,23,.06),0px 4px 6px -1px rgba(23,23,23,.06);
-}
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg-page);color:var(--text-primary);min-width:1280px;font-size:15px;line-height:1.5}
-.layout{display:flex;min-height:100vh}
-.sidebar{width:var(--sidebar-w);background:#1A1A18;flex-shrink:0;padding:20px 0;position:sticky;top:0;height:100vh;overflow-y:auto}
-.sidebar-logo{padding:0 16px 20px;font-size:16px;font-weight:700;color:#fff;border-bottom:1px solid #333;margin-bottom:12px}
-.sidebar a,.nav-locked{display:flex;align-items:center;gap:8px;padding:8px 16px;color:#C8C8C4;text-decoration:none;font-size:14px;transition:background .15s}
-.sidebar a:hover{background:rgba(255,255,255,.08);color:#fff}
-.sidebar a.active{background:rgba(255,255,255,.15);color:#fff;font-weight:600;border-left:3px solid #5A8AE0}
-.nav-divider{border-top:1px solid #333;margin:8px 0}
-.nav-locked{color:#555!important;cursor:not-allowed}
-.main{flex:1;padding:32px;overflow-y:auto}
-.page-header{margin-bottom:28px}
-.page-header h1{font-size:24px;font-weight:700;margin-bottom:6px}
-.page-header p{color:var(--text-secondary)}
-.card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);margin-bottom:20px}
-.section-title{font-size:17px;font-weight:700;margin:0 0 6px;display:flex;align-items:center;gap:10px}
 .section-desc{font-size:14px;color:var(--text-secondary);margin-bottom:20px;line-height:1.6;padding-bottom:16px;border-bottom:1px solid var(--border)}
-.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;font-size:13px;font-weight:600;white-space:nowrap}
-.badge-active{background:rgba(15,110,86,.15);color:var(--status-active)}
-.badge-draft{background:rgba(156,156,148,.15);color:var(--status-draft)}
-.badge-review{background:rgba(186,117,23,.15);color:var(--status-review)}
-.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:6px;font-size:14px;font-weight:600;cursor:pointer;border:none;font-family:inherit;transition:opacity .15s}
-.btn:hover{opacity:.85}
-.btn-primary{background:var(--step-active);color:#fff}
-.btn-secondary{background:var(--bg-card);color:var(--text-primary);border:1px solid var(--border)}
-.btn-sm{padding:5px 10px;font-size:13px}
-.form-group{margin-bottom:18px}
-.form-group label{display:block;font-size:14px;font-weight:600;margin-bottom:4px}
-.field-hint{display:block;font-size:13px;color:var(--text-hint);margin-top:3px;line-height:1.4}
-.form-control{width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-family:inherit;background:#fff;color:var(--text-primary)}
-.form-control:focus{outline:none;border-color:var(--step-active);box-shadow:0 0 0 2px rgba(26,58,107,.12)}
-textarea.form-control{resize:vertical}
-.banner{padding:12px 16px;border-radius:var(--radius);margin-bottom:16px;font-size:14px;line-height:1.6}
-.banner-info{background:#EEF4FF;border:1px solid #C0D0F0;color:#1A3A6B}
 .two-col{display:grid;grid-template-columns:1fr 280px;gap:20px;align-items:start}
 .action-bar{display:flex;gap:10px;justify-content:flex-end;margin-top:4px}
 /* 현재 적용 중 패널 */
@@ -60,36 +21,11 @@ textarea.form-control{resize:vertical}
 .prohibit-list{display:flex;flex-direction:column;gap:3px}
 .prohibit-chip{display:inline-flex;align-items:center;gap:5px;font-size:13px;color:#A32D2D}
 .prohibit-chip::before{content:"✕";font-weight:700;font-size:11px}
-.toast{position:fixed;bottom:24px;right:24px;background:#1A1A18;color:#fff;padding:12px 20px;border-radius:8px;font-size:14px;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none}
-.toast.show{opacity:1}
 </style>
 </head>
 <body>
 <div class="layout">
-<nav class="sidebar">
-  <div class="sidebar-logo">&#9889; KC Admin <span style="font-size:10px;background:#5A8AE0;color:#fff;padding:1px 6px;border-radius:3px;margin-left:4px;font-weight:600">v2</span></div>
-  <a href="01_guide.html"><i class="fa-solid fa-clipboard-list fa-fw"></i> 업무 가이드</a>
-  <a href="02_dashboard.html"><i class="fa-solid fa-chart-bar fa-fw"></i> 대시보드</a>
-  <div class="nav-divider"></div>
-  <a href="03_card-library.html"><i class="fa-solid fa-folder-open fa-fw"></i> 카드 라이브러리</a>
-  <a href="04_risk-type-list.html" style="padding-left:20px"><i class="fa-solid fa-circle-exclamation fa-fw"></i> ① Risk-type</a>
-  <a href="05_evidence-list.html" style="padding-left:20px"><i class="fa-solid fa-database fa-fw"></i> ② Evidence</a>
-  <a href="06_concept-list.html" style="padding-left:20px"><i class="fa-solid fa-lightbulb fa-fw"></i> ③ Concept</a>
-  <a href="07_rule-list.html" style="padding-left:20px"><i class="fa-solid fa-scale-balanced fa-fw"></i> ④ Rule</a>
-  <a href="08_policy-list.html" style="padding-left:20px"><i class="fa-solid fa-file-shield fa-fw"></i> ⑤ Policy</a>
-  <a href="16_playbook-list.html" style="padding-left:20px"><i class="fa-solid fa-bullseye fa-fw"></i> ⑥ Playbook</a>
-  <span class="nav-locked" style="padding-left:20px"><i class="fa-solid fa-lock fa-fw"></i> ⑦ Case 🔒</span>
-  <div class="nav-divider"></div>
-  <a href="09_review-workflow.html"><i class="fa-solid fa-check-double fa-fw"></i> 검수·승인</a>
-  <a href="00_canvas-main.html"><i class="fa-solid fa-diagram-project fa-fw"></i> 연결·테스트·배포</a>
-  <a href="18_system-settings.html" class="active"><i class="fa-solid fa-sliders fa-fw"></i> 시스템 설정</a>
-  <a href="19_faq-rag.html" style="padding-left:20px"><i class="fa-solid fa-list-check fa-fw"></i> FAQ Q&A</a>
-  <div class="nav-divider"></div>
-  <a href="00_design-system.html"><i class="fa-solid fa-palette fa-fw"></i> 디자인 시스템</a>
-  <a href="13_answer-logic.html"><i class="fa-solid fa-sitemap fa-fw"></i> AI 답변 생성 로직</a>
-  <a href="15_aio-guide.html"><i class="fa-solid fa-magnifying-glass fa-fw"></i> AIO 가이드</a>
-  <a href="12_coverage-code-table.html"><i class="fa-solid fa-table-list fa-fw"></i> 담보코드</a>
-</nav>
+<nav class="sidebar" id="sidebar"></nav>
 
 <main class="main">
   <div class="page-header">
@@ -156,21 +92,16 @@ textarea.form-control{resize:vertical}
   </div>
 </main>
 </div>
-<div class="toast" id="toast"></div>
 
 <script>
+renderSidebar();
 function saveSettings() {
   const p = document.getElementById('prohibit').value.trim();
   if (!p) { showToast('금지 사항을 입력해야 합니다.'); return; }
   showToast('저장되었습니다. Clark AI에 즉시 반영됩니다.');
 }
 
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2800);
-}
 </script>
+<script src="../shared.js"></script>
 </body>
 </html>

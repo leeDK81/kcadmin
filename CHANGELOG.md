@@ -4,6 +4,27 @@
 
 ---
 
+## 2026-06-30 — shared.css + shared.js 구조 리팩터링
+
+### 변경 사항
+
+| 파일 | 내용 |
+|---|---|
+| `mockups_v2/shared.css` | **신규** — 26개 파일 공통 CSS 단일화 (`:root` 변수 superset, 사이드바, 버튼, 뱃지, 폼, 토스트 등) |
+| `mockups_v2/shared.js` | **신규** — 사이드바 렌더링(`SIDEBAR_ITEMS` + `renderSidebar()`), 공통 함수(`showToast`, `toggleStep`), 공통 데이터(`CARD_TYPE`, `TYPE_COLOR`, `CARD_NAMES`, `typeColor`, `cardTag`, `usedChip`) |
+| `mockups_v2/` 26개 HTML | 각 파일에 `shared.css` 링크·`shared.js` 스크립트 추가, 사이드바 HTML → `<nav id="sidebar"></nav>` 단일 태그로 교체, 공통 CSS/JS 블록 전체 제거 |
+| `context/impact-map.md` | **항목 18 → 22개로 세분화** — 파일 수준 → 변수·함수·CSS 규칙 수준. shared.css/js 도입 반영 (사이드바·CSS토큰·카드타입 3개 항목 추가). 체크리스트도 shared.js 기준으로 갱신 |
+| `mockups_v2/11_dry-run.html` | 사전 테스트 PROFILE 입력: 5개 고정 필드 → `profileFields` 배열 기반 동적 렌더링 (`buildProfileInputHTML()` 신규 함수, T02 클러스터 카드 4개에 `age`·`gender` 필드만 표시) |
+
+### 구조 변경 효과
+
+- **사이드바 수정**: `shared.js` → `SIDEBAR_ITEMS` 배열 1곳만 수정 → 26개 파일 자동 반영
+- **CSS 디자인 토큰 수정**: `shared.css` → `:root { }` 1곳만 수정 → 26개 파일 자동 반영
+- **공통 함수/데이터 수정**: `shared.js` 1곳만 수정 → 즉시 반영
+- **각 HTML 파일**: 페이지 고유 CSS/JS만 남겨 파일 크기 대폭 감소
+
+---
+
 ## 2026-06-30 — MD 구조 리팩터링 (단일 진실원 + 확장성)
 
 ### 변경 사항

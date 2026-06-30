@@ -1,46 +1,323 @@
 # KC Admin — 정책 변경 영향 파일 매핑
 
-> 정책이 바뀔 때 이 파일을 먼저 열어 수정 대상 파일을 확인한다.
-> 진실원 파일 수정 → 아래 "영향 파일" 순서로 반영한다.
+> 정책이 바뀔 때 이 파일을 먼저 열어 수정 대상 파일과 구체적 변경 위치를 확인한다.
+> **진실원 파일 수정 → 아래 "구체적 변경 위치" 순서로 반영한다.**
 
 ---
 
-## 정책별 영향 파일
+## 정책별 영향 파일 (변수·함수·CSS 수준)
 
-| 변경 항목 | 진실원 파일 | 영향 받는 파일 |
-|---|---|---|
-| **체인 수·T코드** | `context/project.md` · `context/decisions.md` | `policy/01·02·06`, `mockups_v2/10_chain-visualizer` · `11_dry-run` |
-| **wf-tracker 단계 수** | `context/workflow.md` | `agents/06·08`, `policy/01`, `mockups_v2/` 편집기 7개 (04~08·16·16b) |
-| **카드 상태 종류** | `context/card-policy.md` | `agents/06·08`, `mockups_v2/` 전체 목록 6개 + 편집기 전체 |
-| **금지어·대체어 추가** | `guides/copywriting.md` | `mockups_v2/` 전수 확인 (에이전트 파일 수정 불필요 — 참조 방식) |
-| **CONNECT_RULES 변경** | `context/card-policy.md` | `agents/03·04·05·06·08`, `mockups_v2/00_canvas·06·07·08` 편집기 |
-| **Case 1~4 매트릭스** | `context/answer-logic.md` | `agents/01·03·04·06`, `mockups_v2/13_answer-logic` |
-| **PROFILE 필드 수·종류** | `context/card-types.md` | `agents/03·04·06·08`, `mockups_v2/07_card-editor-rule` · `11_dry-run` · `17_system-data-guide` |
-| **MYDATA 담보코드 구조** | `context/card-types.md` | `agents/03·04·06·08`, `mockups_v2/07·11·12·17` |
-| **PROMAGE 필드 구조** | `context/card-types.md` | `agents/03·04·06·08`, `mockups_v2/07·11·17` |
-| **Evidence 수·데이터** | `context/decisions.md` | `mockups_v2/01_guide·05_evidence-list·11_dry-run·17_system-data-guide` |
-| **Policy 편집기 필드** | `context/card-types.md` | `agents/03·04·05·06·08`, `mockups_v2/08_card-editor-policy` |
-| **RAG 아키텍처** | `context/answer-logic.md` | `agents/01·03·04·06`, `mockups_v2/13_answer-logic·19_faq-rag` |
-| **Risk-type 우선순위** | `context/card-types.md` | `agents/01·03·04·06`, `mockups_v2/04_card-editor-risk-type·13_answer-logic` |
-| **사이드바 메뉴 구조** | `context/project.md` | `guides/ux-patterns.md` (사이드바 HTML 패턴), `mockups_v2/` 전체 26개 |
-| **파일 수 (mockups_v2/)** | `context/project.md` | `agents/02·04·05·06`, `CLAUDE.md` |
-| **Playbook 규칙** | `context/card-types.md` | `agents/04·04b·05·06·08`, `mockups_v2/16_playbook-list·16_card-editor-playbook` |
-| **승인 단계·흐름** | `context/workflow.md` | `agents/06·08`, `mockups_v2/08_card-editor-policy·09_review-workflow` |
-| **FAQ RAG 정책** | `context/answer-logic.md` | `agents/03·04·06`, `mockups_v2/19_faq-rag` |
-| **matching-policy** | `context/matching-policy.md` | `policy/09_matching-policy` |
+### 1. 체인 수 · T코드 추가/변경
+
+**진실원:** `context/project.md` (체인 목록) · `context/decisions.md` (이력)
+
+| 영향 파일 | 변경 위치 |
+|---|---|
+| `mockups_v2/shared.js` | `CARD_TYPE` 객체에 새 T코드 추가/삭제 |
+| `mockups_v2/shared.js` | `CARD_NAMES` 객체에 표시명 추가/삭제 |
+| `mockups_v2/10_chain-visualizer.html` | `CHAINS` 배열, 탭 UI, 노드 데이터 |
+| `mockups_v2/11_dry-run.html` | `CARD_TEST_CONDITIONS` 객체, 테스트 카드 목록 |
+| `policy/01_card-lifecycle.html` | 체인 수·T코드 기재 텍스트 |
+| `policy/02_card-types.html` | Risk-type T코드 목록 |
+| `policy/06_evidence-matching.html` | 체인-Evidence 매핑 표 |
 
 ---
 
-## 신규 화면 추가 시 체크리스트
+### 2. wf-tracker 단계 수 변경
 
-새 HTML 파일을 mockups_v2/에 추가할 때 반드시 아래 순서로 반영한다.
+**진실원:** `context/workflow.md`
 
-1. `context/project.md` — 파일 목록에 추가, 파일 수 업데이트
-2. `context/decisions.md` — 변경 이력에 한 줄 추가
+| 영향 파일 | 변경 위치 |
+|---|---|
+| `agents/06_spec-reviewer.md` | 체크리스트 D섹션 단계 수 |
+| `agents/08_ui-reviewer.md` | 체크리스트 B섹션 wf-tracker 항목 |
+| `policy/01_card-lifecycle.html` | 단계 흐름도 |
+| `mockups_v2/04_card-editor-risk-type.html` | `.wf-tracker` UI 단계 수 |
+| `mockups_v2/05_card-editor-evidence.html` | `.wf-tracker` UI 단계 수 |
+| `mockups_v2/06_card-editor-concept.html` | `.wf-tracker` UI 단계 수 |
+| `mockups_v2/07_card-editor-rule.html` | `.wf-tracker` UI 단계 수 |
+| `mockups_v2/08_card-editor-policy.html` | `.wf-tracker` UI 단계 수 |
+| `mockups_v2/16_card-editor-playbook.html` | `.wf-tracker` UI 단계 수 |
+
+---
+
+### 3. 카드 상태 종류 변경 (draft / review / approved / active / paused / rejected)
+
+**진실원:** `context/card-policy.md`
+
+| 영향 파일 | 변경 위치 |
+|---|---|
+| `mockups_v2/shared.css` | `--status-*` CSS 변수 추가/삭제, `.badge-*` 규칙 |
+| `agents/06_spec-reviewer.md` | 체크리스트 D섹션 상태 목록 |
+| `agents/08_ui-reviewer.md` | 뱃지 색상 매핑 표 |
+| 목록 6개 (04~08·16 list) | `STATUS_LABEL` 객체 / `FILTER_OPTIONS` 배열 |
+| 편집기 7개 (04~08·16·16b) | 상태 select `<option>` 목록 |
+
+---
+
+### 4. 금지어·대체어 추가
+
+**진실원:** `guides/copywriting.md`
+
+| 영향 파일 | 변경 위치 |
+|---|---|
+| `mockups_v2/` 전수 | 금지어가 사용된 레이블·placeholder·토스트 텍스트 직접 탐색 |
+| *(agents/ 수정 불필요)* | 에이전트들은 copywriting.md를 참조만 함 |
+
+---
+
+### 5. CONNECT_RULES 변경 (카드 간 연결 규칙)
+
+**진실원:** `context/card-policy.md`
+
+| 영향 파일 | 변경 위치 |
+|---|---|
+| `agents/03_ui-designer.md` | 연결 규칙 설명 |
+| `agents/04_coder.md` | 유효성 검사 로직 설명 |
+| `agents/05_code-reviewer.md` | 체크리스트 연결 규칙 항목 |
+| `agents/06_spec-reviewer.md` | 체크리스트 C섹션 |
+| `agents/08_ui-reviewer.md` | 연결 UI 검수 항목 |
+| `mockups_v2/00_canvas-main.html` | `CONNECT_RULES` 객체, 연결 유효성 함수 `validateConnection()` |
+| `mockups_v2/06_card-editor-concept.html` | "연결 가능 카드" 안내 텍스트 |
+| `mockups_v2/07_card-editor-rule.html` | Evidence 연결 필수 안내 |
+| `mockups_v2/08_card-editor-policy.html` | Rule 연결 안내 |
+
+---
+
+### 6. Case 1~4 매트릭스 변경
+
+**진실원:** `context/answer-logic.md`
+
+| 영향 파일 | 변경 위치 |
+|---|---|
+| `agents/01_ai-rag-architect.md` | Case 분기 설명 |
+| `agents/03_ui-designer.md` | Case 레이아웃 설명 |
+| `agents/04_coder.md` | Case 분기 로직 기술 |
+| `agents/06_spec-reviewer.md` | 체크리스트 E섹션 |
+| `mockups_v2/13_answer-logic.html` | `CASES` 배열, Case 렌더링 함수 `renderCase()` |
+
+---
+
+### 7. PROFILE 필드 수·종류 변경
+
+**진실원:** `context/card-types.md`
+
+| 영향 파일 | 변경 위치 |
+|---|---|
+| `agents/03_ui-designer.md` | PROFILE 필드 목록 기술 |
+| `agents/04_coder.md` | `customProfile.profile` 초기값 참조 |
+| `agents/06_spec-reviewer.md` | 체크리스트 PROFILE 항목 |
+| `agents/08_ui-reviewer.md` | PROFILE UI 검수 항목 |
+| `mockups_v2/11_dry-run.html` | `customProfile.profile` 초기값 객체, `buildProfileInputHTML()` 함수, `CARD_TEST_CONDITIONS[id].profileFields` 배열 |
+| `mockups_v2/07_card-editor-rule.html` | Rule 조건 입력 필드 (나이·성별 등) |
+| `mockups_v2/17_system-data-guide.html` | PROFILE 필드 설명 표 |
+
+---
+
+### 8. MYDATA 담보코드 구조 변경
+
+**진실원:** `context/card-types.md`
+
+| 영향 파일 | 변경 위치 |
+|---|---|
+| `agents/03·04·06·08` | 담보코드 관련 기술 |
+| `mockups_v2/07_card-editor-rule.html` | `COVERAGE_CODES` 배열, 조건 빌더 UI |
+| `mockups_v2/11_dry-run.html` | `CARD_TEST_CONDITIONS[id].mydata` 배열 |
+| `mockups_v2/12_coverage-code-table.html` | 담보코드 전체 표 |
+| `mockups_v2/17_system-data-guide.html` | MYDATA 필드 설명 표 |
+
+---
+
+### 9. PROMAGE 필드 구조 변경
+
+**진실원:** `context/card-types.md`
+
+| 영향 파일 | 변경 위치 |
+|---|---|
+| `agents/03·04·06·08` | PROMAGE 관련 기술 |
+| `mockups_v2/11_dry-run.html` | `CARD_TEST_CONDITIONS[id].promage` 배열, `buildPromageInputHTML()` 함수 |
+| `mockups_v2/17_system-data-guide.html` | PROMAGE 필드 설명 표 |
+
+---
+
+### 10. Evidence 수·데이터 변경
+
+**진실원:** `context/decisions.md`
+
+| 영향 파일 | 변경 위치 |
+|---|---|
+| `mockups_v2/01_guide.html` | Evidence 총 수 기재 |
+| `mockups_v2/05_evidence-list.html` | `EVIDENCE_DATA` 배열 |
+| `mockups_v2/11_dry-run.html` | `CARD_TEST_CONDITIONS[id].evaluate` 내 Evidence 참조 |
+| `mockups_v2/17_system-data-guide.html` | Evidence 설명 섹션 |
+
+---
+
+### 11. Policy 편집기 필드 변경
+
+**진실원:** `context/card-types.md`
+
+| 영향 파일 | 변경 위치 |
+|---|---|
+| `agents/03·04·05·06·08` | Policy 필드 관련 기술 |
+| `mockups_v2/08_card-editor-policy.html` | `POLICY_FIELDS` 배열, 폼 렌더링 함수 |
+
+---
+
+### 12. RAG 아키텍처 변경
+
+**진실원:** `context/answer-logic.md`
+
+| 영향 파일 | 변경 위치 |
+|---|---|
+| `agents/01_ai-rag-architect.md` | RAG 흐름 기술 |
+| `agents/03_ui-designer.md` | RAG 결과 표시 UI 기술 |
+| `agents/04_coder.md` | RAG 분기 로직 기술 |
+| `agents/06_spec-reviewer.md` | 체크리스트 RAG 항목 |
+| `mockups_v2/11_dry-run.html` | `RAG_MOCK` 객체, `setRagMock()` 함수, `updateRagButtons()` 함수 |
+| `mockups_v2/13_answer-logic.html` | RAG 흐름도, `renderFlowChart()` 함수 |
+| `mockups_v2/19_faq-rag.html` | FAQ RAG 관리 UI |
+
+---
+
+### 13. Risk-type 우선순위 로직 변경
+
+**진실원:** `context/card-types.md`
+
+| 영향 파일 | 변경 위치 |
+|---|---|
+| `agents/01·03·04·06` | 우선순위 기술 |
+| `mockups_v2/04_card-editor-risk-type.html` | 중요도 select 옵션, 우선순위 설명 텍스트 |
+| `mockups_v2/13_answer-logic.html` | Risk-type 감지 단계 설명 |
+
+---
+
+### 14. 사이드바 메뉴 구조 변경 ★ (shared.js 도입 후 단일 수정)
+
+**진실원:** `mockups_v2/shared.js` → `SIDEBAR_ITEMS` 배열
+
+| 영향 파일 | 변경 위치 |
+|---|---|
+| `mockups_v2/shared.js` | **`SIDEBAR_ITEMS` 배열만 수정** → 26개 파일 자동 반영 |
+| `context/project.md` | 파일 목록 설명 (사이드바 순서·분류 반영) |
+| `guides/ux-patterns.md` | 사이드바 HTML 패턴 예시 업데이트 |
+| *(mockups_v2/ 26개 직접 수정 불필요)* | `renderSidebar()` 호출로 자동 렌더링됨 |
+
+---
+
+### 15. CSS 디자인 토큰(색상·간격) 변경 ★ (shared.css 도입 후 단일 수정)
+
+**진실원:** `mockups_v2/shared.css` → `:root { }` 블록
+
+| 영향 파일 | 변경 위치 |
+|---|---|
+| `mockups_v2/shared.css` | **`:root` 변수만 수정** → 26개 파일 자동 반영 |
+| `guides/design-system.md` | `:root` 변수 참조 문서 동기화 |
+| *(mockups_v2/ 26개 직접 수정 불필요)* | CSS 변수 참조로 자동 반영됨 |
+
+---
+
+### 16. 카드 타입 태그 색상·스타일 변경 ★ (shared.css 도입 후 단일 수정)
+
+**진실원:** `mockups_v2/shared.css`
+
+| 영향 파일 | 변경 위치 |
+|---|---|
+| `mockups_v2/shared.css` | `.badge-*`, `.tag-*`, `.ct-*` CSS 규칙, `--card-*` 변수 |
+| `mockups_v2/shared.js` | `TYPE_COLOR` 객체 (JS로 동적 색상을 계산하는 곳) |
+| *(26개 파일 직접 수정 불필요)* | shared.css/js 참조로 자동 반영 |
+
+---
+
+### 17. 카드 ID 목록 · 표시명 변경
+
+**진실원:** `context/project.md` (카드 목록)
+
+| 영향 파일 | 변경 위치 |
+|---|---|
+| `mockups_v2/shared.js` | `CARD_TYPE` 객체, `CARD_NAMES` 객체 |
+| `mockups_v2/10_chain-visualizer.html` | `NODES` 배열, `CHAINS` 배열 내 카드 참조 |
+| `mockups_v2/11_dry-run.html` | `CARD_TEST_CONDITIONS` 객체 키 목록 |
+| `mockups_v2/00_canvas-main.html` | 노드 데이터 배열 |
+
+---
+
+### 18. 파일 수 (mockups_v2/ HTML 추가·삭제)
+
+**진실원:** `context/project.md`
+
+| 영향 파일 | 변경 위치 |
+|---|---|
+| `agents/02_po.md` | 화면 목록·우선순위 표 |
+| `agents/04_coder.md` | 파일 수 기재 |
+| `agents/05_code-reviewer.md` | 검수 범위 기재 |
+| `agents/06_spec-reviewer.md` | 검수 범위 기재 |
+| `CLAUDE.md` | 파일 맵 설명 |
+| `mockups_v2/shared.js` | `SIDEBAR_ITEMS` 배열에 새 항목 추가 |
+
+---
+
+### 19. Playbook 규칙 변경
+
+**진실원:** `context/card-types.md`
+
+| 영향 파일 | 변경 위치 |
+|---|---|
+| `agents/04_coder.md` | Playbook 로직 기술 |
+| `agents/04b_coder-playbook.md` | Playbook 전체 스펙 |
+| `agents/05_code-reviewer.md` | 체크리스트 Playbook 항목 |
+| `agents/06_spec-reviewer.md` | 체크리스트 Playbook 항목 |
+| `agents/08_ui-reviewer.md` | Playbook UI 검수 항목 |
+| `mockups_v2/16_playbook-list.html` | `PLAYBOOKS` 배열, 목록 렌더링 |
+| `mockups_v2/16_card-editor-playbook.html` | `PLAYBOOK_FIELDS` 배열, 폼 렌더링 |
+
+---
+
+### 20. 승인 단계·흐름 변경
+
+**진실원:** `context/workflow.md`
+
+| 영향 파일 | 변경 위치 |
+|---|---|
+| `agents/06_spec-reviewer.md` | 체크리스트 승인 항목 |
+| `agents/08_ui-reviewer.md` | 승인 흐름 UI 검수 항목 |
+| `mockups_v2/08_card-editor-policy.html` | 승인 버튼·상태 UI |
+| `mockups_v2/09_review-workflow.html` | `WORKFLOW_STEPS` 배열, 흐름도 렌더링 |
+
+---
+
+### 21. FAQ RAG 정책 변경
+
+**진실원:** `context/answer-logic.md`
+
+| 영향 파일 | 변경 위치 |
+|---|---|
+| `agents/03·04·06` | FAQ RAG 기술 |
+| `mockups_v2/19_faq-rag.html` | FAQ 등록 규칙 텍스트, 등록 금지 카테고리 UI |
+
+---
+
+### 22. matching-policy 임계값·가중치 변경
+
+**진실원:** `context/matching-policy.md`
+
+| 영향 파일 | 변경 위치 |
+|---|---|
+| `policy/09_matching-policy.html` | 기준값 수치 테이블, `THRESHOLDS` 객체 |
+
+---
+
+## 신규 화면 추가 시 체크리스트 (shared.js 도입 후)
+
+새 HTML 파일을 `mockups_v2/`에 추가할 때:
+
+1. `context/project.md` — 파일 목록·파일 수 업데이트
+2. `context/decisions.md` — 변경 이력 한 줄 추가
 3. `agents/02_po.md` — 화면 우선순위 표에 추가
-4. `guides/ux-patterns.md` — 사이드바 HTML 패턴 업데이트
-5. `mockups_v2/` — **전체 26개** 파일의 사이드바 HTML 업데이트
-6. `CLAUDE.md` — 에이전트 표의 "계층 2 참조" 업데이트 (해당 에이전트만)
+4. `mockups_v2/shared.js` — **`SIDEBAR_ITEMS` 배열에 새 항목 추가** (26개 일괄 반영)
+5. `guides/ux-patterns.md` — 사이드바 HTML 패턴 예시 업데이트 (필요 시)
+6. 신규 HTML 파일 — `<link href="../shared.css">` + `<script src="../shared.js">` + `renderSidebar('파일명.html')` 추가
+7. `CLAUDE.md` — 에이전트 표의 "계층 2 참조" 업데이트 (해당 에이전트만)
 
 ---
 
@@ -56,6 +333,9 @@
 
 1. `context/card-policy.md` — CONNECT_RULES에 추가
 2. `context/card-types.md` — 새 카드 스펙 섹션 추가
-3. `guides/ux-patterns.md` — 배지 CSS 클래스 추가, 사이드바 메뉴 추가
-4. `mockups_v2/` — 목록·편집기 신규 HTML 생성
-5. `agents/03·04·05·06·08` — 체크리스트에 새 카드 타입 항목 추가
+3. `mockups_v2/shared.css` — `--card-새타입` 변수, `.badge-새타입`, `.tag-새타입`, `.ct-새타입` 추가
+4. `mockups_v2/shared.js` — `CARD_TYPE`·`TYPE_COLOR`·`CARD_NAMES`에 새 카드 ID 추가
+5. `guides/ux-patterns.md` — 배지 CSS 클래스 설명, 사이드바 메뉴 예시 업데이트
+6. `mockups_v2/` — 목록·편집기 신규 HTML 생성 (shared.css/js 참조 포함)
+7. `mockups_v2/shared.js` — `SIDEBAR_ITEMS`에 새 목록 링크 추가
+8. `agents/03·04·05·06·08` — 체크리스트에 새 카드 타입 항목 추가
