@@ -1626,16 +1626,10 @@ function buildRuleCondRowsHTML(ruleId) {
           (amet ? '✓ 충족' : '✗ 미충족') + ' (현재 ' + age + '세)</span>';
       }
     } else if (cond.source === 'PROMAGE') {
-      var curGrade = testProfile.promage[key];
-      var grades   = [{v:'risk',l:'위험'},{v:'caution',l:'주의'},{v:'good',l:'양호'},{v:null,l:'미설정'}];
-      ctrlHtml = '<div class="test-cond-ctrl">';
-      grades.forEach(function(g) {
-        var isAct = g.v === null ? (curGrade === null || curGrade === undefined) : curGrade === g.v;
-        ctrlHtml += '<button class="test-gpill ' + (g.v || 'none-set') + (isAct ? ' active' : '') + '" ' +
-          'onclick="onTestPromageGrade(\'' + ruleCard.id + '\',' + i + ',' + (g.v ? '\'' + g.v + '\'' : 'null') + ')">' +
-          g.l + '</button>';
-      });
-      ctrlHtml += '</div>';
+      var isMet = testProfile.conditions[key] !== false;
+      ctrlHtml = '<button class="test-toggle ' + (isMet ? 'on' : 'off') + '" ' +
+        'onclick="onTestCondToggle(\'' + ruleCard.id + '\',' + i + ')">' +
+        (isMet ? '✓ 충족' : '✗ 미충족') + '</button>';
     } else {
       var isMet = testProfile.conditions[key] !== false;
       ctrlHtml = '<button class="test-toggle ' + (isMet ? 'on' : 'off') + '" ' +
@@ -1796,9 +1790,10 @@ function updateTestSummary(ruleCard) {
           (met ? 'rgba(15,110,86,.1)' : 'rgba(201,75,26,.08)') + ';color:' + (met ? '#0F6E56' : '#C94B1A') + '">' +
           (met ? '✓ ' : '✗ ') + cond.sourceLabel + (cond.required ? ' 필수' : '') + '</span>');
       } else if (cond.source === 'PROMAGE') {
-        var gr = testProfile.promage[key];
-        if (gr) chips.push('<span class="test-sum-chip" style="background:' + gCol[gr] + ';color:' + gFg[gr] + '">' +
-          cond.sourceLabel + ' ' + gLbl[gr] + '</span>');
+        var pmet = testProfile.conditions[key] !== false;
+        chips.push('<span class="test-sum-chip" style="background:' +
+          (pmet ? 'rgba(15,110,86,.1)' : 'rgba(201,75,26,.08)') + ';color:' + (pmet ? '#0F6E56' : '#C94B1A') + '">' +
+          (pmet ? '✓ ' : '✗ ') + cond.sourceLabel + (cond.required ? ' 필수' : '') + '</span>');
       } else if (cond.source === 'PROFILE') {
         var met2;
         if (cond.op === 'IN') {
@@ -1872,7 +1867,7 @@ function evaluateTestResult() {
             : cond.op === 'GT'  ? age >  val : cond.op === 'LT'  ? age <  val : false;
       }
     } else if (cond.source === 'PROMAGE') {
-      met = cond.op === 'EQ' ? testProfile.promage[key] === gMap[cond.value] : !!testProfile.promage[key];
+      met = testProfile.conditions[key] !== false;
     } else {
       met = testProfile.conditions[key] !== false;
     }

@@ -29,6 +29,7 @@
 |---|---|---|---|
 | Playbook ← Risk-type 연결 | Risk-type 관점의 리드 전환·배정 최적화. CONNECT_RULES.risk에 'playbook' 추가 필요 | Phase 1.5+ 이관 (리드 스코어링 스펙 확정 시 추가) | 2026-06-17 |
 | **A3201 공통 이슈** | A3201을 입원일당 대리 지표로 사용하는 Rule: T01·T12·T19 (T06·T15·T16은 2026-06-29 제거). A3xxx는 담보코드 테이블상 후유장해 계열이나 실제 MYDATA 스펙 미확인. 개발팀 확인 후 전수 교체 or 유지 결정 필요. | 개발팀 MYDATA 스펙 확인 선행 필요 | 2026-06-29 |
+| **사전 테스트 PROFILE 입력 — 사용 필드만 표시** | 현재 Rule 조건과 무관하게 5개 필드(나이·성별·결혼여부·자녀유무·운전여부) 항상 전체 표시. 현재 Rule 조건에서 실제 사용하는 필드만 렌더링하도록 `buildProfileInputHTML(ruleId)` 개선 예정. | 미구현 (다음 세션 예정) | 2026-06-30 |
 
 ---
 
@@ -50,6 +51,7 @@
 
 | 날짜 | 내용 | 진실원 파일 |
 |---|---|---|
+| 2026-06-30 | **사전 테스트 PROMAGE 조건 — 충족/미충족 토글로 통일**: 기존 위험/주의/양호/미설정 4개 등급 버튼 → MYDATA와 동일한 `✓ 충족 / ✗ 미충족` 토글. 조건에 이미 "암 종합 등급 EQ 위험"처럼 기댓값이 명시되어 있으므로 등급 재선택 불필요. `buildRuleCondRowsHTML` PROMAGE 분기, `updateTestSummary` 칩, `evaluateTestResult` 평가 로직 단순화 (`testProfile.conditions[key]` 기준으로 통일). | `mockups_v2/00_canvas-main.html` |
 | 2026-06-29 | **T06·T15·T16 체인 전체 제거**: ① T06(갱신형 보험료 급등) — MYDATA에 갱신형/비갱신형 구분 담보코드 없어 직접 감지 불가. ② T15(자녀 건강보장 공백) — 마이데이터 사업자는 본인 계약만 조회, 자녀 보험 접근 구조적 불가. ③ T16(실손보험 노후화) — 실손 세대(1~4세대) 구분 담보코드 없음. 제거 범위 각 체인당: Risk-type·Rule·Concept·Policy 카드 + 전용 Evidence(EV017·EV020·EV025·EV032). 체인 23→20개, Risk-type 23→20장, Rule 23→20장, Concept 20→17장, Policy 19→16장, Evidence 33→29장. | `contents/html/01~05_*.html` |
 | 2026-06-29 | **데이터 기반 Rule·Evidence 재설계**: 심평원·금감원·보험개발원·국민건강보험공단·중앙치매센터·통계청·보험연구원(KIRI) 등 6개 도메인 전문 데이터 수집 후 교차 검증. ① RU-T06 나이 45→**40세** 하향(40대 진입 시 갱신보험료 3만→10만원 233% 폭등 실사례). ② RU-T17 나이 상한 80→**85세** 상향(85세 이상 치매 유병률 21.18%) + 하한 55→**50세** 하향(MCI→치매 전환율 10~15%). ③ Evidence 카드 6개 수치 최신화(EV007·008·013·015·024·025). ④ EV030~EV033 신규 4장 추가(암 5년 생존율·진단금-사망률 상관·갱신 실사례·건보 보장률). Evidence 총 29→**33장**. | `contents/html/03_rule.html`, `contents/html/01_evidence.html` |
 | 2026-06-29 | **Rule 카드 편집기 입력 벨리데이션 추가**: ① 나이 BETWEEN — step=1(정수 강제), from>to 역전 감지, 0~100 범위 체크, 실시간 오류 표시(빨간 테두리+메시지). ② 담보금액 MYDATA — type=text→number, min=0, 상한 없음(법정 상한 없음 확인 — 생명보험 단일담보 법정 상한 규정 없음), 실시간 단위 변환 레이블(억/만원). `validateAgeRange()`, `onCoverageInput()`, `formatCoverageLabel()` 함수 추가. | `mockups_v2/07_card-editor-rule.html` |
