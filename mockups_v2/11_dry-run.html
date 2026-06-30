@@ -6,7 +6,7 @@
 <title>사전 테스트 — KC Admin</title>
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<link rel="stylesheet" href="../shared.css">
+<link rel="stylesheet" href="shared.css">
 <style>
 /* ── Layout ── */
 .two-col{display:grid;grid-template-columns:1fr 500px;gap:20px;align-items:start}
@@ -1548,6 +1548,7 @@ function openDeployModal()  { document.getElementById('deployModalBackdrop').sty
 function closeDeployModal(e){ if(e&&e.target!==document.getElementById('deployModalBackdrop'))return; document.getElementById('deployModalBackdrop').style.display='none'; }
 function confirmDeploy()    { document.getElementById('deployModalBackdrop').style.display='none'; showToast('🚀 v4 배포 완료 — AI 챗봇에 반영되었습니다'); }
 </script>
-<script src="../shared.js"></script>
+<script src="shared.js"></script>
 </body>
 </html>
+
