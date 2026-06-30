@@ -132,7 +132,7 @@
 
 | 항목 | 기준 |
 |---|---|
-| 상태 필터 탭 | 전체/Active/검수중/Draft 4개 탭, 카운트 숫자 표시 |
+| 상태 필터 탭 | 전체/라이브/승인완료/검수중/임시저장/일시중지/반려 (6종 + 전체), 카운트 숫자 표시 |
 | 신규 등록 버튼 | 우상단 `btn-primary` 버튼 존재 → 해당 편집기로 연결 |
 | 행 클릭 | 카드 행 전체 클릭 시 편집기로 이동 (`card-row` + onclick) |
 | 빈 상태 | 필터 결과 없을 때 `empty-row` 안내 텍스트 존재 |
@@ -148,7 +148,7 @@
 | auto 컬럼 vs 고정 컬럼 균형 | auto 컬럼이 텅 빈데 옆 고정 컬럼이 "..."으로 잘리는 경우 없는지 확인. 잘리면 고정 컬럼 확대 + auto 축소로 재배분 |
 | 컬럼 폭 기준 | `guides/ux-patterns.md` 컬럼 폭 배분 표 참조 |
 | rule-tag 스타일 | 인라인 style 금지. `.rule-tag` CSS 클래스 사용 |
-| 사이드바 구분선 | 대시보드 아래, 카드 라이브러리 위에 `<div class="nav-divider"></div>` 있는가? 모든 27개 파일 확인 |
+| 사이드바 구분선 | 대시보드 아래, 카드 라이브러리 위에 `<div class="nav-divider"></div>` 있는가? 모든 26개 파일 확인 |
 | 공개범위 표시 | 한국어 사용: "고객 공개" / "공통 기준" / "내부 전용". 영문("Public", "Baseline") 사용 금지. select 아님 — 배지로만 표시 |
 | 헤더 두 줄 방지 | `.list-table th`에 `white-space:nowrap;overflow:hidden` 있는가? 헤더가 두 줄이면 레이아웃 틀어짐 |
 
@@ -233,7 +233,7 @@
 
 | 항목 | 기준 |
 |---|---|
-| 피커 패널 | 상단 5컬럼 (CONCEPT / RISK-TYPE / RULE / EVIDENCE·POLICY / PLAYBOOK) — 각 컬럼 카드 목록 표시 |
+| 피커 패널 | 상단 4컬럼 (CONCEPT / RISK-TYPE / RULE / EVIDENCE·POLICY) — 각 컬럼 카드 목록 표시 |
 | 카드 표시 범위 | active + approved + review 카드 (draft 제외) |
 | 상태 배지 | active → "라이브" (초록 `gc-badge-live`), approved → "승인완료" (파랑 `gc-badge-approved`), review → "승인요청" (주황 `gc-badge-review`) |
 | 연결 가능 범위 | active + approved만 연결 가능. review 카드는 "연결 추가" 버튼 없어야 함 |
@@ -242,7 +242,6 @@
 | 연결 추가 버튼 | "연결 가능" 카드에 전폭 파란 "연결 추가" 버튼 (`gc-btn-connect`) 존재 |
 | pending 엣지 | `edge.status === 'pending'` 시 점선 파랑(`stroke-dasharray:6,4`, `#1A4A9A`) SVG 선 + arr-pending 마커 |
 | active 엣지 | `edge.status === 'active'` 시 실선 초록(`#0F6E56`) SVG 선 + arr-active 마커 |
-| PLAYBOOK 컬럼 | 현재 연결 없음(Phase 1.5+ 예정) → 포컬 카드 무관 "해당 없음" 표시 |
 | 포컬 헤더 경고 | 체인 0개 카드: "⚠ 연결 없음" 배지 표시. "연결 가능 N개" 있으면 파란 정보 배지 함께 표시 |
 
 ### I. 19_faq-rag.html 검수 포인트 (2026-06-21 추가)

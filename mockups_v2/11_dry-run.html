@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
@@ -210,7 +210,7 @@ textarea.form-control{resize:vertical;min-height:80px}
   <span class="nav-locked" style="padding-left:20px"><i class="fa-solid fa-lock fa-fw"></i> ⑦ Case 🔒</span>
   <div class="nav-divider"></div>
   <a href="09_review-workflow.html"><i class="fa-solid fa-check-double fa-fw"></i> 검수·승인</a>
-  <a href="00_canvas-main.html"><i class="fa-solid fa-diagram-project fa-fw"></i> 카드 연결</a>
+  <a href="00_canvas-main.html"><i class="fa-solid fa-diagram-project fa-fw"></i> 연결·테스트·배포</a>
   <a href="18_system-settings.html"><i class="fa-solid fa-sliders fa-fw"></i> 시스템 설정</a>
   <a href="19_faq-rag.html" style="padding-left:20px"><i class="fa-solid fa-list-check fa-fw"></i> FAQ Q&A</a>
   <div class="nav-divider"></div>
@@ -309,6 +309,14 @@ textarea.form-control{resize:vertical;min-height:80px}
                   <option value="무관">무관</option>
                   <option value="있음">있음</option>
                   <option value="없음">없음</option>
+                </select>
+              </div>
+              <div style="display:flex;align-items:center;gap:6px">
+                <label style="font-size:12px;color:var(--text-secondary);font-weight:600;white-space:nowrap">운전여부</label>
+                <select id="profileDrives" style="padding:3px 6px;border:1px solid var(--border);border-radius:5px;font-size:13px;font-family:inherit" onchange="onProfileChange()">
+                  <option value="무관">무관</option>
+                  <option value="유">유</option>
+                  <option value="무">무</option>
                 </select>
               </div>
             </div>
@@ -909,7 +917,7 @@ var selectedPathIdx = 0;
 var customProfile = {
   mydata:  {},   // code → number (담보금액, 원) ; 0 = 미보유
   promage: {},   // field → 'risk' | 'caution' | 'good' | undefined
-  profile: {age:45, gender:'남', married:'무관', has_child:'무관'}
+  profile: {age:45, gender:'남', married:'무관', has_child:'무관', drives:'무관'}
 };
 
 // ============================================================
@@ -1102,10 +1110,12 @@ function onProfileChange() {
   var genderEl  = document.querySelector('input[name="profileGender"]:checked');
   var marriedEl = document.getElementById('profileMarried');
   var childEl   = document.getElementById('profileHasChild');
+  var drivesEl  = document.getElementById('profileDrives');
   if (ageEl)     customProfile.profile.age       = parseInt(ageEl.value) || 45;
   if (genderEl)  customProfile.profile.gender    = genderEl.value;
   if (marriedEl) customProfile.profile.married   = marriedEl.value;
   if (childEl)   customProfile.profile.has_child = childEl.value;
+  if (drivesEl)  customProfile.profile.drives    = drivesEl.value;
   updateCustomSummary();
 }
 
@@ -1116,6 +1126,7 @@ function updateCustomSummary() {
   chips.push('<span class="psum-chip" style="background:#EEF4FF;color:#1A3A6B">'+p.age+'세 '+p.gender+'성</span>');
   if (p.married && p.married !== '무관') chips.push('<span class="psum-chip" style="background:#EEF4FF;color:#1A3A6B">결혼 '+p.married+'</span>');
   if (p.has_child && p.has_child !== '무관') chips.push('<span class="psum-chip" style="background:#EEF4FF;color:#1A3A6B">자녀 '+p.has_child+'</span>');
+  if (p.drives && p.drives !== '무관') chips.push('<span class="psum-chip" style="background:#EEF4FF;color:#1A3A6B">운전 '+p.drives+'</span>');
   // 마이데이터 담보금액
   Object.keys(customProfile.mydata).forEach(function(code) {
     var amt = customProfile.mydata[code] || 0;

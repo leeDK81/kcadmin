@@ -185,9 +185,9 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
     <h3 style="color:var(--card-rule)"><i class="fa-solid fa-scale-balanced fa-fw"></i> Rule — 판단 규칙</h3>
     <p><strong>역할:</strong> 고객의 보험 보장 공백 여부를 실제로 판단하는 조건 집합. 마이데이터·프롬에이지·사용자 프로파일 3개 데이터 소스를 조건 빌더로 설정.</p>
     <p><strong>조건 빌더 데이터 소스 3종:</strong><br>
-    · <strong>마이데이터(MyData):</strong> 담보코드 select + 담보금액(coverage_amt) + 조건(LTE/GTE/LT/GT/EQ) + 기준값. 존재여부·갱신여부·보험유형·날짜 조건 불가.<br>
-    · <strong>프롬에이지(Promage):</strong> 위험도 항목 select(암위험도 23개 + 질병위험도 27개 = 50개, optgroup 2개 구분) + 같음(EQ 고정) + 등급(위험/주의/양호). 생체나이·의료비예측 사용 불가.<br>
-    · <strong>사용자 프로파일:</strong> 나이(BETWEEN, 시작세~종료세) / 성별(무관/남/여) / 결혼여부(무관/기혼/미혼) / 자녀유무(무관/있음/없음) 4개 항목. 직업위험도·출산예정·거주지 삭제됨.</p>
+    · <strong>마이데이터(MyData):</strong> 담보코드 select + 담보금액(coverage_amt) + 조건(LTE/GTE) + 기준값. 존재여부·갱신여부·보험유형·날짜 조건 불가.<br>
+    · <strong>프롬에이지(Promage):</strong> 위험도 항목 select(50개 flat, 암위험도 23개 + 질병위험도 27개 구성) + 같음(EQ 고정) + 등급(위험/주의/양호). 생체나이·의료비예측 사용 불가.<br>
+    · <strong>사용자 프로파일:</strong> 나이(BETWEEN, 시작세~종료세) / 성별(무관/남/여) / 결혼여부(무관/기혼/미혼) / 자녀유무(무관/있음/없음) / 운전여부(무관/유/무) 5개 항목. 직업위험도·출산예정·거주지 삭제됨.</p>
     <p><strong>약관 DB:</strong> 약관 DB 확보 시 Rule 조건 충족 → 담보코드 기준으로 자동 조회 → Clark 답변에 면책조항 섹션 자동 포함. (별도 플래그 없이 엔진이 자동 처리)</p>
     <div class="meta">
       <span class="meta-item"><strong>공개범위:</strong> <span class="chip chip-base">공통 기준</span></span>

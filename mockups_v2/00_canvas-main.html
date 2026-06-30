@@ -1,8 +1,8 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=1280">
-<title>KC Admin v2 — 카드 연결</title>
+<title>KC Admin v2 — 연결·테스트·배포</title>
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <style>
@@ -195,6 +195,25 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;backg
 .test-result-wrap{background:var(--bg-page);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-top:12px}
 .test-result-hd{padding:8px 12px;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-secondary);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:6px;background:#fff}
 .test-result-body{padding:14px;font-size:13px;line-height:1.8;color:var(--text-primary)}
+/* Answer chain steps */
+.ans-chain{display:flex;flex-direction:column}
+.ans-step{border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:2px}
+.ans-step.pass{border-color:rgba(15,110,86,.35)}
+.ans-step.fail{border-color:rgba(163,45,45,.25)}
+.ans-step.pending{border-color:var(--border)}
+.ans-step-hd{display:flex;align-items:center;gap:8px;padding:9px 12px;background:#F8F8F6;border-bottom:1px solid var(--border)}
+.ans-step.pass .ans-step-hd{background:rgba(15,110,86,.06);border-bottom-color:rgba(15,110,86,.15)}
+.ans-step.fail .ans-step-hd{background:rgba(163,45,45,.04);border-bottom-color:rgba(163,45,45,.1)}
+.ans-step-num{width:20px;height:20px;border-radius:50%;background:var(--step-active);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.ans-step.fail .ans-step-num{background:#A32D2D}
+.ans-step.pending .ans-step-num{background:var(--text-hint)}
+.ans-step-title{flex:1;font-size:13px;font-weight:700;color:var(--text-primary)}
+.chain-sbadge{font-size:11px;padding:2px 8px;border-radius:12px;font-weight:600;white-space:nowrap}
+.chain-sbadge.ok{background:rgba(15,110,86,.12);color:#0F6E56}
+.chain-sbadge.fail{background:rgba(163,45,45,.1);color:#A32D2D}
+.chain-sbadge.llm{background:rgba(90,90,85,.12);color:#5A5A55}
+.ans-step-body{padding:12px}
+.chain-connector{text-align:center;color:var(--text-hint);font-size:13px;padding:3px 0;line-height:1}
 .test-used-cards{padding:8px 12px;border-top:1px solid var(--border);display:flex;gap:4px;flex-wrap:wrap;align-items:center;background:#fff}
 .test-used-chip{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700;border:1px solid}
 
@@ -282,6 +301,17 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;backg
 .gc-card.test-mode-card{cursor:pointer}
 .gc-focal.test-mode-card{cursor:pointer}
 
+/* ── Canvas Filter Bar ── */
+.canvas-filterbar{display:flex;align-items:center;gap:10px;padding:7px 16px;background:var(--bg-card);border-bottom:1px solid var(--border);flex-shrink:0}
+.cvf-pills{display:flex;gap:4px}
+.cvf-pill{padding:3px 10px;border-radius:5px;font-size:11px;font-weight:700;border:1px solid var(--border);background:transparent;cursor:pointer;font-family:inherit;color:var(--text-secondary);transition:all .15s}
+.cvf-pill.active{background:var(--step-active);color:#fff;border-color:var(--step-active)}
+.cvf-pill.active-fail{background:#C94B1A;color:#fff;border-color:#C94B1A}
+.cvf-pill:not(.active):hover{border-color:var(--text-secondary);color:var(--text-primary)}
+.cvf-search-wrap{display:flex;align-items:center;gap:6px;background:var(--bg-page);border:1px solid var(--border);border-radius:6px;padding:4px 9px;flex:1;max-width:260px;margin-left:auto}
+.cvf-search{border:none;background:transparent;font-size:12px;font-family:inherit;color:var(--text-primary);outline:none;width:100%}
+.cvf-search::placeholder{color:var(--text-hint)}
+
 /* ── Card Detail (read-only fields) ── */
 .detail-field{margin-bottom:14px}
 .detail-label{font-size:11px;font-weight:700;color:var(--text-secondary);margin-bottom:4px;letter-spacing:.02em;text-transform:uppercase}
@@ -308,7 +338,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;backg
   <span class="nav-locked" style="padding-left:20px"><i class="fa-solid fa-lock fa-fw"></i> ⑦ Case 🔒</span>
   <div class="nav-divider"></div>
   <a href="09_review-workflow.html"><i class="fa-solid fa-check-double fa-fw"></i> 검수·승인</a>
-  <a href="00_canvas-main.html" class="active"><i class="fa-solid fa-diagram-project fa-fw"></i> 카드 연결</a>
+  <a href="00_canvas-main.html" class="active"><i class="fa-solid fa-diagram-project fa-fw"></i> 연결·테스트·배포</a>
   <a href="18_system-settings.html"><i class="fa-solid fa-sliders fa-fw"></i> 시스템 설정</a>
   <a href="19_faq-rag.html" style="padding-left:20px"><i class="fa-solid fa-list-check fa-fw"></i> FAQ Q&A</a>
   <div class="nav-divider"></div>
@@ -323,7 +353,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;backg
 
   <!-- Toolbar -->
   <div class="toolbar">
-    <span class="toolbar-title"><i class="fa-solid fa-diagram-project" style="color:var(--step-active)"></i> 카드 연결</span>
+    <span class="toolbar-title"><i class="fa-solid fa-diagram-project" style="color:var(--step-active)"></i> 연결·테스트·배포</span>
     <div class="tb-divider"></div>
     <div class="mode-toggle">
       <button class="mode-btn active" id="modeConnect" onclick="switchCanvasMode('connect')">
@@ -344,6 +374,19 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;backg
         <span id="pendingCount">0</span>개 준비 연결
       </span>
       <a href="11_dry-run.html" class="btn btn-secondary btn-sm"><i class="fa-solid fa-flask" style="font-size:10px"></i> 사전 테스트</a>
+    </div>
+  </div>
+
+  <!-- Canvas Filter Bar -->
+  <div class="canvas-filterbar">
+    <div class="cvf-pills" id="cvfPills">
+      <button class="cvf-pill active" onclick="setStatusFilter('all')">전체</button>
+      <button class="cvf-pill" onclick="setStatusFilter('active')">라이브</button>
+      <button class="cvf-pill" onclick="setStatusFilter('approved')">승인완료</button>
+    </div>
+    <div class="cvf-search-wrap">
+      <i class="fa-solid fa-magnifying-glass" style="font-size:11px;color:var(--text-hint)"></i>
+      <input class="cvf-search" type="text" placeholder="카드명 또는 ID 검색" oninput="onCanvasSearch(this.value)">
     </div>
   </div>
 
@@ -552,7 +595,6 @@ const GRID_COLS = [
   {key:'risk',     types:['risk'],              label:'RISK-TYPE',         icon:'fa-circle-exclamation'},
   {key:'rule',     types:['rule'],              label:'RULE',              icon:'fa-scale-balanced'},
   {key:'evpol',   types:['evidence','policy'],  label:'EVIDENCE · POLICY', icon:'fa-database'},
-  {key:'playbook', types:['playbook'],           label:'PLAYBOOK',          icon:'fa-handshake'},
 ];
 
 // Picker columns — Evidence+Policy 합침 (Rule 아웃풋이 동일)
@@ -561,7 +603,6 @@ const PICKER_COLS = [
   {types:['risk'],              label:'RISK-TYPE',          icon:'fa-circle-exclamation', color:'#C94B1A'},
   {types:['rule'],              label:'RULE',               icon:'fa-scale-balanced',     color:'#9A1A1A'},
   {types:['evidence','policy'], label:'EVIDENCE · POLICY',  icon:'fa-database',           color:'#1A7A4A'},
-  {types:['playbook'],          label:'PLAYBOOK',            icon:'fa-handshake',          color:'#6B4A9A'},
 ];
 
 // ============================================================
@@ -574,18 +615,45 @@ let panelTab       = 'info';
 let testProfile    = {
   conditions: {},    // "RU001_0" → true(충족) | false(미충족)
   promage:    {},    // "RU001_4" → 'risk'|'caution'|'good'|null
-  profile:    { age: 45, gender: '남' }
+  profile:    { age: 45, gender: '남', married: '무관', has_child: '무관', drives: '무관' }
 };
 let testChain     = {};        // type → cardId (체인 구성 선택)
 let canvasMode    = 'connect'; // 'connect' | 'test'
 let testSelection = {};        // type → cardId (테스트 모드 체크 선택)
 let panelTestMode = 'chain';   // 'chain' (연결모드 열기) | 'canvas' (테스트모드 열기)
+let ragMockState  = {yakgwan: true, faq: false}; // true=결과있음, false=결과없음
+let canvasStatusFilter = 'all';   // 'all' | 'active' | 'approved'
+let canvasSearchQuery  = '';
 
 // ============================================================
 // HELPERS
 // ============================================================
 function ACTIVE_CARDS() { return CARDS.filter(c => c.status === 'active'); }
 function ALL_PICKER_CARDS() { return CARDS.filter(c => c.status !== 'draft'); }
+
+function getFilteredPickerCards() {
+  let cards = ALL_PICKER_CARDS();
+  if (canvasStatusFilter === 'active')   cards = cards.filter(c => c.status === 'active');
+  if (canvasStatusFilter === 'approved') cards = cards.filter(c => c.status === 'approved');
+  if (canvasSearchQuery.trim()) {
+    const q = canvasSearchQuery.trim().toLowerCase();
+    cards = cards.filter(c => c.id.toLowerCase().includes(q) || c.title.toLowerCase().includes(q));
+  }
+  return cards;
+}
+
+function setStatusFilter(val) {
+  canvasStatusFilter = val;
+  document.querySelectorAll('.cvf-pill').forEach(function(el) {
+    el.classList.toggle('active', el.getAttribute('onclick').includes("'" + val + "'"));
+  });
+  renderPicker();
+}
+
+function onCanvasSearch(val) {
+  canvasSearchQuery = val;
+  renderPicker();
+}
 
 function edgeExists(fromId, toId) {
   return EDGES.some(e => e.from === fromId && e.to === toId);
@@ -661,7 +729,7 @@ function init() {
 // ============================================================
 function renderPicker() {
   const pickerEl = document.getElementById('pickerCols');
-  const pickerCards = ALL_PICKER_CARDS();
+  const pickerCards = getFilteredPickerCards();
 
   pickerEl.innerHTML = PICKER_COLS.map(col => {
     const cards = pickerCards.filter(c => col.types.includes(c.type));
@@ -770,7 +838,7 @@ function updateTestFloatBar() {
   var bar    = document.getElementById('testFloatBar');
   var chips  = document.getElementById('testFloatChips');
   var runBtn = document.getElementById('testFloatBtn');
-  var order  = ['concept','risk','rule','evidence','policy','playbook'];
+  var order  = ['concept','risk','rule','evidence','policy'];
   var selected = order.map(function(t) { return testSelection[t]; }).filter(Boolean);
 
   if (!selected.length) {
@@ -811,7 +879,7 @@ function runCanvasTest() {
 }
 
 function buildSelectedChainVisual(chainCards) {
-  var TYPE_ORDER = ['concept','risk','rule','evidence','policy','playbook'];
+  var TYPE_ORDER = ['concept','risk','rule','evidence','policy'];
   var groups = TYPE_ORDER
     .map(function(t) { return chainCards.filter(function(c) { return c.type === t; }); })
     .filter(function(g) { return g.length; });
@@ -1253,7 +1321,7 @@ function initTestChain(cardId) {
   var chain      = computeChain(cardId);
   var chainCards = CARDS.filter(function(c) { return chain.has(c.id); });
   testChain = {};
-  ['concept','risk','rule','evidence','policy','playbook'].forEach(function(type) {
+  ['concept','risk','rule','evidence','policy'].forEach(function(type) {
     var available = chainCards.filter(function(c) { return c.type === type; });
     if (available.length) {
       testChain[type] = (available.find(function(c) { return c.id === cardId; }) || available[0]).id;
@@ -1340,6 +1408,11 @@ function renderPanelTest() {
       '</div>' +
       '<div class="test-sum-chips" id="testSummaryChips"></div>' +
     '</div>' +
+    '<div style="font-size:10px;font-weight:700;color:var(--text-secondary);margin:10px 0 6px;letter-spacing:.04em;text-transform:uppercase">' +
+      '<i class="fa-solid fa-database" style="font-size:9px;margin-right:3px;color:#6B4A9A"></i>' +
+      (panelTestMode === 'canvas' ? 'RAG 결과 설정' : '④ RAG 결과 설정') +
+    '</div>' +
+    '<div id="ragPresetSection">' + buildRagPresetHTML() + '</div>' +
     '<div id="testResultArea" style="margin-top:8px"></div>';
 
   document.getElementById('panelBody').innerHTML = html;
@@ -1368,7 +1441,6 @@ function buildChainSelectorHTML(card) {
     { type:'rule',     icon:'fa-scale-balanced',     label:'Rule',      color:'#9A1A1A' },
     { type:'evidence', icon:'fa-database',           label:'Evidence',  color:'#1A7A4A' },
     { type:'policy',   icon:'fa-file-shield',        label:'Policy',    color:'#5A5A55' },
-    { type:'playbook', icon:'fa-handshake',          label:'Playbook',  color:'#6B4A9A' },
   ];
 
   var html = '<div class="test-cond-section first">' +
@@ -1422,7 +1494,7 @@ function onTestChainSelect(type, id) {
 }
 
 function buildChainVisual(card, chain) {
-  var TYPE_ORDER = ['concept','risk','rule','evidence','policy','playbook'];
+  var TYPE_ORDER = ['concept','risk','rule','evidence','policy'];
   var chainCards = CARDS.filter(function(c) { return chain.has(c.id); });
   var groups     = TYPE_ORDER
     .map(function(t) { return chainCards.filter(function(c) { return c.type === t; }); })
@@ -1465,6 +1537,30 @@ function buildProfileInputHTML() {
         '<input type="radio" name="testGender" value="여" ' + (testProfile.profile.gender === '여' ? 'checked' : '') + ' onchange="onTestProfileChange()"> 여' +
       '</label>' +
     '</div>' +
+    '<div class="test-profile-inline">' +
+      '<span class="test-profile-lbl">결혼여부</span>' +
+      '<select id="testMarried" style="padding:2px 5px;border:1px solid var(--border);border-radius:5px;font-size:12px;font-family:inherit" onchange="onTestProfileChange()">' +
+        '<option value="무관"' + (testProfile.profile.married === '무관' ? ' selected' : '') + '>무관</option>' +
+        '<option value="기혼"' + (testProfile.profile.married === '기혼' ? ' selected' : '') + '>기혼</option>' +
+        '<option value="미혼"' + (testProfile.profile.married === '미혼' ? ' selected' : '') + '>미혼</option>' +
+      '</select>' +
+    '</div>' +
+    '<div class="test-profile-inline">' +
+      '<span class="test-profile-lbl">자녀유무</span>' +
+      '<select id="testHasChild" style="padding:2px 5px;border:1px solid var(--border);border-radius:5px;font-size:12px;font-family:inherit" onchange="onTestProfileChange()">' +
+        '<option value="무관"' + (testProfile.profile.has_child === '무관' ? ' selected' : '') + '>무관</option>' +
+        '<option value="있음"' + (testProfile.profile.has_child === '있음' ? ' selected' : '') + '>있음</option>' +
+        '<option value="없음"' + (testProfile.profile.has_child === '없음' ? ' selected' : '') + '>없음</option>' +
+      '</select>' +
+    '</div>' +
+    '<div class="test-profile-inline">' +
+      '<span class="test-profile-lbl">운전여부</span>' +
+      '<select id="testDrives" style="padding:2px 5px;border:1px solid var(--border);border-radius:5px;font-size:12px;font-family:inherit" onchange="onTestProfileChange()">' +
+        '<option value="무관"' + (testProfile.profile.drives === '무관' ? ' selected' : '') + '>무관</option>' +
+        '<option value="유"' + (testProfile.profile.drives === '유' ? ' selected' : '') + '>유</option>' +
+        '<option value="무"' + (testProfile.profile.drives === '무' ? ' selected' : '') + '>무</option>' +
+      '</select>' +
+    '</div>' +
   '</div>';
 }
 
@@ -1500,6 +1596,21 @@ function buildRuleCondRowsHTML(ruleId) {
         var gmet = testProfile.profile.gender === cond.value;
         ctrlHtml = '<span id="testGenderBadge_' + key + '" class="test-auto-badge ' + (gmet ? 'ok' : 'fail') + '">' +
           (gmet ? '✓ 충족' : '✗ 미충족') + ' (현재 ' + testProfile.profile.gender + '성)</span>';
+      } else if (cond.op === 'EQ' && (cond.value === '기혼' || cond.value === '미혼')) {
+        var marriedCur = testProfile.profile.married || '무관';
+        var mmet = marriedCur === cond.value || marriedCur === '무관';
+        ctrlHtml = '<span id="testMarriedBadge_' + key + '" class="test-auto-badge ' + (mmet ? 'ok' : 'fail') + '">' +
+          (mmet ? '✓ 충족' : '✗ 미충족') + ' (현재 ' + marriedCur + ')</span>';
+      } else if (cond.op === 'EQ' && (cond.value === '있음' || cond.value === '없음')) {
+        var hasChildCur = testProfile.profile.has_child || '무관';
+        var hmet = hasChildCur === cond.value || hasChildCur === '무관';
+        ctrlHtml = '<span id="testHasChildBadge_' + key + '" class="test-auto-badge ' + (hmet ? 'ok' : 'fail') + '">' +
+          (hmet ? '✓ 충족' : '✗ 미충족') + ' (현재 ' + hasChildCur + ')</span>';
+      } else if (cond.op === 'EQ' && (cond.value === '유' || cond.value === '무')) {
+        var drivesCur = testProfile.profile.drives || '무관';
+        var dmet = drivesCur === cond.value || drivesCur === '무관';
+        ctrlHtml = '<span id="testDrivesBadge_' + key + '" class="test-auto-badge ' + (dmet ? 'ok' : 'fail') + '">' +
+          (dmet ? '✓ 충족' : '✗ 미충족') + ' (현재 ' + drivesCur + ')</span>';
       } else if (cond.op === 'BETWEEN') {
         var bpts = cond.value.split(',');
         var bage = testProfile.profile.age;
@@ -1572,10 +1683,16 @@ function onTestPromageGrade(ruleId, idx, grade) {
 }
 
 function onTestProfileChange() {
-  var ageEl    = document.getElementById('testAge');
-  var genderEl = document.querySelector('input[name="testGender"]:checked');
-  if (ageEl)    testProfile.profile.age    = parseInt(ageEl.value) || 45;
-  if (genderEl) testProfile.profile.gender = genderEl.value;
+  var ageEl      = document.getElementById('testAge');
+  var genderEl   = document.querySelector('input[name="testGender"]:checked');
+  var marriedEl  = document.getElementById('testMarried');
+  var hasChildEl = document.getElementById('testHasChild');
+  var drivesEl   = document.getElementById('testDrives');
+  if (ageEl)      testProfile.profile.age       = parseInt(ageEl.value) || 45;
+  if (genderEl)   testProfile.profile.gender    = genderEl.value;
+  if (marriedEl)  testProfile.profile.married   = marriedEl.value;
+  if (hasChildEl) testProfile.profile.has_child = hasChildEl.value;
+  if (drivesEl)   testProfile.profile.drives    = drivesEl.value;
 
   // 나이 배지 in-place 업데이트 (age input 포커스 유지)
   document.querySelectorAll('[id^="testProfileBadge_"]').forEach(function(el) {
@@ -1613,6 +1730,48 @@ function onTestProfileChange() {
     el.textContent = (met ? '✓ 충족' : '✗ 미충족') + ' (현재 ' + gender + '성)';
   });
 
+  // 결혼여부 배지 in-place 업데이트
+  document.querySelectorAll('[id^="testMarriedBadge_"]').forEach(function(el) {
+    var key   = el.id.replace('testMarriedBadge_', '');
+    var parts = key.split('_');
+    var idx   = parseInt(parts[parts.length - 1]);
+    var rId   = parts.slice(0, parts.length - 1).join('_');
+    var cond  = ((CARD_DETAILS[rId] || {}).conditions || [])[idx];
+    if (!cond || cond.source !== 'PROFILE') return;
+    var marriedCur = testProfile.profile.married || '무관';
+    var met = cond.op === 'EQ' ? (marriedCur === cond.value || marriedCur === '무관') : false;
+    el.className   = 'test-auto-badge ' + (met ? 'ok' : 'fail');
+    el.textContent = (met ? '✓ 충족' : '✗ 미충족') + ' (현재 ' + marriedCur + ')';
+  });
+
+  // 자녀유무 배지 in-place 업데이트
+  document.querySelectorAll('[id^="testHasChildBadge_"]').forEach(function(el) {
+    var key   = el.id.replace('testHasChildBadge_', '');
+    var parts = key.split('_');
+    var idx   = parseInt(parts[parts.length - 1]);
+    var rId   = parts.slice(0, parts.length - 1).join('_');
+    var cond  = ((CARD_DETAILS[rId] || {}).conditions || [])[idx];
+    if (!cond || cond.source !== 'PROFILE') return;
+    var hasChildCur = testProfile.profile.has_child || '무관';
+    var met = cond.op === 'EQ' ? (hasChildCur === cond.value || hasChildCur === '무관') : false;
+    el.className   = 'test-auto-badge ' + (met ? 'ok' : 'fail');
+    el.textContent = (met ? '✓ 충족' : '✗ 미충족') + ' (현재 ' + hasChildCur + ')';
+  });
+
+  // 운전여부 배지 in-place 업데이트
+  document.querySelectorAll('[id^="testDrivesBadge_"]').forEach(function(el) {
+    var key   = el.id.replace('testDrivesBadge_', '');
+    var parts = key.split('_');
+    var idx   = parseInt(parts[parts.length - 1]);
+    var rId   = parts.slice(0, parts.length - 1).join('_');
+    var cond  = ((CARD_DETAILS[rId] || {}).conditions || [])[idx];
+    if (!cond || cond.source !== 'PROFILE') return;
+    var drivesCur = testProfile.profile.drives || '무관';
+    var met = cond.op === 'EQ' ? (drivesCur === cond.value || drivesCur === '무관') : false;
+    el.className  = 'test-auto-badge ' + (met ? 'ok' : 'fail');
+    el.textContent = (met ? '✓ 충족' : '✗ 미충족') + ' (현재 ' + drivesCur + ')';
+  });
+
   var ruleId   = testChain.rule;
   var ruleCard = ruleId ? CARDS.find(function(c) { return c.id === ruleId; }) : null;
   updateTestSummary(ruleCard);
@@ -1646,6 +1805,15 @@ function updateTestSummary(ruleCard) {
           met2 = true;
         } else if (cond.op === 'EQ' && (cond.value === '남' || cond.value === '여')) {
           met2 = p.gender === cond.value;
+        } else if (cond.op === 'EQ' && (cond.value === '기혼' || cond.value === '미혼')) {
+          var mc = p.married || '무관';
+          met2 = mc === cond.value || mc === '무관';
+        } else if (cond.op === 'EQ' && (cond.value === '있음' || cond.value === '없음')) {
+          var hc = p.has_child || '무관';
+          met2 = hc === cond.value || hc === '무관';
+        } else if (cond.op === 'EQ' && (cond.value === '유' || cond.value === '무')) {
+          var dc = p.drives || '무관';
+          met2 = dc === cond.value || dc === '무관';
         } else if (cond.op === 'BETWEEN') {
           var bps2 = cond.value.split(',');
           met2 = p.age >= parseInt(bps2[0]) && p.age <= parseInt(bps2[1]);
@@ -1653,9 +1821,15 @@ function updateTestSummary(ruleCard) {
           var val = parseInt(cond.value);
           met2 = cond.op === 'GTE' ? p.age >= val : cond.op === 'LTE' ? p.age <= val : false;
         }
+        var condLabel2 = cond.op === 'IN' ? '성별 무관'
+          : (cond.value === '남' || cond.value === '여') ? '성별 조건'
+          : (cond.value === '기혼' || cond.value === '미혼') ? '결혼여부 조건'
+          : (cond.value === '있음' || cond.value === '없음') ? '자녀유무 조건'
+          : (cond.value === '유' || cond.value === '무') ? '운전여부 조건'
+          : '나이 조건';
         chips.push('<span class="test-sum-chip" style="background:' +
           (met2 ? 'rgba(15,110,86,.1)' : 'rgba(201,75,26,.08)') + ';color:' + (met2 ? '#0F6E56' : '#C94B1A') + '">' +
-          (met2 ? '✓ ' : '✗ ') + (cond.op === 'IN' ? '성별 무관' : cond.op === 'EQ' ? '성별 조건' : '나이 조건') + '</span>');
+          (met2 ? '✓ ' : '✗ ') + condLabel2 + '</span>');
       }
     });
   }
@@ -1679,6 +1853,15 @@ function evaluateTestResult() {
         met = true;
       } else if (cond.op === 'EQ' && (cond.value === '남' || cond.value === '여')) {
         met = testProfile.profile.gender === cond.value;
+      } else if (cond.op === 'EQ' && (cond.value === '기혼' || cond.value === '미혼')) {
+        var mc2 = testProfile.profile.married || '무관';
+        met = mc2 === cond.value || mc2 === '무관';
+      } else if (cond.op === 'EQ' && (cond.value === '있음' || cond.value === '없음')) {
+        var hc2 = testProfile.profile.has_child || '무관';
+        met = hc2 === cond.value || hc2 === '무관';
+      } else if (cond.op === 'EQ' && (cond.value === '유' || cond.value === '무')) {
+        var dc2 = testProfile.profile.drives || '무관';
+        met = dc2 === cond.value || dc2 === '무관';
       } else if (cond.op === 'BETWEEN') {
         var bps3 = cond.value.split(',');
         met = testProfile.profile.age >= parseInt(bps3[0]) && testProfile.profile.age <= parseInt(bps3[1]);
@@ -1756,40 +1939,152 @@ function buildChatAnswerHTML() {
   '</div>';
 }
 
+function buildRagPresetHTML() {
+  var y = ragMockState.yakgwan;
+  var f = ragMockState.faq;
+  var pillBase = 'padding:2px 9px;font-size:11px';
+  var dimmed   = y === true ? ';opacity:.35;pointer-events:none' : '';
+  return '<div style="display:flex;flex-direction:column;gap:8px;padding:10px 12px;background:var(--bg-page);border:1px solid var(--border);border-radius:7px">' +
+    '<div style="display:flex;align-items:center;gap:8px">' +
+      '<span style="font-size:11px;font-weight:700;color:var(--text-secondary);flex:1">약관 RAG</span>' +
+      '<div style="display:flex;gap:4px">' +
+        '<button class="cvf-pill' + (y === true ? ' active' : '') + '" style="' + pillBase + '" onclick="setRagPreset(\'yakgwan\',true)">결과있음</button>' +
+        '<button class="cvf-pill' + (y === false ? ' active-fail' : '') + '" style="' + pillBase + '" onclick="setRagPreset(\'yakgwan\',false)">결과없음</button>' +
+      '</div>' +
+    '</div>' +
+    '<div style="display:flex;align-items:center;gap:8px' + dimmed + '">' +
+      '<span style="font-size:11px;font-weight:700;color:var(--text-secondary);flex:1">FAQ RAG</span>' +
+      '<div style="display:flex;gap:4px">' +
+        '<button class="cvf-pill' + (f === true ? ' active' : '') + '" style="' + pillBase + '" onclick="setRagPreset(\'faq\',true)">결과있음</button>' +
+        '<button class="cvf-pill' + (f === false ? ' active-fail' : '') + '" style="' + pillBase + '" onclick="setRagPreset(\'faq\',false)">결과없음</button>' +
+      '</div>' +
+    '</div>' +
+  '</div>';
+}
+
+function setRagPreset(type, val) {
+  ragMockState[type] = val;
+  var section = document.getElementById('ragPresetSection');
+  if (section) section.innerHTML = buildRagPresetHTML();
+}
+
 function runTest(cardId) {
-  var card = CARDS.find(function(c) { return c.id === cardId; });
-  if (!card) return;
   var area = document.getElementById('testResultArea');
   if (!area) return;
-  area.innerHTML =
-    '<div style="padding:20px;text-align:center;color:var(--text-hint);font-size:13px">' +
-    '<i class="fa-solid fa-spinner fa-spin" style="margin-right:6px"></i>평가 중…</div>';
+  area.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-hint);font-size:13px"><i class="fa-solid fa-spinner fa-spin" style="margin-right:6px"></i>평가 중…</div>';
+  setTimeout(function() { renderAnswerChain(cardId); }, 500);
+}
 
-  setTimeout(function() {
-    var evResult = evaluateTestResult();
-    var html     = '';
+function renderAnswerChain(cardId) {
+  var area = document.getElementById('testResultArea');
+  if (!area) return;
+  var evResult = evaluateTestResult();
+  var kcPass   = evResult.pass;
+  var y = ragMockState.yakgwan;
+  var f = ragMockState.faq;
 
-    if (evResult.pass) {
-      html += '<div class="test-pass-banner pass">' +
-        '<i class="fa-solid fa-circle-check" style="margin-top:1px;flex-shrink:0"></i>' +
-        '<div><div>체인 발동 ✓</div>' +
-        '<div style="font-size:11px;font-weight:400;margin-top:2px;opacity:.85">필수 조건 모두 충족 — Clark AI가 이 체인을 활성화합니다</div>' +
-        '</div></div>';
-      html += buildChatAnswerHTML();
-    } else {
-      html += '<div class="test-pass-banner fail">' +
-        '<i class="fa-solid fa-circle-xmark" style="margin-top:1px;flex-shrink:0"></i>' +
-        '<div><div>체인 미발동 ✗</div>' +
-        '<div style="font-size:11px;font-weight:400;margin-top:2px;opacity:.85">필수 조건 미충족 — Clark AI가 이 체인을 건너뜁니다</div>' +
-        '</div></div>' +
-        '<div class="test-fail-list">' +
-          '<strong style="font-size:11px;color:#8A4040">미충족 필수 조건</strong><br>' +
-          evResult.failed.map(function(f) { return '• ' + f; }).join('<br>') +
-        '</div>';
+  var html = '<div class="ans-chain">';
+
+  // ── Step 1: KC 조건 평가 ──
+  var kcBody = kcPass
+    ? buildChatAnswerHTML()
+    : '<div class="test-fail-list" style="margin-bottom:0"><strong style="font-size:11px;color:#8A4040">미충족 필수 조건</strong><br>' +
+      evResult.failed.map(function(r){ return '• ' + r; }).join('<br>') + '</div>';
+  html += buildAnswerStep(1, 'KC 조건 평가',
+    kcPass ? 'pass' : 'fail',
+    kcPass ? '<span class="chain-sbadge ok">체인 발동</span>' : '<span class="chain-sbadge fail">미발동 → 다음 단계</span>',
+    kcBody);
+
+  if (!kcPass) {
+    html += '<div class="chain-connector"><i class="fa-solid fa-arrow-down"></i></div>';
+
+    // ── Step 2: 약관 RAG ──
+    var yakgwanBody = y
+      ? buildRagAnswerHTML('yakgwan', cardId)
+      : '<div style="font-size:12px;color:var(--text-secondary)">약관에서 관련 내용을 찾지 못했습니다.</div>';
+    html += buildAnswerStep(2, '약관 RAG',
+      y ? 'pass' : 'fail',
+      y ? '<span class="chain-sbadge ok">결과 있음</span>' : '<span class="chain-sbadge fail">결과 없음 → 다음 단계</span>',
+      yakgwanBody);
+
+    if (!y) {
+      html += '<div class="chain-connector"><i class="fa-solid fa-arrow-down"></i></div>';
+
+      // ── Step 3: FAQ RAG ──
+      var faqBody = f
+        ? buildRagAnswerHTML('faq', cardId)
+        : '<div style="font-size:12px;color:var(--text-secondary)">FAQ에서 관련 내용을 찾지 못했습니다.</div>';
+      html += buildAnswerStep(3, 'FAQ RAG',
+        f ? 'pass' : 'fail',
+        f ? '<span class="chain-sbadge ok">결과 있음</span>' : '<span class="chain-sbadge fail">결과 없음 → 다음 단계</span>',
+        faqBody);
+
+      if (!f) {
+        html += '<div class="chain-connector"><i class="fa-solid fa-arrow-down"></i></div>';
+        html += buildAnswerStep(4, 'LLM Fallback', 'pass',
+          '<span class="chain-sbadge llm">항상 응답</span>',
+          buildLLMAnswerHTML(cardId));
+      }
     }
-    area.innerHTML = html;
-    area.scrollIntoView({behavior:'smooth', block:'nearest'});
-  }, 600);
+  }
+
+  html += '</div>';
+  area.innerHTML = html;
+  area.scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+function buildAnswerStep(num, title, state, badge, body) {
+  return '<div class="ans-step ' + state + '">' +
+    '<div class="ans-step-hd">' +
+      '<span class="ans-step-num">' + num + '</span>' +
+      '<span class="ans-step-title">' + title + '</span>' +
+      badge +
+    '</div>' +
+    '<div class="ans-step-body">' + body + '</div>' +
+  '</div>';
+}
+
+function buildRagAnswerHTML(type, cardId) {
+  var qEl = document.getElementById('testQueryInput');
+  var question = (qEl ? qEl.value.trim() : '') || '보험 보장 내용을 알려주세요';
+  var isYakgwan = type === 'yakgwan';
+  var tagLabel  = isYakgwan ? '약관 RAG' : 'FAQ RAG';
+  var tagStyle  = 'background:rgba(107,74,154,.12);color:#6B4A9A';
+  var bodyText  = isYakgwan
+    ? '<p>가입하신 보험 약관에 따르면 해당 질환 진단 시 진단급여금이 지급될 수 있습니다.</p>' +
+      '<p style="font-size:12px;color:var(--text-hint)">※ 가입 시점에 따라 세부 약관 내용이 다를 수 있습니다.</p>'
+    : '<p>Clark 서비스 자주 묻는 질문에 관련 안내가 있습니다.</p>' +
+      '<p>더 자세한 사항은 보닥 플래너를 통해 1:1 상담을 신청하시면 맞춤 안내를 받으실 수 있습니다.</p>';
+  return '<div class="chat-preview-wrap">' +
+    '<div class="chat-question"><div class="chat-q-bubble">' + question + '</div></div>' +
+    '<div class="chat-ai-row"><div class="chat-avatar">AI</div>' +
+      '<div class="chat-ai-content">' +
+        '<div class="chat-agent-name">Clark AI<span class="chat-kc-tag" style="' + tagStyle + '">' + tagLabel + '</span></div>' +
+        '<div class="chat-bubble">' + bodyText + '</div>' +
+      '</div>' +
+    '</div></div>';
+}
+
+function buildLLMAnswerHTML(cardId) {
+  var qEl = document.getElementById('testQueryInput');
+  var question = (qEl ? qEl.value.trim() : '') || '보험 보장 내용을 알려주세요';
+  return '<div class="chat-preview-wrap">' +
+    '<div class="chat-question"><div class="chat-q-bubble">' + question + '</div></div>' +
+    '<div class="chat-ai-row"><div class="chat-avatar">AI</div>' +
+      '<div class="chat-ai-content">' +
+        '<div class="chat-agent-name">Clark AI<span class="chat-kc-tag" style="background:rgba(90,90,85,.12);color:#5A5A55">LLM Fallback</span></div>' +
+        '<div class="chat-bubble">' +
+          '<p>일반적인 내용으로 안내드립니다. 마이데이터를 연동하시면 보유 보험 기준으로 더 정확한 분석이 가능합니다.</p>' +
+          '<p>보험 보장의 자세한 내용은 보닥 플래너 상담을 통해 확인하시길 권장드립니다.</p>' +
+        '</div>' +
+        '<div style="font-size:11px;color:var(--text-hint);margin-top:6px;padding:6px 8px;background:var(--bg-page);border-radius:4px">⚠ LLM Fallback 적용 — 시스템 설정 가이드라인 내 응답</div>' +
+      '</div>' +
+    '</div></div>';
+}
+
+function onRagResult(step, hasResult, cardId) {
+  setRagPreset(step, hasResult);
+  renderAnswerChain(cardId);
 }
 
 function closePanel() {

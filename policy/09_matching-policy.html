@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=1280">
+<title>KC Admin 정책서 — 09 감지·매칭 정책</title>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<style>
+:root{--card-risk:#C94B1A;--card-evidence:#1A7A4A;--card-concept:#1A4A9A;--card-rule:#9A1A1A;--card-policy:#5A5A55;--card-playbook:#6B4A9A;--status-draft:#9C9C94;--status-review:#BA7517;--status-active:#0F6E56;--status-approved:#1A4A9A;--status-paused:#7A4A00;--status-rejected:#A32D2D;--step-active:#1A3A6B;--sidebar-w:240px;--bg-page:#F4F4F5;--bg-card:#FFFFFF;--text-primary:#171719;--text-secondary:#70737C;--text-hint:#989BA2;--border:#E1E2E4;--radius:8px;--shadow:0px 2px 4px -2px rgba(23,23,23,.06),0px 4px 6px -1px rgba(23,23,23,.06)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg-page);color:var(--text-primary);min-width:1280px;font-size:15px;line-height:1.5}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:var(--sidebar-w);background:#1A1A18;flex-shrink:0;padding:20px 0;position:sticky;top:0;height:100vh;overflow-y:auto}
+.sidebar-logo{padding:0 16px 16px;font-size:15px;font-weight:700;color:#fff;border-bottom:1px solid #333;margin-bottom:12px;line-height:1.4}
+.sidebar a{display:flex;align-items:center;gap:8px;padding:8px 16px;color:#C8C8C4;text-decoration:none;font-size:14px;transition:background .15s}
+.sidebar a:hover{background:rgba(255,255,255,.08);color:#fff}
+.sidebar a.active{background:rgba(255,255,255,.15);color:#fff;font-weight:600;border-left:3px solid #5A8AE0}
+.sidebar a.ext{color:#777;font-size:13px}
+.nav-divider{border-top:1px solid #333;margin:8px 0}
+.main{flex:1;padding:32px;max-width:960px;overflow-y:auto}
+.page-header{margin-bottom:28px}
+.page-header h1{font-size:24px;font-weight:700;margin-bottom:6px}
+.page-header p{color:var(--text-secondary);font-size:14px}
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);margin-bottom:20px}
+.section-title{font-size:17px;font-weight:700;margin:0 0 18px;padding-bottom:10px;border-bottom:2px solid var(--border);display:flex;align-items:center;gap:8px}
+.section-title i{font-size:14px;color:var(--text-secondary)}
+/* 비교 표 */
+.compare-table{width:100%;border-collapse:collapse;font-size:14px}
+.compare-table th{background:var(--bg-page);padding:10px 14px;text-align:left;font-size:12px;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid var(--border)}
+.compare-table td{padding:14px;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.65}
+.compare-table tr:last-child td{border-bottom:none}
+.compare-table .col-label{font-weight:700;color:var(--text-secondary);font-size:13px;width:120px;white-space:nowrap}
+.ct-concept{color:var(--card-concept);font-weight:700}
+.ct-playbook{color:var(--card-playbook);font-weight:700}
+/* 설명 블록 */
+.info-row{display:flex;gap:12px;align-items:flex-start;padding:14px 0;border-bottom:1px solid var(--border)}
+.info-row:last-child{border-bottom:none}
+.info-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px}
+.info-body{flex:1;min-width:0}
+.info-title{font-size:14px;font-weight:700;margin-bottom:4px}
+.info-desc{font-size:14px;color:var(--text-secondary);line-height:1.7}
+/* 흐름도 */
+.flow-wrap{display:flex;align-items:flex-start;gap:0;margin-top:4px}
+.flow-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:0}
+.flow-input{background:#1A3A6B;color:#fff;border-radius:10px;padding:12px 20px;font-size:14px;font-weight:700;text-align:center;width:100%;max-width:340px}
+.flow-arrow-down{color:var(--text-hint);font-size:18px;margin:6px 0;text-align:center}
+.flow-split{display:flex;align-items:flex-start;gap:16px;width:100%;margin:6px 0}
+.flow-branch{flex:1;display:flex;flex-direction:column;align-items:center;gap:0}
+.flow-box{border-radius:8px;padding:12px 14px;font-size:13px;text-align:center;width:100%;line-height:1.55}
+.flow-box-concept{background:rgba(26,74,154,.1);border:1.5px solid rgba(26,74,154,.3);color:var(--card-concept);font-weight:700}
+.flow-box-playbook{background:rgba(107,74,154,.1);border:1.5px solid rgba(107,74,154,.3);color:var(--card-playbook);font-weight:700}
+.flow-box-neutral{background:var(--bg-page);border:1.5px solid var(--border);color:var(--text-secondary);font-weight:600}
+.flow-box-result{background:#F0FBF6;border:1.5px solid rgba(15,110,86,.3);color:var(--status-active);font-weight:700}
+.flow-box-miss{background:#FFF8F0;border:1.5px solid rgba(186,117,23,.3);color:var(--status-review);font-weight:600;font-size:12px}
+.flow-label{font-size:11px;color:var(--text-hint);text-align:center;margin-top:4px;font-weight:600;letter-spacing:.02em}
+.flow-merge{display:flex;align-items:center;justify-content:center;gap:8px;margin:8px 0;font-size:12px;color:var(--text-hint);font-weight:700}
+.flow-merge-box{background:#F0FBF6;border:1.5px solid rgba(15,110,86,.3);color:var(--status-active);border-radius:8px;padding:12px 20px;font-size:13px;font-weight:700;text-align:center;width:100%;max-width:340px}
+.flow-divider{width:1px;background:var(--border);align-self:stretch;margin:0 4px}
+/* 규칙 카드 */
+.rule-item{padding:16px 0;border-bottom:1px solid var(--border)}
+.rule-item:last-child{border-bottom:none}
+.rule-header{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.rule-num{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}
+.rule-title{font-size:15px;font-weight:700}
+.rule-body{font-size:14px;color:var(--text-secondary);line-height:1.7;padding-left:34px}
+.rule-sub{margin-top:6px;padding:8px 12px;background:var(--bg-page);border-radius:6px;font-size:13px;color:var(--text-secondary)}
+/* 미결 항목 표 */
+.tbd-table{width:100%;border-collapse:collapse;font-size:14px}
+.tbd-table th{background:rgba(186,117,23,.08);padding:10px 14px;text-align:left;font-size:12px;font-weight:700;color:var(--status-review);text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid rgba(186,117,23,.2)}
+.tbd-table td{padding:13px 14px;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.65}
+.tbd-table tr:last-child td{border-bottom:none}
+.tbd-badge{display:inline-flex;padding:1px 8px;border-radius:4px;font-size:11px;font-weight:700;background:rgba(186,117,23,.12);color:var(--status-review);white-space:nowrap}
+/* 태그 */
+.tag{display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;white-space:nowrap}
+.tag-concept{background:rgba(26,74,154,.1);color:var(--card-concept)}
+.tag-playbook{background:rgba(107,74,154,.1);color:var(--card-playbook)}
+/* 노트박스 */
+.note{padding:12px 14px;border-radius:6px;font-size:13px;line-height:1.65;margin-top:14px}
+.note-blue{background:#EEF4FF;border-left:3px solid #5A8AE0;color:#1A3A6B}
+.note-green{background:#F0FBF6;border-left:3px solid var(--status-active);color:#0A4A3A}
+</style>
+</head>
+<body>
+<div class="layout">
+<nav class="sidebar">
+  <div class="sidebar-logo">KC 정책서<br><span style="font-size:11px;color:#888;font-weight:400">메이커 조직용 v2</span></div>
+  <a href="00_index.html"><i class="fa-solid fa-house fa-fw"></i> 목차</a>
+  <div class="nav-divider"></div>
+  <a href="01_glossary.html"><i class="fa-solid fa-book fa-fw"></i> 01 용어 정의</a>
+  <a href="02_card-purpose.html"><i class="fa-solid fa-layer-group fa-fw"></i> 02 카드 기능·목적</a>
+  <a href="03_connect-policy.html"><i class="fa-solid fa-diagram-project fa-fw"></i> 03 연결 정책</a>
+  <a href="04_lifecycle.html"><i class="fa-solid fa-rotate fa-fw"></i> 04 라이프사이클</a>
+  <a href="05_approval.html"><i class="fa-solid fa-check-double fa-fw"></i> 05 승인 정책</a>
+  <a href="06_field-data.html"><i class="fa-solid fa-table-list fa-fw"></i> 06 필드·데이터 정의</a>
+  <a href="07_permission.html"><i class="fa-solid fa-user-shield fa-fw"></i> 07 역할별 권한</a>
+  <a href="08_screen-policy.html"><i class="fa-solid fa-desktop fa-fw"></i> 08 화면 정책</a>
+  <a href="09_matching-policy.html" class="active"><i class="fa-solid fa-magnifying-glass fa-fw"></i> 09 감지·매칭 정책</a>
+  <div class="nav-divider"></div>
+  <a href="../mockups_v2/01_guide.html" target="_blank" class="ext"><i class="fa-solid fa-arrow-up-right-from-square fa-fw"></i> KC Admin 목업</a>
+</nav>
+<main class="main">
+  <div class="page-header">
+    <h1>09 감지·매칭 정책</h1>
+    <p>사용자 질의가 들어왔을 때 Concept·Playbook 카드를 찾는 방식과 결과 처리 규칙 (확정: 2026-06-29)</p>
+  </div>
+
+  <!-- ① 개요 -->
+  <div class="card">
+    <div class="section-title"><i class="fa-solid fa-circle-info"></i> 개요 — 두 카드가 하는 일</div>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th class="col-label"></th>
+          <th><span class="tag tag-concept">CONCEPT</span></th>
+          <th><span class="tag tag-playbook">PLAYBOOK</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="col-label">역할</td>
+          <td>KC 답변 체인의 <strong>진입 트리거</strong></td>
+          <td>CTA 노출의 <strong>트리거</strong></td>
+        </tr>
+        <tr>
+          <td class="col-label">운영자 등록 항목</td>
+          <td>동의어·예문 (단어·구·문장 혼용 가능)</td>
+          <td>예상 질의 (사용자가 할 법한 문장)</td>
+        </tr>
+        <tr>
+          <td class="col-label">매칭 결과</td>
+          <td>Concept 식별 → Risk-type → Rule → … 체인 진입</td>
+          <td>Playbook 식별 → 해당 CTA 버튼·안내 노출</td>
+        </tr>
+        <tr>
+          <td class="col-label">KC 체인과의 관계</td>
+          <td>KC 체인 <strong>그 자체</strong></td>
+          <td>KC 체인과 <strong>독립</strong> — 결과에 CTA만 추가</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="note note-blue" style="margin-top:16px">
+      <strong>핵심 원칙:</strong> 두 카드는 동시에 병렬로 검색한다. 같은 질문에 Concept과 Playbook이 모두 매칭되어도 충돌하지 않는다 — KC 답변을 생성하면서 CTA를 함께 노출한다.
+    </div>
+  </div>
+
+  <!-- ② 매칭 방식 -->
+  <div class="card">
+    <div class="section-title"><i class="fa-solid fa-brain"></i> 매칭 방식 — 임베딩 의미 유사도</div>
+    <div class="info-row">
+      <div class="info-icon" style="background:rgba(26,74,154,.1)"><i class="fa-solid fa-vector-square" style="color:var(--card-concept)"></i></div>
+      <div class="info-body">
+        <div class="info-title">키워드 완전 일치 방식을 쓰지 않는다</div>
+        <div class="info-desc">운영자가 "암"을 등록해도 사용자는 "종양 판정", "악성신생물", "cancer 진단" 같은 다양한 표현을 쓴다. 단어가 정확히 일치해야만 잡는 방식으로는 실제 상담에서 대부분의 질문을 놓친다.</div>
+      </div>
+    </div>
+    <div class="info-row">
+      <div class="info-icon" style="background:rgba(15,110,86,.1)"><i class="fa-solid fa-check-circle" style="color:var(--status-active)"></i></div>
+      <div class="info-body">
+        <div class="info-title">임베딩 벡터 유사도로 매칭한다</div>
+        <div class="info-desc">운영자가 등록한 텍스트(동의어·예문·예상질의)를 벡터로 변환해 인덱싱한다. 사용자 질의도 동일 방식으로 벡터화한 뒤 가장 의미가 가까운 카드를 찾는다. 표현이 달라도 의미가 같으면 매칭된다.</div>
+        <div class="rule-sub" style="margin-top:8px">
+          예: "암"만 등록 → "악성종양", "종양 진단", "cancer" 모두 매칭 가능<br>
+          예: "해지하고 싶어요" 등록 → "계약 취소할게요", "더 이상 보험 유지 안 할래요" 매칭 가능
+        </div>
+      </div>
+    </div>
+    <div class="info-row">
+      <div class="info-icon" style="background:rgba(107,74,154,.1)"><i class="fa-solid fa-equals" style="color:var(--card-playbook)"></i></div>
+      <div class="info-body">
+        <div class="info-title">Concept과 Playbook 모두 동일한 엔진을 사용한다</div>
+        <div class="info-desc">Concept의 동의어·예문과 Playbook의 예상질의 모두 단어·문장이 혼용될 수 있다. 별도 엔진을 쓸 이유가 없으므로 동일한 임베딩 모델로 처리한다. 다만 인덱스는 분리하여 관리한다.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ③ 인덱싱 대상 -->
+  <div class="card">
+    <div class="section-title"><i class="fa-solid fa-database"></i> 인덱싱 대상</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+      <div>
+        <div style="font-size:13px;font-weight:700;color:var(--card-concept);margin-bottom:12px;display:flex;align-items:center;gap:6px">
+          <i class="fa-solid fa-lightbulb"></i> CONCEPT 카드 인덱스
+        </div>
+        <div class="rule-sub" style="margin-top:0">
+          <div style="margin-bottom:8px;font-weight:700;font-size:13px;color:var(--text-primary)">인덱싱 필드</div>
+          <div style="color:var(--text-secondary);font-size:13px;line-height:1.8">
+            ✅ <strong>용어명 (대표명)</strong> — 필수. 미등록 카드도 대표명으로는 매칭되어야 함<br>
+            ✅ <strong>동의어·예문 전체</strong> — 운영자가 입력한 단어·구·문장 모두<br>
+            ❌ 한 줄 정의 — 매칭 대상 아님 (설명 텍스트)
+          </div>
+        </div>
+        <div class="rule-sub" style="margin-top:8px">
+          <div style="margin-bottom:4px;font-weight:700;font-size:13px;color:var(--text-primary)">인덱스 키</div>
+          <code style="font-size:12px">concept_id</code> — 매칭 결과로 어느 Concept인지 식별
+        </div>
+      </div>
+      <div>
+        <div style="font-size:13px;font-weight:700;color:var(--card-playbook);margin-bottom:12px;display:flex;align-items:center;gap:6px">
+          <i class="fa-solid fa-bullseye"></i> PLAYBOOK 카드 인덱스
+        </div>
+        <div class="rule-sub" style="margin-top:0">
+          <div style="margin-bottom:8px;font-weight:700;font-size:13px;color:var(--text-primary)">인덱싱 필드</div>
+          <div style="color:var(--text-secondary);font-size:13px;line-height:1.8">
+            ✅ <strong>예상 질의 전체</strong> — 운영자가 입력한 문장 모두<br>
+            ❌ Playbook 명칭 — 매칭 대상 아님 (운영자용 식별명)<br>
+            ❌ CTA 설명 — 매칭 대상 아님 (노출 내용)
+          </div>
+        </div>
+        <div class="rule-sub" style="margin-top:8px">
+          <div style="margin-bottom:4px;font-weight:700;font-size:13px;color:var(--text-primary)">인덱스 키</div>
+          <code style="font-size:12px">playbook_id</code> — 매칭 결과로 어느 Playbook인지 식별
+        </div>
+      </div>
+    </div>
+    <div class="note note-blue" style="margin-top:16px">
+      <strong>인덱스 분리:</strong> Concept 인덱스와 Playbook 인덱스는 별도로 관리한다. 검색 시 각각 독립적으로 쿼리하고 결과를 병합한다.
+    </div>
+  </div>
+
+  <!-- ④ 실행 구조 -->
+  <div class="card">
+    <div class="section-title"><i class="fa-solid fa-sitemap"></i> 실행 구조</div>
+    <div class="flow-wrap" style="flex-direction:column;align-items:center">
+
+      <!-- 입력 -->
+      <div class="flow-input">사용자 질의 입력</div>
+      <div class="flow-arrow-down"><i class="fa-solid fa-arrow-down"></i></div>
+
+      <!-- 동시 검색 -->
+      <div style="font-size:12px;font-weight:700;color:var(--text-hint);letter-spacing:.04em;margin-bottom:8px">동시 병렬 실행</div>
+      <div class="flow-split" style="max-width:600px">
+        <div class="flow-branch">
+          <div class="flow-box flow-box-concept">
+            <i class="fa-solid fa-lightbulb" style="margin-right:5px"></i>Concept 벡터 검색
+          </div>
+          <div class="flow-label">Concept 인덱스 쿼리</div>
+          <div class="flow-arrow-down"><i class="fa-solid fa-arrow-down"></i></div>
+          <div class="flow-box flow-box-neutral">유사도 최고점 1개 선택</div>
+          <div class="flow-label">임계값 미만 → 미매칭</div>
+          <div class="flow-arrow-down"><i class="fa-solid fa-arrow-down"></i></div>
+          <div class="flow-box" style="background:rgba(26,74,154,.07);border:1.5px solid rgba(26,74,154,.2);color:var(--card-concept);font-size:13px">
+            매칭 시: KC 체인 진입<br>
+            <span style="font-size:12px;opacity:.8">→ Risk-type → Rule → …</span>
+          </div>
+        </div>
+        <div class="flow-divider"></div>
+        <div class="flow-branch">
+          <div class="flow-box flow-box-playbook">
+            <i class="fa-solid fa-bullseye" style="margin-right:5px"></i>Playbook 벡터 검색
+          </div>
+          <div class="flow-label">Playbook 인덱스 쿼리</div>
+          <div class="flow-arrow-down"><i class="fa-solid fa-arrow-down"></i></div>
+          <div class="flow-box flow-box-neutral">유사도 최고점 1개 선택</div>
+          <div class="flow-label">임계값 미만 → 미매칭</div>
+          <div class="flow-arrow-down"><i class="fa-solid fa-arrow-down"></i></div>
+          <div class="flow-box" style="background:rgba(107,74,154,.07);border:1.5px solid rgba(107,74,154,.2);color:var(--card-playbook);font-size:13px">
+            매칭 시: CTA 레이어 준비<br>
+            <span style="font-size:12px;opacity:.8">→ 버튼·안내 노출 대기</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flow-arrow-down" style="margin-top:8px"><i class="fa-solid fa-arrow-down"></i></div>
+
+      <!-- 결과 조합 -->
+      <div class="flow-merge-box" style="max-width:600px">
+        <i class="fa-solid fa-layer-group" style="margin-right:6px;opacity:.7"></i>
+        최종 노출: KC 답변 + CTA 조합
+        <div style="font-size:12px;font-weight:400;margin-top:4px;opacity:.8">KC 답변 생성 → 하단에 CTA 추가 노출 (additive)</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ⑤ 결과 처리 규칙 -->
+  <div class="card">
+    <div class="section-title"><i class="fa-solid fa-list-check"></i> 결과 처리 규칙</div>
+
+    <div class="rule-item">
+      <div class="rule-header">
+        <div class="rule-num" style="background:var(--card-concept)">1</div>
+        <div class="rule-title">Concept 단독 매칭</div>
+      </div>
+      <div class="rule-body">
+        KC 체인(Risk-type → Rule → Evidence → Policy)을 통해 구조화 답변을 생성한다.<br>CTA 없음.
+      </div>
+    </div>
+
+    <div class="rule-item">
+      <div class="rule-header">
+        <div class="rule-num" style="background:var(--card-playbook)">2</div>
+        <div class="rule-title">Playbook 단독 매칭</div>
+      </div>
+      <div class="rule-body">
+        KC 체인 없이 CTA만 노출한다.<br>
+        KC 답변이 없으므로 약관 RAG → FAQ RAG → LLM Fallback 순으로 답변을 생성하고 CTA를 추가한다.
+      </div>
+    </div>
+
+    <div class="rule-item">
+      <div class="rule-header">
+        <div class="rule-num" style="background:var(--status-active)">3</div>
+        <div class="rule-title">Concept + Playbook 동시 매칭</div>
+      </div>
+      <div class="rule-body">
+        KC 체인으로 구조화 답변을 생성하고, 답변 하단에 Playbook CTA를 추가한다 (additive).<br>
+        두 결과가 충돌하지 않으므로 항상 병렬 노출한다.
+        <div class="rule-sub">예: "암 진단 보장 알려주세요" → KC 답변(암 체인) + "플래너 상담 연결" CTA</div>
+      </div>
+    </div>
+
+    <div class="rule-item">
+      <div class="rule-header">
+        <div class="rule-num" style="background:var(--text-hint)">4</div>
+        <div class="rule-title">둘 다 미매칭</div>
+      </div>
+      <div class="rule-body">
+        약관 RAG → FAQ RAG → LLM Fallback 순으로 진행한다 (<a href="../context/answer-logic.md" style="color:var(--card-concept)">answer-logic.md</a> 참조).<br>CTA 없음.
+      </div>
+    </div>
+
+    <div class="note note-green" style="margin-top:4px">
+      <strong>복수 매칭 처리:</strong> 임계값 이상인 결과가 여러 개일 경우 <strong>유사도 최고점 1개만</strong> 선택한다. 동점이면 카드 ID 오름차순으로 선택한다. Concept·Playbook 각각 동일한 규칙을 적용한다.
+    </div>
+  </div>
+
+  <!-- ⑥ 미결 항목 -->
+  <div class="card">
+    <div class="section-title"><i class="fa-solid fa-triangle-exclamation" style="color:var(--status-review)"></i> 미결 항목 — 개발팀 결정 필요</div>
+    <table class="tbd-table">
+      <thead>
+        <tr>
+          <th style="width:200px">항목</th>
+          <th>내용</th>
+          <th style="width:100px">담당</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="tbd-badge">TBD</span> <strong>임계값 수치</strong></td>
+          <td>유사도 점수 몇 이상을 "매칭"으로 볼 건지. Concept과 Playbook을 각각 다른 임계값으로 설정할 수 있는지 여부도 결정 필요. 너무 낮으면 오매칭, 너무 높으면 매칭률 저하.</td>
+          <td style="color:var(--text-secondary);font-size:13px">개발팀 테스트 후 결정</td>
+        </tr>
+        <tr>
+          <td><span class="tbd-badge">TBD</span> <strong>임베딩 모델</strong></td>
+          <td>어떤 임베딩 모델을 사용할 건지. 한국어 보험 도메인에 특화된 모델 권장. OpenAI, Cohere, 국내 모델 중 선택.</td>
+          <td style="color:var(--text-secondary);font-size:13px">개발팀 결정</td>
+        </tr>
+        <tr>
+          <td><span class="tbd-badge">TBD</span> <strong>인덱스 업데이트 타이밍</strong></td>
+          <td>운영자가 카드를 저장·라이브 전환할 때 즉시 인덱싱할지, 일정 주기로 배치 처리할지. 즉시 반영이면 운영자 편집 후 바로 매칭에 반영됨.</td>
+          <td style="color:var(--text-secondary);font-size:13px">개발팀 결정</td>
+        </tr>
+        <tr>
+          <td><span class="tbd-badge">TBD</span> <strong>라이브 카드만 인덱싱?</strong></td>
+          <td>draft·review·approved 상태 카드도 인덱스에 포함할지, active(라이브) 카드만 포함할지. 사전 테스트 환경에서는 approved 카드도 매칭되어야 할 수 있음.</td>
+          <td style="color:var(--text-secondary);font-size:13px">개발팀·PO 합의</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</main>
+</div>
+</body>
+</html>

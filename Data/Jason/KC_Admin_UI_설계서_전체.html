@@ -1,0 +1,2416 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KC Admin UI 설계서 — 01. 대시보드</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --navy:#0f172a;--primary:#2563eb;--primary-dk:#1d4ed8;--primary-lt:#dbeafe;
+  --bg:#f8fafc;--white:#fff;
+  --g50:#f8fafc;--g100:#f1f5f9;--g200:#e2e8f0;--g300:#cbd5e1;
+  --g400:#94a3b8;--g500:#64748b;--g600:#475569;--g700:#334155;--g800:#1e293b;--g900:#0f172a;
+  --green:#22c55e;--green-bg:#f0fdf4;--green-bd:#86efac;
+  --yellow:#f59e0b;--yellow-bg:#fefce8;--yellow-bd:#fde68a;
+  --red:#ef4444;--red-bg:#fef2f2;--red-bd:#fca5a5;
+  --purple:#8b5cf6;--purple-bg:#f5f3ff;
+  --blue:#3b82f6;--blue-bg:#eff6ff;
+  --radius:8px;--radius-lg:12px;
+}
+body{font-family:'Noto Sans KR',sans-serif;background:#e8ecf1;color:var(--g900);font-size:14px;line-height:1.6}
+
+/* ── Document Header ── */
+.doc-header{background:var(--navy);color:#fff;padding:48px 60px 40px;position:relative;overflow:hidden}
+.doc-header::before{content:'';position:absolute;top:0;left:0;width:6px;height:100%;background:var(--primary)}
+.doc-header .doc-badge{display:inline-block;background:var(--primary);color:#fff;font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;letter-spacing:1px;margin-bottom:16px}
+.doc-header h1{font-size:36px;font-weight:800;letter-spacing:-1px;margin-bottom:8px}
+.doc-header p{font-size:15px;color:var(--g400);max-width:600px}
+.doc-header .doc-meta{margin-top:20px;font-size:12px;color:var(--g500)}
+
+/* ── Section ── */
+.section{max-width:1200px;margin:0 auto;padding:40px 60px}
+.section-num{font-size:48px;font-weight:800;color:var(--primary);opacity:0.15;line-height:1}
+.section-title{font-size:24px;font-weight:800;color:var(--g900);margin-top:-10px;margin-bottom:6px}
+.section-desc{font-size:14px;color:var(--g500);margin-bottom:32px}
+.role-badge{display:inline-block;background:var(--primary-lt);color:var(--primary);font-size:11px;font-weight:700;padding:3px 10px;border-radius:12px;margin-left:8px;vertical-align:middle}
+
+/* ── Wireframe Container ── */
+.wireframe-wrap{background:var(--white);border:1px solid var(--g200);border-radius:var(--radius-lg);overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.06);margin-bottom:32px}
+.wireframe-label{background:var(--g100);border-bottom:1px solid var(--g200);padding:10px 20px;font-size:11px;font-weight:700;color:var(--g500);letter-spacing:1px;text-transform:uppercase;display:flex;align-items:center;gap:8px}
+.wireframe-label::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--primary)}
+.wireframe{padding:0;background:var(--bg);position:relative}
+
+/* ── Wireframe: App Shell ── */
+.wf-app{display:flex;height:520px;overflow:hidden}
+
+/* Sidebar */
+.wf-sidebar{width:220px;background:var(--navy);color:#fff;flex-shrink:0;display:flex;flex-direction:column;font-size:12px}
+.wf-sidebar-header{padding:16px 16px 12px;border-bottom:1px solid rgba(255,255,255,0.08)}
+.wf-sidebar-header h2{font-size:14px;font-weight:700}
+.wf-sidebar-header span{font-size:10px;color:var(--g400)}
+.wf-sidebar-nav{flex:1;padding:12px 8px;overflow-y:auto}
+.wf-nav-section{font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--g500);padding:10px 10px 4px;font-weight:700}
+.wf-nav-item{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:6px;cursor:default;color:var(--g300);font-size:12px;margin:1px 0;transition:.15s}
+.wf-nav-item:hover{background:var(--g800);color:#fff}
+.wf-nav-item.active{background:var(--primary);color:#fff;font-weight:600}
+.wf-nav-item .icon{width:16px;text-align:center;font-size:13px}
+.wf-nav-item .badge{margin-left:auto;background:var(--red);color:#fff;font-size:9px;padding:1px 6px;border-radius:8px;font-weight:700}
+.wf-sidebar-footer{padding:12px;border-top:1px solid rgba(255,255,255,0.08)}
+.wf-role-btn{width:100%;padding:6px 10px;border-radius:6px;border:1px solid rgba(255,255,255,0.15);background:transparent;color:var(--g300);font-size:11px;text-align:left;cursor:default;margin-bottom:4px;font-family:inherit}
+.wf-role-btn.active{background:var(--primary);border-color:var(--primary);color:#fff;font-weight:600}
+.wf-role-label{display:block;font-size:9px;color:var(--g500);margin-bottom:4px;font-weight:700;text-transform:uppercase;letter-spacing:1px}
+
+/* Main Area */
+.wf-main{flex:1;display:flex;flex-direction:column;min-width:0}
+.wf-topbar{height:44px;background:var(--white);border-bottom:1px solid var(--g200);display:flex;align-items:center;justify-content:space-between;padding:0 20px;flex-shrink:0}
+.wf-topbar h3{font-size:15px;font-weight:700}
+.wf-topbar-actions{display:flex;gap:8px}
+.wf-topbar-actions .btn{font-size:11px;padding:5px 12px;border-radius:6px;border:1px solid var(--g300);background:var(--white);color:var(--g600);cursor:default;font-family:inherit;font-weight:500}
+.wf-topbar-actions .btn-primary{background:var(--primary);color:#fff;border-color:var(--primary)}
+
+.wf-content{flex:1;padding:20px;overflow-y:auto}
+
+/* ── Wireframe: Dashboard Components ── */
+.wf-stat-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:16px}
+.wf-stat-card{background:var(--white);border:1px solid var(--g200);border-radius:var(--radius);padding:12px;text-align:center}
+.wf-stat-card .label{font-size:10px;color:var(--g500);margin-bottom:2px}
+.wf-stat-card .value{font-size:22px;font-weight:800}
+.wf-stat-card .sub{font-size:9px;color:var(--g400);margin-top:2px}
+
+.wf-dash-body{display:grid;grid-template-columns:2fr 1fr;gap:12px}
+.wf-card{background:var(--white);border:1px solid var(--g200);border-radius:var(--radius);overflow:hidden}
+.wf-card-header{padding:10px 14px;border-bottom:1px solid var(--g100);display:flex;align-items:center;justify-content:space-between}
+.wf-card-header h4{font-size:12px;font-weight:700}
+.wf-card-body{padding:10px 14px}
+
+.wf-feed-item{display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid var(--g100)}
+.wf-feed-item:last-child{border:none}
+.wf-feed-avatar{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;background:var(--primary-lt);color:var(--primary)}
+.wf-feed-text{font-size:11px;color:var(--g600);line-height:1.4}
+.wf-feed-text b{color:var(--g900)}
+.wf-feed-time{font-size:9px;color:var(--g400);margin-top:2px}
+.wf-feed-tag{display:inline-block;padding:1px 6px;border-radius:3px;font-size:9px;font-weight:600}
+.tag-draft{background:#e0e7ff;color:#3730a3}
+.tag-approved{background:#d1fae5;color:#065f46}
+.tag-rejected{background:#fee2e2;color:#991b1b}
+.tag-review{background:#fef3c7;color:#92400e}
+
+.wf-quick-btn{width:100%;padding:8px;border-radius:6px;border:1px solid var(--g200);background:var(--white);font-size:11px;font-weight:600;cursor:default;margin-bottom:6px;font-family:inherit;text-align:left;display:flex;align-items:center;gap:6px;color:var(--g700)}
+.wf-quick-btn.primary{background:var(--primary);color:#fff;border-color:var(--primary)}
+
+.wf-chart-placeholder{height:100px;background:var(--g50);border:2px dashed var(--g200);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;color:var(--g400);font-size:11px;font-weight:500}
+
+/* ── Annotation Markers ── */
+.anno-marker{position:absolute;width:22px;height:22px;border-radius:50%;background:var(--primary);color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;z-index:10;box-shadow:0 2px 8px rgba(37,99,235,0.4);cursor:default}
+
+/* ── Feature Spec Cards ── */
+.spec-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+.spec-card{background:var(--white);border:1px solid var(--g200);border-radius:var(--radius-lg);overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.04)}
+.spec-card-header{display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--g100)}
+.spec-card-num{width:26px;height:26px;border-radius:50%;background:var(--primary);color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.spec-card-title{font-size:14px;font-weight:700;color:var(--g900)}
+.spec-card-body{padding:14px 18px}
+.spec-card-body ul{list-style:none;padding:0}
+.spec-card-body li{font-size:12px;color:var(--g600);padding:4px 0;padding-left:16px;position:relative;line-height:1.5}
+.spec-card-body li::before{content:'';position:absolute;left:0;top:10px;width:6px;height:6px;border-radius:50%;background:var(--g300)}
+.spec-card.accent-blue .spec-card-header{border-left:4px solid var(--primary)}
+.spec-card.accent-green .spec-card-header{border-left:4px solid var(--green)}
+.spec-card.accent-yellow .spec-card-header{border-left:4px solid var(--yellow)}
+.spec-card.accent-purple .spec-card-header{border-left:4px solid var(--purple)}
+.spec-card.accent-red .spec-card-header{border-left:4px solid var(--red)}
+.spec-card.accent-gray .spec-card-header{border-left:4px solid var(--g400)}
+
+/* ── Layout Spec ── */
+.layout-spec{background:var(--white);border:1px solid var(--g200);border-radius:var(--radius-lg);padding:20px 24px;margin-bottom:24px}
+.layout-spec h4{font-size:14px;font-weight:700;margin-bottom:12px;color:var(--g900)}
+.layout-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.layout-item{background:var(--g50);border:1px solid var(--g200);border-radius:var(--radius);padding:12px;text-align:center}
+.layout-item .layout-label{font-size:10px;font-weight:700;color:var(--g500);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+.layout-item .layout-desc{font-size:12px;color:var(--g700)}
+
+/* ── Role Access Table ── */
+.role-table{width:100%;border-collapse:collapse;font-size:12px}
+.role-table th{background:var(--navy);color:#fff;padding:8px 14px;text-align:left;font-weight:600;font-size:11px}
+.role-table td{padding:8px 14px;border-bottom:1px solid var(--g100)}
+.role-table tr:hover{background:var(--g50)}
+.role-table .check{color:var(--green);font-weight:700}
+.role-table .no{color:var(--g300)}
+
+/* ── Footer ── */
+.doc-footer{text-align:center;padding:32px;color:var(--g400);font-size:11px}
+
+/* ── Wireframe: Tab Bar ── */
+.wf-tab-bar{display:flex;gap:2px;background:var(--g100);border-radius:8px;padding:3px}
+.wf-tab{padding:6px 14px;border-radius:6px;font-size:11px;font-weight:600;color:var(--g500);cursor:default;transition:.15s}
+.wf-tab.active{background:var(--white);color:var(--primary);box-shadow:0 1px 3px rgba(0,0,0,0.08)}
+
+/* ── Wireframe: Filter Bar ── */
+.wf-filter-bar{display:flex;gap:8px;align-items:center}
+.wf-select{padding:6px 12px;border:1px solid var(--g300);border-radius:6px;font-size:11px;color:var(--g600);background:var(--white);cursor:default;white-space:nowrap}
+.wf-search-input{padding:6px 12px;border:1px solid var(--g300);border-radius:6px;font-size:11px;color:var(--g400);background:var(--white);min-width:200px}
+
+/* ── Wireframe: Table ── */
+.wf-table-wrap{overflow-x:auto;border:1px solid var(--g200);border-radius:var(--radius);background:var(--white)}
+.wf-table{width:100%;border-collapse:collapse;font-size:11px}
+.wf-table th{background:var(--g50);padding:8px 12px;text-align:left;font-weight:600;color:var(--g600);border-bottom:1px solid var(--g200);white-space:nowrap;font-size:10px}
+.wf-table td{padding:8px 12px;border-bottom:1px solid var(--g100);color:var(--g700)}
+.wf-table tr:hover{background:var(--g50)}
+
+/* Type badges */
+.wf-type-badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:9px;font-weight:700;letter-spacing:0.5px}
+.wf-type-badge.concept{background:#dbeafe;color:#1d4ed8}
+.wf-type-badge.rule{background:#d1fae5;color:#065f46}
+.wf-type-badge.evidence{background:#ecfccb;color:#3f6212}
+.wf-type-badge.playbook{background:#f3e8ff;color:#6d28d9}
+.wf-type-badge.case{background:#fef3c7;color:#92400e}
+.wf-type-badge.policy{background:#fce7f3;color:#9d174d}
+
+/* Visibility badges */
+.wf-vis-badge{font-size:10px;font-weight:600;white-space:nowrap}
+.wf-vis-badge.public{color:#15803d}
+.wf-vis-badge.baseline{color:#a16207}
+.wf-vis-badge.internal{color:#b91c1c}
+
+/* Status badges */
+.wf-status-badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:9px;font-weight:700}
+.wf-status-badge.draft{background:#e0e7ff;color:#3730a3}
+.wf-status-badge.review{background:#fef3c7;color:#92400e}
+.wf-status-badge.legal{background:#fce7f3;color:#9d174d}
+.wf-status-badge.approved{background:#d1fae5;color:#065f46}
+.wf-status-badge.rejected{background:#fee2e2;color:#991b1b}
+
+.wf-action-link{font-size:10px;color:var(--primary);font-weight:600;cursor:default}
+
+/* ── Wireframe: Form Elements ── */
+.wf-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.wf-form-group{margin-bottom:8px}
+.wf-form-label{font-size:10px;font-weight:700;color:var(--g500);margin-bottom:3px;text-transform:uppercase;letter-spacing:0.5px}
+.wf-form-input{padding:7px 10px;border:1px solid var(--g300);border-radius:6px;font-size:11px;color:var(--g700);background:var(--white);min-height:32px;display:flex;align-items:center;flex-wrap:wrap;gap:4px}
+.wf-form-input.disabled{background:var(--g100);color:var(--g400)}
+.wf-form-textarea{padding:8px 10px;border:1px solid var(--g300);border-radius:6px;font-size:11px;color:var(--g700);background:var(--white);min-height:56px;line-height:1.5}
+.wf-tag-item{display:inline-block;background:var(--primary-lt);color:var(--primary);font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px}
+.wf-tag-add{display:inline-block;color:var(--primary);font-size:10px;font-weight:600;cursor:default}
+
+/* Radio group */
+.wf-radio-group{display:flex;gap:8px}
+.wf-radio{display:flex;align-items:flex-start;gap:6px;padding:8px 12px;border:1px solid var(--g200);border-radius:6px;font-size:11px;color:var(--g600);cursor:default;flex:1;background:var(--white)}
+.wf-radio.active{border-color:var(--primary);background:var(--primary-lt)}
+.wf-radio b{color:var(--g900);font-size:12px}
+.wf-radio-desc{font-size:9px;color:var(--g400)}
+.wf-radio-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:2px}
+.wf-radio-dot.green{background:var(--green)}
+.wf-radio-dot.yellow{background:var(--yellow)}
+.wf-radio-dot.red{background:var(--red)}
+
+/* Linked cards */
+.wf-linked-item{display:flex;align-items:center;gap:6px;padding:5px 0;font-size:11px;color:var(--g700);border-bottom:1px solid var(--g100)}
+.wf-linked-add{font-size:10px;color:var(--primary);font-weight:600;padding:6px 0;cursor:default}
+
+/* Version history */
+.wf-version-item{display:flex;align-items:center;gap:8px;padding:5px 0;font-size:11px;color:var(--g700)}
+.wf-version-item.dim{color:var(--g400)}
+.wf-version-dot{width:8px;height:8px;border-radius:50%;background:var(--primary);flex-shrink:0}
+.wf-version-item.dim .wf-version-dot{background:var(--g300);border:2px dashed var(--g400)}
+.wf-version-time{margin-left:auto;font-size:9px;color:var(--g400)}
+
+/* Condition builder inline */
+.wf-condition-builder{border:1px solid var(--g200);border-radius:6px;padding:10px;background:var(--g50)}
+.wf-condition-row{display:flex;align-items:center;gap:6px;margin-bottom:6px;font-size:11px}
+.wf-cond-badge{padding:3px 8px;border-radius:4px;font-size:9px;font-weight:700;color:#fff}
+.wf-cond-badge.source{background:#6366f1}
+.wf-cond-badge.source.amp{background:#f59e0b;color:#78350f}
+.wf-cond-field{padding:4px 8px;background:var(--white);border:1px solid var(--g300);border-radius:4px;font-family:'Consolas','Courier New',monospace;font-size:10px;color:var(--g800)}
+.wf-cond-op{font-weight:800;color:var(--g500);font-size:13px;width:20px;text-align:center}
+.wf-cond-val{padding:4px 8px;background:var(--white);border:1px solid var(--g300);border-radius:4px;font-size:10px;color:var(--primary-dk);font-weight:600}
+.wf-cond-logic{padding:2px 6px;background:var(--navy);color:#fff;border-radius:3px;font-size:9px;font-weight:700}
+.wf-condition-add{font-size:10px;color:var(--primary);font-weight:600;cursor:default;padding:4px 0}
+
+/* Checklist */
+.wf-checklist{border:1px solid var(--g200);border-radius:6px;padding:8px;background:var(--g50)}
+.wf-check-item{display:flex;align-items:center;gap:8px;padding:5px 0;font-size:11px;color:var(--g700);border-bottom:1px solid var(--g100)}
+.wf-check-item:last-of-type{border:none}
+.wf-checkbox{font-size:14px;color:var(--g400)}
+.wf-check-add{font-size:10px;color:var(--primary);font-weight:600;cursor:default;padding:6px 0}
+
+/* ── Wireframe: Slide Panel ── */
+.wf-slide-panel{width:380px;background:var(--white);border-left:1px solid var(--g200);box-shadow:-4px 0 24px rgba(0,0,0,0.08);display:flex;flex-direction:column;flex-shrink:0;overflow:hidden}
+.wf-panel-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--g200);flex-shrink:0}
+.wf-panel-close{width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:6px;cursor:default;color:var(--g400);font-size:16px;font-weight:700}
+.wf-panel-body{flex:1;overflow-y:auto;padding:16px 18px}
+
+/* Detail sections */
+.wf-detail-section{margin-bottom:12px}
+.wf-detail-label{font-size:10px;font-weight:700;color:var(--g500);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px}
+.wf-detail-value{font-size:12px;color:var(--g700);line-height:1.5}
+
+/* Timeline */
+.wf-timeline{position:relative;padding-left:18px}
+.wf-timeline::before{content:'';position:absolute;left:5px;top:6px;bottom:6px;width:2px;background:var(--g200)}
+.wf-timeline-item{display:flex;align-items:flex-start;gap:10px;padding:6px 0;position:relative}
+.wf-timeline-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0;position:absolute;left:-18px;top:8px;border:2px solid var(--white);z-index:1}
+.wf-timeline-dot.approved{background:var(--green)}
+.wf-timeline-dot.review{background:var(--yellow)}
+.wf-timeline-dot.rejected{background:var(--red)}
+.wf-timeline-dot.draft{background:var(--blue)}
+.wf-timeline-content{font-size:11px;color:var(--g700);line-height:1.4}
+.wf-timeline-time{display:block;font-size:9px;color:var(--g400);margin-top:1px}
+
+/* ── Wireframe: Action Buttons (Review) ── */
+.wf-action-btn{display:inline-block;padding:4px 10px;border-radius:4px;font-size:10px;font-weight:700;cursor:default}
+.wf-action-btn.approve{background:var(--green-bg);color:#15803d;border:1px solid var(--green-bd)}
+.wf-action-btn.reject{background:var(--red-bg);color:#b91c1c;border:1px solid var(--red-bd)}
+
+/* Modal preview */
+.wf-modal-preview{background:var(--white);border:2px solid var(--g300);border-radius:var(--radius-lg);padding:16px;box-shadow:0 4px 20px rgba(0,0,0,0.1)}
+.wf-modal-title{font-size:14px;font-weight:700;color:var(--g900);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--g200)}
+
+/* Checkbox active */
+.wf-checkbox-active{font-size:14px;color:var(--green)}
+</style>
+</head>
+<body>
+
+<!-- ══════════════ DOCUMENT HEADER ══════════════ -->
+<div class="doc-header">
+  <div class="doc-badge">UI DESIGN SPEC</div>
+  <h1>KC Admin UI 상세 설계서</h1>
+  <p>Knowledge Core 어드민 시스템 화면별 기능 정의 및 UI 구성 안내</p>
+  <div class="doc-meta">아이지넷 플랫폼사업본부 · v1.0 · 2026.03 · 문서 등급: Internal</div>
+</div>
+
+<!-- ══════════════ 01. 대시보드 ══════════════ -->
+<div class="section">
+  <div class="section-num">01</div>
+  <div class="section-title">대시보드 <span class="role-badge">담당자 / 검수자 / 준법감시인 공통</span></div>
+  <div class="section-desc">전체 카드 현황과 운영 상태를 한눈에 파악하는 메인 화면. 로그인 후 최초 진입 화면으로 설정.</div>
+
+  <!-- Wireframe -->
+  <div class="wireframe-wrap">
+    <div class="wireframe-label">WIREFRAME — 대시보드 화면 구성</div>
+    <div class="wireframe">
+      <div class="wf-app">
+        <!-- Sidebar -->
+        <div class="wf-sidebar">
+          <div class="wf-sidebar-header">
+            <h2>KC Admin</h2>
+            <span>Knowledge Core v1.5</span>
+          </div>
+          <div class="wf-sidebar-nav">
+            <div class="wf-nav-section">홈</div>
+            <div class="wf-nav-item active"><span class="icon">📊</span> 대시보드</div>
+
+            <div class="wf-nav-section">카드 관리</div>
+            <div class="wf-nav-item"><span class="icon">📝</span> 내 카드</div>
+            <div class="wf-nav-item"><span class="icon">➕</span> 카드 생성</div>
+            <div class="wf-nav-item"><span class="icon">📚</span> 카드 라이브러리</div>
+
+            <div class="wf-nav-section">검수</div>
+            <div class="wf-nav-item"><span class="icon">✅</span> 검수 대기 <span class="badge">4</span></div>
+            <div class="wf-nav-item"><span class="icon">⚖️</span> Policy 법무검토 <span class="badge">1</span></div>
+
+            <div class="wf-nav-section">데이터</div>
+            <div class="wf-nav-item"><span class="icon">🎯</span> 리스크 유형</div>
+            <div class="wf-nav-item"><span class="icon">🔧</span> 조건 빌더</div>
+            <div class="wf-nav-item"><span class="icon">🔍</span> 리스크 유형 대조</div>
+            <div class="wf-nav-item"><span class="icon">🏥</span> 마이데이터 담보코드</div>
+
+            <div class="wf-nav-section">운영</div>
+            <div class="wf-nav-item"><span class="icon">💡</span> Case 후보 관리</div>
+            <div class="wf-nav-item"><span class="icon">📋</span> 감사 로그</div>
+          </div>
+          <div class="wf-sidebar-footer">
+            <div class="wf-role-label">현재 역할</div>
+            <div class="wf-role-btn active">담당자</div>
+            <div class="wf-role-btn">검수자</div>
+            <div class="wf-role-btn">준법감시인</div>
+          </div>
+        </div>
+
+        <!-- Main -->
+        <div class="wf-main">
+          <div class="wf-topbar">
+            <h3>대시보드</h3>
+            <div class="wf-topbar-actions">
+              <div class="btn btn-primary">+ 새 카드 생성</div>
+              <div class="btn">🔔 알림</div>
+            </div>
+          </div>
+          <div class="wf-content">
+            <!-- A: Stats Grid -->
+            <div class="wf-stat-grid" style="position:relative">
+              <div class="anno-marker" style="top:-8px;left:-8px">A</div>
+              <div class="wf-stat-card">
+                <div class="label">전체 카드</div>
+                <div class="value">24</div>
+                <div class="sub">6종 카드 합계</div>
+              </div>
+              <div class="wf-stat-card">
+                <div class="label">승인 완료</div>
+                <div class="value" style="color:var(--green)">12</div>
+                <div class="sub">APPROVED</div>
+              </div>
+              <div class="wf-stat-card">
+                <div class="label">검수 대기</div>
+                <div class="value" style="color:var(--yellow)">4</div>
+                <div class="sub">IN_REVIEW</div>
+              </div>
+              <div class="wf-stat-card">
+                <div class="label">반려</div>
+                <div class="value" style="color:var(--red)">2</div>
+                <div class="sub">수정 필요</div>
+              </div>
+              <div class="wf-stat-card">
+                <div class="label">리스크 유형</div>
+                <div class="value">5</div>
+                <div class="sub">T01~T05</div>
+              </div>
+              <div class="wf-stat-card">
+                <div class="label">담보코드</div>
+                <div class="value" style="color:var(--purple)">142</div>
+                <div class="sub">ICIS 코드</div>
+              </div>
+            </div>
+
+            <!-- B,C,D: Body -->
+            <div class="wf-dash-body">
+              <!-- B: Activity Feed -->
+              <div class="wf-card" style="position:relative">
+                <div class="anno-marker" style="top:-8px;left:-8px">B</div>
+                <div class="wf-card-header">
+                  <h4>최근 활동</h4>
+                  <span style="font-size:10px;color:var(--g400)">전체보기 →</span>
+                </div>
+                <div class="wf-card-body">
+                  <div class="wf-feed-item">
+                    <div class="wf-feed-avatar">담</div>
+                    <div>
+                      <div class="wf-feed-text"><b>담당자</b>가 <span class="wf-feed-tag tag-draft">CONCEPT.CANCER.GAP.V1</span> 카드를 생성했습니다.</div>
+                      <div class="wf-feed-time">10분 전</div>
+                    </div>
+                  </div>
+                  <div class="wf-feed-item">
+                    <div class="wf-feed-avatar" style="background:var(--green-bg);color:#15803d">검</div>
+                    <div>
+                      <div class="wf-feed-text"><b>검수자</b>가 <span class="wf-feed-tag tag-approved">RULE.CARDIO.GAP.V1</span>을 승인했습니다.</div>
+                      <div class="wf-feed-time">32분 전</div>
+                    </div>
+                  </div>
+                  <div class="wf-feed-item">
+                    <div class="wf-feed-avatar" style="background:#fce7f3;color:#9d174d">준</div>
+                    <div>
+                      <div class="wf-feed-text"><b>준법감시인</b>이 <span class="wf-feed-tag tag-rejected">POLICY.AI.SAFEGUARD.V1</span>을 반려했습니다.<br><span style="color:var(--g400)">사유: 금소법 제21조 제5호 관련 금지 표현 2건 누락</span></div>
+                      <div class="wf-feed-time">1시간 전</div>
+                    </div>
+                  </div>
+                  <div class="wf-feed-item">
+                    <div class="wf-feed-avatar">담</div>
+                    <div>
+                      <div class="wf-feed-text"><b>담당자</b>가 리스크 유형 <b>T03 심혈관 보장 협소형</b> 조건을 수정했습니다.</div>
+                      <div class="wf-feed-time">2시간 전</div>
+                    </div>
+                  </div>
+                  <div class="wf-feed-item">
+                    <div class="wf-feed-avatar">담</div>
+                    <div>
+                      <div class="wf-feed-text"><b>담당자</b>가 <span class="wf-feed-tag tag-review">PLAYBOOK.COVERAGE.GAP.V1</span> 검수를 요청했습니다.</div>
+                      <div class="wf-feed-time">3시간 전</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Right Column: C + D -->
+              <div style="display:flex;flex-direction:column;gap:12px">
+                <!-- C: Quick Actions -->
+                <div class="wf-card" style="position:relative">
+                  <div class="anno-marker" style="top:-8px;left:-8px">C</div>
+                  <div class="wf-card-header"><h4>빠른 액션</h4></div>
+                  <div class="wf-card-body">
+                    <div class="wf-quick-btn primary">➕ 새 카드 생성</div>
+                    <div class="wf-quick-btn">🎯 리스크 유형 생성</div>
+                    <div class="wf-quick-btn">✅ 검수 대기 목록 (4건)</div>
+                  </div>
+                </div>
+                <!-- D: Chart -->
+                <div class="wf-card" style="position:relative;flex:1">
+                  <div class="anno-marker" style="top:-8px;left:-8px">D</div>
+                  <div class="wf-card-header"><h4>카드 유형별 분포</h4></div>
+                  <div class="wf-card-body">
+                    <div class="wf-chart-placeholder">
+                      도넛 차트 / 바 차트<br>CONCEPT · RULE · EVIDENCE · PLAYBOOK · CASE · POLICY
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feature Spec Cards -->
+  <div class="spec-grid">
+    <div class="spec-card accent-blue">
+      <div class="spec-card-header">
+        <div class="spec-card-num">A</div>
+        <div class="spec-card-title">상단 통계 카드 (Stats Grid)</div>
+      </div>
+      <div class="spec-card-body">
+        <ul>
+          <li>전체 카드 수, 승인 완료, 검수 대기, 반려 건수를 6칸 그리드로 표시</li>
+          <li>리스크 유형 수(ACTIVE 상태), 마이데이터 담보코드 수 포함</li>
+          <li>각 통계 카드 클릭 시 해당 필터가 적용된 목록 화면으로 이동</li>
+          <li>숫자는 실시간 업데이트 (페이지 진입 시 API 호출)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="spec-card accent-green">
+      <div class="spec-card-header">
+        <div class="spec-card-num">B</div>
+        <div class="spec-card-title">최근 활동 피드 (Activity Feed)</div>
+      </div>
+      <div class="spec-card-body">
+        <ul>
+          <li>카드 생성/수정/승인/반려 이벤트를 시간순으로 표시</li>
+          <li>수행자 아바타(역할 표시) + Card ID + 액션 유형 표시</li>
+          <li>반려 시 사유도 피드에 함께 표시</li>
+          <li>Card ID 클릭 시 카드 상세 조회 화면으로 이동</li>
+          <li>최대 20건 표시, 스크롤 가능, "전체보기" 클릭 시 감사 로그로 이동</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="spec-card accent-yellow">
+      <div class="spec-card-header">
+        <div class="spec-card-num">C</div>
+        <div class="spec-card-title">빠른 액션 (Quick Actions)</div>
+      </div>
+      <div class="spec-card-body">
+        <ul>
+          <li>역할에 따라 표시되는 액션이 다름</li>
+          <li><b>담당자</b>: 새 카드 생성, 리스크 유형 생성</li>
+          <li><b>검수자</b>: 검수 대기 목록 바로가기 (대기 건수 표시)</li>
+          <li><b>준법감시인</b>: Policy 법무검토 바로가기</li>
+          <li>버튼 클릭 시 해당 화면으로 즉시 이동</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="spec-card accent-purple">
+      <div class="spec-card-header">
+        <div class="spec-card-num">D</div>
+        <div class="spec-card-title">카드 유형별 분포 (Chart)</div>
+      </div>
+      <div class="spec-card-body">
+        <ul>
+          <li>6+1종 카드의 유형별 분포를 도넛 차트 또는 바 차트로 표시</li>
+          <li>상태별(초안/검수중/승인/반려) 비율도 함께 표시 가능</li>
+          <li>차트의 각 세그먼트 클릭 시 해당 필터가 적용된 카드 목록으로 이동</li>
+          <li>차트 라이브러리: Chart.js 또는 Recharts 사용</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Layout Spec -->
+  <div class="layout-spec">
+    <h4>화면 레이아웃 구성</h4>
+    <div class="layout-grid">
+      <div class="layout-item">
+        <div class="layout-label">상단 영역</div>
+        <div class="layout-desc">6칸 통계 카드 그리드<br>(가로 균등 배치)</div>
+      </div>
+      <div class="layout-item">
+        <div class="layout-label">좌측 하단 (2/3)</div>
+        <div class="layout-desc">최근 활동 피드<br>(스크롤 가능, 최대 20건)</div>
+      </div>
+      <div class="layout-item">
+        <div class="layout-label">우측 하단 (1/3)</div>
+        <div class="layout-desc">빠른 액션 + 카드 분포 차트<br>(상하 분할)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Role Access -->
+  <div class="layout-spec">
+    <h4>역할별 접근 차이</h4>
+    <table class="role-table">
+      <thead>
+        <tr><th>기능</th><th>담당자</th><th>검수자</th><th>준법감시인</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>통계 카드 조회</td><td class="check">● 가능</td><td class="check">● 가능</td><td class="check">● 가능</td></tr>
+        <tr><td>최근 활동 피드 조회</td><td class="check">● 가능</td><td class="check">● 가능</td><td class="check">● 가능</td></tr>
+        <tr><td>새 카드 생성 버튼</td><td class="check">● 표시</td><td class="no">— 미표시</td><td class="no">— 미표시</td></tr>
+        <tr><td>리스크 유형 생성 버튼</td><td class="check">● 표시</td><td class="no">— 미표시</td><td class="no">— 미표시</td></tr>
+        <tr><td>검수 대기 바로가기</td><td class="no">— 미표시</td><td class="check">● 표시 (건수 포함)</td><td class="no">— 미표시</td></tr>
+        <tr><td>Policy 법무검토 바로가기</td><td class="no">— 미표시</td><td class="no">— 미표시</td><td class="check">● 표시 (건수 포함)</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- 02. 카드 목록 -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-num">02</div>
+  <div class="section-title">카드 목록 <span class="role-badge">담당자 / 검수자 / 준법감시인 공통</span></div>
+  <div class="section-desc">승인된 카드를 조회하는 "라이브러리"와, 작업 중인 카드를 관리하는 "내 카드" 두 가지 뷰로 구성. 상단 탭으로 전환.</div>
+
+  <!-- ── 와이어프레임: 라이브러리 ── -->
+  <div class="wireframe-wrap">
+    <div class="wireframe-label">WIREFRAME — 카드 목록: 라이브러리 (승인 완료 카드)</div>
+    <div class="wireframe">
+      <div class="wf-app" style="height:480px">
+        <!-- Sidebar (축약) -->
+        <div class="wf-sidebar">
+          <div class="wf-sidebar-header"><h2>KC Admin</h2><span>Knowledge Core v1.5</span></div>
+          <div class="wf-sidebar-nav">
+            <div class="wf-nav-section">홈</div>
+            <div class="wf-nav-item"><span class="icon">📊</span> 대시보드</div>
+            <div class="wf-nav-section">카드 관리</div>
+            <div class="wf-nav-item"><span class="icon">📝</span> 내 카드</div>
+            <div class="wf-nav-item"><span class="icon">➕</span> 카드 생성</div>
+            <div class="wf-nav-item active"><span class="icon">📚</span> 카드 라이브러리</div>
+            <div class="wf-nav-section">검수</div>
+            <div class="wf-nav-item"><span class="icon">✅</span> 검수 대기 <span class="badge">4</span></div>
+            <div class="wf-nav-item"><span class="icon">⚖️</span> Policy 법무검토</div>
+            <div class="wf-nav-section">데이터</div>
+            <div class="wf-nav-item"><span class="icon">🎯</span> 리스크 유형</div>
+            <div class="wf-nav-item"><span class="icon">🔧</span> 조건 빌더</div>
+          </div>
+        </div>
+
+        <!-- Main -->
+        <div class="wf-main">
+          <div class="wf-topbar">
+            <h3>카드 라이브러리</h3>
+            <div class="wf-topbar-actions">
+              <div class="btn">🔍 검색</div>
+            </div>
+          </div>
+          <div class="wf-content">
+            <!-- E: Tab Bar -->
+            <div style="position:relative;margin-bottom:12px">
+              <div class="anno-marker" style="top:-8px;left:-8px">E</div>
+              <div class="wf-tab-bar">
+                <div class="wf-tab active">전체</div>
+                <div class="wf-tab">CONCEPT</div>
+                <div class="wf-tab">RULE</div>
+                <div class="wf-tab">EVIDENCE</div>
+                <div class="wf-tab">PLAYBOOK</div>
+                <div class="wf-tab">CASE</div>
+                <div class="wf-tab">POLICY</div>
+              </div>
+            </div>
+
+            <!-- F: Filter Bar -->
+            <div style="position:relative;margin-bottom:12px">
+              <div class="anno-marker" style="top:-6px;left:-8px">F</div>
+              <div class="wf-filter-bar">
+                <div class="wf-select">전체 공개범위 ▾</div>
+                <div class="wf-search-input">Card ID / 제목 / 내용 검색...</div>
+              </div>
+            </div>
+
+            <!-- G: Table -->
+            <div style="position:relative">
+              <div class="anno-marker" style="top:-8px;left:-8px">G</div>
+              <div class="wf-table-wrap">
+                <table class="wf-table">
+                  <thead>
+                    <tr>
+                      <th>Card ID</th>
+                      <th>타입</th>
+                      <th>리스크 유형</th>
+                      <th>공개범위</th>
+                      <th>버전</th>
+                      <th>승인일</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><span style="font-weight:600;color:var(--primary)">CONCEPT.CANCER.GAP.V1</span></td>
+                      <td><span class="wf-type-badge concept">CONCEPT</span></td>
+                      <td>T01 암진단금 부족형</td>
+                      <td><span class="wf-vis-badge public">🟢 Public</span></td>
+                      <td>v1.0</td>
+                      <td>2026-03-20</td>
+                      <td><span class="wf-action-link">상세 →</span></td>
+                    </tr>
+                    <tr>
+                      <td><span style="font-weight:600;color:var(--primary)">RULE.CARDIO.GAP.V1</span></td>
+                      <td><span class="wf-type-badge rule">RULE</span></td>
+                      <td>T03 심혈관 보장 협소형</td>
+                      <td><span class="wf-vis-badge baseline">🟡 Baseline</span></td>
+                      <td>v1.2</td>
+                      <td>2026-03-18</td>
+                      <td><span class="wf-action-link">상세 →</span></td>
+                    </tr>
+                    <tr>
+                      <td><span style="font-weight:600;color:var(--primary)">EVIDENCE.MYDATA.CANCER.V1</span></td>
+                      <td><span class="wf-type-badge evidence">EVIDENCE</span></td>
+                      <td>T01 암진단금 부족형</td>
+                      <td><span class="wf-vis-badge internal">🔴 Internal</span></td>
+                      <td>v1.0</td>
+                      <td>2026-03-15</td>
+                      <td><span class="wf-action-link">상세 →</span></td>
+                    </tr>
+                    <tr>
+                      <td><span style="font-weight:600;color:var(--primary)">PLAYBOOK.COVERAGE.GAP.V1</span></td>
+                      <td><span class="wf-type-badge playbook">PLAYBOOK</span></td>
+                      <td>공통</td>
+                      <td><span class="wf-vis-badge internal">🔴 Internal</span></td>
+                      <td>v2.0</td>
+                      <td>2026-03-12</td>
+                      <td><span class="wf-action-link">상세 →</span></td>
+                    </tr>
+                    <tr>
+                      <td><span style="font-weight:600;color:var(--primary)">POLICY.AI.SAFEGUARD.V1</span></td>
+                      <td><span class="wf-type-badge policy">POLICY</span></td>
+                      <td>공통</td>
+                      <td><span class="wf-vis-badge internal">🔴 Internal</span></td>
+                      <td>v1.1</td>
+                      <td>2026-03-10</td>
+                      <td><span class="wf-action-link">상세 →</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 와이어프레임: 내 카드 ── -->
+  <div class="wireframe-wrap">
+    <div class="wireframe-label">WIREFRAME — 카드 목록: 내 카드 (작업 중 카드)</div>
+    <div class="wireframe">
+      <div class="wf-app" style="height:420px">
+        <div class="wf-sidebar" style="width:60px;padding:12px 6px;align-items:center">
+          <div style="font-size:10px;font-weight:700;color:var(--g400);writing-mode:vertical-rl;margin-top:20px">사이드바 (축약)</div>
+        </div>
+        <div class="wf-main">
+          <div class="wf-topbar">
+            <h3>내 카드</h3>
+            <div class="wf-topbar-actions">
+              <div class="btn btn-primary">+ 새 카드 생성</div>
+            </div>
+          </div>
+          <div class="wf-content">
+            <!-- H: Filter Bar -->
+            <div style="position:relative;margin-bottom:12px">
+              <div class="anno-marker" style="top:-6px;left:-8px">H</div>
+              <div class="wf-filter-bar">
+                <div class="wf-select">전체 타입 ▾</div>
+                <div class="wf-select">전체 상태 ▾</div>
+                <div class="wf-select">전체 공개범위 ▾</div>
+                <div class="wf-search-input" style="flex:1">검색...</div>
+              </div>
+            </div>
+
+            <!-- I: Table with status -->
+            <div style="position:relative">
+              <div class="anno-marker" style="top:-8px;left:-8px">I</div>
+              <div class="wf-table-wrap">
+                <table class="wf-table">
+                  <thead>
+                    <tr>
+                      <th>Card ID</th>
+                      <th>타입</th>
+                      <th>리스크 유형</th>
+                      <th>공개범위</th>
+                      <th>상태</th>
+                      <th>버전</th>
+                      <th>수정일</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><span style="font-weight:600;color:var(--primary)">CONCEPT.BRAIN.NARROW.V1</span></td>
+                      <td><span class="wf-type-badge concept">CONCEPT</span></td>
+                      <td>T02 뇌혈관 협소형</td>
+                      <td><span class="wf-vis-badge public">🟢 Public</span></td>
+                      <td><span class="wf-status-badge draft">DRAFT</span></td>
+                      <td>v0.1</td>
+                      <td>10분 전</td>
+                      <td><span class="wf-action-link">편집 →</span></td>
+                    </tr>
+                    <tr>
+                      <td><span style="font-weight:600;color:var(--primary)">RULE.RENEWAL.RISK.V1</span></td>
+                      <td><span class="wf-type-badge rule">RULE</span></td>
+                      <td>T04 갱신 보험료 급증형</td>
+                      <td><span class="wf-vis-badge baseline">🟡 Baseline</span></td>
+                      <td><span class="wf-status-badge review">IN_REVIEW</span></td>
+                      <td>v1.0</td>
+                      <td>2시간 전</td>
+                      <td><span class="wf-action-link">상세 →</span></td>
+                    </tr>
+                    <tr>
+                      <td><span style="font-weight:600;color:var(--primary)">POLICY.CONSUMER.PROTECT.V1</span></td>
+                      <td><span class="wf-type-badge policy">POLICY</span></td>
+                      <td>공통</td>
+                      <td><span class="wf-vis-badge internal">🔴 Internal</span></td>
+                      <td><span class="wf-status-badge rejected">REJECTED</span></td>
+                      <td>v0.3</td>
+                      <td>1일 전</td>
+                      <td><span class="wf-action-link">편집 →</span></td>
+                    </tr>
+                    <tr>
+                      <td><span style="font-weight:600;color:var(--primary)">CASE.LEAD.SUCCESS.001</span></td>
+                      <td><span class="wf-type-badge case">CASE</span></td>
+                      <td>T01 암진단금 부족형</td>
+                      <td><span class="wf-vis-badge internal">🔴 Internal</span></td>
+                      <td><span class="wf-status-badge approved">APPROVED</span></td>
+                      <td>v1.0</td>
+                      <td>3일 전</td>
+                      <td><span class="wf-action-link">상세 →</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feature Spec Cards -->
+  <div class="spec-grid">
+    <div class="spec-card accent-green">
+      <div class="spec-card-header">
+        <div class="spec-card-num">E</div>
+        <div class="spec-card-title">카드 유형 탭 (라이브러리)</div>
+      </div>
+      <div class="spec-card-body">
+        <ul>
+          <li>전체 / CONCEPT / RULE / EVIDENCE / PLAYBOOK / CASE / POLICY 7개 탭</li>
+          <li>탭 클릭 시 해당 유형의 승인 완료 카드만 필터링</li>
+          <li>각 탭에 해당 유형의 카드 수 표시 가능 (옵션)</li>
+          <li>라이브러리는 APPROVED 상태 카드만 표시하는 읽기 전용 뷰</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="spec-card accent-blue">
+      <div class="spec-card-header">
+        <div class="spec-card-num">F</div>
+        <div class="spec-card-title">필터 바 (라이브러리)</div>
+      </div>
+      <div class="spec-card-body">
+        <ul>
+          <li>공개범위 필터: 전체 / Public / Baseline(기준선) / Internal</li>
+          <li>텍스트 검색: Card ID, 제목, 내용 통합 검색</li>
+          <li>필터 적용 시 테이블이 즉시 업데이트 (클라이언트 사이드 필터링)</li>
+          <li>검색 결과 건수 표시</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="spec-card accent-purple">
+      <div class="spec-card-header">
+        <div class="spec-card-num">G</div>
+        <div class="spec-card-title">카드 테이블 (라이브러리)</div>
+      </div>
+      <div class="spec-card-body">
+        <ul>
+          <li>컬럼: Card ID, 타입, 리스크 유형, 공개범위, 버전, 승인일</li>
+          <li>Card ID 클릭 시 카드 상세 조회 화면(슬라이드 패널)으로 이동</li>
+          <li>타입은 컬러 배지로 구분 (CONCEPT=파랑, RULE=초록, EVIDENCE=연두 등)</li>
+          <li>공개범위는 아이콘+텍스트로 표시 (🟢 Public / 🟡 Baseline / 🔴 Internal)</li>
+          <li>정렬: 각 컬럼 헤더 클릭으로 정렬 전환 (승인일순 기본)</li>
+          <li>페이지네이션 또는 무한 스크롤</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="spec-card accent-yellow">
+      <div class="spec-card-header">
+        <div class="spec-card-num">H</div>
+        <div class="spec-card-title">필터 바 (내 카드)</div>
+      </div>
+      <div class="spec-card-body">
+        <ul>
+          <li>라이브러리 대비 필터가 강화됨: 타입 + 상태 + 공개범위 3중 필터</li>
+          <li>상태 필터: DRAFT / IN_REVIEW / LEGAL_REVIEW / APPROVED / REJECTED</li>
+          <li>상단에 "새 카드 생성" 버튼 표시 (담당자만)</li>
+          <li>필터 조합 시 AND 조건으로 적용</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="spec-card accent-red">
+      <div class="spec-card-header">
+        <div class="spec-card-num">I</div>
+        <div class="spec-card-title">카드 테이블 (내 카드)</div>
+      </div>
+      <div class="spec-card-body">
+        <ul>
+          <li>라이브러리 대비 "상태" 컬럼이 추가됨</li>
+          <li>상태 배지: DRAFT(파랑), IN_REVIEW(노랑), LEGAL_REVIEW(핑크), APPROVED(초록), REJECTED(빨강)</li>
+          <li>DRAFT / REJECTED 상태: "편집" 링크 표시 → 카드 에디터로 이동</li>
+          <li>IN_REVIEW / APPROVED 상태: "상세" 링크 표시 → 카드 상세 조회로 이동</li>
+          <li>REJECTED 카드는 행 배경을 연한 빨강으로 강조 (옵션)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="spec-card accent-gray">
+      <div class="spec-card-header">
+        <div class="spec-card-num">★</div>
+        <div class="spec-card-title">라이브러리 vs 내 카드 차이 요약</div>
+      </div>
+      <div class="spec-card-body">
+        <ul>
+          <li><b>라이브러리</b>: APPROVED 카드만 표시, 읽기 전용, 유형 탭 필터 제공</li>
+          <li><b>내 카드</b>: 모든 상태의 카드 표시, 편집 가능, 상태 필터 추가 제공</li>
+          <li>두 뷰는 사이드바 메뉴로 전환 (별도 페이지)</li>
+          <li>검수자/준법감시인은 "내 카드"에서 자신이 검수한 카드도 조회 가능</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Layout Spec -->
+  <div class="layout-spec">
+    <h4>화면 레이아웃 구성</h4>
+    <div class="layout-grid">
+      <div class="layout-item">
+        <div class="layout-label">상단</div>
+        <div class="layout-desc">카드 유형 탭 (라이브러리)<br>또는 없음 (내 카드)</div>
+      </div>
+      <div class="layout-item">
+        <div class="layout-label">필터 영역</div>
+        <div class="layout-desc">공개범위 / 상태 / 타입 드롭다운<br>+ 텍스트 검색 입력</div>
+      </div>
+      <div class="layout-item">
+        <div class="layout-label">테이블 영역</div>
+        <div class="layout-desc">카드 목록 테이블<br>(정렬 가능, 페이지네이션)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Role Access -->
+  <div class="layout-spec">
+    <h4>역할별 접근 차이</h4>
+    <table class="role-table">
+      <thead>
+        <tr><th>기능</th><th>담당자</th><th>검수자</th><th>준법감시인</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>라이브러리 조회</td><td class="check">● 가능</td><td class="check">● 가능</td><td class="check">● 가능</td></tr>
+        <tr><td>내 카드 조회</td><td class="check">● 가능 (자신이 작성한 카드)</td><td class="check">● 가능 (자신이 검수한 카드)</td><td class="check">● 가능 (조회만)</td></tr>
+        <tr><td>새 카드 생성 버튼</td><td class="check">● 표시</td><td class="no">— 미표시</td><td class="no">— 미표시</td></tr>
+        <tr><td>편집 링크 (DRAFT/REJECTED)</td><td class="check">● 표시</td><td class="no">— 미표시</td><td class="no">— 미표시</td></tr>
+        <tr><td>검수 링크 (IN_REVIEW)</td><td class="no">— 미표시</td><td class="check">● 표시 → 검수 화면 이동</td><td class="no">— 미표시</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- 03. 카드 생성/수정 (에디터) -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-num">03</div>
+  <div class="section-title">카드 생성/수정 (에디터) <span class="role-badge">담당자 전용</span></div>
+  <div class="section-desc">6+1종 KC 카드를 생성하고 수정하는 핵심 화면. 카드 유형별 탭으로 전환하며, 공통 입력 영역과 유형별 입력 영역으로 구성.</div>
+
+  <!-- ── 와이어프레임: 에디터 공통 구성 ── -->
+  <div class="wireframe-wrap">
+    <div class="wireframe-label">WIREFRAME — 카드 에디터: CONCEPT 카드 생성 화면</div>
+    <div class="wireframe">
+      <div class="wf-app" style="height:580px">
+        <!-- Sidebar (축약) -->
+        <div class="wf-sidebar" style="width:60px;padding:12px 6px;align-items:center">
+          <div style="font-size:10px;font-weight:700;color:var(--g400);writing-mode:vertical-rl;margin-top:20px">사이드바 (축약)</div>
+        </div>
+
+        <!-- Main -->
+        <div class="wf-main">
+          <div class="wf-topbar">
+            <h3>카드 생성</h3>
+            <div class="wf-topbar-actions">
+              <div class="btn">임시 저장</div>
+              <div class="btn btn-primary">검수 요청</div>
+            </div>
+          </div>
+          <div class="wf-content" style="padding:16px 20px">
+            <!-- J: Card Type Tabs -->
+            <div style="position:relative;margin-bottom:14px">
+              <div class="anno-marker" style="top:-8px;left:-8px">J</div>
+              <div class="wf-tab-bar">
+                <div class="wf-tab active">CONCEPT</div>
+                <div class="wf-tab">RULE</div>
+                <div class="wf-tab">EVIDENCE</div>
+                <div class="wf-tab">PLAYBOOK</div>
+                <div class="wf-tab">CASE</div>
+                <div class="wf-tab">POLICY</div>
+              </div>
+            </div>
+
+            <!-- K: Common Fields -->
+            <div class="wf-card" style="position:relative;margin-bottom:14px">
+              <div class="anno-marker" style="top:-8px;left:-8px">K</div>
+              <div class="wf-card-header"><h4>공통 입력 영역</h4></div>
+              <div class="wf-card-body">
+                <div class="wf-form-grid">
+                  <div class="wf-form-group">
+                    <div class="wf-form-label">Card ID</div>
+                    <div class="wf-form-input disabled">CONCEPT.CANCER.GAP.V1 (자동 생성)</div>
+                  </div>
+                  <div class="wf-form-group">
+                    <div class="wf-form-label">연결 리스크 유형</div>
+                    <div class="wf-form-input">T01 — 암진단금 부족형 ▾</div>
+                  </div>
+                </div>
+                <div class="wf-form-group" style="margin-top:10px">
+                  <div class="wf-form-label">공개범위</div>
+                  <div class="wf-radio-group">
+                    <div class="wf-radio active">
+                      <span class="wf-radio-dot green"></span>
+                      <span><b>Public</b><br><span class="wf-radio-desc">외부 노출. AIO 콘텐츠로 활용</span></span>
+                    </div>
+                    <div class="wf-radio">
+                      <span class="wf-radio-dot yellow"></span>
+                      <span><b>Baseline</b><br><span class="wf-radio-desc">판단 철학만 노출, 기준값 비노출</span></span>
+                    </div>
+                    <div class="wf-radio">
+                      <span class="wf-radio-dot red"></span>
+                      <span><b>Internal</b><br><span class="wf-radio-desc">완전 비노출. 내부 운영용</span></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- L: Type-specific Fields (CONCEPT) -->
+            <div class="wf-card" style="position:relative;margin-bottom:14px">
+              <div class="anno-marker" style="top:-8px;left:-8px">L</div>
+              <div class="wf-card-header"><h4>CONCEPT 카드 입력 항목</h4><span style="font-size:10px;color:var(--g400)">= Definition 카드</span></div>
+              <div class="wf-card-body">
+                <div class="wf-form-group">
+                  <div class="wf-form-label">용어명 *</div>
+                  <div class="wf-form-input">암 진단금</div>
+                </div>
+                <div class="wf-form-group">
+                  <div class="wf-form-label">정의 설명 *</div>
+                  <div class="wf-form-textarea">암 확정 진단 시 보험회사가 지급하는 일시금. 암의 종류(일반암, 소액암, 유사암 등)에 따라 지급 금액이 다르며, 암 치료 기간 동안의 생활비 보전이 주된 목적이다.</div>
+                </div>
+                <div class="wf-form-grid">
+                  <div class="wf-form-group">
+                    <div class="wf-form-label">유사어 / 일상어</div>
+                    <div class="wf-form-input">
+                      <span class="wf-tag-item">암보험금</span>
+                      <span class="wf-tag-item">암걸리면 받는 돈</span>
+                      <span class="wf-tag-item">암 보장금</span>
+                      <span class="wf-tag-add">+ 추가</span>
+                    </div>
+                  </div>
+                  <div class="wf-form-group">
+                    <div class="wf-form-label">하위 분류</div>
+                    <div class="wf-form-input">보장 카테고리 > 3대 중요 질병 > 암 ▾</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- M: Connected Cards + Version -->
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;position:relative">
+              <div class="anno-marker" style="top:-8px;left:-8px">M</div>
+              <div class="wf-card">
+                <div class="wf-card-header"><h4>연결 카드 (참조 링크)</h4></div>
+                <div class="wf-card-body">
+                  <div class="wf-linked-item"><span class="wf-type-badge rule">RULE</span> RULE.CANCER.GAP.V1</div>
+                  <div class="wf-linked-item"><span class="wf-type-badge evidence">EVIDENCE</span> EVIDENCE.MYDATA.CANCER.V1</div>
+                  <div class="wf-linked-add">+ 카드 연결 추가</div>
+                </div>
+              </div>
+              <div class="wf-card">
+                <div class="wf-card-header"><h4>버전 이력</h4></div>
+                <div class="wf-card-body">
+                  <div class="wf-version-item"><span class="wf-version-dot"></span><b>v0.1</b> — 최초 생성 <span class="wf-version-time">방금 전</span></div>
+                  <div class="wf-version-item dim"><span class="wf-version-dot"></span><b>v1.0</b> — 검수 승인 예정</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 와이어프레임: RULE 카드 에디터 ── -->
+  <div class="wireframe-wrap">
+    <div class="wireframe-label">WIREFRAME — 카드 에디터: RULE 카드 생성 화면 (조건 빌더 연결)</div>
+    <div class="wireframe">
+      <div class="wf-app" style="height:460px">
+        <div class="wf-sidebar" style="width:60px;padding:12px 6px;align-items:center">
+          <div style="font-size:10px;font-weight:700;color:var(--g400);writing-mode:vertical-rl;margin-top:20px">사이드바</div>
+        </div>
+        <div class="wf-main">
+          <div class="wf-topbar">
+            <h3>카드 생성 — RULE</h3>
+            <div class="wf-topbar-actions">
+              <div class="btn">임시 저장</div>
+              <div class="btn btn-primary">검수 요청</div>
+            </div>
+          </div>
+          <div class="wf-content" style="padding:16px 20px">
+            <div class="wf-tab-bar" style="margin-bottom:14px">
+              <div class="wf-tab">CONCEPT</div>
+              <div class="wf-tab active">RULE</div>
+              <div class="wf-tab">EVIDENCE</div>
+              <div class="wf-tab">PLAYBOOK</div>
+              <div class="wf-tab">CASE</div>
+              <div class="wf-tab">POLICY</div>
+            </div>
+
+            <!-- N: RULE specific fields -->
+            <div class="wf-card" style="position:relative;margin-bottom:14px">
+              <div class="anno-marker" style="top:-8px;left:-8px">N</div>
+              <div class="wf-card-header"><h4>RULE 카드 입력 항목</h4></div>
+              <div class="wf-card-body">
+                <div class="wf-form-grid">
+                  <div class="wf-form-group">
+                    <div class="wf-form-label">대상 Risk Type *</div>
+                    <div class="wf-form-input">T01 — 암진단금 부족형 ▾</div>
+                  </div>
+                  <div class="wf-form-group">
+                    <div class="wf-form-label">경고 메시지 *</div>
+                    <div class="wf-form-input">암 진단금이 권장 기준에 미달하여 보장 공백이 우려됩니다.</div>
+                  </div>
+                </div>
+                <div class="wf-form-group" style="margin-top:10px">
+                  <div class="wf-form-label">판단 조건 (조건 빌더)</div>
+                  <div class="wf-condition-builder">
+                    <div class="wf-condition-row">
+                      <div class="wf-cond-badge source">마이데이터</div>
+                      <div class="wf-cond-field">cancer_diagnosis_amount</div>
+                      <div class="wf-cond-op">&lt;</div>
+                      <div class="wf-cond-val">50,000,000</div>
+                      <div class="wf-cond-logic">AND</div>
+                    </div>
+                    <div class="wf-condition-row">
+                      <div class="wf-cond-badge source amp">택소노미</div>
+                      <div class="wf-cond-field">selected_service_type</div>
+                      <div class="wf-cond-op">=</div>
+                      <div class="wf-cond-val">"보험진단"</div>
+                      <div class="wf-cond-logic"></div>
+                    </div>
+                    <div class="wf-condition-add">+ 조건 추가</div>
+                    <div style="display:flex;gap:8px;margin-top:8px">
+                      <div class="btn btn-primary" style="font-size:10px;padding:4px 10px">조건 빌더 열기 →</div>
+                      <div class="btn" style="font-size:10px;padding:4px 10px">드라이런 테스트</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="wf-form-group" style="margin-top:10px">
+                  <div class="wf-form-label">연결 Evidence 카드</div>
+                  <div class="wf-form-input">
+                    <span class="wf-tag-item">EVIDENCE.MYDATA.CANCER.V1</span>
+                    <span class="wf-tag-item">EVIDENCE.DISEASE.CODE.V1</span>
+                    <span class="wf-tag-add">+ 추가</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 와이어프레임: POLICY 카드 에디터 ── -->
+  <div class="wireframe-wrap">
+    <div class="wireframe-label">WIREFRAME — 카드 에디터: POLICY 카드 생성 화면 (체크리스트 포함)</div>
+    <div class="wireframe">
+      <div class="wf-app" style="height:400px">
+        <div class="wf-sidebar" style="width:60px;padding:12px 6px;align-items:center">
+          <div style="font-size:10px;font-weight:700;color:var(--g400);writing-mode:vertical-rl;margin-top:20px">사이드바</div>
+        </div>
+        <div class="wf-main">
+          <div class="wf-topbar">
+            <h3>카드 생성 — POLICY</h3>
+            <div class="wf-topbar-actions">
+              <div class="btn">임시 저장</div>
+              <div class="btn btn-primary">검수 요청</div>
+            </div>
+          </div>
+          <div class="wf-content" style="padding:16px 20px">
+            <div class="wf-tab-bar" style="margin-bottom:14px">
+              <div class="wf-tab">CONCEPT</div>
+              <div class="wf-tab">RULE</div>
+              <div class="wf-tab">EVIDENCE</div>
+              <div class="wf-tab">PLAYBOOK</div>
+              <div class="wf-tab">CASE</div>
+              <div class="wf-tab active">POLICY</div>
+            </div>
+
+            <!-- O: POLICY specific fields -->
+            <div class="wf-card" style="position:relative">
+              <div class="anno-marker" style="top:-8px;left:-8px">O</div>
+              <div class="wf-card-header"><h4>POLICY 카드 입력 항목</h4><span class="wf-status-badge" style="background:#fce7f3;color:#9d174d;font-size:9px">준법감시인 최종 승인 필수</span></div>
+              <div class="wf-card-body">
+                <div class="wf-form-grid">
+                  <div class="wf-form-group">
+                    <div class="wf-form-label">규제 문서명 *</div>
+                    <div class="wf-form-input">금융소비자보호에 관한 법률</div>
+                  </div>
+                  <div class="wf-form-group">
+                    <div class="wf-form-label">적용 범위 *</div>
+                    <div class="wf-form-input">Clark AI 전체 출력</div>
+                  </div>
+                </div>
+                <div class="wf-form-group" style="margin-top:10px">
+                  <div class="wf-form-label">핵심 조항 *</div>
+                  <div class="wf-form-textarea" style="min-height:40px">제21조(금지행위) — 불확실한 사항에 대한 단정적 판단 제공 금지, 허위·과장 정보 제공 금지</div>
+                </div>
+                <div class="wf-form-group" style="margin-top:10px">
+                  <div class="wf-form-label">준수 체크리스트</div>
+                  <div class="wf-checklist">
+                    <div class="wf-check-item"><span class="wf-checkbox">☐</span> 단정적 판단 표현 없음 확인</div>
+                    <div class="wf-check-item"><span class="wf-checkbox">☐</span> "반드시", "확실히" 등 금지 표현 미사용 확인</div>
+                    <div class="wf-check-item"><span class="wf-checkbox">☐</span> 상품 추천/권유 표현 미포함 확인</div>
+                    <div class="wf-check-item"><span class="wf-checkbox">☐</span> 개인정보 노출 가능성 확인</div>
+                    <div class="wf-check-add">+ 체크항목 추가</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feature Spec Cards -->
+  <div class="spec-grid">
+    <div class="spec-card accent-blue">
+      <div class="spec-card-header">
+        <div class="spec-card-num">J</div>
+        <div class="spec-card-title">카드 유형 탭</div>
+      </div>
+      <div class="spec-card-body">
+        <ul>
+          <li>CONCEPT | RULE | EVIDENCE | PLAYBOOK | CASE | POLICY 6개 탭</li>
+          <li>탭 전환 시 해당 유형에 맞는 입력 폼이 중앙 영역에 표시</li>
+          <li>현재 선택된 탭은 활성 상태로 강조 표시</li>
+          <li>카드 수정 시에는 해당 유형 탭이 자동 선택됨 (탭 전환 비활성화)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="spec-card accent-green">
+      <div class="spec-card-header">
+        <div class="spec-card-num">K</div>
+        <div class="spec-card-title">공통 입력 영역</div>
+      </div>
+      <div class="spec-card-body">
+        <ul>
+          <li><b>Card ID</b>: 타입.주제.버전 형식으로 자동 생성 (읽기 전용)</li>
+          <li><b>연결 리스크 유형</b>: 등록된 Risk Type 중 드롭다운 선택 (T01~Txx)</li>
+          <li><b>공개범위</b>: Public / Baseline / Internal 라디오 버튼, 각 옵션에 설명 툴팁 제공</li>
+          <li>모든 카드 유형에 공통으로 표시되는 영역</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="spec-card accent-purple">
+      <div class="spec-card-header">
+        <div class="spec-card-num">L</div>
+        <div class="spec-card-title">CONCEPT 카드 입력 항목</div>
+      </div>
+      <div class="spec-card-body">
+        <ul>
+          <li><b>용어명</b> (필수): 정의할 보험 용어</li>
+          <li><b>정의 설명</b> (필수): 용어의 상세 정의 (텍스트 에디터)</li>
+          <li><b>유사어/일상어</b>: 태그 형태로 복수 등록 → AI 의미 매칭 정확도 향상</li>
+          <li><b>하위 분류</b>: 보장 카테고리 트리에서 선택 (동적 추가 가능)</li>
+          <li>CONCEPT = 기획서의 Definition 카드에 해당</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="spec-card accent-gray">
+      <div class="spec-card-header">
+        <div class="spec-card-num">M</div>
+        <div class="spec-card-title">연결 카드 및 버전 이력</div>
+      </div>
+      <div class="spec-card-body">
+        <ul>
+          <li><b>연결 카드</b>: 다른 KC 카드를 참조 링크로 연결 (카드 검색 팝업으로 추가)</li>
+          <li>연결된 카드는 타입 배지 + Card ID로 표시, 클릭 시 해당 카드 상세로 이동</li>
+          <li><b>버전 이력</b>: 생성/수정/승인 이력을 타임라인으로 표시</li>
+          <li>이전 버전 클릭 시 해당 시점의 카드 내용 diff 확인 가능</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="spec-card accent-yellow">
+      <div class="spec-card-header">
+        <div class="spec-card-num">N</div>
+        <div class="spec-card-title">RULE 카드 입력 항목</div>
+      </div>
+      <div class="spec-card-body">
+        <ul>
+          <li><b>대상 Risk Type</b> (필수): 이 Rule이 적용될 리스크 유형 선택</li>
+          <li><b>경고 메시지</b> (필수): 해당 조건 충족 시 Clark AI가 사용자에게 표시할 메시지</li>
+          <li><b>판단 조건</b>: 조건 빌더 GUI로 구성 — [데이터 소스] + [필드명] + [연산자] + [기준값] 행 단위</li>
+          <li>데이터 소스: 마이데이터(ICIS 담보코드) 또는 앰플리튜드 택소노미(User Properties/Events)</li>
+          <li>"조건 빌더 열기" 클릭 시 07. 조건 빌더 화면으로 이동하여 상세 편집</li>
+          <li>"드라이런 테스트"로 샘플 고객 데이터에 조건 적용 결과 미리보기</li>
+          <li><b>연결 Evidence</b>: 이 Rule의 근거가 되는 Evidence 카드를 태그로 연결</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="spec-card accent-red">
+      <div class="spec-card-header">
+        <div class="spec-card-num">O</div>
+        <div class="spec-card-title">POLICY 카드 입력 항목</div>
+      </div>
+      <div class="spec-card-body">
+        <ul>
+          <li><b>규제 문서명</b> (필수): 금소법, 보험업법 등 적용 규제 문서</li>
+          <li><b>적용 범위</b> (필수): Clark AI 전체 출력 / 특정 카드 유형 등</li>
+          <li><b>핵심 조항</b> (필수): 규제의 핵심 내용 (조항 번호 포함)</li>
+          <li><b>준수 체크리스트</b>: 검수 시 확인해야 할 항목 목록 (동적 추가/삭제)</li>
+          <li>검수 요청 시 상태가 IN_REVIEW가 아닌 LEGAL_REVIEW로 설정됨</li>
+          <li>준법감시인(Dwhy)이 모든 체크리스트를 확인해야 승인 가능</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 카드 유형별 입력 항목 비교 테이블 -->
+  <div class="layout-spec">
+    <h4>카드 유형별 입력 항목 비교표</h4>
+    <table class="role-table">
+      <thead>
+        <tr><th>카드 유형</th><th>고유 입력 항목</th><th>특이 사항</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><b>CONCEPT</b></td><td>용어명, 정의 설명, 유사어/일상어, 하위 분류</td><td>유사어 등록이 AI 의미 매칭 정확도의 핵심</td></tr>
+        <tr><td><b>RULE</b></td><td>대상 Risk Type, 판단 조건(조건 빌더), 기준값, 경고 메시지, 연결 Evidence</td><td>조건 빌더에서 택소노미·마이데이터 필드 매핑</td></tr>
+        <tr><td><b>EVIDENCE</b></td><td>데이터 출처, 활용 방법, 연결된 Rule 카드</td><td>Rule 카드에서 참조 링크로 연결</td></tr>
+        <tr><td><b>PLAYBOOK</b></td><td>리드 전환 발화 키워드, 스코어링 공식, 배정 규칙</td><td>레이어별 설정 (전환/스코어링/배정)</td></tr>
+        <tr><td><b>CASE</b></td><td>대화 요약, Risk Type, 전환 결과, 성공 요인</td><td>AI 자동 태깅 후 담당자가 편집 (06. Case 후보 관리 참조)</td></tr>
+        <tr><td><b>POLICY</b></td><td>규제 문서명, 적용 범위, 핵심 조항, 준수 체크리스트</td><td>준법감시인 최종 승인 필수 (LEGAL_REVIEW 단계)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 하단 액션 영역 -->
+  <div class="layout-spec">
+    <h4>하단 액션 버튼</h4>
+    <table class="role-table">
+      <thead>
+        <tr><th>버튼</th><th>동작</th><th>조건</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><b>임시 저장</b></td><td>현재 입력 내용을 DRAFT 상태로 저장. 언제든 다시 편집 가능.</td><td>항상 활성</td></tr>
+        <tr><td><b>검수 요청</b></td><td>검수자에게 검수를 요청. 상태가 IN_REVIEW로 변경됨.</td><td>필수 항목이 모두 입력된 경우에만 활성</td></tr>
+        <tr><td><b>검수 요청 (POLICY)</b></td><td>Policy 카드는 검수 요청 시 LEGAL_REVIEW 상태로 설정됨.</td><td>Policy 카드인 경우 자동 적용</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Role Access -->
+  <div class="layout-spec">
+    <h4>역할별 접근 차이</h4>
+    <table class="role-table">
+      <thead>
+        <tr><th>기능</th><th>담당자</th><th>검수자</th><th>준법감시인</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>카드 생성</td><td class="check">● 가능</td><td class="no">— 불가</td><td class="no">— 불가</td></tr>
+        <tr><td>카드 수정 (DRAFT/REJECTED)</td><td class="check">● 가능</td><td class="no">— 불가</td><td class="no">— 불가</td></tr>
+        <tr><td>임시 저장</td><td class="check">● 가능</td><td class="no">— 불가</td><td class="no">— 불가</td></tr>
+        <tr><td>검수 요청</td><td class="check">● 가능</td><td class="no">— 불가</td><td class="no">— 불가</td></tr>
+        <tr><td>에디터 접근</td><td class="check">● 전체 접근</td><td class="no">— 조회만 (읽기 전용)</td><td class="no">— 조회만 (읽기 전용)</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- 04. 카드 상세 조회 -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-num">04</div>
+  <div class="section-title">카드 상세 조회 <span class="role-badge">담당자 / 검수자 / 준법감시인 공통</span></div>
+  <div class="section-desc">카드의 전체 내용, 메타 정보, 버전 이력, 연결 카드, 승인 상태를 확인하는 화면. 카드 목록이나 대시보드에서 카드를 클릭하면 슬라이드 패널(우측 오버레이) 형태로 열린다.</div>
+
+  <!-- ── 와이어프레임: 슬라이드 패널 ── -->
+  <div class="wireframe-wrap">
+    <div class="wireframe-label">WIREFRAME — 카드 상세 조회: 슬라이드 패널 (RULE 카드 예시)</div>
+    <div class="wireframe">
+      <div class="wf-app" style="height:560px">
+        <!-- 배경: 카드 목록 (흐리게) -->
+        <div style="flex:1;background:var(--g100);opacity:0.4;position:relative;overflow:hidden">
+          <div style="padding:20px">
+            <div style="height:36px;background:var(--g200);border-radius:6px;margin-bottom:12px;width:60%"></div>
+            <div style="height:24px;background:var(--g200);border-radius:4px;margin-bottom:8px;width:100%"></div>
+            <div style="height:24px;background:var(--g200);border-radius:4px;margin-bottom:8px;width:100%"></div>
+            <div style="height:24px;background:var(--g200);border-radius:4px;margin-bottom:8px;width:100%"></div>
+            <div style="height:24px;background:var(--g200);border-radius:4px;margin-bottom:8px;width:90%"></div>
+            <div style="height:24px;background:var(--g200);border-radius:4px;margin-bottom:8px;width:95%"></div>
+          </div>
+          <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:12px;color:var(--g400);font-weight:600;background:var(--g200);padding:6px 16px;border-radius:20px">← 카드 목록 (배경)</div>
+        </div>
+
+        <!-- 슬라이드 패널 -->
+        <div class="wf-slide-panel" style="position:relative">
+          <div class="anno-marker" style="top:4px;left:-12px;z-index:20">P</div>
+          <!-- 패널 헤더 -->
+          <div class="wf-panel-header">
+            <div style="display:flex;align-items:center;gap:8px">
+              <span class="wf-type-badge rule" style="font-size:10px">RULE</span>
+              <span style="font-size:14px;font-weight:700">RULE.CANCER.GAP.V1</span>
+            </div>
+            <div class="wf-panel-close">✕</div>
+          </div>
+
+          <!-- 패널 바디 -->
+          <div class="wf-panel-body">
+            <!-- 상태 + 메타 -->
+            <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;align-items:center">
+              <span class="wf-status-badge approved">APPROVED</span>
+              <span class="wf-vis-badge baseline">🟡 Baseline</span>
+              <span style="font-size:10px;color:var(--g400);margin-left:auto">v1.2 · 2026-03-18 승인</span>
+            </div>
+
+            <!-- Q: 카드 정보 영역 -->
+            <div style="position:relative">
+              <div class="anno-marker" style="top:-8px;left:-8px;width:18px;height:18px;font-size:9px">Q</div>
+              <div class="wf-detail-section">
+                <div class="wf-detail-label">연결 리스크 유형</div>
+                <div class="wf-detail-value"><span class="wf-tag-item" style="background:#fee2e2;color:#991b1b">T01 암진단금 부족형</span></div>
+              </div>
+              <div class="wf-detail-section">
+                <div class="wf-detail-label">경고 메시지</div>
+                <div class="wf-detail-value">암 진단금이 권장 기준에 미달하여 보장 공백이 우려됩니다.</div>
+              </div>
+              <div class="wf-detail-section">
+                <div class="wf-detail-label">판단 조건</div>
+                <div class="wf-condition-builder" style="margin-top:4px">
+                  <div class="wf-condition-row">
+                    <div class="wf-cond-badge source">마이데이터</div>
+                    <div class="wf-cond-field">cancer_diagnosis_amount</div>
+                    <div class="wf-cond-op">&lt;</div>
+                    <div class="wf-cond-val">50,000,000</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- R: 연결 카드 -->
+            <div style="position:relative;margin-top:14px">
+              <div class="anno-marker" style="top:-8px;left:-8px;width:18px;height:18px;font-size:9px">R</div>
+              <div class="wf-detail-label">연결 카드</div>
+              <div class="wf-linked-item"><span class="wf-type-badge concept">CONCEPT</span> CONCEPT.CANCER.GAP.V1</div>
+              <div class="wf-linked-item"><span class="wf-type-badge evidence">EVIDENCE</span> EVIDENCE.MYDATA.CANCER.V1</div>
+              <div class="wf-linked-item"><span class="wf-type-badge policy">POLICY</span> POLICY.AI.SAFEGUARD.V1</div>
+            </div>
+
+            <!-- S: 버전 이력 -->
+            <div style="position:relative;margin-top:14px">
+              <div class="anno-marker" style="top:-8px;left:-8px;width:18px;height:18px;font-size:9px">S</div>
+              <div class="wf-detail-label">버전 이력</div>
+              <div class="wf-timeline">
+                <div class="wf-timeline-item">
+                  <div class="wf-timeline-dot approved"></div>
+                  <div class="wf-timeline-content">
+                    <b>v1.2</b> 검수자 승인
+                    <span class="wf-timeline-time">2026-03-18 14:30</span>
+                  </div>
+                </div>
+                <div class="wf-timeline-item">
+                  <div class="wf-timeline-dot review"></div>
+                  <div class="wf-timeline-content">
+                    <b>v1.1</b> 담당자 수정 → 검수 요청
+                    <span class="wf-timeline-time">2026-03-17 10:15</span>
+                  </div>
+                </div>
+                <div class="wf-timeline-item">
+                  <div class="wf-timeline-dot rejected"></div>
+                  <div class="wf-timeline-content">
+                    <b>v1.0</b> 검수자 반려 <span style="color:var(--red);font-size:10px">— 기준값 근거 보완 필요</span>
+                    <span class="wf-timeline-time">2026-03-15 16:45</span>
+                  </div>
+                </div>
+                <div class="wf-timeline-item">
+                  <div class="wf-timeline-dot draft"></div>
+                  <div class="wf-timeline-content">
+                    <b>v0.1</b> 최초 생성
+                    <span class="wf-timeline-time">2026-03-14 09:00</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- T: 역할별 액션 버튼 -->
+            <div style="position:relative;margin-top:16px;padding-top:14px;border-top:1px solid var(--g200)">
+              <div class="anno-marker" style="top:6px;left:-8px;width:18px;height:18px;font-size:9px">T</div>
+              <div class="wf-detail-label">액션</div>
+              <div style="display:flex;gap:8px;margin-top:6px;flex-wrap:wrap">
+                <div class="btn btn-primary" style="font-size:11px;padding:6px 14px">편집</div>
+                <div class="btn" style="font-size:11px;padding:6px 14px;border-color:var(--red);color:var(--red)">삭제 요청</div>
+              </div>
+              <div style="margin-top:8px;font-size:9px;color:var(--g400);font-style:italic">※ 위 버튼은 담당자에게만 표시됩니다. 검수자는 승인/반려 버튼, 준법감시인은 Policy 카드에 한해 승인/반려 버튼이 표시됩니다.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feature Spec Cards -->
+  <div class="spec-grid">
+    <div class="spec-card accent-blue">
+      <div class="spec-card-header">
+        <div class="spec-card-num">P</div>
+        <div class="spec-card-title">슬라이드 패널 구조</div>
+      </div>
+      <div class="spec-card-body">
+        <ul>
+          <li>카드 목록, 대시보드 등에서 카드를 클릭하면 우측에서 슬라이드 패널이 오버레이로 열림</li>
+          <li>배경은 어둡게 처리(dim)되어 패널에 포커스가 맞춰짐</li>
+          <li>패널 헤더: 카드 유형 배지 + Card ID + 닫기(✕) 버튼</li>
+          <li>패널 너비: 화면의 약 45~50% (반응형으로 모바일에서는 전체 너비)</li>
+          <li>패널 바디: 스크롤 가능, 카드 정보 → 연결 카드 → 버전 이력 → 액션 순서로 배치</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="spec-card accent-green">
+      <div class="spec-card-header">
+        <div class="spec-card-num">Q</div>
+        <div class="spec-card-title">카드 정보 영역</div>
+      </div>
+      <div class="spec-card-body">
+        <ul>
+          <li>상단: 현재 상태 배지 (DRAFT/IN_REVIEW/APPROVED 등) + 공개범위 배지 + 버전·승인일</li>
+          <li>연결 리스크 유형: 해당 Risk Type을 컬러 태그로 표시</li>
+          <li>카드 유형별 고유 필드를 읽기 전용으로 표시 (예: RULE → 경고 메시지, 판단 조건)</li>
+          <li>판단 조건은 조건 빌더와 동일한 시각적 형태로 표시 (데이터 소스 배지 + 필드 + 연산자 + 값)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="spec-card accent-purple">
+      <div class="spec-card-header">
+        <div class="spec-card-num">R</div>
+        <div class="spec-card-title">연결 카드 목록</div>
+      </div>
+      <div class="spec-card-body">
+        <ul>
+          <li>현재 카드와 참조 링크로 연결된 다른 KC 카드 목록 표시</li>
+          <li>각 항목: 카드 유형 배지 + Card ID (클릭 시 해당 카드의 상세 패널로 전환)</li>
+          <li>연결 방향 표시: 이 카드가 참조하는 카드 / 이 카드를 참조하는 카드를 구분 (옵션)</li>
+          <li>카드 간 참조 관계를 통해 의미 경계(Meaning Layer)를 시각적으로 확인 가능</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="spec-card accent-gray">
+      <div class="spec-card-header">
+        <div class="spec-card-num">S</div>
+        <div class="spec-card-title">버전 이력 타임라인</div>
+      </div>
+      <div class="spec-card-body">
+        <ul>
+          <li>카드의 생성 → 수정 → 검수 요청 → 승인/반려 이력을 타임라인으로 표시</li>
+          <li>각 이력 항목: 버전 번호 + 액션 + 수행자 + 시간</li>
+          <li>반려 시 사유도 함께 표시 (빨간색 텍스트)</li>
+          <li>이전 버전 클릭 시 해당 시점의 카드 내용과 현재 내용의 diff를 확인 가능 (옵션)</li>
+          <li>상태별 컬러 도트: DRAFT(파랑), IN_REVIEW(노랑), APPROVED(초록), REJECTED(빨강)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="spec-card accent-yellow">
+      <div class="spec-card-header">
+        <div class="spec-card-num">T</div>
+        <div class="spec-card-title">역할별 액션 버튼</div>
+      </div>
+      <div class="spec-card-body">
+        <ul>
+          <li><b>담당자</b>: 편집 버튼 (→ 에디터로 이동), 삭제 요청 버튼</li>
+          <li><b>검수자</b>: IN_REVIEW 상태일 때 승인/반려 버튼 표시, 반려 시 사유 입력 모달</li>
+          <li><b>준법감시인</b>: LEGAL_REVIEW 상태인 Policy 카드에 한해 승인/반려 버튼 표시</li>
+          <li>현재 상태에 따라 표시되는 버튼이 동적으로 변경됨</li>
+          <li>APPROVED 상태에서는 담당자의 편집 버튼만 표시 (재수정 → 새 버전 생성)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="spec-card accent-red">
+      <div class="spec-card-header">
+        <div class="spec-card-num">★</div>
+        <div class="spec-card-title">상태별 액션 버튼 매트릭스</div>
+      </div>
+      <div class="spec-card-body">
+        <ul>
+          <li><b>DRAFT</b>: 담당자 → 편집, 검수 요청, 삭제</li>
+          <li><b>IN_REVIEW</b>: 검수자 → 승인, 반려(사유 필수)</li>
+          <li><b>LEGAL_REVIEW</b>: 준법감시인 → 승인(체크리스트 완료 필수), 반려(사유 필수)</li>
+          <li><b>APPROVED</b>: 담당자 → 편집 (새 버전으로 수정)</li>
+          <li><b>REJECTED</b>: 담당자 → 편집 (수정 후 재검수 요청)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Layout Spec -->
+  <div class="layout-spec">
+    <h4>화면 레이아웃 구성</h4>
+    <div class="layout-grid">
+      <div class="layout-item">
+        <div class="layout-label">패널 헤더</div>
+        <div class="layout-desc">카드 유형 배지 + Card ID<br>+ 닫기 버튼</div>
+      </div>
+      <div class="layout-item">
+        <div class="layout-label">패널 바디 (스크롤)</div>
+        <div class="layout-desc">상태·공개범위 → 카드 정보<br>→ 연결 카드 → 버전 이력</div>
+      </div>
+      <div class="layout-item">
+        <div class="layout-label">패널 하단</div>
+        <div class="layout-desc">역할별 액션 버튼<br>(편집/승인/반려 등)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Role Access -->
+  <div class="layout-spec">
+    <h4>역할별 접근 차이</h4>
+    <table class="role-table">
+      <thead>
+        <tr><th>기능</th><th>담당자</th><th>검수자</th><th>준법감시인</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>카드 내용 조회</td><td class="check">● 가능</td><td class="check">● 가능</td><td class="check">● 가능</td></tr>
+        <tr><td>버전 이력 조회</td><td class="check">● 가능</td><td class="check">● 가능</td><td class="check">● 가능</td></tr>
+        <tr><td>편집 버튼</td><td class="check">● 표시 (DRAFT/APPROVED/REJECTED)</td><td class="no">— 미표시</td><td class="no">— 미표시</td></tr>
+        <tr><td>삭제 요청 버튼</td><td class="check">● 표시 (DRAFT만)</td><td class="no">— 미표시</td><td class="no">— 미표시</td></tr>
+        <tr><td>승인/반려 버튼</td><td class="no">— 미표시</td><td class="check">● 표시 (IN_REVIEW 상태)</td><td class="check">● 표시 (LEGAL_REVIEW, Policy만)</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- 05. 승인 워크플로우 -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-num">05</div>
+  <div class="section-title">승인 워크플로우 <span class="role-badge">검수자 / 준법감시인</span></div>
+  <div class="section-desc">검수자(Eric)의 일반 카드 검수와 준법감시인(Dwhy)의 Policy 법무 검토를 처리하는 화면. 사이드바의 "검수" 메뉴 그룹에서 접근.</div>
+
+  <!-- ── 와이어프레임: 검수 대기 목록 ── -->
+  <div class="wireframe-wrap">
+    <div class="wireframe-label">WIREFRAME — 05-1. 검수 대기 목록 (검수자 전용)</div>
+    <div class="wireframe">
+      <div class="wf-app" style="height:440px">
+        <div class="wf-sidebar" style="width:60px;padding:12px 6px;align-items:center">
+          <div style="font-size:10px;font-weight:700;color:var(--g400);writing-mode:vertical-rl;margin-top:20px">사이드바</div>
+        </div>
+        <div class="wf-main">
+          <div class="wf-topbar">
+            <h3>검수 대기 목록</h3>
+            <div style="font-size:12px;color:var(--g500)">검수자 전용 화면</div>
+          </div>
+          <div class="wf-content" style="padding:16px 20px">
+            <!-- U: 검수 대기 테이블 -->
+            <div style="position:relative">
+              <div class="anno-marker" style="top:-8px;left:-8px">U</div>
+              <div class="wf-card">
+                <div class="wf-card-header">
+                  <h4>IN_REVIEW 상태 카드 <span style="font-size:11px;color:var(--yellow);font-weight:700;margin-left:6px">4건</span></h4>
+                </div>
+                <div class="wf-card-body" style="padding:0">
+                  <div class="wf-table-wrap" style="border:none;border-radius:0">
+                    <table class="wf-table">
+                      <thead>
+                        <tr><th>Card ID</th><th>타입</th><th>작성자</th><th>요청일</th><th>공개범위</th><th></th></tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td><span style="font-weight:600;color:var(--primary)">CONCEPT.BRAIN.NARROW.V1</span></td>
+                          <td><span class="wf-type-badge concept">CONCEPT</span></td>
+                          <td>담당자</td>
+                          <td>2026-03-24</td>
+                          <td><span class="wf-vis-badge public">🟢 Public</span></td>
+                          <td>
+                            <span style="display:flex;gap:4px">
+                              <span class="wf-action-btn approve">승인</span>
+                              <span class="wf-action-btn reject">반려</span>
+                            </span>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td><span style="font-weight:600;color:var(--primary)">RULE.RENEWAL.RISK.V1</span></td>
+                          <td><span class="wf-type-badge rule">RULE</span></td>
+                          <td>담당자</td>
+                          <td>2026-03-23</td>
+                          <td><span class="wf-vis-badge baseline">🟡 Baseline</span></td>
+                          <td>
+                            <span style="display:flex;gap:4px">
+                              <span class="wf-action-btn approve">승인</span>
+                              <span class="wf-action-btn reject">반려</span>
+                            </span>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td><span style="font-weight:600;color:var(--primary)">PLAYBOOK.COVERAGE.GAP.V1</span></td>
+                          <td><span class="wf-type-badge playbook">PLAYBOOK</span></td>
+                          <td>담당자</td>
+                          <td>2026-03-22</td>
+                          <td><span class="wf-vis-badge internal">🔴 Internal</span></td>
+                          <td>
+                            <span style="display:flex;gap:4px">
+                              <span class="wf-action-btn approve">승인</span>
+                              <span class="wf-action-btn reject">반려</span>
+                            </span>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td><span style="font-weight:600;color:var(--primary)">EVIDENCE.DISEASE.CODE.V1</span></td>
+                          <td><span class="wf-type-badge evidence">EVIDENCE</span></td>
+                          <td>담당자</td>
+                          <td>2026-03-22</td>
+                          <td><span class="wf-vis-badge internal">🔴 Internal</span></td>
+                          <td>
+                            <span style="display:flex;gap:4px">
+                              <span class="wf-action-btn approve">승인</span>
+                              <span class="wf-action-btn reject">반려</span>
+                            </span>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- V: 반려 사유 입력 모달 (인라인 표시) -->
+            <div style="position:relative;margin-top:12px">
+              <div class="anno-marker" style="top:-8px;left:-8px">V</div>
+              <div class="wf-modal-preview">
+                <div class="wf-modal-title">반려 사유 입력</div>
+                <div class="wf-form-group" style="margin-bottom:8px">
+                  <div class="wf-form-label">대상 카드</div>
+                  <div style="font-size:11px;color:var(--g700)">RULE.RENEWAL.RISK.V1</div>
+                </div>
+                <div class="wf-form-group" style="margin-bottom:8px">
+                  <div class="wf-form-label">반려 사유 * (필수)</div>
+                  <div class="wf-form-textarea" style="min-height:40px;border-color:var(--red)">갱신형 담보 비율 기준의 근거 데이터(Evidence 카드) 연결이 누락되었습니다. 보완 후 재검수 요청 바랍니다.</div>
+                </div>
+                <div style="display:flex;gap:8px;justify-content:flex-end">
+                  <div class="btn" style="font-size:11px;padding:5px 12px">취소</div>
+                  <div class="btn" style="font-size:11px;padding:5px 12px;background:var(--red);color:#fff;border-color:var(--red)">반려 확정</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 와이어프레임: Policy 법무 검토 ── -->
+  <div class="wireframe-wrap">
+    <div class="wireframe-label">WIREFRAME — 05-2. Policy 법무 검토 (준법감시인 전용)</div>
+    <div class="wireframe">
+      <div class="wf-app" style="height:480px">
+        <div class="wf-sidebar" style="width:60px;padding:12px 6px;align-items:center">
+          <div style="font-size:10px;font-weight:700;color:var(--g400);writing-mode:vertical-rl;margin-top:20px">사이드바</div>
+        </div>
+        <div class="wf-main">
+          <div class="wf-topbar">
+            <h3>Policy 법무 검토</h3>
+            <div style="font-size:12px;color:var(--g500)">준법감시인 전용 화면</div>
+          </div>
+          <div class="wf-content" style="padding:16px 20px">
+            <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:14px">
+              <!-- W: Policy 카드 내용 -->
+              <div style="position:relative">
+                <div class="anno-marker" style="top:-8px;left:-8px">W</div>
+                <div class="wf-card" style="height:100%">
+                  <div class="wf-card-header">
+                    <h4><span class="wf-type-badge policy">POLICY</span> POLICY.AI.SAFEGUARD.V1</h4>
+                    <span class="wf-status-badge" style="background:#fce7f3;color:#9d174d;font-size:9px">LEGAL_REVIEW</span>
+                  </div>
+                  <div class="wf-card-body">
+                    <div class="wf-detail-section">
+                      <div class="wf-detail-label">규제 문서명</div>
+                      <div class="wf-detail-value">금융소비자보호에 관한 법률</div>
+                    </div>
+                    <div class="wf-detail-section">
+                      <div class="wf-detail-label">적용 범위</div>
+                      <div class="wf-detail-value">Clark AI 전체 출력</div>
+                    </div>
+                    <div class="wf-detail-section">
+                      <div class="wf-detail-label">핵심 조항</div>
+                      <div class="wf-detail-value">제21조(금지행위) — 불확실한 사항에 대한 단정적 판단 제공 금지, 허위·과장 정보 제공 금지</div>
+                    </div>
+                    <div class="wf-detail-section">
+                      <div class="wf-detail-label">작성자</div>
+                      <div class="wf-detail-value">담당자 · 2026-03-20 작성 · 검수자 1차 확인 완료</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- X: 체크리스트 + 액션 -->
+              <div style="position:relative">
+                <div class="anno-marker" style="top:-8px;left:-8px">X</div>
+                <div class="wf-card" style="height:100%">
+                  <div class="wf-card-header"><h4>준수 체크리스트</h4></div>
+                  <div class="wf-card-body">
+                    <div class="wf-checklist" style="border:none;padding:0;background:transparent">
+                      <div class="wf-check-item" style="padding:8px 0"><span class="wf-checkbox-active">☑</span> 단정적 판단 표현 없음 확인</div>
+                      <div class="wf-check-item" style="padding:8px 0"><span class="wf-checkbox-active">☑</span> "반드시", "확실히" 등 금지 표현 미사용 확인</div>
+                      <div class="wf-check-item" style="padding:8px 0"><span class="wf-checkbox">☐</span> 상품 추천/권유 표현 미포함 확인</div>
+                      <div class="wf-check-item" style="padding:8px 0"><span class="wf-checkbox">☐</span> 개인정보 노출 가능성 확인</div>
+                    </div>
+                    <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--g200)">
+                      <div style="font-size:10px;color:var(--red);margin-bottom:8px;font-weight:600">⚠ 2/4 항목 미확인 — 모든 항목 확인 후 승인 가능</div>
+                      <div style="display:flex;gap:8px">
+                        <div class="btn" style="font-size:11px;padding:6px 14px;background:var(--g200);color:var(--g400);border-color:var(--g200);cursor:not-allowed;flex:1;justify-content:center">승인 (비활성)</div>
+                        <div class="btn" style="font-size:11px;padding:6px 14px;border-color:var(--red);color:var(--red);flex:1;justify-content:center">반려</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feature Spec Cards -->
+  <div class="spec-grid">
+    <div class="spec-card accent-blue">
+      <div class="spec-card-header">
+        <div class="spec-card-num">U</div>
+        <div class="spec-card-title">검수 대기 목록 (05-1)</div>
+      </div>
+      <div class="spec-card-body">
+        <ul>
+          <li>IN_REVIEW 상태인 카드만 표시 (Policy 카드 제외 — Policy는 05-2에서 처리)</li>
+          <li>컬럼: Card ID, 타입, 작성자, 요청일, 공개범위, 액션(승인/반려)</li>
+          <li>Card ID 클릭 시 카드 상세 조회 패널이 열림</li>
+          <li>승인 클릭 시 즉시 APPROVED로 변경, Clark AI RAG 지식 베이스에 반영</li>
+          <li>반려 클릭 시 사유 입력 모달이 열림 (사유 필수)</li>
+          <li>대시보드의 "검수 대기" 통계 카드에서 바로 진입 가능</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="spec-card accent-red">
+      <div class="spec-card-header">
+        <div class="spec-card-num">V</div>
+        <div class="spec-card-title">반려 사유 입력 모달</div>
+      </div>
+      <div class="spec-card-body">
+        <ul>
+          <li>반려 버튼 클릭 시 모달(또는 인라인 패널)로 표시</li>
+          <li>대상 카드 Card ID가 자동 표시됨</li>
+          <li>반려 사유 텍스트 입력 (필수 — 미입력 시 반려 확정 버튼 비활성화)</li>
+          <li>반려 확정 시 카드 상태가 REJECTED로 변경</li>
+          <li>입력된 사유는 담당자에게 전달되고, 카드 버전 이력에도 기록됨</li>
+          <li>대시보드 최근 활동 피드에도 반려 사유가 표시됨</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="spec-card accent-purple">
+      <div class="spec-card-header">
+        <div class="spec-card-num">W</div>
+        <div class="spec-card-title">Policy 카드 내용 표시 (05-2)</div>
+      </div>
+      <div class="spec-card-body">
+        <ul>
+          <li>LEGAL_REVIEW 상태인 Policy 카드만 표시</li>
+          <li>좌측 영역에 Policy 카드 전문을 읽기 전용으로 표시</li>
+          <li>규제 문서명, 적용 범위, 핵심 조항 등 모든 필드 표시</li>
+          <li>작성자, 검수자 1차 확인 여부, 검수 일시 등 메타 정보 포함</li>
+          <li>여러 Policy 카드가 대기 중이면 목록으로 전환 가능</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="spec-card accent-yellow">
+      <div class="spec-card-header">
+        <div class="spec-card-num">X</div>
+        <div class="spec-card-title">준수 체크리스트 + 액션 (05-2)</div>
+      </div>
+      <div class="spec-card-body">
+        <ul>
+          <li>우측 영역에 Policy 카드 생성 시 등록된 체크리스트 항목 표시</li>
+          <li>준법감시인이 각 항목을 하나씩 체크하며 확인</li>
+          <li><b>모든 항목이 체크되어야 승인 버튼이 활성화</b> (미완료 시 비활성 + 경고 메시지)</li>
+          <li>반려 시에도 사유 입력 필수 (구체적 조항 번호 + 문제 내용 기재 권장)</li>
+          <li>승인 시 카드 상태가 APPROVED로 변경, Clark AI 출력 통제 레이어에 반영</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 승인 프로세스 비교 -->
+  <div class="layout-spec">
+    <h4>일반 카드 vs Policy 카드 승인 프로세스 비교</h4>
+    <table class="role-table">
+      <thead>
+        <tr><th>단계</th><th>일반 카드 (CONCEPT, RULE, EVIDENCE, PLAYBOOK)</th><th>Policy 카드</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><b>1. 작성</b></td><td>담당자가 카드 생성/수정</td><td>담당자가 카드 생성/수정</td></tr>
+        <tr><td><b>2. 검수 요청</b></td><td>상태 → IN_REVIEW</td><td>상태 → IN_REVIEW</td></tr>
+        <tr><td><b>3. 검수자 확인</b></td><td>검수자가 승인/반려 → 완료</td><td>검수자가 1차 확인 → 상태를 LEGAL_REVIEW로 전환</td></tr>
+        <tr><td><b>4. 법무 검토</b></td><td class="no">— 해당 없음</td><td>준법감시인이 체크리스트 확인 후 최종 승인/반려</td></tr>
+        <tr><td><b>5. 적용</b></td><td>Clark AI RAG 지식 베이스 반영</td><td>Clark AI 출력 통제 레이어 반영</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Role Access -->
+  <div class="layout-spec">
+    <h4>역할별 접근 차이</h4>
+    <table class="role-table">
+      <thead>
+        <tr><th>기능</th><th>담당자</th><th>검수자</th><th>준법감시인</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>검수 대기 목록 (05-1)</td><td class="no">— 접근 불가</td><td class="check">● 전용 화면</td><td class="no">— 접근 불가</td></tr>
+        <tr><td>승인/반려 처리 (일반 카드)</td><td class="no">— 불가</td><td class="check">● 가능</td><td class="no">— 불가</td></tr>
+        <tr><td>Policy 법무 검토 (05-2)</td><td class="no">— 접근 불가</td><td class="no">— 접근 불가</td><td class="check">● 전용 화면</td></tr>
+        <tr><td>Policy 최종 승인/반려</td><td class="no">— 불가</td><td class="no">— 불가</td><td class="check">● 가능 (체크리스트 완료 필수)</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- 06. Case 후보 관리 -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-num">06</div>
+  <div class="section-title">Case 후보 관리 <span class="role-badge">담당자 / 검수자</span></div>
+  <div class="section-desc">Clark AI가 자동 태깅한 리드 전환 성공 케이스를 검토·편집·승인하는 화면. AI 자동 태깅 → 담당자 검토 → 검수자 최종 승인의 반자동 플로우.</div>
+
+  <div class="wireframe-wrap">
+    <div class="wireframe-label">WIREFRAME — Case 후보 관리 화면</div>
+    <div class="wireframe">
+      <div class="wf-app" style="height:520px">
+        <div class="wf-sidebar" style="width:60px;padding:12px 6px;align-items:center">
+          <div style="font-size:10px;font-weight:700;color:var(--g400);writing-mode:vertical-rl;margin-top:20px">사이드바</div>
+        </div>
+        <div class="wf-main">
+          <div class="wf-topbar">
+            <h3>Case 후보 관리</h3>
+            <div style="font-size:12px;color:var(--g500)">AI 자동 태깅 케이스</div>
+          </div>
+          <div class="wf-content" style="padding:16px 20px">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;height:100%">
+              <!-- 좌측: 후보 목록 -->
+              <div style="position:relative">
+                <div class="anno-marker" style="top:-8px;left:-8px">Y</div>
+                <div class="wf-card" style="height:100%">
+                  <div class="wf-card-header">
+                    <h4>Case 후보 목록</h4>
+                    <span style="font-size:10px;color:var(--g400)">총 7건</span>
+                  </div>
+                  <div class="wf-card-body" style="padding:0">
+                    <div class="wf-case-item active">
+                      <div style="display:flex;justify-content:space-between;align-items:center">
+                        <span class="wf-tag-item" style="background:#fee2e2;color:#991b1b">T01 암진단금 부족형</span>
+                        <span class="wf-status-badge draft" style="font-size:8px">검토 대기</span>
+                      </div>
+                      <div style="font-size:11px;color:var(--g700);margin-top:6px;line-height:1.4">"암 진단금이 2천만원밖에 안 되는데... 이걸 어떻게 해야 하나요?"</div>
+                      <div style="font-size:9px;color:var(--g400);margin-top:4px">2026-03-24 15:30 · 전환 성공</div>
+                    </div>
+                    <div class="wf-case-item">
+                      <div style="display:flex;justify-content:space-between;align-items:center">
+                        <span class="wf-tag-item" style="background:#fef3c7;color:#92400e">T04 갱신 급증형</span>
+                        <span class="wf-status-badge review" style="font-size:8px">저장 요청</span>
+                      </div>
+                      <div style="font-size:11px;color:var(--g700);margin-top:6px;line-height:1.4">"보험료가 60세 넘으면 얼마나 올라가요?"</div>
+                      <div style="font-size:9px;color:var(--g400);margin-top:4px">2026-03-23 11:20 · 전환 성공</div>
+                    </div>
+                    <div class="wf-case-item">
+                      <div style="display:flex;justify-content:space-between;align-items:center">
+                        <span class="wf-tag-item" style="background:#d1fae5;color:#065f46">T03 심혈관 협소형</span>
+                        <span class="wf-status-badge approved" style="font-size:8px">승인 완료</span>
+                      </div>
+                      <div style="font-size:11px;color:var(--g700);margin-top:6px;line-height:1.4">"뇌졸중은 보장이 안 되는 건가요?"</div>
+                      <div style="font-size:9px;color:var(--g400);margin-top:4px">2026-03-22 09:45 · 전환 성공</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 우측: 상세 뷰 -->
+              <div style="position:relative">
+                <div class="anno-marker" style="top:-8px;left:-8px">Z</div>
+                <div class="wf-card" style="height:100%">
+                  <div class="wf-card-header">
+                    <h4>Case 상세</h4>
+                    <span class="wf-status-badge draft" style="font-size:9px">검토 대기</span>
+                  </div>
+                  <div class="wf-card-body">
+                    <div class="wf-detail-section">
+                      <div class="wf-detail-label">AI 추출 정보</div>
+                      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px">
+                        <span class="wf-tag-item" style="background:#fee2e2;color:#991b1b">T01 암진단금 부족형</span>
+                        <span class="wf-tag-item">전환 성공</span>
+                      </div>
+                    </div>
+                    <div class="wf-detail-section">
+                      <div class="wf-detail-label">대화 요약 (편집 가능)</div>
+                      <div class="wf-form-textarea" style="min-height:60px;font-size:11px">40대 남성 사용자. 현재 암 진단금 2,000만원 보유. Clark AI가 권장 기준(5,000만원) 대비 3,000만원 부족을 진단. 사용자가 "그래서 어떻게 해야 해?"라고 발화하여 보닥플래너 연결로 전환.</div>
+                    </div>
+                    <div class="wf-detail-section">
+                      <div class="wf-detail-label">성공 요인 (편집 가능)</div>
+                      <div class="wf-form-textarea" style="min-height:36px;font-size:11px">구체적 부족 금액 제시(3,000만원)가 사용자의 행동 전환을 유도함. 단정적 표현 없이 "우려됩니다" 표현 사용.</div>
+                    </div>
+                    <div style="display:flex;gap:8px;margin-top:12px;padding-top:10px;border-top:1px solid var(--g200)">
+                      <div class="btn btn-primary" style="font-size:11px;padding:6px 14px;flex:1;justify-content:center">저장 요청</div>
+                      <div class="btn" style="font-size:11px;padding:6px 14px;border-color:var(--red);color:var(--red);flex:1;justify-content:center">폐기</div>
+                    </div>
+                    <div style="font-size:9px;color:var(--g400);margin-top:6px;font-style:italic">※ 폐기 시 30일간 보관 후 자동 삭제. 기간 내 복원 가능.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="spec-grid">
+    <div class="spec-card accent-yellow">
+      <div class="spec-card-header">
+        <div class="spec-card-num">Y</div>
+        <div class="spec-card-title">Case 후보 목록</div>
+      </div>
+      <div class="spec-card-body">
+        <ul>
+          <li>Clark AI가 리드 전환 성공으로 태깅한 케이스가 자동으로 목록에 추가</li>
+          <li>각 항목: Risk Type 태그 + 대화 핵심 발화 요약 + 상태(검토 대기/저장 요청/승인 완료/폐기)</li>
+          <li>항목 클릭 시 우측 상세 뷰에 내용이 표시됨</li>
+          <li>상태별 필터 제공 (검토 대기만 보기 등)</li>
+          <li>시간순 정렬 (최신 케이스가 상단)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="spec-card accent-green">
+      <div class="spec-card-header">
+        <div class="spec-card-num">Z</div>
+        <div class="spec-card-title">Case 상세 뷰</div>
+      </div>
+      <div class="spec-card-body">
+        <ul>
+          <li><b>AI 추출 정보</b>: Risk Type, 전환 결과를 태그로 표시 (읽기 전용)</li>
+          <li><b>대화 요약</b>: AI가 추출한 요약을 담당자가 편집 가능 (개인정보 마스킹 확인)</li>
+          <li><b>성공 요인</b>: AI가 추출한 성공 요인을 담당자가 보완·편집 가능</li>
+          <li><b>저장 요청</b>: 검수자에게 최종 승인 요청 (승인 시 개인정보 제거된 요약본 자동 생성)</li>
+          <li><b>폐기</b>: 30일 보관 후 자동 삭제, 기간 내 복원 가능</li>
+          <li>승인 완료 시: 원본(Internal, 담당자/검수자만 접근) + 요약본(설계사 교육/AI 학습용) 분리 저장</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="layout-spec">
+    <h4>반자동 생성 플로우 요약</h4>
+    <table class="role-table">
+      <thead><tr><th>단계</th><th>수행자</th><th>동작</th></tr></thead>
+      <tbody>
+        <tr><td><b>1. 자동 태깅</b></td><td>Clark AI</td><td>리드 전환 성공 대화를 자동 태깅, 대화 요약·Risk Type·성공 요인 추출</td></tr>
+        <tr><td><b>2. 검토/편집</b></td><td>담당자</td><td>Case 후보 목록에서 확인, 대화 요약·성공 요인 편집 후 저장 요청 또는 폐기</td></tr>
+        <tr><td><b>3. 최종 승인</b></td><td>검수자</td><td>최종 확인 후 승인 → 개인정보 제거된 요약본 자동 생성</td></tr>
+        <tr><td><b>4. 분리 저장</b></td><td>시스템</td><td>원본(Internal) + 요약본(설계사 교육/AI 학습용) 분리 저장</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- 07. 데이터 매핑 관리 -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-num">07</div>
+  <div class="section-title">데이터 매핑 관리 <span class="role-badge">담당자 전용</span></div>
+  <div class="section-desc">앰플리튜드 택소노미(User Properties/Events)와 마이데이터(ICIS 담보코드)가 Rule 카드의 판단 조건으로 매핑되는 구조를 관리하는 화면군. 조건 빌더, 리스크 유형 대조, 리스크 유형 관리, 마이데이터 담보코드 표로 구성.</div>
+
+  <!-- 07-1 조건 빌더 -->
+  <div class="wireframe-wrap">
+    <div class="wireframe-label">WIREFRAME — 07-1. 조건 빌더 (Condition Builder)</div>
+    <div class="wireframe">
+      <div class="wf-app" style="height:460px">
+        <div class="wf-sidebar" style="width:60px;padding:12px 6px;align-items:center">
+          <div style="font-size:10px;font-weight:700;color:var(--g400);writing-mode:vertical-rl;margin-top:20px">사이드바</div>
+        </div>
+        <div class="wf-main">
+          <div class="wf-topbar">
+            <h3>조건 빌더</h3>
+            <div class="wf-topbar-actions">
+              <div class="btn">드라이런 테스트</div>
+              <div class="btn btn-primary">저장</div>
+            </div>
+          </div>
+          <div class="wf-content" style="padding:16px 20px">
+            <!-- 리스크 유형 선택 -->
+            <div style="display:flex;gap:10px;align-items:center;margin-bottom:14px">
+              <span style="font-size:12px;font-weight:700;color:var(--g700)">리스크 유형 선택:</span>
+              <div class="wf-form-input" style="min-width:250px;display:inline-flex">T03 — 심혈관 질환 보장 협소형 ▾</div>
+            </div>
+
+            <!-- 조건 구성 -->
+            <div style="position:relative">
+              <div class="anno-marker" style="top:-8px;left:-8px">①</div>
+              <div class="wf-card">
+                <div class="wf-card-header">
+                  <h4>조건 구성</h4>
+                  <div class="btn btn-primary" style="font-size:10px;padding:3px 10px">+ 조건 추가</div>
+                </div>
+                <div class="wf-card-body">
+                  <div class="wf-condition-builder" style="background:transparent;border:none;padding:0">
+                    <div class="wf-condition-row" style="padding:8px;background:var(--g50);border-radius:6px;margin-bottom:6px">
+                      <span style="font-size:9px;color:var(--g400);width:20px">1</span>
+                      <div class="wf-cond-badge source">마이데이터</div>
+                      <div class="wf-cond-field">bojang_code</div>
+                      <div class="wf-cond-op">=</div>
+                      <div class="wf-cond-val">A3100 (허혈성심장질환)</div>
+                      <div class="wf-cond-logic">AND</div>
+                      <span style="font-size:12px;color:var(--g400);cursor:default">🗑</span>
+                    </div>
+                    <div class="wf-condition-row" style="padding:8px;background:var(--g50);border-radius:6px;margin-bottom:6px">
+                      <span style="font-size:9px;color:var(--g400);width:20px">2</span>
+                      <div class="wf-cond-badge source">마이데이터</div>
+                      <div class="wf-cond-field">bojang_amount</div>
+                      <div class="wf-cond-op">&lt;</div>
+                      <div class="wf-cond-val">30,000,000</div>
+                      <div class="wf-cond-logic">AND</div>
+                      <span style="font-size:12px;color:var(--g400);cursor:default">🗑</span>
+                    </div>
+                    <div class="wf-condition-row" style="padding:8px;background:var(--g50);border-radius:6px">
+                      <span style="font-size:9px;color:var(--g400);width:20px">3</span>
+                      <div class="wf-cond-badge source amp">택소노미</div>
+                      <div class="wf-cond-field">selected_service_type</div>
+                      <div class="wf-cond-op">=</div>
+                      <div class="wf-cond-val">"보험진단"</div>
+                      <div class="wf-cond-logic"></div>
+                      <span style="font-size:12px;color:var(--g400);cursor:default">🗑</span>
+                    </div>
+                  </div>
+
+                  <!-- 조건 프리뷰 -->
+                  <div style="margin-top:12px;padding:10px;background:#f0f9ff;border:1px solid #bae6fd;border-radius:6px">
+                    <div style="font-size:10px;font-weight:700;color:#0369a1;margin-bottom:4px">조건 프리뷰 (Baseline 영역 — 외부 노출)</div>
+                    <div style="font-size:11px;color:var(--g700)">"허혈성 심장질환 보장이 일정 기준 미만인 경우 심혈관 보장 협소로 판단합니다."</div>
+                  </div>
+                  <div style="margin-top:6px;padding:10px;background:var(--red-bg);border:1px solid var(--red-bd);border-radius:6px">
+                    <div style="font-size:10px;font-weight:700;color:#b91c1c;margin-bottom:4px">Internal 영역 — 외부 비노출</div>
+                    <div style="font-size:11px;color:var(--g700)">bojang_code = A3100, bojang_amount &lt; 30,000,000, selected_service_type = "보험진단"</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 07-2 리스크 유형 대조 -->
+  <div class="wireframe-wrap">
+    <div class="wireframe-label">WIREFRAME — 07-2. 리스크 유형 대조 (고객 데이터 vs 조건 대조)</div>
+    <div class="wireframe">
+      <div class="wf-app" style="height:400px">
+        <div class="wf-sidebar" style="width:60px;padding:12px 6px;align-items:center">
+          <div style="font-size:10px;font-weight:700;color:var(--g400);writing-mode:vertical-rl;margin-top:20px">사이드바</div>
+        </div>
+        <div class="wf-main">
+          <div class="wf-topbar">
+            <h3>리스크 유형 대조</h3>
+            <div class="wf-topbar-actions">
+              <div class="btn">조건 정의 편집</div>
+              <div class="btn">담보코드 표</div>
+            </div>
+          </div>
+          <div class="wf-content" style="padding:16px 20px">
+            <div style="display:flex;gap:10px;align-items:center;margin-bottom:14px">
+              <span style="font-size:12px;font-weight:700">고객 선택:</span>
+              <div class="wf-form-input" style="min-width:220px;display:inline-flex">김보험 (42세, 남성) ▾</div>
+            </div>
+
+            <div style="position:relative">
+              <div class="anno-marker" style="top:-8px;left:-8px">②</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+                <!-- 만족 -->
+                <div class="wf-card" style="border-left:3px solid var(--red)">
+                  <div class="wf-card-header">
+                    <h4>T01 암진단금 부족형</h4>
+                    <span class="wf-action-btn reject" style="font-size:9px">만족 (위험)</span>
+                  </div>
+                  <div class="wf-card-body" style="font-size:11px">
+                    <div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid var(--g100)">
+                      <span style="color:var(--g500)">cancer_diagnosis_amount</span>
+                      <span><b style="color:var(--red)">20,000,000</b> &lt; 50,000,000 ✓</span>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;padding:3px 0">
+                      <span style="color:var(--g500)">selected_service_type</span>
+                      <span><b style="color:var(--red)">"보험진단"</b> = "보험진단" ✓</span>
+                    </div>
+                  </div>
+                </div>
+                <!-- 비만족 -->
+                <div class="wf-card" style="border-left:3px solid var(--g300)">
+                  <div class="wf-card-header">
+                    <h4>T03 심혈관 보장 협소형</h4>
+                    <span style="font-size:9px;color:var(--g400);background:var(--g100);padding:3px 8px;border-radius:4px">비만족</span>
+                  </div>
+                  <div class="wf-card-body" style="font-size:11px">
+                    <div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid var(--g100)">
+                      <span style="color:var(--g500)">bojang_code A3100</span>
+                      <span><b style="color:var(--green)">보유</b> — 조건 불충족</span>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;padding:3px 0">
+                      <span style="color:var(--g500)">bojang_amount</span>
+                      <span><b style="color:var(--green)">50,000,000</b> ≥ 30,000,000</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 07-3 리스크 유형 관리 -->
+  <div class="wireframe-wrap">
+    <div class="wireframe-label">WIREFRAME — 07-3. 리스크 유형 관리</div>
+    <div class="wireframe">
+      <div class="wf-app" style="height:320px">
+        <div class="wf-sidebar" style="width:60px;padding:12px 6px;align-items:center">
+          <div style="font-size:10px;font-weight:700;color:var(--g400);writing-mode:vertical-rl;margin-top:20px">사이드바</div>
+        </div>
+        <div class="wf-main">
+          <div class="wf-topbar">
+            <h3>리스크 유형 관리</h3>
+            <div class="wf-topbar-actions"><div class="btn btn-primary">+ 리스크 유형 생성</div></div>
+          </div>
+          <div class="wf-content" style="padding:16px 20px">
+            <div class="wf-table-wrap">
+              <table class="wf-table">
+                <thead><tr><th>ID</th><th>유형명</th><th>리스크 레벨</th><th>설계사 선호도</th><th>조건 수</th><th>연결 카드</th><th>상태</th><th></th></tr></thead>
+                <tbody>
+                  <tr><td><b>T01</b></td><td>암진단금 부족형</td><td><span style="color:var(--red);font-weight:700">HIGH</span></td><td>★★★★☆</td><td>2</td><td>4</td><td><span class="wf-status-badge approved" style="font-size:9px">ACTIVE</span></td><td><span class="wf-action-link">조건 편집 →</span></td></tr>
+                  <tr><td><b>T02</b></td><td>뇌혈관 질환 보장 협소형</td><td><span style="color:var(--red);font-weight:700">HIGH</span></td><td>★★★☆☆</td><td>3</td><td>3</td><td><span class="wf-status-badge approved" style="font-size:9px">ACTIVE</span></td><td><span class="wf-action-link">조건 편집 →</span></td></tr>
+                  <tr><td><b>T03</b></td><td>심혈관 질환 보장 협소형</td><td><span style="color:var(--yellow);font-weight:700">MID</span></td><td>★★★☆☆</td><td>3</td><td>2</td><td><span class="wf-status-badge approved" style="font-size:9px">ACTIVE</span></td><td><span class="wf-action-link">조건 편집 →</span></td></tr>
+                  <tr><td><b>T04</b></td><td>갱신 보험료 급증 우려형</td><td><span style="color:var(--yellow);font-weight:700">MID</span></td><td>★★☆☆☆</td><td>2</td><td>3</td><td><span class="wf-status-badge approved" style="font-size:9px">ACTIVE</span></td><td><span class="wf-action-link">조건 편집 →</span></td></tr>
+                  <tr><td><b>T05</b></td><td>고비용 저효율형</td><td><span style="color:var(--blue);font-weight:700">LOW</span></td><td>★★☆☆☆</td><td>2</td><td>2</td><td><span class="wf-status-badge approved" style="font-size:9px">ACTIVE</span></td><td><span class="wf-action-link">조건 편집 →</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="spec-grid">
+    <div class="spec-card accent-blue">
+      <div class="spec-card-header">
+        <div class="spec-card-num">①</div>
+        <div class="spec-card-title">조건 빌더 (07-1)</div>
+      </div>
+      <div class="spec-card-body">
+        <ul>
+          <li>리스크 유형 선택 → 해당 유형의 판단 조건을 GUI로 구성</li>
+          <li>각 조건 행: [데이터 소스] + [필드명] + [연산자] + [기준값] + [논리 연산자(AND/OR)]</li>
+          <li>데이터 소스: 마이데이터(ICIS 담보코드/보장내용코드) 또는 앰플리튜드 택소노미(User Properties/Events)</li>
+          <li>조건 프리뷰: Baseline 영역(외부 노출)과 Internal 영역(외부 비노출)을 시각적으로 분리 표시</li>
+          <li>드라이런 테스트: 샘플 고객 데이터로 조건 적용 결과 미리보기</li>
+          <li>저장 시 해당 리스크 유형의 Rule 카드에 자동 연결</li>
+        </ul>
+      </div>
+    </div>
+    <div class="spec-card accent-purple">
+      <div class="spec-card-header">
+        <div class="spec-card-num">②</div>
+        <div class="spec-card-title">리스크 유형 대조 (07-2)</div>
+      </div>
+      <div class="spec-card-body">
+        <ul>
+          <li>고객 선택 → 해당 고객의 마이데이터·택소노미 지표를 모든 리스크 유형 조건과 대조</li>
+          <li>만족(위험): 모든 조건 충족 → 빨간색 강조, 각 조건별 실제값 vs 기준값 표시</li>
+          <li>비만족: 하나 이상 조건 불충족 → 회색 표시, 불충족 조건 명시</li>
+          <li>조건 정의 편집 → 조건 빌더(07-1)로 이동, 담보코드 표 → ICIS 코드 표로 이동</li>
+        </ul>
+      </div>
+    </div>
+    <div class="spec-card accent-green">
+      <div class="spec-card-header">
+        <div class="spec-card-num">③</div>
+        <div class="spec-card-title">리스크 유형 관리 (07-3)</div>
+      </div>
+      <div class="spec-card-body">
+        <ul>
+          <li>등록된 리스크 유형 목록: ID, 유형명, 리스크 레벨(HIGH/MID/LOW), 설계사 선호도, 조건 수, 연결 카드 수, 상태</li>
+          <li>리스크 유형 생성: 모달로 유형명, 설명, 리스크 레벨, 설계사 선호도 설정</li>
+          <li>"조건 편집" 클릭 → 조건 빌더(07-1)로 이동</li>
+          <li>상태: ACTIVE / INACTIVE 전환 가능</li>
+          <li>리드 스코어 가중치 설정: 설계사 선호도와 연동하여 배정 최적화에 활용</li>
+        </ul>
+      </div>
+    </div>
+    <div class="spec-card accent-gray">
+      <div class="spec-card-header">
+        <div class="spec-card-num">④</div>
+        <div class="spec-card-title">마이데이터 담보코드 표</div>
+      </div>
+      <div class="spec-card-body">
+        <ul>
+          <li>인보험 담보코드(A1100~A9999)와 보장내용코드(100~963) 조회</li>
+          <li>탭으로 담보코드/보장내용코드 전환, 코드 검색 및 카테고리 필터</li>
+          <li>각 코드별 리스크 유형 연결 여부 표시 (조건 빌더에서 사용 중인 코드 강조)</li>
+          <li>출처: 보험신용정보관리규약 별표2 코드표</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- 08. 권한/사용자 및 감사 로그 -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-num">08</div>
+  <div class="section-title">권한/사용자 및 감사 로그 <span class="role-badge">전체 공통</span></div>
+  <div class="section-desc">역할별 권한 관리와 모든 카드 변경 이력을 추적하는 관리 화면.</div>
+
+  <div class="wireframe-wrap">
+    <div class="wireframe-label">WIREFRAME — 08. 감사 로그 (Audit Log)</div>
+    <div class="wireframe">
+      <div class="wf-app" style="height:380px">
+        <div class="wf-sidebar" style="width:60px;padding:12px 6px;align-items:center">
+          <div style="font-size:10px;font-weight:700;color:var(--g400);writing-mode:vertical-rl;margin-top:20px">사이드바</div>
+        </div>
+        <div class="wf-main">
+          <div class="wf-topbar"><h3>감사 로그</h3></div>
+          <div class="wf-content" style="padding:16px 20px">
+            <div class="wf-filter-bar" style="margin-bottom:12px">
+              <div class="wf-select">전체 수정자 ▾</div>
+              <div class="wf-select">전체 유형 ▾</div>
+              <div class="wf-search-input">카드 ID 검색...</div>
+            </div>
+            <div class="wf-table-wrap">
+              <table class="wf-table">
+                <thead><tr><th>시간</th><th>수정자</th><th>대상</th><th>유형</th><th>변경 내용</th></tr></thead>
+                <tbody>
+                  <tr><td style="white-space:nowrap">03-24 15:30</td><td>담당자</td><td><span style="color:var(--primary);font-weight:600">CONCEPT.CANCER.GAP.V1</span></td><td><span class="wf-status-badge draft" style="font-size:8px">CREATE</span></td><td>카드 최초 생성</td></tr>
+                  <tr><td style="white-space:nowrap">03-24 14:30</td><td>검수자</td><td><span style="color:var(--primary);font-weight:600">RULE.CARDIO.GAP.V1</span></td><td><span class="wf-status-badge approved" style="font-size:8px">APPROVE</span></td><td>검수 승인 완료</td></tr>
+                  <tr><td style="white-space:nowrap">03-24 13:00</td><td>준법감시인</td><td><span style="color:var(--primary);font-weight:600">POLICY.AI.SAFEGUARD.V1</span></td><td><span class="wf-status-badge rejected" style="font-size:8px">REJECT</span></td><td>반려 — 금소법 제21조 관련 표현 2건 누락</td></tr>
+                  <tr><td style="white-space:nowrap">03-24 10:15</td><td>담당자</td><td><span style="color:var(--primary);font-weight:600">RULE.RENEWAL.RISK.V1</span></td><td><span class="wf-status-badge review" style="font-size:8px">EDIT</span></td><td>경고 메시지 수정, 기준값 70% → 65% 변경</td></tr>
+                  <tr><td style="white-space:nowrap">03-23 16:00</td><td>담당자</td><td><span style="color:var(--primary);font-weight:600">T03 심혈관 보장 협소형</span></td><td><span class="wf-status-badge" style="background:var(--purple-bg);color:#6d28d9;font-size:8px">CONDITION</span></td><td>조건 3번 추가: selected_service_type = "보험진단"</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="spec-grid">
+    <div class="spec-card accent-gray">
+      <div class="spec-card-header">
+        <div class="spec-card-num">⑤</div>
+        <div class="spec-card-title">감사 로그</div>
+      </div>
+      <div class="spec-card-body">
+        <ul>
+          <li>모든 카드의 CREATE/EDIT/STATUS_CHANGE/VISIBILITY_CHANGE/APPROVE/REJECT 이력 기록</li>
+          <li>리스크 유형 조건 변경(CONDITION) 이력도 포함</li>
+          <li>필터: 수정자별(담당자/검수자/준법감시인), 유형별(CREATE/EDIT/APPROVE 등)</li>
+          <li>변경 내용은 이전값 → 변경값 형태로 표시 (예: "기준값 70% → 65% 변경")</li>
+          <li>로그 데이터는 삭제 불가 (감사 추적 목적)</li>
+          <li>대시보드 "최근 활동" 피드의 "전체보기"에서 진입 가능</li>
+        </ul>
+      </div>
+    </div>
+    <div class="spec-card accent-blue">
+      <div class="spec-card-header">
+        <div class="spec-card-num">⑥</div>
+        <div class="spec-card-title">역할 및 권한 관리</div>
+      </div>
+      <div class="spec-card-body">
+        <ul>
+          <li>사이드바 하단의 역할 전환 버튼으로 현재 로그인 역할 확인 (개발/테스트 환경)</li>
+          <li>실 운영 시: SSO 연동을 통해 로그인 계정에 역할이 자동 매핑</li>
+          <li>담당자: 모든 카드 CRUD, 리스크 유형 관리, 조건 빌더 접근</li>
+          <li>검수자: 카드 검수 승인/반려, Case 최종 승인, 전체 카드 조회</li>
+          <li>준법감시인: Policy 최종 승인, 규제 관련 Rule 검토, 전체 카드 조회 (직접 생성/수정 불가)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- 사이드바 네비게이션 구조 요약 -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-title">부록: 사이드바 네비게이션 구조</div>
+  <div class="section-desc">KC Admin 전체 화면의 메뉴 구성과 역할별 접근 권한을 정리한 표.</div>
+  <div class="layout-spec">
+    <table class="role-table">
+      <thead>
+        <tr><th>메뉴 그룹</th><th>메뉴 항목</th><th>대응 화면</th><th>담당자</th><th>검수자</th><th>준법감시인</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><b>홈</b></td><td>대시보드</td><td>01. 대시보드</td><td class="check">●</td><td class="check">●</td><td class="check">●</td></tr>
+        <tr><td rowspan="3"><b>카드 관리</b></td><td>내 카드</td><td>02. 카드 목록 (내 카드)</td><td class="check">●</td><td class="check">●</td><td class="check">●</td></tr>
+        <tr><td>카드 생성</td><td>03. 카드 에디터</td><td class="check">●</td><td class="no">—</td><td class="no">—</td></tr>
+        <tr><td>카드 라이브러리</td><td>02. 카드 목록 (라이브러리)</td><td class="check">●</td><td class="check">●</td><td class="check">●</td></tr>
+        <tr><td rowspan="2"><b>검수</b></td><td>검수 대기</td><td>05-1. 검수 대기 목록</td><td class="no">—</td><td class="check">●</td><td class="no">—</td></tr>
+        <tr><td>Policy 법무검토</td><td>05-2. Policy 법무 검토</td><td class="no">—</td><td class="no">—</td><td class="check">●</td></tr>
+        <tr><td rowspan="4"><b>데이터</b></td><td>리스크 유형</td><td>07-3. 리스크 유형 관리</td><td class="check">●</td><td class="check">● (조회)</td><td class="check">● (조회)</td></tr>
+        <tr><td>조건 빌더</td><td>07-1. 조건 빌더</td><td class="check">●</td><td class="no">—</td><td class="no">—</td></tr>
+        <tr><td>리스크 유형 대조</td><td>07-2. 리스크 유형 대조</td><td class="check">●</td><td class="check">● (조회)</td><td class="check">● (조회)</td></tr>
+        <tr><td>마이데이터 담보코드</td><td>07. ICIS 코드 표</td><td class="check">●</td><td class="check">●</td><td class="check">●</td></tr>
+        <tr><td rowspan="2"><b>운영</b></td><td>Case 후보 관리</td><td>06. Case 후보 관리</td><td class="check">●</td><td class="check">●</td><td class="no">—</td></tr>
+        <tr><td>감사 로그</td><td>08. 감사 로그</td><td class="check">●</td><td class="check">●</td><td class="check">●</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="doc-footer">
+  KC Admin UI 상세 설계서 · 아이지넷 플랫폼사업본부 · v1.0 · 전체 8개 화면 정의 완료
+</div>
+
+</body>
+</html>

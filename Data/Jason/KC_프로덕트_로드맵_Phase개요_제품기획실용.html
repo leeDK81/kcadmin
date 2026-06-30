@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KC 프로덕트 로드맵 Phase 개요 — 제품기획실 공유용</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #FAFAF8;
+  --surface: #FFFFFF;
+  --surface-alt: #F5F4F0;
+  --text: #1A1A18;
+  --text-secondary: #6B6B65;
+  --text-tertiary: #9C9C94;
+  --accent: #2B5797;
+  --accent-light: #E8F0FE;
+  --accent-dark: #1A3A6B;
+  --teal: #0F6E56;
+  --teal-light: #E1F5EE;
+  --teal-dark: #085041;
+  --coral: #D85A30;
+  --coral-light: #FAECE7;
+  --purple: #534AB7;
+  --purple-light: #EEEDFE;
+  --amber: #BA7517;
+  --amber-light: #FAEEDA;
+  --red: #A32D2D;
+  --red-light: #FCEBEB;
+  --border: #E5E4E0;
+  --border-strong: #D0CFC9;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.8;
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+}
+.container { max-width: 900px; margin: 0 auto; padding: 60px 32px; }
+
+/* Header */
+.doc-header {
+  text-align: center;
+  padding-bottom: 48px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 48px;
+}
+.doc-header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent-dark);
+  margin-bottom: 8px;
+  letter-spacing: -0.5px;
+}
+.doc-header .subtitle {
+  font-size: 16px;
+  color: var(--accent);
+  font-weight: 500;
+  margin-bottom: 16px;
+}
+.doc-header .meta {
+  font-size: 13px;
+  color: var(--text-tertiary);
+}
+
+/* Section */
+.section {
+  margin-bottom: 56px;
+}
+.section h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--accent-dark);
+  margin-bottom: 24px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--accent);
+  display: inline-block;
+}
+.section h3 {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  margin-top: 32px;
+  margin-bottom: 12px;
+}
+p { margin-bottom: 14px; }
+.highlight {
+  background: var(--accent-light);
+  border-left: 3px solid var(--accent);
+  padding: 16px 20px;
+  border-radius: 0 8px 8px 0;
+  margin: 20px 0;
+  font-size: 14px;
+}
+.highlight strong { color: var(--accent-dark); }
+.warning-box {
+  background: var(--amber-light);
+  border-left: 3px solid var(--amber);
+  padding: 16px 20px;
+  border-radius: 0 8px 8px 0;
+  margin: 20px 0;
+  font-size: 14px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin: 20px 0;
+}
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+  transition: box-shadow 0.2s;
+}
+.card:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+.card .card-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+.card .card-title {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+.card .card-desc {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* Phase Table */
+.phase-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  margin: 20px 0;
+  font-size: 14px;
+}
+.phase-table th {
+  background: var(--accent-dark);
+  color: #fff;
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 500;
+  font-size: 13px;
+}
+.phase-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+.phase-table tr:last-child td { border-bottom: none; }
+.phase-table tr:nth-child(even) td { background: var(--surface-alt); }
+.phase-badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.phase-badge.p1 { background: var(--teal-light); color: var(--teal-dark); }
+.phase-badge.p15 { background: var(--accent-light); color: var(--accent-dark); }
+.phase-badge.p2 { background: var(--purple-light); color: var(--purple); }
+.phase-badge.p3 { background: var(--coral-light); color: var(--coral); }
+
+/* Diagram Containers */
+.diagram-container {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 32px 24px;
+  margin: 24px 0;
+  overflow-x: auto;
+}
+.diagram-container .diagram-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--accent-dark);
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+/* SVG Diagrams */
+svg text { font-family: 'Noto Sans KR', sans-serif; }
+
+/* Flow Steps */
+.flow-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 24px 0;
+}
+.flow-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  position: relative;
+  padding-bottom: 24px;
+}
+.flow-step:last-child { padding-bottom: 0; }
+.flow-step::before {
+  content: '';
+  position: absolute;
+  left: 18px;
+  top: 40px;
+  bottom: 0;
+  width: 2px;
+  background: var(--border);
+}
+.flow-step:last-child::before { display: none; }
+.step-num {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+.step-num.auth { background: var(--teal-light); color: var(--teal); }
+.step-num.action { background: var(--accent-light); color: var(--accent); }
+.step-num.convert { background: var(--coral-light); color: var(--coral); }
+.step-content { flex: 1; padding-top: 6px; }
+.step-content .step-title { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+.step-content .step-desc { font-size: 13px; color: var(--text-secondary); }
+
+/* Analogy Box */
+.analogy-box {
+  display: flex;
+  gap: 20px;
+  margin: 20px 0;
+  padding: 20px;
+  background: var(--surface-alt);
+  border-radius: 10px;
+}
+.analogy-side {
+  flex: 1;
+  padding: 16px;
+  border-radius: 8px;
+  text-align: center;
+}
+.analogy-side.before { background: var(--red-light); }
+.analogy-side.after { background: var(--teal-light); }
+.analogy-side .analogy-label {
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.analogy-side.before .analogy-label { color: var(--red); }
+.analogy-side.after .analogy-label { color: var(--teal); }
+.analogy-side .analogy-text { font-size: 13px; line-height: 1.6; }
+.analogy-arrow {
+  display: flex;
+  align-items: center;
+  font-size: 24px;
+  color: var(--text-tertiary);
+}
+
+/* Request List */
+.request-list {
+  margin: 16px 0;
+}
+.request-item {
+  display: flex;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 8px;
+  font-size: 14px;
+  align-items: flex-start;
+}
+.request-num {
+  background: var(--accent);
+  color: #fff;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* Code / Mono */
+code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  background: var(--surface-alt);
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: var(--accent-dark);
+}
+
+.note-box {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin: 16px 0;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+@media (max-width: 700px) {
+  .card-grid { grid-template-columns: 1fr; }
+  .analogy-box { flex-direction: column; }
+  .analogy-arrow { justify-content: center; transform: rotate(90deg); }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- HEADER -->
+<div class="doc-header">
+  <h1>KC 프로덕트 로드맵 Phase 개요</h1>
+  <div class="subtitle">제품기획실 공유용</div>
+  <div class="meta">아이지넷 플랫폼사업본부 · 2026.03.30 · 문서 버전 v0.3</div>
+</div>
+
+<!-- 1. 프로젝트 배경과 목적 -->
+<div class="section">
+  <h2>1. 프로젝트 배경과 목적</h2>
+
+  <h3>KC란 무엇인가?</h3>
+  <p>Knowledge Core(KC)는 보닥의 보험 진단 지식을 <strong>체계화</strong>하여, AI가 활용할 수 있는 <strong>구조화된 지식 체계(온톨로지)</strong>로 구축하는 프로젝트입니다.</p>
+
+  <h3>왜 필요한가?</h3>
+  <div class="analogy-box">
+    <div class="analogy-side before">
+      <div class="analogy-label">현재 상태</div>
+      <div class="analogy-text">
+        보닥 앱이 <strong>"암보험 보장이 부족합니다"</strong>라고 알려줌<br><br>
+        하지만 <strong>왜</strong> 부족한지,<br>
+        설계사가 <strong>어떻게</strong> 접근해야 하는지는<br>
+        <strong>설계사 개인 경험에 의존</strong>
+      </div>
+    </div>
+    <div class="analogy-arrow">→</div>
+    <div class="analogy-side after">
+      <div class="analogy-label">KC 도입 후</div>
+      <div class="analogy-text">
+        AI가 <strong>"암 진단비가 3천만원 미만이라 공백입니다"</strong>(Rule)<br>
+        <strong>"국가암등록통계에 따르면..."</strong>(Evidence)<br>
+        <strong>"30대 남성에게는 이렇게 접근하세요"</strong>(Playbook)<br>
+        까지 <strong>완전한 맥락을 제공</strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="highlight">
+    <strong>대표 방침:</strong> 보닥 앱/플래너웹 개발 업데이트를 중지하고, KC 기반 AI 아키텍처 설계에 집중합니다. 기술연구소 전체 인력을 KC 프로젝트에 투입합니다.
+  </div>
+</div>
+
+<!-- 2. Phase 구분과 검증 가설 -->
+<div class="section">
+  <h2>2. Phase 구분과 검증 가설</h2>
+  <p>각 Phase는 <strong>"기능"이 아니라 "검증하려는 가설"</strong>을 기준으로 구분됩니다. 각 Phase의 끝에서 가설이 입증되어야 다음 Phase로 진행합니다.</p>
+
+  <table class="phase-table">
+    <thead>
+      <tr><th>Phase</th><th>검증 가설</th><th>핵심 구축물</th><th>병렬 준비</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="phase-badge p1">Phase 1</span></td>
+        <td>KC 지식 체계가 실제 운용 가능한가?</td>
+        <td>KC Admin MVP + Rule/Playbook/Evidence 카드 입력</td>
+        <td>Clark/Lois 웹뷰 기획·설계</td>
+      </tr>
+      <tr>
+        <td><span class="phase-badge p15">Phase 1.5</span></td>
+        <td>KC 기반 AI 진단이 전환율을 높이는가?</td>
+        <td>Clark/Lois 독립 웹뷰 + KC 연동 + FC 리드 전달</td>
+        <td>Agent table 설계</td>
+      </tr>
+      <tr>
+        <td><span class="phase-badge p2">Phase 2</span></td>
+        <td>Agent 기반 자동 배정이 더 효율적인가?</td>
+        <td>edge table + Agent 상태 + aGCR 스코어링 + Graph RAG</td>
+        <td>Graph DB 전환 검토</td>
+      </tr>
+      <tr>
+        <td><span class="phase-badge p3">Phase 3</span></td>
+        <td>시뮬레이션으로 시장을 예측할 수 있는가?</td>
+        <td>디지털 트윈 시뮬레이션 엔진</td>
+        <td>—</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Phase 흐름 다이어그램 -->
+  <div class="diagram-container">
+    <div class="diagram-title">Phase 간 흐름과 선행 조건</div>
+    <svg width="100%" viewBox="0 0 840 160" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrowG" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="#888" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+      </defs>
+      <!-- Phase boxes -->
+      <rect x="20" y="40" width="170" height="80" rx="10" fill="#E1F5EE" stroke="#0F6E56" stroke-width="1"/>
+      <text x="105" y="68" text-anchor="middle" font-size="13" font-weight="700" fill="#085041">Phase 1</text>
+      <text x="105" y="86" text-anchor="middle" font-size="11" fill="#0F6E56">KC Admin + 카드 입력</text>
+      <text x="105" y="102" text-anchor="middle" font-size="10" fill="#6B6B65">지식 체계 구축</text>
+
+      <rect x="230" y="40" width="170" height="80" rx="10" fill="#E8F0FE" stroke="#2B5797" stroke-width="1"/>
+      <text x="315" y="68" text-anchor="middle" font-size="13" font-weight="700" fill="#1A3A6B">Phase 1.5</text>
+      <text x="315" y="86" text-anchor="middle" font-size="11" fill="#2B5797">Clark/Lois 웹뷰</text>
+      <text x="315" y="102" text-anchor="middle" font-size="10" fill="#6B6B65">전환율 검증</text>
+
+      <rect x="440" y="40" width="170" height="80" rx="10" fill="#EEEDFE" stroke="#534AB7" stroke-width="1"/>
+      <text x="525" y="68" text-anchor="middle" font-size="13" font-weight="700" fill="#3C3489">Phase 2</text>
+      <text x="525" y="86" text-anchor="middle" font-size="11" fill="#534AB7">Graph RAG + Agent</text>
+      <text x="525" y="102" text-anchor="middle" font-size="10" fill="#6B6B65">자동 배정 검증</text>
+
+      <rect x="650" y="40" width="170" height="80" rx="10" fill="#FAECE7" stroke="#D85A30" stroke-width="1"/>
+      <text x="735" y="68" text-anchor="middle" font-size="13" font-weight="700" fill="#993C1D">Phase 3</text>
+      <text x="735" y="86" text-anchor="middle" font-size="11" fill="#D85A30">디지털 트윈</text>
+      <text x="735" y="102" text-anchor="middle" font-size="10" fill="#6B6B65">시장 예측</text>
+
+      <!-- Arrows with labels -->
+      <line x1="190" y1="80" x2="228" y2="80" stroke="#888" stroke-width="1.5" marker-end="url(#arrowG)"/>
+      <text x="209" y="72" text-anchor="middle" font-size="9" fill="#9C9C94">카드 축적</text>
+
+      <line x1="400" y1="80" x2="438" y2="80" stroke="#888" stroke-width="1.5" marker-end="url(#arrowG)"/>
+      <text x="419" y="72" text-anchor="middle" font-size="9" fill="#9C9C94">전환율 데이터</text>
+
+      <line x1="610" y1="80" x2="648" y2="80" stroke="#888" stroke-width="1.5" marker-end="url(#arrowG)"/>
+      <text x="629" y="72" text-anchor="middle" font-size="9" fill="#9C9C94">Agent 데이터</text>
+    </svg>
+  </div>
+</div>
+
+<!-- 3. Phase 1 세부 -->
+<div class="section">
+  <h2>3. Phase 1 — KC Admin 카드 체계</h2>
+
+  <h3>3-1. KC Admin에서 관리하는 카드 6+1종</h3>
+  <p>KC의 지식은 <strong>카드(Card)</strong> 단위로 관리됩니다. 각 카드는 독립적인 지식 단위이며, 다른 카드와 관계를 맺고 있습니다.</p>
+
+  <div class="card-grid">
+    <div class="card" style="border-top: 3px solid #2B5797;">
+      <div class="card-label" style="color:#2B5797;">Playbook</div>
+      <div class="card-title">진단 시나리오</div>
+      <div class="card-desc">예: "30대 암보험 보장공백 진단" — 특정 상황에서 어떤 순서로 진단하고 상담할지를 정의</div>
+    </div>
+    <div class="card" style="border-top: 3px solid #0F6E56;">
+      <div class="card-label" style="color:#0F6E56;">Rule</div>
+      <div class="card-title">판정 규칙</div>
+      <div class="card-desc">예: "암 진단비 3천만원 미만 = 보장공백" — 특정 조건을 판정하는 기준</div>
+    </div>
+    <div class="card" style="border-top: 3px solid #BA7517;">
+      <div class="card-label" style="color:#BA7517;">Evidence</div>
+      <div class="card-title">근거 자료</div>
+      <div class="card-desc">예: "국가암등록통계 2024" — Rule의 판정 기준을 뒷받침하는 객관적 데이터</div>
+    </div>
+    <div class="card" style="border-top: 3px solid #534AB7;">
+      <div class="card-label" style="color:#534AB7;">CONCEPT</div>
+      <div class="card-title">개념 정의</div>
+      <div class="card-desc">예: "암 진단비", "보장공백" — 도메인 내 핵심 용어의 정확한 정의</div>
+    </div>
+    <div class="card" style="border-top: 3px solid #D85A30;">
+      <div class="card-label" style="color:#D85A30;">Policy</div>
+      <div class="card-title">정책/규제</div>
+      <div class="card-desc">보험업법, 금융소비자보호법 등 행동의 경계 조건</div>
+    </div>
+    <div class="card" style="border-top: 3px solid #888;">
+      <div class="card-label" style="color:#888;">Case</div>
+      <div class="card-title">실제 사례</div>
+      <div class="card-desc">과거 진단 및 상담 사례에서 추출한 패턴</div>
+    </div>
+  </div>
+
+  <h3>3-2. 카드 간 관계가 왜 중요한가</h3>
+  <p>카드 하나가 단독으로 존재하면 의미가 없습니다. <strong>카드와 카드 사이의 "참조한다 / 의거한다 / 근거로 삼는다"라는 연결</strong>이 있어야 AI가 완전한 맥락을 구성할 수 있습니다.</p>
+
+  <!-- 카드 관계 다이어그램 -->
+  <div class="diagram-container">
+    <div class="diagram-title">카드 간 관계 구조 예시</div>
+    <svg width="100%" viewBox="0 0 840 280" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrowB" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="#2B5797" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+        <marker id="arrowT" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="#0F6E56" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+        <marker id="arrowA" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="#BA7517" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+      </defs>
+      <!-- CONCEPT -->
+      <rect x="40" y="100" width="160" height="60" rx="8" fill="#EEEDFE" stroke="#534AB7" stroke-width="1"/>
+      <text x="120" y="125" text-anchor="middle" font-size="11" font-weight="700" fill="#534AB7">CONCEPT</text>
+      <text x="120" y="143" text-anchor="middle" font-size="13" font-weight="500" fill="#3C3489">암 진단비</text>
+
+      <!-- Rule -->
+      <rect x="280" y="100" width="200" height="60" rx="8" fill="#E1F5EE" stroke="#0F6E56" stroke-width="1"/>
+      <text x="380" y="125" text-anchor="middle" font-size="11" font-weight="700" fill="#0F6E56">Rule</text>
+      <text x="380" y="143" text-anchor="middle" font-size="13" font-weight="500" fill="#085041">암보험 보장공백 판정</text>
+
+      <!-- Evidence -->
+      <rect x="560" y="30" width="220" height="60" rx="8" fill="#FAEEDA" stroke="#BA7517" stroke-width="1"/>
+      <text x="670" y="55" text-anchor="middle" font-size="11" font-weight="700" fill="#BA7517">Evidence</text>
+      <text x="670" y="73" text-anchor="middle" font-size="13" font-weight="500" fill="#633806">국가암등록통계 2024</text>
+
+      <!-- Playbook -->
+      <rect x="560" y="170" width="220" height="60" rx="8" fill="#E8F0FE" stroke="#2B5797" stroke-width="1"/>
+      <text x="670" y="195" text-anchor="middle" font-size="11" font-weight="700" fill="#2B5797">Playbook</text>
+      <text x="670" y="213" text-anchor="middle" font-size="13" font-weight="500" fill="#1A3A6B">30대 암보험 공백 진단</text>
+
+      <!-- Arrows -->
+      <line x1="200" y1="130" x2="278" y2="130" stroke="#0F6E56" stroke-width="1.5" marker-end="url(#arrowT)"/>
+      <text x="239" y="122" text-anchor="middle" font-size="10" fill="#0F6E56" font-weight="500">DEFINES</text>
+
+      <line x1="480" y1="110" x2="558" y2="70" stroke="#BA7517" stroke-width="1.5" marker-end="url(#arrowA)"/>
+      <text x="510" y="82" text-anchor="middle" font-size="10" fill="#BA7517" font-weight="500">EVIDENCED_BY</text>
+
+      <line x1="480" y1="145" x2="558" y2="190" stroke="#2B5797" stroke-width="1.5" marker-end="url(#arrowB)"/>
+      <text x="510" y="178" text-anchor="middle" font-size="10" fill="#2B5797" font-weight="500">USED_IN</text>
+    </svg>
+  </div>
+
+  <p>이 관계 구조가 바로 <strong>온톨로지</strong>이며, Phase 2에서 AI(Clark/Lois)가 카드 관계를 따라 탐색해서 진단 맥락을 구성하는 <strong>Graph RAG의 기반</strong>이 됩니다.</p>
+
+  <h3>3-3. Rule-Evidence 연결 원칙 <span style="font-size:11px;color:#92400e;background:#fef3c7;padding:2px 8px;border-radius:8px;font-weight:600;margin-left:6px">KC Admin UI 설계서 v1.2.1 반영</span></h3>
+  <div class="highlight">
+    <strong>핵심 원칙:</strong> Evidence가 연결되지 않은 Rule은 "Draft" 상태로 유지되며, Clark/Lois가 참조할 수 없습니다. Evidence가 연결되고 준법감시인 검수가 완료된 Rule만 "Active" 상태로 전환되어 AI가 활용할 수 있습니다.<br><br>
+    <strong>UI 반영 (v1.2.1):</strong><br>
+    · 카드 에디터(03번)에서 Rule 카드의 "연결 Evidence 카드" 필드가 필수(*)로 변경<br>
+    · Evidence 미연결 시 "검수 요청" 버튼 비활성화 + 경고 메시지 표시<br>
+    · 검수 대기 목록(05번)에서 Evidence 미연결 Rule 카드는 승인 버튼 비활성화
+  </div>
+  <p>이를 통해 Phase 1 초기에 카드를 빠르게 입력하면서도, 고객에게 노출되는 지식의 품질을 보장합니다.</p>
+
+  <h3>3-4. 기존 보장 분석 엔진과의 관계</h3>
+  <div class="warning-box">
+    <strong>중요:</strong> 보닥 앱 내 기존 유지/조정/해지 판정 엔진은 <strong>현행 유지</strong>합니다. KC의 Rule/Playbook은 기존 엔진을 대체하는 것이 아니라, <strong>Clark/Lois라는 별도 채널에서 활용되는 독립적인 지식 체계</strong>입니다. 이를 통해 보닥 앱 경유 리드 vs Clark/Lois 경유 리드의 전환율을 비교할 수 있습니다.
+  </div>
+</div>
+
+<!-- 4. Phase 1.5 세부 -->
+<div class="section">
+  <h2>4. Phase 1.5 — Clark/Lois 독립 웹뷰</h2>
+
+  <h3>4-1. 제품 개요</h3>
+  <p>Clark/Lois는 보닥 앱과 별도의 <strong>독립 웹뷰 기반 AI 보험 진단 서비스</strong>입니다. 고객과의 대화를 통해 보장 공백을 진단하고, 상담 의향이 확인되면 리드로 전환하여 First Connect에 전달합니다.</p>
+
+  <h3>4-2. 배포 형태</h3>
+  <div class="analogy-box">
+    <div class="analogy-side after" style="background: var(--accent-light);">
+      <div class="analogy-label" style="color: var(--accent-dark);">독립 앱</div>
+      <div class="analogy-text">PWA 또는 네이티브 앱으로 출시하여 자체 채널로 고객 유입</div>
+    </div>
+    <div class="analogy-arrow">+</div>
+    <div class="analogy-side after" style="background: var(--teal-light);">
+      <div class="analogy-label" style="color: var(--teal-dark);">파트너 임베디드</div>
+      <div class="analogy-text">헬스케어/핀테크 앱 내 웹뷰로 삽입하여 파트너 채널에서 고객 접점 확보</div>
+    </div>
+  </div>
+
+  <h3>4-3. 고객 흐름 (7단계)</h3>
+  <div class="flow-steps">
+    <div class="flow-step">
+      <div class="step-num action">1</div>
+      <div class="step-content">
+        <div class="step-title">진입 → 바로 대화 시작</div>
+        <div class="step-desc">인증 없이 즉시 대화를 시작합니다. 진입 장벽을 최소화하여 이탈을 방지합니다.</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num action">2</div>
+      <div class="step-content">
+        <div class="step-title">사전 질문 카드로 관심 영역 파악</div>
+        <div class="step-desc">"어떤 보험이 궁금하세요?" 등의 질문 카드로 맥락을 형성합니다.</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num auth">3</div>
+      <div class="step-content">
+        <div class="step-title">카카오 로그인 (1차 인증)</div>
+        <div class="step-desc">계정 연동 + 이름/연락처 확보. 보닥의 기존 카카오 로그인 인프라를 공유합니다.</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num auth">4</div>
+      <div class="step-content">
+        <div class="step-title">본인인증 (2차: CI 확보) → 마이데이터 연동</div>
+        <div class="step-desc">보닥의 마이데이터 인프라를 활용하여 가입 보험을 자동 조회합니다. 불가 시 증권 스크린샷으로 폴백합니다.</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num action">5</div>
+      <div class="step-content">
+        <div class="step-title">KC 기반 AI 진단</div>
+        <div class="step-desc">Rule + Evidence를 참조하여 보장 공백을 설명합니다. "왜 부족한지"와 "근거"를 함께 제시합니다.</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num convert">6</div>
+      <div class="step-content">
+        <div class="step-title">상담 의향 확인 → 리드 전환</div>
+        <div class="step-desc">카카오에서 이미 연락처가 확보된 경우 추가 입력 없이 전환 가능합니다.</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num convert">7</div>
+      <div class="step-content">
+        <div class="step-title">FC로 리드 전달</div>
+        <div class="step-desc">리드 + aGCR 스코어 + Risk Type + Playbook 메타데이터를 First Connect에 전달합니다.</div>
+      </div>
+    </div>
+  </div>
+
+  <h3>4-4. 기술적 전제</h3>
+  <div class="note-box">
+    <strong>공유 인프라:</strong> 보닥의 마이데이터 인프라(별도 사업자 등록 불필요), 카카오 로그인 인프라(알림톡 연동 포함)를 공유합니다.<br>
+    <strong>데이터 수집:</strong> 모든 대화 로그를 저장합니다. Phase 2에서 Agent 상태 갱신, 상호작용 모델링 데이터로 활용됩니다.<br>
+    <strong>자동화:</strong> 리드 하루 3만 건 이상 — KC 카드 매핑은 시스템 자동화 필수입니다.
+  </div>
+</div>
+
+<!-- 5. Phase 2 예고 -->
+<div class="section">
+  <h2>5. Phase 2 예고 — Graph RAG와 Agent</h2>
+  <p>Phase 1에서 카드가 충분히 축적되고, Phase 1.5에서 Clark/Lois의 전환율 데이터가 확보되면, Phase 2에서는 다음이 추가됩니다.</p>
+
+  <h3>Graph RAG — AI가 카드 관계를 실시간 탐색</h3>
+  <p>Phase 1.5까지는 Clark/Lois가 기존 방식(pgvector 유사도 검색)으로 카드를 참조합니다. Phase 2에서는 <strong>카드 간 관계를 따라 탐색</strong>하여 빠짐없이 정확한 맥락을 가져옵니다.</p>
+
+  <div class="analogy-box">
+    <div class="analogy-side before">
+      <div class="analogy-label">Phase 1.5: 유사도 검색</div>
+      <div class="analogy-text">
+        "암보험"으로 검색 →<br>
+        관련 텍스트 5개가 나옴<br>
+        필요한 Rule이 빠질 수도 있음
+      </div>
+    </div>
+    <div class="analogy-arrow">→</div>
+    <div class="analogy-side after">
+      <div class="analogy-label">Phase 2: 관계 탐색 (Graph RAG)</div>
+      <div class="analogy-text">
+        CONCEPT "암 진단비" → Rule → Evidence → Playbook<br>
+        <strong>관계를 따라가서 빠짐없이</strong><br>
+        필요한 지식 세트를 확보
+      </div>
+    </div>
+  </div>
+
+  <h3>KC Admin UI 확장 (KC Admin UI 설계서 v1.2.1 참조)</h3>
+  <p>Phase 2에서 KC Admin UI에 다음 화면이 추가됩니다:</p>
+  <div class="card-grid">
+    <div class="card" style="border-top: 3px solid #534AB7;">
+      <div class="card-label" style="color:#534AB7;">11번 화면</div>
+      <div class="card-title">Agent 모니터링 현황</div>
+      <div class="card-desc">Customer/Planner/Channel Agent 상태를 읽기 전용으로 모니터링</div>
+    </div>
+    <div class="card" style="border-top: 3px solid #2B5797;">
+      <div class="card-label" style="color:#2B5797;">12번 화면</div>
+      <div class="card-title">FC 연동 현황</div>
+      <div class="card-desc">리드 전송/콜백 수신 상태를 실시간 모니터링</div>
+    </div>
+    <div class="card" style="border-top: 3px solid #0F6E56;">
+      <div class="card-label" style="color:#0F6E56;">13번 화면</div>
+      <div class="card-title">채널별 전환율 대시보드</div>
+      <div class="card-desc">보닥 vs Clark/Lois, 더파트너스 vs 제휴 GA 비교</div>
+    </div>
+  </div>
+</div>
+
+<!-- 6. 타임라인과 인력 배정 -->
+<div class="section">
+  <h2>6. Phase 1/1.5 타임라인과 인력 배정</h2>
+
+  <h3>6-1. KC Admin 프로토타입 현황</h3>
+  <div class="highlight">
+    <strong>이미 있는 것:</strong> 바이브 코딩으로 만든 KC Admin 프로토타입이 존재하며 고객경험팀이 테스트 중입니다. 카드 CRUD, 카드 간 관계 설정, 승인 워크플로우(Draft→Active), 역할별 권한 관리가 포함되어 있습니다.<br><br>
+    <strong>Phase 1의 개발 범위:</strong> 프로토타입을 프로덕션 수준으로 재구축하는 것입니다. 처음부터 만드는 것이 아니므로 스펙이 명확하고 개발 기간이 단축됩니다.
+  </div>
+
+  <h3>6-2. Phase 1 구현 대상 (KC Admin UI 설계서 v1.2.1 기반)</h3>
+  <p>KC Admin UI 설계서의 13개 화면 중, Phase 1에서는 핵심 8개 화면을 구현합니다:</p>
+  <table class="phase-table">
+    <thead><tr><th>화면</th><th>기능</th><th>복잡도</th></tr></thead>
+    <tbody>
+      <tr><td>01 대시보드</td><td>통계 카드, 최근 활동 피드</td><td>중</td></tr>
+      <tr><td>02 카드 목록</td><td>라이브러리 + 내 카드, 필터/검색</td><td>중</td></tr>
+      <tr><td>03 카드 에디터</td><td>CONCEPT/RULE/POLICY 세 가지 폼 (Rule은 Evidence 연결 필수)</td><td>높음</td></tr>
+      <tr><td>04 카드 상세</td><td>슬라이드 패널, 연결 카드 표시</td><td>중</td></tr>
+      <tr><td>05 승인 워크플로우</td><td>검수 대기 + Policy 법무검토 (Rule Evidence 확인 포함)</td><td>중</td></tr>
+      <tr><td>06 Case 후보</td><td>Case 후보 관리</td><td>낮음</td></tr>
+      <tr><td>07 데이터 매핑</td><td>조건 빌더 + 리스크 유형 대조 + 리스크 유형 관리 (3개 서브 화면)</td><td>높음</td></tr>
+      <tr><td>08 감사 로그</td><td>권한/사용자 관리, 변경 이력</td><td>낮음</td></tr>
+    </tbody>
+  </table>
+  <div class="note-box">09~13번 화면(스코어링/배정, aGCR 모니터링, Agent 현황, FC 연동, 채널별 전환율)은 Phase 1.5~2에서 구현합니다.</div>
+
+  <h3>6-3. Phase 1/1.5 태스크별 제품기획실 역할</h3>
+  <table class="phase-table">
+    <thead><tr><th>태스크</th><th>담당</th><th>예상 기간</th></tr></thead>
+    <tbody>
+      <tr><td>KC Admin MVP UI 상세 설계 검토 (기술연구소 개발과 병행)</td><td>PM 1명</td><td>Phase 1 전체</td></tr>
+      <tr><td>Clark/Lois 독립 웹뷰 UX/UI 설계</td><td>PM 1명 + PD 1명</td><td>4~6주 (Phase 1과 병렬)</td></tr>
+      <tr><td>FC 설계사 화면에 Rule/Playbook 표시 설계</td><td>PM 1명</td><td>2~3주</td></tr>
+      <tr><td>파트너사 임베디드 웹뷰 사양 정의</td><td>PM 1명</td><td>2~3주</td></tr>
+      <tr><td>QA — KC Admin MVP 검증</td><td>QA</td><td>Phase 1 후반</td></tr>
+    </tbody>
+  </table>
+
+  <h3>6-4. 전체 타임라인</h3>
+  <div class="diagram-container">
+    <div class="diagram-title">Phase 1 + Phase 1.5 전체 일정 (약 16~18주)</div>
+    <svg width="100%" viewBox="0 0 840 300" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrowTL" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="#888" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+      </defs>
+      <!-- 시간축 -->
+      <line x1="60" y1="30" x2="800" y2="30" stroke="#D0CFC9" stroke-width="1"/>
+      <text x="60" y="20" font-size="10" fill="#9C9C94">0주</text>
+      <text x="195" y="20" font-size="10" fill="#9C9C94">4주</text>
+      <text x="330" y="20" font-size="10" fill="#9C9C94">8주</text>
+      <text x="470" y="20" font-size="10" fill="#9C9C94">12주</text>
+      <text x="605" y="20" font-size="10" fill="#9C9C94">16주</text>
+      <text x="740" y="20" font-size="10" fill="#9C9C94">18주</text>
+
+      <!-- Phase 1 배경 -->
+      <rect x="60" y="40" width="310" height="240" rx="8" fill="#E1F5EE" opacity="0.3"/>
+      <text x="70" y="58" font-size="11" font-weight="700" fill="#085041">Phase 1 (8~10주)</text>
+
+      <!-- Phase 1.5 배경 -->
+      <rect x="290" y="40" width="470" height="240" rx="8" fill="#E8F0FE" opacity="0.3"/>
+      <text x="540" y="58" font-size="11" font-weight="700" fill="#1A3A6B">Phase 1.5 (8~10주, 병렬 착수)</text>
+
+      <!-- 바 — KC Admin 백엔드 -->
+      <rect x="60" y="75" width="250" height="22" rx="4" fill="#0F6E56"/>
+      <text x="70" y="90" font-size="10" fill="#fff" font-weight="500">KC Admin 백엔드 재구축 (6~7주)</text>
+
+      <!-- 바 — KC Admin 프론트 -->
+      <rect x="60" y="105" width="250" height="22" rx="4" fill="#1D9E75"/>
+      <text x="70" y="120" font-size="10" fill="#fff" font-weight="500">KC Admin 프론트엔드 (6~7주)</text>
+
+      <!-- 바 — 카드 입력 -->
+      <rect x="150" y="135" width="340" height="22" rx="4" fill="#5DCAA5"/>
+      <text x="160" y="150" font-size="10" fill="#085041" font-weight="500">카드 입력 — 고객경험팀 (3주차~, 계속)</text>
+
+      <!-- 바 — Clark/Lois UX -->
+      <rect x="60" y="165" width="220" height="22" rx="4" fill="#2B5797"/>
+      <text x="70" y="180" font-size="10" fill="#fff" font-weight="500">Clark/Lois UX/UI 설계 (4~6주)</text>
+
+      <!-- 바 — Clark/Lois 개발 -->
+      <rect x="290" y="195" width="370" height="22" rx="4" fill="#378ADD"/>
+      <text x="300" y="210" font-size="10" fill="#fff" font-weight="500">Clark/Lois 백엔드/프론트/AI 개발 (8~10주)</text>
+
+      <!-- 바 — FC 연동 -->
+      <rect x="550" y="225" width="130" height="22" rx="4" fill="#534AB7"/>
+      <text x="560" y="240" font-size="10" fill="#fff" font-weight="500">FC 연동 + A/B (3~4주)</text>
+
+      <!-- 바 — 출시 -->
+      <rect x="700" y="255" width="60" height="22" rx="4" fill="#D85A30"/>
+      <text x="710" y="270" font-size="10" fill="#fff" font-weight="600">출시</text>
+    </svg>
+  </div>
+</div>
+
+<!-- 7. 제품기획실 요청사항 -->
+<div class="section">
+  <h2>7. 제품기획실 요청사항</h2>
+
+  <h3>Phase 1 기간 요청</h3>
+  <div class="request-list">
+    <div class="request-item">
+      <div class="request-num">1</div>
+      <div>KC Admin MVP UI 상세 설계 — 카드 CRUD, 카드 간 관계 설정 UI, 승인 워크플로우 (KC Admin UI 설계서 v1.2.1 기반)</div>
+    </div>
+    <div class="request-item">
+      <div class="request-num">2</div>
+      <div>Clark/Lois 독립 웹뷰 UX/UI 설계 — 고객 흐름 7단계 기반, 사전 질문 카드 디자인 포함</div>
+    </div>
+    <div class="request-item">
+      <div class="request-num">3</div>
+      <div>FC에서 설계사가 Rule/Playbook 정보를 보는 화면 설계 — 리드와 함께 전달되는 진단 맥락 표시</div>
+    </div>
+    <div class="request-item">
+      <div class="request-num">4</div>
+      <div>파트너사 임베디드 시 웹뷰 사양 정의 — SDK 또는 iframe 방식, 브랜딩 커스터마이징 범위</div>
+    </div>
+  </div>
+
+  <h3>참고 사항</h3>
+  <div class="note-box">
+    <strong>기존 엔진:</strong> 보닥 앱의 유지/조정/해지 엔진은 현행 유지. KC와 별개입니다.<br>
+    <strong>리드 규모:</strong> 하루 3만 건 이상 — 카드 매핑은 시스템 자동화 필수입니다.<br>
+    <strong>브랜딩:</strong> Clark/Lois 명칭은 미확정입니다.
+  </div>
+</div>
+
+</div>
+</body>
+</html>

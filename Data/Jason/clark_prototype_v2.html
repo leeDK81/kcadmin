@@ -1,0 +1,1739 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Clark — 보험 AI 진단</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#f0f4f8;
+  --white:#ffffff;
+  --black:#0d1117;
+  --gray-50:#f8fafc;
+  --gray-100:#f1f5f9;
+  --gray-200:#e2e8f0;
+  --gray-300:#cbd5e1;
+  --gray-400:#94a3b8;
+  --gray-500:#64748b;
+  --gray-600:#475569;
+  --gray-700:#334155;
+  --gray-800:#1e293b;
+  --gray-900:#0f172a;
+  --blue:#1d4ed8;
+  --blue-light:#dbeafe;
+  --blue-mid:#3b82f6;
+  --red:#C8102E;
+  --red-light:#fff0f2;
+  --green:#15803d;
+  --green-light:#dcfce7;
+  --amber:#d97706;
+  --amber-light:#fef3c7;
+  --kakao:#FEE500;
+  --kakao-text:#191919;
+  --radius:16px;
+  --radius-sm:10px;
+  --radius-xs:8px;
+  --shadow:0 2px 12px rgba(0,0,0,0.08);
+  --shadow-lg:0 8px 32px rgba(0,0,0,0.12);
+}
+
+html,body{
+  height:100%;
+  font-family:'Noto Sans KR',sans-serif;
+  background:var(--bg);
+  overflow:hidden;
+}
+
+/* ── DEVICE FRAME ── */
+.device-wrap{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100vw;
+  height:100vh;
+  background:linear-gradient(135deg,#e8eef5 0%,#dde6f0 100%);
+}
+.device-scaler{
+  width:390px;
+  height:844px;
+  transform-origin:center center;
+}
+.device{
+  width:390px;
+  height:844px;
+  background:var(--white);
+  border-radius:50px;
+  overflow:hidden;
+  box-shadow:0 30px 80px rgba(0,0,0,0.25),inset 0 0 0 1px rgba(255,255,255,0.6);
+  display:flex;
+  flex-direction:column;
+  position:relative;
+}
+
+/* ── STATUS BAR ── */
+.status-bar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:14px 28px 0;
+  font-size:12px;
+  font-weight:700;
+  color:var(--gray-800);
+  background:var(--white);
+  flex-shrink:0;
+  height:44px;
+}
+.status-icons{display:flex;gap:6px;align-items:center}
+.status-icons svg{width:16px;height:16px}
+
+/* ── HEADER ── */
+.app-header{
+  background:var(--white);
+  border-bottom:1px solid var(--gray-100);
+  padding:10px 20px 12px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  flex-shrink:0;
+}
+.header-logo{
+  width:36px;height:36px;
+  background:var(--black);
+  border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Noto Serif KR',serif;
+  font-size:16px;font-weight:700;
+  color:var(--white);
+  letter-spacing:-1px;
+  flex-shrink:0;
+}
+.header-info{flex:1}
+.header-name{font-size:15px;font-weight:700;color:var(--gray-900)}
+.header-status{
+  font-size:11px;color:var(--green);
+  display:flex;align-items:center;gap:4px;margin-top:1px;
+}
+.header-status::before{
+  content:'';width:6px;height:6px;
+  background:var(--green);border-radius:50%;
+}
+.header-badge{
+  font-size:10px;font-weight:600;
+  background:var(--blue-light);
+  color:var(--blue);
+  padding:3px 8px;border-radius:20px;
+  white-space:nowrap;
+}
+
+/* ── CHAT AREA ── */
+.chat-area{
+  flex:1;
+  overflow-y:auto;
+  padding:20px 16px;
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+  scroll-behavior:smooth;
+}
+.chat-area::-webkit-scrollbar{width:3px}
+.chat-area::-webkit-scrollbar-thumb{background:var(--gray-200);border-radius:2px}
+
+/* ── SCREEN TRANSITIONS ── */
+.screen{display:none;flex-direction:column;gap:16px;animation:fadeIn 0.3s ease}
+.screen.active{display:flex}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── SYSTEM DIVIDER ── */
+.sys-divider{
+  text-align:center;font-size:11px;color:var(--gray-400);
+  display:flex;align-items:center;gap:8px;
+}
+.sys-divider::before,.sys-divider::after{
+  content:'';flex:1;height:1px;background:var(--gray-200);
+}
+
+/* ── CLARK BUBBLE ── */
+.clark-row{display:flex;gap:8px;align-items:flex-end}
+.clark-avatar{
+  width:30px;height:30px;
+  background:var(--black);border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Noto Serif KR',serif;
+  font-size:12px;font-weight:700;color:var(--white);
+  flex-shrink:0;
+}
+.clark-bubbles{display:flex;flex-direction:column;gap:4px;max-width:280px}
+.bubble-clark{
+  background:var(--white);
+  border:1px solid var(--gray-100);
+  border-radius:18px 18px 18px 4px;
+  padding:11px 14px;
+  font-size:14px;line-height:1.6;
+  color:var(--gray-800);
+  box-shadow:var(--shadow);
+}
+.bubble-clark .highlight{color:var(--blue);font-weight:600}
+.bubble-clark .warn{color:var(--red);font-weight:600}
+
+/* ── USER BUBBLE ── */
+.user-row{display:flex;justify-content:flex-end}
+.bubble-user{
+  background:var(--black);
+  color:var(--white);
+  border-radius:18px 18px 4px 18px;
+  padding:11px 14px;
+  font-size:14px;line-height:1.6;
+  max-width:240px;
+}
+
+/* ── CHOICE CARDS ── */
+.choice-list{
+  display:flex;flex-direction:column;gap:8px;
+  margin-left:38px;
+}
+.choice-btn{
+  background:var(--white);
+  border:1.5px solid var(--gray-200);
+  border-radius:var(--radius-sm);
+  padding:12px 16px;
+  font-size:13.5px;font-weight:500;
+  color:var(--gray-700);
+  cursor:pointer;
+  text-align:left;
+  transition:all 0.15s;
+  display:flex;align-items:center;gap:10px;
+  box-shadow:var(--shadow);
+}
+.choice-btn:hover{border-color:var(--blue);color:var(--blue);background:#f8fbff}
+.choice-btn.selected{border-color:var(--blue);background:var(--blue-light);color:var(--blue)}
+.choice-btn:active{transform:scale(0.98)}
+.choice-icon{
+  width:28px;height:28px;border-radius:8px;
+  background:var(--gray-100);
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;flex-shrink:0;
+}
+.choice-btn.selected .choice-icon{background:var(--blue-light)}
+
+/* ── KAKAO BUTTON ── */
+.kakao-btn{
+  background:var(--kakao);
+  border:none;border-radius:var(--radius-sm);
+  padding:14px 20px;
+  font-size:14px;font-weight:700;
+  color:var(--kakao-text);
+  cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  width:100%;
+  transition:all 0.15s;
+  margin-left:38px;
+  width:calc(100% - 38px);
+  box-shadow:var(--shadow);
+}
+.kakao-btn:hover{filter:brightness(0.95)}
+.kakao-btn:active{transform:scale(0.98)}
+.kakao-icon{
+  width:20px;height:20px;background:var(--kakao-text);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+}
+
+/* ── LOADING DOTS ── */
+.typing-dots{display:flex;gap:4px;padding:14px 16px;align-items:center}
+.typing-dots span{
+  width:6px;height:6px;background:var(--gray-300);border-radius:50%;
+  animation:bounce 1.2s infinite;
+}
+.typing-dots span:nth-child(2){animation-delay:0.2s}
+.typing-dots span:nth-child(3){animation-delay:0.4s}
+@keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}}
+
+/* ── MYDATA CONSENT ── */
+.consent-card{
+  margin-left:38px;
+  background:var(--white);
+  border:1px solid var(--gray-200);
+  border-radius:var(--radius);
+  overflow:hidden;
+  box-shadow:var(--shadow);
+}
+.consent-header{
+  background:var(--blue);
+  padding:12px 16px;
+  font-size:13px;font-weight:700;color:var(--white);
+  display:flex;align-items:center;gap:8px;
+}
+.consent-body{padding:14px 16px;display:flex;flex-direction:column;gap:8px}
+.consent-item{
+  display:flex;align-items:center;gap:10px;
+  font-size:12.5px;color:var(--gray-600);
+}
+.consent-check{
+  width:18px;height:18px;border-radius:50%;
+  background:var(--green-light);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.consent-check::after{
+  content:'';width:5px;height:9px;
+  border-right:2px solid var(--green);border-bottom:2px solid var(--green);
+  transform:rotate(45deg)translateY(-1px);
+}
+.consent-agree-btn{
+  background:var(--blue);color:var(--white);
+  border:none;border-radius:var(--radius-xs);
+  padding:11px;font-size:13.5px;font-weight:700;
+  cursor:pointer;margin-top:4px;
+  transition:all 0.15s;
+}
+.consent-agree-btn:hover{background:#1e40af}
+.consent-agree-btn:active{transform:scale(0.98)}
+
+/* ── ANALYZING ── */
+.analyzing-card{
+  margin-left:38px;
+  background:var(--white);
+  border:1px solid var(--gray-100);
+  border-radius:var(--radius);
+  padding:16px;
+  box-shadow:var(--shadow);
+}
+.analyzing-title{font-size:13px;font-weight:700;color:var(--gray-800);margin-bottom:12px}
+.analyze-step{
+  display:flex;align-items:center;gap:10px;
+  padding:8px 0;
+  border-bottom:1px solid var(--gray-100);
+  font-size:12.5px;color:var(--gray-500);
+}
+.analyze-step:last-child{border-bottom:none}
+.step-dot{
+  width:20px;height:20px;border-radius:50%;
+  flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:700;
+}
+.step-dot.done{background:var(--green-light);color:var(--green)}
+.step-dot.running{background:var(--blue-light);color:var(--blue);animation:pulse 1s infinite}
+.step-dot.wait{background:var(--gray-100);color:var(--gray-400)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+.analyze-step.done-text{color:var(--gray-700)}
+.analyze-step.run-text{color:var(--blue);font-weight:500}
+
+/* ── INSURANCE LIST ── */
+.insurance-list-card{
+  margin-left:38px;
+  background:var(--white);
+  border:1px solid var(--gray-200);
+  border-radius:var(--radius);
+  overflow:hidden;
+  box-shadow:var(--shadow);
+}
+.ins-header{
+  background:var(--gray-50);
+  padding:10px 14px;
+  font-size:12px;font-weight:700;color:var(--gray-500);
+  letter-spacing:0.05em;border-bottom:1px solid var(--gray-200);
+}
+.ins-item{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 14px;
+  border-bottom:1px solid var(--gray-100);
+}
+.ins-item:last-child{border-bottom:none}
+.ins-icon{
+  width:36px;height:36px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:15px;flex-shrink:0;
+}
+.ins-icon.health{background:#e0f2fe}
+.ins-icon.cancer{background:#fce7f3}
+.ins-icon.life{background:#dcfce7}
+.ins-icon.accident{background:#fef9c3}
+.ins-info{flex:1}
+.ins-name{font-size:13px;font-weight:600;color:var(--gray-800)}
+.ins-detail{font-size:11px;color:var(--gray-400);margin-top:2px}
+.ins-premium{font-size:12px;font-weight:700;color:var(--gray-700)}
+
+/* ── DIAGNOSIS CARD ── */
+.diagnosis-card{
+  margin-left:38px;
+  background:var(--white);
+  border:1.5px solid var(--red);
+  border-radius:var(--radius);
+  overflow:hidden;
+  box-shadow:0 4px 20px rgba(200,16,46,0.1);
+}
+.diag-header{
+  background:var(--red);
+  padding:12px 16px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.diag-header-left{font-size:13px;font-weight:700;color:var(--white)}
+.diag-header-right{font-size:11px;color:rgba(255,255,255,0.7)}
+.diag-risk-type{
+  padding:12px 16px;
+  background:var(--red-light);
+  border-bottom:1px solid rgba(200,16,46,0.1);
+  display:flex;align-items:center;gap:8px;
+}
+.risk-badge{
+  display:inline-flex;align-items:center;gap:4px;
+  background:var(--blue);color:var(--white);
+  font-size:10px;font-weight:700;
+  padding:3px 8px;border-radius:20px;
+  white-space:nowrap;
+}
+.risk-type-label{font-size:13.5px;font-weight:700;color:var(--blue);margin-top:4px}
+.risk-type-desc{font-size:11.5px;color:var(--gray-500);margin-top:4px;line-height:1.5}
+.diag-items{padding:12px 16px;display:flex;flex-direction:column;gap:10px}
+.diag-item{display:flex;align-items:flex-start;gap:10px}
+.diag-dot{
+  width:20px;height:20px;border-radius:6px;
+  flex-shrink:0;margin-top:1px;
+  display:flex;align-items:center;justify-content:center;
+}
+.diag-dot.high{background:#fef2f2}
+.diag-dot.mid{background:#fffbeb}
+.diag-dot-inner{width:8px;height:8px;border-radius:50%}
+.diag-dot.high .diag-dot-inner{background:var(--red)}
+.diag-dot.mid .diag-dot-inner{background:var(--amber)}
+.diag-item-content{}
+.diag-item-title{font-size:13px;font-weight:700;color:var(--gray-800)}
+.diag-item-desc{font-size:12px;color:var(--gray-500);margin-top:2px;line-height:1.5}
+.diag-item-badge{
+  display:inline-block;
+  font-size:10px;font-weight:700;
+  padding:2px 7px;border-radius:4px;
+  margin-top:4px;
+}
+.diag-item-badge.danger{background:#fef2f2;color:var(--red)}
+.diag-item-badge.warn{background:#fffbeb;color:var(--amber)}
+
+/* ── V2 NEW: 종합 보장점수 ── */
+.score-card{
+  margin-left:38px;
+  background:linear-gradient(135deg,#1e3a8a 0%, #3b82f6 100%);
+  color:var(--white);
+  border-radius:var(--radius);
+  padding:16px 18px;
+  box-shadow:var(--shadow);
+}
+.score-card-label{font-size:11px;font-weight:600;opacity:0.8;letter-spacing:0.06em}
+.score-card-row{display:flex;align-items:baseline;gap:8px;margin-top:6px}
+.score-value{font-size:34px;font-weight:800;line-height:1}
+.score-max{font-size:14px;opacity:0.6;font-weight:500}
+.score-desc{font-size:12px;opacity:0.88;margin-top:8px;line-height:1.5}
+.score-note{font-size:10.5px;opacity:0.7;margin-top:6px;font-style:italic}
+.score-delta{
+  display:inline-flex;align-items:center;gap:4px;
+  background:rgba(255,255,255,0.18);
+  padding:3px 8px;border-radius:10px;
+  font-size:10.5px;font-weight:700;
+  margin-left:8px;
+}
+
+/* ── V2 NEW: 상품별 의견 그룹 ── */
+.opinion-card{
+  margin-left:38px;
+  background:var(--white);
+  border:1px solid var(--gray-200);
+  border-radius:var(--radius);
+  overflow:hidden;
+  box-shadow:var(--shadow);
+}
+.opinion-header{
+  padding:11px 16px;
+  background:var(--gray-50);
+  border-bottom:1px solid var(--gray-200);
+  font-size:12px;font-weight:700;color:var(--gray-800);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.opinion-group{
+  padding:12px 16px 14px;
+  border-bottom:1px solid var(--gray-100);
+}
+.opinion-group:last-child{border-bottom:none}
+.opinion-group-title{
+  font-size:11px;font-weight:700;
+  letter-spacing:0.04em;
+  margin-bottom:10px;
+  display:flex;align-items:center;gap:6px;
+}
+.opinion-group-title.review{color:#0369a1}
+.opinion-group-title.boost{color:#b45309}
+.opinion-group-title.keep{color:#15803d}
+.opinion-group-count{
+  background:var(--gray-100);
+  color:var(--gray-600);
+  font-size:10px;font-weight:700;
+  padding:1px 7px;border-radius:10px;
+}
+.opinion-item{
+  padding:10px 0;
+  border-top:1px solid var(--gray-100);
+}
+.opinion-item:first-child{border-top:none;padding-top:0}
+.opinion-item-head{
+  display:flex;align-items:center;gap:8px;
+  margin-bottom:4px;
+}
+.label-badge{
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:10.5px;font-weight:700;
+  padding:3px 9px;border-radius:5px;
+  letter-spacing:0.02em;
+}
+.label-badge.review{background:#e0f2fe;color:#0369a1}
+.label-badge.boost{background:#fef3c7;color:#b45309}
+.label-badge.keep{background:#dcfce7;color:#15803d}
+.label-badge .priority-mark{
+  background:var(--amber);color:var(--white);
+  padding:1px 4px;border-radius:3px;font-size:9px;margin-left:2px;
+}
+.opinion-product-name{font-size:12.5px;font-weight:700;color:var(--gray-800)}
+.opinion-product-issuer{font-size:10.5px;color:var(--gray-500);margin-left:auto}
+.opinion-item-desc{font-size:12px;color:var(--gray-600);line-height:1.6;margin-top:3px}
+
+/* ── V2 NEW: 면책 문구 ── */
+.disclaimer-card{
+  margin-left:38px;
+  background:#fefbf0;
+  border:1px solid #fbeec0;
+  border-radius:var(--radius-sm);
+  padding:11px 14px;
+}
+.disclaimer-title{
+  font-size:11px;font-weight:700;color:#92400e;
+  display:flex;align-items:center;gap:5px;
+  margin-bottom:6px;
+}
+.disclaimer-body{font-size:11px;color:#78350f;line-height:1.7}
+.disclaimer-body li{margin-left:14px;margin-bottom:3px}
+.kc-summary-note{
+  margin-left:38px;
+  font-size:10.5px;color:var(--gray-400);
+  font-style:italic;
+  padding:4px 2px;
+}
+
+/* ── V2 NEW: Fromage 측정 유도 카드 ── */
+.fromage-card{
+  margin-left:38px;
+  background:linear-gradient(135deg,#fefce8 0%, #fef3c7 100%);
+  border:1px solid #fde68a;
+  border-radius:var(--radius);
+  padding:14px 16px;
+  box-shadow:var(--shadow);
+}
+.fromage-title{
+  font-size:13px;font-weight:800;color:#78350f;
+  display:flex;align-items:center;gap:6px;
+  margin-bottom:10px;
+}
+.fromage-benefit-list{
+  background:rgba(255,255,255,0.55);
+  border-radius:var(--radius-xs);
+  padding:10px 12px;
+  margin-bottom:10px;
+}
+.fromage-benefit-item{
+  font-size:11.5px;color:#713f12;
+  padding:3px 0;
+  display:flex;align-items:flex-start;gap:6px;line-height:1.5;
+}
+.fromage-benefit-item::before{
+  content:'✓';color:#b45309;font-weight:800;flex-shrink:0;
+}
+.fromage-meta{
+  font-size:10.5px;color:#a16207;
+  margin-bottom:12px;
+  display:flex;align-items:center;gap:5px;
+}
+.fromage-action-row{display:flex;gap:8px}
+.fromage-btn-primary{
+  flex:1;background:#92400e;color:var(--white);
+  border:none;border-radius:var(--radius-xs);
+  padding:11px;font-size:13px;font-weight:700;
+  cursor:pointer;font-family:inherit;
+}
+.fromage-btn-secondary{
+  flex:1;background:var(--white);color:#78350f;
+  border:1px solid #fde68a;border-radius:var(--radius-xs);
+  padding:11px;font-size:13px;font-weight:600;
+  cursor:pointer;font-family:inherit;
+}
+
+/* ── V2 NEW: Fromage 측정 결과 카드 ── */
+.fromage-result-card{
+  margin-left:38px;
+  background:var(--white);
+  border:1px solid var(--gray-200);
+  border-radius:var(--radius);
+  overflow:hidden;
+  box-shadow:var(--shadow);
+}
+.fromage-result-header{
+  padding:10px 14px;
+  background:#fef3c7;
+  border-bottom:1px solid #fde68a;
+  font-size:11.5px;font-weight:700;color:#78350f;
+  display:flex;align-items:center;gap:6px;
+}
+.fromage-result-body{padding:12px 16px}
+.fromage-metric{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:6px 0;border-top:1px solid var(--gray-100);
+  font-size:12px;
+}
+.fromage-metric:first-child{border-top:none}
+.fromage-metric-name{color:var(--gray-700);font-weight:600}
+.fromage-metric-grade{
+  font-weight:700;padding:2px 9px;border-radius:4px;
+  font-size:11px;
+}
+.grade-high{background:#fef2f2;color:var(--red)}
+.grade-medium{background:#fef3c7;color:#b45309}
+.grade-low{background:#dcfce7;color:var(--green)}
+.fromage-result-note{
+  font-size:10.5px;color:var(--gray-400);
+  padding:6px 16px 10px;font-style:italic;
+  border-top:1px solid var(--gray-100);
+}
+
+/* ── V2 NEW: 핸드오프 강화 카드 ── */
+.handoff-v2-card{
+  margin-left:38px;
+  background:var(--white);
+  border:1px solid var(--gray-200);
+  border-radius:var(--radius);
+  overflow:hidden;
+  box-shadow:var(--shadow);
+}
+.handoff-v2-head{
+  padding:11px 14px;
+  background:var(--blue);color:var(--white);
+  font-size:12px;font-weight:700;
+  display:flex;align-items:center;gap:6px;
+}
+.handoff-v2-count{
+  background:rgba(255,255,255,0.22);
+  padding:2px 8px;border-radius:10px;
+  font-size:10.5px;margin-left:auto;
+}
+.handoff-v2-body{padding:12px 16px}
+.handoff-v2-benefits{
+  font-size:12px;color:var(--gray-700);line-height:1.7;
+  padding:4px 0;
+}
+.handoff-v2-benefits li{margin-left:14px;margin-bottom:3px}
+.handoff-v2-actions{display:flex;gap:8px;margin-top:12px}
+
+/* ── KC CHAIN CARD ── */
+.kc-chain-card{
+  margin-left:38px;
+  background:var(--white);
+  border:1px solid var(--gray-200);
+  border-radius:var(--radius);
+  overflow:hidden;
+  box-shadow:var(--shadow);
+}
+.kc-chain-header{
+  padding:10px 14px;
+  background:var(--gray-900);
+  font-size:11px;font-weight:700;color:rgba(255,255,255,0.6);
+  letter-spacing:0.08em;
+  display:flex;align-items:center;gap:6px;
+}
+.kc-chain-header span{color:var(--white);font-size:12px}
+.kc-cards-row{
+  display:flex;
+  padding:12px 14px;gap:6px;
+  overflow-x:auto;
+  scrollbar-width:none;
+}
+.kc-cards-row::-webkit-scrollbar{display:none}
+.kc-card-chip{
+  flex-shrink:0;
+  border-radius:8px;
+  padding:6px 10px;
+  font-size:11px;font-weight:700;
+  display:flex;align-items:center;gap:4px;
+  white-space:nowrap;
+}
+.kc-chip-concept{background:#eff6ff;color:#1d4ed8}
+.kc-chip-rule{background:#ecfdf5;color:#065f46}
+.kc-chip-evidence{background:#f5f3ff;color:#6d28d9}
+.kc-chip-playbook{background:#fffbeb;color:#92400e}
+.kc-chip-case{background:#fdf4ff;color:#7e22ce}
+.kc-chip-policy{background:#fff1f2;color:#be123c}
+.kc-card-chip-dot{width:5px;height:5px;border-radius:50%;background:currentColor}
+.kc-evidence-row{
+  padding:0 14px 12px;
+  border-top:1px solid var(--gray-100);
+  margin-top:2px;
+}
+.kc-evidence-row{padding:8px 14px 12px}
+.kc-evidence-item{
+  display:flex;align-items:center;gap:6px;
+  font-size:11.5px;color:var(--gray-500);
+  padding:4px 0;
+}
+.kc-evidence-tag{
+  font-size:10px;font-weight:700;
+  background:var(--gray-100);color:var(--gray-600);
+  padding:2px 6px;border-radius:4px;
+  white-space:nowrap;
+}
+
+/* ── CTA CARD ── */
+.cta-card{
+  margin-left:38px;
+  background:var(--white);
+  border:1px solid var(--gray-200);
+  border-radius:var(--radius);
+  padding:16px;
+  box-shadow:var(--shadow);
+}
+.cta-title{font-size:14px;font-weight:700;color:var(--gray-900);margin-bottom:4px}
+.cta-desc{font-size:12.5px;color:var(--gray-500);line-height:1.6;margin-bottom:12px}
+.cta-confirm-btn{
+  background:var(--black);color:var(--white);
+  border:none;border-radius:var(--radius-xs);
+  padding:12px;font-size:14px;font-weight:700;
+  width:100%;cursor:pointer;
+  transition:all 0.15s;
+}
+.cta-confirm-btn:hover{background:var(--gray-800)}
+.cta-confirm-btn:active{transform:scale(0.98)}
+
+/* ── AGREE BUTTONS ── */
+.agree-row{
+  margin-left:38px;
+  display:grid;grid-template-columns:1fr 1fr;gap:8px;
+}
+.agree-btn{
+  background:var(--white);
+  border:1.5px solid var(--gray-200);
+  border-radius:var(--radius-sm);
+  padding:12px;
+  font-size:13.5px;font-weight:600;
+  cursor:pointer;
+  transition:all 0.15s;
+  box-shadow:var(--shadow);
+}
+.agree-btn.confirm{border-color:var(--blue);color:var(--blue);background:var(--blue-light)}
+.agree-btn.decline{color:var(--gray-500)}
+.agree-btn:active{transform:scale(0.98)}
+
+/* ── CONSULT PREF ── */
+.pref-card{
+  margin-left:38px;
+  background:var(--white);
+  border:1px solid var(--gray-200);
+  border-radius:var(--radius);
+  padding:14px 16px;
+  box-shadow:var(--shadow);
+}
+.pref-question{font-size:13px;font-weight:700;color:var(--gray-800);margin-bottom:10px}
+.pref-options{display:flex;gap:8px;flex-wrap:wrap}
+.pref-btn{
+  flex:1;min-width:60px;
+  background:var(--gray-50);
+  border:1.5px solid var(--gray-200);
+  border-radius:var(--radius-xs);
+  padding:10px 8px;
+  font-size:13px;font-weight:600;color:var(--gray-600);
+  cursor:pointer;
+  transition:all 0.15s;
+  text-align:center;
+}
+.pref-btn:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-light)}
+.pref-btn.selected{border-color:var(--blue);color:var(--blue);background:var(--blue-light)}
+.pref-btn:active{transform:scale(0.98)}
+
+/* ── COMPLETION ── */
+.completion-card{
+  margin-left:38px;
+  background:var(--black);
+  border-radius:var(--radius);
+  padding:20px;
+  box-shadow:var(--shadow-lg);
+}
+.completion-icon{
+  width:48px;height:48px;
+  background:rgba(255,255,255,0.1);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;
+  margin-bottom:12px;
+}
+.completion-title{font-size:16px;font-weight:700;color:var(--white);margin-bottom:6px}
+.completion-desc{font-size:13px;color:rgba(255,255,255,0.55);line-height:1.7}
+.completion-detail{
+  margin-top:14px;
+  padding-top:14px;
+  border-top:1px solid rgba(255,255,255,0.1);
+  display:flex;flex-direction:column;gap:8px;
+}
+.completion-row{
+  display:flex;align-items:center;gap:8px;
+  font-size:12px;color:rgba(255,255,255,0.45);
+}
+.completion-row strong{color:rgba(255,255,255,0.8);font-weight:600}
+.aGCR-badge{
+  display:inline-flex;align-items:center;gap:4px;
+  background:rgba(200,16,46,0.25);
+  color:#ff6b84;
+  font-size:11px;font-weight:700;
+  padding:3px 8px;border-radius:20px;
+}
+
+/* ── INPUT BAR ── */
+.input-bar{
+  background:var(--white);
+  border-top:1px solid var(--gray-100);
+  padding:10px 16px 28px;
+  display:flex;gap:10px;align-items:center;
+  flex-shrink:0;
+}
+.input-field{
+  flex:1;
+  background:var(--gray-100);
+  border:none;border-radius:22px;
+  padding:10px 16px;
+  font-size:14px;font-family:inherit;
+  color:var(--gray-500);
+  outline:none;
+}
+.send-btn{
+  width:38px;height:38px;
+  background:var(--black);border-radius:50%;border:none;
+  cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.send-btn svg{width:16px;height:16px}
+
+/* ── PROGRESS BAR ── */
+.progress-bar{
+  height:2px;background:var(--gray-100);flex-shrink:0;
+}
+.progress-fill{
+  height:100%;background:var(--blue);
+  transition:width 0.4s ease;
+}
+</style>
+</head>
+<body>
+
+<div class="device-wrap">
+<div class="device-scaler" id="scaler">
+<div class="device">
+
+  <!-- Status bar -->
+  <div class="status-bar">
+    <span>9:41</span>
+    <div class="status-icons">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M1 6l11 11L23 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <svg viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="7" width="4" height="10" rx="1"/><rect x="8" y="4" width="4" height="13" rx="1"/><rect x="14" y="2" width="4" height="15" rx="1"/><rect x="20" y="0" width="3" height="17" rx="1" opacity="0.3"/></svg>
+      <svg viewBox="0 0 24 24" fill="none"><path d="M23 13a1 1 0 01-1 1H2a1 1 0 01-1-1V9a1 1 0 011-1h17l3 3-3 3z" stroke="currentColor" stroke-width="1.5"/><path d="M4 11h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </div>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-bar"><div class="progress-fill" id="progress" style="width:5%"></div></div>
+
+  <!-- Header -->
+  <div class="app-header">
+    <div class="header-logo">C</div>
+    <div class="header-info">
+      <div class="header-name">Clark</div>
+      <div class="header-status">AI 진단 서비스 · 운영 중</div>
+    </div>
+    <div class="header-badge">KC 기반</div>
+  </div>
+
+  <!-- Chat area -->
+  <div class="chat-area" id="chat">
+
+    <!-- STEP 0: 진입 -->
+    <div class="screen active" id="step0">
+      <div class="sys-divider">보험 AI 진단 시작</div>
+      <div class="clark-row">
+        <div class="clark-avatar">C</div>
+        <div class="clark-bubbles">
+          <div class="bubble-clark">안녕하세요. 저는 보험 AI 진단 서비스 <span class="highlight">Clark</span>입니다.</div>
+          <div class="bubble-clark">오늘 어떤 것을 도와드릴까요?</div>
+        </div>
+      </div>
+      <div class="choice-list">
+        <button class="choice-btn" onclick="selectChoice(0,'내 보험을 조회하고 싶어요')">
+          <div class="choice-icon">🔍</div>내 보험을 조회하고 싶어요
+        </button>
+        <button class="choice-btn" onclick="selectChoice(0,'보험에 문제가 없는지 궁금해요')">
+          <div class="choice-icon">✅</div>보험에 문제가 없는지 궁금해요
+        </button>
+        <button class="choice-btn" onclick="selectChoice(0,'보험이 하나도 없는데 어떻게 해야 하나요?')">
+          <div class="choice-icon">❓</div>보험이 하나도 없는데 어떻게 해야 하나요?
+        </button>
+        <button class="choice-btn" onclick="selectChoice(0,'보험금을 받을 수 있는지 알고 싶어요')">
+          <div class="choice-icon">💰</div>보험금을 받을 수 있는지 알고 싶어요
+        </button>
+      </div>
+    </div>
+
+    <!-- STEP 1: 로그인 안내 -->
+    <div class="screen" id="step1">
+      <div class="user-row"><div class="bubble-user" id="choice-echo"></div></div>
+      <div class="clark-row">
+        <div class="clark-avatar">C</div>
+        <div class="clark-bubbles">
+          <div class="bubble-clark">정확한 보험 정보 확인을 위해 <span class="highlight">로그인 및 마이데이터 연결</span>이 필요합니다.</div>
+          <div class="bubble-clark">카카오 계정으로 간편하게 시작하세요.</div>
+        </div>
+      </div>
+      <button class="kakao-btn" onclick="doKakaoLogin()">
+        <div class="kakao-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M12 3C6.477 3 2 6.477 2 11c0 2.89 1.622 5.423 4.063 6.955L5 21l4.188-2.187C10.017 19.25 10.997 19.4 12 19.4c5.523 0 10-3.477 10-8.4S17.523 3 12 3z"/></svg></div>
+        카카오로 로그인
+      </button>
+    </div>
+
+    <!-- STEP 2: 마이데이터 동의 -->
+    <div class="screen" id="step2">
+      <div class="sys-divider">카카오 로그인 완료</div>
+      <div class="clark-row">
+        <div class="clark-avatar">C</div>
+        <div class="clark-bubbles">
+          <div class="bubble-clark"><span class="highlight">김민준</span> 님, 로그인되었습니다. 보장 분석을 위해 마이데이터 연동에 동의해주세요.</div>
+        </div>
+      </div>
+      <div class="consent-card">
+        <div class="consent-header">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          마이데이터 연동 동의
+        </div>
+        <div class="consent-body">
+          <div class="consent-item"><div class="consent-check"></div>보험 계약 정보 (보장 내역·월 보험료)</div>
+          <div class="consent-item"><div class="consent-check"></div>보험금 청구 이력 (최근 2년)</div>
+          <div class="consent-item"><div class="consent-check"></div>금융 기관 보험 가입 현황</div>
+          <div style="font-size:11px;color:var(--gray-400);padding:4px 0 2px">수집 정보는 진단 목적으로만 사용되며 제3자에게 제공되지 않습니다.</div>
+          <button class="consent-agree-btn" onclick="agreeMyData()">동의하고 마이데이터 연동</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3: 분석 중 -->
+    <div class="screen" id="step3">
+      <div class="sys-divider">마이데이터 연동 완료</div>
+      <div class="clark-row">
+        <div class="clark-avatar">C</div>
+        <div class="clark-bubbles">
+          <div class="bubble-clark">보장 현황을 분석하고 있습니다. 잠시만 기다려주세요.</div>
+        </div>
+      </div>
+      <div class="analyzing-card" id="analyze-card">
+        <div class="analyzing-title">KC 지식 엔진 분석 중...</div>
+        <div class="analyze-step done-text" id="as1">
+          <div class="step-dot done">✓</div>마이데이터 보험 계약 정보 수신
+        </div>
+        <div class="analyze-step" id="as2">
+          <div class="step-dot wait" id="as2-dot">2</div><span id="as2-text">Concept 카드 매핑 중...</span>
+        </div>
+        <div class="analyze-step" id="as3">
+          <div class="step-dot wait" id="as3-dot">3</div><span id="as3-text">Risk-type 판정 중...</span>
+        </div>
+        <div class="analyze-step" id="as4">
+          <div class="step-dot wait" id="as4-dot">4</div><span id="as4-text">Rule / Evidence 대조 중...</span>
+        </div>
+        <div class="analyze-step" id="as5">
+          <div class="step-dot wait" id="as5-dot">5</div><span id="as5-text">진단 리포트 생성 중...</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 4: 보험 현황 -->
+    <div class="screen" id="step4">
+      <div class="clark-row">
+        <div class="clark-avatar">C</div>
+        <div class="clark-bubbles">
+          <div class="bubble-clark"><span class="highlight">김민준</span> 님께서 보유하신 보험 현황입니다.</div>
+        </div>
+      </div>
+      <div class="insurance-list-card">
+        <div class="ins-header">보유 보험 4건 · 월 보험료 285,000원</div>
+        <div class="ins-item">
+          <div class="ins-icon health">🏥</div>
+          <div class="ins-info">
+            <div class="ins-name">실손의료보험 (4세대)</div>
+            <div class="ins-detail">A생명 · 2019.03 가입 · 갱신형</div>
+          </div>
+          <div class="ins-premium">52,000원</div>
+        </div>
+        <div class="ins-item">
+          <div class="ins-icon cancer">🎗️</div>
+          <div class="ins-info">
+            <div class="ins-name">암보험</div>
+            <div class="ins-detail">B손해 · 2018.07 가입 · 갱신형</div>
+          </div>
+          <div class="ins-premium">78,000원</div>
+        </div>
+        <div class="ins-item">
+          <div class="ins-icon life">🛡️</div>
+          <div class="ins-info">
+            <div class="ins-name">종합건강보험</div>
+            <div class="ins-detail">C생명 · 2021.11 가입 · 갱신형</div>
+          </div>
+          <div class="ins-premium">105,000원</div>
+        </div>
+        <div class="ins-item">
+          <div class="ins-icon accident">⚡</div>
+          <div class="ins-info">
+            <div class="ins-name">운전자보험</div>
+            <div class="ins-detail">D손해 · 2020.05 가입 · 비갱신형</div>
+          </div>
+          <div class="ins-premium">50,000원</div>
+        </div>
+      </div>
+      <div class="clark-row">
+        <div class="clark-avatar">C</div>
+        <div class="clark-bubbles">
+          <div class="bubble-clark">보유 보험 내역을 분석한 결과, 중요한 내용을 발견했습니다.</div>
+        </div>
+      </div>
+      <div style="margin-left:38px">
+        <button class="cta-confirm-btn" onclick="showDiagnosis()" style="background:var(--blue);color:white;border:none;border-radius:var(--radius-xs);padding:13px;font-size:14px;font-weight:700;width:100%;cursor:pointer">
+          진단 결과 확인하기
+        </button>
+      </div>
+    </div>
+
+    <!-- STEP 5: 기본 진단 결과 (v2 재구성) -->
+    <div class="screen" id="step5">
+      <div class="clark-row">
+        <div class="clark-avatar">C</div>
+        <div class="clark-bubbles">
+          <div class="bubble-clark">보장 진단이 완료되었습니다. 결과를 함께 확인해보세요.</div>
+        </div>
+      </div>
+
+      <!-- Risk-type 카드 -->
+      <div class="diagnosis-card">
+        <div class="diag-header">
+          <div class="diag-header-left">AI 진단 결과 · 김민준 님 (44세 남)</div>
+          <div class="diag-header-right">2026.04.13</div>
+        </div>
+        <div class="diag-risk-type">
+          <div class="risk-badge">Risk-type</div>
+          <div class="risk-type-label">납입여력부족 우려형</div>
+          <div class="risk-type-desc">갱신형 담보 비중이 76%로 높아, 60세 이후 보험료 부담이 상승할 수 있는 구조입니다.</div>
+        </div>
+      </div>
+
+      <!-- 종합 보장점수 (R6) -->
+      <div class="score-card">
+        <div class="score-card-label">종합 보장점수</div>
+        <div class="score-card-row">
+          <span class="score-value" id="score-basic">62</span>
+          <span class="score-max">/ 100</span>
+        </div>
+        <div class="score-desc">평균 근처의 보장 수준입니다. 일부 담보에 개선 여지가 있습니다.</div>
+        <div class="score-note">※ 점수는 보장 구조의 종합 지표이며, 개별 상품 평가와는 층위가 다릅니다.</div>
+      </div>
+
+      <!-- 상품별 의견 (유지/보강/검토) -->
+      <div class="opinion-card">
+        <div class="opinion-header">
+          <span>📋 상품별 의견</span>
+          <span style="font-weight:500;color:var(--gray-500)">보유 4건</span>
+        </div>
+
+        <!-- 검토 그룹 -->
+        <div class="opinion-group">
+          <div class="opinion-group-title review">
+            검토 권장
+            <span class="opinion-group-count">1</span>
+          </div>
+          <div class="opinion-item">
+            <div class="opinion-item-head">
+              <span class="label-badge review">검토</span>
+              <span class="opinion-product-name">종합건강보험</span>
+              <span class="opinion-product-issuer">C생명</span>
+            </div>
+            <div class="opinion-item-desc">
+              여러 갱신형 담보가 중복되어 있어, 전문가와 함께 정리 방향을 상담해보시길 권합니다.
+            </div>
+          </div>
+        </div>
+
+        <!-- 보강 그룹 -->
+        <div class="opinion-group">
+          <div class="opinion-group-title boost">
+            보강 권장
+            <span class="opinion-group-count">1</span>
+          </div>
+          <div class="opinion-item" id="opinion-cancer-basic">
+            <div class="opinion-item-head">
+              <span class="label-badge boost">보강</span>
+              <span class="opinion-product-name">암보험</span>
+              <span class="opinion-product-issuer">B손해</span>
+            </div>
+            <div class="opinion-item-desc" id="opinion-cancer-desc-basic">
+              현재 암 진단금 4,200만원입니다. 40대 남성 평균 대비 다소 부족한 편이라, 추가 암 담보 보강을 검토해보시길 권합니다.
+            </div>
+          </div>
+        </div>
+
+        <!-- 유지 그룹 -->
+        <div class="opinion-group">
+          <div class="opinion-group-title keep">
+            유지
+            <span class="opinion-group-count">2</span>
+          </div>
+          <div class="opinion-item">
+            <div class="opinion-item-head">
+              <span class="label-badge keep">유지</span>
+              <span class="opinion-product-name">실손의료보험 (4세대)</span>
+              <span class="opinion-product-issuer">A생명</span>
+            </div>
+            <div class="opinion-item-desc">현재 담보 구조가 적절합니다.</div>
+          </div>
+          <div class="opinion-item">
+            <div class="opinion-item-head">
+              <span class="label-badge keep">유지</span>
+              <span class="opinion-product-name">운전자보험</span>
+              <span class="opinion-product-issuer">D손해</span>
+            </div>
+            <div class="opinion-item-desc">현재 상태 유지.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 면책 문구 (R7) -->
+      <div class="disclaimer-card">
+        <div class="disclaimer-title">⚠ AI 진단 안내</div>
+        <div class="disclaimer-body">
+          <ul style="list-style:none;padding:0;margin:0">
+            <li>본 진단은 마이데이터와 건강정보에 기반하며, 재무 상황·가족력·선호도 등 고객의 전체 맥락을 완전히 반영하지 못합니다.</li>
+            <li>최종 판단은 전문가(보닥플래너 또는 설계사) 상담을 통해 수행하시길 권장합니다.</li>
+            <li>가입 당시 개별 상황에 대한 평가가 아니며, 판매 적정성에 대한 판단이 아닙니다.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- KC 요약 -->
+      <div class="kc-summary-note">※ 본 진단은 KC 온톨로지 기반 9개 카드를 참조하여 생성되었습니다.</div>
+
+      <!-- CTA: Fromage 측정 유도로 -->
+      <div class="clark-row">
+        <div class="clark-avatar">C</div>
+        <div class="clark-bubbles">
+          <div class="bubble-clark">건강 상태까지 반영하면 <span class="highlight">더 정밀한 진단</span>이 가능해요.</div>
+        </div>
+      </div>
+      <div style="margin-left:38px">
+        <button class="cta-confirm-btn" onclick="goToFromage()" style="background:var(--blue);color:white;border:none;border-radius:var(--radius-xs);padding:13px;font-size:14px;font-weight:700;width:100%;cursor:pointer">
+          더 정밀한 진단 받기 →
+        </button>
+      </div>
+    </div>
+
+    <!-- STEP 6: Fromage 측정 유도 (신규) -->
+    <div class="screen" id="step6">
+      <div class="clark-row">
+        <div class="clark-avatar">C</div>
+        <div class="clark-bubbles">
+          <div class="bubble-clark">지금까지는 <span class="highlight">보유 보험 정보만으로</span> 진단했어요.</div>
+          <div class="bubble-clark">김민준 님의 건강 상태(대사나이·질병위험도·암위험도 등)까지 반영하면, 지금 보유하신 보장이 실제 위험 대비 충분한지 확인할 수 있습니다.</div>
+        </div>
+      </div>
+      <div class="fromage-card">
+        <div class="fromage-title">📊 고도화 진단으로 얻는 것</div>
+        <div class="fromage-benefit-list">
+          <div class="fromage-benefit-item">개인 건강 위험도가 반영된 담보 권장 우선순위</div>
+          <div class="fromage-benefit-item">"나이 대비 평균보다 높은 위험" 같은 개인 위협 정보</div>
+          <div class="fromage-benefit-item">상품별 의견이 건강 상태에 맞게 조정됨</div>
+        </div>
+        <div class="fromage-meta">⏱ 약 3분 소요 · 의료정보는 국내 서버에만 저장됩니다</div>
+        <div class="fromage-action-row">
+          <button class="fromage-btn-primary" onclick="startFromage()">측정하기</button>
+          <button class="fromage-btn-secondary" onclick="skipFromage()">나중에 하기</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 7: Fromage 측정 완료 → 고도화 진단 (신규) -->
+    <div class="screen" id="step7">
+      <div class="sys-divider">Fromage 측정 완료</div>
+      <div class="clark-row">
+        <div class="clark-avatar">C</div>
+        <div class="clark-bubbles">
+          <div class="bubble-clark">건강 위험도가 반영된 <span class="highlight">고도화 진단</span>을 확인해보세요.</div>
+        </div>
+      </div>
+
+      <!-- Fromage 측정 결과 요약 -->
+      <div class="fromage-result-card">
+        <div class="fromage-result-header">✓ Fromage 건강 위험도 등급</div>
+        <div class="fromage-result-body">
+          <div class="fromage-metric">
+            <span class="fromage-metric-name">대사나이</span>
+            <span class="fromage-metric-grade grade-medium">실제 나이 +3년</span>
+          </div>
+          <div class="fromage-metric">
+            <span class="fromage-metric-name">암 위험도</span>
+            <span class="fromage-metric-grade grade-high">높음 (상위 20%)</span>
+          </div>
+          <div class="fromage-metric">
+            <span class="fromage-metric-name">심혈관 위험도</span>
+            <span class="fromage-metric-grade grade-low">평균</span>
+          </div>
+          <div class="fromage-metric">
+            <span class="fromage-metric-name">사망 위험도</span>
+            <span class="fromage-metric-grade grade-low">평균</span>
+          </div>
+        </div>
+        <div class="fromage-result-note">※ 세부 수치는 안전을 위해 공개하지 않으며, 등급만 표시됩니다.</div>
+      </div>
+
+      <!-- 고도화 진단 Risk-type (동일 유지) -->
+      <div class="diagnosis-card">
+        <div class="diag-header">
+          <div class="diag-header-left">AI 진단 결과 · Fromage 반영</div>
+          <div class="diag-header-right">2026.04.13</div>
+        </div>
+        <div class="diag-risk-type">
+          <div class="risk-badge">Risk-type</div>
+          <div class="risk-type-label">납입여력부족 우려형</div>
+          <div class="risk-type-desc">Risk-type 자체는 보장 구조 기반이므로 변하지 않습니다. 다만 건강 위험도 반영으로 <strong>상품별 의견 우선순위</strong>가 조정되었습니다.</div>
+        </div>
+      </div>
+
+      <!-- 종합 보장점수 (재계산) -->
+      <div class="score-card">
+        <div class="score-card-label">종합 보장점수 (Fromage 반영)</div>
+        <div class="score-card-row">
+          <span class="score-value">58</span>
+          <span class="score-max">/ 100</span>
+          <span class="score-delta">▼ 4점 조정</span>
+        </div>
+        <div class="score-desc">개인 건강 위험도가 높은 항목이 있어 보장 충분성이 재평가되었습니다.</div>
+        <div class="score-note">※ 점수 변동은 Rule fromage_variant 반영에 따른 정상 동작입니다.</div>
+      </div>
+
+      <!-- 상품별 의견 (고도화 버전 — 암보험 보강이 우선순위 상승) -->
+      <div class="opinion-card">
+        <div class="opinion-header">
+          <span>📋 상품별 의견 (고도화)</span>
+          <span style="font-weight:500;color:var(--gray-500)">보유 4건</span>
+        </div>
+
+        <div class="opinion-group">
+          <div class="opinion-group-title boost">
+            보강 권장 — 우선순위 상승
+            <span class="opinion-group-count">1</span>
+          </div>
+          <div class="opinion-item">
+            <div class="opinion-item-head">
+              <span class="label-badge boost">보강<span class="priority-mark">⚡ 우선</span></span>
+              <span class="opinion-product-name">암보험</span>
+              <span class="opinion-product-issuer">B손해</span>
+            </div>
+            <div class="opinion-item-desc">
+              개인 암 위험도 등급이 <strong>높음(동년배 상위 20%)</strong>인 점을 감안하면, 현재 진단금 4,200만원은 평균 기준 이상으로 부족합니다. <strong>암 담보 보강을 우선적으로 검토</strong>하시길 권합니다.
+            </div>
+          </div>
+        </div>
+
+        <div class="opinion-group">
+          <div class="opinion-group-title review">
+            검토 권장
+            <span class="opinion-group-count">1</span>
+          </div>
+          <div class="opinion-item">
+            <div class="opinion-item-head">
+              <span class="label-badge review">검토</span>
+              <span class="opinion-product-name">종합건강보험</span>
+              <span class="opinion-product-issuer">C생명</span>
+            </div>
+            <div class="opinion-item-desc">
+              여러 갱신형 담보가 중복되어 있어, 전문가와 함께 정리 방향을 상담해보시길 권합니다.
+            </div>
+          </div>
+        </div>
+
+        <div class="opinion-group">
+          <div class="opinion-group-title keep">
+            유지
+            <span class="opinion-group-count">2</span>
+          </div>
+          <div class="opinion-item">
+            <div class="opinion-item-head">
+              <span class="label-badge keep">유지</span>
+              <span class="opinion-product-name">실손의료보험 (4세대)</span>
+              <span class="opinion-product-issuer">A생명</span>
+            </div>
+            <div class="opinion-item-desc">현재 담보 구조가 적절합니다.</div>
+          </div>
+          <div class="opinion-item">
+            <div class="opinion-item-head">
+              <span class="label-badge keep">유지</span>
+              <span class="opinion-product-name">운전자보험</span>
+              <span class="opinion-product-issuer">D손해</span>
+            </div>
+            <div class="opinion-item-desc">현재 상태 유지.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 면책 문구 -->
+      <div class="disclaimer-card">
+        <div class="disclaimer-title">⚠ AI 진단 안내</div>
+        <div class="disclaimer-body">
+          <ul style="list-style:none;padding:0;margin:0">
+            <li>본 진단은 마이데이터와 건강정보에 기반하며, 재무 상황·가족력·선호도 등 고객의 전체 맥락을 완전히 반영하지 못합니다.</li>
+            <li>최종 판단은 전문가(보닥플래너 또는 설계사) 상담을 통해 수행하시길 권장합니다.</li>
+            <li>가입 당시 개별 상황에 대한 평가가 아니며, 판매 적정성에 대한 판단이 아닙니다.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="kc-summary-note">※ 본 진단은 KC 온톨로지 기반 11개 카드를 참조하여 생성되었습니다 (Fromage Evidence 2개 추가).</div>
+
+      <div class="clark-row">
+        <div class="clark-avatar">C</div>
+        <div class="clark-bubbles">
+          <div class="bubble-clark">결과를 확인하셨나요?</div>
+        </div>
+      </div>
+      <div class="choice-list">
+        <button class="choice-btn" onclick="askHow()">
+          <div class="choice-icon">💬</div>그럼 어떻게 해야 하나요?
+        </button>
+      </div>
+    </div>
+
+    <!-- STEP 8: 핸드오프 (9.7 UX 강화) -->
+    <div class="screen" id="step8">
+      <div class="user-row"><div class="bubble-user">그럼 어떻게 해야 하나요?</div></div>
+      <div class="clark-row">
+        <div class="clark-avatar">C</div>
+        <div class="clark-bubbles">
+          <div class="bubble-clark">저는 <span class="highlight">보장 진단 AI</span>라 보험을 직접 변경하거나 가입시켜드릴 수 없어요.</div>
+          <div class="bubble-clark">진단 결과 중 <span class="highlight">검토 1건 · 보강 1건</span>이 있네요. 이런 경우는 보유 상품의 구체적 조정 방향을 전문가와 직접 확인하시는 것이 가장 효과적입니다.</div>
+        </div>
+      </div>
+      <div class="handoff-v2-card">
+        <div class="handoff-v2-head">
+          📞 지금 플래너 연결 시
+          <span class="handoff-v2-count">2건 조치 필요</span>
+        </div>
+        <div class="handoff-v2-body">
+          <ul class="handoff-v2-benefits" style="list-style:none;padding:0;margin:0">
+            <li>진단 결과(Risk-type · 보장점수 · 상품별 의견)가 플래너에게 자동 전달</li>
+            <li>상담 시작과 함께 바로 본론으로 진행</li>
+            <li>영업일 기준 <strong>1시간 이내</strong> 연락</li>
+          </ul>
+          <div class="handoff-v2-actions">
+            <button class="agree-btn confirm" style="flex:1" onclick="agreeConnect()">지금 플래너 연결</button>
+            <button class="agree-btn decline" style="flex:1" onclick="declineConnect()">나중에 할게요</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 9: 상담 방식 -->
+    <div class="screen" id="step9">
+      <div class="sys-divider">플래너 연결 동의 완료</div>
+      <div class="clark-row">
+        <div class="clark-avatar">C</div>
+        <div class="clark-bubbles">
+          <div class="bubble-clark">상담 전 <span class="highlight">몇 가지만 확인</span>할게요. 어떤 방식으로 상담을 진행하고 싶으신가요?</div>
+        </div>
+      </div>
+      <div class="pref-card">
+        <div class="pref-question">상담 방식을 선택해주세요</div>
+        <div class="pref-options">
+          <button class="pref-btn" onclick="selectPref('consult-type','채팅',this)">💬 채팅</button>
+          <button class="pref-btn" onclick="selectPref('consult-type','전화',this)">📞 전화</button>
+          <button class="pref-btn" onclick="selectPref('consult-type','대면',this)">🤝 대면</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 10: 가족 보험 -->
+    <div class="screen" id="step10">
+      <div class="clark-row">
+        <div class="clark-avatar">C</div>
+        <div class="clark-bubbles">
+          <div class="bubble-clark">본인의 보험만 점검하고 싶으신가요, 아니면 가족도 함께 점검하고 싶으신가요?</div>
+        </div>
+      </div>
+      <div class="pref-card">
+        <div class="pref-options">
+          <button class="pref-btn" onclick="selectFamily('본인만',this)">👤 본인만</button>
+          <button class="pref-btn" onclick="selectFamily('가족도 함께',this)">👨‍👩‍👧 가족도 함께</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 11: 기혼 여부 (가족 선택시) -->
+    <div class="screen" id="step11">
+      <div class="clark-row">
+        <div class="clark-avatar">C</div>
+        <div class="clark-bubbles">
+          <div class="bubble-clark">기혼이신가요?</div>
+        </div>
+      </div>
+      <div class="pref-card">
+        <div class="pref-options">
+          <button class="pref-btn" onclick="selectMarried('기혼',this)">💍 기혼</button>
+          <button class="pref-btn" onclick="selectMarried('미혼',this)">🙋 미혼</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 12: 자녀 수 -->
+    <div class="screen" id="step12">
+      <div class="clark-row">
+        <div class="clark-avatar">C</div>
+        <div class="clark-bubbles">
+          <div class="bubble-clark">자녀가 있으신가요?</div>
+        </div>
+      </div>
+      <div class="pref-card">
+        <div class="pref-options">
+          <button class="pref-btn" onclick="selectChildren(0,this)">없음</button>
+          <button class="pref-btn" onclick="selectChildren(1,this)">1명</button>
+          <button class="pref-btn" onclick="selectChildren(2,this)">2명</button>
+          <button class="pref-btn" onclick="selectChildren(3,this)">3명+</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 13: 출산 계획 -->
+    <div class="screen" id="step13">
+      <div class="clark-row">
+        <div class="clark-avatar">C</div>
+        <div class="clark-bubbles">
+          <div class="bubble-clark">출산 계획이 있거나 출산 예정인 자녀가 있나요?</div>
+        </div>
+      </div>
+      <div class="pref-card">
+        <div class="pref-options">
+          <button class="pref-btn" onclick="selectBirth('예',this)">예</button>
+          <button class="pref-btn" onclick="selectBirth('아니오',this)">아니오</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 14: 완료 -->
+    <div class="screen" id="step14">
+      <div class="clark-row">
+        <div class="clark-avatar">C</div>
+        <div class="clark-bubbles">
+          <div class="bubble-clark">답변해주셔서 감사합니다. 입력하신 내용은 상담 품질 개선에만 사용됩니다.</div>
+        </div>
+      </div>
+      <div class="completion-card">
+        <div class="completion-icon">✓</div>
+        <div class="completion-title">곧 전문가가 연락드릴 예정입니다</div>
+        <div class="completion-desc">진단 결과와 상담 선호도가 전달되었습니다. 배정된 플래너가 빠른 시간 내에 연락드립니다.</div>
+        <div class="completion-detail">
+          <div class="completion-row">
+            <strong>aGCR 리드 스코어</strong>
+            <div class="aGCR-badge">A등급 · <span id="agcr-score">78</span>점</div>
+          </div>
+          <div class="completion-row"><strong>Risk-type</strong> 납입여력부족 우려형</div>
+          <div class="completion-row"><strong>종합 보장점수</strong> <span id="final-score">58</span> / 100</div>
+          <div class="completion-row" style="flex-direction:column;align-items:flex-start;gap:4px">
+            <strong>상품별 의견</strong>
+            <div style="font-size:11px;color:rgba(255,255,255,0.72);line-height:1.6">
+              · 실손: 유지 &nbsp;/&nbsp; 암보험: <span style="color:#fde68a">보강 ⚡ 우선</span><br>
+              · 종합건강: <span style="color:#93c5fd">검토</span> &nbsp;/&nbsp; 운전자: 유지
+            </div>
+          </div>
+          <div class="completion-row"><strong>배정 예상 시간</strong> 영업일 기준 1시간 이내</div>
+          <div class="completion-row"><strong>담당 플래너</strong> aGCR 배정 최적화 진행 중...</div>
+        </div>
+        <button onclick="restartChat()" style="margin-top:18px;width:100%;padding:12px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:10px;color:rgba(255,255,255,0.5);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.15s;" onmouseover="this.style.background='rgba(255,255,255,0.14)'" onmouseout="this.style.background='rgba(255,255,255,0.08)'">
+          ↩ 처음으로 돌아가기
+        </button>
+      </div>
+    </div>
+
+  </div><!-- /chat -->
+
+  <!-- Input bar -->
+  <div class="input-bar">
+    <input class="input-field" type="text" placeholder="메시지를 입력하세요..." readonly>
+    <button class="send-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+    </button>
+  </div>
+
+</div><!-- /device -->
+</div><!-- /scaler -->
+</div><!-- /device-wrap -->
+
+<script>
+function scaleDevice(){
+  const scaler = document.getElementById('scaler');
+  const scaleX = window.innerWidth / 390;
+  const scaleY = window.innerHeight / 844;
+  const scale = Math.min(scaleX, scaleY) * 0.96;
+  scaler.style.zoom = scale;
+  scaler.style.transform = '';
+}
+scaleDevice();
+window.addEventListener('resize', scaleDevice);
+
+const prefs = {};
+let currentStep = 0;
+
+function setProgress(pct){ document.getElementById('progress').style.width = pct+'%'; }
+
+function showStep(n){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  const el = document.getElementById('step'+n);
+  if(el){ el.classList.add('active'); }
+  currentStep = n;
+  setTimeout(()=>{
+    const chat = document.getElementById('chat');
+    chat.scrollTop = chat.scrollHeight;
+  }, 100);
+}
+
+function showLoading(parentEl, cb){
+  const typing = document.createElement('div');
+  typing.className = 'clark-row';
+  typing.innerHTML = '<div class="clark-avatar">C</div><div class="bubble-clark"><div class="typing-dots"><span></span><span></span><span></span></div></div>';
+  parentEl.appendChild(typing);
+  const chat = document.getElementById('chat');
+  chat.scrollTop = chat.scrollHeight;
+  setTimeout(()=>{ typing.remove(); cb(); }, 1200);
+}
+
+function selectChoice(step, text){
+  document.querySelectorAll('#step0 .choice-btn').forEach(b=>b.disabled=true);
+  document.getElementById('choice-echo').textContent = text;
+  setProgress(15);
+  showStep(1);
+  const chat = document.getElementById('chat');
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function doKakaoLogin(){
+  setProgress(30);
+  showStep(2);
+}
+
+function agreeMyData(){
+  setProgress(45);
+  showStep(3);
+  // Animate analysis steps
+  const steps = [
+    {dot:'as2-dot', txt:'as2-text', label:'Concept 카드 매핑 완료', delay:600},
+    {dot:'as3-dot', txt:'as3-text', label:'Risk-type 판정: 납입여력부족 우려형', delay:1300},
+    {dot:'as4-dot', txt:'as4-text', label:'Rule / Evidence 대조 완료 (9개 카드)', delay:2100},
+    {dot:'as5-dot', txt:'as5-text', label:'진단 리포트 생성 완료', delay:2900},
+  ];
+  steps.forEach((s,i)=>{
+    setTimeout(()=>{
+      const dot = document.getElementById(s.dot);
+      const txt = document.getElementById(s.txt);
+      if(i < steps.length-1){
+        dot.className = 'step-dot running';
+        dot.textContent = '●';
+      } else {
+        dot.className = 'step-dot done';
+        dot.textContent = '✓';
+      }
+      txt.textContent = s.label;
+      const parent = dot.closest('.analyze-step');
+      if(parent){ parent.className = i < steps.length-1 ? 'analyze-step run-text' : 'analyze-step done-text'; }
+    }, s.delay);
+    if(i > 0){
+      setTimeout(()=>{
+        const prevDot = document.getElementById(steps[i-1].dot);
+        if(prevDot){ prevDot.className='step-dot done'; prevDot.textContent='✓'; }
+        const prevEl = prevDot && prevDot.closest('.analyze-step');
+        if(prevEl){ prevEl.className = 'analyze-step done-text'; }
+      }, s.delay);
+    }
+  });
+  setTimeout(()=>{
+    setProgress(60);
+    showStep(4);
+  }, 3800);
+}
+
+function showDiagnosis(){
+  setProgress(60);
+  showStep(5);
+}
+
+function goToFromage(){
+  setProgress(68);
+  showStep(6);
+}
+
+function startFromage(){
+  // 더미 로딩 후 Step 7로
+  const card = document.querySelector('#step6 .fromage-card');
+  if(card){
+    card.innerHTML = '<div class="fromage-title">📊 Fromage 측정 진행 중...</div><div style="padding:20px 8px;text-align:center;font-size:12px;color:#78350f">건강검진 데이터를 기반으로 위험도를 산출하고 있습니다.<br><br><div class="typing-dots" style="margin:8px auto"><span></span><span></span><span></span></div></div>';
+  }
+  setTimeout(()=>{
+    setProgress(78);
+    showStep(7);
+  }, 2200);
+}
+
+function skipFromage(){
+  // 스킵 시 기본 진단 결과로 핸드오프 (Step 8)
+  const card = document.querySelector('#step6 .fromage-card');
+  if(card){
+    const userRow = document.createElement('div');
+    userRow.className = 'user-row';
+    userRow.innerHTML = '<div class="bubble-user">나중에 하기</div>';
+    card.parentNode.insertBefore(userRow, card.nextSibling);
+  }
+  setTimeout(()=>{
+    // Step 8로 가되 "기본 진단 결과" 컨텍스트 유지 — 현재 목업에서는 동일 flow
+    setProgress(80);
+    // 기본 진단에서는 "보강 1건·검토 1건"이 동일하므로 Step 8 UI 재활용 가능
+    // 다만 종합점수는 62점 유지 (Fromage 없음)
+    const scoreEls = document.querySelectorAll('#step14 #final-score');
+    scoreEls.forEach(e => e.textContent = '62');
+    showStep(8);
+  }, 600);
+}
+
+function askHow(){
+  setProgress(82);
+  showStep(8);
+}
+
+function agreeConnect(){
+  setProgress(87);
+  showStep(9);
+}
+
+function declineConnect(){
+  const chat = document.getElementById('chat');
+  const row = document.createElement('div');
+  row.className = 'user-row';
+  row.innerHTML = '<div class="bubble-user">나중에 할게요</div>';
+  document.getElementById('step8').appendChild(row);
+  const clarkRow = document.createElement('div');
+  clarkRow.className = 'clark-row';
+  clarkRow.innerHTML = '<div class="clark-avatar">C</div><div class="clark-bubbles"><div class="bubble-clark">언제든지 다시 연결하실 수 있습니다. 진단 결과는 30일간 보관됩니다.</div></div>';
+  document.getElementById('step8').appendChild(clarkRow);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function selectPref(key, val, btn){
+  btn.closest('.pref-options').querySelectorAll('.pref-btn').forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected');
+  prefs[key] = val;
+  setTimeout(()=>{
+    const userRow = document.createElement('div');
+    userRow.className = 'user-row';
+    userRow.innerHTML = '<div class="bubble-user">'+val+'</div>';
+    document.getElementById('step9').appendChild(userRow);
+    setProgress(89);
+    showStep(10);
+  }, 400);
+}
+
+function selectFamily(val, btn){
+  btn.closest('.pref-options').querySelectorAll('.pref-btn').forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected');
+  prefs.family = val;
+  setTimeout(()=>{
+    const userRow = document.createElement('div');
+    userRow.className = 'user-row';
+    userRow.innerHTML = '<div class="bubble-user">'+val+'</div>';
+    document.getElementById('step10').appendChild(userRow);
+    if(val === '가족도 함께'){
+      setProgress(92);
+      showStep(11);
+    } else {
+      setProgress(97);
+      showStep(14);
+    }
+  }, 400);
+}
+
+function selectMarried(val, btn){
+  btn.closest('.pref-options').querySelectorAll('.pref-btn').forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected');
+  prefs.married = val;
+  setTimeout(()=>{
+    const userRow = document.createElement('div');
+    userRow.className = 'user-row';
+    userRow.innerHTML = '<div class="bubble-user">'+val+'</div>';
+    document.getElementById('step11').appendChild(userRow);
+    if(val === '기혼'){
+      setProgress(94);
+      showStep(12);
+    } else {
+      setProgress(97);
+      showStep(14);
+    }
+  }, 400);
+}
+
+function selectChildren(n, btn){
+  btn.closest('.pref-options').querySelectorAll('.pref-btn').forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected');
+  prefs.children = n;
+  setTimeout(()=>{
+    const label = n === 0 ? '없음' : n === 3 ? '3명 이상' : n+'명';
+    const userRow = document.createElement('div');
+    userRow.className = 'user-row';
+    userRow.innerHTML = '<div class="bubble-user">'+label+'</div>';
+    document.getElementById('step12').appendChild(userRow);
+    if(n >= 1){
+      setProgress(96);
+      showStep(13);
+    } else {
+      setProgress(97);
+      showStep(14);
+    }
+  }, 400);
+}
+
+function restartChat(){
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  ['step1','step6','step7','step8','step9','step10','step11','step12','step13','step14'].forEach(id => {
+    const el = document.getElementById(id);
+    if(!el) return;
+    el.querySelectorAll('.user-row, .clark-row:not(:first-of-type)').forEach(n => n.remove());
+  });
+  document.querySelectorAll('.choice-btn, .pref-btn').forEach(b => {
+    b.classList.remove('selected');
+    b.disabled = false;
+  });
+  setProgress(5);
+  showStep(0);
+  document.getElementById('chat').scrollTop = 0;
+}
+
+function selectBirth(val, btn){
+  btn.closest('.pref-options').querySelectorAll('.pref-btn').forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected');
+  prefs.birth = val;
+  setTimeout(()=>{
+    const userRow = document.createElement('div');
+    userRow.className = 'user-row';
+    userRow.innerHTML = '<div class="bubble-user">'+val+'</div>';
+    document.getElementById('step13').appendChild(userRow);
+    setProgress(97);
+    showStep(14);
+  }, 400);
+}
+</script>
+</body>
+</html>

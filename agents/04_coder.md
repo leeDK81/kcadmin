@@ -9,7 +9,7 @@
 UI 디자이너(03)의 설계 명세를 바탕으로 인터랙티브 HTML 목업을 구현한다.
 완성 기준: "처음 보는 개발자·운영자가 이 화면만 보고 다음 행동을 알 수 있는" 수준.
 
-파일 목록 27개 (mockups_v2/) → `context/project.md` 참조.
+파일 목록 26개 (mockups_v2/) → `context/project.md` 참조.
 Evidence 편집기 구현 → `agents/04a_coder-evidence.md` 전담.
 Playbook 편집기 구현 → `agents/04b_coder-playbook.md` 전담.
 
@@ -84,7 +84,7 @@ HTML 패턴 → `guides/ux-patterns.md` 참조.
 
 | 화면 | 핵심 인터랙션 |
 |---|---|
-| 00_canvas | 피커 패널(상단 5컬럼)에서 카드 클릭 → 그리드(하단 5컬럼)에서 연결됨·연결가능 표시. "연결 추가"/"연결 제거" 버튼. active+approved+review 카드 표시, draft 제외. 연결 가능: active+approved만. 카드 상태 배지(라이브/승인완료/승인요청). pending 엣지(점선 파랑) → approved 카드 간 연결. active 엣지(실선 초록) → active 카드 간 연결. `computeChain` / `findDirectTarget` / `confirmAction` 세 함수로 구성 |
+| 00_canvas | 피커 패널(상단 4컬럼)에서 카드 클릭 → 그리드(하단 4컬럼)에서 연결됨·연결가능 표시. "연결 추가"/"연결 제거" 버튼. active+approved+review 카드 표시, draft 제외. 연결 가능: active+approved만. 카드 상태 배지(라이브/승인완료/승인요청). pending 엣지(점선 파랑) → approved 카드 간 연결. active 엣지(실선 초록) → active 카드 간 연결. `computeChain` / `findDirectTarget` / `confirmAction` 세 함수로 구성 |
 | 01_guide | 프로세스 5단계 클릭 → 해당 화면 |
 | 02_dashboard | 검수 대기 클릭 → 09. 카드 유형 클릭 → 03 |
 | 03_card-library | 필터 탭. 행 클릭 → 편집기 |
@@ -117,7 +117,7 @@ HTML 패턴 → `guides/ux-patterns.md` 참조.
 - [ ] 편집기 연결 카드: "캔버스에서 변경" 버튼이 `00_canvas-main.html`로 링크됨
 
 **캔버스 (00_canvas-main.html)**
-- [ ] 피커 패널: 5컬럼 (CONCEPT/RISK-TYPE/RULE/EVIDENCE·POLICY/PLAYBOOK), active+approved+review 표시
+- [ ] 피커 패널: 4컬럼 (CONCEPT/RISK-TYPE/RULE/EVIDENCE·POLICY), active+approved+review 표시
 - [ ] 그리드 섹션 헤더: `sh-connected`(초록) / `sh-available`(파란) CSS 클래스 사용
 - [ ] 카드 상태 배지: active→`gc-badge-live`(초록), approved→`gc-badge-approved`(파랑), review→`gc-badge-review`(주황)
 - [ ] 연결 가능: active + approved만 (review 카드는 "연결 추가" 버튼 없음)
@@ -127,7 +127,6 @@ HTML 패턴 → `guides/ux-patterns.md` 참조.
 - [ ] "연결 추가" 버튼: `gc-btn-connect` 클래스, 전폭(width:100%), 파란 배경
 - [ ] `findDirectTarget` 사용: CONNECT_RULES 직접 연결만 (체인 경유 금지)
 - [ ] CONNECT_RULES 코드: concept→risk (required:true 표기), risk→rule (required:true), rule→evidence (required:true), rule→policy (required:false)
-- [ ] PLAYBOOK 컬럼: 포컬 카드 무관 "해당 없음" 표시
 
 **오른쪽 컬럼**
 - [ ] wf-tracker 4단계만. rel-box 없음.

@@ -41,7 +41,7 @@
 - [ ] Playbook 편집기 Card ②에 `standaloneGuide` textarea가 border-top 구분선으로 분리되어 있는가? (Standalone 답변 가이드 섹션)
 - [ ] Standalone 배너의 케이스 가이드 링크가 `13_answer-logic.html`로 연결되어 있는가? (`14_answer-logic-guide.html` 및 `17_playbook-answer-guide.html`은 삭제된 파일 — 연결 시 404 오류)
 - [ ] `standaloneGuide` textarea에 `oninput="updateStandaloneCounter()"` 핸들러가 있는가?
-- [ ] `standaloneCount` span이 있고 `updateStandaloneCounter()` 함수가 정의되어 있는가? (20자 미만: 빨강 #A32D2D / 20~150자: hint 색 / 150자 초과: 주황 #BA7517)
+- [ ] `standaloneCount` span이 있고 `updateStandaloneCounter()` 함수가 정의되어 있는가? (선택사항 — 최소 글자 수 제한 없음, 150자 초과 시 주황 #BA7517)
 - [ ] `requestReview()`에서 `standaloneGuide` 20자 미만 시 toast 경고 후 return 처리되는가? → **삭제 대상**: standaloneGuide는 선택사항(minlength=20 검증 제거됨). 빈 값이면 Clark 기본 문구 사용. 이 검증 로직이 남아있으면 수정 필요.
 - [ ] 초기 렌더링 시 `updateStandaloneCounter()` 호출되어 카운터 초깃값이 표시되는가?
 - [ ] Playbook 편집기 `standaloneGuide` textarea에 `minlength="20"` 속성 또는 20자 미만 강제 경고 로직이 없는가? (선택사항 확정 — 최소 글자 수 제한 없음)

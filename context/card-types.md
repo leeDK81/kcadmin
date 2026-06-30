@@ -90,7 +90,7 @@
 | 열 | 헤더 | 소스별 내용 |
 |---|---|---|
 | 1 | 소스 | 마이데이터 / 프롬에이지 / 프로파일 select |
-| 2 | 담보코드·카테고리·항목 | MYDATA: 담보코드 select / PROMAGE: 위험도 항목 select / PROFILE: 나이·성별·결혼여부·자녀유무 select |
+| 2 | 담보코드·카테고리·항목 | MYDATA: 담보코드 select / PROMAGE: 위험도 항목 select / PROFILE: 나이·성별·결혼여부·자녀유무·운전여부 select |
 | 3 | 조건 | MYDATA: op select(LTE/GTE 등) / PROMAGE: 같음(=) static / PROFILE 나이: 사이(∈) static / PROFILE 나머지: 같음(=) static |
 | 4 | 기준값 | MYDATA: 금액 input / PROMAGE: 위험·주의·양호 select / PROFILE 나이: 시작세~종료세 dual input / PROFILE 나머지: 값 select |
 | 5 | 필수여부 | 필수 / 선택 radio |
@@ -112,6 +112,7 @@
 | gender | 성별 | EQ | 무관/남/여 select | 무관=전체 적용 |
 | married | 결혼여부 | EQ | 무관/기혼/미혼 select | 무관=전체 적용 |
 | has_child | 자녀유무 | EQ | 무관/있음/없음 select | 무관=전체 적용 |
+| drives | 운전여부 | EQ | 무관/유/무 select | 무관=전체 적용 |
 
 **등급명:** 위험 / 주의 / 양호 — "상/중/하" "고/중/저" 표기 금지.
 

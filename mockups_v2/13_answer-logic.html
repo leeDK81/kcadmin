@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
@@ -158,7 +158,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
   <span class="nav-locked" style="padding-left:20px"><i class="fa-solid fa-lock fa-fw"></i> ⑦ Case 🔒</span>
   <div class="nav-divider"></div>
   <a href="09_review-workflow.html"><i class="fa-solid fa-check-double fa-fw"></i> 검수·승인</a>
-  <a href="00_canvas-main.html"><i class="fa-solid fa-diagram-project fa-fw"></i> 카드 연결</a>
+  <a href="00_canvas-main.html"><i class="fa-solid fa-diagram-project fa-fw"></i> 연결·테스트·배포</a>
   <a href="18_system-settings.html"><i class="fa-solid fa-sliders fa-fw"></i> 시스템 설정</a>
   <a href="19_faq-rag.html" style="padding-left:20px"><i class="fa-solid fa-list-check fa-fw"></i> FAQ Q&A</a>
   <div class="nav-divider"></div>
@@ -191,12 +191,12 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
   <div class="section">
     <div class="section-title"><i class="fa-solid fa-user-check fa-fw" style="color:#1A4A9A"></i> 사용자 데이터 상태 — 선행 분기 <span style="font-size:12px;font-weight:400;color:var(--text-hint);margin-left:8px">2026-06-26 확정</span></div>
     <div class="note-box" style="margin-bottom:14px">
-      <strong>Clark과 KC 엔진은 별개 서비스·별개 법인입니다.</strong><br>
-      KC 엔진은 Clark의 회원 DB에 접근할 수 없습니다. Clark은 가용한 데이터만 전달하고 KC 엔진은 <code style="background:#FFF0D0;padding:1px 5px;border-radius:3px;font-size:12px">null</code> 여부로 상태를 판단합니다. 별도 user_state 파라미터 불필요.
+      <strong>Clark과 Clark AI 판단 서비스(KC 판단 엔진)는 별개 법인입니다.</strong><br>
+      Clark AI는 Clark의 회원 DB에 접근할 수 없습니다. Clark은 가용한 데이터만 전달하고 Clark AI는 <code style="background:#FFF0D0;padding:1px 5px;border-radius:3px;font-size:12px">null</code> 여부로 상태를 판단합니다. 별도 user_state 파라미터 불필요.
     </div>
 
     <!-- API 호출 구조 -->
-    <div class="section-sub">Clark → KC 엔진 API 호출 구조</div>
+    <div class="section-sub">Clark → Clark AI API 호출 구조</div>
     <div style="background:#1E1E1E;border-radius:8px;padding:16px 20px;margin-bottom:16px;font-family:monospace;font-size:13px;line-height:1.9;color:#D4D4D4">
       <span style="color:#569CD6">{</span><br>
       &nbsp;&nbsp;<span style="color:#9CDCFE">"query"</span><span style="color:#D4D4D4">: </span><span style="color:#CE9178">"암진단금 얼마야"</span><span style="color:#D4D4D4">,</span><br>
@@ -206,7 +206,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
       <span style="color:#569CD6">}</span>
     </div>
     <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;line-height:1.7">
-      KC 엔진은 각 필드의 null 여부로 두 가지를 결정합니다:<br>
+      Clark AI는 각 필드의 null 여부로 두 가지를 결정합니다:<br>
       <strong>① Rule 평가 범위</strong> — null인 데이터 소스의 조건은 평가 생략<br>
       <strong>② Playbook 감지 조건 대조</strong> — 카드에 설정된 데이터 미보유 조건과 비교
     </div>
@@ -266,7 +266,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
         <div style="font-size:13px;line-height:1.8;color:var(--text-primary);font-family:monospace">
           KC 체인 평가 불가 (전달 데이터 없음)<br>
           &nbsp;→ FAQ RAG → 결과 없으면 → Fallback LLM<br>
-          &nbsp;+ Playbook 병렬: "PROFILE 없음" 조건 카드 감지 → <strong>회원가입 유도 CTA</strong>
+          &nbsp;+ Playbook 병렬: "프로파일 없음" 조건 카드 감지 → <strong>회원가입 유도 CTA</strong>
         </div>
       </div>
       <!-- 상태 ② -->
@@ -279,7 +279,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
           &nbsp;└─ PROFILE 조건만 있는 Rule → 정상 평가<br>
           &nbsp;&nbsp;&nbsp;&nbsp;├─ 통과 → KC 구조화 답변 + 마이데이터 연동 유도 문구<br>
           &nbsp;&nbsp;&nbsp;&nbsp;└─ 미통과 → FAQ RAG → 결과 없으면 → Fallback LLM<br>
-          &nbsp;+ Playbook 병렬: "MYDATA 없음" 조건 카드 감지 → <strong>마이데이터 연동 유도 CTA</strong>
+          &nbsp;+ Playbook 병렬: "마이데이터 없음" 조건 카드 감지 → <strong>마이데이터 연동 유도 CTA</strong>
         </div>
         <div style="font-size:12px;color:#7A5A00;background:#FFF9EC;border:1px solid #F0D880;border-radius:4px;padding:6px 10px;margin-top:8px;line-height:1.5">
           <strong>마이데이터 연동 유도 예시:</strong> "마이데이터를 연결하면 내 보험 계약 기반의 정확한 진단을 받을 수 있습니다"<br>
@@ -293,7 +293,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
           KC 체인 → PROFILE + MYDATA 조건 평가 (PROMAGE 선택 조건은 스킵)<br>
           &nbsp;→ Case 1~4 매트릭스 적용 (하단 참조)<br>
           &nbsp;RAG 순서: 약관 RAG → FAQ RAG → Fallback LLM<br>
-          &nbsp;+ Playbook 병렬: "PROMAGE 없음" 조건 카드 or 일반 감지 → <strong>PROMAGE 연동 유도 or 리드 전환 CTA</strong>
+          &nbsp;+ Playbook 병렬: "프롬에이지 없음" 조건 카드 or 일반 감지 → <strong>프롬에이지 연동 유도 or 리드 전환 CTA</strong>
         </div>
       </div>
       <!-- 상태 ④ -->
@@ -320,19 +320,19 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
       </thead>
       <tbody>
         <tr>
-          <td><span style="font-family:monospace;font-size:13px;background:#F0D0C8;padding:1px 8px;border-radius:3px;color:#A32D2D">PROFILE 없음</span></td>
+          <td><span style="font-family:monospace;font-size:13px;background:#F0D0C8;padding:1px 8px;border-radius:3px;color:#A32D2D">프로파일 없음</span></td>
           <td>미가입/미로그인 사용자</td>
           <td>회원가입 유도 버튼 노출</td>
         </tr>
         <tr>
-          <td><span style="font-family:monospace;font-size:13px;background:#F5E8A0;padding:1px 8px;border-radius:3px;color:#7A5A00">MYDATA 없음</span></td>
+          <td><span style="font-family:monospace;font-size:13px;background:#F5E8A0;padding:1px 8px;border-radius:3px;color:#7A5A00">마이데이터 없음</span></td>
           <td>마이데이터 미연동 사용자</td>
           <td>마이데이터 연동 유도 버튼 노출</td>
         </tr>
         <tr>
-          <td><span style="font-family:monospace;font-size:13px;background:#E8E0F5;padding:1px 8px;border-radius:3px;color:#4A2A7A">PROMAGE 없음</span></td>
+          <td><span style="font-family:monospace;font-size:13px;background:#E8E0F5;padding:1px 8px;border-radius:3px;color:#4A2A7A">프롬에이지 없음</span></td>
           <td>건강정보 미연동 사용자</td>
-          <td>PROMAGE 연동 유도 버튼 노출</td>
+          <td>프롬에이지 연동 유도 버튼 노출</td>
         </tr>
         <tr>
           <td><span style="color:var(--text-hint);font-size:13px">(없음)</span></td>
@@ -393,7 +393,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
             <span style="color:var(--text-hint)">&nbsp;→ 실패 시</span> FAQ RAG<br>
             <span style="color:var(--text-hint)">&nbsp;→ 실패 시</span> LLM
           </td>
-          <td style="font-size:13px;line-height:1.7">PROMAGE 없음 조건 감지<br>→ 프롬에이지 연동 CTA</td>
+          <td style="font-size:13px;line-height:1.7">프롬에이지 없음 조건 감지<br>→ 프롬에이지 연동 CTA</td>
         </tr>
         <tr>
           <td style="text-align:center;font-size:16px;font-weight:700;color:#0F6E56">O</td>
@@ -405,7 +405,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
             <span style="color:var(--text-hint)">&nbsp;→ 실패 시</span> FAQ RAG <span style="color:#A32D2D;font-size:12px">(약관 RAG 불가)</span><br>
             <span style="color:var(--text-hint)">&nbsp;→ 실패 시</span> LLM
           </td>
-          <td style="font-size:13px;line-height:1.7">MYDATA 없음 조건 감지<br>→ 마이데이터 연동 CTA</td>
+          <td style="font-size:13px;line-height:1.7">마이데이터 없음 조건 감지<br>→ 마이데이터 연동 CTA</td>
         </tr>
         <tr>
           <td style="text-align:center;font-size:16px;font-weight:700;color:#A32D2D">X</td>
@@ -416,7 +416,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
             FAQ RAG <span style="color:#A32D2D;font-size:12px">(KC·약관 RAG 전체 불가)</span><br>
             <span style="color:var(--text-hint)">&nbsp;→ 실패 시</span> LLM
           </td>
-          <td style="font-size:13px;line-height:1.7">PROFILE 없음 조건 감지<br>→ 회원가입 유도 CTA</td>
+          <td style="font-size:13px;line-height:1.7">프로파일 없음 조건 감지<br>→ 회원가입 유도 CTA</td>
         </tr>
       </tbody>
     </table>
@@ -632,7 +632,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
       <thead><tr><th style="width:130px">소스</th><th>평가 방법</th></tr></thead>
       <tbody>
         <tr><td><strong>마이데이터</strong></td><td>고객 마이데이터에서 지정 담보코드(<span class="out-field">coverage_code</span>)의 확인 항목(<span class="out-field">field</span>)이 기준값(<span class="out-field">value</span>)을 조건 연산자(<span class="out-field">op</span>)로 충족하는지 평가</td></tr>
-        <tr><td><strong>프로파일</strong></td><td>사용자 프로파일 데이터(나이·성별·결혼여부·자녀유무 4개 항목)에서 지정 필드가 조건을 충족하는지 평가. 나이: BETWEEN (시작세~종료세 범위), 나머지 enum 타입: EQ 조건</td></tr>
+        <tr><td><strong>프로파일</strong></td><td>사용자 프로파일 데이터(나이·성별·결혼여부·자녀유무·운전여부 5개 항목)에서 지정 필드가 조건을 충족하는지 평가. 나이: BETWEEN (시작세~종료세 범위), 나머지 enum 타입: EQ 조건</td></tr>
         <tr><td><strong>프롬에이지</strong></td><td>상담 시 수집된 건강검진 데이터(위험도 — 암·질병 50개 항목)를 3단계 등급(위험/주의/양호)으로 변환 후 조건 평가. 수치 직접 비교 금지 [§3-8].</td></tr>
         <tr><td><strong>프롬에이지 미연동</strong></td><td>프롬에이지 데이터 없는 사용자 — 해당 조건 "미충족" 처리. 필수 조건이면 Rule 미발동. 선택 조건이면 Rule은 발동하되 충족 개수에서 제외됨 → 선택 조건 설정 권장</td></tr>
         <tr><td><strong>기타 소스 없음</strong></td><td>해당 소스 데이터 취득 불가 시, 해당 조건은 "미충족"으로 처리</td></tr>
@@ -1139,8 +1139,8 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
   </div>
   <div class="multi-grid">
     <div class="multi-card">
-      <div class="multi-card-title"><span style="background:var(--card-rule);color:#fff;border-radius:4px;padding:2px 8px;font-size:12px">Rule</span> 복수 Rule → 1개 선택</div>
-      <div class="multi-card-body">T02에 Rule이 여러 개 연결되어 있으면 하나씩 조건을 검사합니다. 조건에 맞는 Rule이 있으면 그 중 가장 <strong>조건이 많이 맞는 Rule</strong>을 선택합니다.<div class="multi-example">의사가 여러 진단 기준 중에서 이 환자에게 해당하는 기준을 찾는 것과 같습니다.</div></div>
+      <div class="multi-card-title"><span style="background:var(--card-rule);color:#fff;border-radius:4px;padding:2px 8px;font-size:12px">Rule</span> Risk-type에는 Rule 1개만 연결 가능 (1:1 전속)</div>
+      <div class="multi-card-body">T02에 연결된 Rule 1개의 조건을 평가합니다. Rule이 없으면 RAG·Fallback으로 전환됩니다.<div class="multi-example">Risk-type과 Rule은 1:1 전속 관계이므로 복수 Rule 평가·선택 과정이 없습니다.</div></div>
     </div>
     <div class="multi-card">
       <div class="multi-card-title"><span style="background:var(--card-evidence);color:#fff;border-radius:4px;padding:2px 8px;font-size:12px">Evidence</span> 복수 Evidence → LLM이 선택·인용</div>
@@ -1206,7 +1206,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
         <td><span style="background:rgba(154,26,26,.1);color:var(--card-rule);padding:2px 8px;border-radius:4px;font-size:12px;font-weight:700">③ Rule</span></td>
         <td><span class="uses">Clark 경고 메시지</span></td>
         <td style="font-size:13px"><strong>경고 메시지</strong> → 핵심 안내 문구로 출력<br><span style="color:var(--text-hint)">예: "암진단금이 5,000만원 미만입니다. 보완을 검토해보세요."</span></td>
-        <td style="font-size:12px;line-height:1.7"><span class="ds-chip ds-mydata">마이데이터</span> 담보 금액<br><span class="ds-chip ds-fromage">프롬에이지</span> 건강위험도 등급<br><span class="ds-chip ds-card">프로파일</span> 나이·성별·결혼여부·자녀유무 4개</td>
+        <td style="font-size:12px;line-height:1.7"><span class="ds-chip ds-mydata">마이데이터</span> 담보 금액<br><span class="ds-chip ds-fromage">프롬에이지</span> 건강위험도 등급<br><span class="ds-chip ds-card">프로파일</span> 나이·성별·결혼여부·자녀유무·운전여부 5개</td>
         <td style="font-size:13px;color:var(--text-hint)">판단 조건 (마이데이터 필드명, 연산자, 기준값) — 내부 판단용으로만 사용</td>
       </tr>
       <tr>

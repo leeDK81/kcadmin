@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
@@ -116,7 +116,7 @@ tr.detail-row td{background:#EEF4FF;padding:16px 20px}
   <span class="nav-locked" style="padding-left:20px"><i class="fa-solid fa-lock fa-fw"></i> ⑦ Case 🔒</span>
   <div class="nav-divider"></div>
   <a href="09_review-workflow.html"><i class="fa-solid fa-check-double fa-fw"></i> 검수·승인</a>
-  <a href="00_canvas-main.html"><i class="fa-solid fa-diagram-project fa-fw"></i> 카드 연결</a>
+  <a href="00_canvas-main.html"><i class="fa-solid fa-diagram-project fa-fw"></i> 연결·테스트·배포</a>
   <a href="18_system-settings.html"><i class="fa-solid fa-sliders fa-fw"></i> 시스템 설정</a>
   <a href="19_faq-rag.html" style="padding-left:20px"><i class="fa-solid fa-list-check fa-fw"></i> FAQ Q&A</a>
   <div class="nav-divider"></div>
@@ -309,7 +309,7 @@ function renderCoverageCodes() {
         예) 암진단(A4200) 담보금 3,000만원 이하 → T02 암투병생활비 부족형
       </div>
       <div style="margin-top:8px;padding:8px 10px;background:rgba(15,110,86,.07);border-radius:6px;font-size:13px;color:#0F6E56">
-        <i class="fa fa-user fa-fw"></i> <strong>프로파일 조건 연계:</strong> 동일 담보코드라도 <b>나이·성별·결혼여부·자녀유무</b> 프로파일 조건을 함께 설정하면 기준값을 세분화할 수 있습니다.
+        <i class="fa fa-user fa-fw"></i> <strong>프로파일 조건 연계:</strong> 동일 담보코드라도 <b>나이·성별·결혼여부·자녀유무·운전여부</b> 프로파일 조건을 함께 설정하면 기준값을 세분화할 수 있습니다.
         예) "40세 이상 AND 암진단(A4200) 담보금 3천만원 이하" — <a href="07_card-editor-rule.html" style="color:#0F6E56">Rule 카드 편집기 →</a>
       </div>
     </div>
@@ -383,6 +383,7 @@ const USER_PROFILE_FIELDS = [
   {field:'gender',    label:'성별',     type:'enum',   opType:'select', hint:'무관 / 남 / 여',                  values:['무관','남','여'], example:'남'},
   {field:'married',   label:'결혼여부', type:'enum',   opType:'select', hint:'무관 / 기혼 / 미혼',              values:['무관','기혼','미혼'], example:'기혼'},
   {field:'has_child', label:'자녀유무', type:'enum',   opType:'select', hint:'무관 / 있음 / 없음',              values:['무관','있음','없음'], example:'있음'},
+  {field:'drives',    label:'운전여부', type:'enum',   opType:'select', hint:'무관 / 유 / 무',                  values:['무관','유','무'], example:'유'},
 ];
 
 function renderProfileFields() {
@@ -391,7 +392,7 @@ function renderProfileFields() {
       <i class="fa fa-user fa-fw"></i>
       <strong>사용자 프로파일 — Rule 조건 3번째 소스</strong>
       <div style="margin-top:8px;font-size:14px;line-height:1.7">
-        마이데이터 담보 기준값을 <b>나이·성별·결혼여부·자녀유무</b> 등으로 세분화할 때 사용합니다.<br>
+        마이데이터 담보 기준값을 <b>나이·성별·결혼여부·자녀유무·운전여부</b> 등으로 세분화할 때 사용합니다.<br>
         예) <b>40세 이상</b> AND 암진단(A4200) 담보금 <b>3천만원 이하</b> → T02 암투병생활비 부족형
       </div>
       <div style="margin-top:8px;padding-top:8px;border-top:1px solid #C0D0F0;font-size:13px;color:var(--text-hint)">

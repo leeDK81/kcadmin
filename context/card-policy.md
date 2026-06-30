@@ -107,7 +107,6 @@ const CONNECT_RULES = {
 | T03 | 심혈관질환보장 협소형 | active |
 | T04 | 뇌혈관질환보장 협소형 | active |
 | T05 | 노후돌봄보장 공백형 | active |
-| T06 | 납입여력부족 우려형 | active |
 | T07 | 비용 대비 보장 비효율형 | active |
 | T08 | 생애주기 적합도 저조형 | active |
 | T09 | 단기납 만기 후 공백형 | active |

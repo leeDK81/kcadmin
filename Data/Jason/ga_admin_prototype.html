@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>First Connect — GA 관리자</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#f0f4f8;
+  --white:#ffffff;
+  --black:#0d1117;
+  --gray-50:#f8fafc;
+  --gray-100:#f1f5f9;
+  --gray-200:#e2e8f0;
+  --gray-300:#cbd5e1;
+  --gray-400:#94a3b8;
+  --gray-500:#64748b;
+  --gray-600:#475569;
+  --gray-700:#334155;
+  --gray-800:#1e293b;
+  --gray-900:#0f172a;
+  --blue:#1d4ed8;
+  --blue-light:#dbeafe;
+  --blue-mid:#3b82f6;
+  --red:#C8102E;
+  --red-light:#fff0f2;
+  --green:#15803d;
+  --green-light:#dcfce7;
+  --amber:#d97706;
+  --amber-light:#fef3c7;
+  --purple:#6d28d9;
+  --purple-light:#f5f3ff;
+  --radius:12px;
+  --radius-sm:8px;
+  --shadow:0 2px 12px rgba(0,0,0,0.07);
+  --shadow-lg:0 8px 32px rgba(0,0,0,0.1);
+}
+html,body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--gray-900);min-height:100vh}
+
+/* ── TOPBAR ── */
+.topbar{
+  background:var(--black);
+  padding:0 32px;height:56px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:100;
+}
+.topbar-left{display:flex;align-items:center;gap:14px}
+.logo{display:flex;align-items:center;gap:8px}
+.logo-mark{
+  width:32px;height:32px;background:var(--blue);
+  border-radius:10px;display:flex;align-items:center;justify-content:center;
+  font-family:'Noto Serif KR',serif;font-size:13px;font-weight:700;color:var(--white);
+}
+.logo-name{font-size:15px;font-weight:700;color:var(--white)}
+.logo-sub{font-size:11px;color:rgba(255,255,255,0.4);margin-left:2px}
+.topbar-div{width:1px;height:20px;background:rgba(255,255,255,0.1)}
+.ga-info{display:flex;align-items:center;gap:8px}
+.ga-avatar{
+  width:28px;height:28px;border-radius:8px;
+  background:rgba(255,255,255,0.1);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;color:rgba(255,255,255,0.7);
+}
+.ga-name{font-size:13px;font-weight:600;color:rgba(255,255,255,0.8)}
+.ga-role{font-size:11px;color:rgba(255,255,255,0.35);margin-left:2px}
+.topbar-right{display:flex;align-items:center;gap:10px}
+.save-btn{
+  background:var(--blue);color:var(--white);
+  border:none;border-radius:var(--radius-sm);
+  padding:8px 18px;font-size:13px;font-weight:700;
+  cursor:pointer;font-family:inherit;
+  transition:all 0.15s;display:flex;align-items:center;gap:6px;
+}
+.save-btn:hover{background:#1e40af}
+.save-btn:active{transform:scale(0.98)}
+.save-btn.saved{background:var(--green)}
+.last-saved{font-size:11px;color:rgba(255,255,255,0.3)}
+
+/* ── BANNER ── */
+.banner{
+  background:linear-gradient(90deg,#0c1829,#0f2244);
+  border-bottom:1px solid rgba(29,78,216,0.3);
+  padding:10px 32px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.banner-left{display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,0.55)}
+.banner-left strong{color:var(--white)}
+.banner-stats{display:flex;gap:20px}
+.bstat{display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,0.4)}
+.bstat-val{font-weight:700;font-size:14px}
+.bstat-val.blue{color:#60a5fa}
+.bstat-val.green{color:#4ade80}
+.bstat-val.amber{color:#fbbf24}
+.bstat-val.red{color:#f87171}
+
+/* ── TABS ── */
+.tab-bar{
+  background:var(--white);
+  border-bottom:1px solid var(--gray-200);
+  padding:0 32px;
+  display:flex;gap:0;
+}
+.tab-btn{
+  padding:14px 20px;font-size:13px;font-weight:600;
+  color:var(--gray-500);cursor:pointer;
+  border-bottom:2px solid transparent;margin-bottom:-1px;
+  transition:all 0.15s;display:flex;align-items:center;gap:6px;
+  background:none;border-top:none;border-left:none;border-right:none;
+  font-family:inherit;
+}
+.tab-btn:hover{color:var(--gray-800)}
+.tab-btn.active{color:var(--blue);border-bottom-color:var(--blue)}
+.tab-count{
+  font-size:10px;font-weight:700;
+  background:var(--blue-light);color:var(--blue);
+  padding:2px 7px;border-radius:20px;
+}
+
+/* ── CONTENT ── */
+.content{
+  max-width:1280px;margin:0 auto;
+  padding:28px 32px;
+}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+
+/* ── SECTION ── */
+.section{margin-bottom:28px}
+.section-head{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:14px;
+}
+.section-title{font-size:15px;font-weight:700;color:var(--gray-900)}
+.section-desc{font-size:12px;color:var(--gray-400);margin-top:2px}
+.section-action{
+  font-size:12px;font-weight:600;color:var(--blue);
+  cursor:pointer;background:none;border:none;font-family:inherit;
+}
+
+/* ── CARD ── */
+.card{
+  background:var(--white);
+  border:1px solid var(--gray-200);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+
+/* ── RISK SCORE TABLE ── */
+.risk-table{width:100%;border-collapse:collapse}
+.risk-table th{
+  background:var(--gray-900);color:rgba(255,255,255,0.6);
+  font-size:11px;font-weight:700;letter-spacing:0.08em;
+  padding:10px 16px;text-align:left;
+}
+.risk-table th:last-child{text-align:center}
+.risk-table td{
+  padding:12px 16px;border-bottom:1px solid var(--gray-100);
+  font-size:13px;vertical-align:middle;
+}
+.risk-table tr:last-child td{border-bottom:none}
+.risk-table tr:hover td{background:var(--gray-50)}
+.risk-type-name{font-weight:700;color:var(--gray-800)}
+.risk-type-id{font-size:10px;color:var(--gray-400);font-family:monospace;margin-top:2px}
+.grade-badge{
+  display:inline-flex;align-items:center;
+  font-size:10px;font-weight:700;
+  padding:3px 8px;border-radius:20px;
+}
+.grade-A{background:#fef2f2;color:var(--red)}
+.grade-B{background:#fffbeb;color:var(--amber)}
+.grade-C{background:#f0fdf4;color:var(--green)}
+.grade-D{background:var(--gray-100);color:var(--gray-500)}
+
+/* ── SLIDER ── */
+.slider-wrap{display:flex;align-items:center;gap:10px;min-width:260px}
+.slider-track{
+  flex:1;height:4px;background:var(--gray-200);
+  border-radius:2px;position:relative;cursor:pointer;
+}
+.slider-fill{
+  height:100%;border-radius:2px;background:var(--blue);
+  transition:width 0.1s;
+}
+input[type=range]{
+  -webkit-appearance:none;appearance:none;
+  width:100%;height:4px;background:transparent;
+  position:absolute;top:0;left:0;margin:0;cursor:pointer;
+}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;
+  width:16px;height:16px;border-radius:50%;
+  background:var(--blue);border:2px solid var(--white);
+  box-shadow:0 1px 4px rgba(0,0,0,0.2);
+  cursor:pointer;transition:transform 0.1s;
+}
+input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
+.slider-val{
+  min-width:36px;text-align:right;
+  font-size:13px;font-weight:700;color:var(--blue);
+}
+.slider-label{font-size:11px;color:var(--gray-400);min-width:28px}
+
+/* ── CONSULT TYPE WEIGHTS ── */
+.consult-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:12px;
+  padding:16px;
+}
+.consult-item{
+  background:var(--gray-50);border:1px solid var(--gray-200);
+  border-radius:var(--radius-sm);padding:14px 16px;
+}
+.consult-icon{font-size:18px;margin-bottom:6px}
+.consult-name{font-size:13px;font-weight:700;color:var(--gray-800);margin-bottom:10px}
+.consult-slider{display:flex;flex-direction:column;gap:6px}
+.consult-slider-row{display:flex;align-items:center;gap:8px}
+.cs-label{font-size:11px;color:var(--gray-400);width:32px}
+.cs-input{flex:1;position:relative;height:4px}
+.cs-input input[type=range]{position:relative;width:100%}
+.cs-val{font-size:12px;font-weight:700;color:var(--blue);min-width:30px;text-align:right}
+
+/* ── RECOVERY TIMER ── */
+.timer-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:16px}
+.timer-item{
+  border-radius:var(--radius-sm);overflow:hidden;
+  border:1px solid var(--gray-200);
+}
+.timer-header{
+  padding:10px 14px;font-size:12px;font-weight:700;
+  display:flex;align-items:center;gap:6px;
+}
+.timer-header.A{background:#fef2f2;color:var(--red)}
+.timer-header.B{background:#fffbeb;color:var(--amber)}
+.timer-header.C{background:#f0fdf4;color:var(--green)}
+.timer-body{padding:12px 14px;background:var(--white)}
+.timer-row{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.timer-row:last-child{margin-bottom:0}
+.timer-lbl{font-size:11px;color:var(--gray-500);width:80px;flex-shrink:0}
+.timer-input{
+  flex:1;padding:7px 10px;
+  border:1px solid var(--gray-300);border-radius:6px;
+  font-size:13px;font-weight:700;color:var(--gray-800);
+  text-align:center;font-family:inherit;
+  transition:border-color 0.15s;
+}
+.timer-input:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(29,78,216,0.1)}
+.timer-unit{font-size:11px;color:var(--gray-400)}
+
+/* ── PLANNER TABLE ── */
+.planner-table{width:100%;border-collapse:collapse}
+.planner-table th{
+  background:var(--gray-900);color:rgba(255,255,255,0.6);
+  font-size:11px;font-weight:700;letter-spacing:0.08em;
+  padding:10px 14px;text-align:left;
+}
+.planner-table td{
+  padding:11px 14px;border-bottom:1px solid var(--gray-100);
+  font-size:13px;vertical-align:middle;
+}
+.planner-table tr:last-child td{border-bottom:none}
+.planner-table tr:hover td{background:var(--gray-50)}
+.planner-avatar{
+  width:30px;height:30px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;flex-shrink:0;
+}
+.planner-name-cell{display:flex;align-items:center;gap:8px}
+.planner-name{font-weight:700;color:var(--gray-800)}
+.planner-sub{font-size:11px;color:var(--gray-400);margin-top:1px}
+.rate-bar{
+  display:flex;align-items:center;gap:8px;
+}
+.rate-track{
+  flex:1;height:6px;background:var(--gray-100);
+  border-radius:3px;overflow:hidden;
+}
+.rate-fill{height:100%;border-radius:3px;background:var(--green)}
+.rate-val{font-size:12px;font-weight:700;color:var(--green);min-width:32px}
+.max-input{
+  width:52px;padding:5px 8px;
+  border:1px solid var(--gray-300);border-radius:6px;
+  font-size:13px;font-weight:700;text-align:center;
+  font-family:inherit;
+}
+.max-input:focus{outline:none;border-color:var(--blue)}
+.risk-checkbox-group{display:flex;flex-wrap:wrap;gap:4px}
+.risk-cb{
+  display:flex;align-items:center;gap:4px;
+  font-size:10px;font-weight:700;
+  padding:3px 8px;border-radius:20px;
+  cursor:pointer;border:1.5px solid var(--gray-200);
+  background:var(--gray-50);color:var(--gray-500);
+  transition:all 0.12s;user-select:none;
+}
+.risk-cb.checked{border-color:var(--blue);background:var(--blue-light);color:var(--blue)}
+.risk-cb.checked-red{border-color:var(--red);background:var(--red-light);color:var(--red)}
+.risk-cb.checked-amber{border-color:var(--amber);background:var(--amber-light);color:var(--amber)}
+.risk-cb.checked-purple{border-color:var(--purple);background:var(--purple-light);color:var(--purple)}
+.status-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.status-dot.on{background:var(--green);animation:pulse 2s infinite}
+.status-dot.off{background:var(--gray-300)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+.toggle-switch{
+  position:relative;width:36px;height:20px;cursor:pointer;
+}
+.toggle-switch input{opacity:0;width:0;height:0;position:absolute}
+.toggle-track{
+  position:absolute;inset:0;
+  background:var(--gray-200);border-radius:10px;transition:0.2s;
+}
+.toggle-track::after{
+  content:'';position:absolute;
+  width:14px;height:14px;border-radius:50%;
+  background:var(--white);top:3px;left:3px;transition:0.2s;
+  box-shadow:0 1px 3px rgba(0,0,0,0.2);
+}
+.toggle-switch input:checked + .toggle-track{background:var(--blue)}
+.toggle-switch input:checked + .toggle-track::after{transform:translateX(16px)}
+
+/* ── HISTORY ── */
+.history-list{padding:4px 0}
+.history-item{
+  display:flex;align-items:flex-start;gap:14px;
+  padding:12px 20px;border-bottom:1px solid var(--gray-100);
+}
+.history-item:last-child{border-bottom:none}
+.history-time{
+  font-size:11px;color:var(--gray-400);
+  white-space:nowrap;min-width:90px;margin-top:1px;
+}
+.history-icon{
+  width:26px;height:26px;border-radius:8px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:12px;
+}
+.history-icon.score{background:var(--blue-light)}
+.history-icon.assign{background:var(--purple-light)}
+.history-icon.timer{background:var(--amber-light)}
+.history-content{}
+.history-title{font-size:13px;font-weight:700;color:var(--gray-800)}
+.history-desc{font-size:12px;color:var(--gray-500);margin-top:2px;line-height:1.55}
+.history-by{font-size:11px;color:var(--gray-400);margin-top:3px}
+.diff-old{color:var(--red);text-decoration:line-through;font-weight:600}
+.diff-new{color:var(--green);font-weight:700}
+
+/* ── BOTTOM BAR ── */
+.bottom-bar{
+  position:sticky;bottom:0;
+  background:var(--white);border-top:1px solid var(--gray-200);
+  padding:12px 32px;
+  display:flex;align-items:center;justify-content:space-between;
+  box-shadow:0 -4px 16px rgba(0,0,0,0.06);
+}
+.bottom-left{font-size:12px;color:var(--gray-500);display:flex;align-items:center;gap:6px}
+.bottom-right{display:flex;gap:10px}
+.btn-cancel{
+  background:var(--gray-100);color:var(--gray-600);
+  border:none;border-radius:var(--radius-sm);
+  padding:9px 18px;font-size:13px;font-weight:600;
+  cursor:pointer;font-family:inherit;
+}
+.btn-save{
+  background:var(--blue);color:var(--white);
+  border:none;border-radius:var(--radius-sm);
+  padding:9px 20px;font-size:13px;font-weight:700;
+  cursor:pointer;font-family:inherit;
+  transition:all 0.15s;
+}
+.btn-save:hover{background:#1e40af}
+.btn-save:active{transform:scale(0.98)}
+
+.unsaved-badge{
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:11px;font-weight:700;
+  background:var(--amber-light);color:var(--amber);
+  padding:3px 8px;border-radius:20px;
+}
+.unsaved-dot{width:6px;height:6px;border-radius:50%;background:var(--amber)}
+</style>
+</head>
+<body>
+
+<!-- Top bar -->
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="logo">
+      <div class="logo-mark">FC</div>
+      <div class="logo-name">First Connect</div>
+      <span class="logo-sub">GA 관리자 설정</span>
+    </div>
+    <div class="topbar-div"></div>
+    <div class="ga-info">
+      <div class="ga-avatar">더</div>
+      <div class="ga-name">더파트너스</div>
+      <span class="ga-role">GA 관리자 · 김관리</span>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <div class="last-saved" id="last-saved">마지막 저장: 오늘 09:15</div>
+    <button class="save-btn" id="save-btn" onclick="saveSettings()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+      설정 저장
+    </button>
+  </div>
+</div>
+
+<!-- Banner -->
+<div class="banner">
+  <div class="banner-left">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    오늘 배정 현황 · <strong>2026.04.13 09:41</strong> 기준
+  </div>
+  <div class="banner-stats">
+    <div class="bstat">대기 리드<span class="bstat-val blue" style="margin-left:6px">12건</span></div>
+    <div class="bstat">A등급<span class="bstat-val red" style="margin-left:6px">3건</span></div>
+    <div class="bstat">B등급<span class="bstat-val amber" style="margin-left:6px">6건</span></div>
+    <div class="bstat">C등급<span class="bstat-val" style="margin-left:6px;color:#94a3b8">3건</span></div>
+    <div class="bstat">오늘 배정 완료<span class="bstat-val green" style="margin-left:6px">28건</span></div>
+    <div class="bstat">평균 응답<span class="bstat-val blue" style="margin-left:6px">18분</span></div>
+  </div>
+</div>
+
+<!-- Tab bar -->
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="switchTab(0,this)">
+    📊 리드 스코어링 설정
+  </button>
+  <button class="tab-btn" onclick="switchTab(1,this)">
+    ⚡ 배정 최적화 설정
+  </button>
+  <button class="tab-btn" onclick="switchTab(2,this)">
+    🕐 변경 이력
+    <span class="tab-count">5</span>
+  </button>
+</div>
+
+<!-- ════════════════════════════════ -->
+<!-- TAB 1: 리드 스코어링 설정        -->
+<!-- ════════════════════════════════ -->
+<div class="tab-panel active" id="panel0">
+<div class="content">
+
+  <!-- Risk-type별 가중치 -->
+  <div class="section">
+    <div class="section-head">
+      <div>
+        <div class="section-title">Risk-type별 리드 스코어 가중치</div>
+        <div class="section-desc">각 Risk-type에 가중치를 부여하면 해당 유형의 리드가 높은 aGCR 등급을 받을 가능성이 높아집니다. KC Admin의 기본값을 GA별로 조정할 수 있습니다.</div>
+      </div>
+      <button class="section-action" onclick="resetScores()">기본값으로 초기화</button>
+    </div>
+    <div class="card">
+      <table class="risk-table">
+        <thead>
+          <tr>
+            <th style="width:220px">Risk-type</th>
+            <th>설명</th>
+            <th style="width:80px">기본 등급</th>
+            <th style="width:300px">가중치 조정</th>
+            <th style="width:60px;text-align:center">활성화</th>
+          </tr>
+        </thead>
+        <tbody id="risk-rows">
+          <!-- JS로 렌더링 -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 상담 방식별 가중치 -->
+  <div class="section">
+    <div class="section-head">
+      <div>
+        <div class="section-title">상담 방식별 가중치</div>
+        <div class="section-desc">고객이 선택한 상담 방식에 따라 리드 스코어에 추가 가중치를 부여합니다.</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="consult-grid">
+        <div class="consult-item">
+          <div class="consult-icon">💬</div>
+          <div class="consult-name">채팅 상담</div>
+          <div class="consult-slider">
+            <div class="consult-slider-row">
+              <span class="cs-label">가중치</span>
+              <div class="cs-input">
+                <input type="range" min="0" max="30" value="20" oninput="updateConsult(this,'chat-val')">
+              </div>
+              <span class="cs-val" id="chat-val">+20</span>
+            </div>
+          </div>
+        </div>
+        <div class="consult-item">
+          <div class="consult-icon">📞</div>
+          <div class="consult-name">전화 상담</div>
+          <div class="consult-slider">
+            <div class="consult-slider-row">
+              <span class="cs-label">가중치</span>
+              <div class="cs-input">
+                <input type="range" min="0" max="30" value="15" oninput="updateConsult(this,'phone-val')">
+              </div>
+              <span class="cs-val" id="phone-val">+15</span>
+            </div>
+          </div>
+        </div>
+        <div class="consult-item">
+          <div class="consult-icon">🤝</div>
+          <div class="consult-name">대면 상담</div>
+          <div class="consult-slider">
+            <div class="consult-slider-row">
+              <span class="cs-label">가중치</span>
+              <div class="cs-input">
+                <input type="range" min="0" max="30" value="25" oninput="updateConsult(this,'face-val')">
+              </div>
+              <span class="cs-val" id="face-val">+25</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 등급 기준 -->
+  <div class="section">
+    <div class="section-head">
+      <div>
+        <div class="section-title">aGCR 등급 기준값</div>
+        <div class="section-desc">총 스코어 합산 결과에 따른 A/B/C/D 등급 경계값을 설정합니다.</div>
+      </div>
+    </div>
+    <div class="card" style="padding:20px 24px">
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px">
+        <div style="text-align:center">
+          <div style="font-size:11px;color:var(--gray-400);margin-bottom:8px;font-weight:700;letter-spacing:0.05em">A 등급</div>
+          <div style="display:flex;align-items:center;justify-content:center;gap:6px">
+            <input type="number" value="75" min="0" max="100" style="width:60px;padding:8px;border:1.5px solid var(--red);border-radius:8px;font-size:16px;font-weight:700;color:var(--red);text-align:center;font-family:inherit" onchange="markUnsaved()">
+            <span style="font-size:12px;color:var(--gray-400)">점 이상</span>
+          </div>
+        </div>
+        <div style="text-align:center">
+          <div style="font-size:11px;color:var(--gray-400);margin-bottom:8px;font-weight:700;letter-spacing:0.05em">B 등급</div>
+          <div style="display:flex;align-items:center;justify-content:center;gap:6px">
+            <input type="number" value="55" min="0" max="100" style="width:60px;padding:8px;border:1.5px solid var(--amber);border-radius:8px;font-size:16px;font-weight:700;color:var(--amber);text-align:center;font-family:inherit" onchange="markUnsaved()">
+            <span style="font-size:12px;color:var(--gray-400)">점 이상</span>
+          </div>
+        </div>
+        <div style="text-align:center">
+          <div style="font-size:11px;color:var(--gray-400);margin-bottom:8px;font-weight:700;letter-spacing:0.05em">C 등급</div>
+          <div style="display:flex;align-items:center;justify-content:center;gap:6px">
+            <input type="number" value="35" min="0" max="100" style="width:60px;padding:8px;border:1.5px solid var(--green);border-radius:8px;font-size:16px;font-weight:700;color:var(--green);text-align:center;font-family:inherit" onchange="markUnsaved()">
+            <span style="font-size:12px;color:var(--gray-400)">점 이상</span>
+          </div>
+        </div>
+        <div style="text-align:center">
+          <div style="font-size:11px;color:var(--gray-400);margin-bottom:8px;font-weight:700;letter-spacing:0.05em">D 등급</div>
+          <div style="display:flex;align-items:center;justify-content:center;gap:6px">
+            <input type="number" value="0" min="0" max="100" style="width:60px;padding:8px;border:1.5px solid var(--gray-300);border-radius:8px;font-size:16px;font-weight:700;color:var(--gray-500);text-align:center;font-family:inherit" disabled>
+            <span style="font-size:12px;color:var(--gray-400)">점 이상</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ════════════════════════════════ -->
+<!-- TAB 2: 배정 최적화 설정          -->
+<!-- ════════════════════════════════ -->
+<div class="tab-panel" id="panel1">
+<div class="content">
+
+  <!-- Recovery 타이머 -->
+  <div class="section">
+    <div class="section-head">
+      <div>
+        <div class="section-title">Recovery 타이머 설정</div>
+        <div class="section-desc">리드 배정 후 플래너가 미컨택 시 자동 회수 및 재배정되는 시간을 등급별로 설정합니다.</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="timer-grid">
+        <div class="timer-item">
+          <div class="timer-header A">🔴 A등급 리드 — 최우선 대응</div>
+          <div class="timer-body">
+            <div class="timer-row">
+              <span class="timer-lbl">1차 회수</span>
+              <input class="timer-input" type="number" value="3" min="1" max="24" onchange="markUnsaved()">
+              <span class="timer-unit">시간 후</span>
+            </div>
+            <div class="timer-row">
+              <span class="timer-lbl">2차 재배정</span>
+              <input class="timer-input" type="number" value="6" min="1" max="48" onchange="markUnsaved()">
+              <span class="timer-unit">시간 후</span>
+            </div>
+            <div class="timer-row">
+              <span class="timer-lbl">최대 재시도</span>
+              <input class="timer-input" type="number" value="3" min="1" max="5" onchange="markUnsaved()">
+              <span class="timer-unit">회</span>
+            </div>
+          </div>
+        </div>
+        <div class="timer-item">
+          <div class="timer-header B">🟡 B등급 리드 — 일반 대응</div>
+          <div class="timer-body">
+            <div class="timer-row">
+              <span class="timer-lbl">1차 회수</span>
+              <input class="timer-input" type="number" value="12" min="1" max="48" onchange="markUnsaved()">
+              <span class="timer-unit">시간 후</span>
+            </div>
+            <div class="timer-row">
+              <span class="timer-lbl">2차 재배정</span>
+              <input class="timer-input" type="number" value="24" min="1" max="72" onchange="markUnsaved()">
+              <span class="timer-unit">시간 후</span>
+            </div>
+            <div class="timer-row">
+              <span class="timer-lbl">최대 재시도</span>
+              <input class="timer-input" type="number" value="2" min="1" max="5" onchange="markUnsaved()">
+              <span class="timer-unit">회</span>
+            </div>
+          </div>
+        </div>
+        <div class="timer-item">
+          <div class="timer-header C">🟢 C등급 리드 — 여유 대응</div>
+          <div class="timer-body">
+            <div class="timer-row">
+              <span class="timer-lbl">1차 회수</span>
+              <input class="timer-input" type="number" value="24" min="1" max="72" onchange="markUnsaved()">
+              <span class="timer-unit">시간 후</span>
+            </div>
+            <div class="timer-row">
+              <span class="timer-lbl">2차 재배정</span>
+              <input class="timer-input" type="number" value="48" min="1" max="96" onchange="markUnsaved()">
+              <span class="timer-unit">시간 후</span>
+            </div>
+            <div class="timer-row">
+              <span class="timer-lbl">최대 재시도</span>
+              <input class="timer-input" type="number" value="2" min="1" max="5" onchange="markUnsaved()">
+              <span class="timer-unit">회</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 플래너별 배정 설정 -->
+  <div class="section">
+    <div class="section-head">
+      <div>
+        <div class="section-title">플래너별 배정 최적화</div>
+        <div class="section-desc">플래너별 선호 Risk-type과 최대 배정 건수를 설정합니다. 선호 Risk-type이 일치할수록 PlannerFitScore가 높아져 우선 배정됩니다.</div>
+      </div>
+    </div>
+    <div class="card">
+      <table class="planner-table">
+        <thead>
+          <tr>
+            <th style="width:160px">플래너</th>
+            <th style="width:80px">성약률</th>
+            <th style="width:80px">현재 담당</th>
+            <th style="width:70px">최대 배정</th>
+            <th>선호 Risk-type</th>
+            <th style="width:60px;text-align:center">활성화</th>
+          </tr>
+        </thead>
+        <tbody id="planner-rows">
+          <!-- JS로 렌더링 -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 자동 배정 글로벌 설정 -->
+  <div class="section">
+    <div class="section-head">
+      <div>
+        <div class="section-title">자동 배정 글로벌 설정</div>
+        <div class="section-desc">First Connect 자동 배정 전체 동작 방식을 제어합니다.</div>
+      </div>
+    </div>
+    <div class="card" style="padding:0">
+      <div id="global-settings">
+        <!-- JS 렌더링 -->
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ════════════════════════════════ -->
+<!-- TAB 3: 변경 이력                 -->
+<!-- ════════════════════════════════ -->
+<div class="tab-panel" id="panel2">
+<div class="content">
+  <div class="section">
+    <div class="section-head">
+      <div>
+        <div class="section-title">설정 변경 이력</div>
+        <div class="section-desc">최근 30일간 변경된 설정 이력입니다.</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="history-list">
+        <div class="history-item">
+          <div class="history-time">오늘 09:15</div>
+          <div class="history-icon score">📊</div>
+          <div class="history-content">
+            <div class="history-title">Risk-type 가중치 변경</div>
+            <div class="history-desc">납입여력부족 우려형 가중치 <span class="diff-old">40</span> → <span class="diff-new">55</span> 로 상향 조정</div>
+            <div class="history-by">변경자: 김관리 · IP 192.168.1.xx</div>
+          </div>
+        </div>
+        <div class="history-item">
+          <div class="history-time">어제 16:42</div>
+          <div class="history-icon assign">⚡</div>
+          <div class="history-content">
+            <div class="history-title">플래너 최대 배정 건수 변경</div>
+            <div class="history-desc">이지영 플래너 최대 배정 <span class="diff-old">8건</span> → <span class="diff-new">10건</span>으로 상향 · 박민준 플래너 <span class="diff-old">10건</span> → <span class="diff-new">8건</span>으로 하향</div>
+            <div class="history-by">변경자: 김관리</div>
+          </div>
+        </div>
+        <div class="history-item">
+          <div class="history-time">어제 11:20</div>
+          <div class="history-icon timer">🕐</div>
+          <div class="history-content">
+            <div class="history-title">A등급 Recovery 타이머 변경</div>
+            <div class="history-desc">1차 회수 타이머 <span class="diff-old">6시간</span> → <span class="diff-new">3시간</span>으로 단축 (A등급 응답률 개선 목적)</div>
+            <div class="history-by">변경자: 김관리</div>
+          </div>
+        </div>
+        <div class="history-item">
+          <div class="history-time">3일 전 14:05</div>
+          <div class="history-icon score">📊</div>
+          <div class="history-content">
+            <div class="history-title">상담 방식 가중치 변경</div>
+            <div class="history-desc">대면 상담 가중치 <span class="diff-old">+15</span> → <span class="diff-new">+25</span>로 상향 (대면 성약률 우위 반영)</div>
+            <div class="history-by">변경자: 김관리</div>
+          </div>
+        </div>
+        <div class="history-item">
+          <div class="history-time">1주 전 09:30</div>
+          <div class="history-icon assign">⚡</div>
+          <div class="history-content">
+            <div class="history-title">플래너 선호 Risk-type 변경</div>
+            <div class="history-desc">최설계 플래너 선호 Risk-type에 "노후돌봄보장 공백형" 추가</div>
+            <div class="history-by">변경자: 김관리</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- Bottom bar -->
+<div class="bottom-bar">
+  <div class="bottom-left">
+    <div class="status-dot on"></div>
+    First Connect 자동 배정 운영 중
+    <span class="unsaved-badge" id="unsaved-badge" style="display:none">
+      <div class="unsaved-dot"></div>저장되지 않은 변경사항
+    </span>
+  </div>
+  <div class="bottom-right">
+    <button class="btn-cancel" onclick="cancelChanges()">변경 취소</button>
+    <button class="btn-save" onclick="saveSettings()">
+      설정 저장 및 적용
+    </button>
+  </div>
+</div>
+
+<script>
+// ── DATA ──
+const riskTypes = [
+  { id:'RT01', name:'무보장형',           desc:'기초 보장 전무',              grade:'A', weight:80, active:true  },
+  { id:'RT02', name:'암투병생활비 부족형', desc:'암 진단금 부족',              grade:'A', weight:75, active:true  },
+  { id:'RT03', name:'납입여력부족 우려형', desc:'갱신형 과다, 장기 납입 리스크', grade:'A', weight:55, active:true  },
+  { id:'RT04', name:'뇌혈관보장 협소형',  desc:'좁은 질병코드 보장',           grade:'B', weight:45, active:true  },
+  { id:'RT05', name:'심혈관보장 협소형',  desc:'허혈성 심장질환 미보장',        grade:'B', weight:45, active:true  },
+  { id:'RT06', name:'노후돌봄보장 공백형', desc:'간병·치매 보장 없음',          grade:'B', weight:40, active:true  },
+  { id:'RT07', name:'비용대비 보장 비효율형', desc:'중복 담보 과다',           grade:'C', weight:30, active:true  },
+  { id:'RT08', name:'생애주기 적합도 저조형', desc:'부양가족 리스크 미대비',    grade:'C', weight:25, active:false },
+];
+
+const planners = [
+  { name:'이지영', color:'#dbeafe', tc:'#1d4ed8', rate:68, current:5, max:10,
+    prefs:['납입여력부족 우려형','암투병생활비 부족형'], active:true },
+  { name:'박민준', color:'#dcfce7', tc:'#15803d', rate:72, current:7, max:8,
+    prefs:['뇌혈관보장 협소형','심혈관보장 협소형'], active:true },
+  { name:'최설계', color:'#fef3c7', tc:'#d97706', rate:61, current:4, max:10,
+    prefs:['노후돌봄보장 공백형','암투병생활비 부족형'], active:true },
+  { name:'정보험', color:'#f5f3ff', tc:'#6d28d9', rate:55, current:6, max:8,
+    prefs:['비용대비 보장 비효율형'], active:false },
+  { name:'김상담', color:'#fff0f2', tc:'#c8102e', rate:79, current:3, max:12,
+    prefs:['무보장형','암투병생활비 부족형','납입여력부족 우려형'], active:true },
+];
+
+const globalSettings = [
+  { key:'auto_assign',    label:'자동 배정 활성화',           desc:'aGCR 스코어 기반 자동 배정 전체 활성화/비활성화', on:true  },
+  { key:'recovery',       label:'Recovery 자동 회수',          desc:'미컨택 시 타이머 기준으로 자동 회수 및 재배정',   on:true  },
+  { key:'coaching',       label:'주간 코칭 리포트 발송',        desc:'매주 월요일 플래너별 성과 AI 진단 리포트 발송',    on:true  },
+  { key:'equal_dist',     label:'균등 배분 보정',               desc:'특정 플래너에 리드 쏠림 방지 (최대 배정 기준)',    on:false },
+  { key:'family_match',   label:'가족 정보 매칭 배정',           desc:'가족 보험 점검 희망 고객 → 가족 전문 플래너 우선', on:true  },
+];
+
+let unsaved = false;
+
+// ── RENDER ──
+function renderRiskRows(){
+  const tbody = document.getElementById('risk-rows');
+  tbody.innerHTML = riskTypes.map((r,i) => `
+    <tr>
+      <td>
+        <div class="risk-type-name">${r.name}</div>
+        <div class="risk-type-id">${r.id}</div>
+      </td>
+      <td style="font-size:12px;color:var(--gray-500)">${r.desc}</td>
+      <td><span class="grade-badge grade-${r.grade}">${r.grade}등급 기본</span></td>
+      <td>
+        <div class="slider-wrap">
+          <span class="slider-label">0</span>
+          <div class="slider-track" style="position:relative;flex:1;height:4px;background:var(--gray-200);border-radius:2px">
+            <div style="position:absolute;top:0;left:0;height:100%;background:var(--blue);border-radius:2px;width:${r.weight}%;transition:width 0.1s" id="rf-${i}"></div>
+            <input type="range" min="0" max="100" value="${r.weight}"
+              style="position:absolute;top:-6px;left:0;width:100%;opacity:0;cursor:pointer;height:16px"
+              oninput="updateRisk(${i},this.value)">
+          </div>
+          <span class="slider-label">100</span>
+          <span class="slider-val" id="rv-${i}">${r.weight}</span>
+        </div>
+      </td>
+      <td style="text-align:center">
+        <label class="toggle-switch">
+          <input type="checkbox" ${r.active?'checked':''} onchange="toggleRiskActive(${i},this.checked)">
+          <div class="toggle-track"></div>
+        </label>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function renderPlannerRows(){
+  const tbody = document.getElementById('planner-rows');
+  tbody.innerHTML = planners.map((p,pi) => `
+    <tr style="${!p.active?'opacity:0.45':''}">
+      <td>
+        <div class="planner-name-cell">
+          <div class="planner-avatar" style="background:${p.color};color:${p.tc}">${p.name[0]}</div>
+          <div>
+            <div class="planner-name">${p.name}</div>
+            <div class="planner-sub">플래너</div>
+          </div>
+        </div>
+      </td>
+      <td>
+        <div class="rate-bar">
+          <div class="rate-track"><div class="rate-fill" style="width:${p.rate}%"></div></div>
+          <span class="rate-val">${p.rate}%</span>
+        </div>
+      </td>
+      <td style="font-size:13px;font-weight:700;color:var(--gray-700)">${p.current}건</td>
+      <td>
+        <input class="max-input" type="number" value="${p.max}" min="1" max="20"
+          onchange="planners[${pi}].max=parseInt(this.value);markUnsaved()">
+      </td>
+      <td>
+        <div class="risk-checkbox-group" id="planner-cb-${pi}">
+          ${riskTypes.map((r,ri) => {
+            const checked = p.prefs.includes(r.name);
+            const cls = checked ? (r.grade==='A'?'risk-cb checked-red':r.grade==='B'?'risk-cb checked-amber':'risk-cb checked') : 'risk-cb';
+            return `<span class="${cls}" onclick="togglePref(${pi},${ri},this)">${r.name}</span>`;
+          }).join('')}
+        </div>
+      </td>
+      <td style="text-align:center">
+        <label class="toggle-switch">
+          <input type="checkbox" ${p.active?'checked':''} onchange="planners[${pi}].active=this.checked;markUnsaved()">
+          <div class="toggle-track"></div>
+        </label>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function renderGlobalSettings(){
+  const el = document.getElementById('global-settings');
+  el.innerHTML = globalSettings.map((s,i) => `
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--gray-100)${i===globalSettings.length-1?';border-bottom:none':''}">
+      <div>
+        <div style="font-size:13px;font-weight:700;color:var(--gray-800)">${s.label}</div>
+        <div style="font-size:12px;color:var(--gray-400);margin-top:2px">${s.desc}</div>
+      </div>
+      <label class="toggle-switch">
+        <input type="checkbox" ${s.on?'checked':''} onchange="globalSettings[${i}].on=this.checked;markUnsaved()">
+        <div class="toggle-track"></div>
+      </label>
+    </div>
+  `).join('');
+}
+
+// ── INTERACTIONS ──
+function updateRisk(i, val){
+  riskTypes[i].weight = parseInt(val);
+  document.getElementById('rf-'+i).style.width = val+'%';
+  document.getElementById('rv-'+i).textContent = val;
+  markUnsaved();
+}
+
+function toggleRiskActive(i, checked){
+  riskTypes[i].active = checked;
+  markUnsaved();
+}
+
+function updateConsult(input, valId){
+  document.getElementById(valId).textContent = '+'+input.value;
+  markUnsaved();
+}
+
+function togglePref(pi, ri, el){
+  const name = riskTypes[ri].name;
+  const grade = riskTypes[ri].grade;
+  const idx = planners[pi].prefs.indexOf(name);
+  if(idx>=0){
+    planners[pi].prefs.splice(idx,1);
+    el.className = 'risk-cb';
+  } else {
+    planners[pi].prefs.push(name);
+    el.className = grade==='A' ? 'risk-cb checked-red' : grade==='B' ? 'risk-cb checked-amber' : 'risk-cb checked';
+  }
+  markUnsaved();
+}
+
+function resetScores(){
+  if(!confirm('Risk-type 가중치를 KC Admin 기본값으로 초기화하시겠습니까?')) return;
+  riskTypes.forEach((r,i) => {
+    const defaults = [80,75,55,45,45,40,30,25];
+    r.weight = defaults[i];
+    const fill = document.getElementById('rf-'+i);
+    const val = document.getElementById('rv-'+i);
+    if(fill) fill.style.width = r.weight+'%';
+    if(val) val.textContent = r.weight;
+    const input = fill && fill.parentElement.querySelector('input[type=range]');
+    if(input) input.value = r.weight;
+  });
+  markUnsaved();
+}
+
+function markUnsaved(){
+  unsaved = true;
+  document.getElementById('unsaved-badge').style.display = 'inline-flex';
+}
+
+function saveSettings(){
+  unsaved = false;
+  document.getElementById('unsaved-badge').style.display = 'none';
+  const now = new Date();
+  const hhmm = now.getHours().toString().padStart(2,'0')+':'+now.getMinutes().toString().padStart(2,'0');
+  document.getElementById('last-saved').textContent = '마지막 저장: 오늘 '+hhmm;
+  const btn = document.getElementById('save-btn');
+  btn.classList.add('saved');
+  btn.textContent = '✓ 저장 완료';
+  setTimeout(()=>{
+    btn.classList.remove('saved');
+    btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> 설정 저장';
+  }, 2000);
+}
+
+function cancelChanges(){
+  if(unsaved && !confirm('저장되지 않은 변경사항이 있습니다. 취소하시겠습니까?')) return;
+  location.reload();
+}
+
+function switchTab(idx, btn){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('panel'+idx).classList.add('active');
+}
+
+// ── INIT ──
+renderRiskRows();
+renderPlannerRows();
+renderGlobalSettings();
+</script>
+</body>
+</html>

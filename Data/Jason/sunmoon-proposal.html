@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sun Routine / Moon Routine — 사업기획서</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Noto+Sans+KR:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --sun:#E8960A;--sun-lt:#FEF3C7;--sun-bg:#FFFBEB;
+  --moon:#4F52C8;--moon-lt:#EEF2FF;--moon-bg:#F5F3FF;
+  --green:#059669;--green-lt:#D1FAE5;--green-bg:#F0FDF4;
+  --dark:#0C0C16;--ink:#1A1A2C;--gray:#6B7280;--gray-lt:#F3F4F6;
+  --white:#fff;--border:rgba(0,0,0,.07);
+  --fd:'Cormorant Garamond',serif;
+  --fb:'Noto Sans KR',sans-serif;
+  --fm:'DM Mono',monospace;
+  --r:14px;--r-sm:10px;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--fb);background:var(--white);color:var(--ink);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-thumb{background:rgba(0,0,0,.12);border-radius:2px}
+
+/* NAV */
+nav{position:fixed;inset:0 0 auto;z-index:200;display:flex;align-items:center;justify-content:space-between;
+  padding:14px 48px;background:rgba(255,255,255,.88);backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--border);transition:.3s}
+.nav-logo{font-family:var(--fd);font-size:17px;font-weight:600;letter-spacing:.5px;color:var(--ink)}
+.nl-sun{color:var(--sun)}.nl-moon{color:var(--moon)}
+.nav-tabs{display:flex;gap:4px}
+.nt{padding:6px 16px;border-radius:50px;border:1.5px solid transparent;background:none;
+  font-family:var(--fb);font-size:12px;font-weight:500;cursor:pointer;transition:.2s;color:var(--gray)}
+.nt:hover{color:var(--ink);border-color:var(--border)}
+.nt.as{background:var(--sun-lt);border-color:var(--sun);color:#92400E}
+.nt.am{background:var(--moon-lt);border-color:var(--moon);color:#3730A3}
+.nt.ag{background:var(--green-lt);border-color:#6EE7B7;color:#065F46}
+.nav-progress{position:absolute;bottom:-1px;left:0;height:2px;background:linear-gradient(90deg,var(--sun),var(--moon));transition:width .2s;width:0}
+
+/* HERO */
+.hero{min-height:100vh;background:var(--dark);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;text-align:center;
+  padding:100px 24px 60px;position:relative;overflow:hidden}
+.orb{position:absolute;border-radius:50%;filter:blur(90px);opacity:.35;pointer-events:none}
+.orb1{width:520px;height:520px;background:var(--sun);top:-120px;right:-120px;animation:drift 9s ease-in-out infinite}
+.orb2{width:420px;height:420px;background:var(--moon);bottom:-100px;left:-100px;animation:drift 9s ease-in-out infinite 4.5s}
+@keyframes drift{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(20px,-20px) scale(1.06)}}
+.hero-kicker{font-family:var(--fm);font-size:10px;letter-spacing:4px;color:rgba(255,255,255,.35);
+  text-transform:uppercase;margin-bottom:20px;animation:fu .8s ease both}
+.hero-title{font-family:var(--fd);font-size:clamp(56px,9vw,104px);font-weight:300;
+  line-height:1;color:var(--white);margin-bottom:16px;animation:fu .8s .1s ease both}
+.ht-sun{color:var(--sun);font-style:italic}.ht-moon{color:#A5B4FC;font-style:italic}
+.hero-sub{font-size:15px;color:rgba(255,255,255,.45);font-weight:300;line-height:1.75;
+  max-width:440px;margin-bottom:52px;animation:fu .8s .2s ease both}
+.hero-btns{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;animation:fu .8s .3s ease both}
+.hb{padding:11px 26px;border-radius:50px;border:1.5px solid rgba(255,255,255,.14);
+  background:rgba(255,255,255,.06);color:rgba(255,255,255,.75);
+  font-family:var(--fb);font-size:13px;font-weight:500;cursor:pointer;transition:.25s;text-decoration:none}
+.hb:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.28);color:#fff;transform:translateY(-2px)}
+.hb-sun{border-color:rgba(232,150,10,.5);color:#FCD34D}.hb-sun:hover{background:rgba(232,150,10,.15)}
+.hb-moon{border-color:rgba(79,82,200,.5);color:#A5B4FC}.hb-moon:hover{background:rgba(79,82,200,.15)}
+.hb-green{border-color:rgba(5,150,105,.5);color:#6EE7B7}.hb-green:hover{background:rgba(5,150,105,.1)}
+.hero-scroll{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  color:rgba(255,255,255,.25);font-family:var(--fm);font-size:9px;letter-spacing:3px;text-transform:uppercase;
+  animation:fu 1s .6s ease both}
+.scroll-bar{width:1px;height:36px;background:linear-gradient(to bottom,rgba(255,255,255,.3),transparent);
+  animation:sp 2s ease-in-out infinite}
+@keyframes sp{0%,100%{opacity:.25;transform:scaleY(1)}50%{opacity:1;transform:scaleY(1.2)}}
+@keyframes fu{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+/* LAYOUT */
+.part{padding:128px 0 96px;position:relative}
+.wrap{max-width:960px;margin:0 auto;padding:0 48px}
+.part-sun{background:linear-gradient(180deg,var(--sun-bg) 0%,#fff 220px)}
+.part-moon{background:linear-gradient(180deg,var(--moon-bg) 0%,#fff 220px)}
+.part-green{background:linear-gradient(180deg,var(--green-bg) 0%,#fff 220px)}
+
+/* PART HEADER */
+.part-head{display:flex;align-items:flex-start;gap:28px;margin-bottom:72px;
+  padding-bottom:36px;border-bottom:1px solid var(--border)}
+.part-badge{font-family:var(--fm);font-size:10px;letter-spacing:3px;text-transform:uppercase;
+  padding:5px 12px;border-radius:4px;white-space:nowrap;margin-top:8px;flex-shrink:0}
+.pb-sun{background:var(--sun-lt);color:#92400E}
+.pb-moon{background:var(--moon-lt);color:#3730A3}
+.pb-green{background:var(--green-lt);color:#065F46}
+.part-hl{flex:1}
+.part-hl h2{font-family:var(--fd);font-size:clamp(40px,5.5vw,64px);font-weight:300;
+  line-height:1.05;margin-bottom:14px}
+.part-hl p{font-size:14px;color:var(--gray);line-height:1.85;font-weight:300;max-width:520px}
+
+/* SECTION */
+.sec{margin-bottom:64px}
+.sec-kicker{font-family:var(--fm);font-size:10px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--gray);margin-bottom:8px}
+.sec-title{font-family:var(--fd);font-size:clamp(28px,3.5vw,44px);font-weight:400;
+  line-height:1.15;margin-bottom:20px}
+.sec-body{font-size:14px;color:#374151;line-height:1.9;font-weight:300}
+.divider{height:1px;background:var(--border);margin:56px 0}
+
+/* COMPARE */
+.compare{display:grid;grid-template-columns:1fr auto 1fr;border:1px solid var(--border);
+  border-radius:var(--r);overflow:hidden;margin:28px 0}
+.cmp-col{padding:28px 24px}
+.cmp-old{background:#FAFAFA}
+.cmp-sun{background:var(--sun-bg)}
+.cmp-moon{background:var(--moon-bg)}
+.cmp-green{background:var(--green-bg)}
+.cmp-arrow{display:flex;align-items:center;justify-content:center;
+  padding:0 14px;background:#fff;border-left:1px solid var(--border);border-right:1px solid var(--border);
+  font-size:18px;color:var(--gray)}
+.cmp-label{font-family:var(--fm);font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gray);margin-bottom:14px}
+.cmp-rows{display:flex;flex-direction:column;gap:9px}
+.cmp-row{display:flex;align-items:center;gap:9px;font-size:13px;font-weight:400;color:var(--ink)}
+.dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.d-gray{background:#D1D5DB}.d-sun{background:var(--sun)}.d-moon{background:var(--moon)}.d-green{background:#34D399}
+
+/* FLOW */
+.flow{display:flex;flex-direction:column;gap:0;margin:20px 0}
+.flow-step{display:flex;align-items:flex-start;gap:14px;padding:10px 0}
+.flow-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-family:var(--fm);font-size:11px;font-weight:500;flex-shrink:0;margin-top:1px}
+.fn-gray{background:var(--gray-lt);color:var(--gray)}
+.fn-sun{background:var(--sun-lt);color:#92400E}
+.fn-moon{background:var(--moon-lt);color:#3730A3}
+.fn-green{background:var(--green-lt);color:#065F46}
+.flow-txt{font-size:14px;font-weight:400;color:var(--ink);padding-top:4px}
+.flow-sub{font-size:12px;color:var(--gray);margin-top:2px;font-weight:300}
+.flow-arrow{padding-left:14px;font-size:13px;color:var(--gray);line-height:1;height:14px}
+
+/* QUOTE */
+.quote{border-left:3px solid var(--sun);padding:18px 24px;background:var(--sun-bg);
+  border-radius:0 10px 10px 0;margin:28px 0}
+.quote.q-moon{border-color:var(--moon);background:var(--moon-bg)}
+.quote.q-green{border-color:var(--green);background:var(--green-bg)}
+.quote p{font-family:var(--fd);font-size:clamp(17px,2.5vw,24px);font-weight:400;line-height:1.4;color:var(--ink)}
+
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:24px 0}
+.stat{padding:24px 20px;border-radius:var(--r);border:1px solid var(--border);background:var(--white);transition:.2s}
+.stat:hover{transform:translateY(-3px);box-shadow:0 10px 36px rgba(0,0,0,.08)}
+.stat-val{font-family:var(--fd);font-size:38px;font-weight:300;line-height:1;margin-bottom:6px}
+.stat-lbl{font-size:13px;color:var(--gray);font-weight:300;line-height:1.5}
+.stat-src{font-size:10px;color:#D1D5DB;margin-top:10px;font-family:var(--fm)}
+
+/* TABLE */
+.tbl{width:100%;border-collapse:collapse;font-size:14px;margin:20px 0}
+.tbl th{text-align:left;padding:11px 16px;font-family:var(--fm);font-size:9px;letter-spacing:2.5px;
+  text-transform:uppercase;color:var(--gray);border-bottom:1px solid var(--border);font-weight:400}
+.tbl td{padding:13px 16px;border-bottom:1px solid rgba(0,0,0,.04);color:var(--ink);font-weight:300}
+.tbl tr:hover td{background:var(--gray-lt)}
+.td-b{font-weight:600}
+
+/* CARDS */
+.cards-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:20px 0}
+.cards-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:20px 0}
+.card{border-radius:var(--r);border:1px solid var(--border);padding:24px 20px;background:var(--white);transition:.2s}
+.card:hover{box-shadow:0 8px 28px rgba(0,0,0,.07)}
+.card-icon{font-size:26px;margin-bottom:12px;display:block}
+.card-title{font-family:var(--fd);font-size:20px;font-weight:400;margin-bottom:8px}
+.card-body{font-size:13px;color:var(--gray);line-height:1.75;font-weight:300}
+.card-sun{border-top:3px solid var(--sun);background:var(--sun-bg)}
+.card-moon{border-top:3px solid var(--moon);background:var(--moon-bg)}
+.card-green{border-top:3px solid var(--green);background:var(--green-bg)}
+.card-dark{background:var(--dark);border-color:transparent;color:#fff}
+.card-dark .card-title{color:#fff}.card-dark .card-body{color:rgba(255,255,255,.65)}
+
+/* PILLS */
+.pills{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0}
+.pill{padding:5px 13px;border-radius:50px;font-size:12px;font-weight:400;
+  border:1px solid var(--border);background:var(--gray-lt);color:var(--ink)}
+.pill-sun{background:var(--sun-lt);border-color:rgba(232,150,10,.25);color:#92400E}
+.pill-moon{background:var(--moon-lt);border-color:rgba(79,82,200,.25);color:#3730A3}
+.pill-green{background:var(--green-lt);border-color:rgba(52,211,153,.25);color:#065F46}
+
+/* UX BAR */
+.ux-bar{display:flex;margin:24px 0;border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+.ux-step{flex:1;padding:18px 12px;text-align:center;border-right:1px solid var(--border);
+  background:#fff;transition:.15s;cursor:default}
+.ux-step:last-child{border-right:none}
+.ux-step:hover{background:var(--gray-lt)}
+.ux-icon{font-size:22px;display:block;margin-bottom:6px}
+.ux-num{font-family:var(--fm);font-size:9px;color:var(--gray);margin-bottom:3px;display:block}
+.ux-name{font-size:12px;font-weight:500;color:var(--ink)}
+
+/* TIMELINE */
+.timeline{position:relative;margin:32px 0;padding-left:56px}
+.timeline::before{content:'';position:absolute;left:20px;top:0;bottom:0;
+  width:2px;background:linear-gradient(to bottom,var(--sun),var(--moon))}
+.tl-item{margin-bottom:36px;position:relative}
+.tl-dot{position:absolute;left:-56px;top:0;width:40px;height:40px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-family:var(--fm);
+  font-size:11px;font-weight:500;border:2px solid var(--border);background:#fff;z-index:1}
+.td1{border-color:var(--sun);background:var(--sun-lt);color:#92400E}
+.td2{border-color:var(--moon);background:var(--moon-lt);color:#3730A3}
+.td3{border-color:var(--green);background:var(--green-lt);color:#065F46}
+.tl-phase{font-family:var(--fm);font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gray);margin-bottom:4px}
+.tl-title{font-family:var(--fd);font-size:22px;font-weight:400;margin-bottom:6px;color:var(--ink)}
+.tl-body{font-size:13px;color:var(--gray);line-height:1.75;font-weight:300}
+.tl-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+
+/* KPI */
+.kpi{background:var(--dark);border-radius:var(--r);padding:48px 40px;text-align:center;
+  position:relative;overflow:hidden;margin:36px 0}
+.kpi::before{content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 30% 60%,rgba(232,150,10,.18) 0%,transparent 55%),
+             radial-gradient(ellipse at 70% 40%,rgba(79,82,200,.18) 0%,transparent 55%)}
+.kpi>*{position:relative;z-index:1}
+.kpi-lbl{font-family:var(--fm);font-size:9px;letter-spacing:3px;color:rgba(255,255,255,.3);
+  text-transform:uppercase;margin-bottom:12px}
+.kpi-val{font-family:var(--fd);font-size:clamp(40px,7vw,80px);font-weight:300;
+  color:var(--sun);line-height:1;margin-bottom:12px}
+.kpi-desc{font-size:14px;color:rgba(255,255,255,.5);font-weight:300;max-width:400px;margin:0 auto;line-height:1.75}
+
+/* HIGHLIGHT BOX */
+.hl-box{border-radius:var(--r);padding:22px 24px;margin:20px 0}
+.hlb-sun{background:var(--sun-bg);border:1px solid rgba(232,150,10,.18)}
+.hlb-moon{background:var(--moon-bg);border:1px solid rgba(79,82,200,.18)}
+.hlb-green{background:var(--green-bg);border:1px solid rgba(5,150,105,.18)}
+.hlb-dark{background:#1A1A2C;border:1px solid rgba(255,255,255,.08)}
+.hlb-kicker{font-family:var(--fm);font-size:9px;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
+.hk-sun{color:#92400E}.hk-moon{color:#3730A3}.hk-green{color:#065F46}
+
+/* INGREDIENT GRID */
+.ing-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:10px;margin:20px 0}
+.ing{padding:16px;border-radius:var(--r-sm);border:1px solid var(--border);background:#fff;transition:.2s}
+.ing:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.07)}
+.ing-sun{border-top:2px solid var(--sun)}.ing-moon{border-top:2px solid var(--moon)}
+.ing-name{font-size:13px;font-weight:500;margin-bottom:5px;color:var(--ink)}
+.ing-eff{font-size:11px;color:var(--gray);line-height:1.55;font-weight:300}
+.ing-sub{font-size:10px;color:#9CA3AF;margin-top:4px;font-family:var(--fm)}
+
+/* PRICE */
+.price-wrap{border-radius:var(--r);overflow:hidden;border:1px solid var(--border);margin:20px 0}
+.price-head{padding:24px 26px 20px;display:flex;align-items:flex-start;justify-content:space-between}
+.ph-sun{background:linear-gradient(135deg,#FFFBEB,#FEF3C7)}
+.ph-moon{background:linear-gradient(135deg,#F5F3FF,#EEF2FF)}
+.price-big{font-family:var(--fd);font-size:44px;font-weight:300;line-height:1;color:var(--ink)}
+.price-body{padding:0 26px 22px;background:#fff}
+.price-row{display:flex;justify-content:space-between;align-items:center;
+  padding:11px 0;border-bottom:1px solid rgba(0,0,0,.04);font-size:13px}
+.price-row:last-child{border:none}
+.pr-lbl{color:var(--gray);font-weight:300}.pr-val{font-weight:500;color:var(--ink)}
+.pr-total .pr-lbl,.pr-total .pr-val{font-weight:700;font-size:14px}
+
+/* SUMMARY */
+.summary{background:var(--dark);color:#fff;border-radius:var(--r);padding:40px;
+  margin-top:56px;position:relative;overflow:hidden}
+.summary::before{content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at top right,rgba(232,150,10,.12) 0%,transparent 50%),
+             radial-gradient(ellipse at bottom left,rgba(79,82,200,.12) 0%,transparent 50%)}
+.summary>*{position:relative;z-index:1}
+.summary h4{font-family:var(--fd);font-size:16px;font-weight:300;color:rgba(255,255,255,.4);margin-bottom:14px}
+.summary p{font-size:14px;line-height:1.9;color:rgba(255,255,255,.7);font-weight:300}
+
+/* REVEAL */
+.rv{opacity:0;transform:translateY(18px);transition:opacity .55s ease,transform .55s ease}
+.rv.vis{opacity:1;transform:translateY(0)}
+
+footer{background:var(--dark);color:rgba(255,255,255,.2);
+  text-align:center;padding:36px 24px;font-size:11px;font-family:var(--fm);letter-spacing:1.5px}
+
+@media(max-width:720px){
+  nav{padding:12px 20px}.nav-tabs{display:none}
+  .wrap{padding:0 20px}.part{padding:80px 0 60px}
+  .part-head{flex-direction:column;gap:14px}
+  .compare{grid-template-columns:1fr}.cmp-arrow{display:none}
+  .stats,.cards-2,.cards-3{grid-template-columns:1fr}
+  .ux-bar{flex-direction:column}
+  .ux-step{border-right:none;border-bottom:1px solid var(--border)}
+  .ing-grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo"><span class="nl-sun">Sun</span> &amp; <span class="nl-moon">Moon</span> Routine</div>
+  <div class="nav-tabs">
+    <button class="nt" onclick="goTo('p1')">PART 1 · 사업 개요</button>
+    <button class="nt" onclick="goTo('p2')">PART 2 · 앱 기획</button>
+    <button class="nt" onclick="goTo('p3')">PART 3 · 제품 기획</button>
+  </div>
+  <div class="nav-progress" id="nprog"></div>
+</nav>
+
+<section class="hero">
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="hero-kicker">웰니스 브랜드 사업기획서 · 2025</div>
+  <h1 class="hero-title"><span class="ht-sun">Sun</span> Routine<br><span class="ht-moon">Moon</span> Routine</h1>
+  <p class="hero-sub">건강은 영양제가 아니라 루틴입니다.<br>루틴 프로그램 기반 웰니스 브랜드 사업기획서.</p>
+  <div class="hero-btns">
+    <a class="hb hb-sun" onclick="goTo('p1')">PART 1 · 사업 개요 &amp; 시장 분석</a>
+    <a class="hb hb-moon" onclick="goTo('p2')">PART 2 · 모바일 앱 기획서</a>
+    <a class="hb hb-green" onclick="goTo('p3')">PART 3 · 제품 &amp; 패키지 기획</a>
+  </div>
+  <div class="hero-scroll"><div class="scroll-bar"></div>scroll</div>
+</section>
+
+
+<!-- PART 1 -->
+<section id="p1" class="part part-sun">
+<div class="wrap">
+
+  <div class="part-head rv">
+    <div class="part-badge pb-sun">PART 01</div>
+    <div class="part-hl">
+      <h2>사업 개요 &amp;<br>시장 분석</h2>
+      <p>Sun Routine / Moon Routine은 건강기능식품 브랜드가 아니라 "건강 루틴 프로그램 브랜드"를 지향한다. 루틴 프로그램을 통해 기존 건기식 시장의 성분 경쟁 구조를 전환하는 것이 핵심 전략이다.</p>
+    </div>
+  </div>
+
+  <div class="sec rv">
+    <div class="sec-kicker">1. 사업 개요 — 1.1 사업 정의</div>
+    <h3 class="sec-title">Sun Routine / Moon Routine이란</h3>
+    <p class="sec-body">Sun Routine / Moon Routine은 <strong>건강기능식품 브랜드가 아니라 "건강 루틴 프로그램 브랜드"</strong>를 지향한다.<br><br>기존 건강기능식품 시장은 다음과 같은 구조를 가지고 있다.</p>
+    <div class="pills" style="margin-top:16px">
+      <span class="pill">성분 중심 경쟁</span><span class="pill">가격 경쟁</span>
+      <span class="pill">광고 의존 판매 구조</span><span class="pill">낮은 재구매율</span>
+    </div>
+  </div>
+
+  <div class="rv">
+    <p class="sec-body" style="margin-bottom:20px">대부분의 건기식 브랜드 소비 패턴</p>
+    <div class="compare">
+      <div class="cmp-col cmp-old">
+        <div class="cmp-label">기존 건기식 패턴</div>
+        <div class="flow">
+          <div class="flow-step"><div class="flow-num fn-gray">1</div><div class="flow-txt">광고</div></div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step"><div class="flow-num fn-gray">2</div><div class="flow-txt">제품 구매</div></div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step"><div class="flow-num fn-gray">3</div><div class="flow-txt">1~2개월 섭취</div></div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step"><div class="flow-num fn-gray">4</div><div class="flow-txt" style="color:#EF4444;font-weight:500">중단</div></div>
+        </div>
+      </div>
+      <div class="cmp-arrow">→</div>
+      <div class="cmp-col cmp-sun">
+        <div class="cmp-label">Sun / Moon Routine — 구조 전환</div>
+        <div class="flow">
+          <div class="flow-step"><div class="flow-num fn-sun">1</div><div class="flow-txt">루틴 시작</div></div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step"><div class="flow-num fn-sun">2</div><div class="flow-txt">습관 형성</div></div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step"><div class="flow-num fn-sun">3</div><div class="flow-txt">프로그램 반복</div></div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step"><div class="flow-num fn-sun">4</div><div class="flow-txt" style="color:#059669;font-weight:500">장기 사용자</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="quote"><p>즉 제품 판매가 아니라 루틴 프로그램을 제공하는 웰니스 브랜드이다.</p></div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="sec rv">
+    <div class="sec-kicker">2. 시장 분석 — 2.1 글로벌 건강기능식품 시장</div>
+    <h3 class="sec-title">글로벌 &amp; 한국 시장 현황</h3>
+    <p class="sec-body">글로벌 건강기능식품 시장은 매우 빠르게 성장하고 있다.</p>
+  </div>
+  <div class="stats rv">
+    <div class="stat"><div class="stat-val" style="color:var(--sun)">$177B</div><div class="stat-lbl">글로벌 건기식 시장 규모 (2023)</div><div class="stat-src">Grand View Research</div></div>
+    <div class="stat"><div class="stat-val" style="color:var(--sun)">$300B+</div><div class="stat-lbl">2030년 시장 규모 전망</div><div class="stat-src">CAGR 약 8.9%</div></div>
+    <div class="stat"><div class="stat-val" style="color:var(--moon)">6~7조</div><div class="stat-lbl">한국 건기식 시장 규모 (2023)</div><div class="stat-src">한국건강기능식품협회</div></div>
+  </div>
+  <div class="hl-box hlb-sun rv" style="display:flex;align-items:center;gap:24px">
+    <div style="font-family:var(--fd);font-size:56px;font-weight:300;color:var(--sun);line-height:1;flex-shrink:0">80%</div>
+    <div>
+      <div class="hlb-kicker hk-sun">2.2 한국 건강기능식품 시장</div>
+      <div style="font-size:14px;font-weight:500;margin-bottom:4px">건강기능식품 구매 경험 가구 비율</div>
+      <div style="font-size:13px;color:var(--gray);font-weight:300;line-height:1.6">식품의약품안전처 건강기능식품 산업현황 보고서 기준. 한국 내 가구 80% 이상이 건강기능식품 구매 경험 보유.</div>
+    </div>
+  </div>
+
+  <div class="sec rv" style="margin-top:40px">
+    <div class="sec-kicker">2.3 시장 구조 문제</div>
+    <h3 class="sec-title">현재 건기식 시장의 주요 특징</h3>
+    <p class="sec-body">현재 건기식 시장은 다음 세 가지 구조적 문제를 가진다. 대부분 제품 중심 소비 구조이며, 종합비타민 / 오메가3 / 유산균 등 성분 기반 반복 경쟁이다.</p>
+  </div>
+  <div class="cards-3 rv">
+    <div class="card"><span class="card-icon">⚗️</span><div class="card-title">① 성분 경쟁</div><div class="card-body">종합비타민, 오메가3, 유산균 등 동일 성분 내 가격·용량 경쟁. 브랜드 차별화가 구조적으로 어렵다.</div></div>
+    <div class="card"><span class="card-icon">📢</span><div class="card-title">② 광고 경쟁</div><div class="card-body">매출의 상당 부분이 광고비로 소진. 지속 가능한 브랜드 자산 형성이 어렵다.</div></div>
+    <div class="card"><span class="card-icon">📉</span><div class="card-title">③ 낮은 지속성</div><div class="card-body">1~2개월 섭취 후 중단하는 패턴의 반복. 장기 사용자를 만들기 어렵다.</div></div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="sec rv">
+    <div class="sec-kicker">3. 새로운 카테고리 기회</div>
+    <h3 class="sec-title">제품 중심 → 행동 중심 서비스</h3>
+    <p class="sec-body">최근 글로벌 웰니스 시장에서는 제품 중심에서 행동 중심 서비스로 변화하고 있다.</p>
+  </div>
+  <table class="tbl rv">
+    <thead><tr><th>서비스</th><th>카테고리</th><th>특징</th></tr></thead>
+    <tbody>
+      <tr><td class="td-b">Noom</td><td>다이어트</td><td>행동 기반 다이어트 프로그램</td></tr>
+      <tr><td class="td-b">Headspace</td><td>명상</td><td>명상 루틴 서비스</td></tr>
+      <tr><td class="td-b">Duolingo</td><td>언어 학습</td><td>습관 기반 학습 서비스</td></tr>
+    </tbody>
+  </table>
+  <div class="quote rv"><p>이들의 공통점 — 제품이 아니라 행동을 판매한다.</p></div>
+
+  <div class="divider"></div>
+
+  <div class="sec rv">
+    <div class="sec-kicker">4. 사업 컨셉</div>
+    <h3 class="sec-title">Routine Experience Brand</h3>
+    <p class="sec-body">Sun Routine / Moon Routine은 다음과 같은 구조를 가진다.</p>
+  </div>
+  <div class="cards-3 rv">
+    <div class="card card-sun"><span class="card-icon">📋</span><div class="card-title">루틴 프로그램</div><div class="card-body">30일 단위 Morning / Night 루틴 프로그램. 사용자의 건강 행동을 바꾸도록 설계된다.</div></div>
+    <div class="card card-moon"><span class="card-icon">📱</span><div class="card-title">루틴 앱</div><div class="card-body">루틴 실행, 스트릭, 캐릭터 성장, Wellness Index로 행동 변화를 유도하는 플랫폼.</div></div>
+    <div class="card card-green"><span class="card-icon">📦</span><div class="card-title">건강 루틴 키트</div><div class="card-body">루틴 실행 도구로서 설계된 Daily Pack. 영양제가 아닌 루틴 키트.</div></div>
+  </div>
+  <div class="quote q-green rv"><p>즉 Routine Experience Brand이다.</p></div>
+
+  <div class="divider"></div>
+
+  <div class="sec rv">
+    <div class="sec-kicker">5. 브랜드 컨셉 — 5.1 브랜드 이름 / 5.2 브랜드 철학</div>
+    <h3 class="sec-title">Sun Routine · Moon Routine</h3>
+    <p class="sec-body">사람의 생체 리듬은 크게 두 가지로 나뉜다. 낮 → 활동 / 밤 → 회복. 따라서 건강 관리 역시 두 루틴으로 나눌 수 있다.</p>
+  </div>
+  <div class="cards-2 rv">
+    <div class="card card-sun" style="padding:32px 28px">
+      <div style="font-family:var(--fd);font-size:48px;font-weight:300;color:var(--sun);margin-bottom:10px">☀</div>
+      <div style="font-family:var(--fd);font-size:26px;font-weight:300;margin-bottom:4px">Sun Routine</div>
+      <div style="font-family:var(--fm);font-size:9px;letter-spacing:2px;color:#92400E;margin-bottom:14px">MORNING ENERGY ROUTINE</div>
+      <div style="font-size:13px;color:#78350F;line-height:1.75;font-weight:300">낮 → 활동. 에너지와 집중력을 위한 아침 루틴 프로그램.</div>
+    </div>
+    <div class="card card-moon" style="padding:32px 28px">
+      <div style="font-family:var(--fd);font-size:48px;font-weight:300;color:var(--moon);margin-bottom:10px">🌙</div>
+      <div style="font-family:var(--fd);font-size:26px;font-weight:300;margin-bottom:4px">Moon Routine</div>
+      <div style="font-family:var(--fm);font-size:9px;letter-spacing:2px;color:#3730A3;margin-bottom:14px">NIGHT RECOVERY ROUTINE</div>
+      <div style="font-size:13px;color:#3730A3;line-height:1.75;font-weight:300">밤 → 회복. 수면과 안정을 위한 저녁 루틴 프로그램.</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="sec rv">
+    <div class="sec-kicker">6. 핵심 제품 구조</div>
+    <h3 class="sec-title">30 Day Routine Program</h3>
+    <p class="sec-body">제품은 단순 건강기능식품이 아니라 루틴 프로그램으로 설계된다.</p>
+  </div>
+  <div class="cards-2 rv">
+    <div class="hl-box hlb-sun" style="padding:24px 28px">
+      <div class="hlb-kicker hk-sun">SUN ROUTINE 30</div>
+      <div style="font-family:var(--fd);font-size:22px;font-weight:400;margin-bottom:10px">Morning Energy Program</div>
+      <div class="pills"><span class="pill pill-sun">30 Day Routine Program</span><span class="pill pill-sun">Routine Kit</span><span class="pill pill-sun">Routine App</span></div>
+    </div>
+    <div class="hl-box hlb-moon" style="padding:24px 28px">
+      <div class="hlb-kicker hk-moon">MOON ROUTINE 30</div>
+      <div style="font-family:var(--fd);font-size:22px;font-weight:400;margin-bottom:10px">Night Recovery Program</div>
+      <div class="pills"><span class="pill pill-moon">30 Day Routine Program</span><span class="pill pill-moon">Routine Kit</span><span class="pill pill-moon">Routine App</span></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="sec rv">
+    <div class="sec-kicker">7. 핵심 고객</div>
+    <h3 class="sec-title">초기 타겟: 30~45세</h3>
+  </div>
+  <div class="cards-3 rv">
+    <div class="card" style="text-align:center;padding:28px 16px">
+      <div style="font-family:var(--fd);font-size:52px;font-weight:300;color:var(--sun);line-height:1;margin-bottom:8px">30–45</div>
+      <div style="font-size:12px;color:var(--gray);font-weight:300">세 · 핵심 타겟</div>
+    </div>
+    <div class="card"><span class="card-icon">🪞</span><div class="card-title">자기관리 관심</div><div class="card-body">건강, 외모, 멘탈 관리에 관심이 높은 세대. 루틴 기반 자기계발에 익숙하다.</div></div>
+    <div class="card"><span class="card-icon">💳</span><div class="card-title">구매력 존재</div><div class="card-body">건강 관심이 급격히 증가하는 시기. 프리미엄 웰니스 제품 구매 능력이 있다.</div></div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="sec rv">
+    <div class="sec-kicker">8. 핵심 가치 제안</div>
+    <h3 class="sec-title">성분 → 루틴</h3>
+  </div>
+  <div class="compare rv">
+    <div class="cmp-col cmp-old">
+      <div class="cmp-label">기존 건강기능식품</div>
+      <div style="font-size:22px;font-weight:500;color:var(--gray);margin-top:10px">성분</div>
+      <div style="font-size:12px;color:#9CA3AF;margin-top:6px;font-weight:300">성분, 용량, 가격으로 비교</div>
+    </div>
+    <div class="cmp-arrow">→</div>
+    <div class="cmp-col cmp-sun">
+      <div class="cmp-label">Sun Routine</div>
+      <div style="font-size:22px;font-weight:500;color:var(--sun);margin-top:10px">루틴</div>
+      <div style="font-size:12px;color:#92400E;margin-top:6px;font-weight:300">루틴 경험, 행동 변화, 프로그램으로 차별화</div>
+    </div>
+  </div>
+  <div class="quote rv"><p>핵심 메시지 — 건강은 영양제가 아니라 루틴입니다.</p></div>
+
+  <div class="divider"></div>
+
+  <div class="sec rv">
+    <div class="sec-kicker">9. 매출 모델</div>
+    <h3 class="sec-title">Recurring Program Model</h3>
+    <p class="sec-body">기본 제품: Sun Routine 30 / Moon Routine 30 · 가격: 39,000 ~ 49,000원</p>
+  </div>
+  <div class="cards-2 rv">
+    <div>
+      <div class="flow" style="margin:0">
+        <div class="flow-step"><div class="flow-num fn-sun">1</div><div class="flow-txt">루틴 시작</div></div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-step"><div class="flow-num fn-sun">2</div><div class="flow-txt">프로그램 구매</div></div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-step"><div class="flow-num fn-sun">3</div><div class="flow-txt">30일 완료</div></div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-step"><div class="flow-num fn-sun">4</div><div class="flow-txt">다음 프로그램 → 반복</div></div>
+      </div>
+    </div>
+    <div>
+      <div class="hl-box hlb-sun" style="margin-bottom:12px;padding:20px 22px">
+        <div class="hlb-kicker hk-sun">가격</div>
+        <div style="font-family:var(--fd);font-size:36px;font-weight:300;color:var(--sun)">39,000–49,000원</div>
+        <div style="font-size:12px;color:#92400E;margin-top:4px;font-weight:300">D2C 웰니스 브랜드 기준</div>
+      </div>
+      <div class="card card-dark">
+        <div class="card-body" style="font-size:12px;line-height:1.8">구독형에 가까운 반복 구매 유도 구조.<br>Sun Routine 30 + Moon Routine 30 동일 가격 구조 적용.<br><br>즉 <strong style="color:#fff">Recurring Program Model</strong>이다.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="sec rv">
+    <div class="sec-kicker">10. 시장 규모 추정</div>
+    <h3 class="sec-title">현실적 점유율 시나리오</h3>
+    <p class="sec-body">한국 건강기능식품 시장 6조~7조 중 루틴 웰니스 시장 추정 규모: 약 1~2조</p>
+  </div>
+  <table class="tbl rv">
+    <thead><tr><th>점유율</th><th>연간 매출</th><th>시나리오</th></tr></thead>
+    <tbody>
+      <tr><td>0.1%</td><td class="td-b">약 20억원</td><td>초기 진입</td></tr>
+      <tr><td>0.5%</td><td class="td-b">약 100억원</td><td>성장</td></tr>
+      <tr><td>1.0%</td><td class="td-b">약 200억원</td><td>장기 목표</td></tr>
+    </tbody>
+  </table>
+
+  <div class="divider"></div>
+
+  <div class="sec rv">
+    <div class="sec-kicker">11. 장기 성장 전략</div>
+    <h3 class="sec-title">3단계 성장 로드맵</h3>
+  </div>
+  <div class="timeline rv">
+    <div class="tl-item">
+      <div class="tl-dot td1">P1</div>
+      <div class="tl-phase">Phase 1</div>
+      <div class="tl-title">루틴 프로그램 브랜드</div>
+      <div class="tl-body">Sun Routine 30 / Moon Routine 30 론칭. 핵심 목표: 매출 달성 및 루틴 프로그램 브랜드 포지셔닝.</div>
+      <div class="tl-tags"><span class="pill pill-sun">Sun Routine 30</span><span class="pill pill-sun">Moon Routine 30</span><span class="pill">목표: 매출</span></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot td2">P2</div>
+      <div class="tl-phase">Phase 2</div>
+      <div class="tl-title">루틴 서비스 플랫폼</div>
+      <div class="tl-body">Routine App 중심의 서비스 플랫폼 구축. 핵심 목표: 사용자 확보.</div>
+      <div class="tl-tags"><span class="pill pill-moon">Routine App</span><span class="pill">목표: 사용자 확보</span></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot td3">P3</div>
+      <div class="tl-phase">Phase 3</div>
+      <div class="tl-title">웰니스 라이프스타일 브랜드</div>
+      <div class="tl-body">루틴 콘텐츠 / 커뮤니티 / IP까지 확장하는 웰니스 라이프스타일 브랜드로 성장.</div>
+      <div class="tl-tags"><span class="pill pill-green">루틴 콘텐츠</span><span class="pill pill-green">커뮤니티</span><span class="pill pill-green">IP</span></div>
+    </div>
+  </div>
+
+  <div class="sec rv"><div class="sec-kicker">12. 핵심 성공 지표</div></div>
+  <div class="kpi rv">
+    <div class="kpi-lbl">가장 중요한 KPI</div>
+    <div class="kpi-val">7 Day<br>Routine Retention</div>
+    <div class="kpi-desc">7일 유지 → 30일 유지 가능<br>30일 유지 → 재구매 가능<br><br>모든 성장 지표의 출발점.</div>
+  </div>
+
+  <div class="summary rv">
+    <h4>PART 1 정리</h4>
+    <p>Sun Routine / Moon Routine 사업은 기존 건강기능식품 브랜드가 아니라 건강 루틴 프로그램 브랜드로 설계된다. 제품은 단순 영양제가 아니라 30일 루틴 프로그램의 일부로 구성되며, 이를 통해 제품 중심 경쟁이 아닌 행동 중심 웰니스 브랜드로 차별화하는 것이 핵심 전략이다.</p>
+  </div>
+
+</div>
+</section>
+
+
+<!-- PART 2 -->
+<section id="p2" class="part part-moon">
+<div class="wrap">
+
+  <div class="part-head rv">
+    <div class="part-badge pb-moon">PART 02</div>
+    <div class="part-hl">
+      <h2>모바일 앱<br>프로덕트 기획서</h2>
+      <p>Sun Routine App은 건강 루틴 형성을 지원하는 웰니스 루틴 서비스이다. 단순 기록 앱이 아닌 루틴 실행 → 루틴 유지 → 루틴 성장의 구조로 행동 변화를 만드는 루틴 플랫폼으로 설계된다.</p>
+    </div>
+  </div>
+
+  <div class="sec rv">
+    <div class="sec-kicker">1. 제품 개요 — 1.1 제품 정의</div>
+    <h3 class="sec-title">행동 변화를 만드는 루틴 플랫폼</h3>
+    <p class="sec-body">Sun Routine App은 건강 루틴 형성을 지원하는 웰니스 루틴 서비스이다.<br><br>기존 건강 앱은 다음 두 가지 유형이 많다.</p>
+    <div class="pills" style="margin-top:14px">
+      <span class="pill">건강 데이터 앱 (Apple Health / Fitbit)</span>
+      <span class="pill">습관 기록 앱 (Habit apps)</span>
+    </div>
+    <p class="sec-body" style="margin-top:14px">하지만 대부분 <strong>행동 기록</strong>에 그친다.</p>
+  </div>
+
+  <div class="compare rv">
+    <div class="cmp-col cmp-old">
+      <div class="cmp-label">기존 건강 앱</div>
+      <div class="cmp-rows" style="margin-top:10px">
+        <div class="cmp-row"><div class="dot d-gray"></div>건강 데이터 기록</div>
+        <div class="cmp-row"><div class="dot d-gray"></div>습관 체크 기록</div>
+        <div class="cmp-row"><div class="dot d-gray"></div>행동 기록에 그침</div>
+      </div>
+    </div>
+    <div class="cmp-arrow">→</div>
+    <div class="cmp-col cmp-moon">
+      <div class="cmp-label">Sun Routine App</div>
+      <div class="flow" style="margin-top:6px">
+        <div class="flow-step"><div class="flow-num fn-moon">1</div><div class="flow-txt">루틴 실행</div></div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-step"><div class="flow-num fn-moon">2</div><div class="flow-txt">루틴 유지</div></div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-step"><div class="flow-num fn-moon">3</div><div class="flow-txt">루틴 성장</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="quote q-moon rv"><p>즉 행동 변화를 만드는 루틴 플랫폼이다.</p></div>
+
+  <div class="divider"></div>
+
+  <div class="sec rv">
+    <div class="sec-kicker">2. 제품 목표</div>
+    <h3 class="sec-title">핵심 목표: 사용자의 건강 루틴 형성</h3>
+    <p class="sec-body">이를 위해 다음 행동을 만든다: <strong>매일 루틴 실행</strong></p>
+  </div>
+  <div class="cards-2 rv">
+    <div class="kpi" style="margin:0;padding:36px 32px">
+      <div class="kpi-lbl">제품 KPI</div>
+      <div class="kpi-val" style="font-size:clamp(32px,5vw,52px)">7 Day<br>Routine Retention</div>
+      <div class="kpi-desc" style="font-size:13px">목표: 30% 이상</div>
+    </div>
+    <div class="hl-box hlb-moon" style="margin:0;display:flex;flex-direction:column;justify-content:center">
+      <div class="hlb-kicker hk-moon">보조 KPI</div>
+      <div class="flow" style="margin:12px 0 0">
+        <div class="flow-step"><div class="flow-num fn-moon">01</div><div class="flow-txt">루틴 시작률</div></div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-step"><div class="flow-num fn-moon">02</div><div class="flow-txt">루틴 완료율</div></div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-step"><div class="flow-num fn-moon">03</div><div class="flow-txt">30 Day Completion Rate</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="sec rv">
+    <div class="sec-kicker">3. 사용자 흐름 (User Flow)</div>
+    <h3 class="sec-title">전체 사용자 경험 구조</h3>
+  </div>
+  <div class="ux-bar rv">
+    <div class="ux-step"><span class="ux-icon">👋</span><span class="ux-num">STEP 1</span><span class="ux-name">온보딩</span></div>
+    <div class="ux-step"><span class="ux-icon">🚀</span><span class="ux-num">STEP 2</span><span class="ux-name">루틴 시작</span></div>
+    <div class="ux-step"><span class="ux-icon">✅</span><span class="ux-num">STEP 3</span><span class="ux-name">루틴 실행</span></div>
+    <div class="ux-step"><span class="ux-icon">📅</span><span class="ux-num">STEP 4</span><span class="ux-name">루틴 유지</span></div>
+    <div class="ux-step"><span class="ux-icon">🏆</span><span class="ux-num">STEP 5</span><span class="ux-name">루틴 완료</span></div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="sec rv">
+    <div class="sec-kicker">4. 온보딩 설계</div>
+    <h3 class="sec-title">목표: 3분 안에 첫 루틴 실행</h3>
+    <p class="sec-body">온보딩은 4단계로 구성된다.</p>
+  </div>
+  <div class="cards-2 rv">
+    <div>
+      <div class="flow" style="margin:0">
+        <div class="flow-step"><div class="flow-num fn-moon">1</div><div><div class="flow-txt">건강 관심 질문</div><div class="flow-sub">사용자 상태 인식</div></div></div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-step"><div class="flow-num fn-moon">2</div><div><div class="flow-txt">루틴 추천</div><div class="flow-sub">추천 기반 UX</div></div></div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-step"><div class="flow-num fn-moon">3</div><div><div class="flow-txt">루틴 시간 설정</div><div class="flow-sub">알림 시간 개인화</div></div></div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-step"><div class="flow-num fn-moon">4</div><div><div class="flow-txt">첫 루틴 완료</div><div class="flow-sub">Day 1 Completion</div></div></div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div class="hl-box hlb-moon">
+        <div class="hlb-kicker hk-moon">4.1 건강 관심 질문</div>
+        <div style="font-size:13px;color:var(--ink);font-weight:500;margin-bottom:8px">"요즘 가장 관리하고 싶은 것은 무엇인가요?"</div>
+        <div class="pills"><span class="pill pill-moon">에너지</span><span class="pill pill-moon">수면</span><span class="pill pill-moon">스트레스</span><span class="pill pill-moon">건강 습관</span></div>
+        <div style="font-size:11px;color:var(--gray);margin-top:8px">목적: 사용자 상태 인식</div>
+      </div>
+      <div class="hl-box hlb-moon">
+        <div class="hlb-kicker hk-moon">4.2 루틴 추천 — 핵심 UX 원칙</div>
+        <div style="font-size:13px;color:var(--ink);line-height:1.7">사용자 응답 기반으로 Sun / Moon Routine을 추천.<br><strong>사용자에게 선택을 강요하지 않는다 → 추천 기반 UX.</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="sec rv">
+    <div class="sec-kicker">5. 루틴 시스템 / 6. 루틴 실행 UX</div>
+    <h3 class="sec-title">루틴 실행은 최대한 간단해야 한다</h3>
+    <p class="sec-body">앱의 핵심 기능은 루틴 실행 시스템이다.<br>사용자 행동: 루틴 완료 버튼 · 소요 시간: 3초 이하 · 루틴 완료 시: Day Completion 표시</p>
+  </div>
+  <div class="cards-2 rv">
+    <div class="card card-sun" style="padding:28px 24px">
+      <div style="font-size:40px;margin-bottom:12px">☀️</div>
+      <div style="font-family:var(--fd);font-size:22px;margin-bottom:4px">5.1 Sun Routine</div>
+      <div style="font-family:var(--fm);font-size:9px;letter-spacing:2px;color:#92400E;margin-bottom:12px">사용 시간: 아침</div>
+      <div class="pills"><span class="pill pill-sun">에너지</span><span class="pill pill-sun">활력</span><span class="pill pill-sun">집중력</span></div>
+    </div>
+    <div class="card card-moon" style="padding:28px 24px">
+      <div style="font-size:40px;margin-bottom:12px">🌙</div>
+      <div style="font-family:var(--fd);font-size:22px;margin-bottom:4px">5.2 Moon Routine</div>
+      <div style="font-family:var(--fm);font-size:9px;letter-spacing:2px;color:#3730A3;margin-bottom:12px">사용 시간: 취침 전</div>
+      <div class="pills"><span class="pill pill-moon">회복</span><span class="pill pill-moon">수면</span><span class="pill pill-moon">안정</span></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="sec rv">
+    <div class="sec-kicker">7. 스트릭 시스템</div>
+    <h3 class="sec-title">루틴 서비스에서 가장 중요한 유지 장치</h3>
+    <p class="sec-body">사람은 연속 기록을 유지하려는 심리가 있다. 이 기능은 루틴 유지율 증가에 매우 중요한 역할을 한다.</p>
+  </div>
+  <div class="cards-3 rv">
+    <div class="card" style="text-align:center;padding:28px 16px"><div style="font-size:36px;margin-bottom:8px">🔥</div><div style="font-family:var(--fd);font-size:30px;font-weight:300;color:var(--sun)">3 Day</div><div style="font-size:12px;color:var(--gray);margin-top:4px">Streak</div></div>
+    <div class="card" style="text-align:center;padding:28px 16px;border-color:var(--sun)"><div style="font-size:36px;margin-bottom:8px">🔥</div><div style="font-family:var(--fd);font-size:30px;font-weight:300;color:var(--sun)">7 Day</div><div style="font-size:12px;color:var(--gray);margin-top:4px">Streak</div></div>
+    <div class="card card-dark" style="text-align:center;padding:28px 16px"><div style="font-size:36px;margin-bottom:8px">🔥</div><div style="font-family:var(--fd);font-size:30px;font-weight:300;color:#FCD34D">30 Day</div><div style="font-size:12px;color:rgba(255,255,255,.4);margin-top:4px">Streak</div></div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="sec rv">
+    <div class="sec-kicker">8. 캐릭터 시스템</div>
+    <h3 class="sec-title">루틴 코치 캐릭터 — Solar &amp; Luna</h3>
+    <p class="sec-body">앱에는 루틴 코치 캐릭터가 등장한다.</p>
+  </div>
+  <div class="cards-2 rv">
+    <div class="card card-sun" style="padding:28px 24px">
+      <div style="font-size:52px;margin-bottom:10px">☀️</div>
+      <div style="font-family:var(--fd);font-size:26px;font-weight:300;margin-bottom:4px">8.1 Solar</div>
+      <div style="font-family:var(--fm);font-size:9px;letter-spacing:2px;color:#92400E;margin-bottom:14px">역할: 아침 루틴 코치</div>
+      <div style="background:#fff;border-radius:10px;padding:14px 16px;font-size:13px;color:var(--ink);font-style:italic;border:1px solid rgba(232,150,10,.18)">"오늘 Sun Routine을 시작할 시간입니다."</div>
+    </div>
+    <div class="card card-moon" style="padding:28px 24px">
+      <div style="font-size:52px;margin-bottom:10px">🌙</div>
+      <div style="font-family:var(--fd);font-size:26px;font-weight:300;margin-bottom:4px">8.2 Luna</div>
+      <div style="font-family:var(--fm);font-size:9px;letter-spacing:2px;color:#3730A3;margin-bottom:14px">역할: 밤 루틴 코치</div>
+      <div style="background:#fff;border-radius:10px;padding:14px 16px;font-size:13px;color:var(--ink);font-style:italic;border:1px solid rgba(79,82,200,.18)">"하루를 편안하게 마무리해볼까요?"</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="sec rv">
+    <div class="sec-kicker">9. 웰니스 지표</div>
+    <h3 class="sec-title">Wellness Metrics</h3>
+    <p class="sec-body">앱에는 루틴 진행 상태를 보여주는 Wellness Metrics가 있다. 루틴 실행 시 Index 상승이 표시된다.</p>
+  </div>
+  <div class="cards-2 rv">
+    <div class="hl-box hlb-sun">
+      <div class="hlb-kicker hk-sun">Solar — Metrics</div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-top:12px">
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:#fff;border-radius:8px;border:1px solid rgba(232,150,10,.15)"><span>⚡</span><span style="font-size:13px;font-weight:500">Energy Index</span></div>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:#fff;border-radius:8px;border:1px solid rgba(232,150,10,.15)"><span>🎯</span><span style="font-size:13px;font-weight:500">Focus Index</span></div>
+      </div>
+    </div>
+    <div class="hl-box hlb-moon">
+      <div class="hlb-kicker hk-moon">Luna — Metrics</div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-top:12px">
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:#fff;border-radius:8px;border:1px solid rgba(79,82,200,.15)"><span>🔄</span><span style="font-size:13px;font-weight:500">Recovery Index</span></div>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:#fff;border-radius:8px;border:1px solid rgba(79,82,200,.15)"><span>😴</span><span style="font-size:13px;font-weight:500">Sleep Index</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="sec rv">
+    <div class="sec-kicker">10. 루틴 단계 시스템 / 11. 루틴 챌린지 / 12. 루틴 진행 시각화</div>
+    <h3 class="sec-title">게임 레벨 대신 루틴 단계</h3>
+  </div>
+  <div class="cards-3 rv">
+    <div class="card">
+      <div class="hlb-kicker hk-moon" style="margin-bottom:16px">10. 루틴 단계</div>
+      <div class="flow" style="margin:0">
+        <div class="flow-step"><div class="flow-num fn-gray" style="font-size:10px">S1</div><div class="flow-txt">Routine Starter</div></div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-step"><div class="flow-num fn-moon" style="font-size:10px">S2</div><div class="flow-txt">Routine Builder</div></div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-step"><div class="flow-num fn-sun" style="font-size:10px">S3</div><div class="flow-txt">Routine Master</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="hlb-kicker hk-moon" style="margin-bottom:16px">11. 루틴 챌린지</div>
+      <p style="font-size:13px;color:var(--gray);font-weight:300;margin-bottom:14px;line-height:1.65">사용자가 목표를 가지고 루틴을 유지하도록 만드는 기능.</p>
+      <div class="pills"><span class="pill pill-moon">7 Day Challenge</span><span class="pill pill-moon">30 Day Challenge</span></div>
+    </div>
+    <div class="card">
+      <div class="hlb-kicker hk-moon" style="margin-bottom:16px">12. 진행 시각화</div>
+      <div style="font-family:var(--fd);font-size:36px;font-weight:300;color:var(--moon);margin-bottom:8px">Day 1 <span style="font-size:22px;color:var(--gray)">/30</span></div>
+      <div style="height:6px;background:var(--moon-lt);border-radius:3px;overflow:hidden;margin-bottom:8px"><div style="width:3.3%;height:100%;background:var(--moon);border-radius:3px"></div></div>
+      <div style="font-size:11px;color:var(--gray);font-family:var(--fm)">Routine Progress Bar</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="sec rv">
+    <div class="sec-kicker">13. 알림 시스템 / 14. 커뮤니티 기능 / 15. 제품 연동 기능</div>
+    <h3 class="sec-title">루틴 유지를 위한 핵심 기능</h3>
+  </div>
+  <div class="cards-3 rv">
+    <div class="card">
+      <span class="card-icon">🔔</span>
+      <div class="card-title">13. 알림 시스템</div>
+      <div class="card-body" style="margin-bottom:12px">루틴 유지에 가장 중요한 기능.<br><br>알림 종류:</div>
+      <div class="pills"><span class="pill">루틴 알림</span><span class="pill">루틴 미완료 알림</span><span class="pill">루틴 성취 알림</span></div>
+      <div style="margin-top:14px;padding:12px 14px;background:var(--moon-bg);border-radius:8px;font-size:12px;color:#3730A3;font-style:italic;border:1px solid var(--moon-lt)">"Sun Routine을 시작할 시간입니다."</div>
+    </div>
+    <div class="card">
+      <span class="card-icon">👥</span>
+      <div class="card-title">14. 커뮤니티 (확장)</div>
+      <div class="card-body" style="margin-bottom:12px">루틴 유지율을 높이기 위한 사회적 기능.</div>
+      <div class="pills"><span class="pill pill-moon">Routine Club</span><span class="pill pill-moon">Monthly Challenge</span></div>
+    </div>
+    <div class="card">
+      <span class="card-icon">📦</span>
+      <div class="card-title">15. 제품 연동</div>
+      <div class="card-body" style="margin-bottom:12px">앱은 제품과 연결된다. (QR Activation)</div>
+      <div class="flow" style="margin:0">
+        <div class="flow-step"><div class="flow-num fn-green" style="font-size:10px">①</div><div class="flow-txt" style="font-size:13px">제품 구매</div></div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-step"><div class="flow-num fn-green" style="font-size:10px">②</div><div class="flow-txt" style="font-size:13px">QR 스캔</div></div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-step"><div class="flow-num fn-green" style="font-size:10px">③</div><div class="flow-txt" style="font-size:13px">루틴 프로그램 활성화</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec rv" style="margin-top:48px"><div class="sec-kicker">16. 핵심 KPI</div></div>
+  <div class="kpi rv">
+    <div class="kpi-lbl">앱의 핵심 KPI</div>
+    <div class="kpi-val">7 Day Routine<br>Retention</div>
+    <div class="kpi-desc">목표: 30% 이상<br><br>보조 KPI: 루틴 시작률 / 루틴 완료율 / 30 Day Completion Rate</div>
+  </div>
+
+  <div class="summary rv">
+    <h4>PART 2 정리</h4>
+    <p>Sun Routine App은 단순 건강 관리 앱이 아니라 루틴 형성을 위한 행동 설계 플랫폼으로 설계된다. 핵심 기능은 루틴 실행 / 스트릭 / 챌린지 / 캐릭터 코치이며, 이를 통해 사용자가 건강 루틴을 지속적으로 유지하도록 만드는 것이 제품의 핵심 목표이다.</p>
+  </div>
+
+</div>
+</section>
+
+
+<!-- PART 3 -->
+<section id="p3" class="part part-green">
+<div class="wrap">
+
+  <div class="part-head rv">
+    <div class="part-badge pb-green">PART 03</div>
+    <div class="part-hl">
+      <h2>건기식 제품 &amp;<br>패키지 기획서</h2>
+      <p>Sun Routine 제품은 단순 건강기능식품이 아니라 루틴 프로그램을 실행하기 위한 도구이다. 영양제가 아닌 Daily Routine Pack으로 설계하여 루틴 경험 중심 브랜드로 차별화한다.</p>
+    </div>
+  </div>
+
+  <div class="sec rv">
+    <div class="sec-kicker">1. 제품 전략 — 1.1 제품 철학</div>
+    <h3 class="sec-title">제품 → 루틴 실행 도구</h3>
+    <p class="sec-body">Sun Routine 제품은 단순 건강기능식품이 아니라 루틴 프로그램을 실행하기 위한 도구이다.</p>
+  </div>
+  <div class="compare rv">
+    <div class="cmp-col cmp-old">
+      <div class="cmp-label">기존 건강기능식품</div>
+      <div style="font-size:20px;font-weight:500;color:var(--gray);margin-top:10px">제품 중심</div>
+    </div>
+    <div class="cmp-arrow">→</div>
+    <div class="cmp-col cmp-green">
+      <div class="cmp-label">Sun Routine</div>
+      <div style="font-size:20px;font-weight:500;color:var(--green);margin-top:10px">루틴 중심</div>
+    </div>
+  </div>
+  <div class="quote q-green rv"><p>즉 제품 → 루틴 실행 도구이다.</p></div>
+
+  <div class="divider"></div>
+
+  <div class="sec rv">
+    <div class="sec-kicker">2. 제품 라인업 / 3. 제품 구조</div>
+    <h3 class="sec-title">30일 프로그램 구조</h3>
+    <p class="sec-body">초기 제품은 하루 루틴 구조로 설계한다. 각 제품은 30일 프로그램으로 구성된다.</p>
+  </div>
+  <div class="cards-2 rv">
+    <div class="card card-sun" style="padding:28px 24px">
+      <div style="font-size:40px;margin-bottom:12px">☀️</div>
+      <div style="font-family:var(--fd);font-size:24px;font-weight:300;margin-bottom:4px">Sun Routine 30</div>
+      <div style="font-family:var(--fm);font-size:9px;letter-spacing:2px;color:#92400E;margin-bottom:16px">MORNING ENERGY PROGRAM</div>
+      <div style="background:#fff;border-radius:10px;padding:16px;border:1px solid rgba(232,150,10,.15)">
+        <div style="font-family:var(--fm);font-size:9px;letter-spacing:2px;color:#92400E;margin-bottom:10px">제품 내부 구성</div>
+        <div class="flow" style="margin:0;gap:2px">
+          <div class="flow-step" style="padding:4px 0"><div class="flow-num fn-sun" style="width:18px;height:18px;font-size:9px">✓</div><div class="flow-txt" style="font-size:12px">30 Morning Capsules 또는 30 Daily Packs</div></div>
+          <div class="flow-step" style="padding:4px 0"><div class="flow-num fn-sun" style="width:18px;height:18px;font-size:9px">✓</div><div class="flow-txt" style="font-size:12px">Routine Guide Card</div></div>
+          <div class="flow-step" style="padding:4px 0"><div class="flow-num fn-sun" style="width:18px;height:18px;font-size:9px">✓</div><div class="flow-txt" style="font-size:12px">Activation QR</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card card-moon" style="padding:28px 24px">
+      <div style="font-size:40px;margin-bottom:12px">🌙</div>
+      <div style="font-family:var(--fd);font-size:24px;font-weight:300;margin-bottom:4px">Moon Routine 30</div>
+      <div style="font-family:var(--fm);font-size:9px;letter-spacing:2px;color:#3730A3;margin-bottom:16px">NIGHT RECOVERY PROGRAM</div>
+      <div style="background:#fff;border-radius:10px;padding:16px;border:1px solid rgba(79,82,200,.15)">
+        <div style="font-family:var(--fm);font-size:9px;letter-spacing:2px;color:#3730A3;margin-bottom:10px">제품 내부 구성</div>
+        <div class="flow" style="margin:0;gap:2px">
+          <div class="flow-step" style="padding:4px 0"><div class="flow-num fn-moon" style="width:18px;height:18px;font-size:9px">✓</div><div class="flow-txt" style="font-size:12px">30 Night Capsules 또는 30 Night Packs</div></div>
+          <div class="flow-step" style="padding:4px 0"><div class="flow-num fn-moon" style="width:18px;height:18px;font-size:9px">✓</div><div class="flow-txt" style="font-size:12px">Routine Guide Card</div></div>
+          <div class="flow-step" style="padding:4px 0"><div class="flow-num fn-moon" style="width:18px;height:18px;font-size:9px">✓</div><div class="flow-txt" style="font-size:12px">Activation QR</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="hl-box hlb-green rv" style="margin-top:4px">
+    <div class="hlb-kicker hk-green">4. 제품 포맷 — 소분형 데일리 팩</div>
+    <div style="font-size:15px;font-weight:500;color:var(--ink);margin-bottom:10px">Daily Pack · 1 Pack = 하루 분량</div>
+    <div class="pills"><span class="pill pill-green">루틴 실행 용이</span><span class="pill pill-green">휴대성</span><span class="pill pill-green">복용 편의성</span></div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="sec rv">
+    <div class="sec-kicker">5. Sun Routine 제품 설계 — Morning Energy Program</div>
+    <h3 class="sec-title">핵심 성분 &amp; 효과</h3>
+    <p class="sec-body" style="margin-bottom:6px">목표: 활력 / 집중력 / 피로 개선</p>
+    <p style="font-family:var(--fd);font-size:18px;color:var(--sun);font-style:italic;margin-bottom:24px">하루 에너지를 만드는 아침 루틴</p>
+  </div>
+  <div class="ing-grid rv">
+    <div class="ing ing-sun"><div class="ing-name">비타민 B군</div><div class="ing-sub">B1 · B2 · B6 · B12</div><div class="ing-eff">에너지 대사 / 피로 개선</div></div>
+    <div class="ing ing-sun"><div class="ing-name">비타민 C</div><div class="ing-eff">항산화 / 면역</div></div>
+    <div class="ing ing-sun"><div class="ing-name">비타민 D</div><div class="ing-eff">면역 / 기분 안정</div></div>
+    <div class="ing ing-sun"><div class="ing-name">마그네슘</div><div class="ing-eff">신경 안정 / 근육 기능</div></div>
+    <div class="ing ing-sun"><div class="ing-name">코엔자임 Q10</div><div class="ing-eff">세포 에너지 생성 / 피로 개선</div></div>
+    <div class="ing ing-sun"><div class="ing-name">L-테아닌</div><div class="ing-eff">집중력 / 긴장 완화</div></div>
+  </div>
+  <div class="hl-box hlb-sun rv">
+    <div class="hlb-kicker hk-sun">Sun Routine 성분 예시</div>
+    <div class="pills" style="margin-top:10px"><span class="pill pill-sun">비타민 B군</span><span class="pill pill-sun">비타민 C</span><span class="pill pill-sun">비타민 D</span><span class="pill pill-sun">마그네슘</span><span class="pill pill-sun">코엔자임 Q10</span><span class="pill pill-sun">L-테아닌</span></div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="sec rv">
+    <div class="sec-kicker">6. Moon Routine 제품 설계 — Night Recovery Program</div>
+    <h3 class="sec-title">핵심 성분 &amp; 효과</h3>
+    <p class="sec-body" style="margin-bottom:6px">목표: 수면 준비 / 긴장 완화 / 회복</p>
+    <p style="font-family:var(--fd);font-size:18px;color:var(--moon);font-style:italic;margin-bottom:24px">하루를 회복하는 밤 루틴</p>
+  </div>
+  <div class="ing-grid rv">
+    <div class="ing ing-moon"><div class="ing-name">마그네슘</div><div class="ing-eff">근육 이완 / 신경 안정</div></div>
+    <div class="ing ing-moon"><div class="ing-name">L-테아닌</div><div class="ing-eff">스트레스 완화 / 긴장 완화</div></div>
+    <div class="ing ing-moon"><div class="ing-name">GABA</div><div class="ing-eff">심리 안정 / 긴장 완화</div></div>
+    <div class="ing ing-moon"><div class="ing-name">글리신</div><div class="ing-eff">수면 질 개선</div></div>
+    <div class="ing ing-moon"><div class="ing-name">아슈와간다</div><div class="ing-eff">스트레스 완화 / 코르티솔 감소</div></div>
+  </div>
+  <div class="hl-box hlb-moon rv">
+    <div class="hlb-kicker hk-moon">Moon Routine 성분 예시</div>
+    <div class="pills" style="margin-top:10px"><span class="pill pill-moon">마그네슘</span><span class="pill pill-moon">L-테아닌</span><span class="pill pill-moon">GABA</span><span class="pill pill-moon">글리신</span><span class="pill pill-moon">아슈와간다</span></div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="sec rv">
+    <div class="sec-kicker">7. 패키지 전략 / 8. 패키지 구성 / 9. 패키지 메시지 / 10. 패키지 디자인</div>
+    <h3 class="sec-title">Routine Kit Box</h3>
+    <p class="sec-body">패키지는 영양제 박스가 아니라 루틴 키트처럼 보이게 설계한다.</p>
+  </div>
+  <div class="compare rv">
+    <div class="cmp-col cmp-old">
+      <div class="cmp-label">기존 건기식 패키지</div>
+      <div class="cmp-rows" style="margin-top:10px">
+        <div class="cmp-row"><div class="dot d-gray"></div>통 / 알약</div>
+        <div class="cmp-row"><div class="dot d-gray"></div>성분 정보 중심 디자인</div>
+      </div>
+    </div>
+    <div class="cmp-arrow">→</div>
+    <div class="cmp-col cmp-green">
+      <div class="cmp-label">Sun Routine — Routine Kit Box</div>
+      <div class="cmp-rows" style="margin-top:10px">
+        <div class="cmp-row"><div class="dot d-green"></div>30 Daily Packs</div>
+        <div class="cmp-row"><div class="dot d-green"></div>Routine Guide Card</div>
+        <div class="cmp-row"><div class="dot d-green"></div>Activation QR</div>
+      </div>
+    </div>
+  </div>
+  <div class="cards-2 rv" style="margin-top:16px">
+    <div class="hl-box hlb-green" style="margin:0">
+      <div class="hlb-kicker hk-green">9. 패키지 내부 메시지</div>
+      <div style="margin-top:12px;display:flex;flex-direction:column;gap:10px">
+        <div style="padding:14px 16px;background:#fff;border-radius:10px;font-size:14px;font-style:italic;color:var(--ink);border:1px solid rgba(5,150,105,.15);line-height:1.65">"오늘부터 당신의 새로운 루틴이 시작됩니다."</div>
+        <div style="padding:14px 16px;background:#fff;border-radius:10px;font-size:14px;font-style:italic;color:var(--ink);border:1px solid rgba(5,150,105,.15);line-height:1.65">"건강은 성분이 아니라 루틴입니다."</div>
+      </div>
+    </div>
+    <div class="card" style="margin:0">
+      <div class="hlb-kicker hk-green" style="margin-bottom:14px">10. 패키지 디자인 방향</div>
+      <div style="font-size:14px;font-weight:500;margin-bottom:12px">미니멀 웰니스 디자인</div>
+      <div style="font-family:var(--fm);font-size:10px;color:var(--gray);margin-bottom:8px">참고 브랜드</div>
+      <div class="pills"><span class="pill">Apple Health</span><span class="pill">Oura</span><span class="pill">Headspace</span></div>
+      <div style="margin-top:14px;display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;align-items:center;gap:10px;font-size:13px"><div class="dot d-sun" style="width:8px;height:8px"></div>Sun Routine → Warm Tone</div>
+        <div style="display:flex;align-items:center;gap:10px;font-size:13px"><div class="dot d-moon" style="width:8px;height:8px"></div>Moon Routine → Calm Tone</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="sec rv">
+    <div class="sec-kicker">11. 제조 구조 / 12. 제조 원가 추정</div>
+    <h3 class="sec-title">OEM / ODM 제조 &amp; 원가 구조</h3>
+    <p class="sec-body">제품 생산 방식: OEM / ODM 제조 · 국내 주요 건기식 OEM 제조사 활용</p>
+  </div>
+  <div class="cards-2 rv">
+    <div class="card">
+      <div class="hlb-kicker hk-green" style="margin-bottom:12px">국내 주요 제조사</div>
+      <div class="pills"><span class="pill pill-green">콜마</span><span class="pill pill-green">코스맥스</span><span class="pill pill-green">노바렉스</span><span class="pill pill-green">서흥</span></div>
+    </div>
+    <div class="price-wrap" style="margin:0">
+      <div class="price-head ph-sun">
+        <div>
+          <div style="font-family:var(--fm);font-size:9px;letter-spacing:2px;color:#92400E;margin-bottom:4px">캡슐 제품 기준 / OEM 생산</div>
+          <div class="price-big">총 원가</div>
+        </div>
+      </div>
+      <div class="price-body">
+        <div class="price-row"><span class="pr-lbl">OEM 생산 (대략 원가)</span><span class="pr-val">6,000 ~ 9,000원</span></div>
+        <div class="price-row"><span class="pr-lbl">패키지</span><span class="pr-val">2,000 ~ 3,000원</span></div>
+        <div class="price-row"><span class="pr-lbl">물류</span><span class="pr-val">2,000 ~ 3,000원</span></div>
+        <div class="price-row pr-total"><span class="pr-lbl">총 제조 원가</span><span class="pr-val">10,000 ~ 15,000원</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="sec rv">
+    <div class="sec-kicker">13. 권장 소비자가</div>
+    <h3 class="sec-title">마진 구조 예시</h3>
+    <p class="sec-body">D2C 웰니스 브랜드 기준 · 권장 가격: 39,000 ~ 49,000원</p>
+  </div>
+  <div class="cards-2 rv">
+    <div class="price-wrap" style="margin:0">
+      <div class="price-head ph-sun">
+        <div>
+          <div style="font-family:var(--fm);font-size:9px;letter-spacing:2px;color:#92400E;margin-bottom:4px">권장 소비자가</div>
+          <div class="price-big" style="color:var(--sun)">39,000원</div>
+        </div>
+        <div style="font-family:var(--fd);font-size:13px;color:#92400E;text-align:right;line-height:1.5">D2C 웰니스<br>브랜드 기준</div>
+      </div>
+      <div class="price-body">
+        <div class="price-row"><span class="pr-lbl">판매가</span><span class="pr-val">39,000원</span></div>
+        <div class="price-row"><span class="pr-lbl">원가</span><span class="pr-val">12,000원</span></div>
+        <div class="price-row pr-total"><span class="pr-lbl">매출총이익</span><span class="pr-val" style="color:var(--green);font-family:var(--fd);font-size:20px">27,000원</span></div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div class="hl-box hlb-green" style="margin:0">
+        <div class="hlb-kicker hk-green">마진율 (참고)</div>
+        <div style="font-family:var(--fd);font-size:40px;font-weight:300;color:var(--green)">~69%</div>
+        <div style="font-size:12px;color:var(--gray);font-weight:300">27,000 / 39,000원 기준</div>
+      </div>
+      <div class="card card-dark" style="margin:0">
+        <div class="card-body" style="font-size:12px;line-height:1.8">권장 가격 범위: <strong style="color:#fff">39,000 ~ 49,000원</strong><br>Sun Routine 30 / Moon Routine 30 동일 가격 구조 적용.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="sec rv">
+    <div class="sec-kicker">14. 제품 포지셔닝</div>
+    <h3 class="sec-title">영양제 ❌ &nbsp;루틴 프로그램 ⭕</h3>
+  </div>
+  <div class="compare rv">
+    <div class="cmp-col cmp-old">
+      <div class="cmp-label">기존 제품</div>
+      <div style="font-family:var(--fd);font-size:26px;font-weight:300;color:var(--gray);margin-top:10px">종합비타민</div>
+      <div style="font-size:12px;color:#9CA3AF;margin-top:6px;font-weight:300">성분 / 함량 중심 포지셔닝</div>
+    </div>
+    <div class="cmp-arrow">→</div>
+    <div class="cmp-col cmp-sun">
+      <div class="cmp-label">Sun Routine</div>
+      <div style="font-family:var(--fd);font-size:26px;font-weight:300;color:var(--sun);margin-top:10px">Daily Routine Program</div>
+      <div style="font-size:12px;color:#92400E;margin-top:6px;font-weight:300">루틴 경험 / 행동 중심 포지셔닝</div>
+    </div>
+  </div>
+  <div class="hl-box hlb-green rv" style="margin-top:16px;text-align:center;padding:28px">
+    <div style="font-family:var(--fd);font-size:clamp(20px,3vw,32px);color:var(--ink);line-height:1.4">영양제 <span style="color:#EF4444">❌</span>&nbsp;&nbsp;&nbsp;루틴 프로그램 <span style="color:var(--green)">⭕</span></div>
+  </div>
+
+  <div class="summary rv">
+    <h4>PART 3 정리</h4>
+    <p>Sun Routine / Moon Routine 제품은 단순 건강기능식품이 아니라 하루 건강 루틴을 실행하는 Daily Routine Pack으로 설계된다. 아침 루틴과 밤 루틴을 중심으로 활력과 회복을 동시에 관리하는 구조를 만들며, 이를 통해 기존 건기식 시장의 성분 경쟁이 아닌 루틴 경험 중심 브랜드로 차별화한다.</p>
+  </div>
+
+</div>
+</section>
+
+<footer>SUN ROUTINE / MOON ROUTINE — 루틴 웰니스 브랜드 사업기획서 · 2025</footer>
+
+<script>
+function goTo(id){const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'})}
+const parts=[{id:'p1'},{id:'p2'},{id:'p3'}];
+const nts=document.querySelectorAll('.nt');
+const actCls=['as','am','ag'];
+function onScroll(){
+  const sy=window.scrollY;
+  const dh=document.documentElement.scrollHeight-window.innerHeight;
+  document.getElementById('nprog').style.width=(dh>0?sy/dh*100:0)+'%';
+  let cur=0;
+  parts.forEach((p,i)=>{const el=document.getElementById(p.id);if(el&&el.offsetTop-140<=sy)cur=i;});
+  nts.forEach((t,i)=>{t.className='nt';if(i===cur)t.classList.add(actCls[i]);});
+}
+const rvEls=document.querySelectorAll('.rv');
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');obs.unobserve(e.target);}});
+},{threshold:0.07,rootMargin:'0px 0px -32px 0px'});
+rvEls.forEach(el=>obs.observe(el));
+window.addEventListener('scroll',onScroll,{passive:true});
+onScroll();
+</script>
+</body>
+</html>

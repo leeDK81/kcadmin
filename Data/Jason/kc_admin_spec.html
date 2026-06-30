@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KC Admin 개발 기획안 — 카드 시스템 명세서</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f7f7f5;
+  --surface: #ffffff;
+  --surface2: #f0efec;
+  --text: #1a1a18;
+  --text2: #5f5e5a;
+  --text3: #8a8983;
+  --accent: #1a3a6b;
+  --accent2: #2b5797;
+  --accent-light: #e8f0fe;
+  --teal: #0f6e56;
+  --teal-bg: #e6f5ee;
+  --coral: #d85a30;
+  --coral-bg: #faece7;
+  --purple: #534ab7;
+  --purple-bg: #eeedfe;
+  --amber: #b07d10;
+  --amber-bg: #faf0da;
+  --red: #a32d2d;
+  --red-bg: #fcebeb;
+  --green: #27864a;
+  --green-bg: #ecfaf0;
+  --border: #e5e4e0;
+  --border-s: #d0cfc9;
+  --mono: 'JetBrains Mono', monospace;
+  --sans: 'Noto Sans KR', sans-serif;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--sans); background: var(--bg); color: var(--text); line-height: 1.8; font-size: 15px; -webkit-font-smoothing: antialiased; }
+
+.header { text-align: center; padding: 56px 24px 40px; border-bottom: 2px solid var(--accent); background: var(--surface); }
+.header .badge { display: inline-block; background: var(--accent); color: #fff; font-size: 11px; font-weight: 700; padding: 4px 14px; border-radius: 20px; letter-spacing: 1.5px; margin-bottom: 14px; }
+.header h1 { font-size: 28px; font-weight: 800; color: var(--accent); letter-spacing: -0.5px; margin-bottom: 6px; }
+.header .sub { font-size: 14px; color: var(--text2); }
+.header .meta { font-size: 12px; color: var(--text3); margin-top: 16px; font-family: var(--mono); }
+
+.nav { position: sticky; top: 0; z-index: 100; background: rgba(247,247,245,.96); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); padding: 10px 0; }
+.nav-inner { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; max-width: 1000px; margin: 0 auto; padding: 0 20px; }
+.nav-inner::-webkit-scrollbar { display: none; }
+.nav-pill { white-space: nowrap; padding: 7px 14px; border-radius: 18px; font-size: 12.5px; font-weight: 500; color: var(--text3); cursor: pointer; transition: all .2s; border: 1px solid transparent; flex-shrink: 0; }
+.nav-pill:hover { color: var(--text2); background: var(--surface2); }
+.nav-pill.active { color: #fff; background: var(--accent); }
+
+.container { max-width: 860px; margin: 0 auto; padding: 0 24px 120px; }
+.section { padding: 52px 0 0; }
+.section-num { font-size: 11px; font-family: var(--mono); color: var(--accent); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; }
+.section-title { font-size: 22px; font-weight: 800; color: var(--accent); margin-bottom: 6px; letter-spacing: -0.3px; }
+.section-desc { font-size: 14px; color: var(--text2); margin-bottom: 28px; line-height: 1.7; }
+
+/* Accordion */
+.acc { border: 1px solid var(--border); border-radius: 10px; margin-bottom: 10px; background: var(--surface); overflow: hidden; transition: box-shadow .2s; }
+.acc:hover { box-shadow: 0 2px 8px rgba(0,0,0,.04); }
+.acc-head { padding: 16px 20px; cursor: pointer; display: flex; align-items: center; gap: 12px; user-select: none; }
+.acc-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
+.acc-title { font-size: 15px; font-weight: 700; color: var(--text); flex: 1; }
+.acc-sub { font-size: 12px; color: var(--text3); margin-left: 8px; }
+.acc-arrow { width: 20px; height: 20px; transition: transform .25s; flex-shrink: 0; color: var(--text3); }
+.acc.open .acc-arrow { transform: rotate(180deg); }
+.acc-body { max-height: 0; overflow: hidden; transition: max-height .4s cubic-bezier(.4,0,.2,1); }
+.acc.open .acc-body { max-height: 9000px; }
+.acc-inner { padding: 0 20px 20px; }
+
+.ic-teal { background: var(--teal-bg); color: var(--teal); }
+.ic-coral { background: var(--coral-bg); color: var(--coral); }
+.ic-purple { background: var(--purple-bg); color: var(--purple); }
+.ic-amber { background: var(--amber-bg); color: var(--amber); }
+.ic-red { background: var(--red-bg); color: var(--red); }
+.ic-green { background: var(--green-bg); color: var(--green); }
+.ic-blue { background: var(--accent-light); color: var(--accent); }
+.ic-gray { background: var(--surface2); color: var(--text2); }
+
+h4 { font-size: 14px; font-weight: 700; color: var(--text); margin: 20px 0 8px; }
+h4:first-child { margin-top: 0; }
+p, li { font-size: 14px; line-height: 1.75; color: var(--text2); }
+p { margin-bottom: 10px; }
+ul, ol { margin: 6px 0 12px 18px; }
+li { margin-bottom: 4px; }
+strong { color: var(--text); font-weight: 600; }
+
+code { font-family: var(--mono); font-size: 12.5px; background: var(--surface2); padding: 2px 6px; border-radius: 4px; color: var(--purple); }
+pre { background: #1e1e2e; border-radius: 8px; padding: 16px 18px; font-family: var(--mono); font-size: 12px; color: #cdd6f4; line-height: 1.75; overflow-x: auto; margin: 10px 0 14px; white-space: pre; }
+pre .cm { color: #6c7086; }
+pre .kw { color: #cba6f7; }
+pre .st { color: #a6e3a1; }
+pre .nm { color: #89b4fa; }
+pre .tp { color: #f9e2af; }
+pre .op { color: #89dceb; }
+
+table { width: 100%; border-collapse: separate; border-spacing: 0; border-radius: 8px; overflow: hidden; border: 1px solid var(--border); margin: 10px 0 14px; font-size: 13px; }
+th { background: var(--accent); color: #fff; padding: 9px 12px; text-align: left; font-weight: 500; font-size: 12px; }
+td { padding: 9px 12px; border-bottom: 1px solid var(--border); vertical-align: top; color: var(--text2); }
+tr:last-child td { border-bottom: none; }
+tr:nth-child(even) td { background: rgba(0,0,0,.015); }
+
+.info-box { border-radius: 8px; padding: 14px 16px; margin: 12px 0; font-size: 13px; line-height: 1.65; }
+.info-box strong { display: block; margin-bottom: 4px; }
+.info-blue { background: var(--accent-light); border-left: 3px solid var(--accent2); }
+.info-blue strong { color: var(--accent); }
+.info-teal { background: var(--teal-bg); border-left: 3px solid var(--teal); }
+.info-teal strong { color: var(--teal); }
+.info-amber { background: var(--amber-bg); border-left: 3px solid var(--amber); }
+.info-amber strong { color: var(--amber); }
+.info-red { background: var(--red-bg); border-left: 3px solid var(--red); }
+.info-red strong { color: var(--red); }
+.info-green { background: var(--green-bg); border-left: 3px solid var(--green); }
+.info-green strong { color: var(--green); }
+
+.chain { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin: 14px 0; }
+.chain-item { padding: 7px 16px; border-radius: 8px; font-size: 13px; font-weight: 700; }
+.chain-arr { color: var(--text3); font-size: 18px; font-weight: 300; }
+
+/* State machine */
+.state-flow { display: flex; align-items: center; gap: 0; margin: 16px 0; flex-wrap: wrap; }
+.state-box { padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 700; border: 2px solid; text-align: center; min-width: 90px; }
+.state-draft { background: #e0e7ff; color: #3730a3; border-color: #a5b4fc; }
+.state-review { background: #fef3c7; color: #92400e; border-color: #fbbf24; }
+.state-legal { background: #fce7f3; color: #9d174d; border-color: #f9a8d4; }
+.state-active { background: var(--green-bg); color: #065f46; border-color: #6ee7b7; }
+.state-archived { background: var(--surface2); color: var(--text3); border-color: var(--border-s); }
+.state-arrow { font-size: 20px; color: var(--text3); padding: 0 4px; }
+.state-label { font-size: 11px; color: var(--text3); text-align: center; margin-top: 4px; font-family: var(--mono); }
+
+/* Badge pills */
+.pill { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; margin: 2px; }
+.pill-req { background: var(--red-bg); color: var(--red); border: 1px solid #f5c0c0; }
+.pill-opt { background: var(--surface2); color: var(--text3); border: 1px solid var(--border); }
+.pill-auto { background: var(--teal-bg); color: var(--teal); border: 1px solid #b0dcc5; }
+
+/* API table */
+.api-method { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; font-family: var(--mono); }
+.m-get { background: #dbeafe; color: #1d4ed8; }
+.m-post { background: #dcfce7; color: #15803d; }
+.m-put { background: #fef9c3; color: #854d0e; }
+.m-patch { background: #f3e8ff; color: #6b21a8; }
+.m-delete { background: #fee2e2; color: #b91c1c; }
+
+/* Required badge */
+.req { color: var(--red); font-weight: 700; font-size: 12px; }
+.opt { color: var(--text3); font-size: 12px; }
+
+/* Screen spec */
+.screen-box { border: 1px solid var(--border); border-radius: 10px; margin: 12px 0; overflow: hidden; }
+.screen-title-bar { background: var(--accent); color: #fff; padding: 10px 16px; font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+.screen-body { padding: 16px; }
+.action-row { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+.action-row:last-child { border-bottom: none; }
+.action-name { font-weight: 700; color: var(--text); min-width: 140px; flex-shrink: 0; }
+.action-desc { color: var(--text2); flex: 1; line-height: 1.6; }
+.action-rule { font-size: 11px; color: var(--accent2); font-family: var(--mono); margin-top: 3px; }
+
+/* Two-col layout for wide tables */
+.field-tag { font-size: 11px; padding: 1px 6px; border-radius: 3px; font-family: var(--mono); }
+.ft-str { background: #dbeafe; color: #1d4ed8; }
+.ft-enum { background: #f3e8ff; color: #6b21a8; }
+.ft-arr { background: #dcfce7; color: #15803d; }
+.ft-num { background: #fef9c3; color: #854d0e; }
+.ft-bool { background: #fee2e2; color: #b91c1c; }
+.ft-json { background: #fef3c7; color: #92400e; }
+.ft-date { background: var(--surface2); color: var(--text2); }
+
+/* Vertical step */
+.vstep { position: relative; padding-left: 32px; margin: 16px 0; }
+.vstep::before { content: ''; position: absolute; left: 11px; top: 0; bottom: 0; width: 2px; background: var(--border); }
+.vstep-item { position: relative; margin-bottom: 20px; }
+.vstep-dot { position: absolute; left: -32px; top: 3px; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; background: var(--accent); color: #fff; z-index: 1; }
+.vstep-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.vstep-desc { font-size: 13px; color: var(--text2); line-height: 1.6; }
+
+@media (max-width: 640px) {
+  .header h1 { font-size: 22px; }
+  .container { padding: 0 16px 80px; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="badge">개발 기획안 · 내부 배포</div>
+  <h1>KC Admin — 카드 시스템 개발 명세서</h1>
+  <div class="sub">개발팀이 KC 카드를 구현하기 위한 필드 정의 · 관계 구조 · 화면 명세 · API 목록</div>
+  <div class="meta">v1.0 · 2026-04-16 · 플랫폼사업본부 기획 · 대상: 개발팀</div>
+</div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-pill active" onclick="navTo('overview')">개요</div>
+    <div class="nav-pill" onclick="navTo('cards')">카드 7종 정의</div>
+    <div class="nav-pill" onclick="navTo('relation')">관계 구조</div>
+    <div class="nav-pill" onclick="navTo('condition')">조건 엔진</div>
+    <div class="nav-pill" onclick="navTo('status')">상태 관리</div>
+    <div class="nav-pill" onclick="navTo('screens')">화면 정의</div>
+    <div class="nav-pill" onclick="navTo('api')">API 목록</div>
+  </div>
+</nav>
+
+<div class="container">
+
+<!-- ======================== PART 1 ======================== -->
+<section class="section" id="overview">
+  <div class="section-num">Part 1</div>
+  <div class="section-title">KC Admin이 무엇인가</div>
+  <div class="section-desc">개발 착수 전 반드시 공유해야 하는 핵심 개념입니다.</div>
+
+  <h4>한 줄 정의</h4>
+  <p><strong>KC Admin = Clark AI가 고객에게 답변하기 위해 필요한 "보험 지식 카드"를 관리하는 어드민 시스템</strong>입니다.<br>
+  담당자가 KC Admin에서 카드를 작성·승인하면, 그 카드가 자동으로 Vector DB에 반영되고, Clark이 고객 질문에 답변할 때 해당 카드를 참조합니다.</p>
+
+  <h4>시스템 흐름 (전체 그림)</h4>
+  <pre>
+[KC Admin]
+  담당자/검수자/준법감시인이
+  카드를 작성·검수·승인
+       │
+       │ 카드 ACTIVE 전환 시 자동 트리거
+       ▼
+[Vector DB]
+  카드 텍스트를 임베딩 벡터로 변환·저장
+  (카드 수정 → 벡터 교체 / 카드 보관 → 벡터 삭제)
+       │
+       │ Clark이 고객 질문 수신 시 검색
+       ▼
+[Clark AI — 고객 대화]
+  ① 벡터 검색으로 관련 카드 탐색
+  ② 카드 간 참조 체이닝 (Concept → Risk-type → Rule → Evidence)
+  ③ 고객 실제 보험 데이터와 Rule 조건 비교 (if-else 로직)
+  ④ Policy 제약 확인 후 LLM 답변 생성
+  ⑤ 필요 시 설계사 연결 (Playbook → FC API)</pre>
+
+  <h4>KC 카드가 일반 CMS와 다른 점</h4>
+  <table>
+    <thead><tr><th>일반 CMS (예: 공지사항 게시판)</th><th>KC Admin (온톨로지 기반)</th></tr></thead>
+    <tbody>
+      <tr><td>글 1개 = 독립 콘텐츠</td><td>카드 1개 = 지식 그래프의 노드 1개</td></tr>
+      <tr><td>카드 간 관계 없음</td><td>카드끼리 FK 참조로 연결됨 (체이닝)</td></tr>
+      <tr><td>검색 = 키워드 매칭</td><td>검색 = 벡터 유사도 검색</td></tr>
+      <tr><td>저장 = DB 저장</td><td>저장 = DB 저장 + Vector DB 반영 (2곳)</td></tr>
+      <tr><td>승인 없음</td><td>카드마다 사람이 검수·승인 (금융 규제 의무)</td></tr>
+    </tbody>
+  </table>
+
+  <div class="info-box info-amber">
+    <strong>승인 절차가 있는 이유</strong>
+    금융 마이데이터 사업자 의무로, KC 카드 콘텐츠는 법적 검토 및 사람의 승인을 거쳐야 Clark이 참조할 수 있습니다. 승인되지 않은 카드(DRAFT, IN_REVIEW 상태)는 Clark이 절대 참조하지 않습니다.
+  </div>
+
+  <h4>Phase 1 개발 범위</h4>
+  <table>
+    <thead><tr><th>Phase 1 — 이번에 만드는 것</th><th>이후 단계</th></tr></thead>
+    <tbody>
+      <tr><td>KC Admin 전체 (카드 7종 관리)</td><td>Clark AI 채팅 인터페이스 (Phase 2)</td></tr>
+      <tr><td>조건 빌더 + Dry-run 엔진</td><td>Case 카드 자동 태그 (Clark 연동 후)</td></tr>
+      <tr><td>카드 승인 절차 (상태 관리)</td><td>건강검진 API 연동 — Phase 1.5</td></tr>
+      <tr><td>Vector DB 반영 파이프라인</td><td>설계사 배정 최적화 엔진 (Phase 2)</td></tr>
+      <tr><td>역할별 권한 관리</td><td>그래프 기반 고급 검색 (Phase 2)</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ======================== PART 2 ======================== -->
+<section class="section" id="cards">
+  <div class="section-num">Part 2</div>
+  <div class="section-title">카드 7종 정의</div>
+  <div class="section-desc">각 카드 타입의 필드 목록, 참조 관계, 제약 조건을 정의합니다. <span class="req">* 필수</span> <span class="opt">선택</span></div>
+
+  <!-- Concept -->
+  <div class="acc" onclick="toggleAcc(this)">
+    <div class="acc-head">
+      <div class="acc-icon ic-teal">①</div>
+      <div class="acc-title">Concept 카드</div>
+      <div class="acc-sub">Clark의 검색 진입점 — 고객 질문과 가장 먼저 매칭</div>
+      <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="acc-body"><div class="acc-inner">
+      <p><strong>역할:</strong> 고객이 "암 보험이 뭐야?" 같은 질문을 하면 벡터 검색으로 가장 먼저 히트되는 카드. STANDALONE이면 바로 답변, LINKED이면 연결된 Risk-type으로 체이닝 시작.</p>
+
+      <h4>필드 정의</h4>
+      <table>
+        <thead><tr><th>필드명</th><th>타입</th><th>필수</th><th>설명</th></tr></thead>
+        <tbody>
+          <tr><td><code>id</code></td><td><span class="field-tag ft-str">string</span></td><td><span class="req">*</span></td><td>자동 생성. 형식: <code>CONCEPT.C01.V1</code></td></tr>
+          <tr><td><code>type</code></td><td><span class="field-tag ft-enum">enum</span></td><td><span class="req">*</span></td><td>고정값: <code>CONCEPT</code></td></tr>
+          <tr><td><code>title</code></td><td><span class="field-tag ft-str">string</span></td><td><span class="req">*</span></td><td>카드 제목 (예: 암 치료비·생활비 이중 공백의 구조)</td></tr>
+          <tr><td><code>question</code></td><td><span class="field-tag ft-str">string</span></td><td><span class="req">*</span></td><td>이 카드가 답하는 핵심 질문 1줄</td></tr>
+          <tr><td><code>definition</code></td><td><span class="field-tag ft-str">string</span></td><td><span class="req">*</span></td><td>한 줄 정의 (25자 이내)</td></tr>
+          <tr><td><code>content</code></td><td><span class="field-tag ft-str">string</span></td><td><span class="req">*</span></td><td>본문 (왜 중요한가 3가지, 대표 오해 2가지 포함)</td></tr>
+          <tr><td><code>synonyms</code></td><td><span class="field-tag ft-arr">string[]</span></td><td><span class="opt">선택</span></td><td>동의어 목록. 벡터 변환 시 본문과 합쳐 검색 정확도 향상</td></tr>
+          <tr><td><code>link_type</code></td><td><span class="field-tag ft-enum">enum</span></td><td><span class="req">*</span></td><td><code>STANDALONE</code> (독립 개념) 또는 <code>LINKED</code> (Risk-type 연결)</td></tr>
+          <tr><td><code>linked_risk_types</code></td><td><span class="field-tag ft-arr">string[]</span></td><td>LINKED 시 <span class="req">*</span></td><td>연결된 Risk-type 카드 ID 목록. link_type이 LINKED일 때만 활성화</td></tr>
+          <tr><td><code>visibility</code></td><td><span class="field-tag ft-enum">enum</span></td><td><span class="req">*</span></td><td><code>PUBLIC</code> (Clark 일반 사용) / <code>INTERNAL</code> (내부 전용)</td></tr>
+          <tr><td><code>status</code></td><td><span class="field-tag ft-enum">enum</span></td><td>자동</td><td><code>DRAFT</code> / <code>IN_REVIEW</code> / <code>ACTIVE</code> / <code>ARCHIVED</code></td></tr>
+          <tr><td><code>assignee</code></td><td><span class="field-tag ft-str">string</span></td><td><span class="opt">선택</span></td><td>작성 담당자</td></tr>
+          <tr><td><code>created_at</code></td><td><span class="field-tag ft-date">datetime</span></td><td>자동</td><td>생성 시각</td></tr>
+          <tr><td><code>updated_at</code></td><td><span class="field-tag ft-date">datetime</span></td><td>자동</td><td>수정 시각</td></tr>
+        </tbody>
+      </table>
+
+      <h4>참조 관계</h4>
+      <div class="chain">
+        <span class="chain-item" style="background:var(--teal-bg);color:var(--teal);">Concept (이 카드)</span>
+        <span class="chain-arr">→</span>
+        <span class="chain-item" style="background:var(--coral-bg);color:var(--coral);">Risk-type (link_type=LINKED 시)</span>
+      </div>
+
+      <h4>벡터 DB 임베딩 텍스트</h4>
+      <pre><span class="cm">// ACTIVE 상태 전환 시 아래 텍스트를 합쳐 임베딩</span>
+<span class="nm">embedText</span> = title + <span class="st">" "</span> + definition + <span class="st">" "</span> + synonyms.join(<span class="st">" "</span>) + <span class="st">" "</span> + content</pre>
+
+      <div class="info-box info-teal">
+        <strong>초기 데이터</strong>
+        Phase 1 기준 27장 사전 정의 예정. 담당자가 KC Admin에서 직접 입력. 이후 운영 중 추가 생성 가능.
+      </div>
+    </div></div>
+  </div>
+
+  <!-- Risk-type -->
+  <div class="acc" onclick="toggleAcc(this)">
+    <div class="acc-head">
+      <div class="acc-icon ic-coral">②</div>
+      <div class="acc-title">Risk-type 카드</div>
+      <div class="acc-sub">보험 위험 유형 분류 레이블 — 현재 13종 정의됨</div>
+      <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="acc-body"><div class="acc-inner">
+      <p><strong>역할:</strong> 고객의 보험 상태에서 발생할 수 있는 위험 유형을 분류하는 마스터 데이터. Rule 카드와 Concept 카드가 이 카드를 참조함.</p>
+
+      <h4>필드 정의</h4>
+      <table>
+        <thead><tr><th>필드명</th><th>타입</th><th>필수</th><th>설명</th></tr></thead>
+        <tbody>
+          <tr><td><code>id</code></td><td><span class="field-tag ft-str">string</span></td><td><span class="req">*</span></td><td>형식: <code>RT01</code> ~ <code>RT13</code> (이후 추가 시 RT14…)</td></tr>
+          <tr><td><code>name_ko</code></td><td><span class="field-tag ft-str">string</span></td><td><span class="req">*</span></td><td>한국어 유형명 (예: 암투병생활비 부족형)</td></tr>
+          <tr><td><code>name_en</code></td><td><span class="field-tag ft-str">string</span></td><td><span class="req">*</span></td><td>영문 코드명 (예: CANCER_GAP)</td></tr>
+          <tr><td><code>description</code></td><td><span class="field-tag ft-str">string</span></td><td><span class="req">*</span></td><td>유형 설명 1~2줄</td></tr>
+          <tr><td><code>risk_level</code></td><td><span class="field-tag ft-enum">enum</span></td><td><span class="req">*</span></td><td><code>LOW</code> / <code>MODERATE</code> / <code>HIGH</code> / <code>CRITICAL</code></td></tr>
+          <tr><td><code>lead_score_weight</code></td><td><span class="field-tag ft-num">number</span></td><td><span class="req">*</span></td><td>설계사 배정 우선순위 가중치</td></tr>
+          <tr><td><code>status</code></td><td><span class="field-tag ft-enum">enum</span></td><td>자동</td><td><code>ACTIVE</code> / <code>ARCHIVED</code></td></tr>
+        </tbody>
+      </table>
+
+      <h4>현재 정의된 13종 (Phase 1)</h4>
+      <table>
+        <thead><tr><th>ID</th><th>유형명</th><th>레벨</th><th>설명</th></tr></thead>
+        <tbody>
+          <tr><td><code>RT01</code></td><td>암투병생활비 부족형</td><td>HIGH</td><td>암 진단금이 치료비+생활비 이중 공백을 커버 못함</td></tr>
+          <tr><td><code>RT02</code></td><td>소액암 담보 공백형</td><td>MODERATE</td><td>일반암 보장 있으나 소액암(갑상선·피부암) 담보 없음</td></tr>
+          <tr><td><code>RT03</code></td><td>뇌혈관질환보장 협소형</td><td>HIGH</td><td>뇌출혈 단독 담보만 있고 포괄 뇌졸중 담보 없음</td></tr>
+          <tr><td><code>RT04</code></td><td>뇌혈관 코드범위 협소형</td><td>MODERATE</td><td>뇌출혈 코드만 보유, 허혈성 뇌졸중 코드 미보유</td></tr>
+          <tr><td><code>RT05</code></td><td>심혈관보장 협소형</td><td>HIGH</td><td>급성심근경색 담보만 있고 허혈성심장질환 포괄 담보 없음</td></tr>
+          <tr><td><code>RT06</code></td><td>허혈성심장질환 미보장형</td><td>HIGH</td><td>급성심근경색만 보장, 협심증·만성 허혈성심장질환 미보장</td></tr>
+          <tr><td><code>RT07</code></td><td>갱신형 비율 과다형</td><td>MODERATE</td><td>갱신형 담보 비율 과다로 노후 보험료 인상 리스크</td></tr>
+          <tr><td><code>RT08</code></td><td>납입여력 부족 우려형</td><td>MODERATE</td><td>고령 + 갱신형 비율 높아 향후 보험료 감당 어려운 구조</td></tr>
+          <tr><td><code>RT09</code></td><td>비용 대비 보장 비효율형</td><td>LOW</td><td>종신보험 중심 구조로 보장 대비 보험료 비효율</td></tr>
+          <tr><td><code>RT10</code></td><td>보장 중복 낭비형</td><td>LOW</td><td>실손 중복 가입 또는 수술 특약 중복 → 보험료 낭비</td></tr>
+          <tr><td><code>RT11</code></td><td>치매간병비 미보장형</td><td>MODERATE</td><td>50세 이상 치매/간병 담보 미보유 → 장기요양 무방비</td></tr>
+          <tr><td><code>RT12</code></td><td>4세대 실손 비급여 공백형</td><td>MODERATE</td><td>4세대 실손 가입자로 비급여 특약 3종 미가입</td></tr>
+          <tr><td><code>RT13</code></td><td>후유장해 소득대체 공백형</td><td>HIGH</td><td>현장직 + 후유장해 금액 부족 + 장해연금 없음</td></tr>
+        </tbody>
+      </table>
+
+      <div class="info-box info-blue">
+        <strong>개발 포인트</strong>
+        담당자가 KC Admin에서 코드 변경 없이 새 Risk-type을 추가할 수 있어야 합니다. Risk-type은 다른 카드(Rule, Concept)가 FK로 참조하므로 삭제 시 참조 정합성 검사 필요.
+      </div>
+    </div></div>
+  </div>
+
+  <!-- Rule -->
+  <div class="acc" onclick="toggleAcc(this)">
+    <div class="acc-head">
+      <div class="acc-icon ic-purple">③</div>
+      <div class="acc-title">Rule 카드 <span style="font-size:12px;color:var(--coral);font-weight:600;margin-left:6px;">KC의 핵심</span></div>
+      <div class="acc-sub">조건 실행 엔진 — "어떤 조건이면 어떤 위험인가" 정의</div>
+      <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="acc-body"><div class="acc-inner">
+      <p><strong>역할:</strong> "암 진단금이 5천만 원 미만이면 암투병생활비 부족형에 해당한다"는 비즈니스 판단 규칙을 코드가 아닌 카드 데이터로 저장. 담당자가 기준값을 코드 수정 없이 변경 가능. Clark의 실시간 조건 판정이 이 카드의 데이터를 기반으로 실행됨.</p>
+
+      <h4>필드 정의</h4>
+      <table>
+        <thead><tr><th>필드명</th><th>타입</th><th>필수</th><th>설명</th></tr></thead>
+        <tbody>
+          <tr><td><code>id</code></td><td><span class="field-tag ft-str">string</span></td><td><span class="req">*</span></td><td>형식: <code>RULE.RL01.V1</code></td></tr>
+          <tr><td><code>type</code></td><td><span class="field-tag ft-enum">enum</span></td><td><span class="req">*</span></td><td>고정값: <code>RULE</code></td></tr>
+          <tr><td><code>title</code></td><td><span class="field-tag ft-str">string</span></td><td><span class="req">*</span></td><td>규칙 제목</td></tr>
+          <tr><td><code>target_risk_type_id</code></td><td><span class="field-tag ft-str">string</span></td><td><span class="req">*</span></td><td>FK → risk_types.id. 이 Rule이 판정하는 Risk-type</td></tr>
+          <tr><td><code>base_conditions</code></td><td><span class="field-tag ft-arr">Condition[]</span></td><td><span class="req">*</span></td><td>전제조건. 이 조건이 모두 충족된 고객에게만 Rule 적용 (AND 결합)</td></tr>
+          <tr><td><code>judge_conditions</code></td><td><span class="field-tag ft-arr">Condition[]</span></td><td><span class="req">*</span></td><td>판단조건. 전제 통과 후 위험 레벨 결정 (OR 결합)</td></tr>
+          <tr><td><code>warning_message</code></td><td><span class="field-tag ft-str">string</span></td><td><span class="req">*</span></td><td>조건 충족 시 Clark이 사용하는 경고 메시지</td></tr>
+          <tr><td><code>linked_evidences</code></td><td><span class="field-tag ft-arr">string[]</span></td><td><span class="req">*</span></td><td>FK → evidences.id. 1개 이상 필수. 미연결 시 검수 요청 버튼 비활성화</td></tr>
+          <tr><td><code>visibility</code></td><td><span class="field-tag ft-enum">enum</span></td><td><span class="req">*</span></td><td><code>PUBLIC</code> / <code>INTERNAL</code></td></tr>
+          <tr><td><code>status</code></td><td><span class="field-tag ft-enum">enum</span></td><td>자동</td><td><code>DRAFT</code> / <code>IN_REVIEW</code> / <code>ACTIVE</code> / <code>ARCHIVED</code></td></tr>
+        </tbody>
+      </table>
+
+      <h4>Condition 객체 구조 (base_conditions, judge_conditions 배열의 원소)</h4>
+      <table>
+        <thead><tr><th>필드명</th><th>타입</th><th>설명</th></tr></thead>
+        <tbody>
+          <tr><td><code>source</code></td><td><span class="field-tag ft-enum">enum</span></td><td><code>MYDATA</code> 또는 <code>AMPLITUDE</code></td></tr>
+          <tr><td><code>field</code></td><td><span class="field-tag ft-str">string</span></td><td>비교 대상 필드명 (Part 4에서 전체 목록 정의)</td></tr>
+          <tr><td><code>operator</code></td><td><span class="field-tag ft-enum">enum</span></td><td><code>IN</code> / <code>NOT_IN</code> / <code>LT</code> / <code>LTE</code> / <code>GTE</code> / <code>EQ</code> / <code>CONTAINS</code> / <code>NOT_CONTAINS</code></td></tr>
+          <tr><td><code>value</code></td><td><span class="field-tag ft-str">string</span></td><td>비교 기준값 (숫자도 string으로 저장, 엔진에서 타입 변환)</td></tr>
+          <tr><td><code>cond_type</code></td><td><span class="field-tag ft-enum">enum</span></td><td><code>base</code> (전제조건) 또는 <code>judge</code> (판단조건)</td></tr>
+        </tbody>
+      </table>
+
+      <div class="info-box info-red">
+        <strong>핵심 제약 — Evidence 연결 필수</strong>
+        Rule 카드에 Evidence가 1개도 연결되지 않은 경우, 저장은 가능하지만 "검수 요청" 버튼이 비활성화됩니다. DRAFT 상태에서 벗어날 수 없습니다.
+      </div>
+    </div></div>
+  </div>
+
+  <!-- Evidence -->
+  <div class="acc" onclick="toggleAcc(this)">
+    <div class="acc-head">
+      <div class="acc-icon ic-purple">④</div>
+      <div class="acc-title">Evidence 카드</div>
+      <div class="acc-sub">Rule 판단 기준의 근거 데이터</div>
+      <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="acc-body"><div class="acc-inner">
+      <p><strong>역할:</strong> "왜 5천만 원이 기준인가"에 대한 근거를 담는 카드. Rule이 반드시 1개 이상 연결해야 함. Clark이 고객에게 근거를 설명할 때 사용.</p>
+
+      <h4>필드 정의</h4>
+      <table>
+        <thead><tr><th>필드명</th><th>타입</th><th>필수</th><th>설명</th></tr></thead>
+        <tbody>
+          <tr><td><code>id</code></td><td><span class="field-tag ft-str">string</span></td><td><span class="req">*</span></td><td>형식: <code>EVID.EV01.V1</code></td></tr>
+          <tr><td><code>type</code></td><td><span class="field-tag ft-enum">enum</span></td><td><span class="req">*</span></td><td>고정값: <code>EVIDENCE</code></td></tr>
+          <tr><td><code>title</code></td><td><span class="field-tag ft-str">string</span></td><td><span class="req">*</span></td><td>근거 제목</td></tr>
+          <tr><td><code>evidence_type</code></td><td><span class="field-tag ft-enum">enum</span></td><td><span class="req">*</span></td><td><code>MYDATA</code> / <code>BODOC_STAT</code> / <code>DISEASE_CODE</code> / <code>PROMAGE</code> (Phase 1에서는 앞 3종만)</td></tr>
+          <tr><td><code>summary</code></td><td><span class="field-tag ft-str">string</span></td><td><span class="req">*</span></td><td>고객·FC 공개용 요약 (핵심 수치·출처·해석 1줄)</td></tr>
+          <tr><td><code>detail</code></td><td><span class="field-tag ft-str">string</span></td><td><span class="req">*</span></td><td>상세 근거 (재현 가능한 정의, 기간, 표본, 한계 포함)</td></tr>
+          <tr><td><code>source_url</code></td><td><span class="field-tag ft-str">string</span></td><td><span class="opt">선택</span></td><td>출처 링크</td></tr>
+          <tr><td><code>verification_status</code></td><td><span class="field-tag ft-enum">enum</span></td><td><span class="req">*</span></td><td><code>DRAFT</code> / <code>PEER_REVIEWED</code> / <code>APPROVED</code></td></tr>
+          <tr><td><code>visibility</code></td><td><span class="field-tag ft-enum">enum</span></td><td><span class="req">*</span></td><td><code>PUBLIC</code> / <code>INTERNAL</code></td></tr>
+          <tr><td><code>status</code></td><td><span class="field-tag ft-enum">enum</span></td><td>자동</td><td>카드 공통 상태값</td></tr>
+        </tbody>
+      </table>
+
+      <div class="info-box info-amber">
+        <strong>Phase 1 범위</strong>
+        PROMAGE(프롬에이지/건강검진) 유형은 Phase 1.5에서 추가. Phase 1은 MYDATA, BODOC_STAT, DISEASE_CODE 3종만 구현.
+      </div>
+    </div></div>
+  </div>
+
+  <!-- Playbook -->
+  <div class="acc" onclick="toggleAcc(this)">
+    <div class="acc-head">
+      <div class="acc-icon ic-amber">⑤</div>
+      <div class="acc-title">Playbook 카드</div>
+      <div class="acc-sub">설계사 연결 판단 기준 — 카드 체이닝과 독립적으로 동작</div>
+      <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="acc-body"><div class="acc-inner">
+      <p><strong>역할:</strong> 고객 발화에서 "상담 받고 싶어" 같은 전환 키워드를 감지하고 설계사 연결(FC API)로 이어지는 프로세스를 정의. 카드 체이닝과 별도로 매 발화마다 독립 실행.</p>
+
+      <h4>필드 정의</h4>
+      <table>
+        <thead><tr><th>필드명</th><th>타입</th><th>필수</th><th>설명</th></tr></thead>
+        <tbody>
+          <tr><td><code>id</code></td><td><span class="field-tag ft-str">string</span></td><td><span class="req">*</span></td><td>형식: <code>PLAY.PL01.V1</code></td></tr>
+          <tr><td><code>goal</code></td><td><span class="field-tag ft-str">string</span></td><td><span class="req">*</span></td><td>이 Playbook의 목표 (예: 보장 공백 인지 후 설계사 상담 연결)</td></tr>
+          <tr><td><code>conversion_keywords</code></td><td><span class="field-tag ft-arr">string[]</span></td><td><span class="req">*</span></td><td>전환 감지 키워드 목록. 담당자가 코드 변경 없이 추가·수정 가능</td></tr>
+          <tr><td><code>questions</code></td><td><span class="field-tag ft-arr">string[]</span></td><td><span class="req">*</span></td><td>Clark이 사용할 문진 질문 5~7개</td></tr>
+          <tr><td><code>forbidden_phrases</code></td><td><span class="field-tag ft-arr">string[]</span></td><td><span class="req">*</span></td><td>Clark이 사용하면 안 되는 금지 문구 목록</td></tr>
+          <tr><td><code>escalation_rules</code></td><td><span class="field-tag ft-str">string</span></td><td><span class="req">*</span></td><td>설계사 연결 발동 기준 (예: CRITICAL 리스크 확진 시, 상담 의향 명확 표현 시)</td></tr>
+          <tr><td><code>routing_channel</code></td><td><span class="field-tag ft-enum">enum</span></td><td><span class="req">*</span></td><td><code>CALL</code> / <code>CHAT</code> / <code>FACE_TO_FACE</code></td></tr>
+          <tr><td><code>visibility</code></td><td><span class="field-tag ft-enum">enum</span></td><td><span class="req">*</span></td><td><code>PUBLIC</code> / <code>INTERNAL</code></td></tr>
+          <tr><td><code>status</code></td><td><span class="field-tag ft-enum">enum</span></td><td>자동</td><td>카드 공통 상태값</td></tr>
+        </tbody>
+      </table>
+    </div></div>
+  </div>
+
+  <!-- Policy -->
+  <div class="acc" onclick="toggleAcc(this)">
+    <div class="acc-head">
+      <div class="acc-icon ic-red">⑥</div>
+      <div class="acc-title">Policy 카드</div>
+      <div class="acc-sub">법적 제약 안전장치 — 모든 Clark 답변에 전역 적용 · 3단계 승인</div>
+      <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="acc-body"><div class="acc-inner">
+      <p><strong>역할:</strong> 금융소비자보호법 등 규제에 따라 Clark이 해서는 안 되는 것을 정의. 모든 Clark 답변 생성 전에 전역으로 참조됨. 다른 카드와 달리 준법감시인 승인이 추가로 필요.</p>
+
+      <h4>필드 정의</h4>
+      <table>
+        <thead><tr><th>필드명</th><th>타입</th><th>필수</th><th>설명</th></tr></thead>
+        <tbody>
+          <tr><td><code>id</code></td><td><span class="field-tag ft-str">string</span></td><td><span class="req">*</span></td><td>형식: <code>POLICY.PO01.V1</code></td></tr>
+          <tr><td><code>regulation_name</code></td><td><span class="field-tag ft-str">string</span></td><td><span class="req">*</span></td><td>근거 법령명 (예: 금융소비자보호법 제21조)</td></tr>
+          <tr><td><code>forbidden_expressions</code></td><td><span class="field-tag ft-arr">string[]</span></td><td><span class="req">*</span></td><td>Clark이 사용하면 안 되는 표현 목록 (법령 조항별 매핑)</td></tr>
+          <tr><td><code>required_notices</code></td><td><span class="field-tag ft-arr">string[]</span></td><td><span class="req">*</span></td><td>Clark이 반드시 고지해야 하는 문구 (설명의무 이행)</td></tr>
+          <tr><td><code>escalation_rules</code></td><td><span class="field-tag ft-str">string</span></td><td><span class="req">*</span></td><td>에스컬레이션 발동 기준 (민원 표현, CRITICAL 리스크 등)</td></tr>
+          <tr><td><code>ai_intro_phrase</code></td><td><span class="field-tag ft-str">string</span></td><td><span class="req">*</span></td><td>AI 고지 의무 이행 문구 (대화 시작 시 사용)</td></tr>
+          <tr><td><code>status</code></td><td><span class="field-tag ft-enum">enum</span></td><td>자동</td><td><code>DRAFT</code> / <code>IN_REVIEW</code> / <code>LEGAL_REVIEW</code> / <code>ACTIVE</code> / <code>ARCHIVED</code></td></tr>
+        </tbody>
+      </table>
+
+      <div class="info-box info-red">
+        <strong>승인 단계가 다름 — 3단계</strong>
+        다른 카드: 담당자 → 검수자 (2단계)<br>
+        Policy 카드: 담당자 → 검수자 → <strong>준법감시인</strong> (3단계)<br>
+        준법감시인 승인 없이는 ACTIVE 불가.
+      </div>
+    </div></div>
+  </div>
+
+  <!-- Case -->
+  <div class="acc" onclick="toggleAcc(this)">
+    <div class="acc-head">
+      <div class="acc-icon ic-green">⑦</div>
+      <div class="acc-title">Case 카드</div>
+      <div class="acc-sub">성공 상담 사례 — Clark이 자동 태그 후 담당자 검토</div>
+      <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="acc-body"><div class="acc-inner">
+      <p><strong>역할:</strong> Clark과 고객의 대화에서 설계사 연결에 성공한 사례를 쌓는 카드. 다른 6종과 달리 Clark이 자동으로 초안을 생성하고 담당자가 검토. Phase 1에서는 수동 입력도 가능.</p>
+
+      <h4>필드 정의</h4>
+      <table>
+        <thead><tr><th>필드명</th><th>타입</th><th>필수</th><th>설명</th></tr></thead>
+        <tbody>
+          <tr><td><code>id</code></td><td><span class="field-tag ft-str">string</span></td><td><span class="req">*</span></td><td>형식: <code>CASE.CA01.V1</code></td></tr>
+          <tr><td><code>situation</code></td><td><span class="field-tag ft-str">string</span></td><td><span class="req">*</span></td><td>고객 상황 (나이/가족/예산 등)</td></tr>
+          <tr><td><code>diagnosis_result</code></td><td><span class="field-tag ft-str">string</span></td><td><span class="req">*</span></td><td>진단 결과 요약</td></tr>
+          <tr><td><code>before_after</code></td><td><span class="field-tag ft-str">string</span></td><td><span class="req">*</span></td><td>변경 전/후 보장 구조</td></tr>
+          <tr><td><code>lessons</code></td><td><span class="field-tag ft-arr">string[]</span></td><td><span class="opt">선택</span></td><td>배운 점 1~2개</td></tr>
+          <tr><td><code>detected_risk_types</code></td><td><span class="field-tag ft-arr">string[]</span></td><td><span class="req">*</span></td><td>FK → risk_types.id. 진단된 위험 유형 목록</td></tr>
+          <tr><td><code>conversion_result</code></td><td><span class="field-tag ft-bool">boolean</span></td><td><span class="req">*</span></td><td>설계사 연결 성공 여부</td></tr>
+          <tr><td><code>raw_data</code></td><td><span class="field-tag ft-str">string</span></td><td><span class="opt">선택</span></td><td>원본 대화 (개인정보 포함 — 내부 전용, Clark 자동 생성)</td></tr>
+          <tr><td><code>pattern_summary</code></td><td><span class="field-tag ft-str">string</span></td><td><span class="opt">선택</span></td><td>개인정보 제거 패턴 요약 (교육·학습용, Clark 자동 생성)</td></tr>
+          <tr><td><code>status</code></td><td><span class="field-tag ft-enum">enum</span></td><td>자동</td><td>카드 공통 상태값</td></tr>
+        </tbody>
+      </table>
+
+      <div class="info-box info-teal">
+        <strong>생성 방식 (다른 6종과 다름)</strong>
+        Clark이 리드 전환 성공 감지 → Case 카드 자동 초안 생성 → 담당자 검토 → 검수자 승인 (반자동). Phase 1에서는 담당자 수동 입력도 허용.
+      </div>
+    </div></div>
+  </div>
+</section>
+
+<!-- ======================== PART 3 ======================== -->
+<section class="section" id="relation">
+  <div class="section-num">Part 3</div>
+  <div class="section-title">카드 관계 구조</div>
+  <div class="section-desc">카드들이 어떻게 연결되는지, 실제 DB 설계에서 어떻게 구현하는지 정의합니다.</div>
+
+  <h4>메인 체이닝 방향</h4>
+  <div class="chain">
+    <span class="chain-item" style="background:var(--teal-bg);color:var(--teal);">Concept<br><small style="font-weight:400">(LINKED)</small></span>
+    <span class="chain-arr">→</span>
+    <span class="chain-item" style="background:var(--coral-bg);color:var(--coral);">Risk-type</span>
+    <span class="chain-arr">←</span>
+    <span class="chain-item" style="background:var(--purple-bg);color:var(--purple);">Rule</span>
+    <span class="chain-arr">→</span>
+    <span class="chain-item" style="background:var(--purple-bg);color:var(--purple);">Evidence</span>
+    <span class="chain-arr">+</span>
+    <span class="chain-item" style="background:var(--red-bg);color:var(--red);">Policy<br><small style="font-weight:400">(전역)</small></span>
+  </div>
+  <div class="chain" style="margin-top:4px">
+    <span class="chain-item" style="background:var(--amber-bg);color:var(--amber);">Playbook</span>
+    <span class="chain-arr" style="font-size:14px">↔ 체이닝과 독립, 매 발화마다 별도 실행</span>
+  </div>
+  <div class="chain" style="margin-top:4px">
+    <span class="chain-item" style="background:var(--green-bg);color:var(--green);">Case</span>
+    <span class="chain-arr" style="font-size:14px">→ Risk-type 참조 (결과 로그)</span>
+  </div>
+
+  <h4>완성 세트 예시 — "1번 세트: 암투병생활비 부족형"</h4>
+  <table>
+    <thead><tr><th>카드 타입</th><th>카드 ID</th><th>역할 요약</th></tr></thead>
+    <tbody>
+      <tr><td>CONCEPT</td><td><code>CONCEPT.C01.V1</code></td><td>암 치료비·생활비 이중 공백의 구조 (검색 진입점)</td></tr>
+      <tr><td>RISK-TYPE</td><td><code>RISK-TYPE.RT01.V1</code></td><td>암투병생활비 부족형 (분류 레이블)</td></tr>
+      <tr><td>RULE</td><td><code>RULE.RL01.V1</code></td><td>암 진단금 5천만 미만 + 35~59세 조건 (판정 엔진)</td></tr>
+      <tr><td>EVIDENCE</td><td><code>EVID.EV01.V1</code></td><td>40대 평균 암 진단금 통계 근거</td></tr>
+      <tr><td>PLAYBOOK</td><td><code>PLAY.PL01.V1</code></td><td>암 보장 상담 연결 시나리오</td></tr>
+      <tr><td>POLICY</td><td><code>POLICY.PO01.V1</code></td><td>금소법 제약 + Clark 고지 의무</td></tr>
+      <tr><td>CASE</td><td><code>CASE.CA01.V1</code></td><td>42세 고객 암 진단금 증액 성공 사례</td></tr>
+    </tbody>
+  </table>
+
+  <h4>DB 테이블 설계 제안</h4>
+  <pre>
+<span class="cm">-- 공통 카드 테이블 (모든 카드 공유 필드)</span>
+<span class="kw">CREATE TABLE</span> cards (
+  id           <span class="tp">VARCHAR(50)</span>  <span class="kw">PRIMARY KEY</span>,   <span class="cm">-- e.g. CONCEPT.C01.V1</span>
+  type         <span class="tp">VARCHAR(20)</span>  <span class="kw">NOT NULL</span>,      <span class="cm">-- CONCEPT, RISK-TYPE, RULE...</span>
+  title        <span class="tp">TEXT</span>         <span class="kw">NOT NULL</span>,
+  visibility   <span class="tp">VARCHAR(10)</span>  <span class="kw">NOT NULL</span>,      <span class="cm">-- PUBLIC, INTERNAL</span>
+  status       <span class="tp">VARCHAR(15)</span>  <span class="kw">NOT NULL</span>  <span class="kw">DEFAULT</span> <span class="st">'DRAFT'</span>,
+  assignee     <span class="tp">VARCHAR(50)</span>,
+  created_at   <span class="tp">TIMESTAMP</span>    <span class="kw">DEFAULT NOW()</span>,
+  updated_at   <span class="tp">TIMESTAMP</span>    <span class="kw">DEFAULT NOW()</span>
+);
+
+<span class="cm">-- 카드 간 참조 관계 테이블 (체이닝의 핵심)</span>
+<span class="kw">CREATE TABLE</span> card_links (
+  from_card_id  <span class="tp">VARCHAR(50)</span>  <span class="kw">REFERENCES</span> cards(id),
+  to_card_id    <span class="tp">VARCHAR(50)</span>  <span class="kw">REFERENCES</span> cards(id),
+  link_type     <span class="tp">VARCHAR(30)</span>,  <span class="cm">-- concept_to_risk, rule_to_evidence...</span>
+  <span class="kw">PRIMARY KEY</span>(from_card_id, to_card_id)
+);
+
+<span class="cm">-- Rule 전용 확장 테이블</span>
+<span class="kw">CREATE TABLE</span> rule_details (
+  card_id           <span class="tp">VARCHAR(50)</span>  <span class="kw">PRIMARY KEY REFERENCES</span> cards(id),
+  target_risk_type  <span class="tp">VARCHAR(10)</span>  <span class="kw">NOT NULL</span>,    <span class="cm">-- RT01~RT13</span>
+  warning_message   <span class="tp">TEXT</span>         <span class="kw">NOT NULL</span>
+);
+
+<span class="cm">-- 조건 테이블 (Rule 조건 개별 저장 — JSON 아닌 정규화 권장)</span>
+<span class="kw">CREATE TABLE</span> conditions (
+  id         <span class="tp">SERIAL PRIMARY KEY</span>,
+  card_id    <span class="tp">VARCHAR(50)</span>  <span class="kw">REFERENCES</span> cards(id)  <span class="kw">ON DELETE CASCADE</span>,
+  cond_type  <span class="tp">VARCHAR(10)</span>  <span class="kw">NOT NULL</span>,  <span class="cm">-- base, judge</span>
+  source     <span class="tp">VARCHAR(15)</span>  <span class="kw">NOT NULL</span>,  <span class="cm">-- MYDATA, AMPLITUDE</span>
+  field      <span class="tp">VARCHAR(50)</span>  <span class="kw">NOT NULL</span>,
+  operator   <span class="tp">VARCHAR(15)</span>  <span class="kw">NOT NULL</span>,
+  value      <span class="tp">TEXT</span>         <span class="kw">NOT NULL</span>,
+  sort_order <span class="tp">INT</span>          <span class="kw">DEFAULT</span> 0
+);</pre>
+
+  <div class="info-box info-blue">
+    <strong>card_links 테이블이 없으면 체이닝 불가</strong>
+    이 테이블이 KC 시스템의 핵심입니다. Concept이 어떤 Risk-type을 가리키는지, Rule이 어떤 Evidence를 참조하는지가 모두 이 테이블에 저장됩니다. 카드 단위 CRUD보다 이 테이블 설계를 먼저 잡아야 합니다.
+  </div>
+</section>
+
+<!-- ======================== PART 4 ======================== -->
+<section class="section" id="condition">
+  <div class="section-num">Part 4</div>
+  <div class="section-title">조건 엔진 명세</div>
+  <div class="section-desc">Rule 카드의 조건을 화면에서 만들고, 실제 고객 데이터와 비교 실행하는 Dry-run 로직을 정의합니다.</div>
+
+  <h4>조건 빌더 — 사용 가능한 필드 목록</h4>
+
+  <div class="acc" onclick="toggleAcc(this)">
+    <div class="acc-head">
+      <div class="acc-icon ic-blue">M</div>
+      <div class="acc-title">MYDATA 소스 필드 (10종)</div>
+      <div class="acc-sub">고객 실제 보험 계약 데이터</div>
+      <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="acc-body"><div class="acc-inner">
+      <table>
+        <thead><tr><th>필드명</th><th>타입</th><th>설명</th><th>사용 가능 연산자</th></tr></thead>
+        <tbody>
+          <tr><td><code>coverage_code</code></td><td>string</td><td>담보코드 (ICIS 기준, 예: A4200)</td><td>IN, NOT_IN</td></tr>
+          <tr><td><code>coverage_name</code></td><td>string</td><td>담보명 (예: 암진단)</td><td>CONTAINS, NOT_CONTAINS</td></tr>
+          <tr><td><code>coverage_amt</code></td><td>number</td><td>담보금액 (원, 담보코드별 합산)</td><td>LT, LTE, GTE, EQ</td></tr>
+          <tr><td><code>insu_type</code></td><td>string</td><td>보험 종류 (종신보험, 실손의료보험, 4세대실손 등)</td><td>EQ, CONTAINS</td></tr>
+          <tr><td><code>renewal_status</code></td><td>boolean</td><td>갱신형 담보 보유 여부</td><td>EQ</td></tr>
+          <tr><td><code>insu_company</code></td><td>string</td><td>보험사명</td><td>EQ, CONTAINS</td></tr>
+          <tr><td><code>insu_name</code></td><td>string</td><td>보험상품명</td><td>CONTAINS</td></tr>
+          <tr><td><code>premium</code></td><td>number</td><td>월 보험료 (원)</td><td>LT, LTE, GTE, EQ</td></tr>
+          <tr><td><code>pay_period</code></td><td>string</td><td>납입기간</td><td>EQ, CONTAINS</td></tr>
+          <tr><td><code>insured_period</code></td><td>string</td><td>보험기간</td><td>EQ, CONTAINS</td></tr>
+        </tbody>
+      </table>
+    </div></div>
+  </div>
+
+  <div class="acc" onclick="toggleAcc(this)">
+    <div class="acc-head">
+      <div class="acc-icon ic-purple">A</div>
+      <div class="acc-title">AMPLITUDE 소스 필드 (13종)</div>
+      <div class="acc-sub">고객 행동 분석 및 건강 위험 속성</div>
+      <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="acc-body"><div class="acc-inner">
+      <table>
+        <thead><tr><th>필드명</th><th>타입</th><th>설명</th><th>사용 가능 연산자</th></tr></thead>
+        <tbody>
+          <tr><td><code>age</code></td><td>number</td><td>만 나이</td><td>LT, LTE, GTE, EQ</td></tr>
+          <tr><td><code>cancer_risk_rating</code></td><td>string</td><td>암 위험 등급 (양호/보통/주의/위험)</td><td>EQ</td></tr>
+          <tr><td><code>risk_of_stroke</code></td><td>string</td><td>뇌졸중 위험 등급</td><td>EQ</td></tr>
+          <tr><td><code>risk_of_myocardial</code></td><td>string</td><td>심근경색 위험 등급</td><td>EQ</td></tr>
+          <tr><td><code>bodoc_score</code></td><td>number</td><td>보닥 진단 점수 (0~100)</td><td>LT, LTE, GTE, EQ</td></tr>
+          <tr><td><code>join_renewal_insurance</code></td><td>number</td><td>갱신형 보험 비중 (0.0~1.0)</td><td>LT, LTE, GTE, EQ</td></tr>
+          <tr><td><code>whole_insurance_filter</code></td><td>boolean</td><td>종신보험 보유 여부</td><td>EQ</td></tr>
+          <tr><td><code>total_paid_premium</code></td><td>number</td><td>총 납입보험료 (연간, 원)</td><td>LT, LTE, GTE, EQ</td></tr>
+          <tr><td><code>join_non_renewal_insurance</code></td><td>number</td><td>비갱신형 보험 계약 수</td><td>LT, LTE, GTE, EQ</td></tr>
+          <tr><td><code>diagnosis_price</code></td><td>string</td><td>진단-가격 점수 (매우나쁨~매우좋음)</td><td>EQ</td></tr>
+          <tr><td><code>diagnosis_warranty</code></td><td>string</td><td>진단-보장 점수</td><td>EQ</td></tr>
+          <tr><td><code>diagnosis_coverage</code></td><td>string</td><td>진단-보장범위 점수</td><td>EQ</td></tr>
+          <tr><td><code>job</code></td><td>string</td><td>직업군 (현장직, 중위험군 등)</td><td>EQ, CONTAINS</td></tr>
+        </tbody>
+      </table>
+    </div></div>
+  </div>
+
+  <h4>Dry-run 실행 로직 (의사코드)</h4>
+  <pre>
+<span class="kw">function</span> <span class="nm">evaluateRule</span>(rule, customerData):
+
+  <span class="cm">// 1단계: 전제조건(base) — 전부 AND. 하나라도 실패 시 이 Rule 스킵</span>
+  <span class="kw">for</span> cond <span class="kw">in</span> rule.base_conditions:
+    <span class="kw">if not</span> <span class="nm">check</span>(cond, customerData):
+      <span class="kw">return</span> { matched: <span class="kw">false</span>, reason: <span class="st">"전제조건 미충족"</span> }
+
+  <span class="cm">// 2단계: 판단조건(judge) — OR 결합. 하나라도 충족 시 해당</span>
+  results = []
+  <span class="kw">for</span> cond <span class="kw">in</span> rule.judge_conditions:
+    results.push({ cond, passed: <span class="nm">check</span>(cond, customerData) })
+
+  <span class="kw">if</span> results.some(r => r.passed):
+    <span class="kw">return</span> { matched: <span class="kw">true</span>, level: <span class="nm">resolveLevel</span>(results), details: results }
+  <span class="kw">else</span>:
+    <span class="kw">return</span> { matched: <span class="kw">false</span>, reason: <span class="st">"판단조건 미충족"</span> }
+
+<span class="kw">function</span> <span class="nm">check</span>(condition, customerData):
+  value = <span class="nm">getFieldValue</span>(customerData, condition.source, condition.field)
+  <span class="kw">switch</span> condition.operator:
+    <span class="st">"IN"</span>:          <span class="kw">return</span> condition.value <span class="kw">in</span> value          <span class="cm">// 담보코드 보유</span>
+    <span class="st">"NOT_IN"</span>:      <span class="kw">return</span> condition.value <span class="kw">not in</span> value      <span class="cm">// 담보코드 미보유</span>
+    <span class="st">"LT"</span>:          <span class="kw">return</span> Number(value) &lt; Number(condition.value)
+    <span class="st">"LTE"</span>:         <span class="kw">return</span> Number(value) &lt;= Number(condition.value)
+    <span class="st">"GTE"</span>:         <span class="kw">return</span> Number(value) >= Number(condition.value)
+    <span class="st">"EQ"</span>:          <span class="kw">return</span> String(value) == String(condition.value)
+    <span class="st">"CONTAINS"</span>:    <span class="kw">return</span> value.includes(condition.value)
+    <span class="st">"NOT_CONTAINS"</span>: <span class="kw">return</span> !value.includes(condition.value)</pre>
+
+  <h4>Dry-run 결과 화면 출력 예시</h4>
+  <pre>
+[RT01 암투병생활비 부족형] 검사 결과
+
+전제조건 (모두 충족 필요)
+  ✓ A4200 담보 보유                   → 충족 (암진단 담보 있음)
+  ✓ 만 35세 이상                       → 충족 (45세)
+  ✓ 만 59세 이하                       → 충족 (45세)
+
+판단조건 (하나 이상 충족 필요)
+  ✓ 암 진단금 3천만 미만               → 충족 (3,000만원, MODERATE)
+  ✕ 암 진단금 5천만 미만 + 생활비 없음  → 미충족 (5천만 이상)
+  ✕ 생활비 특약 미보유                 → 미충족 (생활비 특약 있음)
+
+결과: ✓ 해당 — 레벨: MODERATE
+경고: 현재 암 진단금이 3천만원으로, 암 발병 시 치료비 공백이 우려됩니다.</pre>
+</section>
+
+<!-- ======================== PART 5 ======================== -->
+<section class="section" id="status">
+  <div class="section-num">Part 5</div>
+  <div class="section-title">상태 관리 명세</div>
+  <div class="section-desc">카드 생성부터 Clark 반영까지의 상태 전환 규칙과 역할별 권한을 정의합니다.</div>
+
+  <h4>일반 카드 상태 흐름 (Concept / Risk-type / Rule / Evidence / Playbook / Case)</h4>
+  <div class="state-flow">
+    <div>
+      <div class="state-box state-draft">DRAFT</div>
+      <div class="state-label">초안</div>
+    </div>
+    <div class="state-arrow">→</div>
+    <div>
+      <div class="state-box state-review">IN_REVIEW</div>
+      <div class="state-label">검수 중</div>
+    </div>
+    <div class="state-arrow">→</div>
+    <div>
+      <div class="state-box state-active">ACTIVE</div>
+      <div class="state-label">활성 (Clark 참조)</div>
+    </div>
+    <div class="state-arrow">→</div>
+    <div>
+      <div class="state-box state-archived">ARCHIVED</div>
+      <div class="state-label">보관</div>
+    </div>
+  </div>
+  <div style="margin: 8px 0 16px; font-size: 13px; color: var(--text2);">
+    IN_REVIEW → DRAFT (반려, 반려 사유 필수)
+  </div>
+
+  <h4>Policy 카드 상태 흐름 (3단계)</h4>
+  <div class="state-flow">
+    <div>
+      <div class="state-box state-draft">DRAFT</div>
+    </div>
+    <div class="state-arrow">→</div>
+    <div>
+      <div class="state-box state-review">IN_REVIEW</div>
+      <div class="state-label">검수자 검토</div>
+    </div>
+    <div class="state-arrow">→</div>
+    <div>
+      <div class="state-box state-legal">LEGAL_REVIEW</div>
+      <div class="state-label">준법감시인 검토</div>
+    </div>
+    <div class="state-arrow">→</div>
+    <div>
+      <div class="state-box state-active">ACTIVE</div>
+    </div>
+    <div class="state-arrow">→</div>
+    <div>
+      <div class="state-box state-archived">ARCHIVED</div>
+    </div>
+  </div>
+
+  <h4>상태 전환 규칙 상세</h4>
+  <table>
+    <thead><tr><th>전환</th><th>조건</th><th>실행 주체</th><th>추가 처리</th></tr></thead>
+    <tbody>
+      <tr><td>DRAFT → IN_REVIEW</td><td>Rule 카드: Evidence 1개 이상 연결 필수. 나머지 카드: 제약 없음</td><td>담당자</td><td>검수자에게 알림 발송</td></tr>
+      <tr><td>IN_REVIEW → ACTIVE</td><td>검수자 승인</td><td>검수자</td><td><strong>Vector DB 임베딩 자동 트리거</strong></td></tr>
+      <tr><td>IN_REVIEW → DRAFT</td><td>검수자 반려 (반려 사유 필수 입력)</td><td>검수자</td><td>담당자에게 반려 알림 + 사유 저장</td></tr>
+      <tr><td>IN_REVIEW → LEGAL_REVIEW</td><td>Policy 카드 전용, 검수자 승인</td><td>검수자</td><td>준법감시인에게 알림 발송</td></tr>
+      <tr><td>LEGAL_REVIEW → ACTIVE</td><td>Policy 카드 전용, 준법감시인 승인</td><td>준법감시인</td><td>Vector DB 임베딩 자동 트리거</td></tr>
+      <tr><td>ACTIVE → ARCHIVED</td><td>제약 없음</td><td>담당자</td><td><strong>Vector DB에서 해당 벡터 삭제</strong></td></tr>
+      <tr><td>ARCHIVED → DRAFT</td><td>복원 시</td><td>담당자</td><td>다시 승인 절차 진행 필요</td></tr>
+    </tbody>
+  </table>
+
+  <h4>역할별 권한 매트릭스</h4>
+  <table>
+    <thead><tr><th>액션</th><th>담당자</th><th>검수자</th><th>준법감시인</th></tr></thead>
+    <tbody>
+      <tr><td>카드 생성/수정/삭제</td><td>✅</td><td>❌</td><td>❌</td></tr>
+      <tr><td>검수 요청 (→ IN_REVIEW)</td><td>✅</td><td>❌</td><td>❌</td></tr>
+      <tr><td>Dry-run 실행</td><td>✅</td><td>✅</td><td>❌</td></tr>
+      <tr><td>승인 (→ ACTIVE)</td><td>❌</td><td>✅ (일반 카드)</td><td>✅ (Policy만)</td></tr>
+      <tr><td>반려 (→ DRAFT)</td><td>❌</td><td>✅</td><td>✅ (Policy만)</td></tr>
+      <tr><td>보관 (→ ARCHIVED)</td><td>✅</td><td>❌</td><td>❌</td></tr>
+      <tr><td>Risk-type 생성/수정</td><td>✅</td><td>❌</td><td>❌</td></tr>
+    </tbody>
+  </table>
+
+  <h4>Vector DB 연동 트리거 명세</h4>
+  <table>
+    <thead><tr><th>트리거 이벤트</th><th>처리</th><th>임베딩 대상 텍스트</th></tr></thead>
+    <tbody>
+      <tr><td>카드 → ACTIVE 전환</td><td>신규 벡터 생성 + 저장</td><td>카드 타입별 텍스트 조합 (Part 2 각 카드 정의 참조)</td></tr>
+      <tr><td>ACTIVE 카드 수정 후 재승인</td><td>기존 벡터 삭제 → 새 벡터 생성</td><td>동일</td></tr>
+      <tr><td>카드 → ARCHIVED 전환</td><td>해당 카드 벡터 삭제</td><td>—</td></tr>
+    </tbody>
+  </table>
+
+  <div class="info-box info-blue">
+    <strong>벡터 ID 규칙</strong>
+    벡터 DB의 벡터 ID = 카드 ID (예: <code>CONCEPT.C01.V1</code>). 1:1 매핑으로 관리. 카드 버전이 올라가면(V1 → V2) 기존 벡터(V1)를 삭제하고 신규(V2)를 저장.
+  </div>
+</section>
+
+<!-- ======================== PART 6 ======================== -->
+<section class="section" id="screens">
+  <div class="section-num">Part 6</div>
+  <div class="section-title">화면 정의서 (핵심 5개)</div>
+  <div class="section-desc">개발 공수 산정에 필요한 핵심 화면의 기능 명세입니다. 각 버튼/액션의 동작과 제약을 정의합니다.</div>
+
+  <!-- 카드 목록 -->
+  <div class="screen-box">
+    <div class="screen-title-bar">📋 카드 목록 화면 <span style="font-size:11px;font-weight:400;margin-left:8px;">(/cards)</span></div>
+    <div class="screen-body">
+      <h4>화면 구성 요소</h4>
+      <ul>
+        <li>검색 입력 (카드 ID 또는 제목)</li>
+        <li>필터 칩: 타입(7종), 공개 범위(PUBLIC/INTERNAL), 상태(4종)</li>
+        <li>정렬: ID, 타입, 제목, 공개범위, 링크 수, 상태, 생성시각, 수정시각</li>
+        <li>테이블: No / Card ID / 타입 / 제목 / 공개범위 / 링크 수 / 상태 / 생성시각 / 수정시각</li>
+        <li>페이지네이션</li>
+      </ul>
+      <h4>액션 명세</h4>
+      <div class="action-row">
+        <div class="action-name">테이블 행 클릭</div>
+        <div class="action-desc">카드 상세 화면으로 이동
+          <div class="action-rule">GET /cards/:id</div>
+        </div>
+      </div>
+      <div class="action-row">
+        <div class="action-name">+ 새 카드 만들기</div>
+        <div class="action-desc">카드 에디터 화면으로 이동 (빈 폼)</div>
+      </div>
+      <div class="action-row">
+        <div class="action-name">타입 필터 칩 클릭</div>
+        <div class="action-desc">선택된 타입의 카드만 표시. 중복 선택 불가 (단일 선택)</div>
+      </div>
+      <div class="action-row">
+        <div class="action-name">상태 필터 칩 클릭</div>
+        <div class="action-desc">선택된 상태의 카드만 표시. 다른 필터와 AND 조합</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 카드 에디터 -->
+  <div class="screen-box">
+    <div class="screen-title-bar">✏️ 카드 에디터 화면 <span style="font-size:11px;font-weight:400;margin-left:8px;">(/cards/new, /cards/:id/edit)</span></div>
+    <div class="screen-body">
+      <h4>화면 구성 요소</h4>
+      <ul>
+        <li>카드 타입 선택 탭 (신규 생성 시): CONCEPT / RULE / EVIDENCE / PLAYBOOK / CASE / POLICY</li>
+        <li>공통 필드 영역: Card ID (자동생성, 읽기전용) / 공개 범위 라디오</li>
+        <li>타입별 필드 영역: 선택된 타입에 따라 폼 변경 (Part 2 참조)</li>
+        <li>카드 링크 연결 영역: 연결 가능한 카드 검색·선택 (Rule → Evidence 등)</li>
+        <li>하단: 임시저장 / 검수 요청 버튼</li>
+      </ul>
+      <h4>액션 명세</h4>
+      <div class="action-row">
+        <div class="action-name">임시저장</div>
+        <div class="action-desc">현재 내용을 DRAFT 상태로 저장. 필수 필드 미입력 시에도 저장 허용 (단, 검수 요청은 불가)
+          <div class="action-rule">POST /cards (신규) 또는 PUT /cards/:id</div>
+        </div>
+      </div>
+      <div class="action-row">
+        <div class="action-name">검수 요청</div>
+        <div class="action-desc">상태를 IN_REVIEW로 변경하고 검수자에게 알림 발송
+          <div class="action-rule">PATCH /cards/:id/status { status: "IN_REVIEW" }</div>
+          <div class="action-rule">제약: Rule 카드는 linked_evidences 1개 이상 없으면 버튼 비활성화</div>
+        </div>
+      </div>
+      <div class="action-row">
+        <div class="action-name">카드 링크 검색</div>
+        <div class="action-desc">Evidence 검색 모달 — 제목/ID로 검색 후 선택. 선택 즉시 linked_evidences에 추가
+          <div class="action-rule">GET /cards?type=EVIDENCE&status=ACTIVE&q={검색어}</div>
+        </div>
+      </div>
+      <div class="action-row">
+        <div class="action-name">삭제</div>
+        <div class="action-desc">DRAFT 상태 카드만 삭제 가능. IN_REVIEW 이상은 삭제 불가 (보관 처리만 가능)
+          <div class="action-rule">DELETE /cards/:id (DRAFT만)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 카드 검증 -->
+  <div class="screen-box">
+    <div class="screen-title-bar">✅ 카드 검증 화면 <span style="font-size:11px;font-weight:400;margin-left:8px;">(/cards/:id/review)</span></div>
+    <div class="screen-body">
+      <h4>화면 구성 요소 (검수자 전용)</h4>
+      <ul>
+        <li>카드 내용 전체 보기 (읽기전용)</li>
+        <li>이전 버전과의 변경 diff (수정 재검수 시)</li>
+        <li>연결된 Evidence 카드 목록 미리보기</li>
+        <li>반려 사유 입력 텍스트박스</li>
+        <li>하단: 승인 / 반려 버튼</li>
+      </ul>
+      <h4>액션 명세</h4>
+      <div class="action-row">
+        <div class="action-name">승인</div>
+        <div class="action-desc">상태를 ACTIVE로 변경. Vector DB 임베딩 자동 트리거
+          <div class="action-rule">PATCH /cards/:id/status { status: "ACTIVE" }</div>
+          <div class="action-rule">Policy 카드는 LEGAL_REVIEW로 변경 (ACTIVE 아님)</div>
+        </div>
+      </div>
+      <div class="action-row">
+        <div class="action-name">반려</div>
+        <div class="action-desc">상태를 DRAFT로 변경. 반려 사유 입력 필수. 담당자에게 알림 발송
+          <div class="action-rule">PATCH /cards/:id/status { status: "DRAFT", reject_reason: "..." }</div>
+          <div class="action-rule">제약: 반려 사유 비어있으면 버튼 비활성화</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Condition Builder -->
+  <div class="screen-box">
+    <div class="screen-title-bar">🔧 Condition Builder 화면 <span style="font-size:11px;font-weight:400;margin-left:8px;">(/condition-builder)</span></div>
+    <div class="screen-body">
+      <h4>화면 구성 요소</h4>
+      <ul>
+        <li>리스크 유형 선택 드롭다운 (RT01~RT13)</li>
+        <li>조건 목록 (전제조건 / 판단조건 구분 표시)</li>
+        <li>조건 추가 버튼 → 소스 선택 → 필드 드롭다운 → 연산자 선택 → 값 입력</li>
+        <li>우측 패널: 조건 미리보기 (한국어 설명) + 내부 로직 표현 (코드 형식)</li>
+        <li>Dry-run 버튼 → 테스트 고객 선택 → 결과 표시</li>
+      </ul>
+      <h4>액션 명세</h4>
+      <div class="action-row">
+        <div class="action-name">소스 선택</div>
+        <div class="action-desc">MYDATA 선택 시 MYDATA 필드 10종 표시. AMPLITUDE 선택 시 AMPLITUDE 필드 13종 표시. 필드 드롭다운은 소스 선택 후 활성화</div>
+      </div>
+      <div class="action-row">
+        <div class="action-name">필드 선택</div>
+        <div class="action-desc">선택된 필드의 타입에 따라 연산자 목록 자동 필터링 (숫자 타입 → LT/LTE/GTE/EQ, 문자열 → CONTAINS 등)</div>
+      </div>
+      <div class="action-row">
+        <div class="action-name">Dry-run 실행</div>
+        <div class="action-desc">등록된 테스트 고객 중 선택 후 전제/판단조건 각각 충족 여부 표시
+          <div class="action-rule">POST /dryruns { rule_id, customer_id }</div>
+        </div>
+      </div>
+      <div class="action-row">
+        <div class="action-name">조건 저장</div>
+        <div class="action-desc">연결된 Rule 카드의 conditions 업데이트 (Rule 카드 상태가 ACTIVE이면 수정 후 재검수 필요)
+          <div class="action-rule">PUT /cards/:rule_id/conditions</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 대시보드 -->
+  <div class="screen-box">
+    <div class="screen-title-bar">📊 대시보드 화면 <span style="font-size:11px;font-weight:400;margin-left:8px;">(/)</span></div>
+    <div class="screen-body">
+      <h4>화면 구성 요소</h4>
+      <ul>
+        <li>카드 상태별 KPI: 전체 / 승인 완료(ACTIVE) / 검증 중(IN_REVIEW) / 초안(DRAFT) / 검증실패(반려)</li>
+        <li>공개 범위별 KPI: PUBLIC / INTERNAL</li>
+        <li>세트 현황: 완전 세트(7타입 모두 연결) / 미완 세트 수</li>
+        <li>타입별 분포 칩 (CONCEPT: N, RULE: N …)</li>
+        <li>각 KPI 숫자 클릭 → 카드 목록 화면으로 해당 필터 적용된 상태로 이동</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ======================== PART 7 ======================== -->
+<section class="section" id="api">
+  <div class="section-num">Part 7</div>
+  <div class="section-title">API 목록</div>
+  <div class="section-desc">KC Admin 구현에 필요한 RESTful API 목록입니다. 세부 request/response body는 별도 API 명세서에서 정의합니다.</div>
+
+  <h4>카드 관리</h4>
+  <table>
+    <thead><tr><th>메서드</th><th>경로</th><th>설명</th></tr></thead>
+    <tbody>
+      <tr><td><span class="api-method m-get">GET</span></td><td><code>/cards</code></td><td>카드 목록 조회 (type, status, visibility 필터, 페이지네이션)</td></tr>
+      <tr><td><span class="api-method m-get">GET</span></td><td><code>/cards/:id</code></td><td>카드 상세 조회</td></tr>
+      <tr><td><span class="api-method m-post">POST</span></td><td><code>/cards</code></td><td>카드 생성 (DRAFT 상태로 저장)</td></tr>
+      <tr><td><span class="api-method m-put">PUT</span></td><td><code>/cards/:id</code></td><td>카드 수정 (DRAFT 상태만 가능)</td></tr>
+      <tr><td><span class="api-method m-delete">DELETE</span></td><td><code>/cards/:id</code></td><td>카드 삭제 (DRAFT 상태만 가능)</td></tr>
+      <tr><td><span class="api-method m-patch">PATCH</span></td><td><code>/cards/:id/status</code></td><td>카드 상태 변경 (검수 요청 / 승인 / 반려 / 보관)</td></tr>
+      <tr><td><span class="api-method m-get">GET</span></td><td><code>/cards/:id/links</code></td><td>카드에 연결된 카드 목록 조회 (체이닝 탐색)</td></tr>
+      <tr><td><span class="api-method m-post">POST</span></td><td><code>/cards/:id/links</code></td><td>카드 링크 추가</td></tr>
+      <tr><td><span class="api-method m-delete">DELETE</span></td><td><code>/cards/:id/links/:target_id</code></td><td>카드 링크 삭제</td></tr>
+    </tbody>
+  </table>
+
+  <h4>조건 관리 (Rule 카드 전용)</h4>
+  <table>
+    <thead><tr><th>메서드</th><th>경로</th><th>설명</th></tr></thead>
+    <tbody>
+      <tr><td><span class="api-method m-get">GET</span></td><td><code>/cards/:id/conditions</code></td><td>Rule 카드의 조건 목록 조회</td></tr>
+      <tr><td><span class="api-method m-put">PUT</span></td><td><code>/cards/:id/conditions</code></td><td>조건 전체 업데이트 (배열 전체 교체)</td></tr>
+    </tbody>
+  </table>
+
+  <h4>Dry-run (조건 검증)</h4>
+  <table>
+    <thead><tr><th>메서드</th><th>경로</th><th>설명</th></tr></thead>
+    <tbody>
+      <tr><td><span class="api-method m-post">POST</span></td><td><code>/dryruns</code></td><td>Rule 카드 조건과 테스트 고객 데이터 비교 실행. 조건별 충족/미충족 반환</td></tr>
+      <tr><td><span class="api-method m-get">GET</span></td><td><code>/test-customers</code></td><td>테스트용 고객 프로필 목록 조회</td></tr>
+      <tr><td><span class="api-method m-post">POST</span></td><td><code>/test-customers</code></td><td>테스트 고객 프로필 추가</td></tr>
+    </tbody>
+  </table>
+
+  <h4>리스크 유형 관리</h4>
+  <table>
+    <thead><tr><th>메서드</th><th>경로</th><th>설명</th></tr></thead>
+    <tbody>
+      <tr><td><span class="api-method m-get">GET</span></td><td><code>/risk-types</code></td><td>리스크 유형 전체 목록 (RT01~RT13 + 추가분)</td></tr>
+      <tr><td><span class="api-method m-post">POST</span></td><td><code>/risk-types</code></td><td>리스크 유형 신규 추가</td></tr>
+      <tr><td><span class="api-method m-put">PUT</span></td><td><code>/risk-types/:id</code></td><td>리스크 유형 수정</td></tr>
+    </tbody>
+  </table>
+
+  <h4>대시보드 / 통계</h4>
+  <table>
+    <thead><tr><th>메서드</th><th>경로</th><th>설명</th></tr></thead>
+    <tbody>
+      <tr><td><span class="api-method m-get">GET</span></td><td><code>/dashboard/stats</code></td><td>카드 상태별 KPI 수치, 타입별 분포, 세트 현황</td></tr>
+    </tbody>
+  </table>
+
+  <h4>참조 데이터 (조회 전용)</h4>
+  <table>
+    <thead><tr><th>메서드</th><th>경로</th><th>설명</th></tr></thead>
+    <tbody>
+      <tr><td><span class="api-method m-get">GET</span></td><td><code>/icis-codes</code></td><td>ICIS 담보코드 목록 (타입, 카테고리, 검색 필터)</td></tr>
+      <tr><td><span class="api-method m-get">GET</span></td><td><code>/disease-codes</code></td><td>KCD 질병코드 목록 (검색 필터)</td></tr>
+    </tbody>
+  </table>
+
+  <div class="info-box info-amber">
+    <strong>이 목록은 Clark AI 연동 API를 포함하지 않습니다</strong>
+    Clark이 벡터 검색·체이닝·조건 대조를 실행하는 API (예: <code>POST /clark/query</code>)는 Phase 1 KC Admin 범위 밖입니다. KC Admin이 완성된 후 별도로 정의됩니다.
+  </div>
+</section>
+
+</div>
+
+<script>
+function toggleAcc(el) {
+  el.classList.toggle('open');
+}
+
+function navTo(id) {
+  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+  document.querySelectorAll('.nav-pill').forEach(p => p.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+const sections = document.querySelectorAll('.section');
+const pills = document.querySelectorAll('.nav-pill');
+const ids = ['overview','cards','relation','condition','status','screens','api'];
+
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 120) current = s.id; });
+  pills.forEach((p, i) => { p.classList.toggle('active', ids[i] === current); });
+});
+</script>
+</body>
+</html>

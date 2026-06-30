@@ -102,15 +102,17 @@ function actionBtns(d) {
     approved: `<button class="btn btn-sm btn-primary" onclick="event.stopPropagation();act('live','${d.id}')">라이브 전환</button>` + edit,
     active:   `<button class="btn btn-sm btn-warn" onclick="event.stopPropagation();act('pause','${d.id}')">일시중지</button>` + edit,
     paused:   `<button class="btn btn-sm btn-secondary" onclick="event.stopPropagation();act('resume','${d.id}')">재시작</button>` + edit,
+    rejected: edit + `<button class="btn btn-sm btn-secondary" onclick="event.stopPropagation();act('resubmit','${d.id}')">재등록</button>` + `<button class="btn btn-sm btn-danger-sm" onclick="event.stopPropagation();act('delete','${d.id}')">삭제</button>`,
   };
   return map[d.status] || edit;
 }
 
 function act(type, id) {
   const msgs = {delete:'삭제하시겠습니까?', cancel:'검수 요청을 취소합니까?',
-    live:'라이브로 전환합니까?', pause:'일시중지합니까?', resume:'재시작합니까?'};
+    live:'라이브로 전환합니까?', pause:'일시중지합니까?', resume:'재시작합니까?',
+    resubmit:'반려된 카드를 재등록(임시저장)합니까?'};
   if (!confirm(msgs[type])) return;
-  const next = {delete:null, cancel:'draft', live:'active', pause:'paused', resume:'active'};
+  const next = {delete:null, cancel:'draft', live:'active', pause:'paused', resume:'active', resubmit:'draft'};
   if (next[type] === null) { DATA.splice(DATA.findIndex(d=>d.id===id), 1); }
   else { const d = DATA.find(d=>d.id===id); if(d) d.status = next[type]; }
   render();

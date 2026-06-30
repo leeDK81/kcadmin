@@ -38,12 +38,12 @@ table.cond tr.opt td { background: #FFFDF5; color: #6B7280; }
 <header>
   <div class="nav"><a href="00_index.html">← 인덱스로 돌아가기</a></div>
   <h1>Rule 카드 입력 가이드</h1>
-  <p>STEP 3 · 마이데이터·프롬에이지·프로파일 판단 조건 카드 · 총 23장</p>
+  <p>STEP 3 · 마이데이터·프롬에이지·프로파일 판단 조건 카드 · 총 20장</p>
 </header>
 <main>
 
 <div class="stats">
-  <span class="chip">📋 총 23장</span>
+  <span class="chip">📋 총 20장</span>
   <span class="chip">✅ 필수 조건</span>
   <span class="chip">⚡ 선택 조건</span>
 </div>
@@ -132,19 +132,6 @@ table.cond tr.opt td { background: #FFFDF5; color: #6B7280; }
 </div>
 
 <div class="card">
-  <div class="card-head"><span class="ru-id">RU-T06</span><span class="card-name">갱신형 보험료 급등 위험 판정</span><span class="rt-tag">→ T06 갱신형 보험료 급등 위험형</span></div>
-  <div class="card-body">
-    <div class="cond-label">판단 조건</div>
-    <table class="cond">
-      <tr><th>소스</th><th>항목</th><th>조건</th><th>기준값</th><th>구분</th></tr>
-      <tr class="req"><td>프로파일</td><td>나이</td><td>사이(BETWEEN)</td><td>45세 ~ 60세</td><td><span class="badge-req">필수</span></td></tr>
-      <tr class="req"><td>마이데이터</td><td>A3201 (입원일당)</td><td>이상(GTE)</td><td>1원</td><td><span class="badge-req">필수</span></td></tr>
-    </table>
-  </div>
-  <div class="note">※ 갱신형 보험 여부를 직접 확인할 담보코드 없음. 45~60세(갱신 시 보험료 급등 최대 구간) + 보험 보유(A3201 1원 이상)를 조합한 간접 판정. 기존 선택조건이었던 고혈압 위험도는 갱신형·납입여력과 논리적 연관 없어 제거. 추후 갱신형 전용 담보코드 확보 시 정밀화 필요.</div>
-</div>
-
-<div class="card">
   <div class="card-head"><span class="ru-id">RU-T07</span><span class="card-name">보장 비효율 판정</span><span class="rt-tag">→ T07 비용 대비 보장 비효율형</span></div>
   <div class="card-body">
     <div class="cond-label">판단 조건</div>
@@ -185,20 +172,6 @@ table.cond tr.opt td { background: #FFFDF5; color: #6B7280; }
       <tr class="opt"><td>프롬에이지</td><td>질병위험도 &gt; 고혈압</td><td>같음(EQ)</td><td>위험</td><td><span class="badge-opt">선택</span></td></tr>
     </table>
   </div>
-</div>
-
-<div class="card">
-  <div class="card-head"><span class="ru-id">RU-T16</span><span class="card-name">실손보험 노후화 판정</span><span class="rt-tag">→ T16 실손보험 노후화형</span></div>
-  <div class="card-body">
-    <div class="cond-label">판단 조건</div>
-    <table class="cond">
-      <tr><th>소스</th><th>항목</th><th>조건</th><th>기준값</th><th>구분</th></tr>
-      <tr class="req"><td>마이데이터</td><td>A3201 (입원일당)</td><td>이상(GTE)</td><td>1원</td><td><span class="badge-req">필수</span></td></tr>
-      <tr class="req"><td>프로파일</td><td>나이</td><td>사이(BETWEEN)</td><td>40세 ~ 65세</td><td><span class="badge-req">필수</span></td></tr>
-      <tr class="opt"><td>프롬에이지</td><td>질병위험도 &gt; 고혈압</td><td>같음(EQ)</td><td>주의</td><td><span class="badge-opt">선택</span></td></tr>
-    </table>
-  </div>
-  <div class="note">※ 입원일당 보유(실손 간접 지표) + 40세 이상 = 1~3세대 실손 보유 가능성 높음. 실손 세대 구분 담보코드 확보 시 정밀화 필요.</div>
 </div>
 
 <div class="card">
@@ -273,25 +246,12 @@ table.cond tr.opt td { background: #FFFDF5; color: #6B7280; }
       <tr class="req"><td>마이데이터</td><td>A9607 (형사합의지원금)</td><td>이하(LTE)</td><td>0원</td><td><span class="badge-req">필수</span></td></tr>
       <tr class="req"><td>마이데이터</td><td>A9604 (벌금비용)</td><td>이하(LTE)</td><td>0원</td><td><span class="badge-req">필수</span></td></tr>
       <tr class="req"><td>프로파일</td><td>나이</td><td>사이(BETWEEN)</td><td>20세 ~ 65세</td><td><span class="badge-req">필수</span></td></tr>
+      <tr class="req"><td>프로파일</td><td>운전여부</td><td>같음(EQ)</td><td>유</td><td><span class="badge-req">필수</span></td></tr>
       <tr class="opt"><td>마이데이터</td><td>A9605 (변호사선임비용)</td><td>이하(LTE)</td><td>0원</td><td><span class="badge-opt">선택</span></td></tr>
       <tr class="opt"><td>프로파일</td><td>성별</td><td>같음(EQ)</td><td>남</td><td><span class="badge-opt">선택</span></td></tr>
     </table>
   </div>
   <div class="note">※ A9607(형사합의지원금) + A9604(벌금비용) 모두 0원 = 운전자보험 핵심 담보 미보장. 담보코드 레퍼런스 테이블 기타 계열(A8~A9xxx)에서 형사합의지원금(A9607)·벌금비용(A9604)·변호사선임비용(A9605) 모두 확인됨. 자동차보험(대인·대물)과 별개로 형사 책임 보장이 없는 상태를 정확히 감지. <strong>[v1.4 수정]</strong> 기존 A3001(상해후유장해)은 운전자보험 형사합의금과 직접 연관 없어 교체 완료.</div>
-</div>
-
-<div class="card">
-  <div class="card-head"><span class="ru-id">RU-T15</span><span class="card-name">자녀 건강보장 공백 판정</span><span class="rt-tag">→ T15 자녀 건강보장 공백형</span></div>
-  <div class="card-body">
-    <div class="cond-label">판단 조건</div>
-    <table class="cond">
-      <tr><th>소스</th><th>항목</th><th>조건</th><th>기준값</th><th>구분</th></tr>
-      <tr class="req"><td>프로파일</td><td>나이</td><td>사이(BETWEEN)</td><td>25세 ~ 45세</td><td><span class="badge-req">필수</span></td></tr>
-      <tr class="req"><td>프로파일</td><td>자녀유무</td><td>같음(EQ)</td><td>있음</td><td><span class="badge-req">필수</span></td></tr>
-      <tr class="req"><td>마이데이터</td><td>A3201 (입원일당)</td><td>이하(LTE)</td><td>5,000원</td><td><span class="badge-req">필수</span></td></tr>
-    </table>
-  </div>
-  <div class="note">※ 자녀 있는 25~45세 + 입원일당 최소 수준 = 어린이보험 미가입 대리 판정.</div>
 </div>
 
 <div class="section-label">신규 미커버 영역 · T17 · T18 · T19 · T20 · T21 · T22 · T23</div>
@@ -303,12 +263,12 @@ table.cond tr.opt td { background: #FFFDF5; color: #6B7280; }
     <table class="cond">
       <tr><th>소스</th><th>항목</th><th>조건</th><th>기준값</th><th>구분</th></tr>
       <tr class="req"><td>마이데이터</td><td>A4109 (치매진단)</td><td>이하(LTE)</td><td>0원</td><td><span class="badge-req">필수</span></td></tr>
-      <tr class="req"><td>프로파일</td><td>나이</td><td>사이(BETWEEN)</td><td>55세 ~ 80세</td><td><span class="badge-req">필수</span></td></tr>
+      <tr class="req"><td>프로파일</td><td>나이</td><td>사이(BETWEEN)</td><td>50세 ~ 85세</td><td><span class="badge-req">필수</span></td></tr>
       <tr class="opt"><td>프롬에이지</td><td>질병위험도 &gt; 치매</td><td>같음(EQ)</td><td>위험</td><td><span class="badge-opt">선택</span></td></tr>
       <tr class="opt"><td>프롬에이지</td><td>질병위험도 &gt; 당뇨병</td><td>같음(EQ)</td><td>위험</td><td><span class="badge-opt">선택</span></td></tr>
     </table>
   </div>
-  <div class="note">※ T05(노후돌봄보장 공백형)는 간병보험(A4300) 미가입 감지. T17은 치매 진단 시 지급되는 진단금(A4109) 미가입을 별도 감지. 당뇨병은 치매 위험 증가 인자로 선택 조건 활용.</div>
+  <div class="note">※ T05(노후돌봄보장 공백형)는 간병보험(A4300) 미가입 감지. T17은 치매 진단 시 지급되는 진단금(A4109) 미가입을 별도 감지. <strong>나이 하한 50세:</strong> 경도인지장애(MCI) → 치매 연간 전환율 10~15%로, 사전 진단금 확보 관점에서 50대부터 감지 필요. <strong>나이 상한 85세:</strong> 85세 이상 치매 유병률 21.18%(65~69세 4.99% 대비 4배), 실제 고위험군까지 포괄(출처: 보건복지부·중앙치매센터 2023년 치매역학조사). 당뇨병은 치매 위험 증가 인자로 선택 조건 활용.</div>
 </div>
 
 <div class="card">

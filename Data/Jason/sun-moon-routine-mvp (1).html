@@ -1,0 +1,2115 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Sun & Moon Routine</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Pretendard:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sun: #F59E0B;
+    --sun-light: #FEF3C7;
+    --sun-dark: #D97706;
+    --moon: #6366F1;
+    --moon-light: #EEF2FF;
+    --moon-dark: #4F46E5;
+    --dark: #0F0F1A;
+    --dark2: #1A1A2E;
+    --gray: #6B7280;
+    --gray-light: #F3F4F6;
+    --white: #FFFFFF;
+    --text: #111827;
+    --text-muted: #9CA3AF;
+    --radius: 20px;
+    --radius-sm: 12px;
+    --shadow: 0 20px 60px rgba(0,0,0,0.12);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #0F0F1A;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Phone shell */
+  .phone {
+    width: 390px;
+    min-height: 100vh;
+    background: #F9FAFB;
+    position: relative;
+    box-shadow: 0 0 80px rgba(0,0,0,0.5);
+  }
+
+  @media (max-width: 420px) {
+    .phone { width: 100vw; box-shadow: none; }
+    body { background: #F9FAFB; }
+  }
+
+  /* ========================
+     SCREENS
+  ======================== */
+  .screen {
+    display: none;
+    width: 100%;
+    min-height: 100vh;
+    flex-direction: column;
+    animation: fadeIn 0.35s ease;
+  }
+  .screen.active { display: flex; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ========================
+     ONBOARDING
+  ======================== */
+  #screen-onboard {
+    background: var(--dark);
+    align-items: center;
+    justify-content: center;
+    padding: 40px 32px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.35;
+    pointer-events: none;
+  }
+  .orb-sun { width: 280px; height: 280px; background: var(--sun); top: -80px; right: -60px; animation: pulse 4s ease-in-out infinite; }
+  .orb-moon { width: 220px; height: 220px; background: var(--moon); bottom: -60px; left: -60px; animation: pulse 4s ease-in-out infinite 2s; }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 0.3; }
+    50% { transform: scale(1.1); opacity: 0.45; }
+  }
+
+  .onboard-icon { font-size: 64px; margin-bottom: 8px; animation: float 3s ease-in-out infinite; }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  .brand-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 36px;
+    color: var(--white);
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+  .brand-name span { color: var(--sun); }
+  .brand-name .moon-text { color: #A5B4FC; }
+
+  .brand-tagline {
+    font-size: 14px;
+    color: rgba(255,255,255,0.55);
+    margin-bottom: 48px;
+    letter-spacing: 0.3px;
+  }
+
+  /* Question card */
+  .q-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--sun);
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    margin-bottom: 12px;
+  }
+  .q-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    color: var(--white);
+    margin-bottom: 24px;
+    line-height: 1.35;
+  }
+
+  .goal-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    width: 100%;
+    margin-bottom: 32px;
+  }
+
+  .goal-btn {
+    background: rgba(255,255,255,0.07);
+    border: 1.5px solid rgba(255,255,255,0.12);
+    border-radius: var(--radius-sm);
+    padding: 16px 12px;
+    color: var(--white);
+    font-family: 'Pretendard', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+  .goal-btn .goal-icon { font-size: 24px; display: block; margin-bottom: 6px; }
+  .goal-btn:hover, .goal-btn.selected {
+    background: rgba(245,158,11,0.18);
+    border-color: var(--sun);
+    color: var(--sun);
+    transform: translateY(-2px);
+  }
+
+  .cta-btn {
+    width: 100%;
+    padding: 16px;
+    border-radius: var(--radius-sm);
+    border: none;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.22s;
+    letter-spacing: 0.2px;
+  }
+  .cta-sun {
+    background: linear-gradient(135deg, var(--sun) 0%, #FBBF24 100%);
+    color: var(--dark);
+    box-shadow: 0 8px 30px rgba(245,158,11,0.4);
+  }
+  .cta-sun:hover { transform: translateY(-2px); box-shadow: 0 12px 36px rgba(245,158,11,0.5); }
+  .cta-moon {
+    background: linear-gradient(135deg, var(--moon) 0%, #818CF8 100%);
+    color: var(--white);
+    box-shadow: 0 8px 30px rgba(99,102,241,0.4);
+  }
+  .cta-moon:hover { transform: translateY(-2px); box-shadow: 0 12px 36px rgba(99,102,241,0.5); }
+
+  /* ========================
+     ROUTINE SETUP
+  ======================== */
+  #screen-setup {
+    background: var(--dark);
+    padding: 60px 28px 40px;
+    align-items: center;
+  }
+  .setup-back {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+    border: none;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .setup-step {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--sun);
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    margin-bottom: 16px;
+  }
+  .setup-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 26px;
+    color: var(--white);
+    text-align: center;
+    margin-bottom: 8px;
+    line-height: 1.25;
+  }
+  .setup-subtitle {
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .routine-cards { width: 100%; display: flex; flex-direction: column; gap: 14px; margin-bottom: 40px; }
+
+  .routine-card {
+    background: rgba(255,255,255,0.05);
+    border: 1.5px solid rgba(255,255,255,0.1);
+    border-radius: var(--radius);
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    cursor: pointer;
+    transition: all 0.25s;
+  }
+  .routine-card:hover { border-color: rgba(255,255,255,0.25); background: rgba(255,255,255,0.08); }
+  .routine-card.selected-sun { background: rgba(245,158,11,0.12); border-color: var(--sun); }
+  .routine-card.selected-moon { background: rgba(99,102,241,0.12); border-color: var(--moon); }
+
+  .rc-icon { font-size: 36px; flex-shrink: 0; }
+  .rc-info { flex: 1; }
+  .rc-name { font-size: 15px; font-weight: 700; color: var(--white); margin-bottom: 3px; }
+  .rc-desc { font-size: 12px; color: rgba(255,255,255,0.5); }
+  .rc-check {
+    width: 24px; height: 24px; border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; transition: all 0.2s;
+  }
+  .routine-card.selected-sun .rc-check { background: var(--sun); color: var(--dark); }
+  .routine-card.selected-moon .rc-check { background: var(--moon); color: var(--white); }
+
+  /* Time picker */
+  .time-section { width: 100%; margin-bottom: 32px; }
+  .time-card {
+    background: rgba(255,255,255,0.05);
+    border: 1.5px solid rgba(255,255,255,0.1);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .time-card:hover { background: rgba(255,255,255,0.09); border-color: rgba(255,255,255,0.22); }
+  .time-card.sun-active  { background: rgba(245,158,11,0.1);  border-color: var(--sun); }
+  .time-card.moon-active { background: rgba(99,102,241,0.1);  border-color: var(--moon); }
+  .time-card-left { display: flex; flex-direction: column; gap: 3px; }
+  .time-label { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.7); }
+  .time-hint  { font-size: 10px; color: rgba(255,255,255,0.35); }
+  .time-card-right { display: flex; align-items: center; gap: 8px; }
+  .time-value {
+    font-family: 'DM Serif Display', serif;
+    font-size: 26px;
+    color: var(--white);
+  }
+  .time-value.sun-time  { color: var(--sun); }
+  .time-value.moon-time { color: #A5B4FC; }
+  .time-edit-icon { font-size: 14px; opacity: 0.5; }
+
+  /* ── Time Picker Modal ── */
+  .time-modal-backdrop {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 9999;
+    display: flex; align-items: flex-end; justify-content: center;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.25s;
+  }
+  .time-modal-backdrop.open { opacity: 1; pointer-events: auto; }
+
+  .time-modal {
+    width: 100%; max-width: 390px;
+    background: #1C1C2E;
+    border-radius: 28px 28px 0 0;
+    padding: 20px 24px 44px;
+    transform: translateY(100%);
+    transition: transform 0.35s cubic-bezier(0.34, 1.1, 0.64, 1);
+  }
+  .time-modal-backdrop.open .time-modal { transform: translateY(0); }
+
+  .time-modal-handle {
+    width: 40px; height: 4px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 2px;
+    margin: 0 auto 20px;
+  }
+  .time-modal-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px; color: var(--white);
+    margin-bottom: 4px;
+  }
+  .time-modal-sub { font-size: 12px; color: rgba(255,255,255,0.4); margin-bottom: 24px; }
+
+  /* Hour/Min buttons grid */
+  .time-picker-section { margin-bottom: 20px; }
+  .time-picker-label {
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 1.2px; color: rgba(255,255,255,0.35);
+    margin-bottom: 10px;
+  }
+  .time-btn-grid {
+    display: flex; flex-wrap: wrap; gap: 8px;
+  }
+  .time-btn {
+    padding: 10px 0; width: calc(100% / 6 - 7px);
+    background: rgba(255,255,255,0.06);
+    border: 1.5px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    color: rgba(255,255,255,0.55);
+    font-family: 'Pretendard', sans-serif;
+    font-size: 15px; font-weight: 600;
+    cursor: pointer; transition: all 0.15s;
+    text-align: center;
+  }
+  .time-btn:hover { background: rgba(255,255,255,0.1); color: white; }
+  .time-btn.sel-sun  { background: rgba(245,158,11,0.25); border-color: var(--sun); color: var(--sun); font-weight: 800; }
+  .time-btn.sel-moon { background: rgba(99,102,241,0.25); border-color: var(--moon); color: #A5B4FC; font-weight: 800; }
+
+  /* Preview row */
+  .time-preview-row {
+    display: flex; align-items: center; justify-content: center; gap: 16px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 16px; padding: 14px 20px;
+    margin-bottom: 20px;
+  }
+  .preview-big {
+    font-family: 'DM Serif Display', serif;
+    font-size: 42px; color: white;
+    letter-spacing: 2px;
+  }
+
+  /* Period toggle */
+  .period-toggle { display: flex; gap: 6px; }
+  .period-btn {
+    padding: 8px 16px;
+    background: rgba(255,255,255,0.06);
+    border: 1.5px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    color: rgba(255,255,255,0.35);
+    font-family: 'Pretendard', sans-serif;
+    font-size: 13px; font-weight: 700;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .period-btn.sel-sun  { background: rgba(245,158,11,0.2); border-color: var(--sun); color: var(--sun); }
+  .period-btn.sel-moon { background: rgba(99,102,241,0.2); border-color: var(--moon); color: #A5B4FC; }
+
+  .time-modal-confirm {
+    width: 100%; padding: 16px;
+    border-radius: var(--radius-sm); border: none;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 15px; font-weight: 700;
+    cursor: pointer; transition: all 0.2s;
+  }
+
+  /* Settings alarm row (home) */
+  .alarm-row {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--white);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: background 0.2s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .alarm-row:hover { background: #F9FAFB; }
+  .alarm-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .alarm-dot.sun  { background: var(--sun); }
+  .alarm-dot.moon { background: var(--moon); }
+  .alarm-info { flex: 1; }
+  .alarm-name { font-size: 13px; font-weight: 600; color: var(--text); }
+  .alarm-time { font-size: 11px; color: var(--text-muted); }
+  .alarm-time-big {
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px;
+  }
+  .alarm-time-big.sun  { color: var(--sun-dark); }
+  .alarm-time-big.moon { color: var(--moon-dark); }
+  .alarm-edit { font-size: 12px; color: var(--text-muted); }
+
+  /* ========================
+     MAIN HOME
+  ======================== */
+  #screen-home {
+    background: #F9FAFB;
+    padding-bottom: 90px;
+  }
+
+  .home-header {
+    background: var(--dark);
+    padding: 52px 24px 28px;
+    position: relative;
+    overflow: hidden;
+  }
+  .home-header-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: 0.3;
+    pointer-events: none;
+  }
+  .home-date {
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 4px;
+    letter-spacing: 0.5px;
+  }
+  .home-greeting {
+    font-family: 'DM Serif Display', serif;
+    font-size: 24px;
+    color: var(--white);
+    margin-bottom: 20px;
+    line-height: 1.25;
+  }
+  .home-greeting span { color: var(--sun); }
+
+  /* Streak banner */
+  .streak-banner {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 14px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .streak-fire { font-size: 28px; }
+  .streak-info { flex: 1; }
+  .streak-count { font-size: 18px; font-weight: 800; color: var(--white); }
+  .streak-sub { font-size: 11px; color: rgba(255,255,255,0.5); }
+  .streak-days { display: flex; gap: 4px; }
+  .streak-day {
+    width: 26px; height: 26px; border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 600; color: rgba(255,255,255,0.4);
+    background: rgba(255,255,255,0.06);
+  }
+  .streak-day.done { background: var(--sun); color: var(--dark); }
+  .streak-day.today { background: rgba(245,158,11,0.25); color: var(--sun); border: 1.5px solid var(--sun); }
+
+  /* Section */
+  .section { padding: 20px 20px 0; }
+  .section-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    margin-bottom: 14px;
+  }
+
+  /* Routine cards home */
+  .routine-home-card {
+    border-radius: var(--radius);
+    padding: 22px;
+    margin-bottom: 12px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .routine-home-card:hover { transform: translateY(-2px); }
+  .routine-home-card:active { transform: scale(0.98); }
+
+  .rhc-sun {
+    background: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%);
+    border: 1.5px solid #FDE68A;
+    box-shadow: 0 4px 24px rgba(245,158,11,0.15);
+  }
+  .rhc-moon {
+    background: linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 100%);
+    border: 1.5px solid #C7D2FE;
+    box-shadow: 0 4px 24px rgba(99,102,241,0.12);
+  }
+
+  .rhc-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 14px; }
+  .rhc-icon-wrap { position: relative; }
+  .rhc-icon { font-size: 40px; }
+  .rhc-badge {
+    position: absolute;
+    top: -4px; right: -8px;
+    background: var(--dark);
+    color: var(--white);
+    font-size: 9px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+  .rhc-sun .rhc-badge { background: var(--sun); color: var(--dark); }
+  .rhc-moon .rhc-badge { background: var(--moon); }
+
+  .rhc-status {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+  }
+  .status-pending-sun { background: rgba(245,158,11,0.15); color: var(--sun-dark); }
+  .status-pending-moon { background: rgba(99,102,241,0.15); color: var(--moon-dark); }
+  .status-done { background: #DCFCE7; color: #16A34A; }
+  .status-locked { background: #F3F4F6; color: var(--text-muted); }
+
+  .rhc-name { font-size: 16px; font-weight: 800; color: var(--text); margin-bottom: 3px; }
+  .rhc-sub { font-size: 12px; color: var(--gray); margin-bottom: 14px; }
+
+  .rhc-progress-wrap { margin-bottom: 6px; }
+  .rhc-progress-label {
+    display: flex; justify-content: space-between;
+    font-size: 11px; color: var(--gray); margin-bottom: 6px;
+  }
+  .rhc-progress-bar {
+    height: 6px; background: rgba(0,0,0,0.08); border-radius: 3px; overflow: hidden;
+  }
+  .rhc-progress-fill {
+    height: 100%; border-radius: 3px; transition: width 0.6s ease;
+  }
+  .fill-sun { background: linear-gradient(90deg, var(--sun), #FBBF24); }
+  .fill-moon { background: linear-gradient(90deg, var(--moon), #818CF8); }
+
+  /* Character card */
+  .char-row { display: flex; gap: 10px; }
+  .char-card {
+    flex: 1;
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 16px;
+    text-align: center;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  .char-card:hover { transform: translateY(-2px); }
+  .char-icon { font-size: 40px; margin-bottom: 8px; display: block; }
+  .char-name { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+  .char-level { font-size: 11px; color: var(--text-muted); margin-bottom: 10px; }
+  .char-xp-bar { height: 4px; background: var(--gray-light); border-radius: 2px; overflow: hidden; }
+  .char-xp-fill { height: 100%; border-radius: 2px; }
+  .xp-sun { background: var(--sun); }
+  .xp-moon { background: var(--moon); }
+
+  /* Wellness index */
+  .wellness-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+  .well-card {
+    background: var(--white);
+    border-radius: var(--radius-sm);
+    padding: 14px 10px;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  }
+  .well-icon { font-size: 22px; margin-bottom: 6px; display: block; }
+  .well-value { font-size: 20px; font-weight: 800; color: var(--text); margin-bottom: 2px; }
+  .well-name { font-size: 10px; color: var(--text-muted); font-weight: 500; }
+  .well-change { font-size: 10px; margin-top: 3px; }
+  .up { color: #16A34A; }
+  .down { color: #DC2626; }
+
+  /* Bottom nav */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 390px;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(0,0,0,0.06);
+    padding: 10px 0 20px;
+    display: flex;
+    justify-content: space-around;
+    z-index: 100;
+  }
+  @media (max-width: 420px) { .bottom-nav { width: 100vw; left: 0; transform: none; } }
+  .nav-btn {
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    background: none; border: none; cursor: pointer;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 10px; color: var(--text-muted); font-weight: 500;
+    padding: 4px 16px;
+    border-radius: 10px;
+    transition: all 0.2s;
+  }
+  .nav-btn.active { color: var(--sun); }
+  .nav-btn .nav-icon { font-size: 22px; transition: transform 0.2s; }
+  .nav-btn.active .nav-icon { transform: scale(1.1); }
+
+  /* ========================
+     ROUTINE DETAIL / TRACKER
+  ======================== */
+  #screen-tracker {
+    background: #F9FAFB;
+    padding-bottom: 90px;
+  }
+
+  .tracker-header {
+    padding: 52px 24px 24px;
+    position: relative;
+  }
+  .back-btn {
+    position: absolute;
+    top: 16px; left: 16px;
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.06);
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .tracker-type { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 6px; }
+  .tracker-title { font-family: 'DM Serif Display', serif; font-size: 28px; color: var(--text); margin-bottom: 4px; }
+  .tracker-sub { font-size: 13px; color: var(--gray); margin-bottom: 20px; }
+
+  .day-counter {
+    display: flex; align-items: center; gap: 12px;
+    background: var(--white);
+    border-radius: var(--radius-sm);
+    padding: 14px 18px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    margin-bottom: 0;
+  }
+  .day-num { font-family: 'DM Serif Display', serif; font-size: 36px; color: var(--text); }
+  .day-info { flex: 1; }
+  .day-label { font-size: 13px; font-weight: 600; color: var(--text); }
+  .day-sub { font-size: 11px; color: var(--text-muted); }
+  .day-pct { font-size: 20px; font-weight: 800; }
+  .pct-sun { color: var(--sun); }
+  .pct-moon { color: var(--moon); }
+
+  /* Daily tasks */
+  .task-list { display: flex; flex-direction: column; gap: 10px; }
+  .task-item {
+    background: var(--white);
+    border-radius: var(--radius-sm);
+    padding: 16px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .task-item:active { transform: scale(0.98); }
+
+  .task-check {
+    width: 26px; height: 26px; border-radius: 50%;
+    border: 2px solid #D1D5DB;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; flex-shrink: 0; transition: all 0.25s;
+  }
+  .task-item.done .task-check { border-color: transparent; color: var(--white); }
+  .task-item.done-sun .task-check { background: var(--sun); border-color: var(--sun); }
+  .task-item.done-moon .task-check { background: var(--moon); border-color: var(--moon); }
+  .task-item.done .task-name { text-decoration: line-through; color: var(--text-muted); }
+
+  /* Failed task (after routine submitted) */
+  .task-item.failed {
+    background: #FFF7F7;
+    border: 1.5px solid #FEE2E2;
+    opacity: 0.85;
+  }
+  .task-item.failed .task-check {
+    background: #FEE2E2;
+    border-color: #FECACA;
+    color: #EF4444;
+    font-size: 11px;
+  }
+  .task-item.failed .task-name { color: #9CA3AF; text-decoration: line-through; }
+  .task-item.failed .task-meta { color: #D1D5DB; }
+
+  /* Section dividers inside task list */
+  .task-section-label {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 1px; padding: 4px 0 6px;
+  }
+  .task-section-label.success { color: #16A34A; }
+  .task-section-label.fail { color: #EF4444; }
+  .task-section-line { flex: 1; height: 1px; }
+  .task-section-line.success { background: #DCFCE7; }
+  .task-section-line.fail { background: #FEE2E2; }
+
+  /* Result summary card */
+  .result-summary {
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    margin-bottom: 12px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .result-summary.all-pass { background: #F0FDF4; border: 1.5px solid #BBF7D0; }
+  .result-summary.partial  { background: #FFFBEB; border: 1.5px solid #FDE68A; }
+  .result-summary.all-fail { background: #FFF7F7; border: 1.5px solid #FECACA; }
+  .result-emoji { font-size: 36px; flex-shrink: 0; }
+  .result-info { flex: 1; }
+  .result-title { font-size: 15px; font-weight: 800; color: var(--text); margin-bottom: 2px; }
+  .result-sub { font-size: 12px; color: var(--gray); }
+  .result-xp {
+    font-size: 16px; font-weight: 800;
+    background: var(--dark); color: var(--white);
+    padding: 6px 12px; border-radius: 20px;
+    white-space: nowrap;
+  }
+
+  .task-text { flex: 1; }
+  .task-name { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 2px; transition: all 0.2s; }
+  .task-meta { font-size: 11px; color: var(--text-muted); }
+  .task-icon { font-size: 22px; }
+
+  /* Complete button */
+  .complete-section { padding: 20px; }
+  .complete-btn {
+    width: 100%;
+    padding: 18px;
+    border-radius: var(--radius);
+    border: none;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 16px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.25s;
+    letter-spacing: 0.3px;
+  }
+  .complete-btn:disabled {
+    background: var(--gray-light);
+    color: var(--text-muted);
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+  }
+
+  /* ========================
+     CHARACTER SCREEN
+  ======================== */
+  #screen-character {
+    background: var(--dark);
+    padding-bottom: 90px;
+    overflow-y: auto;
+  }
+
+  .char-header {
+    background: linear-gradient(180deg, rgba(245,158,11,0.15) 0%, transparent 100%);
+    padding: 52px 24px 24px;
+    text-align: center;
+  }
+  .char-big-icon { font-size: 88px; margin-bottom: 8px; display: block; animation: float 3s ease-in-out infinite; }
+  .char-header-name { font-family: 'DM Serif Display', serif; font-size: 32px; color: var(--white); margin-bottom: 4px; }
+  .char-header-role { font-size: 13px; color: rgba(255,255,255,0.5); margin-bottom: 20px; }
+
+  .stage-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(245,158,11,0.15);
+    border: 1px solid rgba(245,158,11,0.3);
+    color: var(--sun);
+    font-size: 12px; font-weight: 700;
+    padding: 6px 14px; border-radius: 20px;
+    margin-bottom: 24px;
+  }
+
+  .xp-section { padding: 0 24px 20px; }
+  .xp-label { display: flex; justify-content: space-between; font-size: 12px; color: rgba(255,255,255,0.5); margin-bottom: 8px; }
+  .xp-track { height: 10px; background: rgba(255,255,255,0.08); border-radius: 5px; overflow: hidden; }
+  .xp-track-fill { height: 100%; border-radius: 5px; transition: width 0.8s ease; }
+
+  .metric-section { padding: 0 24px 20px; }
+  .metric-title { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 14px; }
+  .metric-list { display: flex; flex-direction: column; gap: 12px; }
+  .metric-row {
+    display: flex; align-items: center; gap: 12px;
+  }
+  .metric-icon { font-size: 20px; width: 36px; text-align: center; }
+  .metric-info { flex: 1; }
+  .metric-name { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.8); margin-bottom: 5px; }
+  .metric-bar-wrap { height: 6px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden; }
+  .metric-bar-fill { height: 100%; border-radius: 3px; transition: width 0.8s ease; }
+  .metric-val { font-size: 13px; font-weight: 700; width: 36px; text-align: right; }
+
+  .msg-card {
+    margin: 0 24px 20px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: var(--radius);
+    padding: 18px;
+    display: flex; gap: 12px; align-items: flex-start;
+  }
+  .msg-char { font-size: 28px; flex-shrink: 0; }
+  .msg-bubble {
+    flex: 1;
+    background: rgba(255,255,255,0.06);
+    border-radius: 0 12px 12px 12px;
+    padding: 12px 14px;
+  }
+  .msg-text { font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.5; }
+
+  /* ========================
+     DASHBOARD
+  ======================== */
+  #screen-dashboard {
+    background: #F9FAFB;
+    padding-bottom: 90px;
+    overflow-y: auto;
+  }
+
+  .dash-header {
+    background: var(--dark);
+    padding: 52px 24px 28px;
+  }
+  .dash-title { font-family: 'DM Serif Display', serif; font-size: 26px; color: var(--white); margin-bottom: 4px; }
+  .dash-sub { font-size: 13px; color: rgba(255,255,255,0.5); }
+
+  .kpi-row { display: flex; gap: 10px; padding: 20px 20px 0; }
+  .kpi-card {
+    flex: 1;
+    background: var(--white);
+    border-radius: var(--radius-sm);
+    padding: 16px 14px;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  }
+  .kpi-val { font-family: 'DM Serif Display', serif; font-size: 28px; color: var(--text); }
+  .kpi-label { font-size: 11px; color: var(--text-muted); font-weight: 500; margin-top: 2px; }
+
+  .calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+  }
+  .cal-day {
+    aspect-ratio: 1;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 600;
+    background: var(--gray-light);
+    color: var(--text-muted);
+  }
+  .cal-day.sun-done { background: var(--sun-light); color: var(--sun-dark); }
+  .cal-day.moon-done { background: var(--moon-light); color: var(--moon-dark); }
+  .cal-day.both-done { background: linear-gradient(135deg, var(--sun-light) 50%, var(--moon-light) 50%); color: var(--text); }
+  .cal-day.today-cal { border: 2px solid var(--sun); }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-80px);
+    background: var(--dark);
+    color: var(--white);
+    font-size: 14px; font-weight: 600;
+    padding: 12px 24px;
+    border-radius: 50px;
+    z-index: 1000;
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    white-space: nowrap;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* Celebration overlay */
+  .celebrate {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    z-index: 500;
+    pointer-events: none;
+  }
+  .celebrate-inner {
+    text-align: center;
+    animation: celebIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+  @keyframes celebIn {
+    from { opacity: 0; transform: scale(0.5); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  .celebrate-emoji { font-size: 80px; display: block; margin-bottom: 8px; }
+
+  /* Utils */
+  .mt-4 { margin-top: 16px; }
+  .scroll-y { overflow-y: auto; }
+</style>
+</head>
+<body>
+
+<div class="phone">
+
+  <!-- TOAST -->
+  <div class="toast" id="toast">✅ 루틴 완료!</div>
+
+  <!-- ========================
+       SCREEN: ONBOARDING
+  ======================== -->
+  <div id="screen-onboard" class="screen active">
+    <div class="orb orb-sun"></div>
+    <div class="orb orb-moon"></div>
+
+    <div style="position:relative;z-index:1;width:100%;display:flex;flex-direction:column;align-items:center;">
+      <div class="onboard-icon">🌅</div>
+      <div class="brand-name">
+        <span>Sun</span> &amp; <span class="moon-text">Moon</span><br>Routine
+      </div>
+      <div class="brand-tagline">건강은 제품이 아니라 루틴입니다</div>
+
+      <div class="q-label">Step 1 of 2</div>
+      <div class="q-title">요즘 가장 관리하고<br>싶은 것은 무엇인가요?</div>
+
+      <div class="goal-grid">
+        <button class="goal-btn" onclick="selectGoal(this, '활력')">
+          <span class="goal-icon">⚡</span>
+          활력
+        </button>
+        <button class="goal-btn" onclick="selectGoal(this, '수면')">
+          <span class="goal-icon">😴</span>
+          수면
+        </button>
+        <button class="goal-btn" onclick="selectGoal(this, '스트레스')">
+          <span class="goal-icon">🧘</span>
+          스트레스
+        </button>
+        <button class="goal-btn" onclick="selectGoal(this, '건강 습관')">
+          <span class="goal-icon">💪</span>
+          건강 습관
+        </button>
+      </div>
+
+      <button class="cta-btn cta-sun" id="onboard-next" onclick="goToSetup()" style="opacity:0.4;pointer-events:none;">
+        나에게 맞는 루틴 추천받기 →
+      </button>
+    </div>
+  </div>
+
+  <!-- ========================
+       SCREEN: SETUP
+  ======================== -->
+  <div id="screen-setup" class="screen">
+    <div class="orb orb-sun" style="opacity:0.2;top:-40px;right:-40px;width:200px;height:200px;"></div>
+    <div class="orb orb-moon" style="opacity:0.2;bottom:80px;left:-40px;width:180px;height:180px;"></div>
+
+    <button class="setup-back" onclick="showScreen('screen-onboard')">←</button>
+
+    <div style="position:relative;z-index:1;width:100%;display:flex;flex-direction:column;align-items:center;">
+      <div class="setup-step">Step 2 of 2</div>
+      <div class="setup-title">루틴을 선택하고<br>시간을 설정하세요</div>
+      <div class="setup-subtitle">두 루틴 모두 선택하면 더 좋아요!</div>
+
+      <div class="routine-cards">
+        <div class="routine-card" id="card-sun" onclick="toggleRoutine('sun')">
+          <div class="rc-icon">☀️</div>
+          <div class="rc-info">
+            <div class="rc-name">Sun Routine</div>
+            <div class="rc-desc">Morning Energy Program · 매일 08:00</div>
+          </div>
+          <div class="rc-check" id="check-sun">—</div>
+        </div>
+        <div class="routine-card" id="card-moon" onclick="toggleRoutine('moon')">
+          <div class="rc-icon">🌙</div>
+          <div class="rc-info">
+            <div class="rc-name">Moon Routine</div>
+            <div class="rc-desc">Night Recovery Program · 매일 22:00</div>
+          </div>
+          <div class="rc-check" id="check-moon">—</div>
+        </div>
+      </div>
+
+      <div class="time-section">
+        <div class="time-card sun-active" onclick="openTimePicker('sun')">
+          <div class="time-card-left">
+            <span class="time-label">☀️ Sun Routine 알림</span>
+            <span class="time-hint">탭해서 시간 변경</span>
+          </div>
+          <div class="time-card-right">
+            <span class="time-value sun-time" id="setup-sun-time">08:00</span>
+            <span class="time-edit-icon">✏️</span>
+          </div>
+        </div>
+        <div class="time-card moon-active" onclick="openTimePicker('moon')">
+          <div class="time-card-left">
+            <span class="time-label">🌙 Moon Routine 알림</span>
+            <span class="time-hint">탭해서 시간 변경</span>
+          </div>
+          <div class="time-card-right">
+            <span class="time-value moon-time" id="setup-moon-time">22:00</span>
+            <span class="time-edit-icon">✏️</span>
+          </div>
+        </div>
+      </div>
+
+      <button class="cta-btn cta-sun" onclick="startRoutine()">
+        🔥 루틴 시작하기
+      </button>
+    </div>
+  </div>
+
+  <!-- ========================
+       SCREEN: HOME
+  ======================== -->
+  <div id="screen-home" class="screen scroll-y">
+    <div class="home-header">
+      <div class="home-header-orb" style="width:200px;height:200px;background:var(--sun);top:-60px;right:-40px;"></div>
+      <div class="home-date" id="home-date"></div>
+      <div class="home-greeting">안녕하세요! 👋<br>오늘의 <span>루틴</span>을 시작할까요?</div>
+
+      <div class="streak-banner">
+        <div class="streak-fire">🔥</div>
+        <div class="streak-info">
+          <div class="streak-count" id="streak-count">1 Day Streak</div>
+          <div class="streak-sub">루틴을 유지하고 있어요!</div>
+        </div>
+        <div class="streak-days" id="streak-days"></div>
+      </div>
+    </div>
+
+    <!-- Routine Cards -->
+    <div class="section">
+      <div class="section-title">오늘의 루틴</div>
+
+      <div class="routine-home-card rhc-sun" onclick="openTracker('sun')">
+        <div class="rhc-top">
+          <div class="rhc-icon-wrap">
+            <div class="rhc-icon">☀️</div>
+            <div class="rhc-badge" id="sun-badge">Day 1</div>
+          </div>
+          <div class="rhc-status status-pending-sun" id="sun-home-status">진행중</div>
+        </div>
+        <div class="rhc-name">Sun Routine 30</div>
+        <div class="rhc-sub">Morning Energy Program · <span id="home-sun-time">08:00</span></div>
+        <div class="rhc-progress-wrap">
+          <div class="rhc-progress-label">
+            <span>오늘 진행률</span>
+            <span id="sun-pct">0%</span>
+          </div>
+          <div class="rhc-progress-bar">
+            <div class="rhc-progress-fill fill-sun" id="sun-bar" style="width:0%"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="routine-home-card rhc-moon" onclick="openTracker('moon')">
+        <div class="rhc-top">
+          <div class="rhc-icon-wrap">
+            <div class="rhc-icon">🌙</div>
+            <div class="rhc-badge" id="moon-badge">Day 1</div>
+          </div>
+          <div class="rhc-status status-pending-moon" id="moon-home-status">진행중</div>
+        </div>
+        <div class="rhc-name">Moon Routine 30</div>
+        <div class="rhc-sub">Night Recovery Program · <span id="home-moon-time">22:00</span></div>
+        <div class="rhc-progress-wrap">
+          <div class="rhc-progress-label">
+            <span>오늘 진행률</span>
+            <span id="moon-pct">0%</span>
+          </div>
+          <div class="rhc-progress-bar">
+            <div class="rhc-progress-fill fill-moon" id="moon-bar" style="width:0%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Characters -->
+    <div class="section mt-4">
+      <div class="section-title">나의 캐릭터</div>
+      <div class="char-row">
+        <div class="char-card" onclick="showScreen('screen-character'); showChar('solar')">
+          <span class="char-icon" id="solar-home-icon">🌤️</span>
+          <div class="char-name">Solar</div>
+          <div class="char-level" id="solar-level-home">Routine Starter</div>
+          <div class="char-xp-bar">
+            <div class="char-xp-fill xp-sun" id="solar-xp-bar" style="width:10%"></div>
+          </div>
+        </div>
+        <div class="char-card" onclick="showScreen('screen-character'); showChar('luna')">
+          <span class="char-icon" id="luna-home-icon">🌑</span>
+          <div class="char-name">Luna</div>
+          <div class="char-level" id="luna-level-home">Routine Starter</div>
+          <div class="char-xp-bar">
+            <div class="char-xp-fill xp-moon" id="luna-xp-bar" style="width:10%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Wellness -->
+    <div class="section mt-4" style="padding-bottom:20px;">
+      <div class="section-title">Wellness Index</div>
+      <div class="wellness-grid">
+        <div class="well-card">
+          <span class="well-icon">⚡</span>
+          <div class="well-value" id="w-energy">42</div>
+          <div class="well-name">Energy</div>
+          <div class="well-change up" id="w-energy-ch">+2</div>
+        </div>
+        <div class="well-card">
+          <span class="well-icon">🎯</span>
+          <div class="well-value" id="w-focus">38</div>
+          <div class="well-name">Focus</div>
+          <div class="well-change up" id="w-focus-ch">+1</div>
+        </div>
+        <div class="well-card">
+          <span class="well-icon">💪</span>
+          <div class="well-value" id="w-vitality">45</div>
+          <div class="well-name">Vitality</div>
+          <div class="well-change up" id="w-vitality-ch">+3</div>
+        </div>
+        <div class="well-card">
+          <span class="well-icon">🔄</span>
+          <div class="well-value" id="w-recovery">35</div>
+          <div class="well-name">Recovery</div>
+          <div class="well-change up" id="w-recovery-ch">+2</div>
+        </div>
+        <div class="well-card">
+          <span class="well-icon">🧘</span>
+          <div class="well-value" id="w-calm">40</div>
+          <div class="well-name">Calm</div>
+          <div class="well-change up" id="w-calm-ch">+1</div>
+        </div>
+        <div class="well-card">
+          <span class="well-icon">😴</span>
+          <div class="well-value" id="w-sleep">37</div>
+          <div class="well-name">Sleep</div>
+          <div class="well-change up" id="w-sleep-ch">+2</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Alarm Settings -->
+    <div class="section mt-4" style="padding-bottom:24px;">
+      <div class="section-title">🔔 루틴 알림 시간</div>
+      <div class="alarm-row" onclick="openTimePicker('sun')">
+        <div class="alarm-dot sun"></div>
+        <div class="alarm-info">
+          <div class="alarm-name">Sun Routine 알림</div>
+          <div class="alarm-time">매일 아침</div>
+        </div>
+        <div class="alarm-time-big sun" id="home-alarm-sun">08:00</div>
+        <div class="alarm-edit">✏️</div>
+      </div>
+      <div class="alarm-row" onclick="openTimePicker('moon')">
+        <div class="alarm-dot moon"></div>
+        <div class="alarm-info">
+          <div class="alarm-name">Moon Routine 알림</div>
+          <div class="alarm-time">매일 저녁</div>
+        </div>
+        <div class="alarm-time-big moon" id="home-alarm-moon">22:00</div>
+        <div class="alarm-edit">✏️</div>
+      </div>
+    </div>
+
+    <!-- Bottom nav -->
+    <nav class="bottom-nav">
+      <button class="nav-btn active" onclick="switchNav(this,'screen-home')">
+        <span class="nav-icon">🏠</span>홈
+      </button>
+      <button class="nav-btn" onclick="switchNav(this,'screen-tracker','sun')">
+        <span class="nav-icon">☀️</span>Sun
+      </button>
+      <button class="nav-btn" onclick="switchNav(this,'screen-tracker','moon')">
+        <span class="nav-icon">🌙</span>Moon
+      </button>
+      <button class="nav-btn" onclick="switchNav(this,'screen-character')">
+        <span class="nav-icon">✨</span>캐릭터
+      </button>
+      <button class="nav-btn" onclick="switchNav(this,'screen-dashboard')">
+        <span class="nav-icon">📊</span>기록
+      </button>
+    </nav>
+  </div>
+
+  <!-- ========================
+       SCREEN: TRACKER
+  ======================== -->
+  <div id="screen-tracker" class="screen scroll-y">
+    <div class="tracker-header" id="tracker-header-bg">
+      <button class="back-btn" onclick="showScreen('screen-home')">←</button>
+      <div class="tracker-type" id="tracker-type-label"></div>
+      <div class="tracker-title" id="tracker-title"></div>
+      <div class="tracker-sub" id="tracker-sub"></div>
+
+      <div class="day-counter">
+        <div class="day-num" id="tracker-day">Day 1</div>
+        <div class="day-info">
+          <div class="day-label">30일 루틴 프로그램</div>
+          <div class="day-sub" id="tracker-progress-txt">오늘 0/5 완료</div>
+        </div>
+        <div class="day-pct" id="tracker-pct">0%</div>
+      </div>
+    </div>
+
+    <div class="section mt-4">
+      <div class="section-title" id="tracker-list-label">오늘의 미션 — 완료한 항목을 체크하세요</div>
+      <div class="task-list" id="task-list"></div>
+    </div>
+
+    <div class="complete-section">
+      <button class="complete-btn cta-sun" id="complete-btn" onclick="completeRoutine()">
+        루틴 마치기
+      </button>
+    </div>
+
+    <!-- Bottom nav (tracker) -->
+    <nav class="bottom-nav">
+      <button class="nav-btn" onclick="switchNav(this,'screen-home')">
+        <span class="nav-icon">🏠</span>홈
+      </button>
+      <button class="nav-btn active" onclick="switchNav(this,'screen-tracker','sun')">
+        <span class="nav-icon">☀️</span>Sun
+      </button>
+      <button class="nav-btn" onclick="switchNav(this,'screen-tracker','moon')">
+        <span class="nav-icon">🌙</span>Moon
+      </button>
+      <button class="nav-btn" onclick="switchNav(this,'screen-character')">
+        <span class="nav-icon">✨</span>캐릭터
+      </button>
+      <button class="nav-btn" onclick="switchNav(this,'screen-dashboard')">
+        <span class="nav-icon">📊</span>기록
+      </button>
+    </nav>
+  </div>
+
+  <!-- ========================
+       SCREEN: CHARACTER
+  ======================== -->
+  <div id="screen-character" class="screen scroll-y">
+    <!-- Toggle -->
+    <div style="background:var(--dark);padding:52px 24px 0;display:flex;gap:8px;position:relative;">
+      <button class="back-btn" style="background:rgba(255,255,255,0.1);" onclick="showScreen('screen-home')">←</button>
+      <button id="char-tab-solar" onclick="showChar('solar')"
+        style="flex:1;padding:10px;border-radius:10px;border:none;font-family:'Pretendard',sans-serif;font-size:13px;font-weight:700;cursor:pointer;background:var(--sun);color:var(--dark);">
+        ☀️ Solar
+      </button>
+      <button id="char-tab-luna" onclick="showChar('luna')"
+        style="flex:1;padding:10px;border-radius:10px;border:none;font-family:'Pretendard',sans-serif;font-size:13px;font-weight:700;cursor:pointer;background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.5);">
+        🌙 Luna
+      </button>
+    </div>
+
+    <div id="char-content" class="char-header">
+      <!-- Filled by JS -->
+    </div>
+
+    <div class="xp-section">
+      <div class="xp-label">
+        <span id="char-xp-label">경험치</span>
+        <span id="char-xp-val">10 / 100 XP</span>
+      </div>
+      <div class="xp-track">
+        <div class="xp-track-fill" id="char-xp-fill" style="width:10%;background:var(--sun);"></div>
+      </div>
+    </div>
+
+    <div class="metric-section">
+      <div class="metric-title" id="char-metric-title">Solar's Wellness Metrics</div>
+      <div class="metric-list" id="char-metrics"></div>
+    </div>
+
+    <div class="msg-card">
+      <div class="msg-char" id="char-msg-icon">☀️</div>
+      <div class="msg-bubble">
+        <div class="msg-text" id="char-msg-text"></div>
+      </div>
+    </div>
+
+    <!-- Bottom nav (char) -->
+    <nav class="bottom-nav">
+      <button class="nav-btn" onclick="switchNav(this,'screen-home')">
+        <span class="nav-icon">🏠</span>홈
+      </button>
+      <button class="nav-btn" onclick="switchNav(this,'screen-tracker','sun')">
+        <span class="nav-icon">☀️</span>Sun
+      </button>
+      <button class="nav-btn" onclick="switchNav(this,'screen-tracker','moon')">
+        <span class="nav-icon">🌙</span>Moon
+      </button>
+      <button class="nav-btn active" onclick="switchNav(this,'screen-character')">
+        <span class="nav-icon">✨</span>캐릭터
+      </button>
+      <button class="nav-btn" onclick="switchNav(this,'screen-dashboard')">
+        <span class="nav-icon">📊</span>기록
+      </button>
+    </nav>
+  </div>
+
+  <!-- ========================
+       SCREEN: DASHBOARD
+  ======================== -->
+  <div id="screen-dashboard" class="screen scroll-y">
+    <div class="dash-header">
+      <div class="dash-title">📊 30일 기록</div>
+      <div class="dash-sub">루틴 달성 현황을 확인하세요</div>
+    </div>
+
+    <div class="kpi-row">
+      <div class="kpi-card">
+        <div class="kpi-val" id="kpi-streak">1</div>
+        <div class="kpi-label">🔥 현재 스트릭</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-val" id="kpi-total">1</div>
+        <div class="kpi-label">✅ 총 완료일</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-val" id="kpi-rate">100%</div>
+        <div class="kpi-label">📈 달성률</div>
+      </div>
+    </div>
+
+    <div class="section mt-4">
+      <div class="section-title">이번 달 루틴 캘린더</div>
+      <div style="background:var(--white);border-radius:var(--radius);padding:16px;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
+        <div class="calendar-grid" id="cal-labels" style="margin-bottom:6px;">
+          <div class="cal-day" style="background:none;color:var(--text-muted);font-size:10px;">일</div>
+          <div class="cal-day" style="background:none;color:var(--text-muted);font-size:10px;">월</div>
+          <div class="cal-day" style="background:none;color:var(--text-muted);font-size:10px;">화</div>
+          <div class="cal-day" style="background:none;color:var(--text-muted);font-size:10px;">수</div>
+          <div class="cal-day" style="background:none;color:var(--text-muted);font-size:10px;">목</div>
+          <div class="cal-day" style="background:none;color:var(--text-muted);font-size:10px;">금</div>
+          <div class="cal-day" style="background:none;color:var(--text-muted);font-size:10px;">토</div>
+        </div>
+        <div class="calendar-grid" id="calendar"></div>
+      </div>
+    </div>
+
+    <div class="section mt-4" style="padding-bottom:20px;">
+      <div class="section-title">루틴별 달성률</div>
+      <div style="background:var(--white);border-radius:var(--radius);padding:20px;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
+        <div style="margin-bottom:16px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <span style="font-size:14px;font-weight:700;color:var(--text);">☀️ Sun Routine</span>
+            <span style="font-size:14px;font-weight:800;color:var(--sun);" id="sun-rate">100%</span>
+          </div>
+          <div class="rhc-progress-bar">
+            <div class="rhc-progress-fill fill-sun" id="sun-rate-bar" style="width:100%"></div>
+          </div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <span style="font-size:14px;font-weight:700;color:var(--text);">🌙 Moon Routine</span>
+            <span style="font-size:14px;font-weight:800;color:var(--moon);" id="moon-rate">100%</span>
+          </div>
+          <div class="rhc-progress-bar">
+            <div class="rhc-progress-fill fill-moon" id="moon-rate-bar" style="width:100%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom nav (dashboard) -->
+    <nav class="bottom-nav">
+      <button class="nav-btn" onclick="switchNav(this,'screen-home')">
+        <span class="nav-icon">🏠</span>홈
+      </button>
+      <button class="nav-btn" onclick="switchNav(this,'screen-tracker','sun')">
+        <span class="nav-icon">☀️</span>Sun
+      </button>
+      <button class="nav-btn" onclick="switchNav(this,'screen-tracker','moon')">
+        <span class="nav-icon">🌙</span>Moon
+      </button>
+      <button class="nav-btn" onclick="switchNav(this,'screen-character')">
+        <span class="nav-icon">✨</span>캐릭터
+      </button>
+      <button class="nav-btn active" onclick="switchNav(this,'screen-dashboard')">
+        <span class="nav-icon">📊</span>기록
+      </button>
+    </nav>
+  </div>
+
+<!-- TIME PICKER MODAL — body level, outside .phone -->
+<div class="time-modal-backdrop" id="time-modal-backdrop">
+  <div class="time-modal" id="time-modal">
+    <div class="time-modal-handle"></div>
+    <div class="time-modal-title" id="modal-title">☀️ Sun Routine 알림</div>
+    <div class="time-modal-sub" id="modal-sub">아침 루틴 시작 알림을 설정하세요</div>
+
+    <!-- Preview + AM/PM -->
+    <div class="time-preview-row">
+      <div class="preview-big" id="time-preview">08:00</div>
+      <div class="period-toggle">
+        <button class="period-btn" id="btn-am" onclick="selectPeriod('AM')">AM</button>
+        <button class="period-btn" id="btn-pm" onclick="selectPeriod('PM')">PM</button>
+      </div>
+    </div>
+
+    <!-- Hour grid -->
+    <div class="time-picker-section">
+      <div class="time-picker-label">시 (Hour)</div>
+      <div class="time-btn-grid" id="hour-grid"></div>
+    </div>
+
+    <!-- Minute grid -->
+    <div class="time-picker-section">
+      <div class="time-picker-label">분 (Minute)</div>
+      <div class="time-btn-grid" id="min-grid"></div>
+    </div>
+
+    <button class="time-modal-confirm cta-sun" id="modal-confirm-btn" onclick="confirmTime()">
+      ✓ 이 시간으로 설정
+    </button>
+  </div>
+</div>
+
+<script>
+/* =============================================
+   STATE
+============================================= */
+const STATE = {
+  goal: null,
+  routines: { sun: true, moon: true },
+  alarmTimes: { sun: { h: 8, m: 0, period: 'AM' }, moon: { h: 10, m: 0, period: 'PM' } },
+  streak: 3,
+  day: 7,
+  currentTracker: 'sun',
+  currentChar: 'solar',
+  sunXP: 35,
+  moonXP: 22,
+  sunDone: false,
+  moonDone: false,
+  tasks: {
+    sun: [
+      { id: 's1', name: '기상 후 물 한 잔 마시기', meta: '수분 보충 · 5분', icon: '💧', done: false },
+      { id: 's2', name: 'Sun Routine 영양제 섭취', meta: '비타민C + 오메가3 · 2분', icon: '💊', done: false },
+      { id: 's3', name: '10분 가벼운 스트레칭', meta: '에너지 활성화 · 10분', icon: '🤸', done: false },
+      { id: 's4', name: '오늘 목표 3가지 적기', meta: '집중력 향상 · 3분', icon: '📝', done: false },
+      { id: 's5', name: '햇빛 10분 쬐기', meta: '비타민D + 기분 개선 · 10분', icon: '☀️', done: false },
+    ],
+    moon: [
+      { id: 'm1', name: 'Moon Routine 영양제 섭취', meta: '마그네슘 + 멜라토닌 · 2분', icon: '💊', done: false },
+      { id: 'm2', name: '저녁 가벼운 요가/스트레칭', meta: '긴장 해소 · 10분', icon: '🧘', done: false },
+      { id: 'm3', name: '오늘 하루 감사 3가지 적기', meta: '긍정 마인드 · 5분', icon: '✍️', done: false },
+      { id: 'm4', name: '블루라이트 차단 (화면 줄이기)', meta: '수면 준비 · 30분 전', icon: '📵', done: false },
+      { id: 'm5', name: '취침 루틴 완료 체크', meta: '수면 루틴 고정 · 22:00', icon: '😴', done: false },
+    ]
+  },
+  wellness: { energy: 42, focus: 38, vitality: 45, recovery: 35, calm: 40, sleep: 37 },
+  calDone: new Set(),
+};
+
+/* =============================================
+   SCREENS
+============================================= */
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if (id === 'screen-home') updateHome();
+  if (id === 'screen-dashboard') updateDashboard();
+}
+
+function switchNav(btn, screen, trackerType) {
+  // Update nav in all navbars
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => {
+    if (b.textContent.trim() === btn.textContent.trim()) b.classList.add('active');
+  });
+  if (trackerType) openTracker(trackerType);
+  else showScreen(screen);
+}
+
+/* =============================================
+   ONBOARDING
+============================================= */
+function selectGoal(btn, goal) {
+  document.querySelectorAll('.goal-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  STATE.goal = goal;
+  const next = document.getElementById('onboard-next');
+  next.style.opacity = '1';
+  next.style.pointerEvents = 'auto';
+}
+
+function goToSetup() {
+  showScreen('screen-setup');
+}
+
+function toggleRoutine(type) {
+  const card = document.getElementById(`card-${type}`);
+  const check = document.getElementById(`check-${type}`);
+  STATE.routines[type] = !STATE.routines[type];
+  if (STATE.routines[type]) {
+    card.classList.add(`selected-${type}`);
+    check.textContent = '✓';
+  } else {
+    card.classList.remove(`selected-${type}`);
+    check.textContent = '—';
+  }
+}
+
+// Initialize setup cards
+document.getElementById('card-sun').classList.add('selected-sun');
+document.getElementById('check-sun').textContent = '✓';
+document.getElementById('card-moon').classList.add('selected-moon');
+document.getElementById('check-moon').textContent = '✓';
+
+function startRoutine() {
+  showScreen('screen-home');
+  updateHome();
+  // First day celebration
+  setTimeout(() => showToast('🔥 1 Day Streak 시작! 루틴을 완료하세요!'), 400);
+}
+
+/* =============================================
+   HOME
+============================================= */
+function updateHome() {
+  // Date
+  const now = new Date();
+  const days = ['일', '월', '화', '수', '목', '금', '토'];
+  document.getElementById('home-date').textContent =
+    `${now.getFullYear()}년 ${now.getMonth()+1}월 ${now.getDate()}일 ${days[now.getDay()]}요일`;
+
+  // Streak
+  document.getElementById('streak-count').textContent = `${STATE.streak} Day Streak 🔥`;
+
+  // Streak days
+  const streakEl = document.getElementById('streak-days');
+  streakEl.innerHTML = '';
+  const dayNames = ['월','화','수','목','금','토','일'];
+  const today = now.getDay();
+  for (let i = 0; i < 7; i++) {
+    const d = document.createElement('div');
+    d.className = 'streak-day';
+    d.textContent = dayNames[i];
+    if (i < STATE.streak - 1) d.classList.add('done');
+    else if (i === STATE.streak - 1) d.classList.add('today');
+    streakEl.appendChild(d);
+  }
+
+  // Badges
+  document.getElementById('sun-badge').textContent = `Day ${STATE.day}`;
+  document.getElementById('moon-badge').textContent = `Day ${STATE.day}`;
+
+  // Progress
+  const sunCount = STATE.tasks.sun.filter(t => t.done).length;
+  const moonCount = STATE.tasks.moon.filter(t => t.done).length;
+  const total = STATE.tasks.sun.length;
+
+  const sunPct = Math.round(sunCount / total * 100);
+  const moonPct = Math.round(moonCount / total * 100);
+
+  document.getElementById('sun-pct').textContent = `${sunPct}%`;
+  document.getElementById('moon-pct').textContent = `${moonPct}%`;
+  document.getElementById('sun-bar').style.width = sunPct + '%';
+  document.getElementById('moon-bar').style.width = moonPct + '%';
+
+  // Status
+  const sunStatus = document.getElementById('sun-home-status');
+  const moonStatus = document.getElementById('moon-home-status');
+  if (STATE.sunDone) {
+    sunStatus.textContent = '✅ 완료';
+    sunStatus.className = 'rhc-status status-done';
+  } else {
+    sunStatus.textContent = '진행중';
+    sunStatus.className = 'rhc-status status-pending-sun';
+  }
+  if (STATE.moonDone) {
+    moonStatus.textContent = '✅ 완료';
+    moonStatus.className = 'rhc-status status-done';
+  } else {
+    moonStatus.textContent = '진행중';
+    moonStatus.className = 'rhc-status status-pending-moon';
+  }
+
+  // Characters
+  updateCharHomeUI();
+}
+
+function updateCharHomeUI() {
+  const solarStage = getStage(STATE.sunXP);
+  const lunaStage = getStage(STATE.moonXP);
+  document.getElementById('solar-level-home').textContent = solarStage.name;
+  document.getElementById('luna-level-home').textContent = lunaStage.name;
+  document.getElementById('solar-home-icon').textContent = getSolarIcon(STATE.sunXP);
+  document.getElementById('luna-home-icon').textContent = getLunaIcon(STATE.moonXP);
+  document.getElementById('solar-xp-bar').style.width = Math.min(STATE.sunXP, 100) + '%';
+  document.getElementById('luna-xp-bar').style.width = Math.min(STATE.moonXP, 100) + '%';
+}
+
+/* =============================================
+   TRACKER
+============================================= */
+function openTracker(type) {
+  STATE.currentTracker = type;
+  const isSun = type === 'sun';
+  const header = document.getElementById('tracker-header-bg');
+  const isSubmitted = isSun ? STATE.sunDone : STATE.moonDone;
+
+  header.style.background = isSun
+    ? 'linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%)'
+    : 'linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 100%)';
+
+  document.getElementById('tracker-type-label').style.color = isSun ? '#D97706' : '#4F46E5';
+  document.getElementById('tracker-type-label').textContent = isSun ? '☀️ SUN ROUTINE' : '🌙 MOON ROUTINE';
+  document.getElementById('tracker-title').textContent = isSun ? 'Morning Energy Program' : 'Night Recovery Program';
+  document.getElementById('tracker-sub').textContent = isSun ? '아침 에너지 루틴 · 매일 08:00' : '밤 회복 루틴 · 매일 22:00';
+  document.getElementById('tracker-day').textContent = `Day ${STATE.day}`;
+
+  // 섹션 라벨: 제출 전/후 다르게
+  const listLabel = document.getElementById('tracker-list-label');
+  listLabel.textContent = isSubmitted
+    ? '오늘의 미션 결과'
+    : '오늘의 미션 — 완료한 항목을 체크하세요';
+
+  const btn = document.getElementById('complete-btn');
+  btn.className = `complete-btn cta-${type}`;
+
+  renderTasks(type);
+  showScreen('screen-tracker');
+}
+
+function renderTasks(type) {
+  const list = document.getElementById('task-list');
+  const tasks = STATE.tasks[type];
+  const isSubmitted = type === 'sun' ? STATE.sunDone : STATE.moonDone;
+  list.innerHTML = '';
+
+  if (isSubmitted) {
+    // ── 결과 요약 카드 ──
+    const successTasks = tasks.filter(t => t.done);
+    const failTasks    = tasks.filter(t => !t.done);
+    const total = tasks.length;
+    const rate  = Math.round(successTasks.length / total * 100);
+    const xpEarned = Math.round((successTasks.length / total) * 20);
+
+    let summaryClass, emoji, title, sub;
+    if (rate === 100)      { summaryClass = 'all-pass'; emoji = '🏆'; title = '완벽해요! 모든 미션 성공!';        sub = '오늘 루틴을 완벽하게 마쳤어요.'; }
+    else if (rate >= 60)   { summaryClass = 'partial';  emoji = '👍'; title = `${rate}% 달성! 잘하고 있어요`;     sub = `${successTasks.length}/${total}개 미션 성공. 내일은 더 잘할 수 있어요!`; }
+    else                   { summaryClass = 'all-fail';  emoji = '💪'; title = '아쉽지만 내일 다시 도전!';         sub = `${successTasks.length}/${total}개 미션 성공. 루틴을 이어가는 게 중요해요.`; }
+
+    const summary = document.createElement('div');
+    summary.className = `result-summary ${summaryClass}`;
+    summary.innerHTML = `
+      <div class="result-emoji">${emoji}</div>
+      <div class="result-info">
+        <div class="result-title">${title}</div>
+        <div class="result-sub">${sub}</div>
+      </div>
+      <div class="result-xp">+${xpEarned} XP</div>
+    `;
+    list.appendChild(summary);
+
+    // ── 성공한 미션 ──
+    if (successTasks.length > 0) {
+      const label = document.createElement('div');
+      label.className = 'task-section-label success';
+      label.innerHTML = `✅ 성공한 미션 ${successTasks.length}개 <div class="task-section-line success"></div>`;
+      list.appendChild(label);
+      successTasks.forEach(task => {
+        const div = document.createElement('div');
+        div.className = `task-item done done-${type}`;
+        div.innerHTML = `
+          <div class="task-check">✓</div>
+          <div class="task-text">
+            <div class="task-name">${task.name}</div>
+            <div class="task-meta">${task.meta}</div>
+          </div>
+          <div class="task-icon">${task.icon}</div>
+        `;
+        list.appendChild(div);
+      });
+    }
+
+    // ── 실패한 미션 ──
+    if (failTasks.length > 0) {
+      const label2 = document.createElement('div');
+      label2.className = 'task-section-label fail';
+      label2.innerHTML = `❌ 실패한 미션 ${failTasks.length}개 <div class="task-section-line fail"></div>`;
+      list.appendChild(label2);
+      failTasks.forEach(task => {
+        const div = document.createElement('div');
+        div.className = 'task-item failed';
+        div.innerHTML = `
+          <div class="task-check">✕</div>
+          <div class="task-text">
+            <div class="task-name">${task.name}</div>
+            <div class="task-meta">${task.meta}</div>
+          </div>
+          <div class="task-icon" style="opacity:0.35;">${task.icon}</div>
+        `;
+        list.appendChild(div);
+      });
+    }
+
+  } else {
+    // ── 진행 중: 자유롭게 체크/언체크 ──
+    tasks.forEach((task, i) => {
+      const div = document.createElement('div');
+      div.className = `task-item${task.done ? ` done done-${type}` : ''}`;
+      div.style.cursor = 'pointer';
+      div.innerHTML = `
+        <div class="task-check">${task.done ? '✓' : ''}</div>
+        <div class="task-text">
+          <div class="task-name">${task.name}</div>
+          <div class="task-meta">${task.meta}</div>
+        </div>
+        <div class="task-icon">${task.icon}</div>
+      `;
+      div.onclick = () => toggleTask(type, i);
+      list.appendChild(div);
+    });
+  }
+
+  updateTrackerProgress(type);
+}
+
+function toggleTask(type, idx) {
+  STATE.tasks[type][idx].done = !STATE.tasks[type][idx].done;
+  renderTasks(type);
+}
+
+function updateTrackerProgress(type) {
+  const tasks = STATE.tasks[type];
+  const done  = tasks.filter(t => t.done).length;
+  const total = tasks.length;
+  const pct   = Math.round(done / total * 100);
+  const isSubmitted = type === 'sun' ? STATE.sunDone : STATE.moonDone;
+
+  document.getElementById('tracker-progress-txt').textContent =
+    isSubmitted ? `${done}/${total} 미션 성공` : `오늘 ${done}/${total} 체크됨`;
+  document.getElementById('tracker-pct').textContent = pct + '%';
+  document.getElementById('tracker-pct').className = `day-pct pct-${type}`;
+
+  const btn = document.getElementById('complete-btn');
+  if (isSubmitted) {
+    btn.disabled = true;
+    btn.textContent = '✅ 오늘 루틴 제출 완료';
+  } else {
+    // 항상 활성화 — 체크 개수 상관없이 마칠 수 있음
+    btn.disabled = false;
+    btn.className = `complete-btn cta-${type}`;
+    if (done === 0) {
+      btn.textContent = `루틴 마치기 (아직 체크 없음)`;
+    } else if (done === total) {
+      btn.textContent = `🔥 모든 미션 완료! 루틴 마치기`;
+    } else {
+      btn.textContent = `루틴 마치기 (${done}/${total} 성공)`;
+    }
+  }
+}
+
+function completeRoutine() {
+  const type  = STATE.currentTracker;
+  const tasks = STATE.tasks[type];
+  const done  = tasks.filter(t => t.done).length;
+  const total = tasks.length;
+  const rate  = done / total;
+
+  // XP: 성공률에 비례 (최대 20xp)
+  const xpGain = Math.max(2, Math.round(rate * 20));
+
+  if (type === 'sun') {
+    STATE.sunDone = true;
+    STATE.sunXP = Math.min(STATE.sunXP + xpGain, 100);
+    STATE.wellness.energy   = Math.min(99, STATE.wellness.energy   + Math.ceil(rate * 3));
+    STATE.wellness.focus    = Math.min(99, STATE.wellness.focus    + Math.ceil(rate * 2));
+    STATE.wellness.vitality = Math.min(99, STATE.wellness.vitality + Math.ceil(rate * 2));
+  } else {
+    STATE.moonDone = true;
+    STATE.moonXP = Math.min(STATE.moonXP + xpGain, 100);
+    STATE.wellness.recovery = Math.min(99, STATE.wellness.recovery + Math.ceil(rate * 3));
+    STATE.wellness.calm     = Math.min(99, STATE.wellness.calm     + Math.ceil(rate * 2));
+    STATE.wellness.sleep    = Math.min(99, STATE.wellness.sleep    + Math.ceil(rate * 2));
+  }
+
+  // 스트릭: 성공률 60% 이상일 때만 카운트
+  if (STATE.sunDone && STATE.moonDone) {
+    STATE.streak++;
+    STATE.calDone.add(new Date().getDate());
+  }
+
+  const rateLabel = rate === 1 ? '완벽 달성' : `${Math.round(rate * 100)}% 달성`;
+  showToast(`${type === 'sun' ? '☀️' : '🌙'} ${rateLabel}! +${xpGain} XP`);
+
+  renderTasks(type);
+  updateWellnessUI();
+  updateCharHomeUI();
+}
+
+/* =============================================
+   CHARACTER
+============================================= */
+function getStage(xp) {
+  if (xp < 33) return { name: 'Routine Starter', stage: 1 };
+  if (xp < 66) return { name: 'Routine Builder', stage: 2 };
+  return { name: 'Routine Master', stage: 3 };
+}
+
+function getSolarIcon(xp) {
+  if (xp < 33) return '🌤️';
+  if (xp < 66) return '🌞';
+  return '☀️';
+}
+
+function getLunaIcon(xp) {
+  if (xp < 33) return '🌑';
+  if (xp < 50) return '🌒';
+  if (xp < 66) return '🌓';
+  if (xp < 80) return '🌔';
+  return '🌕';
+}
+
+function showChar(type) {
+  STATE.currentChar = type;
+  const isSolar = type === 'solar';
+  const xp = isSolar ? STATE.sunXP : STATE.moonXP;
+  const stage = getStage(xp);
+  const icon = isSolar ? getSolarIcon(xp) : getLunaIcon(xp);
+
+  // Tabs
+  const tabSolar = document.getElementById('char-tab-solar');
+  const tabLuna = document.getElementById('char-tab-luna');
+  tabSolar.style.background = isSolar ? 'var(--sun)' : 'rgba(255,255,255,0.08)';
+  tabSolar.style.color = isSolar ? 'var(--dark)' : 'rgba(255,255,255,0.5)';
+  tabLuna.style.background = !isSolar ? 'var(--moon)' : 'rgba(255,255,255,0.08)';
+  tabLuna.style.color = !isSolar ? 'var(--white)' : 'rgba(255,255,255,0.5)';
+
+  // Header
+  const content = document.getElementById('char-content');
+  content.innerHTML = `
+    <span class="char-big-icon">${icon}</span>
+    <div class="char-header-name">${isSolar ? 'Solar' : 'Luna'}</div>
+    <div class="char-header-role">${isSolar ? '아침 루틴 코치 · Morning Energy' : '밤 루틴 코치 · Night Recovery'}</div>
+    <div class="stage-pill">⭐ Stage ${stage.stage} — ${stage.name}</div>
+  `;
+
+  // XP
+  document.getElementById('char-xp-label').textContent = `경험치 (Stage ${stage.stage})`;
+  document.getElementById('char-xp-val').textContent = `${xp} / 100 XP`;
+  document.getElementById('char-xp-fill').style.width = xp + '%';
+  document.getElementById('char-xp-fill').style.background = isSolar ? 'var(--sun)' : 'var(--moon)';
+
+  // Metrics
+  document.getElementById('char-metric-title').textContent = isSolar ? "Solar's Wellness Metrics" : "Luna's Wellness Metrics";
+  const metrics = isSolar
+    ? [
+        { icon: '⚡', name: 'Energy Index', val: STATE.wellness.energy, color: '#F59E0B' },
+        { icon: '🎯', name: 'Focus Index', val: STATE.wellness.focus, color: '#F59E0B' },
+        { icon: '💪', name: 'Vitality Index', val: STATE.wellness.vitality, color: '#F59E0B' },
+      ]
+    : [
+        { icon: '🔄', name: 'Recovery Index', val: STATE.wellness.recovery, color: '#6366F1' },
+        { icon: '🧘', name: 'Calm Index', val: STATE.wellness.calm, color: '#6366F1' },
+        { icon: '😴', name: 'Sleep Index', val: STATE.wellness.sleep, color: '#6366F1' },
+      ];
+
+  const mList = document.getElementById('char-metrics');
+  mList.innerHTML = metrics.map(m => `
+    <div class="metric-row">
+      <div class="metric-icon">${m.icon}</div>
+      <div class="metric-info">
+        <div class="metric-name">${m.name}</div>
+        <div class="metric-bar-wrap">
+          <div class="metric-bar-fill" style="width:${m.val}%;background:${m.color};"></div>
+        </div>
+      </div>
+      <div class="metric-val" style="color:${m.color};">${m.val}</div>
+    </div>
+  `).join('');
+
+  // Message
+  document.getElementById('char-msg-icon').textContent = isSolar ? '☀️' : '🌙';
+  const msgs = isSolar
+    ? [
+        'Sun Routine을 시작할 시간입니다! 오늘도 에너지 넘치게 하루를 시작해봐요.',
+        '7일 연속 루틴 달성까지 얼마 남지 않았어요! 조금만 더 힘내봐요.',
+        '루틴을 통해 에너지 지수가 올라가고 있어요. 오늘도 함께 해요!',
+      ]
+    : [
+        'Moon Routine으로 하루를 마무리해볼까요? 오늘 하루도 수고했어요.',
+        '밤의 회복 루틴이 내일의 에너지를 만들어요. 오늘도 함께해요.',
+        '수면 루틴이 점점 안정되고 있어요. 계속 유지해봐요!',
+      ];
+  document.getElementById('char-msg-text').textContent = msgs[STATE.streak % msgs.length];
+}
+
+/* =============================================
+   WELLNESS UI
+============================================= */
+function updateWellnessUI() {
+  const w = STATE.wellness;
+  document.getElementById('w-energy').textContent = w.energy;
+  document.getElementById('w-focus').textContent = w.focus;
+  document.getElementById('w-vitality').textContent = w.vitality;
+  document.getElementById('w-recovery').textContent = w.recovery;
+  document.getElementById('w-calm').textContent = w.calm;
+  document.getElementById('w-sleep').textContent = w.sleep;
+}
+
+/* =============================================
+   DASHBOARD
+============================================= */
+function updateDashboard() {
+  const totalDays = 7;
+  const completedDays = STATE.streak;
+  const rate = Math.round(completedDays / totalDays * 100);
+
+  document.getElementById('kpi-streak').textContent = STATE.streak;
+  document.getElementById('kpi-total').textContent = completedDays;
+  document.getElementById('kpi-rate').textContent = rate + '%';
+
+  document.getElementById('sun-rate').textContent = rate + '%';
+  document.getElementById('moon-rate').textContent = Math.max(rate - 10, 0) + '%';
+  document.getElementById('sun-rate-bar').style.width = rate + '%';
+  document.getElementById('moon-rate-bar').style.width = Math.max(rate - 10, 0) + '%';
+
+  // Calendar
+  const cal = document.getElementById('calendar');
+  cal.innerHTML = '';
+  const now = new Date();
+  const firstDay = new Date(now.getFullYear(), now.getMonth(), 1).getDay();
+  const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+
+  for (let i = 0; i < firstDay; i++) {
+    const empty = document.createElement('div');
+    empty.className = 'cal-day';
+    empty.style.background = 'transparent';
+    cal.appendChild(empty);
+  }
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const div = document.createElement('div');
+    div.textContent = d;
+    const isToday = d === now.getDate();
+    const isPast = d < now.getDate();
+    const isDone = isPast && d >= now.getDate() - STATE.streak + 1;
+
+    div.className = 'cal-day';
+    if (isDone) div.classList.add('both-done');
+    if (isToday) div.classList.add('today-cal');
+    cal.appendChild(div);
+  }
+}
+
+/* =============================================
+   TOAST
+============================================= */
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+/* =============================================
+   TIME PICKER
+============================================= */
+let _pickerType   = 'sun';
+let _pickerH      = 8;   // 1–12
+let _pickerM      = 0;   // 0,5,10,...55
+let _pickerPeriod = 'AM';
+
+function fmt2(n) { return String(n).padStart(2, '0'); }
+
+function to24h(h, m, period) {
+  let h24 = h;
+  if (period === 'AM' && h === 12) h24 = 0;
+  if (period === 'PM' && h !== 12) h24 = h + 12;
+  return `${fmt2(h24)}:${fmt2(m)}`;
+}
+
+function updatePreview() {
+  document.getElementById('time-preview').textContent = to24h(_pickerH, _pickerM, _pickerPeriod);
+}
+
+function selectHour(h) {
+  _pickerH = h;
+  const selClass = _pickerType === 'sun' ? 'sel-sun' : 'sel-moon';
+  document.querySelectorAll('#hour-grid .time-btn').forEach(b => {
+    b.classList.toggle(selClass, parseInt(b.dataset.val) === h);
+  });
+  updatePreview();
+}
+
+function selectMin(m) {
+  _pickerM = m;
+  const selClass = _pickerType === 'sun' ? 'sel-sun' : 'sel-moon';
+  document.querySelectorAll('#min-grid .time-btn').forEach(b => {
+    b.classList.toggle(selClass, parseInt(b.dataset.val) === m);
+  });
+  updatePreview();
+}
+
+function selectPeriod(p) {
+  _pickerPeriod = p;
+  const selClass = _pickerType === 'sun' ? 'sel-sun' : 'sel-moon';
+  document.getElementById('btn-am').className = 'period-btn' + (p === 'AM' ? ` ${selClass}` : '');
+  document.getElementById('btn-pm').className = 'period-btn' + (p === 'PM' ? ` ${selClass}` : '');
+  updatePreview();
+}
+
+function buildGrids() {
+  const selClass = _pickerType === 'sun' ? 'sel-sun' : 'sel-moon';
+
+  // Hours 1–12
+  const hg = document.getElementById('hour-grid');
+  hg.innerHTML = '';
+  for (let h = 1; h <= 12; h++) {
+    const btn = document.createElement('button');
+    btn.className = 'time-btn' + (h === _pickerH ? ` ${selClass}` : '');
+    btn.textContent = fmt2(h);
+    btn.dataset.val = h;
+    btn.onclick = () => selectHour(h);
+    hg.appendChild(btn);
+  }
+
+  // Minutes 0,5,10,...55
+  const mg = document.getElementById('min-grid');
+  mg.innerHTML = '';
+  for (let m = 0; m < 60; m += 5) {
+    const btn = document.createElement('button');
+    btn.className = 'time-btn' + (m === _pickerM ? ` ${selClass}` : '');
+    btn.textContent = fmt2(m);
+    btn.dataset.val = m;
+    btn.onclick = () => selectMin(m);
+    mg.appendChild(btn);
+  }
+
+  // Period
+  selectPeriod(_pickerPeriod);
+}
+
+function openTimePicker(type) {
+  _pickerType = type;
+  const isSun = type === 'sun';
+
+  // Load current saved time
+  const t = STATE.alarmTimes[type];
+  _pickerH = t.h; _pickerM = t.m; _pickerPeriod = t.period;
+
+  document.getElementById('modal-title').textContent = isSun ? '☀️ Sun Routine 알림' : '🌙 Moon Routine 알림';
+  document.getElementById('modal-sub').textContent   = isSun ? '아침 루틴 시작 알림을 설정하세요' : '저녁 루틴 시작 알림을 설정하세요';
+  document.getElementById('modal-confirm-btn').className = `time-modal-confirm ${isSun ? 'cta-sun' : 'cta-moon'}`;
+
+  buildGrids();
+  updatePreview();
+  document.getElementById('time-modal-backdrop').classList.add('open');
+}
+
+function closeTimePicker() {
+  document.getElementById('time-modal-backdrop').classList.remove('open');
+}
+
+function confirmTime() {
+  STATE.alarmTimes[_pickerType] = { h: _pickerH, m: _pickerM, period: _pickerPeriod };
+  const timeStr = to24h(_pickerH, _pickerM, _pickerPeriod);
+
+  if (_pickerType === 'sun') {
+    document.getElementById('setup-sun-time').textContent  = timeStr;
+    document.getElementById('home-sun-time').textContent   = timeStr;
+    document.getElementById('home-alarm-sun').textContent  = timeStr;
+  } else {
+    document.getElementById('setup-moon-time').textContent = timeStr;
+    document.getElementById('home-moon-time').textContent  = timeStr;
+    document.getElementById('home-alarm-moon').textContent = timeStr;
+  }
+
+  closeTimePicker();
+  showToast(`🔔 매일 ${timeStr}에 알림이 울려요`);
+}
+
+// Close when tapping backdrop
+document.getElementById('time-modal-backdrop').addEventListener('click', function(e) {
+  if (e.target === this) closeTimePicker();
+});
+
+/* =============================================
+   INIT
+============================================= */
+updateWellnessUI();
+
+// Set date
+const now = new Date();
+const days = ['일','월','화','수','목','금','토'];
+document.getElementById('home-date').textContent =
+  `${now.getFullYear()}년 ${now.getMonth()+1}월 ${now.getDate()}일 ${days[now.getDay()]}요일`;
+</script>
+</body>
+</html>

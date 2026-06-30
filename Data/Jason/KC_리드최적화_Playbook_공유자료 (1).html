@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KC 기반 리드 최적화 Playbook — 공유자료</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #FAFAF8;
+  --surface: #FFFFFF;
+  --surface-alt: #F5F4F0;
+  --text-primary: #1A1A1A;
+  --text-secondary: #5C5C5C;
+  --text-tertiary: #9C9C9C;
+  --border: #E8E6E1;
+  --accent: #2E5BFF;
+  --accent-light: #EEF2FF;
+  --coral: #E8593C;
+  --coral-light: #FEF0EC;
+  --teal: #0F7B6C;
+  --teal-light: #ECFAF6;
+  --purple: #6C5CE7;
+  --purple-light: #F0EEFF;
+  --blue: #2E75B6;
+  --blue-light: #EDF4FB;
+  --amber: #D4890A;
+  --amber-light: #FEF7E8;
+  --red: #C0392B;
+  --red-light: #FDECEC;
+  --green: #27864A;
+  --green-light: #ECFAF0;
+  --pink: #C0457B;
+  --pink-light: #FDECF3;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--bg);
+  color: var(--text-primary);
+  line-height: 1.8;
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ===== COVER ===== */
+.cover {
+  padding: 80px 0 60px;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 60px;
+}
+.cover-tag {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: var(--accent-light);
+  padding: 4px 14px;
+  border-radius: 4px;
+  margin-bottom: 24px;
+}
+.cover h1 {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.4;
+  margin-bottom: 12px;
+  letter-spacing: -0.5px;
+}
+.cover .subtitle {
+  font-size: 17px;
+  color: var(--text-secondary);
+  font-weight: 300;
+  margin-bottom: 32px;
+}
+.cover-meta {
+  font-size: 13px;
+  color: var(--text-tertiary);
+}
+
+/* ===== SECTIONS ===== */
+.section {
+  margin-bottom: 64px;
+}
+.section-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+.section h2 {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  letter-spacing: -0.3px;
+}
+.section-lead {
+  font-size: 16px;
+  color: var(--text-secondary);
+  margin-bottom: 28px;
+  font-weight: 300;
+}
+.section h3 {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 32px 0 12px;
+}
+
+p { margin-bottom: 14px; }
+
+/* ===== CALLOUT ===== */
+.callout {
+  background: var(--surface);
+  border-left: 3px solid var(--accent);
+  padding: 20px 24px;
+  border-radius: 0 8px 8px 0;
+  margin: 20px 0;
+  font-size: 15px;
+}
+.callout strong { color: var(--accent); }
+
+.callout-warn {
+  background: var(--amber-light);
+  border-left-color: var(--amber);
+}
+.callout-warn strong { color: var(--amber); }
+
+/* ===== LAYER DIAGRAM ===== */
+.layer-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 24px 0;
+}
+.layer-box {
+  padding: 18px 24px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.layer-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 500;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.layer-content { flex: 1; }
+.layer-name {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+.layer-desc {
+  font-size: 13px;
+  opacity: 0.8;
+}
+.layer-4 { background: var(--coral-light); color: var(--coral); }
+.layer-4 .layer-num { background: var(--coral); color: white; }
+.layer-3 { background: var(--teal-light); color: var(--teal); }
+.layer-3 .layer-num { background: var(--teal); color: white; }
+.layer-2 { background: var(--blue-light); color: var(--blue); }
+.layer-2 .layer-num { background: var(--blue); color: white; }
+.layer-1 { background: var(--purple-light); color: var(--purple); }
+.layer-1 .layer-num { background: var(--purple); color: white; }
+
+.layer-arrow {
+  text-align: center;
+  color: var(--text-tertiary);
+  font-size: 18px;
+  margin: -4px 0;
+}
+
+/* ===== FORMULA ===== */
+.formula-box {
+  text-align: center;
+  padding: 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  margin: 20px 0;
+}
+.formula-main {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+.formula-sub {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+/* ===== CARD MOCKUPS ===== */
+.card-mock {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 20px 0;
+  background: var(--surface);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+.card-head {
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+}
+.card-id {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 500;
+}
+.card-badges { display: flex; gap: 6px; }
+.badge {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: 4px;
+}
+.badge-playbook { background: var(--pink-light); color: var(--pink); }
+.badge-rule { background: var(--blue-light); color: var(--blue); }
+.badge-evidence { background: var(--teal-light); color: var(--teal); }
+.badge-internal { background: var(--red-light); color: var(--red); }
+.badge-baseline { background: var(--amber-light); color: var(--amber); }
+
+.card-body { padding: 20px; }
+.card-section { margin-bottom: 18px; }
+.card-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-bottom: 6px;
+}
+.card-value {
+  font-size: 14px;
+  color: var(--text-primary);
+  line-height: 1.7;
+}
+.card-mono {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  background: var(--surface-alt);
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin: 8px 0;
+  line-height: 1.9;
+  color: var(--text-primary);
+}
+
+.card-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin: 8px 0;
+}
+.card-table th {
+  text-align: left;
+  padding: 8px 12px;
+  background: var(--surface-alt);
+  color: var(--text-secondary);
+  font-weight: 500;
+  border-bottom: 1px solid var(--border);
+}
+.card-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-primary);
+}
+.card-table td:first-child {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+}
+
+.card-link {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--accent);
+  display: block;
+  margin: 3px 0;
+}
+
+.card-footer {
+  padding: 10px 20px;
+  border-top: 1px solid var(--border);
+  background: var(--surface-alt);
+  display: flex;
+  gap: 20px;
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+
+/* ===== CONDITION BUILDER ===== */
+.builder-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+  flex-wrap: wrap;
+}
+.builder-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+.builder-op {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--accent);
+  font-weight: 500;
+  padding: 2px 8px;
+  background: var(--accent-light);
+  border-radius: 4px;
+}
+.builder-src {
+  font-size: 10px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+.src-mydata { background: var(--blue-light); color: var(--blue); }
+.src-clark { background: var(--purple-light); color: var(--purple); }
+.src-calc { background: var(--amber-light); color: var(--amber); }
+
+/* ===== BASELINE DISPLAY ===== */
+.baseline-box {
+  border-left: 3px solid var(--amber);
+  padding: 14px 18px;
+  margin: 10px 0;
+  border-radius: 0 8px 8px 0;
+  background: var(--surface-alt);
+}
+.baseline-pub {
+  font-size: 14px;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+  line-height: 1.7;
+}
+.baseline-label {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-bottom: 6px;
+  display: inline-block;
+}
+
+/* ===== STATUS TABLE ===== */
+.status-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  margin: 20px 0;
+}
+.status-table th {
+  text-align: left;
+  padding: 10px 14px;
+  background: var(--surface-alt);
+  color: var(--text-secondary);
+  font-weight: 500;
+  border-bottom: 1px solid var(--border);
+}
+.status-table td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+}
+.status-ok { color: var(--green); font-weight: 500; }
+.status-proxy { color: var(--amber); font-weight: 500; }
+.status-infra { color: var(--red); font-weight: 500; }
+
+/* ===== CONTROL SCOPE ===== */
+.ctrl-list { margin: 16px 0; }
+.ctrl-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+.ctrl-icon {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.ctrl-yes { background: var(--green-light); color: var(--green); }
+.ctrl-no { background: var(--red-light); color: var(--red); }
+.ctrl-text { font-size: 14px; color: var(--text-primary); }
+.ctrl-sub { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
+
+/* ===== SCENARIO BOX ===== */
+.scenario {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px 24px;
+  margin: 16px 0;
+}
+.scenario-title {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+.scenario-step {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin: 4px 0;
+  line-height: 1.7;
+}
+.scenario-step strong { color: var(--text-primary); }
+.scenario-highlight {
+  color: var(--accent);
+  font-weight: 500;
+}
+.scenario-result {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--green);
+}
+
+/* ===== FOOTER ===== */
+.doc-footer {
+  padding: 40px 0;
+  border-top: 1px solid var(--border);
+  margin-top: 60px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-tertiary);
+}
+
+@media print {
+  body { font-size: 13px; }
+  .container { max-width: 100%; padding: 0 20px; }
+  .cover { padding: 40px 0; }
+  .section { page-break-inside: avoid; }
+  .card-mock { page-break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<!-- ===== COVER ===== -->
+<div class="cover">
+  <div class="cover-tag">Internal Sharing</div>
+  <h1>KC 기반 리드 최적화 Playbook<br>아키텍처 설계 공유</h1>
+  <p class="subtitle">KC 온톨로지 → 디지털 트윈 → aGCR 스코어링까지,<br>"좋은 리드를 좋은 설계사에게 정확하게 연결하는 시스템"의 전체 그림</p>
+  <p class="cover-meta">아이지넷 플랫폼사업본부 · 2026.03 · 문서 등급: Internal</p>
+</div>
+
+<!-- ===== 01. 한마디 요약 ===== -->
+<div class="section">
+  <div class="section-num">01</div>
+  <h2>한마디로 뭘 하려는 건가?</h2>
+  <p class="section-lead">지금은 리드가 생기면 감이나 순서대로 설계사에게 배정합니다. 이걸 데이터와 AI가 자동으로 최적화하게 만들겠다는 거예요.</p>
+
+  <div class="callout">
+    <strong>핵심 질문:</strong> "이 계약은 지금 팔아도 되는 계약인가?" 그리고 "이 설계사가 이 리드에 가장 적합한가?"<br>
+    이 두 질문에 숫자로 답하는 시스템을 만드는 것이 목표입니다.
+  </div>
+
+  <p>그런데 이걸 제대로 하려면 밑바닥부터 차근차근 쌓아야 합니다. 그래서 <strong>4층짜리 건물</strong>을 짓는 겁니다.</p>
+</div>
+
+<!-- ===== 02. 4계층 아키텍처 ===== -->
+<div class="section">
+  <div class="section-num">02</div>
+  <h2>4계층 아키텍처 — 전체 그림</h2>
+  <p class="section-lead">KC 온톨로지가 기반이 되고, 그 위에 Graph RAG, Digital Twin, 그리고 최상위에 Lead Optimization Playbook이 올라갑니다.</p>
+
+  <div class="layer-stack">
+    <div class="layer-box layer-4">
+      <div class="layer-num">4</div>
+      <div class="layer-content">
+        <div class="layer-name">Lead Optimization Playbook</div>
+        <div class="layer-desc">aGCR 스코어링 → 설계사 매칭 → 배정 실행. "누구에게 배정할지" 결정하는 실행 계층.</div>
+      </div>
+    </div>
+    <div class="layer-arrow">↑ 시뮬레이션 결과 소비</div>
+    <div class="layer-box layer-3">
+      <div class="layer-num">3</div>
+      <div class="layer-content">
+        <div class="layer-name">Digital Twin — 보험 시장 시뮬레이션</div>
+        <div class="layer-desc">Customer · Planner · Product · Carrier · Channel 5개 Agent의 상호작용을 시뮬레이션.</div>
+      </div>
+    </div>
+    <div class="layer-arrow">↑ 그래프 탐색 요청</div>
+    <div class="layer-box layer-2">
+      <div class="layer-num">2</div>
+      <div class="layer-content">
+        <div class="layer-name">Graph RAG — 관계 기반 해석 엔진</div>
+        <div class="layer-desc">"비슷한 문장 찾기"가 아니라 "의미 관계를 따라가며 추론". multi-hop 복합 조건 탐색.</div>
+      </div>
+    </div>
+    <div class="layer-arrow">↑ 온톨로지 스키마 참조</div>
+    <div class="layer-box layer-1">
+      <div class="layer-num">1</div>
+      <div class="layer-content">
+        <div class="layer-name">KC 온톨로지 — 보험 도메인 지식 체계</div>
+        <div class="layer-desc">6+1종 카드 체계. Definition → Risk Type → Rule → Evidence → Policy 체이닝. 건물의 기초.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>왜 4층인가?</strong> 1층(KC)이 없으면 AI가 아무 기준 없이 답변합니다. 2층(Graph RAG)이 없으면 복합 조건을 추론할 수 없습니다. 3층(Digital Twin)이 없으면 시장을 시뮬레이션할 수 없습니다. 4층(Playbook)이 없으면 실제 배정이 실행되지 않습니다. 각 층은 아래 층 없이는 동작하지 않습니다.
+  </div>
+</div>
+
+<!-- ===== 03. aGCR 공식 ===== -->
+<div class="section">
+  <div class="section-num">03</div>
+  <h2>aGCR — 리드의 가치를 숫자로 표현</h2>
+  <p class="section-lead">adjusted Gross Contract Revenue. "이 계약은 지금 팔아도 되는 계약인가?"에 대한 숫자 답.</p>
+
+  <div class="formula-box">
+    <div class="formula-main">aGCR = (유지확률 × LTV × 마진 × 전환확률) / 리드비용</div>
+    <div class="formula-sub">aGCR이 높다 = "오래 유지할 것 같고, 보험료도 많이 내고, 수수료율도 좋고,<br>상담 의향도 높은데, 데려오는 비용은 적었다"</div>
+  </div>
+
+  <h3>리드 단계에서의 현실성 검증 결과</h3>
+  <p>리드 단계에서는 아직 가입할 상품이 정해지지 않았습니다. 따라서 유지확률, LTV, 마진은 상품을 직접 참조할 수 없고, <strong>추정 → 확정 2단계 계산 구조</strong>로 설계했습니다.</p>
+
+  <table class="status-table">
+    <thead>
+      <tr><th>변수</th><th>리드 단계 추정 방법</th><th>확정 시점</th><th>상태</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>전환확률</strong></td>
+        <td>Clark 발화 의도(0.4) + 앰플리튜드 engagement(0.35) + Risk Type 긴급도(0.25)</td>
+        <td>리드 생성 시 확정</td>
+        <td class="status-ok">즉시 가능</td>
+      </tr>
+      <tr>
+        <td><strong>유지확률</strong></td>
+        <td>마이데이터 갱신형 담보 비율 기반 추정 + Risk Type별 전환 패턴 통계</td>
+        <td>PROPOSED 시 상품 확정</td>
+        <td class="status-proxy">proxy 시작</td>
+      </tr>
+      <tr>
+        <td><strong>LTV</strong></td>
+        <td>현재 월납 보험료 총액(마이데이터) × Risk Type별 리모델링 변동률</td>
+        <td>PROPOSED 시 상품 확정</td>
+        <td class="status-proxy">proxy 시작</td>
+      </tr>
+      <tr>
+        <td><strong>마진</strong></td>
+        <td>Risk Type별 과거 체결 상품 평균 수수료율 (2027년 1200% 룰 이후 준상수)</td>
+        <td>PROPOSED 시 보험사 확정</td>
+        <td class="status-proxy">proxy 시작</td>
+      </tr>
+      <tr>
+        <td><strong>리드비용</strong></td>
+        <td>광고 채널별 CPA(설치 기준) ÷ 설치→리드 전환율</td>
+        <td>리드 생성 시 확정</td>
+        <td class="status-ok">즉시 가능</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>aGCR만으로는 부족합니다. 아무리 좋은 리드라도 엉뚱한 설계사에게 배정하면 체결이 안 되니까요. 그래서 <strong>PlannerFitScore</strong>를 곱합니다.</p>
+
+  <div class="formula-box">
+    <div class="formula-main">최종 배정 점수 = aGCR × PlannerFitScore</div>
+    <div class="formula-sub">PlannerFitScore = (응답속도 × 0.3 + 매칭도 × 0.4 + 체결율 × 0.3) × 여력</div>
+  </div>
+</div>
+
+<!-- ===== 04. Playbook 카드 실제 화면 ===== -->
+<div class="section">
+  <div class="section-num">04</div>
+  <h2>KC Admin 실제 화면 예시 — Playbook 카드</h2>
+  <p class="section-lead">Playbook은 3개 레이어로 구성됩니다. 전환(언제 리드로 만들 것인가) → 스코어링(이 리드가 얼마나 가치 있는가) → 배정(누구에게 줄 것인가).</p>
+
+  <!-- CARD: CONVERT -->
+  <h3>Playbook ① 리드 전환 레이어</h3>
+  <p>Clark AI 대화 중 고객의 전환 의도 발화를 감지하여, 보닥플래너 상담으로 전환하는 시점을 정의합니다.</p>
+
+  <div class="card-mock">
+    <div class="card-head" style="background: var(--pink-light);">
+      <span class="card-id" style="color: var(--pink);">PLAYBOOK.LEAD.CONVERT.V1</span>
+      <div class="card-badges">
+        <span class="badge badge-internal">Internal</span>
+        <span class="badge badge-playbook">Playbook</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="card-section">
+        <div class="card-label">카드명</div>
+        <div class="card-value" style="font-weight:700;font-size:16px;">리드 전환 레이어 — Clark 발화 기반 전환 트리거</div>
+      </div>
+      <div class="card-section">
+        <div class="card-label">전환 트리거 발화 키워드</div>
+        <table class="card-table">
+          <tr><th>우선순위</th><th>발화 패턴</th><th>intent_weight</th></tr>
+          <tr><td>P1 (즉시 전환)</td><td>"보험 추천해줘", "가입하고 싶어"</td><td>0.95</td></tr>
+          <tr><td>P2 (전환 제안)</td><td>"어떻게 해야 해?", "이대로 괜찮아?"</td><td>0.75</td></tr>
+          <tr><td>P3 (잠재 전환)</td><td>"더 알아보고 싶어", "상담 가능해?"</td><td>0.55</td></tr>
+          <tr><td>P0 (비전환)</td><td>위 패턴 미감지</td><td>0.15</td></tr>
+        </table>
+      </div>
+      <div class="card-section">
+        <div class="card-label">전환 조건</div>
+        <div class="card-mono">
+IF intent_weight >= 0.75 (P1 또는 P2):<br>
+&nbsp;&nbsp;→ 즉시 리드 생성, 스코어링 레이어로 전달<br>
+IF intent_weight >= 0.55 (P3):<br>
+&nbsp;&nbsp;→ Clark이 전환 유도 멘트 출력 후, 고객 반응에 따라 리드 생성<br>
+IF intent_weight < 0.55 (P0):<br>
+&nbsp;&nbsp;→ 리드 미생성, Clark 대화 계속
+        </div>
+      </div>
+      <div class="card-section">
+        <div class="card-label">연결 카드</div>
+        <span class="card-link">→ PLAYBOOK.LEAD.SCORING.V1</span>
+        <span class="card-link">→ RULE.LEAD.CONVERT_THRESHOLD</span>
+        <span class="card-link">→ POLICY.CONSUMER_PROTECTION.V1</span>
+      </div>
+    </div>
+    <div class="card-footer">
+      <span>작성자: 담당자</span><span>검수: 검수자</span><span>v1.0</span><span>상태: 검수 완료</span>
+    </div>
+  </div>
+
+  <!-- CARD: SCORING -->
+  <h3>Playbook ② 스코어링 레이어</h3>
+  <p>aGCR 공식의 각 변수를 어디서 가져오고 어떻게 계산하는지 정의합니다. 리드 단계에서는 추정값(v0)을 사용하고, 상품 제안 시점에서 확정값(v1)으로 갱신합니다.</p>
+
+  <div class="card-mock">
+    <div class="card-head" style="background: var(--pink-light);">
+      <span class="card-id" style="color: var(--pink);">PLAYBOOK.LEAD.SCORING.V1</span>
+      <div class="card-badges">
+        <span class="badge badge-internal">Internal</span>
+        <span class="badge badge-playbook">Playbook</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="card-section">
+        <div class="card-label">카드명</div>
+        <div class="card-value" style="font-weight:700;font-size:16px;">스코어링 레이어 — aGCR 기반 리드 가치 산정</div>
+      </div>
+      <div class="card-section">
+        <div class="card-label">aGCR 공식</div>
+        <div class="card-mono" style="text-align:center;font-weight:500;font-size:14px;">
+          aGCR = (P_retain × LTV × Margin × P_convert) / Cost_lead
+        </div>
+      </div>
+      <div class="card-section">
+        <div class="card-label">P_convert (전환확률) 산출</div>
+        <div class="card-mono">P_convert = intent × 0.4 + engagement × 0.35 + risk_urgency × 0.25</div>
+        <table class="card-table">
+          <tr><th>하위 변수</th><th>데이터 소스</th><th>산출 방법</th></tr>
+          <tr><td>intent</td><td>Clark 세션 발화</td><td>전환 레이어에서 전달받은 intent_weight 값</td></tr>
+          <tr><td>engagement</td><td>앰플리튜드</td><td>세션 깊이(0.4) + 분석 완료(0.3) + 재방문(0.3)</td></tr>
+          <tr><td>risk_urgency</td><td>Risk Type 카드</td><td>무보장형 10점, 암 부족형 8점, 비효율형 4점 등</td></tr>
+        </table>
+      </div>
+      <div class="card-section">
+        <div class="card-label">P_retain (유지확률) — 2단계 추정</div>
+        <table class="card-table">
+          <tr><th>단계</th><th>시점</th><th>산출 방법</th></tr>
+          <tr><td>v0 (추정)</td><td>리드 생성</td><td>갱신형 70%↑ → 0.55 / 30~70% → 0.72 / 30%↓ → 0.85</td></tr>
+          <tr><td>v1 (확정)</td><td>상품 제안</td><td>실제 상품의 정액형 → 0.85, 갱신형 → 0.62</td></tr>
+        </table>
+      </div>
+      <div class="card-section">
+        <div class="card-label">연결 카드</div>
+        <span class="card-link">← PLAYBOOK.LEAD.CONVERT.V1</span>
+        <span class="card-link">→ PLAYBOOK.LEAD.ALLOCATION.V1</span>
+        <span class="card-link">→ EVIDENCE.MYDATA.RENEWAL_RATIO</span>
+      </div>
+    </div>
+    <div class="card-footer">
+      <span>작성자: 담당자</span><span>검수: 검수자</span><span>v1.0</span><span>상태: 작성 중</span>
+    </div>
+  </div>
+
+  <!-- CARD: ALLOCATION -->
+  <h3>Playbook ③ 배정 최적화 레이어</h3>
+  <p>aGCR이 산출된 리드를 가장 적합한 설계사에게 배정합니다.</p>
+
+  <div class="card-mock">
+    <div class="card-head" style="background: var(--pink-light);">
+      <span class="card-id" style="color: var(--pink);">PLAYBOOK.LEAD.ALLOCATION.V1</span>
+      <div class="card-badges">
+        <span class="badge badge-internal">Internal</span>
+        <span class="badge badge-playbook">Playbook</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="card-section">
+        <div class="card-label">AllocationScore 공식</div>
+        <div class="card-mono" style="text-align:center;font-weight:500;font-size:14px;">
+          AllocationScore = aGCR × PlannerFitScore
+        </div>
+      </div>
+      <div class="card-section">
+        <div class="card-label">PlannerFitScore 변수</div>
+        <table class="card-table">
+          <tr><th>변수</th><th>산출 방법</th><th>현재 상태</th></tr>
+          <tr><td>response</td><td>30분 이내=1.0, 1시간 이내=0.8, 3시간 이내=0.5</td><td class="status-ok">즉시 가능</td></tr>
+          <tr><td>matching</td><td>해당 Risk Type 체결율 (Graph 탐색)</td><td class="status-infra">초기: closing 대체</td></tr>
+          <tr><td>closing</td><td>전체 체결 건수 / 전체 배정 건수 (90일)</td><td class="status-ok">즉시 가능</td></tr>
+          <tr><td>capacity</td><td>1 - (활성 리드 / 최대 처리량)</td><td class="status-proxy">proxy: 14일 규칙</td></tr>
+        </table>
+      </div>
+      <div class="card-section">
+        <div class="card-label">배정 규칙 분기</div>
+        <table class="card-table">
+          <tr><th>리드 유형</th><th>배정 기준</th></tr>
+          <tr><td>무료 리드</td><td>aGCR 분자값 (절대 가치) × PlannerFitScore</td></tr>
+          <tr><td>유상 리드</td><td>aGCR (ROI 포함) × PlannerFitScore</td></tr>
+          <tr><td>고위험 리드</td><td>matching 0.4→0.6, response 0.3→0.2, closing 0.3→0.2 (합계 1.0 유지)</td></tr>
+        </table>
+      </div>
+      <div class="card-section">
+        <div class="card-label">aGCR 자기 보정 장치</div>
+        <div class="card-mono">
+PROPOSED 시점: 추정 aGCR(v0) → 확정 aGCR(v1) 갱신<br>
+차이율 산출: |v0 - v1| / v0 × 100 (추정값 v0 대비)<br>
+차이율 30% 이상 시 담당자에게 알림 → 추정 모델 점검
+        </div>
+      </div>
+    </div>
+    <div class="card-footer">
+      <span>작성자: 담당자</span><span>검수: 검수자</span><span>v1.0</span><span>상태: 작성 중</span>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 05. Rule 카드 ===== -->
+<div class="section">
+  <div class="section-num">05</div>
+  <h2>Rule 카드 — "구체적으로 어떤 조건일 때"</h2>
+  <p class="section-lead">Playbook이 "무엇을 할 것인가"를 정의한다면, Rule은 "어떤 조건에서"를 정의합니다. 조건 빌더 GUI로 기준값을 설정합니다.</p>
+
+  <!-- CARD: CONVERT THRESHOLD -->
+  <div class="card-mock">
+    <div class="card-head" style="background: var(--blue-light);">
+      <span class="card-id" style="color: var(--blue);">RULE.LEAD.CONVERT_THRESHOLD.V1</span>
+      <div class="card-badges">
+        <span class="badge badge-baseline">Baseline</span>
+        <span class="badge badge-rule">Rule</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="card-section">
+        <div class="card-label">카드명</div>
+        <div class="card-value" style="font-weight:700;font-size:16px;">리드 전환 임계값 — 전환 조건 상세 판단 기준</div>
+      </div>
+
+      <div class="card-section">
+        <div class="card-label">Baseline 공개범위 — 판단 철학 vs 기준값 분리</div>
+        <div class="baseline-box">
+          <div><span class="baseline-label" style="background:var(--green-light);color:var(--green);">Public — 외부 노출</span></div>
+          <div class="baseline-pub">"보닥은 고객이 충분한 정보를 바탕으로 상담 의사를 표현한 경우에만 보닥플래너를 연결합니다. AI 진단 과정에서 고객의 보장 공백이 확인되더라도, 고객 스스로 상담 의향을 밝히지 않으면 설계사 연결을 강제하지 않습니다."</div>
+          <div style="margin-top:10px;"><span class="baseline-label" style="background:var(--red-light);color:var(--red);">Internal — 외부 비노출</span></div>
+          <div class="baseline-pub" style="color:var(--text-secondary);">구체적 임계값 (intent_weight 0.75 등), 조건 빌더 상세 설정</div>
+        </div>
+      </div>
+
+      <div class="card-section">
+        <div class="card-label">조건 빌더 — 기본 전환 조건</div>
+        <div class="card-mono" style="padding:10px 14px;">
+          <div class="builder-row">
+            <span class="builder-src src-clark">Clark 세션</span>
+            <span class="builder-chip">intent_weight</span>
+            <span class="builder-op">>=</span>
+            <span class="builder-chip">0.75</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-section">
+        <div class="card-label">조건 빌더 — 복합 전환 조건 (P3 + 보장 공백)</div>
+        <div class="card-mono" style="padding:10px 14px;">
+          <div class="builder-row">
+            <span class="builder-src src-clark">Clark 세션</span>
+            <span class="builder-chip">intent_weight</span>
+            <span class="builder-op">>=</span>
+            <span class="builder-chip">0.55</span>
+          </div>
+          <div class="builder-row"><span class="builder-op">AND</span></div>
+          <div class="builder-row">
+            <span class="builder-src src-mydata">마이데이터</span>
+            <span class="builder-chip">coverage_gap_score</span>
+            <span class="builder-op">>=</span>
+            <span class="builder-chip">60</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-section">
+        <div class="card-label">조건 빌더 — 무보장형 긴급 전환</div>
+        <div class="card-mono" style="padding:10px 14px;">
+          <div class="builder-row">
+            <span class="builder-src src-mydata">마이데이터</span>
+            <span class="builder-chip">active_policy_count</span>
+            <span class="builder-op">==</span>
+            <span class="builder-chip">0</span>
+          </div>
+          <div class="builder-row"><span class="builder-op">AND</span></div>
+          <div class="builder-row">
+            <span class="builder-src src-clark">Clark 세션</span>
+            <span class="builder-chip">intent_weight</span>
+            <span class="builder-op">>=</span>
+            <span class="builder-chip">0.40</span>
+          </div>
+        </div>
+        <p style="font-size:13px;color:var(--text-secondary);margin-top:6px;">무보장 고객은 낮은 의향에서도 전환 — 기초 보장 확보 긴급도 반영</p>
+      </div>
+    </div>
+    <div class="card-footer">
+      <span>작성자: 담당자</span><span>검수: 검수자</span><span>v1.0</span><span>상태: 검수 요청</span>
+    </div>
+  </div>
+
+  <!-- CARD: PLANNER ELIGIBILITY -->
+  <div class="card-mock">
+    <div class="card-head" style="background: var(--blue-light);">
+      <span class="card-id" style="color: var(--blue);">RULE.PLANNER.ELIGIBILITY.V1</span>
+      <div class="card-badges">
+        <span class="badge badge-internal">Internal</span>
+        <span class="badge badge-rule">Rule</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="card-section">
+        <div class="card-label">카드명</div>
+        <div class="card-value" style="font-weight:700;font-size:16px;">설계사 배정 자격 요건 — 배정 대상 필터링 조건</div>
+      </div>
+      <div class="card-section">
+        <div class="card-label">조건 빌더 — 자격 요건 (모두 충족 필요)</div>
+        <div class="card-mono" style="padding:10px 14px;">
+          <div class="builder-row">
+            <span class="builder-src src-calc">산출값</span>
+            <span class="builder-chip">capacity_factor</span>
+            <span class="builder-op">>=</span>
+            <span class="builder-chip">0.2</span>
+            <span style="font-size:12px;color:var(--text-tertiary);">과부하 아님</span>
+          </div>
+          <div class="builder-row"><span class="builder-op">AND</span></div>
+          <div class="builder-row">
+            <span class="builder-src src-calc">산출값</span>
+            <span class="builder-chip">closing_rate (90일)</span>
+            <span class="builder-op">>=</span>
+            <span class="builder-chip">0.10</span>
+            <span style="font-size:12px;color:var(--text-tertiary);">최소 체결율</span>
+          </div>
+          <div class="builder-row"><span class="builder-op">AND</span></div>
+          <div class="builder-row">
+            <span class="builder-src src-calc">산출값</span>
+            <span class="builder-chip">avg_response_speed</span>
+            <span class="builder-op"><=</span>
+            <span class="builder-chip">180분</span>
+            <span style="font-size:12px;color:var(--text-tertiary);">3시간 이내 응답</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-section">
+        <div class="card-label">특수 규칙</div>
+        <table class="card-table">
+          <tr><th>조건</th><th>처리</th></tr>
+          <tr><td>신규 설계사 (이력 10건 미만)</td><td>체결율 요건 면제, 주 3건 배정 제한</td></tr>
+          <tr><td>고위험 리드 (risk_urgency ≥ 8)</td><td>체결율 요건 0.10 → 0.20 상향</td></tr>
+          <tr><td>72시간 미컨택 3회 이상</td><td>자격 일시 정지 (7일)</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="card-footer">
+      <span>작성자: 담당자</span><span>검수: 검수자</span><span>v1.0</span><span>상태: 작성 중</span>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 06. Evidence 카드 ===== -->
+<div class="section">
+  <div class="section-num">06</div>
+  <h2>Evidence 카드 — "데이터를 어디서 어떻게 가져오는가"</h2>
+  <p class="section-lead">Rule이 "이 조건을 충족하면"이라고 했을 때, 그 조건의 데이터가 어디에 있고 어떻게 산출하는지를 정의합니다.</p>
+
+  <div class="card-mock">
+    <div class="card-head" style="background: var(--teal-light);">
+      <span class="card-id" style="color: var(--teal);">EVIDENCE.MYDATA.RENEWAL_RATIO.V1</span>
+      <div class="card-badges">
+        <span class="badge badge-internal">Internal</span>
+        <span class="badge badge-evidence">Evidence</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="card-section">
+        <div class="card-label">카드명</div>
+        <div class="card-value" style="font-weight:700;font-size:16px;">마이데이터 갱신형 담보 비율 — P_retain 추정 근거</div>
+      </div>
+      <div class="card-section">
+        <div class="card-label">데이터 출처</div>
+        <table class="card-table">
+          <tr><th>항목</th><th>내용</th></tr>
+          <tr><td>소스</td><td>한국신용정보원 ICIS (보험자기신용정보)</td></tr>
+          <tr><td>유형</td><td>고객의 현재 보유 보험계약 정보</td></tr>
+          <tr><td>갱신</td><td>고객 마이데이터 연동 시 실시간 조회</td></tr>
+        </table>
+      </div>
+      <div class="card-section">
+        <div class="card-label">산출 방법</div>
+        <div class="card-mono">
+갱신형 담보 비율 = 갱신형 담보 보험료 합계 / 전체 담보 보험료 합계<br><br>
+참조 필드:<br>
+&nbsp;&nbsp;ICIS 담보코드 → 담보별 보험료<br>
+&nbsp;&nbsp;ICIS 보장내용코드 → 정액형/갱신형 구분
+        </div>
+      </div>
+      <div class="card-section">
+        <div class="card-label">P_retain 추정 매핑표</div>
+        <table class="card-table">
+          <tr><th>갱신형 비율</th><th>P_retain(v0)</th><th>해석</th></tr>
+          <tr><td>70% 이상</td><td>0.55</td><td>리모델링 가능성 높음</td></tr>
+          <tr><td>30% ~ 70%</td><td>0.72</td><td>혼합 구조, 부분 전환</td></tr>
+          <tr><td>30% 미만</td><td>0.85</td><td>현재 구조 유지 가능</td></tr>
+        </table>
+        <p style="font-size:12px;color:var(--text-tertiary);margin-top:6px;">Case 데이터 100건 축적 시 Risk Type별 실측 모델로 교체</p>
+      </div>
+    </div>
+    <div class="card-footer">
+      <span>작성자: 담당자</span><span>검수: 검수자</span><span>v1.0</span><span>상태: 검수 완료</span>
+    </div>
+  </div>
+
+  <div class="card-mock">
+    <div class="card-head" style="background: var(--teal-light);">
+      <span class="card-id" style="color: var(--teal);">EVIDENCE.MYDATA.COVERAGE_GAP.V1</span>
+      <div class="card-badges">
+        <span class="badge badge-internal">Internal</span>
+        <span class="badge badge-evidence">Evidence</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="card-section">
+        <div class="card-label">카드명</div>
+        <div class="card-value" style="font-weight:700;font-size:16px;">보장 공백 종합 스코어 산출 근거</div>
+      </div>
+      <div class="card-section">
+        <div class="card-label">카테고리별 가중치</div>
+        <div class="card-mono">
+coverage_gap_score = 카테고리별 공백 점수의 가중 합산<br><br>
+실손(0.20) · 암(0.20) · 뇌(0.15) · 심장(0.15)<br>
+사망(0.10) · 후유장해(0.10) · 간병/치매(0.10)
+        </div>
+      </div>
+      <div class="card-section">
+        <div class="card-label">판단 예시 — 암 카테고리</div>
+        <table class="card-table">
+          <tr><th>조건</th><th>공백 점수</th></tr>
+          <tr><td>암진단금 0원 (보장 없음)</td><td>100</td></tr>
+          <tr><td>동일 연령/성별 평균의 50% 미만</td><td>70</td></tr>
+          <tr><td>동일 연령/성별 평균 미만</td><td>40</td></tr>
+          <tr><td>평균 이상</td><td>10</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="card-footer">
+      <span>작성자: 담당자</span><span>검수: 검수자</span><span>v1.0</span><span>상태: 검수 완료</span>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 07. 통제 범위 ===== -->
+<div class="section">
+  <div class="section-num">07</div>
+  <h2>이 시스템의 핵심 — 코드 없이 AI를 통제한다</h2>
+  <p class="section-lead">엔진이 한번 만들어지면, 그 이후에는 KC Admin의 카드 수정만으로 Clark과 배정 엔진의 동작이 바뀝니다.</p>
+
+  <h3>KC Admin에서 수치/컬럼 조정만으로 통제 가능</h3>
+  <div class="ctrl-list">
+    <div class="ctrl-item">
+      <div class="ctrl-icon ctrl-yes">O</div>
+      <div>
+        <div class="ctrl-text">기준값 변경 — "암진단금 부족 기준을 5천만 원에서 7천만 원으로"</div>
+        <div class="ctrl-sub">Rule 카드 기준값 수정 → 검수 승인 → Clark 진단 결과 즉시 반영</div>
+      </div>
+    </div>
+    <div class="ctrl-item">
+      <div class="ctrl-icon ctrl-yes">O</div>
+      <div>
+        <div class="ctrl-text">가중치 튜닝 — "matching 가중치 0.4 → 0.5, response 0.3 → 0.2"</div>
+        <div class="ctrl-sub">Playbook 카드 수정 → 검수자 승인 → 배정 순위 자동 변경. 코드 배포 불필요.</div>
+      </div>
+    </div>
+    <div class="ctrl-item">
+      <div class="ctrl-icon ctrl-yes">O</div>
+      <div>
+        <div class="ctrl-text">전환 키워드 추가 — "보험료 줄일 수 있어?"를 P2 발화로 등록</div>
+        <div class="ctrl-sub">Playbook 카드 키워드 추가 → Clark이 해당 발화 감지 시 전환</div>
+      </div>
+    </div>
+    <div class="ctrl-item">
+      <div class="ctrl-icon ctrl-yes">O</div>
+      <div>
+        <div class="ctrl-text">규제 대응 — "2027년 1200% 룰 시행"</div>
+        <div class="ctrl-sub">Policy 카드 추가 + Playbook에서 Margin 고정값 처리. 코드 변경 없음.</div>
+      </div>
+    </div>
+    <div class="ctrl-item">
+      <div class="ctrl-icon ctrl-yes">O</div>
+      <div>
+        <div class="ctrl-text">Risk Type 신규 추가 — "치아보장 공백형" 정의</div>
+        <div class="ctrl-sub">Risk Type 카드 + Rule + Evidence 연결 → Clark이 새 유형 진단 시작</div>
+      </div>
+    </div>
+  </div>
+
+  <h3>기술연구소 코드가 필요한 영역</h3>
+  <div class="ctrl-list">
+    <div class="ctrl-item">
+      <div class="ctrl-icon ctrl-no">X</div>
+      <div>
+        <div class="ctrl-text">새로운 변수 추가 — "고객 만족도 점수를 PlannerFitScore에 추가"</div>
+        <div class="ctrl-sub">엔진이 새 데이터 소스를 읽어오는 로직 개발 필요</div>
+      </div>
+    </div>
+    <div class="ctrl-item">
+      <div class="ctrl-icon ctrl-no">X</div>
+      <div>
+        <div class="ctrl-text">데이터 파이프라인 신규 구축 — "Clark 진단-체결 데이터 연결"</div>
+        <div class="ctrl-sub">데이터 흐름 자체를 새로 만들어야 함</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>비유: 레시피북과 요리사.</strong> Playbook/Rule/Evidence 카드가 레시피북(무엇을 어떤 조건으로 할 것인가)이고, Scoring/Allocation Engine이 요리사(실제로 계산하고 실행하는 코드)입니다. 레시피를 바꾸는 건 플랫폼사업본부가 KC Admin에서 하고, 주방(엔진)을 새로 만드는 건 기술연구소가 합니다.
+  </div>
+</div>
+
+<!-- ===== 08. 실제 운용 시나리오 ===== -->
+<div class="section">
+  <div class="section-num">08</div>
+  <h2>실제 운용 시나리오</h2>
+  <p class="section-lead">이 시스템이 동작하면, 일상적인 비즈니스 판단이 이렇게 바뀝니다.</p>
+
+  <div class="scenario">
+    <div class="scenario-title">시나리오 1: "암보험 리드 체결율이 떨어지고 있다"</div>
+    <div class="scenario-step"><strong>1단계</strong> → Case 카드에서 암투병생활비 부족형 실패 케이스 분석</div>
+    <div class="scenario-step"><strong>2단계</strong> → 원인 파악: 전환 시점이 너무 빨라 고객 준비 부족</div>
+    <div class="scenario-step"><strong>3단계</strong> → <span class="scenario-highlight">Rule 카드 수정: 암투병생활비 부족형의 전환 임계값 0.75 → 0.85 상향</span></div>
+    <div class="scenario-step"><strong>4단계</strong> → 검수자 승인</div>
+    <div class="scenario-step"><strong>5단계</strong> → Clark이 암 관련 상담에서 좀 더 충분한 정보를 제공한 후 전환</div>
+    <div class="scenario-result">코드 변경: 없음. 기술연구소 일정과 무관하게 즉시 실행 가능.</div>
+  </div>
+
+  <div class="scenario">
+    <div class="scenario-title">시나리오 2: "특정 설계사가 리드를 받아놓고 연락을 안 한다"</div>
+    <div class="scenario-step"><strong>1단계</strong> → Evidence에서 해당 설계사 response_speed 확인: 평균 240분</div>
+    <div class="scenario-step"><strong>2단계</strong> → Rule 카드 자격 요건 확인: 180분 초과 → 미충족</div>
+    <div class="scenario-step"><strong>3단계</strong> → <span class="scenario-highlight">시스템이 자동으로 해당 설계사를 배정 대상에서 제외</span></div>
+    <div class="scenario-step">더 엄격하게 하고 싶으면? Rule 카드에서 180분 → 120분으로 수정 + 검수 승인</div>
+    <div class="scenario-result">코드 변경: 없음.</div>
+  </div>
+
+  <div class="scenario">
+    <div class="scenario-title">시나리오 3: "2027년 1200% 룰 시행"</div>
+    <div class="scenario-step"><strong>1단계</strong> → Policy 카드에 1200% 룰 규제 추가, 준법감시인 승인</div>
+    <div class="scenario-step"><strong>2단계</strong> → <span class="scenario-highlight">Playbook 스코어링 카드에서 Margin 변수를 고정값으로 수정</span></div>
+    <div class="scenario-step"><strong>3단계</strong> → aGCR에서 Margin 변별력 소멸 → P_retain × LTV × P_convert가 핵심이 됨</div>
+    <div class="scenario-result">코드 변경: 없음. 규제 변화에 카드 수정만으로 대응.</div>
+  </div>
+</div>
+
+<!-- ===== 09. 전략적 의미 ===== -->
+<div class="section">
+  <div class="section-num">09</div>
+  <h2>전략적 의미</h2>
+
+  <div class="callout">
+    <strong>LLM은 교체 가능하지만, 온톨로지는 교체 불가능한 플랫폼 자산이다.</strong><br><br>
+    Clark의 LLM을 GPT에서 Claude로 바꿔도, KC 카드에 정의된 기준값과 규칙은 그대로 동작합니다. 판단의 뇌(온톨로지)와 말하는 입(LLM)이 분리되어 있으니까요. Playbook 카드에 담긴 aGCR 공식, Risk Type별 스코어, 배정 규칙, 전환 키워드 — 이것들이 아이지넷만의 고유 자산이 됩니다.
+  </div>
+
+  <div class="callout-warn callout">
+    <strong>데이터 인프라 과제 2건 (기술연구소 협의 필요)</strong><br><br>
+    1. Clark 진단 결과와 체결 데이터 연결 파이프라인 구축 → matching 변수 활성화 전제조건<br>
+    2. 앰플리튜드 택소노미 이벤트 추가 정의 → engagement 변수 정밀도 향상
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<div class="doc-footer">
+  <div class="container">
+    <p>아이지넷 플랫폼사업본부 · 2026년 3월 · Internal</p>
+    <p style="margin-top:4px;">본 문서는 KC 기반 리드 최적화 Playbook 아키텍처의 초기 설계 공유 자료이며, 향후 논의에 따라 지속적으로 업데이트됩니다.</p>
+  </div>
+</div>
+
+</body>
+</html>

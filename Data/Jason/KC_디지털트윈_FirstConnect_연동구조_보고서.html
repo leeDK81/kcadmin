@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KC 기반 GA 시장 디지털 트윈 & First Connect 연동 구조 보고서</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Noto+Serif+KR:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #FAFAF8;
+  --surface: #FFFFFF;
+  --text: #1A1A18;
+  --text-secondary: #5F5E5A;
+  --text-tertiary: #888780;
+  --border: #E8E6E0;
+  --accent: #0F6E56;
+  --accent-light: #E1F5EE;
+  --coral: #D85A30;
+  --coral-light: #FAECE7;
+  --purple: #534AB7;
+  --purple-light: #EEEDFE;
+  --blue: #185FA5;
+  --blue-light: #E6F1FB;
+  --amber: #BA7517;
+  --amber-light: #FAEEDA;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.8;
+  font-size: 15px;
+  font-weight: 400;
+}
+
+.report-container {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+}
+
+/* Cover */
+.cover {
+  text-align: center;
+  padding: 80px 0 60px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 48px;
+}
+.cover-label {
+  font-size: 12px;
+  letter-spacing: 3px;
+  color: var(--accent);
+  text-transform: uppercase;
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+.cover h1 {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.4;
+  margin-bottom: 12px;
+  color: var(--text);
+}
+.cover-sub {
+  font-size: 16px;
+  color: var(--text-secondary);
+  margin-bottom: 32px;
+}
+.cover-meta {
+  font-size: 13px;
+  color: var(--text-tertiary);
+  line-height: 1.6;
+}
+
+/* TOC */
+.toc {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 32px 36px;
+  margin-bottom: 48px;
+}
+.toc-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-tertiary);
+  letter-spacing: 1px;
+  margin-bottom: 16px;
+}
+.toc ol {
+  list-style: none;
+  counter-reset: toc;
+}
+.toc li {
+  counter-increment: toc;
+  padding: 6px 0;
+  border-bottom: 1px solid #F1EFE8;
+}
+.toc li:last-child { border-bottom: none; }
+.toc li a {
+  text-decoration: none;
+  color: var(--text);
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.toc li a:hover { color: var(--accent); }
+.toc li a::before {
+  content: counter(toc, decimal-leading-zero);
+  font-size: 12px;
+  color: var(--text-tertiary);
+  font-weight: 500;
+  min-width: 24px;
+}
+
+/* Section */
+.section {
+  margin-bottom: 56px;
+}
+.section-number {
+  font-size: 12px;
+  color: var(--accent);
+  font-weight: 500;
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+}
+.section h2 {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+.section h3 {
+  font-size: 17px;
+  font-weight: 500;
+  margin-top: 32px;
+  margin-bottom: 12px;
+  color: var(--text);
+  padding-left: 12px;
+  border-left: 3px solid var(--accent);
+}
+.section p {
+  margin-bottom: 16px;
+  color: var(--text);
+}
+
+/* Callout */
+.callout {
+  background: var(--accent-light);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 8px 8px 0;
+  padding: 16px 20px;
+  margin: 20px 0;
+  font-size: 14px;
+  color: #085041;
+}
+.callout-coral {
+  background: var(--coral-light);
+  border-left-color: var(--coral);
+  color: #712B13;
+}
+.callout-purple {
+  background: var(--purple-light);
+  border-left-color: var(--purple);
+  color: #3C3489;
+}
+.callout-blue {
+  background: var(--blue-light);
+  border-left-color: var(--blue);
+  color: #0C447C;
+}
+
+/* Diagram container */
+.diagram-wrap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px 16px;
+  margin: 24px 0;
+  overflow-x: auto;
+}
+.diagram-caption {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  text-align: center;
+  margin-top: 12px;
+  font-style: italic;
+}
+
+/* Comparison table */
+.compare-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 14px;
+}
+.compare-table th {
+  background: #F1EFE8;
+  font-weight: 500;
+  padding: 10px 14px;
+  text-align: left;
+  border-bottom: 2px solid var(--border);
+}
+.compare-table td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+.compare-table tr:last-child td { border-bottom: none; }
+
+.tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-right: 4px;
+}
+.tag-green { background: var(--accent-light); color: #085041; }
+.tag-coral { background: var(--coral-light); color: #712B13; }
+.tag-purple { background: var(--purple-light); color: #3C3489; }
+.tag-amber { background: var(--amber-light); color: #633806; }
+
+/* Footer */
+.report-footer {
+  border-top: 1px solid var(--border);
+  padding-top: 24px;
+  margin-top: 56px;
+  font-size: 12px;
+  color: var(--text-tertiary);
+  text-align: center;
+}
+
+/* SVG inside report */
+.diagram-wrap svg text { font-family: 'Noto Sans KR', sans-serif; }
+.diagram-wrap svg .th { font-size: 13px; font-weight: 500; fill: var(--text); }
+.diagram-wrap svg .ts { font-size: 11px; font-weight: 400; fill: var(--text-secondary); }
+.diagram-wrap svg .t { font-size: 13px; font-weight: 400; fill: var(--text); }
+
+/* Print styles */
+@media print {
+  body { background: #fff; font-size: 13px; }
+  .report-container { max-width: 100%; padding: 20px; }
+  .section { page-break-inside: avoid; }
+  .diagram-wrap { page-break-inside: avoid; border: 1px solid #ccc; }
+  .cover { padding: 40px 0 30px; }
+}
+</style>
+</head>
+<body>
+<div class="report-container">
+
+<!-- ===== COVER ===== -->
+<div class="cover">
+  <div class="cover-label">Internal Report</div>
+  <h1>KC 기반 GA 시장 디지털 트윈 &<br>First Connect 연동 구조 설계</h1>
+  <div class="cover-sub">디지털 트윈 개념 정의부터 First Connect CRM 연동,<br>더파트너스/제휴 GA 이원 구조까지의 전체 아키텍처</div>
+  <div class="cover-meta">
+    아이지넷 플랫폼사업본부 · 2026.03.27<br>
+    작성: Jason (플랫폼사업본부 본부장)
+  </div>
+</div>
+
+<!-- ===== TOC ===== -->
+<div class="toc">
+  <div class="toc-title">목차</div>
+  <ol>
+    <li><a href="#s1">논의 배경과 목적</a></li>
+    <li><a href="#s2">디지털 트윈의 개념과 GA 보험시장 적용</a></li>
+    <li><a href="#s3">Agent와 AI의 관계 정의</a></li>
+    <li><a href="#s4">3대 저장소 아키텍처: KC Admin · Agent 상태 · 서버 DB</a></li>
+    <li><a href="#s5">Graph RAG와 온톨로지의 관계</a></li>
+    <li><a href="#s6">First Connect CRM 연동 구조 (B-2 모델)</a></li>
+    <li><a href="#s7">더파트너스 vs 제휴 GA 이원 구조</a></li>
+    <li><a href="#s8">데이터 추적 현실과 Planner Agent 구축 전략</a></li>
+    <li><a href="#s9">Phase별 로드맵과 선행 과제</a></li>
+  </ol>
+</div>
+
+<!-- ===== SECTION 1 ===== -->
+<div class="section" id="s1">
+  <div class="section-number">01</div>
+  <h2>논의 배경과 목적</h2>
+  <p>KC(Knowledge Core) 온톨로지를 기반으로 보험 GA 시장의 디지털 트윈을 구현하고, 리드 스코어링과 배정 최적화를 실현하기 위한 아키텍처를 설계하는 과정에서, 다음의 핵심 질문들이 순차적으로 제기되었다.</p>
+  <p>디지털 트윈에서 "Agent"란 무엇인가, AI와 어떻게 상호작용하는가, 데이터는 어디에 저장하는가, 외부 CRM(First Connect)과 어떻게 연동하는가, 그리고 내부 조직(더파트너스)과 외부 조직(제휴 GA)에서 구조가 어떻게 달라지는가.</p>
+  <p>본 보고서는 이 질문들에 대한 논의 과정과 결론을 체계적으로 정리하여, 전체 시스템의 설계 방향을 공유하기 위해 작성되었다.</p>
+</div>
+
+<!-- ===== SECTION 2 ===== -->
+<div class="section" id="s2">
+  <div class="section-number">02</div>
+  <h2>디지털 트윈의 개념과 GA 보험시장 적용</h2>
+
+  <h3>디지털 트윈이란</h3>
+  <p>디지털 트윈은 현실 세계의 시스템을 소프트웨어 모델로 복제하고, 그 모델 위에서 시뮬레이션을 통해 미래를 예측하는 기술이다. 제조업에서는 물리적 설비의 센서 데이터를 기반으로 작동하지만, GA 보험시장에서는 "사람의 의사결정"이 핵심 변수이므로 확률적 모델로 설계해야 한다.</p>
+
+  <h3>GA 보험시장에서의 의미</h3>
+  <p>시장 참여자들(고객·설계사·상품·보험사·GA 채널)의 현재 상태와 상호작용을 소프트웨어 모델로 복제하고, "만약 이 리드를 이 설계사에게 배정하면 어떻게 될까?"를 시뮬레이션하는 것이 GA 보험시장 디지털 트윈의 핵심이다.</p>
+
+  <h3>구현 7단계 프로세스</h3>
+  <p>디지털 트윈 구현은 다음 순서를 따른다.</p>
+  <p><strong>구성요소 식별</strong>(시장에 누가/무엇이 있는가) → <strong>상태 정의</strong>(각 요소를 어떤 변수로 기술하는가) → <strong>상호작용 모델링</strong>(요소들이 만나면 무슨 일이 벌어지는가) → <strong>시간 축 설계</strong>(동기화 주기와 시뮬레이션 범위) → <strong>데이터 파이프라인</strong>(수집·갱신·피드백) → <strong>의사결정 연결</strong>(시뮬레이션 결과의 활용) → <strong>검증과 보정</strong>(트윈의 현실 반영도 확인).</p>
+  <p>이 중 1~3이 설계, 4~5가 구현, 6~7이 운용이며, 7의 결과가 다시 2~3을 수정하는 순환 구조다.</p>
+
+  <div class="callout">
+    <strong>핵심 판단:</strong> Phase 2에서는 시뮬레이션 레벨 2(배치 최적화)까지만 목표로 잡고, 레벨 3(시장 동태 시뮬레이션)은 Case 500건 이상 축적 후(Phase 3)에 도입한다.
+  </div>
+</div>
+
+<!-- ===== SECTION 3 ===== -->
+<div class="section" id="s3">
+  <div class="section-number">03</div>
+  <h2>Agent와 AI의 관계 정의</h2>
+
+  <h3>Agent는 AI가 아니다</h3>
+  <p>디지털 트윈에서 Agent란 Agent-Based Modeling(ABM)의 개념으로, "자기 자신의 상태를 가지고 있고, 규칙에 따라 행동하며, 다른 Agent와 상호작용하는 독립적 데이터 객체"를 뜻한다. Customer Agent는 실제 고객 한 명의 보장 공백 점수, 의도 신호 등을 숫자로 표현한 객체이며, Planner Agent는 설계사 한 명의 응답 속도, 체결율, 업무량을 표현한 객체다.</p>
+
+  <h3>AI와 Agent의 3가지 상호작용 패턴</h3>
+
+  <p><strong>패턴 1 — AI가 Agent의 상태를 생성·갱신한다.</strong> Clark이 고객과 대화를 분석해서 Customer Agent의 coverage_gap_score, intent_signal 등의 속성에 값을 기록한다. AI가 없으면 Agent는 빈 껍데기다.</p>
+
+  <p><strong>패턴 2 — AI가 Agent 간 상호작용의 결과를 결정한다.</strong> 스코어링 엔진이 Customer Agent와 Planner Agent의 상태를 동시에 읽고 AllocationScore를 산출한다. 이때 AI는 Agent에 대해 read-only 접근만 하고, 상태 변경은 별도의 이벤트 핸들러가 담당해야 한다.</p>
+
+  <p><strong>패턴 3 — Agent의 상태 변화가 AI를 트리거한다.</strong> Customer Agent의 intent_signal이 임계값을 넘으면 리드 전환 이벤트가 발생하고, 스코어링 AI가 호출된다.</p>
+
+  <div class="callout">
+    <strong>설계 원칙 3가지:</strong> ① AI와 Agent의 책임을 섞지 않는다 (Agent는 상태 저장, AI는 판단). ② AI의 판단 근거를 항상 추적 가능하게 만든다. ③ AI 없이도 Agent 그래프가 마지막 스냅샷으로 유효하도록 설계한다.
+  </div>
+</div>
+
+<!-- ===== SECTION 4 ===== -->
+<div class="section" id="s4">
+  <div class="section-number">04</div>
+  <h2>3대 저장소 아키텍처</h2>
+  <p>KC Admin, Agent 상태 저장소, 서버 DB는 각각 다른 성격의 데이터를 담으며, AI 엔진이 이 세 저장소를 연결하는 구조다.</p>
+
+  <!-- DIAGRAM 1: 3대 저장소 + AI 관계도 -->
+  <div class="diagram-wrap">
+    <svg width="100%" viewBox="0 0 680 620">
+      <defs>
+        <marker id="a1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+      </defs>
+      <!-- 현실 세계 -->
+      <rect x="40" y="25" width="600" height="52" rx="10" fill="#F1EFE8" stroke="#B4B2A9" stroke-width="0.5"/>
+      <text class="th" x="340" y="46" text-anchor="middle" dominant-baseline="central">현실 세계</text>
+      <text class="ts" x="340" y="64" text-anchor="middle" dominant-baseline="central">고객 행동 · 설계사 활동 · 계약 발생 · 시장 이벤트</text>
+      <!-- 현실 → DB -->
+      <line x1="340" y1="77" x2="340" y2="110" stroke="#888780" stroke-width="0.8" marker-end="url(#a1)"/>
+      <text class="ts" x="350" y="98">원시 데이터 수집</text>
+      <!-- 서버 DB -->
+      <rect x="40" y="114" width="600" height="70" rx="10" fill="#E6F1FB" stroke="#85B7EB" stroke-width="0.5"/>
+      <text class="th" x="340" y="138" text-anchor="middle" dominant-baseline="central">서버 DB (트랜잭션 저장소)</text>
+      <text class="ts" x="340" y="156" text-anchor="middle" dominant-baseline="central">사실의 기록: 고객 정보 · 계약 이력 · Clark 로그 · 배정 이력</text>
+      <!-- DB → AI -->
+      <path d="M170 184 L170 230 L220 230" fill="none" stroke="#888780" stroke-width="0.8" marker-end="url(#a1)"/>
+      <text class="ts" x="128" y="212">원시 데이터</text>
+      <!-- AI 엔진 -->
+      <rect x="220" y="210" width="240" height="70" rx="10" fill="#FAECE7" stroke="#F0997B" stroke-width="0.5"/>
+      <text class="th" x="340" y="234" text-anchor="middle" dominant-baseline="central">AI 엔진</text>
+      <text class="ts" x="340" y="252" text-anchor="middle" dominant-baseline="central">판단을 내리는 두뇌</text>
+      <text class="ts" x="340" y="268" text-anchor="middle" dominant-baseline="central">Clark · 스코어링 · 배정 최적화</text>
+      <!-- KC → AI -->
+      <path d="M120 380 L120 250 L218 250" fill="none" stroke="#0F6E56" stroke-width="0.8" marker-end="url(#a1)"/>
+      <text class="ts" x="60" y="320">규칙·기준값 참조</text>
+      <!-- AI → Agent -->
+      <path d="M462 250 L560 250 L560 380" fill="none" stroke="#D85A30" stroke-width="0.8" marker-end="url(#a1)"/>
+      <text class="ts" x="570" y="320">해석된 상태 기록</text>
+      <!-- KC Admin -->
+      <rect x="40" y="370" width="240" height="86" rx="10" fill="#E1F5EE" stroke="#5DCAA5" stroke-width="0.5"/>
+      <text class="th" x="160" y="392" text-anchor="middle" dominant-baseline="central">KC Admin (지식 저장소)</text>
+      <text class="ts" x="160" y="410" text-anchor="middle" dominant-baseline="central">판단의 규칙</text>
+      <rect x="55" y="424" width="72" height="22" rx="4" fill="#9FE1CB" stroke="#5DCAA5" stroke-width="0.5"/>
+      <text class="ts" x="91" y="435" text-anchor="middle" dominant-baseline="central" style="fill:#085041">Rule</text>
+      <rect x="135" y="424" width="72" height="22" rx="4" fill="#9FE1CB" stroke="#5DCAA5" stroke-width="0.5"/>
+      <text class="ts" x="171" y="435" text-anchor="middle" dominant-baseline="central" style="fill:#085041">Evidence</text>
+      <!-- Agent 상태 -->
+      <rect x="400" y="370" width="240" height="86" rx="10" fill="#EEEDFE" stroke="#AFA9EC" stroke-width="0.5"/>
+      <text class="th" x="520" y="392" text-anchor="middle" dominant-baseline="central">Agent 상태 (트윈 저장소)</text>
+      <text class="ts" x="520" y="410" text-anchor="middle" dominant-baseline="central">시뮬레이션의 재료</text>
+      <rect x="415" y="424" width="80" height="22" rx="4" fill="#CECBF6" stroke="#AFA9EC" stroke-width="0.5"/>
+      <text class="ts" x="455" y="435" text-anchor="middle" dominant-baseline="central" style="fill:#3C3489">Customer</text>
+      <rect x="505" y="424" width="80" height="22" rx="4" fill="#CECBF6" stroke="#AFA9EC" stroke-width="0.5"/>
+      <text class="ts" x="545" y="435" text-anchor="middle" dominant-baseline="central" style="fill:#3C3489">Planner</text>
+      <!-- Agent → AI 피드백 -->
+      <path d="M520 456 L520 504 L340 504 L340 282" fill="none" stroke="#534AB7" stroke-width="0.8" stroke-dasharray="4 3" marker-end="url(#a1)"/>
+      <text class="ts" x="436" y="520">상태 변화 → AI 트리거</text>
+      <!-- Case 피드백 -->
+      <path d="M160 456 L160 554 L520 554 L520 504" fill="none" stroke="#888780" stroke-width="0.8" stroke-dasharray="4 3"/>
+      <text class="ts" x="340" y="570" text-anchor="middle">Case 피드백: 전환 결과 → 지식 보정</text>
+      <!-- 범례 -->
+      <text class="th" x="40" y="600">범례</text>
+      <line x1="80" y1="596" x2="110" y2="596" stroke="#888780" stroke-width="0.8" marker-end="url(#a1)"/>
+      <text class="ts" x="116" y="600">데이터 흐름</text>
+      <line x1="220" y1="596" x2="250" y2="596" stroke="#888780" stroke-width="0.8" stroke-dasharray="4 3" marker-end="url(#a1)"/>
+      <text class="ts" x="256" y="600">피드백 루프</text>
+    </svg>
+    <div class="diagram-caption">그림 1. KC Admin · Agent 상태 · 서버 DB · AI 엔진 관계도</div>
+  </div>
+
+  <table class="compare-table">
+    <tr>
+      <th>저장소</th>
+      <th>저장 대상</th>
+      <th>비유</th>
+      <th>특성</th>
+    </tr>
+    <tr>
+      <td><span class="tag tag-green">KC Admin</span></td>
+      <td>도메인 규칙, 기준값, 카드</td>
+      <td>사전(Dictionary)</td>
+      <td>수십~수백 장, 주/월 단위 변경, 사람이 검수</td>
+    </tr>
+    <tr>
+      <td><span class="tag tag-purple">Agent 상태</span></td>
+      <td>개별 인스턴스의 현재 상태</td>
+      <td>환자 차트(Medical Record)</td>
+      <td>수천~수만 건, 분~시간 단위 변경, 시스템 자동 갱신</td>
+    </tr>
+    <tr>
+      <td><span class="tag tag-coral">서버 DB</span></td>
+      <td>원시 트랜잭션 데이터</td>
+      <td>업무 장부(Ledger)</td>
+      <td>사건의 원본 기록, 해석 없이 저장</td>
+    </tr>
+  </table>
+
+  <div class="callout-coral callout">
+    <strong>핵심 결론:</strong> KC Admin에 Agent를 관리하면 안 된다. UI 목적, 데이터 볼륨, 권한 체계가 근본적으로 다르기 때문이다. Agent 모니터링은 별도 도구(초기: 기존 어드민에 탭 추가)로 분리한다.
+  </div>
+</div>
+
+<!-- ===== SECTION 5 ===== -->
+<div class="section" id="s5">
+  <div class="section-number">05</div>
+  <h2>Graph RAG와 온톨로지의 관계</h2>
+
+  <p>Graph RAG는 "그래프 DB를 쓰는 RAG"가 아니라, <strong>"연결된 지식 체계(온톨로지) 위에서 관계 탐색을 통해 AI에게 맥락을 제공하는 시스템"</strong>이다.</p>
+
+  <h3>일반 RAG vs Graph RAG</h3>
+  <table class="compare-table">
+    <tr>
+      <th>구분</th>
+      <th>일반 RAG</th>
+      <th>Graph RAG</th>
+    </tr>
+    <tr>
+      <td>검색 방식</td>
+      <td>유사도 검색 (similarity search)</td>
+      <td>관계 탐색 (graph traversal)</td>
+    </tr>
+    <tr>
+      <td>검색 결과</td>
+      <td>독립적인 텍스트 조각의 목록</td>
+      <td>연결된 경로 (path)</td>
+    </tr>
+    <tr>
+      <td>관계 추론</td>
+      <td>AI가 조각 사이의 관계를 스스로 추론</td>
+      <td>관계가 이미 그래프에 정의됨</td>
+    </tr>
+    <tr>
+      <td>선행 요건</td>
+      <td>문서 chunking + 벡터 변환</td>
+      <td>온톨로지 설계 + 그래프 구축</td>
+    </tr>
+  </table>
+
+  <p>구현 순서는 <strong>온톨로지 설계</strong>(어떤 개념이 존재하고 어떻게 연결되는가) → <strong>그래프 DB에 스키마 구현</strong>(노드/엣지 타입 정의, 데이터 적재) → <strong>Graph RAG 엔진 구축</strong>(질문을 그래프 탐색 쿼리로 변환하고 결과를 AI에게 전달)이다.</p>
+
+  <div class="callout">
+    <strong>bodoc 맥락:</strong> KC Admin의 카드 체계(CONCEPT, Risk Type, Rule, Evidence, Playbook)가 온톨로지의 역할을 하고, DIAGNOSED_BY 같은 엣지가 지식 노드와 인스턴스 노드를 연결하는 구조다.
+  </div>
+</div>
+
+<!-- ===== SECTION 6 ===== -->
+<div class="section" id="s6">
+  <div class="section-number">06</div>
+  <h2>First Connect CRM 연동 구조 (B-2 모델)</h2>
+
+  <h3>배정 구조의 선택지</h3>
+  <p>AI 엔진과 First Connect 사이의 역할 분배에 대해 세 가지 선택지를 검토했다.</p>
+
+  <table class="compare-table">
+    <tr>
+      <th>선택지</th>
+      <th>설명</th>
+      <th>판단</th>
+    </tr>
+    <tr>
+      <td><span class="tag tag-green">A</span></td>
+      <td>AI 엔진이 배정 결과까지 결정, FC는 실행만</td>
+      <td>설계사 데이터 필요 → 제약 존재</td>
+    </tr>
+    <tr>
+      <td><span class="tag tag-coral">B-1</span></td>
+      <td>FC 자체 배정 로직, 규칙이 두 곳에 분산</td>
+      <td>규칙 동기화 문제 → 부적합</td>
+    </tr>
+    <tr>
+      <td><span class="tag tag-purple">B-2 (채택)</span></td>
+      <td>AI가 리드 스코어 + 배정 가이드를 FC에 전달, FC는 가이드 범위 안에서 실행</td>
+      <td>반위임 구조, 규칙 단일 원천 유지</td>
+    </tr>
+  </table>
+
+  <div class="callout-purple callout">
+    <strong>B-2의 핵심:</strong> 배정의 "결정"은 AI 엔진 + KC Admin이, "실행"은 First Connect가 담당한다. 규칙의 원본은 KC Admin에만 있고, First Connect에는 복잡한 배정 규칙이 불필요하다.
+  </div>
+</div>
+
+<!-- ===== SECTION 7 ===== -->
+<div class="section" id="s7">
+  <div class="section-number">07</div>
+  <h2>더파트너스 vs 제휴 GA 이원 구조</h2>
+
+  <p>First Connect는 내부용(더파트너스 = 보닥플래너)과 외부용(제휴 GA)으로 사용자가 나뉜다. 두 채널은 설계사 데이터 접근 수준이 근본적으로 다르며, 이 차이가 전체 구조를 양갈래로 나눈다.</p>
+
+  <!-- DIAGRAM 2: 서비스 플로우 (이원 구조) -->
+  <div class="diagram-wrap">
+    <svg width="100%" viewBox="0 0 680 880">
+      <defs>
+        <marker id="a2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+      </defs>
+      <!-- Tier 1: 고객 접점 -->
+      <text class="ts" x="40" y="24">고객 접점</text>
+      <rect x="40" y="32" width="280" height="56" rx="8" fill="#E1F5EE" stroke="#5DCAA5" stroke-width="0.5"/>
+      <text class="th" x="180" y="52" text-anchor="middle" dominant-baseline="central">보닥 앱</text>
+      <text class="ts" x="180" y="72" text-anchor="middle" dominant-baseline="central">퍼포먼스 마케팅 → 앱 설치 → 리드</text>
+      <rect x="340" y="32" width="300" height="56" rx="8" fill="#E1F5EE" stroke="#5DCAA5" stroke-width="0.5"/>
+      <text class="th" x="490" y="52" text-anchor="middle" dominant-baseline="central">Clark AI (임베디드 웹뷰)</text>
+      <text class="ts" x="490" y="72" text-anchor="middle" dominant-baseline="central">헬스케어 플랫폼 등에 임베디드</text>
+      <!-- → AI 엔진 -->
+      <line x1="180" y1="88" x2="180" y2="118" stroke="#0F6E56" stroke-width="0.8" marker-end="url(#a2)"/>
+      <line x1="490" y1="88" x2="490" y2="118" stroke="#0F6E56" stroke-width="0.8" marker-end="url(#a2)"/>
+      <!-- AI 엔진 -->
+      <text class="ts" x="40" y="114">결정 레이어</text>
+      <rect x="40" y="122" width="600" height="56" rx="10" fill="#FAECE7" stroke="#F0997B" stroke-width="0.5"/>
+      <text class="th" x="340" y="142" text-anchor="middle" dominant-baseline="central">AI 엔진 (KC Admin 규칙 참조)</text>
+      <text class="ts" x="340" y="162" text-anchor="middle" dominant-baseline="central">aGCR 산출 · 리드 유형 판별 · 채널 라우팅</text>
+      <!-- 분기 -->
+      <line x1="200" y1="178" x2="200" y2="222" stroke="#D85A30" stroke-width="0.8" marker-end="url(#a2)"/>
+      <line x1="480" y1="178" x2="480" y2="222" stroke="#D85A30" stroke-width="0.8" marker-end="url(#a2)"/>
+      <text class="th" x="340" y="208" text-anchor="middle" dominant-baseline="central">채널 분기</text>
+      <!-- 좌: 더파트너스 -->
+      <rect x="40" y="226" width="280" height="500" rx="12" fill="none" stroke="#0F6E56" stroke-width="0.5" stroke-dasharray="5 3" opacity="0.5"/>
+      <text class="ts" x="180" y="244" text-anchor="middle">내부: 더파트너스 (보닥플래너)</text>
+      <rect x="56" y="256" width="248" height="44" rx="7" fill="#E1F5EE" stroke="#5DCAA5" stroke-width="0.5"/>
+      <text class="th" x="180" y="272" text-anchor="middle" dominant-baseline="central">FC 내부용 전송</text>
+      <text class="ts" x="180" y="290" text-anchor="middle" dominant-baseline="central">리드 + aGCR + 추천 설계사 리스트</text>
+      <line x1="180" y1="300" x2="180" y2="318" stroke="#0F6E56" stroke-width="0.6" marker-end="url(#a2)"/>
+      <rect x="56" y="322" width="248" height="36" rx="7" fill="#E1F5EE" stroke="#5DCAA5" stroke-width="0.5"/>
+      <text class="th" x="180" y="340" text-anchor="middle" dominant-baseline="central">FC 배정 → 보닥플래너</text>
+      <line x1="180" y1="358" x2="180" y2="376" stroke="#0F6E56" stroke-width="0.6" marker-end="url(#a2)"/>
+      <rect x="56" y="380" width="248" height="96" rx="7" fill="#E1F5EE" stroke="#5DCAA5" stroke-width="0.5"/>
+      <text class="th" x="180" y="398" text-anchor="middle" dominant-baseline="central">추적 가능 범위</text>
+      <text class="ts" x="180" y="416" text-anchor="middle" dominant-baseline="central">안심번호 통화 시도 (O)</text>
+      <text class="ts" x="180" y="432" text-anchor="middle" dominant-baseline="central">개인폰 상담/제안 (X)</text>
+      <text class="ts" x="180" y="452" text-anchor="middle" dominant-baseline="central">계약 체결: 앰플리튜드 후행 매칭</text>
+      <text class="ts" x="180" y="468" text-anchor="middle" dominant-baseline="central">고객 정보 기반 계약 통합</text>
+      <line x1="180" y1="476" x2="180" y2="494" stroke="#0F6E56" stroke-width="0.6" marker-end="url(#a2)"/>
+      <rect x="56" y="498" width="248" height="56" rx="7" fill="#E1F5EE" stroke="#5DCAA5" stroke-width="0.5"/>
+      <text class="th" x="180" y="516" text-anchor="middle" dominant-baseline="central">Planner Agent 구축</text>
+      <text class="ts" x="180" y="534" text-anchor="middle" dominant-baseline="central">response(O) · closing(후행 O)</text>
+      <text class="ts" x="180" y="548" text-anchor="middle" dominant-baseline="central">matching · capacity (제한적)</text>
+      <rect x="56" y="572" width="248" height="56" rx="7" fill="#E1F5EE" stroke="#5DCAA5" stroke-width="0.5"/>
+      <text class="ts" x="180" y="592" text-anchor="middle" dominant-baseline="central" style="fill:#085041">Phase 1: 부분 정밀 배정 가능</text>
+      <text class="ts" x="180" y="610" text-anchor="middle" dominant-baseline="central" style="fill:#085041">→ aGCR 시스템의 실험장·증명 무대</text>
+      <!-- 우: 제휴 GA -->
+      <rect x="360" y="226" width="280" height="500" rx="12" fill="none" stroke="#534AB7" stroke-width="0.5" stroke-dasharray="5 3" opacity="0.5"/>
+      <text class="ts" x="500" y="244" text-anchor="middle">외부: 제휴 GA</text>
+      <rect x="376" y="256" width="248" height="44" rx="7" fill="#EEEDFE" stroke="#AFA9EC" stroke-width="0.5"/>
+      <text class="th" x="500" y="272" text-anchor="middle" dominant-baseline="central">FC 외부용 전송</text>
+      <text class="ts" x="500" y="290" text-anchor="middle" dominant-baseline="central">리드 + aGCR + 배정 가이드만</text>
+      <line x1="500" y1="300" x2="500" y2="318" stroke="#534AB7" stroke-width="0.6" marker-end="url(#a2)"/>
+      <rect x="376" y="322" width="248" height="36" rx="7" fill="#EEEDFE" stroke="#AFA9EC" stroke-width="0.5"/>
+      <text class="th" x="500" y="340" text-anchor="middle" dominant-baseline="central">FC 배정 → GA 소속 설계사</text>
+      <line x1="500" y1="358" x2="500" y2="376" stroke="#534AB7" stroke-width="0.6" marker-end="url(#a2)"/>
+      <rect x="376" y="380" width="248" height="96" rx="7" fill="#EEEDFE" stroke="#AFA9EC" stroke-width="0.5"/>
+      <text class="th" x="500" y="398" text-anchor="middle" dominant-baseline="central">추적 가능 범위</text>
+      <text class="ts" x="500" y="416" text-anchor="middle" dominant-baseline="central">리드 배정 여부 (O)</text>
+      <text class="ts" x="500" y="432" text-anchor="middle" dominant-baseline="central">컨택/상담/제안 (X)</text>
+      <text class="ts" x="500" y="452" text-anchor="middle" dominant-baseline="central">체결 여부: GA 보고 의존</text>
+      <text class="ts" x="500" y="468" text-anchor="middle" dominant-baseline="central">설계사 상세 미제공</text>
+      <line x1="500" y1="476" x2="500" y2="494" stroke="#534AB7" stroke-width="0.6" marker-end="url(#a2)"/>
+      <rect x="376" y="498" width="248" height="56" rx="7" fill="#EEEDFE" stroke="#AFA9EC" stroke-width="0.5"/>
+      <text class="th" x="500" y="516" text-anchor="middle" dominant-baseline="central">Agent 구축: GA 단위만 가능</text>
+      <text class="ts" x="500" y="534" text-anchor="middle" dominant-baseline="central">설계사별 불가 → Channel Agent</text>
+      <text class="ts" x="500" y="548" text-anchor="middle" dominant-baseline="central">GA별 전환율 수준만 파악</text>
+      <rect x="376" y="572" width="248" height="56" rx="7" fill="#EEEDFE" stroke="#AFA9EC" stroke-width="0.5"/>
+      <text class="ts" x="500" y="592" text-anchor="middle" dominant-baseline="central" style="fill:#3C3489">Phase 1: 리드 품질 최적화만 가능</text>
+      <text class="ts" x="500" y="610" text-anchor="middle" dominant-baseline="central" style="fill:#3C3489">→ Case 500건 후 배정 가이드 정밀화</text>
+      <!-- 하단 피드백 -->
+      <path d="M180 628 L180 660 L340 660" fill="none" stroke="#0F6E56" stroke-width="0.8" marker-end="url(#a2)"/>
+      <path d="M500 628 L500 660 L342 660" fill="none" stroke="#534AB7" stroke-width="0.8" marker-end="url(#a2)"/>
+      <rect x="120" y="674" width="440" height="36" rx="7" fill="#F1EFE8" stroke="#D3D1C7" stroke-width="0.5"/>
+      <text class="ts" x="340" y="692" text-anchor="middle" dominant-baseline="central">앰플리튜드: 고객 정보 기반 계약 후행 매칭 → Agent 갱신 → KC 보정</text>
+      <!-- 피드백 루프 -->
+      <path d="M340 710 L340 738 L40 738 L40 150 L54 150" fill="none" stroke="#888780" stroke-width="0.8" stroke-dasharray="4 3" marker-end="url(#a2)"/>
+      <text class="ts" x="48" y="450">피드백 루프</text>
+      <!-- 범례 -->
+      <text class="th" x="40" y="770">범례</text>
+      <rect x="80" y="760" width="12" height="12" rx="3" fill="#E1F5EE" stroke="#5DCAA5" stroke-width="0.5"/>
+      <text class="ts" x="98" y="771">내부 (더파트너스)</text>
+      <rect x="220" y="760" width="12" height="12" rx="3" fill="#EEEDFE" stroke="#AFA9EC" stroke-width="0.5"/>
+      <text class="ts" x="238" y="771">외부 (제휴 GA)</text>
+      <rect x="370" y="760" width="12" height="12" rx="3" fill="#FAECE7" stroke="#F0997B" stroke-width="0.5"/>
+      <text class="ts" x="388" y="771">AI · 결정</text>
+      <line x1="460" y1="766" x2="490" y2="766" stroke="#888780" stroke-width="0.8" stroke-dasharray="4 3"/>
+      <text class="ts" x="498" y="771">피드백</text>
+      <text class="ts" x="80" y="794">* 설계사 추천 리스트는 내부 채널에만 적용</text>
+    </svg>
+    <div class="diagram-caption">그림 2. 더파트너스 / 제휴 GA 이원 서비스 플로우 (B-2 모델, 추적 제약 반영)</div>
+  </div>
+
+  <h3>내부 vs 외부: 3가지 결정적 차이</h3>
+  <table class="compare-table">
+    <tr>
+      <th>구분</th>
+      <th><span class="tag tag-green">더파트너스 (내부)</span></th>
+      <th><span class="tag tag-purple">제휴 GA (외부)</span></th>
+    </tr>
+    <tr>
+      <td>AI 엔진 출력물</td>
+      <td>리드 + aGCR + 추천 설계사 리스트 [1, 2, 3순위]</td>
+      <td>리드 + aGCR + 배정 가이드 (추천 없음)</td>
+    </tr>
+    <tr>
+      <td>피드백 데이터</td>
+      <td>수락/통화 시도(안심번호)/체결(후행 매칭)</td>
+      <td>배정 여부/체결 여부 (GA 보고 의존)</td>
+    </tr>
+    <tr>
+      <td>Agent 구축 단위</td>
+      <td>설계사 단위 (Planner Agent)</td>
+      <td>GA 단위 (Channel Agent)</td>
+    </tr>
+    <tr>
+      <td>배정 최적화 시점</td>
+      <td>Phase 1부터 부분 정밀 배정</td>
+      <td>Phase 1은 리드 품질 최적화만, Case 축적 후 정밀화</td>
+    </tr>
+  </table>
+
+  <div class="callout">
+    <strong>전략적 의미:</strong> 더파트너스가 aGCR 시스템의 실험장이자 증명 무대가 된다. 내부에서 "AI 기반 배정이 전환율을 X% 높인다"를 실증하고, 그 데이터를 근거로 제휴 GA에 설계사 정보 공유를 제안할 수 있다.
+  </div>
+</div>
+
+<!-- ===== SECTION 8 ===== -->
+<div class="section" id="s8">
+  <div class="section-number">08</div>
+  <h2>데이터 추적 현실과 Planner Agent 구축 전략</h2>
+
+  <h3>추적의 현실적 제약</h3>
+  <p>안심번호 트래킹을 통해 보닥플래너의 통화 시도까지는 추적이 되지만, 개인 핸드폰을 통한 고객 상담 및 제안 과정은 추적이 불가능하다. 계약 체결 정보는 앰플리튜드를 통해 고객 정보 기반으로 후행 매칭하는 구조다.</p>
+
+  <h3>Planner Agent 변수별 현실성</h3>
+  <table class="compare-table">
+    <tr>
+      <th>변수</th>
+      <th>더파트너스</th>
+      <th>제휴 GA</th>
+    </tr>
+    <tr>
+      <td>response_speed (응답 속도)</td>
+      <td><span class="tag tag-green">즉시 가능</span> 안심번호 첫 통화 시도 시간</td>
+      <td><span class="tag tag-coral">불가</span> 설계사 단위 미파악</td>
+    </tr>
+    <tr>
+      <td>closing_rate (체결율)</td>
+      <td><span class="tag tag-amber">후행 가능</span> 앰플리튜드 후행 매칭 (수일~수주 시차)</td>
+      <td><span class="tag tag-coral">GA 단위만</span> GA 보고 의존</td>
+    </tr>
+    <tr>
+      <td>matching_accuracy</td>
+      <td><span class="tag tag-amber">축적 후</span> closing 축적 → Risk Type별 분해</td>
+      <td><span class="tag tag-coral">불가</span></td>
+    </tr>
+    <tr>
+      <td>capacity (활성 리드 수)</td>
+      <td><span class="tag tag-amber">proxy</span> 14일 경과 = 종료 추정</td>
+      <td><span class="tag tag-coral">불가</span></td>
+    </tr>
+  </table>
+
+  <div class="callout-coral callout">
+    <strong>현실적 결론:</strong> 더파트너스에서도 Phase 1에서는 response + closing(후행)만으로 동작하는 경량 PlannerFitScore로 시작한다. 제휴 GA에서는 설계사 단위가 아닌 GA 단위의 Channel Agent로 전환율을 축적한다. 상담 과정 추적 보강(FC에 상담 완료 버튼 추가 등)은 Phase 2 과제다.
+  </div>
+</div>
+
+<!-- ===== SECTION 9 ===== -->
+<div class="section" id="s9">
+  <div class="section-number">09</div>
+  <h2>Phase별 로드맵과 선행 과제</h2>
+
+  <h3>Phase 1 — 즉시 실행</h3>
+  <p>AI 엔진이 리드 스코어(aGCR) + 배정 가이드를 산출하여 First Connect에 전송하는 파이프라인을 구축한다. 더파트너스 경로에서는 추천 설계사 리스트까지 포함하고, 제휴 GA 경로에서는 배정 가이드만 포함한다.</p>
+  <p>동시에 First Connect에서 배정 결과(수락/통화 시도/체결)를 콜백으로 받아 서버 DB에 축적하기 시작한다. 이것이 Planner Agent의 씨앗 데이터가 된다.</p>
+  <p>KC Admin에 Playbook/Rule 카드로 Agent 관련 규칙(임계값, 가중치, 배정 로직)을 입력한다.</p>
+
+  <h3>Phase 2 — 데이터 축적 후</h3>
+  <p>축적된 성과 데이터로 설계사별 프로필(Planner Agent)을 구축한다. 안심번호 통화 시도 데이터와 앰플리튜드 후행 매칭 데이터를 결합하여 response_speed, closing_rate를 산출한다.</p>
+  <p>Agent 모니터링 대시보드를 기존 어드민에 탭으로 추가한다. Graph DB 도입을 위한 Federated 구조 설계를 시작한다.</p>
+  <p>제휴 GA와의 계약에 설계사 정보 공유 조건 협상을 병행한다 — 더파트너스에서의 전환율 향상 실증 데이터를 협상 근거로 활용한다.</p>
+
+  <h3>Phase 3 — 장기</h3>
+  <p>Graph DB 전면 도입 및 Graph RAG 엔진 구축. 디지털 트윈 레벨 3(시장 동태 시뮬레이션) 도입. Case 피드백 루프의 자동 보정 파이프라인 구축.</p>
+
+  <h3>First Connect에 요구되는 최소 기능 (선정 체크리스트)</h3>
+  <table class="compare-table">
+    <tr><th>기능</th><th>설명</th></tr>
+    <tr><td>리드 수신 API</td><td>AI 엔진이 보내는 리드 + 메타데이터(aGCR, Risk Type, 추천 리스트 또는 배정 가이드)를 받는 엔드포인트</td></tr>
+    <tr><td>우선순위 기반 순차 배정</td><td>1순위 → 타임아웃 → 2순위 로직 (내부용). 배정 가이드 참고 자체 매칭 (외부용)</td></tr>
+    <tr><td>설계사 워크스페이스</td><td>리드 확인, 고객 정보 열람, 컨택 기록</td></tr>
+    <tr><td>결과 콜백 API</td><td>수락/미수락/통화 시도/체결 이벤트를 bodoc 서버로 전송</td></tr>
+  </table>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<div class="report-footer">
+  아이지넷 플랫폼사업본부 · 2026.03.27 · 내부 공유용<br>
+  본 보고서는 KC 기반 디지털 트윈 아키텍처 논의의 전체 흐름을 정리한 것이며,<br>
+  세부 기획서(KC 기획서 v1.x)와 함께 참고하시기 바랍니다.
+</div>
+
+</div>
+</body>
+</html>

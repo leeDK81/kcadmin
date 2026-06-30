@@ -28,9 +28,7 @@
 | 항목 | 논의 내용 | 미결 이유 | 등록일 |
 |---|---|---|---|
 | Playbook ← Risk-type 연결 | Risk-type 관점의 리드 전환·배정 최적화. CONNECT_RULES.risk에 'playbook' 추가 필요 | Phase 1.5+ 이관 (리드 스코어링 스펙 확정 시 추가) | 2026-06-17 |
-| **T15 제거** | 마이데이터 사업자는 본인 데이터만 조회 가능 → 자녀 보험 계약 데이터 접근 불가. "자녀 건강보장 공백" 감지는 구조적으로 불가능. 제거 범위: T15(Risk-type)·RU-T15(Rule)·CN-T15(Concept)·PO-T15(Policy)·EV020(Evidence, T15 전용 어린이 연간 의료비). 체인 23→22개, 카드 132→127장. HTML 7개 카운트 일괄 조정 필요. | 다음 컨텐츠 업데이트 세션에서 처리 | 2026-06-29 |
-| **RU-T16 재설계** | ① A3201이 담보코드 테이블상 A3xxx(후유장해) 계열인데 입원일당 대리 지표로 사용 중 — MYDATA 실제 분류 확인 필요. ② "입원일당 있음=실손보험 보유" 논리 비약 (입원일당은 별도 정액 담보). 대안 A: 개발팀이 A3201 분류 확인 후 코드 교체. 대안 B: MYDATA 조건 제거 + 40세 이상 프로파일 기반으로 단순화. | 개발팀 MYDATA 스펙 확인 선행 필요. 다음 컨텐츠 업데이트 세션에서 처리 | 2026-06-29 |
-| **A3201 공통 이슈** | A3201을 입원일당 대리 지표로 사용하는 Rule: T01·T06·T12·T16·T19 (T15는 제거 예정). A3xxx는 담보코드 테이블상 후유장해 계열이나 실제 MYDATA 스펙 미확인. 개발팀 확인 후 전수 교체 or 유지 결정 필요. | 개발팀 MYDATA 스펙 확인 선행 필요 | 2026-06-29 |
+| **A3201 공통 이슈** | A3201을 입원일당 대리 지표로 사용하는 Rule: T01·T12·T19 (T06·T15·T16은 2026-06-29 제거). A3xxx는 담보코드 테이블상 후유장해 계열이나 실제 MYDATA 스펙 미확인. 개발팀 확인 후 전수 교체 or 유지 결정 필요. | 개발팀 MYDATA 스펙 확인 선행 필요 | 2026-06-29 |
 
 ---
 
@@ -52,6 +50,14 @@
 
 | 날짜 | 내용 | 진실원 파일 |
 |---|---|---|
+| 2026-06-29 | **T06·T15·T16 체인 전체 제거**: ① T06(갱신형 보험료 급등) — MYDATA에 갱신형/비갱신형 구분 담보코드 없어 직접 감지 불가. ② T15(자녀 건강보장 공백) — 마이데이터 사업자는 본인 계약만 조회, 자녀 보험 접근 구조적 불가. ③ T16(실손보험 노후화) — 실손 세대(1~4세대) 구분 담보코드 없음. 제거 범위 각 체인당: Risk-type·Rule·Concept·Policy 카드 + 전용 Evidence(EV017·EV020·EV025·EV032). 체인 23→20개, Risk-type 23→20장, Rule 23→20장, Concept 20→17장, Policy 19→16장, Evidence 33→29장. | `contents/html/01~05_*.html` |
+| 2026-06-29 | **데이터 기반 Rule·Evidence 재설계**: 심평원·금감원·보험개발원·국민건강보험공단·중앙치매센터·통계청·보험연구원(KIRI) 등 6개 도메인 전문 데이터 수집 후 교차 검증. ① RU-T06 나이 45→**40세** 하향(40대 진입 시 갱신보험료 3만→10만원 233% 폭등 실사례). ② RU-T17 나이 상한 80→**85세** 상향(85세 이상 치매 유병률 21.18%) + 하한 55→**50세** 하향(MCI→치매 전환율 10~15%). ③ Evidence 카드 6개 수치 최신화(EV007·008·013·015·024·025). ④ EV030~EV033 신규 4장 추가(암 5년 생존율·진단금-사망률 상관·갱신 실사례·건보 보장률). Evidence 총 29→**33장**. | `contents/html/03_rule.html`, `contents/html/01_evidence.html` |
+| 2026-06-29 | **Rule 카드 편집기 입력 벨리데이션 추가**: ① 나이 BETWEEN — step=1(정수 강제), from>to 역전 감지, 0~100 범위 체크, 실시간 오류 표시(빨간 테두리+메시지). ② 담보금액 MYDATA — type=text→number, min=0, 상한 없음(법정 상한 없음 확인 — 생명보험 단일담보 법정 상한 규정 없음), 실시간 단위 변환 레이블(억/만원). `validateAgeRange()`, `onCoverageInput()`, `formatCoverageLabel()` 함수 추가. | `mockups_v2/07_card-editor-rule.html` |
+| 2026-06-29 | **감지·매칭 정책 HTML 문서 신규 추가**: `policy/09_matching-policy.html` 생성. 개요(역할비교표)·매칭방식·인덱싱대상·실행구조(병렬흐름도)·결과처리규칙·미결항목 포함. `policy/00_index.html` 사이드바·그리드 카드 추가. | `policy/09_matching-policy.html`, `policy/00_index.html` |
+| 2026-06-29 | **Concept·Playbook 매칭 정책 확정**: 임베딩 의미 유사도 방식, Concept·Playbook 동시 병렬 검색, 각 최고점 1개 선택, KC 답변 + CTA 병렬 노출(additive). 임계값·모델·인덱스 업데이트 타이밍은 개발팀 미결. | `context/matching-policy.md` (신규) |
+| 2026-06-29 | **캔버스 UX 3건 개선**: ① 사이드바 "카드 연결"→"연결·테스트·배포" 전체 26개 파일 일괄 변경. ② 캔버스 필터 바 추가: 상태 필터(전체/라이브/승인완료) + 카드명·ID 검색 (`getFilteredPickerCards()`, `setStatusFilter()`, `onCanvasSearch()`). ③ Playbook 캔버스 제외: 피커 패널·그리드 컬럼 모두 제거(KC 체인과 독립, 캔버스 연결 불필요). | `mockups_v2/00_canvas-main.html`, `context/workflow.md` |
+| 2026-06-29 | **캔버스 테스트 모드 — RAG 결과 사전 설정 방식으로 변경**: 기존 인터랙티브(테스트 결과 내 버튼 클릭) → 사전 설정(설정 패널 "④ RAG 결과 설정" 토글 먼저 선택 후 실행). 기본값: 약관=결과있음, FAQ=결과없음. 약관=결과있음이면 FAQ 토글 비활성. `ragMockState` null 제거(항상 boolean). `buildRagPresetHTML()`, `setRagPreset()` 신규, `onRagResult()` 내부만 유지. | `mockups_v2/00_canvas-main.html`, `context/workflow.md` |
+| 2026-06-29 | **PROFILE 5번째 필드 추가 — 운전여부(drives)**: EQ 무관/유/무. RU-T14에 운전여부=유 필수 조건 추가 (오탐 방지). 10개 파일 전수 수정: context/card-types.md, CLAUDE.md, mockups_v2/ 6개(07_card-editor-rule / 12_coverage-code-table / 17_system-data-guide / 11_dry-run / 00_canvas-main / 13_answer-logic), contents/html/03_rule.html. commit 미정 (다음 세션 push 예정). | `context/card-types.md`, `contents/html/03_rule.html`, `CLAUDE.md`, `mockups_v2/` 6개 |
 | 2026-06-29 | **컨텐츠 업데이트 v1.4**: T20~T23 신규 4개 체인 추가 (후유장해·치과·상해 특화·골절), T14 Rule 담보코드 교체(A3001→A9607+A9604+A9605), 전수 감사(T01~T23) 완료. 체인 19→23개, 카드 112→132장. MD 6개+HTML 7개 업데이트. commit c0a44ee. | `contents/` 전체 |
 | 2026-06-29 | **T15 제거 결정**: 마이데이터 사업자는 본인 데이터만 조회 가능 — 자녀 보험 계약 데이터 접근 구조적 불가. "자녀 건강보장 공백" 감지는 개인화 오해 소지. 미결 항목 등록, 다음 컨텐츠 업데이트 세션에서 처리. | `context/decisions.md` (미결) |
 | 2026-06-29 | **RU-T16·A3201 이슈 식별**: RU-T16 — A3201 분류 불확실 + 입원일당=실손보험 논리 비약. A3201 공통 이슈 — T01·T06·T12·T16·T19 5개 Rule에서 입원일당 대리 지표 사용. 모두 개발팀 MYDATA 스펙 확인 후 처리. 미결 항목 등록. | `context/decisions.md` (미결) |

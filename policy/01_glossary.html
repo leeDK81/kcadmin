@@ -153,11 +153,11 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
     </div>
     <div class="term-row">
       <div class="term-name">프롬에이지 <span style="font-size:12px;color:var(--text-hint)">Promage</span></div>
-      <div class="term-def">개인 건강 위험도 분석 데이터. <strong>암위험도(23개) + 질병위험도(27개) = 50개 항목</strong> (optgroup 2개 구분). 생체나이·의료비예측 항목은 Rule 조건 빌더에서 사용 불가. 상담 시 자동 전달. Clark 앱 출력 시 위험/주의/양호 3단계 등급명만 표시(수치·percentile 노출 금지).</div>
+      <div class="term-def">개인 건강 위험도 분석 데이터. <strong>암위험도(23개) + 질병위험도(27개) = 50개 항목</strong> (flat 단일 select). 생체나이·의료비예측 항목은 Rule 조건 빌더에서 사용 불가. 상담 시 자동 전달. Clark 앱 출력 시 위험/주의/양호 3단계 등급명만 표시(수치·percentile 노출 금지).</div>
     </div>
     <div class="term-row">
       <div class="term-name">사용자 프로파일 <span style="font-size:12px;color:var(--text-hint)">User Profile</span></div>
-      <div class="term-def"><strong>나이·성별·결혼여부·자녀유무 4개 필드</strong>. 나이는 BETWEEN(시작세~종료세 범위), 나머지 3개는 EQ 조건. Rule 조건 빌더에서 직접 참조. 직업위험도·출산예정·거주지는 삭제됨.</div>
+      <div class="term-def"><strong>나이·성별·결혼여부·자녀유무·운전여부 5개 필드</strong>. 나이는 BETWEEN(시작세~종료세 범위), 나머지 4개는 EQ 조건. Rule 조건 빌더에서 직접 참조. 직업위험도·출산예정·거주지는 삭제됨. drives(운전여부 — 무관/유/무) 항목 추가됨.</div>
     </div>
   </div>
 

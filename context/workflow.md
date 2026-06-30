@@ -7,7 +7,7 @@
 
 ## 카드 라이프사이클 (2026-06-18 확정)
 
-**흐름:** 임시저장 → 승인요청 → **승인완료(캔버스 연결 가능)** → Dry-run → **라이브 전환** → KC Engine 반영
+**흐름:** 임시저장 → 승인요청 → **승인완료(캔버스 연결 가능)** → 사전 테스트 → **라이브 전환** → KC Engine 반영
 
 | 단계 | 상태 | 캔버스 연결 | KC Engine |
 |---|---|---|---|
@@ -18,7 +18,7 @@
 
 - 승인완료 카드 간 연결 = **준비 연결(pending edge)**: 캔버스에는 표시되지만 KC Engine에는 미반영
 - **라이브 전환** 시 pending edge → active edge: KC Engine에 즉시 반영
-- Dry-run(사전 테스트) 통과 후 "배포 요청"으로 라이브 전환
+- 사전 테스트 통과 후 "배포 요청"으로 라이브 전환
 
 **Playbook 예외:** Playbook은 approved 상태에서 캔버스 연결 없이 직접 "라이브 전환" 가능 (독립 체인).
 
@@ -35,11 +35,11 @@
 
 [카드 연결 — 캔버스에서 처리]
   → 카드 캔버스(00_canvas-main.html) 접근
-  → 피커 패널(상단 5컬럼)에서 포컬 카드 클릭
+  → 피커 패널(상단 4컬럼)에서 포컬 카드 클릭
   → 그리드(하단) "연결 가능" 섹션에서 "연결 추가" 버튼 클릭 → 확인 모달
 
 [검증]
-  → 사전 테스트 (드라이런: 11_dry-run.html)
+  → 사전 테스트 (11_dry-run.html)
 
 [라이브 전환]
   → "배포 요청": pending edge → active edge, KC Engine 즉시 반영
@@ -60,8 +60,13 @@
 
 ### 캔버스 화면 구조
 
-**상단 피커 패널 (204px 고정):** 5컬럼 카드 목록
-- 컬럼: CONCEPT / RISK-TYPE / RULE / EVIDENCE·POLICY (합침) / PLAYBOOK
+**필터 바 (툴바 바로 아래):**
+- 상태 필터 pill: 전체 / 라이브 / 승인완료 (기본: 전체)
+- 카드명·ID 검색 인풋 (`getFilteredPickerCards()`가 피커에 적용)
+
+**상단 피커 패널 (204px 고정):** 4컬럼 카드 목록
+- 컬럼: CONCEPT / RISK-TYPE / RULE / EVIDENCE·POLICY (합침)
+- **Playbook 제외** — KC 체인과 독립 동작, 캔버스 연결 불필요
 - active + approved + review 카드 표시 (draft 제외)
 - 카드 클릭 → 하단 그리드 갱신 (포컬 카드 지정)
 
@@ -69,7 +74,7 @@
 
 **하단 그리드 섹션 (flex-1):**
 - 선택 전: 빈 상태 안내 ("위에서 카드를 선택하세요")
-- 선택 후: 포컬 카드 기준 5컬럼 그리드
+- 선택 후: 포컬 카드 기준 4컬럼 그리드 (Playbook 제외)
   - **포컬 컬럼**: 선택된 카드 상세 (타입 배지, 상태 배지, 상세보기·편집 버튼)
   - **연결됨 섹션** (초록 헤더, `sh-connected`): `computeChain()` 반환 Set 내 카드
   - **연결 가능 섹션** (파란 헤더, `sh-available`): `findDirectTarget()` 성공한 미연결 카드 + "연결 추가" 버튼
@@ -81,6 +86,20 @@
 - `findDirectTarget(card, focalCard)`: CONNECT_RULES 기반 직접 연결 가능성만 체크 (체인 경유 금지)
 - `findChainEdge(cardId, chainSet, focalId)`: 포컬 카드 직접 엣지 우선 반환
 - `visibleCards = CARDS.filter(c => c.status !== 'draft')`: active + approved + review 표시
+- `getFilteredPickerCards()`: `ALL_PICKER_CARDS()`에 상태 필터(`canvasStatusFilter`) + 검색어(`canvasSearchQuery`) 적용
+- `setStatusFilter(val)`: 필터 pill 토글 후 `renderPicker()` 재호출
+- `onCanvasSearch(val)`: 검색어 업데이트 후 `renderPicker()` 재호출
+
+### 테스트 모드 — RAG 결과 사전 설정 (2026-06-29 확정)
+
+**흐름:** KC 조건 설정 → RAG 결과 사전 설정 → 테스트 실행 → 전체 답변 체인 즉시 확인
+
+- 설정 패널 "④ RAG 결과 설정" 섹션에서 약관 RAG / FAQ RAG 결과 사전 선택 (결과있음/결과없음 토글)
+- 기본값: 약관 RAG = 결과있음, FAQ RAG = 결과없음
+- 약관 RAG = 결과있음이면 FAQ 토글 비활성(dimmed) — 도달 불가 단계
+- "테스트 실행" 클릭 시 사전 설정값 기준으로 전체 체인(KC → 약관 → FAQ → LLM) 즉시 렌더
+- `ragMockState = {yakgwan: boolean, faq: boolean}` (null 없음)
+- `buildRagPresetHTML()`: 토글 UI 렌더 / `setRagPreset(type, val)`: 상태 갱신 + UI 재렌더
 
 ### 카드 상태 배지 (캔버스 내)
 
@@ -114,7 +133,7 @@
 - 편집기 내 연결 선택 UI 제거 → 등록 순서 의존성 없어짐
 - 각 카드는 순서 무관하게 등록·검수·승인 가능
 - **승인완료(approved) 상태부터 캔버스에서 연결 구성 가능** (라이브 전환 전 사전 연결 허용)
-- Dry-run 통과 후 라이브 전환 → KC Engine 반영
+- 사전 테스트 통과 후 라이브 전환 → KC Engine 반영
 
 ---
 
@@ -125,7 +144,7 @@
 - "카드 연결 현황" (10_chain-visualizer.html) 메뉴 **제거** — deprecated
 - **`<div class="nav-section">` 섹션 레이블 완전 제거** — `nav-divider`만 사용
 - **사이드바 순서 (2026-06-25 업데이트):**
-- 카드 라이브러리 그룹 (divider) → 검수·승인 → **카드 연결** → 시스템 설정 → FAQ Q&A (divider) → 참조 섹션
+- 카드 라이브러리 그룹 (divider) → 검수·승인 → **연결·테스트·배포** → 시스템 설정 → FAQ Q&A (divider) → 참조 섹션
 - "사전 테스트" 메뉴 완전 제거됨 (2026-06-25, 26개 파일 전수 반영)
 - 카드 연결은 승인된 카드만 연결 가능하므로 검수·승인 하단에 위치
 

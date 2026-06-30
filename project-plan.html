@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=1280">
+<title>KC 플랫폼 — 팀별 준비 체크리스트</title>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css" rel="stylesheet">
+<style>
+:root{
+  --ph1:#3A3A4A; --ph2:#1A4A9A; --ph3:#0F6E56; --ph4:#BA7517; --ph5:#9A1A1A;
+  --bg:#F5F5F6; --white:#fff; --border:#E2E2E4; --text:#171719; --sub:#70737C;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif;background:var(--bg);color:var(--text);min-width:1280px}
+
+.page-hd{background:#1A1A18;color:#fff;padding:20px 32px}
+.page-hd h1{font-size:20px;font-weight:700}
+.page-hd p{margin-top:5px;font-size:13px;color:#999;line-height:1.6}
+
+/* phase block */
+.phase{margin:24px 32px 0}
+.phase:last-child{margin-bottom:40px}
+
+.phase-hd{border-radius:8px 8px 0 0;padding:13px 20px;display:flex;align-items:baseline;gap:12px}
+.phase-hd h2{font-size:17px;font-weight:700;color:#fff}
+.phase-hd .dur{font-size:12px;color:rgba(255,255,255,.6);font-weight:400}
+.ph1 .phase-hd{background:var(--ph1)}
+.ph2 .phase-hd{background:var(--ph2)}
+.ph3 .phase-hd{background:var(--ph3)}
+.ph4 .phase-hd{background:var(--ph4)}
+.ph5 .phase-hd{background:var(--ph5)}
+
+.phase-body{background:var(--white);border:1px solid var(--border);border-top:none;border-radius:0 0 8px 8px;display:grid;grid-template-columns:1fr 300px;gap:0}
+
+/* team list */
+.team-list{padding:20px 24px;border-right:1px solid var(--border)}
+.team-row{display:grid;grid-template-columns:90px 1fr;gap:0;padding:10px 0;border-bottom:1px solid var(--border)}
+.team-row:last-child{border-bottom:none}
+.team-name{font-weight:700;font-size:13px;padding-top:1px;color:var(--text)}
+.team-name small{display:block;font-weight:400;font-size:11px;color:var(--sub);margin-top:1px}
+.tasks{font-size:13px;color:var(--text);line-height:1.7;padding-left:4px}
+.tasks ul{list-style:none}
+.tasks ul li{position:relative;padding-left:14px}
+.tasks ul li::before{content:'·';position:absolute;left:3px;color:#bbb}
+.buy{display:inline-block;margin-left:5px;padding:1px 6px;background:#FDE8C0;color:#7A4500;border-radius:3px;font-size:10px;font-weight:700;vertical-align:middle}
+.gate{display:inline-block;margin-left:5px;padding:1px 6px;background:#FFE0E0;color:#8A0000;border-radius:3px;font-size:10px;font-weight:700;vertical-align:middle}
+
+/* collab box */
+.collab-box{padding:20px;background:#F8F8FF}
+.collab-box h3{font-size:12px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.05em;margin-bottom:14px}
+.collab-item{margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--border)}
+.collab-item:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.collab-who{font-size:12px;font-weight:700;color:#1A3A6B;margin-bottom:4px}
+.collab-what{font-size:12px;color:var(--text);line-height:1.6}
+
+/* note box */
+.note{margin:16px 32px 0;background:#FFF9EC;border:1px solid #F0D870;border-radius:8px;padding:14px 20px;font-size:13px;color:#5A4000;line-height:1.8}
+.note strong{color:#3A2800}
+</style>
+</head>
+<body>
+
+<div class="page-hd">
+  <h1>KC 플랫폼 — 팀별 준비 체크리스트</h1>
+  <p>단계별로 각 팀이 준비해야 할 것과, 팀 간에 같이 앉아서 결정해야 할 것을 정리했습니다.<br>
+  세부 기술 사항은 각 팀 리드가 채워나가고, PM은 이 흐름을 기준으로 일정과 협업을 조율하세요.</p>
+</div>
+
+<!-- 주의 먼저 -->
+<div class="note">
+  <strong>⚠️ 사전준비 단계에서 가장 먼저 해야 할 것 2가지</strong><br>
+  1. <strong>보안 솔루션 발주</strong> (정보보호) — 서버에 설치할 보안 장비·소프트웨어는 구매 후 납품까지 4~8주 걸립니다. 프로젝트 시작과 동시에 발주해야 개발 서버 세팅 때 맞출 수 있습니다.<br>
+  2. <strong>마이데이터·약관 데이터 외부 계약</strong> (기획) — AI 엔진이 외부 데이터를 써야 하기 때문에, 계약이 늦어지면 개발팀 전체 일정이 밀립니다.
+</div>
+
+
+<!-- ① 사전준비 -->
+<div class="phase ph1">
+  <div class="phase-hd"><h2>① 사전준비</h2><span class="dur">프로젝트 시작 4주 전</span></div>
+  <div class="phase-body">
+    <div class="team-list">
+      <div class="team-row">
+        <div class="team-name">기획 / PO</div>
+        <div class="tasks"><ul>
+          <li>만들 것의 목적·범위 확정 (무엇을 Phase 1에 넣고 빼는지)</li>
+          <li>예산 계획 — 서버·보안 솔루션·AI API 비용 포함</li>
+          <li>외부 계약 착수 <span class="buy">발주</span> — 마이데이터, 약관 DB 데이터 제공사</li>
+          <li>준법감시인·도메인 검수자 실사용자 확보 (누가 쓸 건지 미리 확정)</li>
+        </ul></div>
+      </div>
+      <div class="team-row">
+        <div class="team-name">디자인</div>
+        <div class="tasks"><ul>
+          <li>유사 서비스 조사 및 화면 구조 방향 초안</li>
+          <li>디자인 스타일 방향 결정 (색상·폰트 등 큰 그림)</li>
+        </ul></div>
+      </div>
+      <div class="team-row">
+        <div class="team-name">FE<small>프론트엔드</small></div>
+        <div class="tasks"><ul>
+          <li>개발 기술 방향 검토 (어떤 프레임워크, 카드 연결 캔버스 구현 방식)</li>
+        </ul></div>
+      </div>
+      <div class="team-row">
+        <div class="team-name">BE<small>백엔드</small></div>
+        <div class="tasks"><ul>
+          <li>서버 구조 방향 검토</li>
+          <li>외부 데이터(마이데이터·약관 DB) 연동 방식 파악</li>
+        </ul></div>
+      </div>
+      <div class="team-row">
+        <div class="team-name">AI 개발</div>
+        <div class="tasks"><ul>
+          <li>AI 모델 후보 선정 및 비용 비교</li>
+          <li>KC 엔진 구조 방향 결정 (어떻게 카드를 읽어 답변을 만들 것인지)</li>
+        </ul></div>
+      </div>
+      <div class="team-row">
+        <div class="team-name">DevOps<small>서버·인프라</small></div>
+        <div class="tasks"><ul>
+          <li>서버 환경 결정 — 클라우드 vs 직접 구매 <span class="buy">발주</span></li>
+          <li>마이데이터 연동을 위한 망 분리 요건 파악</li>
+        </ul></div>
+      </div>
+      <div class="team-row">
+        <div class="team-name">정보보호</div>
+        <div class="tasks"><ul>
+          <li>마이데이터·금소법 보안 규제 요건 파악</li>
+          <li>필요한 보안 솔루션 선정 및 발주 <span class="buy">발주 급함</span> — 리드타임 4~8주</li>
+          <li>보안 인증 범위 결정 (ISMS 등)</li>
+        </ul></div>
+      </div>
+      <div class="team-row">
+        <div class="team-name">QA<small>품질보증</small></div>
+        <div class="tasks"><ul>
+          <li>전체 테스트 전략 수립 및 테스트 도구 결정</li>
+        </ul></div>
+      </div>
+    </div>
+    <div class="collab-box">
+      <h3>같이 해야 할 것</h3>
+      <div class="collab-item">
+        <div class="collab-who">DevOps + 정보보호</div>
+        <div class="collab-what">서버에 어떤 보안 솔루션을 설치할지 공동으로 결정하고 함께 발주</div>
+      </div>
+      <div class="collab-item">
+        <div class="collab-who">기획 + 정보보호</div>
+        <div class="collab-what">AI가 어디까지 답변할 수 있는지 금소법·마이데이터 규제 범위 확인</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ② 착수 -->
+<div class="phase ph2">
+  <div class="phase-hd"><h2>② 착수</h2><span class="dur">킥오프 후 2~3주</span></div>
+  <div class="phase-body">
+    <div class="team-list">
+      <div class="team-row">
+        <div class="team-name">기획 / PO</div>
+        <div class="tasks"><ul>
+          <li>요구사항 문서 완성 — 무엇을 만들 것인지 전 팀에 공유</li>
+          <li>전체 일정·마일스톤 확정, 킥오프 미팅 주관</li>
+        </ul></div>
+      </div>
+      <div class="team-row">
+        <div class="team-name">디자인</div>
+        <div class="tasks"><ul>
+          <li>디자인 시스템 구축 — 색상·글꼴·공통 버튼·배지 등 규격 확정</li>
+          <li>핵심 화면 와이어프레임 (카드 연결 캔버스, 카드 편집기, 검수 화면)</li>
+        </ul></div>
+      </div>
+      <div class="team-row">
+        <div class="team-name">FE</div>
+        <div class="tasks"><ul>
+          <li>개발 환경 세팅 (DevOps 개발 서버 완료 후 가능)</li>
+          <li>디자인팀 규격 기반으로 공통 컴포넌트 구조 설계</li>
+        </ul></div>
+      </div>
+      <div class="team-row">
+        <div class="team-name">BE</div>
+        <div class="tasks"><ul>
+          <li>데이터베이스 구조 설계 <span class="gate">핵심 선행 조건</span> — FE·AI팀 개발 착수 전 확정 필요</li>
+          <li>API 명세 작성 후 FE·AI팀에 공유</li>
+        </ul></div>
+      </div>
+      <div class="team-row">
+        <div class="team-name">AI 개발</div>
+        <div class="tasks"><ul>
+          <li>KC 엔진 설계 문서 완성 — 질의 처리 흐름, 답변 생성 방식</li>
+          <li>학습 데이터 수집 및 정리 시작</li>
+        </ul></div>
+      </div>
+      <div class="team-row">
+        <div class="team-name">DevOps</div>
+        <div class="tasks"><ul>
+          <li>개발 서버 구축 <span class="gate">FE·BE 착수 선행 조건</span></li>
+          <li>자동 배포 파이프라인 설계·구축 시작</li>
+        </ul></div>
+      </div>
+      <div class="team-row">
+        <div class="team-name">정보보호</div>
+        <div class="tasks"><ul>
+          <li>개인정보 처리방침 초안 작성</li>
+          <li>개발팀에 보안 가이드라인 공유 (무엇을 하면 안 되는지)</li>
+        </ul></div>
+      </div>
+      <div class="team-row">
+        <div class="team-name">QA</div>
+        <div class="tasks"><ul>
+          <li>테스트 계획 수립 및 테스트 케이스 초안 작성 시작</li>
+        </ul></div>
+      </div>
+    </div>
+    <div class="collab-box">
+      <h3>같이 해야 할 것</h3>
+      <div class="collab-item">
+        <div class="collab-who">DevOps + 정보보호</div>
+        <div class="collab-what">개발 서버 세팅 시 보안 솔루션 함께 설치<br><small>(WAF·취약점 스캐너 등 — 발주한 것 설치)</small></div>
+      </div>
+      <div class="collab-item">
+        <div class="collab-who">BE + FE + AI 개발</div>
+        <div class="collab-what">API 명세를 함께 확정한 뒤 각자 개발 착수 — 이 합의 없이 먼저 개발하면 나중에 다 바꿔야 함</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ③ 진행 -->
+<div class="phase ph3">
+  <div class="phase-hd"><h2>③ 진행</h2><span class="dur">개발 기간 12~16주</span></div>
+  <div class="phase-body">
+    <div class="team-list">
+      <div class="team-row">
+        <div class="team-name">기획 / PO</div>
+        <div class="tasks"><ul>
+          <li>2주 단위 스프린트 운영 — 무엇을 이번 주에 완성할지 조율</li>
+          <li>중간에 요구사항이 바뀌면 범위·일정 영향 즉시 공유</li>
+        </ul></div>
+      </div>
+      <div class="team-row">
+        <div class="team-name">디자인</div>
+        <div class="tasks"><ul>
+          <li>전체 26개 화면 디자인 완성 및 개발팀에 순차 전달</li>
+          <li>개발팀 구현 결과 주기적으로 확인하고 피드백</li>
+        </ul></div>
+      </div>
+      <div class="team-row">
+        <div class="team-name">FE</div>
+        <div class="tasks"><ul>
+          <li>6종 카드 편집 화면, 카드 연결 캔버스, 검수·승인 화면 개발</li>
+          <li>역할에 따라 다르게 보이는 버튼·메뉴 제어</li>
+        </ul></div>
+      </div>
+      <div class="team-row">
+        <div class="team-name">BE</div>
+        <div class="tasks"><ul>
+          <li>카드 저장·수정·조회 API, 승인 워크플로우 개발</li>
+          <li>마이데이터·약관 DB 외부 데이터 연동 개발</li>
+        </ul></div>
+      </div>
+      <div class="team-row">
+        <div class="team-name">AI 개발</div>
+        <div class="tasks"><ul>
+          <li>KC 엔진 개발 — 사용자 질문 → 카드 매칭 → 답변 생성 전체 흐름</li>
+          <li>LLM 연동 및 면책 고지 자동 삽입, 사전 테스트 도구 개발</li>
+        </ul></div>
+      </div>
+      <div class="team-row">
+        <div class="team-name">DevOps</div>
+        <div class="tasks"><ul>
+          <li>스테이징(검증용) 서버 구축, 배포 자동화 완성</li>
+          <li>로그·모니터링 설정</li>
+        </ul></div>
+      </div>
+      <div class="team-row">
+        <div class="team-name">정보보호</div>
+        <div class="tasks"><ul>
+          <li>스프린트마다 개발 코드 보안 점검</li>
+          <li>외부로 나가는 데이터 암호화 구간 검증</li>
+        </ul></div>
+      </div>
+      <div class="team-row">
+        <div class="team-name">QA</div>
+        <div class="tasks"><ul>
+          <li>테스트 케이스 전체 작성 완성</li>
+          <li>스프린트 데모마다 참여해 검수</li>
+        </ul></div>
+      </div>
+    </div>
+    <div class="collab-box">
+      <h3>같이 해야 할 것</h3>
+      <div class="collab-item">
+        <div class="collab-who">DevOps + 정보보호</div>
+        <div class="collab-what">스테이징 서버에 보안 솔루션 설치 및 보안 설정 적용</div>
+      </div>
+      <div class="collab-item">
+        <div class="collab-who">FE + 디자인</div>
+        <div class="collab-what">매주 구현된 화면을 디자인팀이 확인·피드백 (늦게 할수록 수정 공수 증가)</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ④ 테스트 -->
+<div class="phase ph4">
+  <div class="phase-hd"><h2>④ 테스트</h2><span class="dur">4~6주</span></div>
+  <div class="phase-body">
+    <div class="team-list">
+      <div class="team-row">
+        <div class="team-name">기획 / PO</div>
+        <div class="tasks"><ul>
+          <li>실사용자 테스트(UAT) 시나리오 준비</li>
+          <li>검수자·준법감시인 UAT 참여 일정 조율</li>
+          <li>오픈 전 최종 확인 목록 작성</li>
+        </ul></div>
+      </div>
+      <div class="team-row">
+        <div class="team-name">디자인</div>
+        <div class="tasks"><ul>
+          <li>전체 화면 최종 디자인 검수 (픽셀 단위)</li>
+        </ul></div>
+      </div>
+      <div class="team-row">
+        <div class="team-name">FE</div>
+        <div class="tasks"><ul>
+          <li>발견된 버그 수정, 느린 화면 성능 개선</li>
+        </ul></div>
+      </div>
+      <div class="team-row">
+        <div class="team-name">BE</div>
+        <div class="tasks"><ul>
+          <li>API 부하 테스트 — 동시 접속자 많을 때도 버티는지</li>
+          <li>버그 수정, 데이터 이전 스크립트 검증</li>
+        </ul></div>
+      </div>
+      <div class="team-row">
+        <div class="team-name">AI 개발</div>
+        <div class="tasks"><ul>
+          <li>AI 답변 품질 평가 및 튜닝</li>
+          <li>예외 상황(케이스 미매칭·Fallback) 전수 점검</li>
+        </ul></div>
+      </div>
+      <div class="team-row">
+        <div class="team-name">DevOps</div>
+        <div class="tasks"><ul>
+          <li>프로덕션(실 서비스) 서버 구축</li>
+          <li>서버 장애 발생 시 복구 시나리오 테스트</li>
+        </ul></div>
+      </div>
+      <div class="team-row">
+        <div class="team-name">정보보호</div>
+        <div class="tasks"><ul>
+          <li>외부 침투 테스트 실시 (전문 업체 진행) <span class="buy">용역</span></li>
+          <li>보안 취약점 보고서 작성 및 개인정보 영향평가 완료</li>
+        </ul></div>
+      </div>
+      <div class="team-row">
+        <div class="team-name">QA</div>
+        <div class="tasks"><ul>
+          <li>전체 기능 통합 테스트 (시나리오 기반 E2E)</li>
+          <li>성능·부하 테스트, UAT 진행 및 이슈 관리</li>
+        </ul></div>
+      </div>
+    </div>
+    <div class="collab-box">
+      <h3>같이 해야 할 것</h3>
+      <div class="collab-item">
+        <div class="collab-who">DevOps + 정보보호</div>
+        <div class="collab-what">프로덕션 서버에 보안 솔루션 최종 설치·검증 — 오픈 전 마지막 보안 설정</div>
+      </div>
+      <div class="collab-item">
+        <div class="collab-who">QA + AI 개발</div>
+        <div class="collab-what">AI 답변 품질 공동 검증 — QA가 시나리오를 돌리고 AI팀이 결과를 판단</div>
+      </div>
+      <div class="collab-item">
+        <div class="collab-who">기획 + 실사용자</div>
+        <div class="collab-what">UAT — 운영자·검수자·준법감시인이 직접 써보고 문제 제기</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ⑤ 오픈 -->
+<div class="phase ph5">
+  <div class="phase-hd"><h2>⑤ 오픈</h2><span class="dur">1~2주</span></div>
+  <div class="phase-body">
+    <div class="team-list">
+      <div class="team-row">
+        <div class="team-name">기획 / PO</div>
+        <div class="tasks"><ul>
+          <li>전 팀 오픈 최종 서명 수집</li>
+          <li>실사용자 교육 진행 (운영자·검수자·준법감시인)</li>
+          <li>운영팀 인수인계 — 오픈 이후 누가 관리할지</li>
+        </ul></div>
+      </div>
+      <div class="team-row">
+        <div class="team-name">디자인</div>
+        <div class="tasks"><ul>
+          <li>프로덕션 최종 화면 확인</li>
+        </ul></div>
+      </div>
+      <div class="team-row">
+        <div class="team-name">FE</div>
+        <div class="tasks"><ul>
+          <li>프로덕션 최종 배포, 오픈 직후 오류 모니터링</li>
+        </ul></div>
+      </div>
+      <div class="team-row">
+        <div class="team-name">BE</div>
+        <div class="tasks"><ul>
+          <li>프로덕션 배포 및 데이터 이전</li>
+          <li>오픈 직후 API 응답 모니터링</li>
+        </ul></div>
+      </div>
+      <div class="team-row">
+        <div class="team-name">AI 개발</div>
+        <div class="tasks"><ul>
+          <li>KC 엔진 프로덕션 배포, Clark AI 연동 최종 확인</li>
+        </ul></div>
+      </div>
+      <div class="team-row">
+        <div class="team-name">DevOps</div>
+        <div class="tasks"><ul>
+          <li>프로덕션 배포 실행, 모니터링 대시보드 가동</li>
+          <li>문제 시 즉시 롤백 준비 (이전 버전으로 되돌리기)</li>
+        </ul></div>
+      </div>
+      <div class="team-row">
+        <div class="team-name">정보보호</div>
+        <div class="tasks"><ul>
+          <li><strong>최종 보안 오픈 승인</strong> <span class="gate">이 서명 없으면 오픈 불가</span></li>
+          <li>개인정보 처리방침 게시</li>
+        </ul></div>
+      </div>
+      <div class="team-row">
+        <div class="team-name">QA</div>
+        <div class="tasks"><ul>
+          <li>프로덕션 최종 확인 (스모크 테스트)</li>
+          <li>오픈 후 48시간 집중 모니터링</li>
+        </ul></div>
+      </div>
+    </div>
+    <div class="collab-box">
+      <h3>같이 해야 할 것</h3>
+      <div class="collab-item">
+        <div class="collab-who">DevOps + 정보보호</div>
+        <div class="collab-what">프로덕션 보안 최종 확인 및 Sign-off<br>오픈 당일 보안 이벤트 공동 모니터링</div>
+      </div>
+      <div class="collab-item">
+        <div class="collab-who">기획 — 오픈 게이트</div>
+        <div class="collab-what">정보보호·QA·DevOps 세 팀 모두 "이상 없음" 확인 후에만 오픈 진행</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

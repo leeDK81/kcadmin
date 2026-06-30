@@ -1,0 +1,2430 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>보닥 플랫폼사업본부 전략 브리핑 2026.03</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Bebas+Neue&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0e1a;
+  --surface: #111827;
+  --surface2: #1a2235;
+  --border: rgba(255,255,255,0.08);
+  --accent: #00c8ff;
+  --accent2: #7b61ff;
+  --accent3: #00e5a0;
+  --accent4: #ff6b6b;
+  --text: #e8edf5;
+  --text-muted: #7a8499;
+  --text-dim: #4a556a;
+  --gold: #f0c060;
+  --radius: 12px;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+/* NAV */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  background: rgba(10,14,26,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 40px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px;
+  letter-spacing: 3px;
+  color: var(--accent);
+}
+
+.nav-links {
+  display: flex;
+  gap: 4px;
+  list-style: none;
+}
+
+.nav-links a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  transition: all 0.2s;
+}
+
+.nav-links a:hover {
+  color: var(--accent);
+  background: rgba(0,200,255,0.08);
+}
+
+/* SECTIONS */
+section {
+  min-height: 100vh;
+  padding: 100px 60px 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+section:nth-child(even) { background: var(--surface); }
+
+/* HERO */
+#hero {
+  background: var(--bg);
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 140px;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0,200,255,0.1);
+  border: 1px solid rgba(0,200,255,0.3);
+  border-radius: 20px;
+  padding: 6px 16px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 32px;
+}
+
+.hero-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(52px, 7vw, 96px);
+  line-height: 0.95;
+  letter-spacing: 2px;
+  margin-bottom: 24px;
+}
+
+.hero-title span { color: var(--accent); }
+
+.hero-sub {
+  font-size: 18px;
+  font-weight: 300;
+  color: var(--text-muted);
+  max-width: 560px;
+  line-height: 1.7;
+  margin-bottom: 48px;
+}
+
+.hero-meta {
+  display: flex;
+  gap: 40px;
+}
+
+.hero-meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.hero-meta-label {
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+
+.hero-meta-value {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.hero-bg-lines {
+  position: absolute;
+  right: 0; top: 0; bottom: 0;
+  width: 50%;
+  opacity: 0.04;
+  background-image: repeating-linear-gradient(
+    90deg,
+    white 0px, white 1px,
+    transparent 1px, transparent 60px
+  ),
+  repeating-linear-gradient(
+    0deg,
+    white 0px, white 1px,
+    transparent 1px, transparent 60px
+  );
+}
+
+/* SECTION HEADERS */
+.section-tag {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.section-tag::before {
+  content: '';
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--accent);
+}
+
+.section-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(36px, 4vw, 56px);
+  letter-spacing: 2px;
+  line-height: 1.1;
+  margin-bottom: 12px;
+}
+
+.section-desc {
+  font-size: 15px;
+  color: var(--text-muted);
+  max-width: 640px;
+  line-height: 1.7;
+  margin-bottom: 56px;
+}
+
+/* ===== SECTION 1: 사업 개요 ===== */
+.biz-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  max-width: 1100px;
+}
+
+.biz-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 32px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.3s, transform 0.3s;
+}
+
+.biz-card:hover {
+  border-color: rgba(0,200,255,0.3);
+  transform: translateY(-3px);
+}
+
+.biz-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+}
+
+.biz-card:nth-child(1)::before { background: var(--accent); }
+.biz-card:nth-child(2)::before { background: var(--accent2); }
+.biz-card:nth-child(3)::before { background: var(--accent3); }
+.biz-card:nth-child(4)::before { background: var(--gold); }
+
+.biz-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 42px;
+  color: var(--border);
+  line-height: 1;
+  margin-bottom: 16px;
+  letter-spacing: 2px;
+}
+
+.biz-card:nth-child(1) .biz-num { color: rgba(0,200,255,0.15); }
+.biz-card:nth-child(2) .biz-num { color: rgba(123,97,255,0.15); }
+.biz-card:nth-child(3) .biz-num { color: rgba(0,229,160,0.15); }
+.biz-card:nth-child(4) .biz-num { color: rgba(240,192,96,0.15); }
+
+.biz-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: var(--text);
+}
+
+.biz-desc {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.8;
+}
+
+.tag-pill {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-top: 16px;
+}
+
+.tag-pill.blue { background: rgba(0,200,255,0.12); color: var(--accent); }
+.tag-pill.purple { background: rgba(123,97,255,0.12); color: var(--accent2); }
+.tag-pill.green { background: rgba(0,229,160,0.12); color: var(--accent3); }
+.tag-pill.gold { background: rgba(240,192,96,0.12); color: var(--gold); }
+
+/* ===== SECTION 2: 플랫폼 구조 ===== */
+.arch-container {
+  max-width: 1100px;
+}
+
+.arch-flow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  position: relative;
+  margin-bottom: 48px;
+}
+
+.arch-flow::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 12%;
+  right: 12%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3), var(--gold));
+  transform: translateY(-50%);
+  z-index: 0;
+}
+
+.arch-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+  padding: 0 16px;
+}
+
+.arch-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  margin-bottom: 20px;
+  border: 2px solid;
+  background: var(--bg);
+}
+
+.arch-step:nth-child(1) .arch-icon { border-color: var(--accent); color: var(--accent); }
+.arch-step:nth-child(2) .arch-icon { border-color: var(--accent2); color: var(--accent2); }
+.arch-step:nth-child(3) .arch-icon { border-color: var(--accent3); color: var(--accent3); }
+.arch-step:nth-child(4) .arch-icon { border-color: var(--gold); color: var(--gold); }
+
+.arch-label {
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
+}
+
+.arch-detail {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-align: center;
+  line-height: 1.6;
+}
+
+.channel-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.channel-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.channel-icon-box {
+  width: 52px;
+  height: 52px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.channel-icon-box.app { background: rgba(0,200,255,0.1); }
+.channel-icon-box.web { background: rgba(123,97,255,0.1); }
+
+.channel-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.channel-label.app { color: var(--accent); }
+.channel-label.web { color: var(--accent2); }
+
+.channel-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.channel-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.7;
+  margin-bottom: 16px;
+}
+
+.mini-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mini-flow-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: var(--text-muted);
+  padding: 5px 10px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 6px;
+}
+
+.mini-flow-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.mini-flow-dot.blue { background: var(--accent); }
+.mini-flow-dot.purple { background: var(--accent2); }
+.mini-flow-arrow {
+  font-size: 10px;
+  color: var(--text-dim);
+  padding-left: 8px;
+}
+
+/* ===== SECTION 3: 리드 전략 ===== */
+.lead-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  max-width: 1100px;
+}
+
+.pricing-table {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.pricing-table-header {
+  background: rgba(0,200,255,0.06);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 24px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  padding: 12px 16px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  text-align: left;
+  background: rgba(255,255,255,0.02);
+  border-bottom: 1px solid var(--border);
+}
+
+td {
+  padding: 13px 16px;
+  font-size: 12px;
+  color: var(--text-muted);
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+tr:last-child td { border-bottom: none; }
+
+td.highlight { color: var(--text); font-weight: 600; }
+td.price { font-family: 'Space Mono', monospace; color: var(--accent); }
+td.price-muted { font-family: 'Space Mono', monospace; color: var(--text-muted); }
+
+.badge-premium {
+  display: inline-block;
+  padding: 2px 8px;
+  background: rgba(240,192,96,0.12);
+  color: var(--gold);
+  border-radius: 4px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.badge-mid {
+  display: inline-block;
+  padding: 2px 8px;
+  background: rgba(0,229,160,0.1);
+  color: var(--accent3);
+  border-radius: 4px;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.badge-low {
+  display: inline-block;
+  padding: 2px 8px;
+  background: rgba(255,255,255,0.05);
+  color: var(--text-dim);
+  border-radius: 4px;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.routing-diagram {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+}
+
+.routing-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent2);
+  margin-bottom: 24px;
+}
+
+.routing-tree {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.routing-center {
+  background: rgba(0,200,255,0.08);
+  border: 1px solid rgba(0,200,255,0.2);
+  border-radius: 8px;
+  padding: 14px 20px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+
+.routing-branches {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  position: relative;
+  padding-top: 20px;
+}
+
+.routing-branches::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 16.7%;
+  right: 16.7%;
+  height: 1px;
+  background: var(--border);
+}
+
+.routing-branches::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  height: 20px;
+  width: 1px;
+  background: var(--border);
+  transform: translateX(-50%);
+}
+
+.routing-branch {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px;
+  text-align: center;
+  position: relative;
+}
+
+.routing-branch::before {
+  content: '';
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  height: 20px;
+  width: 1px;
+  background: var(--border);
+  transform: translateX(-50%);
+}
+
+.routing-branch-icon { font-size: 20px; margin-bottom: 6px; }
+.routing-branch-label {
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+.routing-branch-dest {
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.branch-col1 .routing-branch-dest { color: var(--accent); }
+.branch-col2 .routing-branch-dest { color: var(--accent2); }
+.branch-col3 .routing-branch-dest { color: var(--accent3); }
+
+/* ===== SECTION 4: First Connect ===== */
+.fc-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr;
+  gap: 32px;
+  max-width: 1100px;
+}
+
+.moq-model {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+}
+
+.moq-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent3);
+  margin-bottom: 20px;
+}
+
+.moq-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.moq-node {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.moq-node:last-child { border-bottom: none; }
+
+.moq-dot {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.moq-dot.a { background: rgba(0,229,160,0.15); color: var(--accent3); }
+.moq-dot.b { background: rgba(255,107,107,0.15); color: var(--accent4); }
+
+.moq-text-title {
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.moq-text-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.moq-highlight {
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  color: var(--accent3);
+  margin-top: 4px;
+}
+
+.fc-features {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+}
+
+.fc-features-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 20px;
+}
+
+.fc-feature-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.fc-feature-item {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.fc-feature-icon { font-size: 20px; margin-bottom: 8px; }
+.fc-feature-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.fc-feature-desc {
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+/* ===== SECTION 5: Clark ===== */
+.clark-layout {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 32px;
+  max-width: 1100px;
+}
+
+.clark-persona {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 32px;
+  position: relative;
+  overflow: hidden;
+}
+
+.clark-persona::before {
+  content: '';
+  position: absolute;
+  top: -60px; right: -60px;
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(0,200,255,0.08), transparent 70%);
+  border-radius: 50%;
+}
+
+.clark-avatar {
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(0,200,255,0.2), rgba(123,97,255,0.2));
+  border: 2px solid rgba(0,200,255,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  margin-bottom: 20px;
+}
+
+.clark-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 40px;
+  letter-spacing: 4px;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+
+.clark-tagline {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 24px;
+  font-style: italic;
+}
+
+.clark-props {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.clark-prop {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.clark-prop-icon {
+  width: 28px; height: 28px;
+  border-radius: 6px;
+  background: rgba(0,200,255,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.clark-prop-text {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.clark-prop-text strong { color: var(--text); }
+
+.clark-role-box {
+  background: rgba(0,200,255,0.06);
+  border: 1px solid rgba(0,200,255,0.15);
+  border-radius: 8px;
+  padding: 16px 20px;
+}
+
+.clark-role-title {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.clark-role-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.clark-role-item {
+  font-size: 12px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.clark-role-item::before {
+  content: '→';
+  color: var(--accent);
+  font-size: 11px;
+}
+
+.clark-right { display: flex; flex-direction: column; gap: 20px; }
+
+.clark-ux-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+}
+
+.clark-ux-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--accent2);
+  margin-bottom: 16px;
+}
+
+.ux-compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.ux-item {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px;
+}
+
+.ux-item-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.ux-item.bad .ux-item-label { color: var(--accent4); }
+.ux-item.good .ux-item-label { color: var(--accent3); }
+
+.ux-bubble {
+  background: rgba(255,255,255,0.04);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  font-style: italic;
+}
+
+.ux-item.bad .ux-bubble { border-left: 2px solid var(--accent4); }
+.ux-item.good .ux-bubble { border-left: 2px solid var(--accent3); }
+
+.clark-journey {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+}
+
+.clark-journey-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--accent3);
+  margin-bottom: 16px;
+}
+
+.journey-steps {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 4px;
+  align-items: center;
+}
+
+.journey-step {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 8px;
+  text-align: center;
+}
+
+.journey-step-icon { font-size: 18px; margin-bottom: 4px; }
+.journey-step-label {
+  font-size: 10px;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.journey-arrow {
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 14px;
+}
+
+/* ===== SECTION 6: RAG ===== */
+.rag-layout {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 32px;
+  max-width: 1100px;
+}
+
+.rag-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.rag-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px;
+  transition: border-color 0.2s;
+}
+
+.rag-card:hover { border-color: rgba(123,97,255,0.3); }
+
+.rag-card-type {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 4px;
+  display: inline-block;
+  margin-bottom: 10px;
+}
+
+.rag-card:nth-child(1) .rag-card-type { background: rgba(0,200,255,0.1); color: var(--accent); }
+.rag-card:nth-child(2) .rag-card-type { background: rgba(123,97,255,0.1); color: var(--accent2); }
+.rag-card:nth-child(3) .rag-card-type { background: rgba(0,229,160,0.1); color: var(--accent3); }
+.rag-card:nth-child(4) .rag-card-type { background: rgba(240,192,96,0.1); color: var(--gold); }
+.rag-card:nth-child(5) .rag-card-type { background: rgba(255,107,107,0.1); color: var(--accent4); }
+.rag-card:nth-child(6) .rag-card-type { background: rgba(255,255,255,0.08); color: var(--text-muted); }
+
+.rag-card-name {
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.rag-card-desc {
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.rag-flow-box {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+}
+
+.rag-flow-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent2);
+  margin-bottom: 24px;
+}
+
+.rag-pipeline {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.rag-pipe-step {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.rag-pipe-step:hover { background: rgba(123,97,255,0.06); }
+
+.rag-pipe-num {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: rgba(123,97,255,0.15);
+  color: var(--accent2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: 'Space Mono', monospace;
+  flex-shrink: 0;
+}
+
+.rag-pipe-text {
+  font-size: 13px;
+  color: var(--text);
+}
+
+.rag-pipe-text span {
+  font-size: 11px;
+  color: var(--text-muted);
+  display: block;
+  margin-top: 2px;
+}
+
+.rag-pipe-tag {
+  margin-left: auto;
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  color: var(--accent2);
+  background: rgba(123,97,255,0.1);
+  padding: 2px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+/* ===== SECTION 7: Clark 플랫폼 확장 ===== */
+.expand-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  max-width: 1100px;
+}
+
+.platform-model {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+}
+
+.platform-model-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 20px;
+}
+
+.platform-layers {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.platform-layer {
+  border-radius: 8px;
+  padding: 16px 20px;
+  border: 1px solid;
+}
+
+.platform-layer.conv { background: rgba(0,200,255,0.06); border-color: rgba(0,200,255,0.2); }
+.platform-layer.intel { background: rgba(123,97,255,0.06); border-color: rgba(123,97,255,0.2); }
+.platform-layer.dist { background: rgba(0,229,160,0.06); border-color: rgba(0,229,160,0.2); }
+
+.platform-layer-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.platform-layer.conv .platform-layer-label { color: var(--accent); }
+.platform-layer.intel .platform-layer-label { color: var(--accent2); }
+.platform-layer.dist .platform-layer-label { color: var(--accent3); }
+
+.platform-layer-title {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.platform-layer-items {
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.8;
+}
+
+.brand-strategy {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+}
+
+.brand-strategy-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent4);
+  margin-bottom: 20px;
+}
+
+.brand-compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.brand-col {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.brand-col-title {
+  font-size: 11px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.brand-col:nth-child(1) .brand-col-title { color: var(--accent); }
+.brand-col:nth-child(2) .brand-col-title { color: var(--text-muted); }
+
+.brand-item {
+  font-size: 11px;
+  color: var(--text-muted);
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.brand-item:last-child { border-bottom: none; }
+.brand-item .dot { width: 4px; height: 4px; border-radius: 50%; background: var(--text-dim); flex-shrink: 0; }
+
+.recommended-box {
+  background: rgba(0,229,160,0.06);
+  border: 1px solid rgba(0,229,160,0.2);
+  border-radius: 8px;
+  padding: 16px 20px;
+}
+
+.recommended-title {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent3);
+  margin-bottom: 10px;
+}
+
+.recommended-table {
+  width: 100%;
+}
+
+.recommended-table td {
+  padding: 6px 10px;
+  font-size: 11px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.recommended-table td:first-child { color: var(--text-muted); }
+.recommended-table td:last-child { color: var(--text); font-weight: 600; }
+
+/* ===== SECTION 8: KPI ===== */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  max-width: 1100px;
+  margin-bottom: 40px;
+}
+
+.kpi-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.kpi-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 3px;
+}
+
+.kpi-card:nth-child(1)::after { background: var(--accent); }
+.kpi-card:nth-child(2)::after { background: var(--accent2); }
+.kpi-card:nth-child(3)::after { background: var(--accent3); }
+.kpi-card:nth-child(4)::after { background: var(--gold); }
+
+.kpi-icon { font-size: 28px; margin-bottom: 12px; }
+
+.kpi-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+  line-height: 1.4;
+}
+
+.kpi-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.roadmap {
+  max-width: 1100px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 32px;
+}
+
+.roadmap-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 28px;
+}
+
+.roadmap-track {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  position: relative;
+}
+
+.roadmap-track::before {
+  content: '';
+  position: absolute;
+  top: 22px; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3));
+}
+
+.roadmap-phase {
+  padding: 0 20px;
+  position: relative;
+}
+
+.roadmap-dot {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
+  background: var(--surface);
+  border: 2px solid;
+}
+
+.roadmap-phase:nth-child(1) .roadmap-dot { border-color: var(--accent); }
+.roadmap-phase:nth-child(2) .roadmap-dot { border-color: var(--accent2); }
+.roadmap-phase:nth-child(3) .roadmap-dot { border-color: var(--accent3); }
+
+.roadmap-period {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.roadmap-phase:nth-child(1) .roadmap-period { color: var(--accent); }
+.roadmap-phase:nth-child(2) .roadmap-period { color: var(--accent2); }
+.roadmap-phase:nth-child(3) .roadmap-period { color: var(--accent3); }
+
+.roadmap-name {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.roadmap-items {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.roadmap-items li {
+  font-size: 12px;
+  color: var(--text-muted);
+  padding-left: 14px;
+  position: relative;
+  line-height: 1.5;
+}
+
+.roadmap-items li::before {
+  content: '·';
+  position: absolute;
+  left: 0;
+  color: var(--text-dim);
+}
+
+/* FOOTER */
+footer {
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  padding: 40px 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 18px;
+  letter-spacing: 3px;
+  color: var(--text-dim);
+}
+
+.footer-note {
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+/* ANIMATIONS */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate {
+  opacity: 0;
+  animation: fadeUp 0.6s ease forwards;
+}
+
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.2s; }
+.delay-3 { animation-delay: 0.3s; }
+.delay-4 { animation-delay: 0.4s; }
+.delay-5 { animation-delay: 0.5s; }
+
+/* DIVIDER */
+.section-divider {
+  width: 100%;
+  height: 1px;
+  background: var(--border);
+  margin: 40px 0;
+  max-width: 1100px;
+}
+
+/* CALLOUT */
+.callout {
+  border-left: 3px solid var(--accent);
+  background: rgba(0,200,255,0.05);
+  padding: 16px 20px;
+  border-radius: 0 8px 8px 0;
+  margin-top: 24px;
+  max-width: 1100px;
+}
+
+.callout-text {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+.callout-text strong { color: var(--accent); }
+
+/* CORRECTION BANNER */
+.correction-banner {
+  background: rgba(240,192,96,0.06);
+  border: 1px solid rgba(240,192,96,0.2);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  margin-bottom: 32px;
+  max-width: 1100px;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.correction-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+
+.correction-body {}
+
+.correction-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 6px;
+}
+
+.correction-text {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+.correction-text strong { color: var(--text); }
+
+/* TWO COLUMN */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  max-width: 1100px;
+}
+
+/* scroll indicator */
+.scroll-hint {
+  position: absolute;
+  bottom: 32px;
+  left: 60px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-dim);
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(4px); }
+}
+
+.scroll-line {
+  width: 24px;
+  height: 1px;
+  background: var(--text-dim);
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">BODOC</div>
+  <ul class="nav-links">
+    <li><a href="#overview">사업 개요</a></li>
+    <li><a href="#platform">플랫폼 구조</a></li>
+    <li><a href="#lead">리드 전략</a></li>
+    <li><a href="#firstconnect">First Connect</a></li>
+    <li><a href="#clark">Clark</a></li>
+    <li><a href="#rag">지식 체계</a></li>
+    <li><a href="#expansion">확장 전략</a></li>
+    <li><a href="#roadmap">로드맵</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg-lines"></div>
+  <div class="hero-badge animate">📋 플랫폼사업본부 전략 브리핑</div>
+  <h1 class="hero-title animate delay-1">
+    BODOC<br><span>PLATFORM</span><br>STRATEGY
+  </h1>
+  <p class="hero-sub animate delay-2">
+    보험 리드 플랫폼을 넘어, Insurance AI Stack으로.<br>
+    리스크 엔진 · AI 상담 · 리드 유통의 3축 전략과<br>
+    Clark 독립 플랫폼化 로드맵을 정리합니다.
+  </p>
+  <div class="hero-meta animate delay-3">
+    <div class="hero-meta-item">
+      <span class="hero-meta-label">작성 기준일</span>
+      <span class="hero-meta-value">2026년 3월</span>
+    </div>
+    <div class="hero-meta-item">
+      <span class="hero-meta-label">작성</span>
+      <span class="hero-meta-value">최한식 본부장</span>
+    </div>
+    <div class="hero-meta-item">
+      <span class="hero-meta-label">배포 대상</span>
+      <span class="hero-meta-value">플랫폼사업본부</span>
+    </div>
+  </div>
+  <div class="scroll-hint animate delay-4">
+    <div class="scroll-line"></div>
+    Scroll to explore
+  </div>
+</section>
+
+<!-- SECTION 1: 사업 개요 -->
+<section id="overview">
+  <div class="section-tag">01 — Business Overview</div>
+  <h2 class="section-title">현재 담당 사업 4대 축</h2>
+  <p class="section-desc">
+    플랫폼사업본부가 동시 추진 중인 핵심 사업 영역입니다. 표면적으로는 독립적으로 보이지만, 구조적으로는 하나의 Insurance AI Stack을 형성합니다.
+  </p>
+  <div class="biz-grid">
+    <div class="biz-card">
+      <div class="biz-num">01</div>
+      <div class="biz-title">보닥 플랫폼 확장 / 개선</div>
+      <div class="biz-desc">
+        보험 진단 → 상담 → 설계사 연결 → 리모델링으로 이어지는 풀 플랫폼 고도화. 마이데이터 기반 보험 보장 리스크 분석이 핵심으로, 단순 보험 앱을 넘어 리스크 관리 플랫폼으로의 전환을 목표로 한다.
+      </div>
+      <span class="tag-pill blue">CORE PLATFORM</span>
+    </div>
+    <div class="biz-card">
+      <div class="biz-num">02</div>
+      <div class="biz-title">리드 유통 플랫폼 구축</div>
+      <div class="biz-desc">
+        현재의 실시간 API 기반 리드 공급 구조를 SaaS형 리드 관리·유통 플랫폼으로 전환 추진. GA(독립 법인 보험대리점) 중심의 B2B 플랫폼으로, First Connect CRM이 핵심 인프라가 된다.
+      </div>
+      <span class="tag-pill purple">API → SaaS</span>
+    </div>
+    <div class="biz-card">
+      <div class="biz-num">03</div>
+      <div class="biz-title">AI 상담 + 설계사 연결 구조 정교화</div>
+      <div class="biz-desc">
+        AI 상담사 Clark을 중심으로 마이데이터 기반 AI 진단 → 니즈 파악 → 설계사 연결 구조를 고도화. Clark은 장기적으로 보닥 내부 기능을 넘어 독립 AI 상담 플랫폼으로 발전시킬 예정이다.
+      </div>
+      <span class="tag-pill green">CLARK AI</span>
+    </div>
+    <div class="biz-card">
+      <div class="biz-num">04</div>
+      <div class="biz-title">신사업 기획: 수면 건강 루틴 플랫폼</div>
+      <div class="biz-desc">
+        건강 루틴 형성 플랫폼을 기획 중이며, 현재는 보닥 보험 플랫폼과 완전히 별개의 독립 트랙으로 운영. 초기 통합은 제품 포지션 혼란 방지를 위해 지양하나, 장기적으로 건강 리스크 → 보험 리스크 연결 루프 형성 가능.
+      </div>
+      <span class="tag-pill gold">신사업 / 별도 트랙</span>
+    </div>
+  </div>
+  <div class="callout" style="margin-top:32px">
+    <p class="callout-text">
+      <strong>핵심 통찰</strong>: 대부분의 보험 테크 기업은 리드 생성, AI 상담, 유통 플랫폼 중 하나만 다룹니다. 보닥은 <strong>Risk Engine + AI Layer(Clark) + Distribution Layer(First Connect)</strong>를 동시에 구축하고 있어, 장기적으로 보험 유통 OS(Operating System)로의 포지셔닝이 가능합니다.
+    </p>
+  </div>
+</section>
+
+<!-- SECTION 2: 플랫폼 구조 -->
+<section id="platform">
+  <div class="section-tag">02 — Platform Architecture</div>
+  <h2 class="section-title">플랫폼 전체 구조</h2>
+  <p class="section-desc">
+    보닥 앱과 보닥 웹은 데이터 기반과 사용자 경험이 완전히 다른 두 개의 독립 채널로 운영됩니다. 하지만 리드 유통 이후 구조는 동일한 파이프라인을 공유합니다.
+  </p>
+  <div class="arch-container">
+
+    <div class="arch-flow">
+      <div class="arch-step">
+        <div class="arch-icon">🔍</div>
+        <div class="arch-label">리드 생성</div>
+        <div class="arch-detail">광고·SEO·콘텐츠<br>→ 앱 설치 유도</div>
+      </div>
+      <div class="arch-step">
+        <div class="arch-icon">🧠</div>
+        <div class="arch-label">AI 진단</div>
+        <div class="arch-detail">마이데이터 / ICIS<br>→ 리스크 분석</div>
+      </div>
+      <div class="arch-step">
+        <div class="arch-icon">⚡</div>
+        <div class="arch-label">가격 산정</div>
+        <div class="arch-detail">Pricing Engine<br>→ 리드 가치 결정</div>
+      </div>
+      <div class="arch-step">
+        <div class="arch-icon">🔗</div>
+        <div class="arch-label">유통·연결</div>
+        <div class="arch-detail">First Connect<br>→ GA 자동 배정</div>
+      </div>
+    </div>
+
+    <div class="channel-grid">
+      <div class="channel-card">
+        <div class="channel-icon-box app">📱</div>
+        <div>
+          <div class="channel-label app">BODOC APP — Data-first</div>
+          <div class="channel-title">마이데이터 기반 보험 진단 앱</div>
+          <div class="channel-desc">광고/SEO/콘텐츠는 앱 설치와 마이데이터 연결을 유도하기 위한 수단이며, 보닥의 모든 리드는 마이데이터 기반 보험 진단 리드입니다. 일반 퍼미션 DB와 구조적으로 다른 고품질 리드.</div>
+          <div class="mini-flow">
+            <div class="mini-flow-item"><div class="mini-flow-dot blue"></div>앱 설치 → 마이데이터 연결</div>
+            <div class="mini-flow-item"><div class="mini-flow-dot blue"></div>백엔드: AI 진단 즉시 실행</div>
+            <div class="mini-flow-item"><div class="mini-flow-dot blue"></div>상담 신청 페이지 노출 (리드 전환율 최적화)</div>
+            <div class="mini-flow-item"><div class="mini-flow-dot blue"></div>상담 신청 → 즉시 GA 배정 → Clark 노출</div>
+          </div>
+        </div>
+      </div>
+      <div class="channel-card">
+        <div class="channel-icon-box web">🌐</div>
+        <div>
+          <div class="channel-label web">BODOC WEB — Conversation-first</div>
+          <div class="channel-title">LLM 기반 AI 보험 상담사 (Clark)</div>
+          <div class="channel-desc">보닥 웹은 Clark이 전면에 나서는 AI 상담 채널입니다. ICIS 데이터(보험사 원수사 제휴 → 한국신용정보원 ICIS)를 기반으로 보험 진단 및 상담을 제공합니다.</div>
+          <div class="mini-flow">
+            <div class="mini-flow-item"><div class="mini-flow-dot purple"></div>Clark 상담 시작 (카드형 + 자유 질문)</div>
+            <div class="mini-flow-item"><div class="mini-flow-dot purple"></div>ICIS 조회 → 보험 진단</div>
+            <div class="mini-flow-item"><div class="mini-flow-dot purple"></div>상담 신청 → First Connect → GA 배정</div>
+            <div class="mini-flow-item"><div class="mini-flow-dot purple"></div>리드 유형: 상담 리드 (앱: 진단 리드)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <p class="callout-text">
+        <strong>Clark 등장 시점</strong>: 시스템 이벤트 기준으로는 GA 배정 직후이지만, 사용자 경험 기준으로는 상담 신청 직후에 해당합니다. 상담 신청과 동시에 GA 배정이 이루어지는 구조이기 때문입니다.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 3: 리드 전략 -->
+<section id="lead">
+  <div class="section-tag">03 — Lead Strategy</div>
+  <h2 class="section-title">리드 가격 전략 & 채널별 라우팅</h2>
+  <p class="section-desc">
+    보닥 리드는 일반 퍼미션 DB와 다른 "진단 리드"입니다. 리스크 유형·상담 채널·심각도를 조합한 Pricing Engine으로 리드 가격을 결정합니다.
+  </p>
+
+  <div class="lead-layout">
+    <div>
+      <div class="pricing-table" style="margin-bottom:20px">
+        <div class="pricing-table-header">채널 기본가 — 시장 포지셔닝</div>
+        <table>
+          <thead>
+            <tr>
+              <th>채널</th>
+              <th>보닥 기본가</th>
+              <th>시장 비교 기준</th>
+              <th>포지션</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="highlight">💬 채팅</td>
+              <td class="price">25,000원</td>
+              <td class="price-muted">저가 디지털 리드</td>
+              <td><span class="badge-low">Standard</span></td>
+            </tr>
+            <tr>
+              <td class="highlight">📞 통화</td>
+              <td class="price">40,000원</td>
+              <td class="price-muted">일반 콜 리드</td>
+              <td><span class="badge-mid">High</span></td>
+            </tr>
+            <tr>
+              <td class="highlight">🤝 대면</td>
+              <td class="price">80,000원</td>
+              <td class="price-muted">1차(55k)~2차(110k) 중간</td>
+              <td><span class="badge-premium">Premium</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="pricing-table">
+        <div class="pricing-table-header">리스크 유형별 프리미엄 (대면 기준)</div>
+        <table>
+          <thead>
+            <tr>
+              <th>리스크 유형</th>
+              <th>설계사 선호</th>
+              <th>예상 가격대</th>
+              <th>등급</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="highlight">암진단금 부족형</td>
+              <td>매우 높음</td>
+              <td class="price">~100,000원</td>
+              <td><span class="badge-premium">Premium</span></td>
+            </tr>
+            <tr>
+              <td class="highlight">심혈관 보장 협소형</td>
+              <td>높음</td>
+              <td class="price">~90,000원</td>
+              <td><span class="badge-premium">Premium</span></td>
+            </tr>
+            <tr>
+              <td class="highlight">뇌혈관 보장 협소형</td>
+              <td>높음</td>
+              <td class="price">~85,000원</td>
+              <td><span class="badge-mid">High</span></td>
+            </tr>
+            <tr>
+              <td class="highlight">갱신 부담 우려형</td>
+              <td>중간</td>
+              <td class="price">~70,000원</td>
+              <td><span class="badge-mid">Mid</span></td>
+            </tr>
+            <tr>
+              <td class="highlight">가성비 부족형</td>
+              <td>낮음</td>
+              <td class="price">~60,000원</td>
+              <td><span class="badge-low">Basic</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div>
+      <div class="routing-diagram" style="margin-bottom:20px">
+        <div class="routing-title">채널별 리드 라우팅 구조</div>
+        <div style="margin-bottom:12px">
+          <div class="routing-center">상담 신청 → First Connect (즉시 GA 배정)</div>
+        </div>
+        <div class="routing-branches">
+          <div class="routing-branch branch-col1">
+            <div class="routing-branch-icon">🤝</div>
+            <div class="routing-branch-label">대면 상담 리드</div>
+            <div class="routing-branch-dest">외부 GA<br>(엔터프라이즈)</div>
+          </div>
+          <div class="routing-branch branch-col2">
+            <div class="routing-branch-icon">📞</div>
+            <div class="routing-branch-label">통화 상담 리드</div>
+            <div class="routing-branch-dest">자회사 GA<br>(더파트너스)</div>
+          </div>
+          <div class="routing-branch branch-col3">
+            <div class="routing-branch-icon">💬</div>
+            <div class="routing-branch-label">채팅 상담 리드</div>
+            <div class="routing-branch-dest">JV GA<br>(성공보수 연동)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pricing-table">
+        <div class="pricing-table-header">Pricing Engine 산식 (v0 Rule-based)</div>
+        <table>
+          <thead>
+            <tr>
+              <th>변수</th>
+              <th>항목 예시</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="highlight">채널 기본가</td>
+              <td>대면 80k / 통화 40k / 채팅 25k</td>
+            </tr>
+            <tr>
+              <td class="highlight">리스크 가치 가중치</td>
+              <td>암 1.35 / 심혈관 1.20 / 갱신 0.90</td>
+            </tr>
+            <tr>
+              <td class="highlight">심각도 가중치</td>
+              <td>Critical 1.40 / High 1.20 / Low 0.85</td>
+            </tr>
+            <tr>
+              <td class="highlight">품질 등급 가중치</td>
+              <td>Premium 1.20 / Standard 1.00 / Basic 0.90</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout">
+        <p class="callout-text">
+          <strong>JV GA 수익 모델</strong>: 리드 단가 + 계약 성공 보수(성과 연동). 이 구조는 "리드 퀄리티 논쟁"을 감소시키고 보닥이 리스크를 함께 부담한다는 신뢰 기반을 형성합니다.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 4: First Connect -->
+<section id="firstconnect">
+  <div class="section-tag">04 — Distribution Infrastructure</div>
+  <h2 class="section-title">First Connect: 보험 유통 인프라</h2>
+  <p class="section-desc">
+    First Connect는 단순 CRM이 아닙니다. 리드 라우팅 · GA 관리 · MOQ 계약을 통합하는 보험 Distribution Engine입니다.
+  </p>
+  <div class="fc-grid">
+    <div>
+      <div class="moq-model" style="margin-bottom:20px">
+        <div class="moq-title">Hybrid + MOQ 비즈니스 모델</div>
+        <div class="moq-flow">
+          <div class="moq-node">
+            <div class="moq-dot" style="background:rgba(0,200,255,0.1); color:var(--accent); font-size:16px;">🔑</div>
+            <div>
+              <div class="moq-text-title">CRM 사용 필수</div>
+              <div class="moq-text-desc">GA의 First Connect 사용은 계약의 전제 조건. CRM + 리드 + 데이터가 묶이는 Lock-in 구조.</div>
+            </div>
+          </div>
+          <div class="moq-node">
+            <div class="moq-dot a">A</div>
+            <div>
+              <div class="moq-text-title">MOQ 준수 시</div>
+              <div class="moq-text-desc">월 최소 구매량(MOQ) 달성 → SaaS 요금 면제</div>
+              <div class="moq-highlight">리드 구매량 ≥ MOQ → Free CRM</div>
+            </div>
+          </div>
+          <div class="moq-node">
+            <div class="moq-dot b">B</div>
+            <div>
+              <div class="moq-text-title">MOQ 미달 시</div>
+              <div class="moq-text-desc">부족 물량 발생 → SaaS 월 과금으로 전환</div>
+              <div class="moq-highlight">리드 구매량 &lt; MOQ → SaaS 월 과금</div>
+            </div>
+          </div>
+          <div class="moq-node">
+            <div class="moq-dot" style="background:rgba(240,192,96,0.1); color:var(--gold); font-size:16px;">📊</div>
+            <div>
+              <div class="moq-text-title">Tier 기반 MOQ 구조 (예시)</div>
+              <div class="moq-text-desc">Starter(100개/월·80k), Growth(300개/월·75k), Enterprise(500개/월·70k). 구매량 증가 시 단가 인하.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius); padding:24px;">
+        <div style="font-size:12px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--accent2); margin-bottom:16px;">전략적 장점</div>
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <div style="display:flex; align-items:flex-start; gap:12px;">
+            <span style="font-size:16px; flex-shrink:0;">✅</span>
+            <div style="font-size:12px; color:var(--text-muted); line-height:1.6;"><strong style="color:var(--text);">리드 수요 확보</strong>: CRM만 쓰고 리드를 안 사는 상황 차단</div>
+          </div>
+          <div style="display:flex; align-items:flex-start; gap:12px;">
+            <span style="font-size:16px; flex-shrink:0;">✅</span>
+            <div style="font-size:12px; color:var(--text-muted); line-height:1.6;"><strong style="color:var(--text);">매출 안정성</strong>: 리드 수요 변동 시에도 SaaS 과금으로 보완</div>
+          </div>
+          <div style="display:flex; align-items:flex-start; gap:12px;">
+            <span style="font-size:16px; flex-shrink:0;">✅</span>
+            <div style="font-size:12px; color:var(--text-muted); line-height:1.6;"><strong style="color:var(--text);">플랫폼 락인</strong>: CRM + 리드 + 데이터가 묶여 이탈 비용 상승</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fc-features">
+      <div class="fc-features-title">First Connect 핵심 기능 6가지</div>
+      <div class="fc-feature-grid">
+        <div class="fc-feature-item">
+          <div class="fc-feature-icon">🔀</div>
+          <div class="fc-feature-label">Lead Routing Engine</div>
+          <div class="fc-feature-desc">리스크 유형별 자동 GA 배정. 라운드 로빈 / 성과 기반 배정 지원. 1고객 → 1GA Exclusive 구조.</div>
+        </div>
+        <div class="fc-feature-item">
+          <div class="fc-feature-icon">📋</div>
+          <div class="fc-feature-label">Capacity Control</div>
+          <div class="fc-feature-desc">GA별 월 수신 가능 리드 수 설정. MOQ 기반 배분 비율 자동 산정.</div>
+        </div>
+        <div class="fc-feature-item">
+          <div class="fc-feature-icon">🏷️</div>
+          <div class="fc-feature-label">Quality Tier</div>
+          <div class="fc-feature-desc">Premium / Standard / Basic 티어 설정. GA 계약 등급에 따라 수신 가능 리드 풀 차별화.</div>
+        </div>
+        <div class="fc-feature-item">
+          <div class="fc-feature-icon">📡</div>
+          <div class="fc-feature-label">Channel Matching</div>
+          <div class="fc-feature-desc">대면 → 현장 조직 GA / 통화 → TMR 조직 / 채팅 → JV GA. 상담 채널에 따른 GA 매칭.</div>
+        </div>
+        <div class="fc-feature-item">
+          <div class="fc-feature-icon">📈</div>
+          <div class="fc-feature-label">Performance Tracking</div>
+          <div class="fc-feature-desc">리드 → 상담 → 설계 → 계약 전 과정 추적. 데이터 축적 후 Pricing Engine 자동 조정에 활용.</div>
+        </div>
+        <div class="fc-feature-item">
+          <div class="fc-feature-icon">🏆</div>
+          <div class="fc-feature-label">GA Ranking</div>
+          <div class="fc-feature-desc">상담 전환율, 계약 전환율, 고객 만족도 기반 GA 랭킹. 우수 GA 우선 리드 배정.</div>
+        </div>
+      </div>
+
+      <div style="margin-top:20px; background:rgba(255,255,255,0.02); border:1px solid var(--border); border-radius:8px; padding:16px 20px;">
+        <div style="font-size:11px; font-weight:700; letter-spacing:1.5px; color:var(--text-dim); text-transform:uppercase; margin-bottom:10px;">리드 공급 배분 원칙 (예시)</div>
+        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px;">
+          <div style="text-align:center; padding:12px; background:rgba(0,200,255,0.06); border:1px solid rgba(0,200,255,0.15); border-radius:8px;">
+            <div style="font-size:18px; font-weight:900; font-family:'Space Mono',monospace; color:var(--accent);">50%</div>
+            <div style="font-size:11px; color:var(--text-muted); margin-top:4px;">GA A (MOQ 500)</div>
+          </div>
+          <div style="text-align:center; padding:12px; background:rgba(123,97,255,0.06); border:1px solid rgba(123,97,255,0.15); border-radius:8px;">
+            <div style="font-size:18px; font-weight:900; font-family:'Space Mono',monospace; color:var(--accent2);">30%</div>
+            <div style="font-size:11px; color:var(--text-muted); margin-top:4px;">GA B (MOQ 300)</div>
+          </div>
+          <div style="text-align:center; padding:12px; background:rgba(0,229,160,0.06); border:1px solid rgba(0,229,160,0.15); border-radius:8px;">
+            <div style="font-size:18px; font-weight:900; font-family:'Space Mono',monospace; color:var(--accent3);">20%</div>
+            <div style="font-size:11px; color:var(--text-muted); margin-top:4px;">GA C (MOQ 200)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 5: Clark -->
+<section id="clark">
+  <div class="section-tag">05 — Clark AI Platform</div>
+  <h2 class="section-title">Clark: 보험 진단 전문의 AI</h2>
+  <p class="section-desc">
+    Clark은 "보험 판매 AI"가 아닙니다. 대화를 통해 진단을 내리고, 처방(설계·가입)은 설계사에게 위임하는 보험 진단 전문의입니다.
+  </p>
+  <div class="clark-layout">
+    <div class="clark-persona">
+      <div class="clark-avatar">🤖</div>
+      <div class="clark-name">CLARK</div>
+      <div class="clark-tagline">"당신의 리스크를 미리 보고 왔습니다"</div>
+      <div class="clark-props">
+        <div class="clark-prop">
+          <div class="clark-prop-icon">🌌</div>
+          <div class="clark-prop-text"><strong>세계관</strong>: 미래에서 온 AI. 개인의 리스크 데이터를 미리 분석하여 현재의 대비를 돕는 조력자. "인류 리스크"가 아닌 <strong>개인 맞춤 리스크 분석</strong>에 집중.</div>
+        </div>
+        <div class="clark-prop">
+          <div class="clark-prop-icon">🩺</div>
+          <div class="clark-prop-text"><strong>포지션</strong>: 보험 진단 전문의. 의사가 진단을 내리고 치료는 전문의에게 위임하듯, Clark은 진단하고 설계사가 처방.</div>
+        </div>
+        <div class="clark-prop">
+          <div class="clark-prop-icon">💡</div>
+          <div class="clark-prop-text"><strong>UX 철학</strong>: 리스크를 "선언"하지 않고 사용자와 "함께 발견". 보험 가입 유도가 아닌 보험 점검의 자연스러운 흐름.</div>
+        </div>
+        <div class="clark-prop">
+          <div class="clark-prop-icon">📡</div>
+          <div class="clark-prop-text"><strong>확장성</strong>: 보닥 내부 기능을 넘어 독립 Insurance AI Platform으로 발전 예정. B2C 직접 노출 + B2B 파트너 SDK 이중 전략.</div>
+        </div>
+      </div>
+      <div class="clark-role-box">
+        <div class="clark-role-title">역할 분리 구조</div>
+        <div class="clark-role-grid">
+          <div class="clark-role-item">보험 상태 점검</div>
+          <div class="clark-role-item">리스크 발견</div>
+          <div class="clark-role-item">보장 부족 진단</div>
+          <div class="clark-role-item">상담 니즈 파악</div>
+          <div class="clark-role-item">설계사 연결 준비</div>
+          <div class="clark-role-item">대화 데이터 생성</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="clark-right">
+      <div class="clark-ux-card">
+        <div class="clark-ux-title">UX 표현 원칙: 함께 발견 vs 선언</div>
+        <div class="ux-compare">
+          <div class="ux-item bad">
+            <div class="ux-item-label">❌ 피할 표현</div>
+            <div class="ux-bubble">"고객님의 암 보장이 부족합니다."</div>
+          </div>
+          <div class="ux-item good">
+            <div class="ux-item-label">✅ 권장 표현</div>
+            <div class="ux-bubble">"암 치료 비용 리스크가 증가하는 추세입니다. 현재 보장을 한번 확인해볼까요?"</div>
+          </div>
+          <div class="ux-item bad">
+            <div class="ux-item-label">❌ 피할 표현</div>
+            <div class="ux-bubble">"맞춤 보험을 추천해드릴게요."</div>
+          </div>
+          <div class="ux-item good">
+            <div class="ux-item-label">✅ 권장 표현</div>
+            <div class="ux-bubble">"몇 가지 확인해서 현재 보장 상태를 점검해볼게요."</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="clark-journey">
+        <div class="clark-journey-title">Clark 사용자 여정 (보닥 웹 기준)</div>
+        <div class="journey-steps">
+          <div class="journey-step">
+            <div class="journey-step-icon">🃏</div>
+            <div class="journey-step-label">카드형<br>질문 선택</div>
+          </div>
+          <div class="journey-arrow">→</div>
+          <div class="journey-step">
+            <div class="journey-step-icon">💬</div>
+            <div class="journey-step-label">대화형<br>상담 진행</div>
+          </div>
+          <div class="journey-arrow">→</div>
+          <div class="journey-step">
+            <div class="journey-step-icon">🔍</div>
+            <div class="journey-step-label">ICIS 조회<br>보험 진단</div>
+          </div>
+          <div class="journey-arrow">→</div>
+          <div class="journey-step">
+            <div class="journey-step-icon">📊</div>
+            <div class="journey-step-label">리스크<br>진단 결과</div>
+          </div>
+          <div class="journey-arrow">→</div>
+          <div class="journey-step">
+            <div class="journey-step-icon">🤝</div>
+            <div class="journey-step-label">설계사<br>연결</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius); padding:24px;">
+        <div style="font-size:12px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--accent); margin-bottom:16px;">3단 문진 체계 (필수 포함)</div>
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <div style="display:flex; gap:14px; align-items:flex-start;">
+            <div style="width:28px; height:28px; border-radius:50%; background:rgba(0,200,255,0.12); color:var(--accent); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; flex-shrink:0;">1</div>
+            <div>
+              <div style="font-size:13px; font-weight:700; margin-bottom:3px;">기본 문진 (3~5개)</div>
+              <div style="font-size:11px; color:var(--text-muted);">부양가족, 가장 걱정되는 보장, 보험료 부담감, 상담 목적. 카드형 선택지로 제공.</div>
+            </div>
+          </div>
+          <div style="display:flex; gap:14px; align-items:flex-start;">
+            <div style="width:28px; height:28px; border-radius:50%; background:rgba(123,97,255,0.12); color:var(--accent2); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; flex-shrink:0;">2</div>
+            <div>
+              <div style="font-size:13px; font-weight:700; margin-bottom:3px;">리스크 연동형 추가 문진</div>
+              <div style="font-size:11px; color:var(--text-muted);">리스크 유형에 따라 분기. 암 → 가족력 / 갱신 → 은퇴 시점 / 가성비 → 절감 의향.</div>
+            </div>
+          </div>
+          <div style="display:flex; gap:14px; align-items:flex-start;">
+            <div style="width:28px; height:28px; border-radius:50%; background:rgba(0,229,160,0.12); color:var(--accent3); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; flex-shrink:0;">3</div>
+            <div>
+              <div style="font-size:13px; font-weight:700; margin-bottom:3px;">설계사 핸드오프 문진</div>
+              <div style="font-size:11px; color:var(--text-muted);">상담 방식 선호(대면/통화/채팅), 가능 시간, 우선순위. First Connect 라우팅에 직접 활용.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 6: RAG 지식 체계 -->
+<section id="rag">
+  <div class="section-tag">06 — Clark Knowledge System</div>
+  <h2 class="section-title">Clark 지식 체계 (RAG 구조)</h2>
+  <p class="section-desc">
+    Clark은 일반 QA 챗봇이 아닙니다. 구조화된 지식 카드 기반 RAG로 Hallucination을 억제하고, 보험 진단 전문의 역할을 수행합니다.
+  </p>
+  <div class="rag-layout">
+    <div>
+      <div style="font-size:12px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--accent2); margin-bottom:16px;">6가지 지식 카드 타입</div>
+      <div class="rag-cards">
+        <div class="rag-card">
+          <div class="rag-card-type">CONCEPT</div>
+          <div class="rag-card-name">개념 카드</div>
+          <div class="rag-card-desc">보험 용어, 상품 구조, 보장 개념 등 기본 지식 정의.</div>
+        </div>
+        <div class="rag-card">
+          <div class="rag-card-type">RULE</div>
+          <div class="rag-card-name">판단 기준 카드</div>
+          <div class="rag-card-desc">IF 암진단금 &lt; 3000만원 THEN 보장 부족. 진단의 논리 기반.</div>
+        </div>
+        <div class="rag-card">
+          <div class="rag-card-type">PLAYBOOK</div>
+          <div class="rag-card-name">상담 흐름 카드</div>
+          <div class="rag-card-desc">리스크 유형별 상담 시나리오. 문진 → 진단 → 설계사 연결.</div>
+        </div>
+        <div class="rag-card">
+          <div class="rag-card-type">EVIDENCE</div>
+          <div class="rag-card-name">데이터 근거 카드</div>
+          <div class="rag-card-desc">통계, 연구, 시장 데이터. 리스크 설명 시 근거 제공.</div>
+        </div>
+        <div class="rag-card">
+          <div class="rag-card-type">CASE</div>
+          <div class="rag-card-name">사례 카드</div>
+          <div class="rag-card-desc">실제 상담 사례. 유사 사례 기반 진단 정확도 향상.</div>
+        </div>
+        <div class="rag-card">
+          <div class="rag-card-type">POLICY</div>
+          <div class="rag-card-name">규제 준수 카드</div>
+          <div class="rag-card-desc">특정 상품 추천 금지, 확정적 표현 금지 등 컴플라이언스.</div>
+        </div>
+      </div>
+
+      <div style="margin-top:16px; background:rgba(240,192,96,0.06); border:1px solid rgba(240,192,96,0.2); border-radius:10px; padding:20px 24px;">
+        <div style="font-size:11px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--gold); margin-bottom:10px;">확장 계획</div>
+        <div style="font-size:13px; color:var(--text-muted); line-height:1.7;">현재 MVP 수준 카드 세트로 시작하여, <strong style="color:var(--text);">보험 진단 백서 기반으로 150~300개 수준</strong>까지 확장 예정. 자동 생성 후 전문가 인간 검증 프로세스 유지. Risk Taxonomy 표준화(RISK_001, RISK_002...)로 RAG 품질 관리.</div>
+      </div>
+    </div>
+
+    <div class="rag-flow-box">
+      <div class="rag-flow-title">Clark 진단 파이프라인 (목표 구조)</div>
+      <div class="rag-pipeline">
+        <div class="rag-pipe-step">
+          <div class="rag-pipe-num">01</div>
+          <div class="rag-pipe-text">
+            INTENT 탐지
+            <span>사용자 발화 → 상담 의도 분류 (보험 점검 / 보험료 절감 / 특정 보장 등)</span>
+          </div>
+          <div class="rag-pipe-tag">INTENT</div>
+        </div>
+        <div class="rag-pipe-step">
+          <div class="rag-pipe-num">02</div>
+          <div class="rag-pipe-text">
+            QUESTIONNAIRE
+            <span>기본 문진 → 리스크 연동 추가 문진 → 설계사 핸드오프 문진</span>
+          </div>
+          <div class="rag-pipe-tag">문진</div>
+        </div>
+        <div class="rag-pipe-step">
+          <div class="rag-pipe-num">03</div>
+          <div class="rag-pipe-text">
+            RISK 탐지
+            <span>ICIS / 마이데이터 + 문진 결과 → 5가지 리스크 유형 분류</span>
+          </div>
+          <div class="rag-pipe-tag">RISK</div>
+        </div>
+        <div class="rag-pipe-step">
+          <div class="rag-pipe-num">04</div>
+          <div class="rag-pipe-text">
+            RULE 적용
+            <span>리스크 판단 기준 카드 호출 → 진단 결과 산정</span>
+          </div>
+          <div class="rag-pipe-tag">RULE</div>
+        </div>
+        <div class="rag-pipe-step">
+          <div class="rag-pipe-num">05</div>
+          <div class="rag-pipe-text">
+            PLAYBOOK 실행
+            <span>리스크 유형별 상담 시나리오 실행 + POLICY 컴플라이언스 적용</span>
+          </div>
+          <div class="rag-pipe-tag">PLAYBOOK</div>
+        </div>
+        <div class="rag-pipe-step">
+          <div class="rag-pipe-num">06</div>
+          <div class="rag-pipe-text">
+            HANDOFF
+            <span>상담 니즈 요약 → First Connect → GA 라우팅 → 설계사 전달</span>
+          </div>
+          <div class="rag-pipe-tag">HANDOFF</div>
+        </div>
+      </div>
+
+      <div style="margin-top:16px; background:rgba(123,97,255,0.06); border:1px solid rgba(123,97,255,0.15); border-radius:8px; padding:16px 20px;">
+        <div style="font-size:11px; color:var(--text-muted); line-height:1.7;">
+          <strong style="color:var(--accent2);">핵심 원칙</strong>: Clark의 모든 답변은 Knowledge Card 기반으로 제한합니다. LLM Hallucination 방지를 위해 RULE + PLAYBOOK 카드를 반드시 포함하는 Grounded Generation 구조를 유지합니다.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 7: Clark 확장 전략 -->
+<section id="expansion">
+  <div class="section-tag">07 — Clark Platform Expansion</div>
+  <h2 class="section-title">Clark 독립 플랫폼 확장 전략</h2>
+  <p class="section-desc">
+    Clark은 보닥의 기능이 아닌, 독립 Insurance AI Platform으로 발전시킵니다. 캐릭터 기반 플랫폼 전략과 브랜드 노출 전략을 정리합니다.
+  </p>
+  <div class="expand-layout">
+    <div>
+      <div class="platform-model" style="margin-bottom:20px">
+        <div class="platform-model-title">Clark 플랫폼 3층 구조</div>
+        <div class="platform-layers">
+          <div class="platform-layer conv">
+            <div class="platform-layer-label">Layer 1 — Conversation</div>
+            <div class="platform-layer-title">사용자 인터페이스</div>
+            <div class="platform-layer-items">웹 Clark · 앱 Clark · 파트너 앱 Clark<br>음성 Clark (장기 검토 중, 기술 검토 미착수)</div>
+          </div>
+          <div style="text-align:center; font-size:16px; color:var(--text-dim); padding:6px 0;">↓</div>
+          <div class="platform-layer intel">
+            <div class="platform-layer-label">Layer 2 — Intelligence</div>
+            <div class="platform-layer-title">보험 분석 엔진</div>
+            <div class="platform-layer-items">ICIS 데이터 · 마이데이터<br>리스크 분석 · 보험 진단 · Knowledge Graph</div>
+          </div>
+          <div style="text-align:center; font-size:16px; color:var(--text-dim); padding:6px 0;">↓</div>
+          <div class="platform-layer dist">
+            <div class="platform-layer-label">Layer 3 — Distribution</div>
+            <div class="platform-layer-title">보험 유통 네트워크</div>
+            <div class="platform-layer-items">First Connect · GA 네트워크 · 보험사 연동</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius); padding:24px;">
+        <div style="font-size:12px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--accent3); margin-bottom:16px;">트래픽 소스 전략</div>
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border); border-radius:8px; padding:14px 16px;">
+            <div style="font-size:12px; font-weight:700; margin-bottom:6px;">헬스케어 / 리스크 관리 플랫폼 제휴</div>
+            <div style="font-size:11px; color:var(--text-muted); line-height:1.6;">수면·건강검진·자산관리·가족케어 플랫폼의 사용자는 이미 리스크 관리 맥락에 있음. 건강 리스크 → 보험 보장 리스크로 자연스러운 연결 가능.</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border); border-radius:8px; padding:14px 16px;">
+            <div style="font-size:12px; font-weight:700; margin-bottom:6px;">제외 채널: 카카오톡</div>
+            <div style="font-size:11px; color:var(--text-muted); line-height:1.6;">카카오페이가 보험 상담 서비스를 이미 운영 중. 직접 경쟁 관계로 채널 활용 불가. API 접근 제한 및 복잡한 인증 UX 구현 한계도 존재.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="brand-strategy">
+      <div class="brand-strategy-title">브랜드 노출 전략: Branded vs White-label</div>
+      <div class="brand-compare">
+        <div class="brand-col">
+          <div class="brand-col-title">🔵 브랜드 노출 (Clark 표시)</div>
+          <div class="brand-item"><span class="dot"></span>Clark 브랜드 자산 축적</div>
+          <div class="brand-item"><span class="dot"></span>직접 트래픽 유입 가능</div>
+          <div class="brand-item"><span class="dot"></span>데이터 네트워크 효과</div>
+          <div class="brand-item" style="color:var(--accent4);"><span class="dot" style="background:var(--accent4)"></span>파트너 거부감 가능</div>
+          <div class="brand-item" style="color:var(--accent4);"><span class="dot" style="background:var(--accent4)"></span>계약 속도 느릴 수 있음</div>
+        </div>
+        <div class="brand-col">
+          <div class="brand-col-title">⚪ White-label (숨김)</div>
+          <div class="brand-item"><span class="dot"></span>파트너 확장 매우 빠름</div>
+          <div class="brand-item"><span class="dot"></span>보험사 협업 유리</div>
+          <div class="brand-item"><span class="dot"></span>플랫폼 종속성 강화</div>
+          <div class="brand-item" style="color:var(--accent4);"><span class="dot" style="background:var(--accent4)"></span>Clark 브랜드 성장 없음</div>
+          <div class="brand-item" style="color:var(--accent4);"><span class="dot" style="background:var(--accent4)"></span>장기적 가격 경쟁 위험</div>
+        </div>
+      </div>
+
+      <div class="recommended-box">
+        <div class="recommended-title">✅ 권장 전략: Hybrid</div>
+        <table class="recommended-table">
+          <tr>
+            <td>보닥 웹 (B2C)</td>
+            <td>Clark 브랜드 직접 노출</td>
+          </tr>
+          <tr>
+            <td>헬스케어 앱 (B2B)</td>
+            <td>보험 상담 · Powered by Clark</td>
+          </tr>
+          <tr>
+            <td>보험사 (B2B)</td>
+            <td>White-label (보험사 브랜드)</td>
+          </tr>
+        </table>
+      </div>
+
+      <div style="margin-top:16px; background:rgba(0,200,255,0.06); border:1px solid rgba(0,200,255,0.15); border-radius:8px; padding:16px 20px;">
+        <div style="font-size:11px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--accent); margin-bottom:10px;">캐릭터 전략의 장점</div>
+        <div style="font-size:12px; color:var(--text-muted); line-height:1.7;">Clark의 대표 캐릭터(흰 가운 착용 AI)가 이미 존재하므로 "보험 상담 AI 플랫폼" 전략이 자연스럽게 확장됩니다. 보험은 신뢰·설명·공감이 필요한 영역으로, 캐릭터 기반 인터페이스가 기능형 AI보다 높은 사용자 신뢰를 형성합니다. 장기적으로 "보험 궁금하면 Clark에게 물어봐"가 되는 것이 목표입니다.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 8: KPI & 로드맵 -->
+<section id="roadmap">
+  <div class="section-tag">08 — KPIs & Roadmap</div>
+  <h2 class="section-title">핵심 KPI & 실행 로드맵</h2>
+  <p class="section-desc">
+    플랫폼 성과를 측정하는 4가지 핵심 지표와, 단계별 실행 방향을 정리합니다.
+  </p>
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-icon">📱</div>
+      <div class="kpi-label">앱 설치 후</div>
+      <div class="kpi-name">마이데이터 연결률</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon">✍️</div>
+      <div class="kpi-label">마이데이터 연결 후</div>
+      <div class="kpi-name">상담 신청 전환율</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon">💬</div>
+      <div class="kpi-label">리드 발생 후</div>
+      <div class="kpi-name">Clark 대화 참여율</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon">🤝</div>
+      <div class="kpi-label">Clark 대화 후</div>
+      <div class="kpi-name">설계사 상담 연결율</div>
+    </div>
+  </div>
+
+  <div class="roadmap">
+    <div class="roadmap-title">단계별 실행 로드맵</div>
+    <div class="roadmap-track">
+      <div class="roadmap-phase">
+        <div class="roadmap-dot">🚀</div>
+        <div class="roadmap-period">Phase 1 — 단기</div>
+        <div class="roadmap-name">기반 구축</div>
+        <ul class="roadmap-items">
+          <li>Pricing Engine v0 구현 (Rule-based)</li>
+          <li>First Connect MOQ 모델 계약 체계 확립</li>
+          <li>Clark 문진 체계 설계 및 MVP 구현</li>
+          <li>더파트너스를 내부 벤치마크 채널로 활용</li>
+          <li>Clark RAG 지식 카드 MVP 구축</li>
+          <li>리스크 유형별 계약 전환율 데이터 수집 시작</li>
+        </ul>
+      </div>
+      <div class="roadmap-phase">
+        <div class="roadmap-dot">⚡</div>
+        <div class="roadmap-period">Phase 2 — 중기</div>
+        <div class="roadmap-name">고도화 및 확장</div>
+        <ul class="roadmap-items">
+          <li>전환율 데이터 기반 Pricing Engine 학습형 전환</li>
+          <li>보닥 웹 Clark 런칭 (ICIS 기반)</li>
+          <li>헬스케어 플랫폼 제휴 파이프라인 구축</li>
+          <li>Clark RAG 지식 카드 150개+ 확장</li>
+          <li>First Connect GA Ranking 시스템 도입</li>
+          <li>Clark Lead Qualification Score 구현</li>
+        </ul>
+      </div>
+      <div class="roadmap-phase">
+        <div class="roadmap-dot">🌟</div>
+        <div class="roadmap-period">Phase 3 — 장기</div>
+        <div class="roadmap-name">플랫폼화</div>
+        <ul class="roadmap-items">
+          <li>Clark 독립 플랫폼 분리 및 브랜딩</li>
+          <li>Clark 파트너 SDK B2B 제공 시작</li>
+          <li>Clark Voice Agent 기술 검토 착수</li>
+          <li>Insurance Risk Knowledge Graph 완성</li>
+          <li>보험 유통 OS 포지셔닝 완성</li>
+          <li>수면 플랫폼 연계 가능성 검토</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:40px; max-width:1100px; background:linear-gradient(135deg, rgba(0,200,255,0.06), rgba(123,97,255,0.06)); border:1px solid rgba(0,200,255,0.15); border-radius:var(--radius); padding:32px;">
+    <div style="font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--accent); margin-bottom:16px;">전략 총괄 요약</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:24px;">
+      <div>
+        <div style="font-size:22px; margin-bottom:10px;">🎯</div>
+        <div style="font-size:14px; font-weight:700; margin-bottom:8px;">단기 승부처</div>
+        <div style="font-size:12px; color:var(--text-muted); line-height:1.7;">GA 대상 리드 SaaS(First Connect) 성공적 안착. MOQ 기반 수익 구조 검증. Pricing Engine으로 "왜 이 리드가 비싼가"에 답하는 논리 체계 완성.</div>
+      </div>
+      <div>
+        <div style="font-size:22px; margin-bottom:10px;">🧠</div>
+        <div style="font-size:14px; font-weight:700; margin-bottom:8px;">중기 경쟁력</div>
+        <div style="font-size:12px; color:var(--text-muted); line-height:1.7;">Clark의 보험 진단 전문의 포지셔닝 확립. 타 보험 AI와 차별화되는 Knowledge Graph 구축. 진단 리드의 높은 전환율 데이터로 프리미엄 가격 방어.</div>
+      </div>
+      <div>
+        <div style="font-size:22px; margin-bottom:10px;">🚀</div>
+        <div style="font-size:14px; font-weight:700; margin-bottom:8px;">장기 포지셔닝</div>
+        <div style="font-size:12px; color:var(--text-muted); line-height:1.7;">Risk Engine + Clark AI + First Connect Distribution. 보험 리드 플랫폼이 아닌 한국 보험 유통 Infrastructure. Clark = 보험 상담의 Default AI.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">BODOC PLATFORM STRATEGY 2026</div>
+  <div class="footer-note">플랫폼사업본부 내부 전략 문서 · 작성: 최한식 본부장</div>
+</footer>
+
+<script>
+// Intersection Observer for animations
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.opacity = '1';
+      entry.target.style.transform = 'translateY(0)';
+    }
+  });
+}, { threshold: 0.1 });
+
+// Animate section elements on scroll
+document.querySelectorAll('.biz-card, .channel-card, .fc-feature-item, .rag-card, .rag-pipe-step, .kpi-card').forEach((el, i) => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(20px)';
+  el.style.transition = `opacity 0.5s ease ${i * 0.05}s, transform 0.5s ease ${i * 0.05}s`;
+  observer.observe(el);
+});
+
+// Active nav link
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-links a');
+
+const sectionObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navLinks.forEach(link => {
+        link.style.color = '';
+        link.style.background = '';
+        if (link.getAttribute('href') === '#' + entry.target.id) {
+          link.style.color = 'var(--accent)';
+          link.style.background = 'rgba(0,200,255,0.08)';
+        }
+      });
+    }
+  });
+}, { threshold: 0.4 });
+
+sections.forEach(s => sectionObserver.observe(s));
+</script>
+
+</body>
+</html>

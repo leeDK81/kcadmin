@@ -184,21 +184,21 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
         <tr>
           <td><strong>마이데이터</strong></td>
           <td><code>MYDATA</code></td>
-          <td>담보코드 select + 담보금액(coverage_amt, 정적 레이블) + 조건 select(LTE/GTE/LT/GT/EQ) + 기준값 + 필수/선택 라디오</td>
+          <td>담보코드 select + 담보금액(coverage_amt, 정적 레이블) + 조건 select(LTE/GTE) + 기준값 + 필수/선택 라디오</td>
           <td><code>required: true</code> (필수)</td>
           <td><code>.cond-row-mydata</code> (기본 회색)</td>
         </tr>
         <tr>
           <td><strong>프롬에이지</strong></td>
           <td><code>PROMAGE</code></td>
-          <td>위험도 항목 select(50개, optgroup: 암위험도 23개 / 질병위험도 27개) + 같음(EQ 고정) + 등급 select(위험/주의/양호) + 필수/선택 라디오. 생체나이·의료비예측 구현 금지.</td>
+          <td>위험도 항목 select(50개 flat — 암위험도 23개·질병위험도 27개 포함) + 같음(EQ 고정) + 등급 select(위험/주의/양호) + 필수/선택 라디오. 생체나이·의료비예측 구현 금지.</td>
           <td><code>required: false</code> (선택 — 미연동 사용자 대응)</td>
           <td><code>.cond-row-promage</code> (보라, <code>#FAF8FD</code>)</td>
         </tr>
         <tr>
           <td><strong>프로파일</strong></td>
           <td><code>PROFILE</code></td>
-          <td>항목 select(4개: age·gender·married·has_child) + 조건 + 기준값 + 필수/선택 라디오</td>
+          <td>항목 select(5개: age·gender·married·has_child·drives) + 조건 + 기준값 + 필수/선택 라디오</td>
           <td><code>required: true</code> (필수)</td>
           <td><code>.cond-row-profile</code> (초록, <code>#F4FBF8</code>)</td>
         </tr>
@@ -220,6 +220,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
         <tr><td><code>gender</code></td><td>성별</td><td>enum</td><td>무관 / 남 / 여</td></tr>
         <tr><td><code>married</code></td><td>결혼여부</td><td>enum</td><td>무관 / 기혼 / 미혼</td></tr>
         <tr><td><code>has_child</code></td><td>자녀유무</td><td>enum</td><td>무관 / 있음 / 없음</td></tr>
+        <tr><td><code>drives</code></td><td>운전여부</td><td>enum</td><td>무관 / 유 / 무</td></tr>
       </tbody>
     </table>
   </div>
