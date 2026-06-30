@@ -621,7 +621,7 @@ let testChain     = {};        // type → cardId (체인 구성 선택)
 let canvasMode    = 'connect'; // 'connect' | 'test'
 let testSelection = {};        // type → cardId (테스트 모드 체크 선택)
 let panelTestMode = 'chain';   // 'chain' (연결모드 열기) | 'canvas' (테스트모드 열기)
-let ragMockState  = {yakgwan: true, faq: false}; // true=결과있음, false=결과없음
+let ragMockState  = 'yakgwan'; // 'yakgwan' | 'faq' | 'llm'
 let canvasStatusFilter = 'all';   // 'all' | 'active' | 'approved'
 let canvasSearchQuery  = '';
 
@@ -1935,30 +1935,27 @@ function buildChatAnswerHTML() {
 }
 
 function buildRagPresetHTML() {
-  var y = ragMockState.yakgwan;
-  var f = ragMockState.faq;
-  var pillBase = 'padding:2px 9px;font-size:11px';
-  var dimmed   = y === true ? ';opacity:.35;pointer-events:none' : '';
-  return '<div style="display:flex;flex-direction:column;gap:8px;padding:10px 12px;background:var(--bg-page);border:1px solid var(--border);border-radius:7px">' +
-    '<div style="display:flex;align-items:center;gap:8px">' +
-      '<span style="font-size:11px;font-weight:700;color:var(--text-secondary);flex:1">약관 RAG</span>' +
-      '<div style="display:flex;gap:4px">' +
-        '<button class="cvf-pill' + (y === true ? ' active' : '') + '" style="' + pillBase + '" onclick="setRagPreset(\'yakgwan\',true)">결과있음</button>' +
-        '<button class="cvf-pill' + (y === false ? ' active-fail' : '') + '" style="' + pillBase + '" onclick="setRagPreset(\'yakgwan\',false)">결과없음</button>' +
-      '</div>' +
-    '</div>' +
-    '<div style="display:flex;align-items:center;gap:8px' + dimmed + '">' +
-      '<span style="font-size:11px;font-weight:700;color:var(--text-secondary);flex:1">FAQ RAG</span>' +
-      '<div style="display:flex;gap:4px">' +
-        '<button class="cvf-pill' + (f === true ? ' active' : '') + '" style="' + pillBase + '" onclick="setRagPreset(\'faq\',true)">결과있음</button>' +
-        '<button class="cvf-pill' + (f === false ? ' active-fail' : '') + '" style="' + pillBase + '" onclick="setRagPreset(\'faq\',false)">결과없음</button>' +
-      '</div>' +
-    '</div>' +
-  '</div>';
+  var opts = [
+    {v:'yakgwan', l:'약관 RAG',     icon:'fa-file-contract'},
+    {v:'faq',     l:'FAQ RAG',      icon:'fa-circle-question'},
+    {v:'llm',     l:'LLM Fallback', icon:'fa-robot'},
+  ];
+  var html = '<div style="display:flex;gap:5px">';
+  opts.forEach(function(o) {
+    var isAct = ragMockState === o.v;
+    html += '<button class="cvf-pill' + (isAct ? ' active' : '') + '" ' +
+      'style="flex:1;justify-content:center;padding:5px 0;font-size:11px" ' +
+      'onclick="setRagPreset(\'' + o.v + '\')">' +
+      '<i class="fa-solid ' + o.icon + '" style="font-size:10px;margin-right:4px"></i>' + o.l +
+      '</button>';
+  });
+  html += '</div>';
+  html += '<div style="font-size:10px;color:var(--text-hint);margin-top:5px">KC 미매칭 시 발동할 경로를 선택하세요</div>';
+  return html;
 }
 
-function setRagPreset(type, val) {
-  ragMockState[type] = val;
+function setRagPreset(val) {
+  ragMockState = val;
   var section = document.getElementById('ragPresetSection');
   if (section) section.innerHTML = buildRagPresetHTML();
 }
@@ -1975,8 +1972,7 @@ function renderAnswerChain(cardId) {
   if (!area) return;
   var evResult = evaluateTestResult();
   var kcPass   = evResult.pass;
-  var y = ragMockState.yakgwan;
-  var f = ragMockState.faq;
+  var ragPath  = ragMockState; // 'yakgwan' | 'faq' | 'llm'
 
   var html = '<div class="ans-chain">';
 
@@ -1994,27 +1990,23 @@ function renderAnswerChain(cardId) {
     html += '<div class="chain-connector"><i class="fa-solid fa-arrow-down"></i></div>';
 
     // ── Step 2: 약관 RAG ──
-    var yakgwanBody = y
-      ? buildRagAnswerHTML('yakgwan', cardId)
-      : '<div style="font-size:12px;color:var(--text-secondary)">약관에서 관련 내용을 찾지 못했습니다.</div>';
+    var yakgwanPass = ragPath === 'yakgwan';
     html += buildAnswerStep(2, '약관 RAG',
-      y ? 'pass' : 'fail',
-      y ? '<span class="chain-sbadge ok">결과 있음</span>' : '<span class="chain-sbadge fail">결과 없음 → 다음 단계</span>',
-      yakgwanBody);
+      yakgwanPass ? 'pass' : 'fail',
+      yakgwanPass ? '<span class="chain-sbadge ok">결과 있음</span>' : '<span class="chain-sbadge fail">결과 없음 → 다음 단계</span>',
+      yakgwanPass ? buildRagAnswerHTML('yakgwan', cardId) : '<div style="font-size:12px;color:var(--text-secondary)">약관에서 관련 내용을 찾지 못했습니다.</div>');
 
-    if (!y) {
+    if (!yakgwanPass) {
       html += '<div class="chain-connector"><i class="fa-solid fa-arrow-down"></i></div>';
 
       // ── Step 3: FAQ RAG ──
-      var faqBody = f
-        ? buildRagAnswerHTML('faq', cardId)
-        : '<div style="font-size:12px;color:var(--text-secondary)">FAQ에서 관련 내용을 찾지 못했습니다.</div>';
+      var faqPass = ragPath === 'faq';
       html += buildAnswerStep(3, 'FAQ RAG',
-        f ? 'pass' : 'fail',
-        f ? '<span class="chain-sbadge ok">결과 있음</span>' : '<span class="chain-sbadge fail">결과 없음 → 다음 단계</span>',
-        faqBody);
+        faqPass ? 'pass' : 'fail',
+        faqPass ? '<span class="chain-sbadge ok">결과 있음</span>' : '<span class="chain-sbadge fail">결과 없음 → 다음 단계</span>',
+        faqPass ? buildRagAnswerHTML('faq', cardId) : '<div style="font-size:12px;color:var(--text-secondary)">FAQ에서 관련 내용을 찾지 못했습니다.</div>');
 
-      if (!f) {
+      if (!faqPass) {
         html += '<div class="chain-connector"><i class="fa-solid fa-arrow-down"></i></div>';
         html += buildAnswerStep(4, 'LLM Fallback', 'pass',
           '<span class="chain-sbadge llm">항상 응답</span>',
@@ -2077,10 +2069,6 @@ function buildLLMAnswerHTML(cardId) {
     '</div></div>';
 }
 
-function onRagResult(step, hasResult, cardId) {
-  setRagPreset(step, hasResult);
-  renderAnswerChain(cardId);
-}
 
 function closePanel() {
   document.getElementById('slidePanel').classList.remove('open');
