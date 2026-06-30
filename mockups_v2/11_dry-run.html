@@ -276,50 +276,7 @@ textarea.form-control{resize:vertical;min-height:80px}
             <div class="cpro-sec" style="margin-top:0;padding-top:0;border-top:none">
               <i class="fa-solid fa-user" style="font-size:10px;margin-right:4px"></i>사용자 프로파일
             </div>
-            <div style="display:flex;align-items:center;gap:20px;margin-bottom:4px">
-              <div style="display:flex;align-items:center;gap:6px">
-                <label style="font-size:12px;color:var(--text-secondary);font-weight:600;white-space:nowrap">나이</label>
-                <input id="profileAge" type="number" min="20" max="80" value="45"
-                       style="width:58px;padding:4px 8px;border:1px solid var(--border);border-radius:5px;font-size:13px;font-family:inherit;text-align:center"
-                       oninput="onProfileChange()">
-                <span style="font-size:12px;color:var(--text-secondary)">세</span>
-              </div>
-              <div style="display:flex;align-items:center;gap:8px">
-                <label style="font-size:12px;color:var(--text-secondary);font-weight:600">성별</label>
-                <label style="font-size:13px;cursor:pointer;display:flex;align-items:center;gap:3px">
-                  <input type="radio" name="profileGender" value="남" checked onchange="onProfileChange()"> 남
-                </label>
-                <label style="font-size:13px;cursor:pointer;display:flex;align-items:center;gap:3px">
-                  <input type="radio" name="profileGender" value="여" onchange="onProfileChange()"> 여
-                </label>
-              </div>
-            </div>
-            <div style="display:flex;align-items:center;gap:20px;margin-bottom:4px">
-              <div style="display:flex;align-items:center;gap:6px">
-                <label style="font-size:12px;color:var(--text-secondary);font-weight:600;white-space:nowrap">결혼여부</label>
-                <select id="profileMarried" style="padding:3px 6px;border:1px solid var(--border);border-radius:5px;font-size:13px;font-family:inherit" onchange="onProfileChange()">
-                  <option value="무관">무관</option>
-                  <option value="기혼">기혼</option>
-                  <option value="미혼">미혼</option>
-                </select>
-              </div>
-              <div style="display:flex;align-items:center;gap:6px">
-                <label style="font-size:12px;color:var(--text-secondary);font-weight:600;white-space:nowrap">자녀유무</label>
-                <select id="profileHasChild" style="padding:3px 6px;border:1px solid var(--border);border-radius:5px;font-size:13px;font-family:inherit" onchange="onProfileChange()">
-                  <option value="무관">무관</option>
-                  <option value="있음">있음</option>
-                  <option value="없음">없음</option>
-                </select>
-              </div>
-              <div style="display:flex;align-items:center;gap:6px">
-                <label style="font-size:12px;color:var(--text-secondary);font-weight:600;white-space:nowrap">운전여부</label>
-                <select id="profileDrives" style="padding:3px 6px;border:1px solid var(--border);border-radius:5px;font-size:13px;font-family:inherit" onchange="onProfileChange()">
-                  <option value="무관">무관</option>
-                  <option value="유">유</option>
-                  <option value="무">무</option>
-                </select>
-              </div>
-            </div>
+            <div id="customProfileFields"></div>
 
             <!-- 마이데이터 담보금액 -->
             <div class="cpro-sec">
@@ -858,6 +815,7 @@ const RESULTS = {
 const CARD_TEST_CONDITIONS = {
   CN004: {
     cluster: 'T02',
+    profileFields: ['age', 'gender'],
     mydata: [
       {code:'A4601', desc:'중증질환(뇌혈관) 산정특례', op:'LTE', threshold:10000000},
       {code:'A6107', desc:'뇌혈관질환 입원일당',       op:'LTE', threshold:50000},
@@ -874,6 +832,7 @@ const CARD_TEST_CONDITIONS = {
   },
   RT03: {
     cluster: 'T02',
+    profileFields: ['age', 'gender'],
     mydata: [
       {code:'A4601', desc:'중증질환(뇌혈관) 산정특례', op:'LTE', threshold:10000000},
       {code:'A4602', desc:'중증질환(심장) 산정특례',   op:'LTE', threshold:10000000},
@@ -892,6 +851,7 @@ const CARD_TEST_CONDITIONS = {
   },
   RU003: {
     cluster: 'T02',
+    profileFields: ['age', 'gender'],
     mydata: [
       {code:'A4601', desc:'중증질환(뇌혈관) 산정특례', op:'LTE', threshold:10000000},
       {code:'A4602', desc:'중증질환(심장) 산정특례',   op:'LTE', threshold:10000000},
@@ -908,6 +868,7 @@ const CARD_TEST_CONDITIONS = {
   },
   PB002: {
     cluster: 'T02',
+    profileFields: ['age', 'gender'],
     mydata: [
       {code:'A4601', desc:'중증질환(뇌혈관) 산정특례', op:'LTE', threshold:10000000},
       {code:'A6107', desc:'뇌혈관질환 입원일당',       op:'LTE', threshold:50000},
@@ -1061,16 +1022,95 @@ function updateRunBtnState() {
 }
 
 // ============================================================
+// 사용자 프로파일 입력 HTML 생성 (카드별 필요 필드만)
+// fields: ['age','gender','married','has_child','drives'] 중 일부
+// ============================================================
+function buildProfileInputHTML(fields) {
+  var f = fields || ['age', 'gender', 'married', 'has_child', 'drives'];
+  var p = customProfile.profile;
+  var row1 = [];
+  var row2 = [];
+
+  if (f.indexOf('age') !== -1) {
+    row1.push(
+      '<div style="display:flex;align-items:center;gap:6px">' +
+        '<label style="font-size:12px;color:var(--text-secondary);font-weight:600;white-space:nowrap">나이</label>' +
+        '<input id="profileAge" type="number" min="20" max="80" value="' + (p.age || 45) + '" ' +
+          'style="width:58px;padding:4px 8px;border:1px solid var(--border);border-radius:5px;font-size:13px;font-family:inherit;text-align:center" ' +
+          'oninput="onProfileChange()">' +
+        '<span style="font-size:12px;color:var(--text-secondary)">세</span>' +
+      '</div>'
+    );
+  }
+  if (f.indexOf('gender') !== -1) {
+    var isMale = p.gender !== '여';
+    row1.push(
+      '<div style="display:flex;align-items:center;gap:8px">' +
+        '<label style="font-size:12px;color:var(--text-secondary);font-weight:600">성별</label>' +
+        '<label style="font-size:13px;cursor:pointer;display:flex;align-items:center;gap:3px">' +
+          '<input type="radio" name="profileGender" value="남" ' + (isMale ? 'checked' : '') + ' onchange="onProfileChange()"> 남' +
+        '</label>' +
+        '<label style="font-size:13px;cursor:pointer;display:flex;align-items:center;gap:3px">' +
+          '<input type="radio" name="profileGender" value="여" ' + (!isMale ? 'checked' : '') + ' onchange="onProfileChange()"> 여' +
+        '</label>' +
+      '</div>'
+    );
+  }
+  if (f.indexOf('married') !== -1) {
+    var mv = p.married || '무관';
+    row2.push(
+      '<div style="display:flex;align-items:center;gap:6px">' +
+        '<label style="font-size:12px;color:var(--text-secondary);font-weight:600;white-space:nowrap">결혼여부</label>' +
+        '<select id="profileMarried" style="padding:3px 6px;border:1px solid var(--border);border-radius:5px;font-size:13px;font-family:inherit" onchange="onProfileChange()">' +
+          ['무관','기혼','미혼'].map(function(v) { return '<option value="'+v+'"'+(mv===v?' selected':'')+'>'+v+'</option>'; }).join('') +
+        '</select>' +
+      '</div>'
+    );
+  }
+  if (f.indexOf('has_child') !== -1) {
+    var cv = p.has_child || '무관';
+    row2.push(
+      '<div style="display:flex;align-items:center;gap:6px">' +
+        '<label style="font-size:12px;color:var(--text-secondary);font-weight:600;white-space:nowrap">자녀유무</label>' +
+        '<select id="profileHasChild" style="padding:3px 6px;border:1px solid var(--border);border-radius:5px;font-size:13px;font-family:inherit" onchange="onProfileChange()">' +
+          ['무관','있음','없음'].map(function(v) { return '<option value="'+v+'"'+(cv===v?' selected':'')+'>'+v+'</option>'; }).join('') +
+        '</select>' +
+      '</div>'
+    );
+  }
+  if (f.indexOf('drives') !== -1) {
+    var dv = p.drives || '무관';
+    row2.push(
+      '<div style="display:flex;align-items:center;gap:6px">' +
+        '<label style="font-size:12px;color:var(--text-secondary);font-weight:600;white-space:nowrap">운전여부</label>' +
+        '<select id="profileDrives" style="padding:3px 6px;border:1px solid var(--border);border-radius:5px;font-size:13px;font-family:inherit" onchange="onProfileChange()">' +
+          ['무관','유','무'].map(function(v) { return '<option value="'+v+'"'+(dv===v?' selected':'')+'>'+v+'</option>'; }).join('') +
+        '</select>' +
+      '</div>'
+    );
+  }
+
+  var html = '';
+  if (row1.length) html += '<div style="display:flex;align-items:center;gap:20px;margin-bottom:4px">' + row1.join('') + '</div>';
+  if (row2.length) html += '<div style="display:flex;align-items:center;gap:20px;margin-bottom:4px">' + row2.join('') + '</div>';
+  return html || '<span style="font-size:13px;color:var(--text-hint)">이 카드에서 사용하지 않는 항목</span>';
+}
+
+// ============================================================
 // 테스트 조건 UI 빌드
 // ============================================================
 function buildCustomProfileUI(cardId) {
   var conds = CARD_TEST_CONDITIONS[cardId];
   if (!conds) {
+    document.getElementById('customProfileFields').innerHTML = buildProfileInputHTML(null);
     document.getElementById('customMydataFields').innerHTML = '<span style="font-size:13px;color:var(--text-hint)">이 카드 타입의 조건 정의 없음</span>';
     document.getElementById('customPromageFields').innerHTML = '';
     updateCustomSummary();
     return;
   }
+
+  // 사용자 프로파일 (카드별 필요 필드만)
+  document.getElementById('customProfileFields').innerHTML = buildProfileInputHTML(conds.profileFields);
 
   // 마이데이터 담보금액
   var mydataHtml = conds.mydata.map(function(item) {
@@ -1289,11 +1329,8 @@ function resetBelowCard() {
   document.getElementById('profileGroup').style.display = 'none';
   customProfile.mydata   = {};
   customProfile.promage  = {};
-  customProfile.profile  = {age:45, gender:'남'};
-  var ageEl = document.getElementById('profileAge');
-  if (ageEl) ageEl.value = 45;
-  var genderEl = document.querySelector('input[name="profileGender"][value="남"]');
-  if (genderEl) genderEl.checked = true;
+  customProfile.profile  = {age:45, gender:'남', married:'무관', has_child:'무관', drives:'무관'};
+  document.getElementById('customProfileFields').innerHTML = '';
   document.getElementById('customMydataFields').innerHTML = '';
   document.getElementById('customPromageFields').innerHTML = '';
   var sumEl = document.getElementById('customProfileSummary');
