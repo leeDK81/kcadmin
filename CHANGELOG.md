@@ -10,9 +10,16 @@
 
 | 파일 | 내용 |
 |---|---|
-| `mockups_v2/00_canvas-main.html` | 사전 테스트 PROMAGE 조건: 위험/주의/양호 등급 버튼 → 충족/미충족 토글 (MYDATA와 통일) |
-| `context/decisions.md` | 2026-06-30 변경 이력 추가, 미결 항목 1건 추가 (PROFILE 사용 필드만 표시) |
-| `CLAUDE.md` | 현재 상태 2026-06-30 섹션 추가 |
+| `mockups_v2/00_canvas-main.html` | ① PROMAGE 조건: 위험/주의/양호 등급 버튼 → 충족/미충족 토글 (MYDATA와 통일) |
+| `mockups_v2/00_canvas-main.html` | ② RAG 결과 설정: 약관RAG 제거 → FAQ RAG · LLM Fallback 2버튼. KC미매칭 흐름 3단계로 재구성. |
+| `context/decisions.md` | 2026-06-30 변경 이력 2건 추가, 미결 항목 1건 추가 (PROFILE 사용 필드만 표시) |
+| `CLAUDE.md` | 현재 상태 2026-06-30 섹션 최신화 |
+
+### 결정 근거 — 약관 RAG 제거
+
+약관 RAG는 실사용자의 MYDATA(보험 계약 정보) 없이는 발동 조건 자체를 특정할 수 없음.  
+사전 테스트는 운영자 배포 판단 관문이므로 검증 불가 경로를 선택지에 두면 안 됨.  
+가상 인물로 테스트 가능한 경로: KC 조건 평가 → FAQ RAG → LLM Fallback.
 
 ### 미결 (다음 세션 예정)
 
