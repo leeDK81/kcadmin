@@ -915,12 +915,13 @@ function buildProfileInputHTML(fields) {
       '</div>'
     );
   }
+  var SEL = 'padding:3px 6px;border:1px solid var(--border);border-radius:5px;font-size:13px;font-family:inherit;width:72px';
   if (f.indexOf('married') !== -1) {
     var mv = p.married || '무관';
     row2.push(
       '<div style="display:flex;align-items:center;gap:6px">' +
         '<label style="font-size:12px;color:var(--text-secondary);font-weight:600;white-space:nowrap">결혼여부</label>' +
-        '<select id="profileMarried" style="padding:3px 6px;border:1px solid var(--border);border-radius:5px;font-size:13px;font-family:inherit" onchange="onProfileChange()">' +
+        '<select id="profileMarried" style="' + SEL + '" onchange="onProfileChange()">' +
           ['무관','기혼','미혼'].map(function(v) { return '<option value="'+v+'"'+(mv===v?' selected':'')+'>'+v+'</option>'; }).join('') +
         '</select>' +
       '</div>'
@@ -931,7 +932,7 @@ function buildProfileInputHTML(fields) {
     row2.push(
       '<div style="display:flex;align-items:center;gap:6px">' +
         '<label style="font-size:12px;color:var(--text-secondary);font-weight:600;white-space:nowrap">자녀유무</label>' +
-        '<select id="profileHasChild" style="padding:3px 6px;border:1px solid var(--border);border-radius:5px;font-size:13px;font-family:inherit" onchange="onProfileChange()">' +
+        '<select id="profileHasChild" style="' + SEL + '" onchange="onProfileChange()">' +
           ['무관','있음','없음'].map(function(v) { return '<option value="'+v+'"'+(cv===v?' selected':'')+'>'+v+'</option>'; }).join('') +
         '</select>' +
       '</div>'
@@ -942,17 +943,16 @@ function buildProfileInputHTML(fields) {
     row2.push(
       '<div style="display:flex;align-items:center;gap:6px">' +
         '<label style="font-size:12px;color:var(--text-secondary);font-weight:600;white-space:nowrap">운전여부</label>' +
-        '<select id="profileDrives" style="padding:3px 6px;border:1px solid var(--border);border-radius:5px;font-size:13px;font-family:inherit" onchange="onProfileChange()">' +
+        '<select id="profileDrives" style="' + SEL + '" onchange="onProfileChange()">' +
           ['무관','유','무'].map(function(v) { return '<option value="'+v+'"'+(dv===v?' selected':'')+'>'+v+'</option>'; }).join('') +
         '</select>' +
       '</div>'
     );
   }
 
-  var html = '';
-  if (row1.length) html += '<div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px 16px;margin-bottom:4px">' + row1.join('') + '</div>';
-  if (row2.length) html += '<div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px 16px;margin-bottom:4px">' + row2.join('') + '</div>';
-  return html || '<span style="font-size:13px;color:var(--text-hint)">이 카드에서 사용하지 않는 항목</span>';
+  var allItems = row1.concat(row2);
+  if (!allItems.length) return '<span style="font-size:13px;color:var(--text-hint)">이 카드에서 사용하지 않는 항목</span>';
+  return '<div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px 20px">' + allItems.join('') + '</div>';
 }
 
 // ============================================================
