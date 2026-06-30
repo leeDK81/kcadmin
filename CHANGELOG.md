@@ -4,6 +4,33 @@
 
 ---
 
+## 2026-06-30 — MD 구조 리팩터링 (단일 진실원 + 확장성)
+
+### 변경 사항
+
+| 파일 | 내용 |
+|---|---|
+| `context/rules.md` | **신규** — 협업 고정 규칙·단일 진실원 원칙·에이전트 수정 조건·업데이트 절차 단일화 |
+| `context/impact-map.md` | **신규** — 정책 변경 → 영향 파일 매핑 테이블 (18개 항목, 체크리스트 3종) |
+| `CLAUDE.md` | 380줄 → ~100줄 슬림화. 협업 지침 → rules.md 위임. 현재 상태/이력 → CHANGELOG.md. 계층 2에 rules.md·impact-map.md 추가 |
+| `guides/ux-patterns.md` | 금지어 목록 16줄 제거 → `guides/copywriting.md` 참조 1줄로 |
+| `guides/copywriting.md` | 금지어 단일 원본 유지 (변경 없음) |
+| `agents/01_ai-rag-architect.md` | 금지 용어 테이블 9행 제거 → `guides/copywriting.md` 참조 1줄로 |
+| `agents/02_po.md` | 진실원 파일 표에 rules.md · impact-map.md 2행 추가 |
+| `agents/03_ui-designer.md` | 금지어 테이블 11행 제거 → `guides/copywriting.md` 참조 1줄로 |
+| `agents/04_coder.md` | 카피라이팅 체크리스트 10개 → 4줄 단순화 (copywriting.md 참조 + MOCK_DATA/console.log/Pretendard 핵심만) |
+| `agents/05_code-reviewer.md` | G 섹션 금지 표현 개별 항목 제거 → `guides/copywriting.md` 참조 1줄로 |
+| `agents/06_spec-reviewer.md` | I 섹션 카피라이팅 검수 7개 항목 → `guides/copywriting.md` 참조 1줄로 |
+| `agents/08_ui-reviewer.md` | E-1 섹션 11행 표 → 2행으로 단순화 (copywriting.md 참조 + Evidence 구조 핵심만 유지) |
+
+### 구조 변경 원칙
+
+- **단일 진실원**: 금지어는 `guides/copywriting.md` 한 곳에만. 에이전트/가이드는 참조만.
+- **impact-map.md**: 정책 변경 시 전수 감사 불필요 — 해당 항목 행만 보고 영향 파일 수정.
+- **rules.md**: 협업 규칙·업데이트 절차가 흩어지지 않도록 단일 관리.
+
+---
+
 ## 2026-06-30 — 사전 테스트 UX 개선 · Vercel 배포
 
 ### 변경 사항
