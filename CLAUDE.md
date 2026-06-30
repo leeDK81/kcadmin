@@ -31,7 +31,7 @@
 
 ```
 context/
-  project.md          ← KC Admin 개요, 카드 체계, 파일 목록 26개 (v2)
+  project.md          ← KC Admin 개요, 카드 체계, 파일 목록 24개 (v2)
   decisions.md        ← 미결 항목, Phase 범위, 변경 이력 인덱스
   card-policy.md      ← CONNECT_RULES, 카드 상태/엣지, 공개범위, 타입코드
   card-types.md       ← 카드별 상세 스펙 (Evidence/Rule/Concept/Policy/Playbook/Risk-type)
@@ -49,7 +49,7 @@ guides/
 
 agents/           ← 역할별 전담 파일 (위 에이전트 구성 표 참조)
 CHANGELOG.md      ← 세션별 변경 이력 (현재 상태·과거 기록 전체 여기서 관리)
-mockups_v2/       ← 현행 작업 폴더. 26개 HTML (캔버스 UX 기준)
+mockups_v2/       ← 현행 작업 폴더. 24개 HTML (캔버스 UX 기준)
 policy/           ← 설계 정책 문서 10개 HTML (00_index~09_matching-policy)
 mockups/          ← Phase 1 완료 산출물 24개 (참조용 — 신규 작업은 mockups_v2/ 사용)
 Data/             ← 원천 기획서 — 별도 지시 없이 접근 금지

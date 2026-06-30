@@ -197,10 +197,10 @@
 
 | 영향 파일 | 변경 위치 |
 |---|---|
-| `mockups_v2/shared.js` | **`SIDEBAR_ITEMS` 배열만 수정** → 26개 파일 자동 반영 |
+| `mockups_v2/shared.js` | **`SIDEBAR_ITEMS` 배열만 수정** → 24개 파일 자동 반영 |
 | `context/project.md` | 파일 목록 설명 (사이드바 순서·분류 반영) |
 | `guides/ux-patterns.md` | 사이드바 HTML 패턴 예시 업데이트 |
-| *(mockups_v2/ 26개 직접 수정 불필요)* | `renderSidebar()` 호출로 자동 렌더링됨 |
+| *(mockups_v2/ 24개 직접 수정 불필요)* | `renderSidebar()` 호출로 자동 렌더링됨 |
 
 ---
 
@@ -210,9 +210,9 @@
 
 | 영향 파일 | 변경 위치 |
 |---|---|
-| `mockups_v2/shared.css` | **`:root` 변수만 수정** → 26개 파일 자동 반영 |
+| `mockups_v2/shared.css` | **`:root` 변수만 수정** → 24개 파일 자동 반영 |
 | `guides/design-system.md` | `:root` 변수 참조 문서 동기화 |
-| *(mockups_v2/ 26개 직접 수정 불필요)* | CSS 변수 참조로 자동 반영됨 |
+| *(mockups_v2/ 24개 직접 수정 불필요)* | CSS 변수 참조로 자동 반영됨 |
 
 ---
 
@@ -224,7 +224,7 @@
 |---|---|
 | `mockups_v2/shared.css` | `.badge-*`, `.tag-*`, `.ct-*` CSS 규칙, `--card-*` 변수 |
 | `mockups_v2/shared.js` | `TYPE_COLOR` 객체 (JS로 동적 색상을 계산하는 곳) |
-| *(26개 파일 직접 수정 불필요)* | shared.css/js 참조로 자동 반영 |
+| *(24개 파일 직접 수정 불필요)* | shared.css/js 참조로 자동 반영 |
 
 ---
 
@@ -311,7 +311,7 @@
 1. `context/project.md` — 파일 목록·파일 수 업데이트
 2. `context/decisions.md` — 변경 이력 한 줄 추가
 3. `agents/02_po.md` — 화면 우선순위 표에 추가
-4. `mockups_v2/shared.js` — **`SIDEBAR_ITEMS` 배열에 새 항목 추가** (26개 일괄 반영)
+4. `mockups_v2/shared.js` — **`SIDEBAR_ITEMS` 배열에 새 항목 추가** (24개 일괄 반영)
 5. `guides/ux-patterns.md` — 사이드바 HTML 패턴 예시 업데이트 (필요 시)
 6. 신규 HTML 파일 — `<link href="shared.css">` + `<script src="shared.js">` + `renderSidebar('파일명.html')` 추가 (같은 폴더이므로 `../` 없음)
 7. `CLAUDE.md` — 에이전트 표의 "계층 2 참조" 업데이트 (해당 에이전트만)
