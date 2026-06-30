@@ -12,6 +12,8 @@
 |---|---|
 | `mockups_v2/00_canvas-main.html` | ① PROMAGE 조건: 위험/주의/양호 등급 버튼 → 충족/미충족 토글 (MYDATA와 통일) |
 | `mockups_v2/00_canvas-main.html` | ② RAG 결과 설정: 약관RAG 제거 → FAQ RAG · LLM Fallback 2버튼. KC미매칭 흐름 3단계로 재구성. |
+| `mockups_v2/00_canvas-main.html` | ③ 라이브 전환 버튼: 패널 푸터 고정. KC 통과 + approved 카드 존재 시 표시. 클릭 시 approved→active 전환·캔버스 갱신. |
+| `mockups_v2/00_canvas-main.html` | ④ 데모 데이터: PO001 status=approved, RU001→PO001 edge=pending (T01 라이브 전환 시나리오) |
 | `context/decisions.md` | 2026-06-30 변경 이력 2건 추가, 미결 항목 1건 추가 (PROFILE 사용 필드만 표시) |
 | `CLAUDE.md` | 현재 상태 2026-06-30 섹션 최신화 |
 

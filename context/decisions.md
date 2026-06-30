@@ -51,6 +51,7 @@
 
 | 날짜 | 내용 | 진실원 파일 |
 |---|---|---|
+| 2026-06-30 | **사전 테스트 — 라이브 전환 버튼 추가**: 조건: KC 통과 AND 체인 내 approved 카드 존재. 위치: 패널 푸터 고정(테스트 실행 전 숨김). 클릭 시 체인 내 approved 카드 → active 전환, 캔버스 즉시 갱신. `testHasRun` 플래그, `updateFooterGoLive()`, `goLive()` 신규. 데모 데이터: PO001 status=approved, RU001→PO001 edge=pending. | `mockups_v2/00_canvas-main.html` |
 | 2026-06-30 | **사전 테스트 RAG 결과 설정 — 약관 RAG 제거, FAQ RAG·LLM Fallback 2개로 단순화**: 약관 RAG는 사용자 실제 보험 계약 정보(MYDATA) 없이 테스트 불가 — 사전 테스트는 운영자 배포 판단 관문이므로 검증 불가 항목 제거. `ragMockState`: `{yakgwan,faq}` → `'faq'\|'llm'`. `buildRagPresetHTML` 2버튼, `renderAnswerChain` Step 2→FAQ RAG·Step 3→LLM Fallback으로 재번호. hint 텍스트에 약관 RAG 제외 이유 명시. | `mockups_v2/00_canvas-main.html` |
 | 2026-06-30 | **사전 테스트 PROMAGE 조건 — 충족/미충족 토글로 통일**: 기존 위험/주의/양호/미설정 4개 등급 버튼 → MYDATA와 동일한 `✓ 충족 / ✗ 미충족` 토글. 조건에 이미 "암 종합 등급 EQ 위험"처럼 기댓값이 명시되어 있으므로 등급 재선택 불필요. `buildRuleCondRowsHTML` PROMAGE 분기, `updateTestSummary` 칩, `evaluateTestResult` 평가 로직 단순화 (`testProfile.conditions[key]` 기준으로 통일). | `mockups_v2/00_canvas-main.html` |
 | 2026-06-29 | **T06·T15·T16 체인 전체 제거**: ① T06(갱신형 보험료 급등) — MYDATA에 갱신형/비갱신형 구분 담보코드 없어 직접 감지 불가. ② T15(자녀 건강보장 공백) — 마이데이터 사업자는 본인 계약만 조회, 자녀 보험 접근 구조적 불가. ③ T16(실손보험 노후화) — 실손 세대(1~4세대) 구분 담보코드 없음. 제거 범위 각 체인당: Risk-type·Rule·Concept·Policy 카드 + 전용 Evidence(EV017·EV020·EV025·EV032). 체인 23→20개, Risk-type 23→20장, Rule 23→20장, Concept 20→17장, Policy 19→16장, Evidence 33→29장. | `contents/html/01~05_*.html` |

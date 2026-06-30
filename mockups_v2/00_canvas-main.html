@@ -481,7 +481,7 @@ const CARDS = [
   {id:'EV001',type:'evidence', status:'active', cluster:'T01',title:'암 평균 입원 진료비',     meta:'심평원 (HIRA) 2024 · 기준값: 386만원', scope:'internal'},
   {id:'EV002',type:'evidence', status:'active', cluster:'T01',title:'암 5년 생존율',           meta:'건보공단 (NHIS) 2023 · 기준값: 71.5%', scope:'internal'},
   {id:'EV005',type:'evidence', status:'active', cluster:'T01',title:'65세↑ 간병보험 미가입률', meta:'금감원 (FSS) 2024 · 기준값: 68.3%',    scope:'internal'},
-  {id:'PO001',type:'policy',   status:'active', cluster:'T01',title:'암 보장 면책 고지',       meta:'금소법 17조 · 준법감시인 승인완료',     scope:'internal'},
+  {id:'PO001',type:'policy',   status:'approved', cluster:'T01',title:'암 보장 면책 고지',       meta:'금소법 17조 · 준법감시인 승인완료',     scope:'internal'},
   {id:'PB001',type:'playbook', status:'active', cluster:'T01',title:'암 진단 상담 CTA',        meta:'키워드 5개 · 💬 상담연결',              scope:'internal'},
   {id:'CN003',type:'concept',  status:'active', cluster:'T02',title:'뇌졸중 보험 보장',        meta:'동의어 9개 · Risk: RT02',              scope:'public'},
   {id:'CN004',type:'concept',  status:'approved', cluster:'T02',title:'뇌경색 치료비 보장',      meta:'동의어 6개 · Risk: RT02',              scope:'public'},
@@ -500,7 +500,7 @@ const EDGES = [
   {from:'RU001',to:'EV001',status:'active'},
   {from:'RU001',to:'EV002',status:'active'},
   {from:'RU001',to:'EV005',status:'active'},
-  {from:'RU001',to:'PO001',status:'active'},
+  {from:'RU001',to:'PO001',status:'pending'},
   {from:'CN003',to:'RT02', status:'active'},
   {from:'CN004',to:'RT02', status:'pending'},
   {from:'RT02', to:'RU002',status:'active'},
@@ -622,6 +622,7 @@ let canvasMode    = 'connect'; // 'connect' | 'test'
 let testSelection = {};        // type → cardId (테스트 모드 체크 선택)
 let panelTestMode = 'chain';   // 'chain' (연결모드 열기) | 'canvas' (테스트모드 열기)
 let ragMockState  = 'faq'; // 'faq' | 'llm'
+let testHasRun    = false;
 let canvasStatusFilter = 'all';   // 'all' | 'active' | 'approved'
 let canvasSearchQuery  = '';
 
@@ -1425,11 +1426,13 @@ function renderPanelTest() {
     : '<button class="btn btn-secondary" onclick="switchPanelTab(\'info\')">' +
         '<i class="fa-solid fa-arrow-left" style="font-size:11px"></i> 카드 정보</button>';
 
+  testHasRun = false;
   document.getElementById('panelFooter').innerHTML =
     backBtn +
     '<button class="btn btn-primary" style="flex:1;justify-content:center" onclick="runTest(\'' + card.id + '\')">' +
       '<i class="fa-solid fa-play" style="font-size:11px"></i> 테스트 실행' +
-    '</button>';
+    '</button>' +
+    '<div id="footerGoLive"></div>';
 }
 
 function buildChainSelectorHTML(card) {
@@ -2006,8 +2009,38 @@ function renderAnswerChain(cardId) {
   }
 
   html += '</div>';
+
+  testHasRun = true;
   area.innerHTML = html;
   area.scrollIntoView({behavior:'smooth', block:'nearest'});
+  updateFooterGoLive(kcPass);
+}
+
+function updateFooterGoLive(kcPass) {
+  var el = document.getElementById('footerGoLive');
+  if (!el) return;
+  if (!testHasRun || !kcPass) { el.innerHTML = ''; return; }
+  var chainIds    = Object.values(testChain).filter(Boolean);
+  var chainCards  = CARDS.filter(function(c) { return chainIds.indexOf(c.id) >= 0; });
+  var hasApproved = chainCards.some(function(c) { return c.status === 'approved'; });
+  el.innerHTML = hasApproved
+    ? '<button class="btn btn-primary" style="background:#0F6E56;border-color:#0F6E56;justify-content:center" onclick="goLive()">' +
+        '<i class="fa-solid fa-rocket" style="font-size:11px"></i> 라이브 전환' +
+      '</button>'
+    : '';
+}
+
+function goLive() {
+  var chainIds = Object.values(testChain).filter(Boolean);
+  CARDS.forEach(function(c) {
+    if (chainIds.indexOf(c.id) >= 0 && c.status === 'approved') {
+      c.status = 'active';
+    }
+  });
+  renderGrid();
+  requestAnimationFrame(drawLines);
+  showToast('🚀 라이브 전환 완료 — Clark AI에 반영되었습니다', 'success');
+  renderAnswerChain(panelCardId);
 }
 
 function buildAnswerStep(num, title, state, badge, body) {
