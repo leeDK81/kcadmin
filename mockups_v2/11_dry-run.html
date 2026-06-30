@@ -85,7 +85,7 @@
 .diff-add{color:#0F6E56}.diff-mod{color:#BA7517}
 .deploy-modal-actions{display:flex;gap:8px;justify-content:flex-end}
 /* ── Custom Profile Builder ── */
-.custom-profile-wrap{border:1px solid var(--border);border-radius:8px;padding:14px}
+.custom-profile-wrap{border:1px solid var(--border);border-radius:8px;padding:14px;overflow:hidden}
 .cpro-sec{font-size:11px;font-weight:700;color:var(--text-secondary);letter-spacing:.05em;text-transform:uppercase;margin:14px 0 8px;padding-top:10px;border-top:1px solid var(--border)}
 .cpro-sec:first-child{margin-top:0;padding-top:0;border-top:none}
 .cov-toggle{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:5px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:#fff;color:var(--text-secondary);transition:all .15s;user-select:none;font-family:inherit}
@@ -952,7 +952,7 @@ function buildProfileInputHTML(fields) {
 
   var allItems = row1.concat(row2);
   if (!allItems.length) return '<span style="font-size:13px;color:var(--text-hint)">이 카드에서 사용하지 않는 항목</span>';
-  return '<div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px 20px">' + allItems.join('') + '</div>';
+  return '<div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px 20px;width:100%;box-sizing:border-box">' + allItems.join('') + '</div>';
 }
 
 // ============================================================
