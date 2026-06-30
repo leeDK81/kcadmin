@@ -48,7 +48,7 @@
       <button class="filter-tab active" onclick="filter('all',this)">전체 <span id="c-all"></span></button>
       <button class="filter-tab" onclick="filter('active',this)">🟢 라이브 <span id="c-active"></span></button>
       <button class="filter-tab" onclick="filter('approved',this)">✔ 승인완료 <span id="c-approved"></span></button>
-      <button class="filter-tab" onclick="filter('review',this)">⏳ 검수중 <span id="c-review"></span></button>
+      <button class="filter-tab" onclick="filter('review',this)">⏳ 승인요청 <span id="c-review"></span></button>
       <button class="filter-tab" onclick="filter('draft',this)">📝 임시저장 <span id="c-draft"></span></button>
       <button class="filter-tab" onclick="filter('paused',this)">⏸ 일시중지 <span id="c-paused"></span></button>
       <button class="filter-tab" onclick="filter('rejected',this)">🚫 반려 <span id="c-rejected"></span></button>
@@ -79,12 +79,12 @@ const DATA=[
   {code:'RU002',name:'뇌혈관 보장 범위 협소',status:'review',scope:'공통 기준',riskType:'T04 뇌혈관질환보장 협소형',evidences:['EV003 뇌졸중 평균 입원 진료비 (심평원 2024)'],policies:1,conditions:3,updated:'2026-05-12'},
   {code:'RU003',name:'심혈관 보장 미흡',status:'draft',scope:'공통 기준',riskType:'T03 심혈관질환보장 협소형',evidences:[],policies:0,conditions:0,updated:'2026-05-08'},
   {code:'RU004',name:'노후 간병 보장 부재',status:'approved',scope:'공통 기준',riskType:'T05 노후돌봄보장 공백형',evidences:['EV005 65세 이상 간병보험 미가입률 (금감원 2024)'],policies:1,conditions:2,updated:'2026-05-15'},
-  {code:'RU005',name:'보험료 납입 부담 과다',status:'paused',scope:'공통 기준',riskType:'T06 납입여력부족 우려형',evidences:[],policies:0,conditions:0,updated:'2026-05-16'},
+  {code:'RU005',name:'보험료 납입 부담 과다',status:'paused',scope:'공통 기준',riskType:'',evidences:[],policies:0,conditions:0,updated:'2026-05-16'},
   {code:'RU010',name:'단기납 만기 후 공백',status:'approved',scope:'공통 기준',riskType:'T09 단기납 만기 후 공백형',evidences:['EV005 65세 이상 간병보험 미가입률 (금감원 2024)'],policies:0,conditions:2,updated:'2026-05-15'},
   {code:'RU011',name:'고액 보험료 유지 부담',status:'paused',scope:'공통 기준',riskType:'T10 고액 보험료 유지 부담형',evidences:[],policies:0,conditions:0,updated:'2026-05-16'},
   {code:'RU006',name:'실손 중복 보장 기준 미흡',status:'rejected',scope:'공통 기준',riskType:'T07 실손중복보장 과잉형',evidences:[],policies:0,conditions:1,updated:'2026-05-18'},
 ];
-const ST={active:'🟢 라이브',review:'⏳ 검수중',draft:'📝 임시저장',approved:'✔ 승인완료',paused:'⏸ 일시중지',rejected:'🚫 반려'};
+const ST={active:'🟢 라이브',review:'⏳ 승인요청',draft:'📝 임시저장',approved:'✔ 승인완료',paused:'⏸ 일시중지',rejected:'🚫 반려'};
 let cur='all';
 function filter(s,btn){cur=s;document.querySelectorAll('.filter-tab').forEach(t=>t.classList.remove('active'));btn.classList.add('active');render();}
 

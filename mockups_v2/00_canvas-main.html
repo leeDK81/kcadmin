@@ -323,7 +323,7 @@ body{overflow:hidden;height:100vh}
         <i class="fa-solid fa-circle-dot" style="font-size:9px"></i>
         <span id="pendingCount">0</span>개 준비 연결
       </span>
-      <a href="11_dry-run.html" class="btn btn-secondary btn-sm"><i class="fa-solid fa-flask" style="font-size:10px"></i> 사전 테스트</a>
+      <button class="btn btn-secondary btn-sm" onclick="alert('사전 테스트는 이 캔버스 하단 패널에서 진행합니다.')"><i class="fa-solid fa-flask" style="font-size:10px"></i> 사전 테스트</button>
     </div>
   </div>
 
@@ -1014,7 +1014,7 @@ function chainCardHTML(card, chainSet, focalId) {
   const viaLabel = viaCard
     ? '<div style="font-size:9px;color:var(--text-hint);margin-bottom:4px;display:flex;align-items:center;gap:4px">' +
         (cedge.from === card.id ? '→ ' : '← ') + viaCard.id +
-        (isReviewEdge ? '<span class="gc-review-badge">연결 검수중</span>' : '') +
+        (isReviewEdge ? '<span class="gc-review-badge">승인요청 엣지</span>' : '') +
       '</div>'
     : '';
 
