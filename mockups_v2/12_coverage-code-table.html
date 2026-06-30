@@ -60,11 +60,11 @@ tr.detail-row td{background:#EEF4FF;padding:16px 20px}
 <nav class="sidebar" id="sidebar"></nav>
 <main class="main">
   <div class="page-header">
-    <h1>📋 담보코드·필드 레퍼런스 테이블</h1>
+    <h1>담보코드·필드 레퍼런스 테이블</h1>
     <p>Rule 조건 빌더에서 사용할 수 있는 전체 필드를 탐색하세요</p>
   </div>
 
-  <div class="banner-info">
+  <div class="banner banner-info">
     📌 아래 목록은 주요 담보코드 예시입니다. 실제 운영 시에는 더 많은 항목이 있을 수 있습니다.
   </div>
 
@@ -230,7 +230,7 @@ function switchTab(source) {
 function renderCoverageCodes() {
   const total = Object.values(COVERAGE_CODES).reduce((s, v) => s + v.length, 0);
   const condNote = `
-    <div class="banner-info" style="margin-bottom:20px">
+    <div class="banner banner-info" style="margin-bottom:20px">
       <i class="fa fa-sliders fa-fw"></i>
       <strong>담보코드별 Rule 조건 유형</strong>
       <div style="margin-top:10px;font-size:14px">
@@ -315,7 +315,7 @@ const USER_PROFILE_FIELDS = [
 
 function renderProfileFields() {
   const note = `
-    <div class="banner-info" style="margin-bottom:20px">
+    <div class="banner banner-info" style="margin-bottom:20px">
       <i class="fa fa-user fa-fw"></i>
       <strong>사용자 프로파일 — Rule 조건 3번째 소스</strong>
       <div style="margin-top:8px;font-size:14px;line-height:1.7">

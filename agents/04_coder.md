@@ -14,7 +14,7 @@ Evidence 편집기 구현 → `agents/04a_coder-evidence.md` 전담.
 Playbook 편집기 구현 → `agents/04b_coder-playbook.md` 전담.
 
 > **CONNECT_RULES (최종):**
-> concept → risk-type (필수) / risk → rule (필수, 최소 1개) / rule → evidence (필수, 최소 1개) / rule → policy (선택) / evidence → (단말) / policy → (단말) / playbook → (단말, 독립 체인)
+> concept → risk-type (필수) / risk → rule (필수, 정확히 1개, 1:1 전속·공유 불가) / rule → evidence (필수, 최소 1개) / rule → policy (선택) / evidence → (단말) / policy → (단말) / playbook → (단말, 독립 체인)
 > Concept → Risk-type 연결은 필수. 연결 없으면 KC 체인 미진입. Concept에 Standalone 기능 없음.
 
 ---
@@ -26,7 +26,7 @@ Playbook 편집기 구현 → `agents/04b_coder-playbook.md` 전담.
 - 순수 HTML / CSS / JS. CDN 허용: Font Awesome(아이콘) + Pretendard(폰트).
 - **Google Fonts(Noto Sans KR) 사용 금지.**
 - 데스크탑 기준 1280px. 모바일 대응 불필요.
-- API 연동 없음. `const MOCK_DATA = {}` 하드코딩. 기획서 실제 값 사용 (T01~T10, 담보코드 A4200 등).
+- API 연동 없음. `const MOCK_DATA = {}` 하드코딩. 기획서 실제 값 사용 (T01~T23 (T06·T15·T16 제외), 담보코드 A4200 등).
 
 ### CSS
 

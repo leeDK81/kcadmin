@@ -65,7 +65,6 @@
         <th style="width:110px">연결</th>
         <th style="width:100px;text-align:center">동의어수</th>
         <th style="width:100px">수정일</th>
-        <th style="width:80px"></th>
       </tr>
     </thead>
     <tbody id="tbody"></tbody>
@@ -86,20 +85,7 @@ const DATA=[
 ];
 const ST={active:'🟢 라이브',review:'⏳ 승인요청',draft:'📝 임시저장',approved:'✔ 승인완료',paused:'⏸ 일시중지',rejected:'🚫 반려'};
 let cur='all';
-function actionBtns(d) {
-  const editUrl = `06_card-editor-concept.html?id=${d.code}`;
-  if (d.status === 'draft')    return `<a href="${editUrl}" class="btn btn-sm">편집</a> <button onclick="delCard('${d.code}')" class="btn btn-sm">삭제</button>`;
-  if (d.status === 'review')   return `<button onclick="cancelReview('${d.code}')" class="btn btn-sm">요청취소</button>`;
-  if (d.status === 'approved') return `<a href="00_canvas-main.html" class="btn btn-sm">캔버스에서 연결</a> <a href="${editUrl}" class="btn btn-sm">편집</a>`;
-  if (d.status === 'active')   return `<button onclick="pauseCard('${d.code}')" class="btn btn-sm">일시중지</button> <a href="${editUrl}" class="btn btn-sm">편집</a>`;
-  if (d.status === 'paused')   return `<button onclick="resumeCard('${d.code}')" class="btn btn-sm">재시작</button> <a href="${editUrl}" class="btn btn-sm">편집</a>`;
-  if (d.status === 'rejected') return `<a href="${editUrl}" class="btn btn-sm">편집</a> <button onclick="delCard('${d.code}')" class="btn btn-sm">삭제</button>`;
-  return `<a href="${editUrl}" class="btn btn-sm">편집</a>`;
-}
-function delCard(id){ alert('삭제: '+id); }
-function cancelReview(id){ alert('요청취소: '+id); }
-function pauseCard(id){ alert('일시중지: '+id); }
-function resumeCard(id){ alert('재시작: '+id); }
+
 function filter(s,btn){cur=s;document.querySelectorAll('.filter-tab').forEach(t=>t.classList.remove('active'));btn.classList.add('active');render();}
 function render(){
   const rows=cur==='all'?DATA:DATA.filter(d=>d.status===cur);
@@ -117,9 +103,8 @@ function render(){
       <td>${d.riskTypes.length ? `<span class="conn-chip chip-risk">Risk-type ${d.riskTypes.length}</span>` : `<span style="color:var(--text-hint);font-size:13px">—</span>`}</td>
       <td style="text-align:center">${d.synonyms.length?`<span style="color:var(--step-active);font-weight:600">${d.synonyms.length}개</span>`:'<span style="color:var(--text-hint)">0</span>'}</td>
       <td class="cell-date">${d.updated}</td>
-      <td style="white-space:nowrap" onclick="event.stopPropagation()">${actionBtns(d)}</td>
     </tr>`;}).join('')
-    :`<tr class="empty-row"><td colspan="8">해당 상태의 카드가 없습니다</td></tr>`;
+    :`<tr class="empty-row"><td colspan="7">해당 상태의 카드가 없습니다</td></tr>`;
   const cnt={all:DATA.length,active:0,review:0,draft:0,approved:0,paused:0,rejected:0};
   DATA.forEach(d=>cnt[d.status]++);
   ['all','active','review','draft','approved','paused','rejected'].forEach(k=>{const el=document.getElementById('c-'+k);if(el)el.textContent=cnt[k]});

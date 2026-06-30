@@ -12,7 +12,7 @@
 
 ## 진실원
 
-- **디자인 시스템:** `mockups/00_design-system.html` — CSS 변수·컴포넌트 표준
+- **디자인 시스템:** `mockups_v2/00_design-system.html` — CSS 변수·컴포넌트 표준
 - **UI 설계 원칙:** `agents/03_ui-designer.md` — 원칙 0(첫 방문자 우선) 포함
 - **공통 원칙:** `guides/ux-patterns.md` — 사이드바 아이콘·Active 클래스 표준 / `agents/03_ui-designer.md` — 코드+명칭 병기 원칙(원칙 0)
 

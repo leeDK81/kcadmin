@@ -39,7 +39,7 @@
   → 그리드(하단) "연결 가능" 섹션에서 "연결 추가" 버튼 클릭 → 확인 모달
 
 [검증]
-  → 사전 테스트 (11_dry-run.html)
+  → 캔버스 사전 테스트 패널 (00_canvas-main.html)
 
 [라이브 전환]
   → "배포 요청": pending edge → active edge, KC Engine 즉시 반영

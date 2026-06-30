@@ -158,8 +158,7 @@ rel-box 없음. 4단계 흐름만. HTML/CSS → `guides/ux-patterns.md` + `guide
 **연결 가능 판정 로직:** `findDirectTarget(card, focalCard)` — CONNECT_RULES 직접 연결만 (체인 경유 불가)
 
 **카드 상태 배지 (캔버스 그리드):**
-- active → `"라이브"` (초록), review → `"승인완료"` (주황)
-- review 엣지 → `"연결 검수중"` 배지 (주황)
+- active → `"라이브"` (초록), approved → `"승인완료"` (파랑), review → `"승인요청"` (주황)
 
 HTML/CSS 패턴 → `guides/ux-patterns.md` 캔버스 섹션 참조.
 

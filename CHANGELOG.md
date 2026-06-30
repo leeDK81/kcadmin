@@ -4,6 +4,87 @@
 
 ---
 
+## 2026-06-30 — 전수 감사 결과 일괄 수정 (🔴🟡 이슈 전체 해소)
+
+### 삭제
+| 파일 | 사유 |
+|---|---|
+| `mockups_v2/10_chain-visualizer.html` | 캔버스 UX v2로 대체됨. 사이드바에서도 제거됨 |
+| `mockups_v2/11_dry-run.html` | `00_canvas-main.html` 사전 테스트 패널로 통합됨 |
+
+### 기획 정합성 수정
+| 파일 | 내용 |
+|---|---|
+| `mockups_v2/13_answer-logic.html` | Concept→Risk 연결 "선택사항" → "필수 (미연결 시 KC 체인 진입 불가)" |
+| `mockups_v2/13_answer-logic.html` | Concept 매칭: 키워드 일치 방식 → 임베딩 의미 유사도 (코사인 유사도 ≥ 기준값) |
+| `mockups_v2/13_answer-logic.html` | Playbook 감지: "사용자 발화 부분 매칭" → 임베딩 의미 유사도 (2곳) |
+| `mockups_v2/13_answer-logic.html` | 약관 RAG 가능 상태: "③ 상태에서만" → "상태 ③④에서 가능" |
+| `mockups_v2/13_answer-logic.html` | Risk-type 정렬: "카드코드 오름차순" → ①중요도 서열 → ②선택조건 충족 개수 → ③최근 배포순 |
+| `mockups_v2/13_answer-logic.html` | Policy 필드: `limit`/`scope` → `appDisplayText` (단일 진실원 필드) |
+| `policy/02_card-purpose.html` | Concept 매칭: "완전 일치/포함 일치" → 임베딩 의미 유사도, 타이브레이킹도 정합성 수정 |
+
+### context/ 업데이트
+| 파일 | 내용 |
+|---|---|
+| `context/impact-map.md` | policy/ 파일명 3개 정정, 10·11 참조 전체 제거, 섹션 12 RAG 함수명 업데이트 |
+| `context/workflow.md` | "사전 테스트 (11_dry-run.html)" → "캔버스 사전 테스트 패널 (00_canvas-main.html)" |
+| `context/project.md` | policy/ 9개 → 10개, 09_matching-policy 추가, 파일 목록 26개 → 24개 |
+| `context/decisions.md` | A3201 공통 이슈 T코드 표기 정리 |
+| `context/card-policy.md` | 타입코드 섹션 T01~T10 → T01~T23 확장, T11~T23 행 추가 |
+
+### agents/ 업데이트
+| 파일 | 내용 |
+|---|---|
+| `agents/03_ui-designer.md` | review↔approved 배지 혼동 수정, "연결 검수중" 배지 제거 |
+| `agents/04_coder.md` | T코드 범위 T01~T23, risk→rule 카디널리티 "정확히 1개 (1:1)" |
+| `agents/06_spec-reviewer.md` | 섹션 E T코드 체크리스트 T01~T23 전체로 확장 |
+| `agents/07_insurance-expert.md` | T11~T23 섹션 신규 추가 |
+| `agents/08_ui-reviewer.md` | 경로 `mockups/` → `mockups_v2/` |
+
+### guides/ + 공통 업데이트
+| 파일 | 내용 |
+|---|---|
+| `guides/insurance-domain.md` | T11~T23 섹션 추가 (T01~T23 전체) |
+| `guides/copywriting.md` | T코드 범위 T01~T23 업데이트 |
+| `mockups_v2/shared.js` | `CARD_NAMES`에 EV005 추가 |
+| `mockups_v2/00_design-system.html` | `.badge-locked` 미정의 주석 추가 |
+
+### HTML UI 수정
+| 파일 | 내용 |
+|---|---|
+| `policy/01~08_*.html` (8개) | 사이드바에 `09_matching-policy.html` 링크 추가 |
+| `mockups_v2/08_policy-list.html` | `.badge-scope`/`.sc-internal` → shared.css `.badge-internal`로 교체 |
+| `mockups_v2/12_coverage-code-table.html` | h1 이모지 제거, `class="banner-info"` → `class="banner banner-info"` (3곳) |
+| `mockups_v2/16_card-editor-playbook.html` | `banner-purple` → `banner banner-info` |
+| `mockups_v2/09_review-workflow.html` | `badge-conn-cr/pr` → `badge-concept`/`badge-policy` |
+| `mockups_v2/07_card-editor-rule.html` | hint 텍스트 이모지 제거 |
+
+---
+
+## 2026-06-30 — 리팩터링 후속 버그 수정 · PROFILE 레이아웃 수정
+
+### 변경 사항
+
+| 파일 | 내용 |
+|---|---|
+| `mockups_v2/00_canvas-main.html` | `.test-profile-row`에 `flex-wrap:wrap;gap:8px 14px;overflow:hidden` 추가 → 사전 테스트 패널 PROFILE 항목 줄바꿈 |
+| `mockups_v2/00_canvas-main.html` | `.panel-bd`에 `overflow-x:hidden` 추가 → 패널 가로 스크롤 방지 |
+| `mockups_v2/shared.css` | `.form-control`에 `max-width:100%;box-sizing:border-box` 추가 → 체인경로 select 가로 overflow 방지 |
+| `mockups_v2/11_dry-run.html` | `buildProfileInputHTML(fields)` 함수 개선: row1/row2 구분 제거 → 단일 flex-wrap 컨테이너, select `width:72px` 고정, 반환 div에 `width:100%` 추가 |
+| `mockups_v2/11_dry-run.html` | `.custom-profile-wrap`에 `overflow:hidden` 추가 |
+| 26개 HTML 전체 | `href="../shared.css"` → `href="shared.css"` 경로 오류 일괄 수정 |
+| 11개 HTML (스크립트 순서 오류) | `<script src="shared.js">` 위치를 인라인 `<script>` **앞**으로 이동 — `renderSidebar is not defined` 에러 수정 |
+| `mockups_v2/00_canvas-main.html` | `--panel-w:480px` CSS 변수 복원 (리팩터링 중 `:root` 블록 제거 시 같이 삭제됨) |
+
+### 원인 및 조치 요약
+
+- **경로 오류**: 에이전트들이 `../shared.css` (상위 폴더)로 참조. shared.css/js는 `mockups_v2/` 같은 폴더이므로 상대 경로 불필요. PowerShell 일괄 치환으로 수정.
+- **스크립트 순서**: 11개 파일에서 shared.js가 인라인 스크립트 이후에 로드 → `renderSidebar` 미정의 에러. 순서 재정렬로 수정.
+- **PROFILE 레이아웃**: 5개 항목(나이/성별/결혼/자녀/운전)이 flex 한 줄에 나열 → 480px 패널에서 우측 항목 overflow. flex-wrap 추가로 수정.
+- **체인경로 select overflow**: 긴 option 텍스트가 select 너비를 확장 → `max-width:100%` 추가로 수정.
+
+---
+
 ## 2026-06-30 — shared.css + shared.js 구조 리팩터링
 
 ### 변경 사항

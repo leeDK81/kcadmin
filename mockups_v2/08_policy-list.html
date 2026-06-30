@@ -18,10 +18,6 @@
 .list-table td{padding:12px 16px;border-bottom:1px solid var(--border);font-size:14px;vertical-align:middle}
 .list-table tr:last-child td{border-bottom:none}
 .list-table tr.card-row:hover td{background:#FAFAF8;cursor:pointer}
-.badge-scope{display:inline-block;padding:2px 8px;border-radius:4px;font-size:12px;font-weight:700;white-space:nowrap}
-.sc-public{background:rgba(26,74,154,.1);color:var(--scope-public)}
-.sc-baseline{background:rgba(186,117,23,.1);color:var(--scope-baseline)}
-.sc-internal{background:rgba(90,90,85,.1);color:var(--scope-internal)}
 .cell-code{font-size:12px;font-weight:700;color:var(--text-hint);margin-bottom:1px}
 .cell-name{font-weight:600;overflow:hidden;white-space:nowrap}
 .cell-date{color:var(--text-hint);font-size:13px;white-space:nowrap}
@@ -66,7 +62,6 @@
         <th style="width:120px">연결</th>
         <th>출력제한 요약</th>
         <th style="width:100px">수정일</th>
-        <th style="width:80px"></th>
       </tr>
     </thead>
     <tbody id="tbody"></tbody>
@@ -85,24 +80,10 @@ const DATA=[
   {code:'PO006',name:'단기납 해지 환급금 안내 기준',status:'rejected',scope:'내부 전용',rules:[],limit:'준법감시인 반려 — 문구 재작성 필요',updated:'2026-05-18'},
 ];
 const ST={active:'🟢 라이브',review:'⏳ 검수중',draft:'📝 임시저장',approved:'✔ 승인완료',paused:'⏸ 일시중지',rejected:'🚫 반려'};
-const SC={'고객 공개':'sc-public','공통 기준':'sc-baseline','내부 전용':'sc-internal'};
+const SC={'고객 공개':'badge badge-public','공통 기준':'badge badge-baseline','내부 전용':'badge badge-internal'};
 let cur='all';
 function filter(s,btn){cur=s;document.querySelectorAll('.filter-tab').forEach(t=>t.classList.remove('active'));btn.classList.add('active');render();}
-function actionBtns(d) {
-  const id = d.id || d.code;
-  const editUrl = `08_card-editor-policy.html?id=${id}`;
-  if (d.status === 'draft')    return `<a href="${editUrl}" class="btn btn-sm">편집</a> <button onclick="delCard('${id}')" class="btn btn-sm">삭제</button>`;
-  if (d.status === 'review')   return `<button onclick="cancelReview('${id}')" class="btn btn-sm">요청취소</button>`;
-  if (d.status === 'approved') return `<a href="00_canvas-main.html" class="btn btn-sm">캔버스에서 연결</a> <a href="${editUrl}" class="btn btn-sm">편집</a>`;
-  if (d.status === 'active')   return `<button onclick="pauseCard('${id}')" class="btn btn-sm">일시중지</button> <a href="${editUrl}" class="btn btn-sm">편집</a>`;
-  if (d.status === 'paused')   return `<button onclick="resumeCard('${id}')" class="btn btn-sm">재시작</button> <a href="${editUrl}" class="btn btn-sm">편집</a>`;
-  if (d.status === 'rejected') return `<a href="${editUrl}" class="btn btn-sm">편집</a> <button onclick="delCard('${id}')" class="btn btn-sm">삭제</button>`;
-  return `<a href="${editUrl}" class="btn btn-sm">편집</a>`;
-}
-function delCard(id){ alert('삭제: '+id); }
-function cancelReview(id){ alert('요청취소: '+id); }
-function pauseCard(id){ alert('일시중지: '+id); }
-function resumeCard(id){ alert('재시작: '+id); }
+
 function render(){
   const rows=cur==='all'?DATA:DATA.filter(d=>d.status===cur);
   const tb=document.getElementById('tbody');
@@ -114,13 +95,12 @@ function render(){
     <tr class="card-row" onclick="location.href='08_card-editor-policy.html?id=${d.id||d.code}'">
       <td><span class="badge badge-${d.status}">${ST[d.status]}</span></td>
       <td><div class="cell-code">${d.code}</div><div class="cell-name" title="${d.name}">${d.name}</div></td>
-      <td><span class="badge-scope ${SC[d.scope]}">${d.scope}</span></td>
+      <td><span class="${SC[d.scope]}">${d.scope}</span></td>
       <td>${ruleCell}</td>
       <td style="max-width:0"><div style="overflow:hidden;white-space:nowrap;color:var(--text-secondary);font-size:13px" title="${d.limit}">${d.limit}</div></td>
       <td class="cell-date">${d.updated}</td>
-      <td style="white-space:nowrap">${actionBtns(d)}</td>
     </tr>`;}).join('')
-    :`<tr class="empty-row"><td colspan="7">해당 상태의 카드가 없습니다</td></tr>`;
+    :`<tr class="empty-row"><td colspan="6">해당 상태의 카드가 없습니다</td></tr>`;
   const cnt={all:DATA.length,active:0,review:0,draft:0,approved:0,paused:0,rejected:0};
   DATA.forEach(d=>cnt[d.status]++);
   ['all','active','review','draft','approved','paused','rejected'].forEach(k=>{const el=document.getElementById('c-'+k);if(el)el.textContent=cnt[k]});

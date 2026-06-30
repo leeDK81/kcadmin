@@ -67,7 +67,6 @@
         <th style="width:100px">전환 키워드</th>
         <th style="width:140px">Risk-type 스코어</th>
         <th style="width:100px">수정일</th>
-        <th style="width:150px"></th>
       </tr>
     </thead>
     <tbody id="tbody"></tbody>
@@ -102,21 +101,7 @@ function filter(s,btn){
   btn.classList.add('active');
   render();
 }
-function actionBtns(d) {
-  const editUrl = `16_card-editor-playbook.html?id=${d.id}`;
-  if (d.status === 'draft')    return `<a href="${editUrl}" class="btn btn-sm">편집</a> <button onclick="delCard('${d.id}')" class="btn btn-sm">삭제</button>`;
-  if (d.status === 'review')   return `<button onclick="cancelReview('${d.id}')" class="btn btn-sm">요청취소</button>`;
-  if (d.status === 'approved') return `<button onclick="goLive('${d.id}')" class="btn btn-sm">라이브 전환</button> <a href="${editUrl}" class="btn btn-sm">편집</a>`;
-  if (d.status === 'active')   return `<button onclick="pauseCard('${d.id}')" class="btn btn-sm">일시중지</button> <a href="${editUrl}" class="btn btn-sm">편집</a>`;
-  if (d.status === 'paused')   return `<button onclick="resumeCard('${d.id}')" class="btn btn-sm">재시작</button> <a href="${editUrl}" class="btn btn-sm">편집</a>`;
-  if (d.status === 'rejected') return `<a href="${editUrl}" class="btn btn-sm">편집</a> <button onclick="delCard('${d.id}')" class="btn btn-sm">삭제</button>`;
-  return `<a href="${editUrl}" class="btn btn-sm">편집</a>`;
-}
-function delCard(id){ alert('삭제: '+id); }
-function cancelReview(id){ alert('요청취소: '+id); }
-function goLive(id){ alert('라이브 전환: '+id); }
-function pauseCard(id){ alert('일시중지: '+id); }
-function resumeCard(id){ alert('재시작: '+id); }
+
 function render(){
   const rows=cur==='all'?DATA:DATA.filter(d=>d.status===cur);
   const tb=document.getElementById('tbody');
@@ -131,9 +116,8 @@ function render(){
       <td><span class="count-chip chip-kw"><i class="fa-solid fa-comment-dots"></i> ${d.kwCount}개</span></td>
       <td><span class="count-chip chip-rt"><i class="fa-solid fa-circle-exclamation"></i> ${d.rtCount}개</span></td>
       <td class="cell-date">${d.updated}</td>
-      <td style="white-space:nowrap">${actionBtns(d)}</td>
     </tr>`).join('')
-    :`<tr class="empty-row"><td colspan="7">해당 상태의 Playbook이 없습니다</td></tr>`;
+    :`<tr class="empty-row"><td colspan="6">해당 상태의 Playbook이 없습니다</td></tr>`;
   const cnt={all:DATA.length,active:0,review:0,draft:0,approved:0,paused:0,rejected:0};
   DATA.forEach(d=>cnt[d.status]++);
   ['all','active','review','draft','approved','paused','rejected'].forEach(k=>{const el=document.getElementById('c-'+k);if(el)el.textContent=cnt[k]});
