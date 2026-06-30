@@ -137,18 +137,19 @@ const DATA=[
   {code:'PO005',name:'납입 부담 경고 출력',status:'paused',scope:'내부 전용',rules:[],limit:'보험료 비율 기준 재정의 중 — 운영 일시중지',updated:'2026-05-16'},
   {code:'PO006',name:'단기납 해지 환급금 안내 기준',status:'rejected',scope:'내부 전용',rules:[],limit:'준법감시인 반려 — 문구 재작성 필요',updated:'2026-05-18'},
 ];
-const ST={active:'🟢 라이브',review:'⏳ 검수중',draft:'📝 임시저장',approved:'✔ 승인완료',paused:'⏸ 일시중지',rejected:'✕ 반려'};
+const ST={active:'🟢 라이브',review:'⏳ 검수중',draft:'📝 임시저장',approved:'✔ 승인완료',paused:'⏸ 일시중지',rejected:'🚫 반려'};
 const SC={'고객 공개':'sc-public','공통 기준':'sc-baseline','내부 전용':'sc-internal'};
 let cur='all';
 function filter(s,btn){cur=s;document.querySelectorAll('.filter-tab').forEach(t=>t.classList.remove('active'));btn.classList.add('active');render();}
 function actionBtns(d) {
-  const editUrl = `08_card-editor-policy.html?id=${d.id}`;
-  if (d.status === 'draft')    return `<a href="${editUrl}" class="btn btn-sm">편집</a> <button onclick="delCard('${d.id}')" class="btn btn-sm">삭제</button>`;
-  if (d.status === 'review')   return `<button onclick="cancelReview('${d.id}')" class="btn btn-sm">요청취소</button>`;
+  const id = d.id || d.code;
+  const editUrl = `08_card-editor-policy.html?id=${id}`;
+  if (d.status === 'draft')    return `<a href="${editUrl}" class="btn btn-sm">편집</a> <button onclick="delCard('${id}')" class="btn btn-sm">삭제</button>`;
+  if (d.status === 'review')   return `<button onclick="cancelReview('${id}')" class="btn btn-sm">요청취소</button>`;
   if (d.status === 'approved') return `<a href="00_canvas-main.html" class="btn btn-sm">캔버스에서 연결</a> <a href="${editUrl}" class="btn btn-sm">편집</a>`;
-  if (d.status === 'active')   return `<button onclick="pauseCard('${d.id}')" class="btn btn-sm">일시중지</button> <a href="${editUrl}" class="btn btn-sm">편집</a>`;
-  if (d.status === 'paused')   return `<button onclick="resumeCard('${d.id}')" class="btn btn-sm">재시작</button> <a href="${editUrl}" class="btn btn-sm">편집</a>`;
-  if (d.status === 'rejected') return `<a href="${editUrl}" class="btn btn-sm">편집</a> <button onclick="delCard('${d.id}')" class="btn btn-sm">삭제</button>`;
+  if (d.status === 'active')   return `<button onclick="pauseCard('${id}')" class="btn btn-sm">일시중지</button> <a href="${editUrl}" class="btn btn-sm">편집</a>`;
+  if (d.status === 'paused')   return `<button onclick="resumeCard('${id}')" class="btn btn-sm">재시작</button> <a href="${editUrl}" class="btn btn-sm">편집</a>`;
+  if (d.status === 'rejected') return `<a href="${editUrl}" class="btn btn-sm">편집</a> <button onclick="delCard('${id}')" class="btn btn-sm">삭제</button>`;
   return `<a href="${editUrl}" class="btn btn-sm">편집</a>`;
 }
 function delCard(id){ alert('삭제: '+id); }
@@ -163,7 +164,7 @@ function render(){
       ?`<span class="conn-chip chip-rule">Rule ${d.rules.length}</span>`
       :`<span style="color:var(--text-hint);font-size:13px">—</span>`;
     return `
-    <tr class="card-row" onclick="location.href='08_card-editor-policy.html?id=${d.id}'">
+    <tr class="card-row" onclick="location.href='08_card-editor-policy.html?id=${d.id||d.code}'">
       <td><span class="badge badge-${d.status}">${ST[d.status]}</span></td>
       <td><div class="cell-code">${d.code}</div><div class="cell-name" title="${d.name}">${d.name}</div></td>
       <td><span class="badge-scope ${SC[d.scope]}">${d.scope}</span></td>

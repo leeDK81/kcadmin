@@ -119,7 +119,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
     <div class="section-title">카드 유형 6종</div>
     <div class="term-row">
       <div class="term-name"><span class="tag tag-risk">Risk-type</span> 리스크 유형</div>
-      <div class="term-def">사용자의 보험 보장 공백 유형을 분류하는 카드. Clark AI 답변 체인의 핵심 분류 기준. 코드 형식: <code>T01~T10</code>. 공개범위: 고객 공개.</div>
+      <div class="term-def">사용자의 보험 보장 공백 유형을 분류하는 카드. Clark AI 답변 체인의 핵심 분류 기준. 코드 형식: <code>T01~T23</code> (T06·T15·T16 미사용, 총 20개). 공개범위: 고객 공개.</div>
     </div>
     <div class="term-row">
       <div class="term-name"><span class="tag tag-evidence">Evidence</span> 근거 자료</div>
@@ -204,8 +204,8 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
     <div class="section-title">워크플로우·시스템</div>
     <div class="term-row">
       <div class="term-name">wf-tracker</div>
-      <div class="term-def">카드 편집기 상단에 표시되는 5단계 진행 표시바. ① 내용 입력 → ② 검수 요청 → ③ 승인완료 → ④ 캔버스 연결 → ⑤ 사전 테스트·배포. 단계 ④ 클릭 시 <code>00_canvas-main.html</code>로 이동.</div>
-      <div class="term-note">④ 링크 대상: 반드시 <code>00_canvas-main.html</code> (10_chain-visualizer.html은 deprecated, 사용 금지)</div>
+      <div class="term-def">카드 편집기 상단에 표시되는 4단계 진행 표시바. ① 내용 입력 → ② 검수 요청 → ③ 승인완료 → ④ 라이브. 캔버스 연결·사전 테스트·라이브 전환은 <code>00_canvas-main.html</code>에서 처리.</div>
+      <div class="term-note">캔버스 연결·사전 테스트는 <code>00_canvas-main.html</code>에서만 수행 (사이드바에 별도 메뉴 없음)</div>
     </div>
     <div class="term-row">
       <div class="term-name">AIO <span style="font-size:12px;color:var(--text-hint)">AI Optimization</span></div>

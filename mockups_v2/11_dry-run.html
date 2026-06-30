@@ -362,6 +362,18 @@ textarea.form-control{resize:vertical;min-height:80px}
           <span class="field-hint">Playbook이 활성화될 상담 상황을 선택하세요</span>
         </div>
 
+        <div id="ragPresetSection" style="display:none;margin-bottom:10px">
+          <div style="font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:6px">RAG 결과 사전 설정</div>
+          <div style="display:flex;gap:6px">
+            <button id="ragBtnFaq" class="btn btn-secondary btn-sm" style="font-size:12px" onclick="setRagMock('faq')">
+              <i class="fa-solid fa-circle-check"></i> FAQ RAG
+            </button>
+            <button id="ragBtnLlm" class="btn btn-secondary btn-sm" style="font-size:12px" onclick="setRagMock('llm')">
+              LLM Fallback
+            </button>
+          </div>
+        </div>
+
         <div id="runBtns" style="display:none;gap:8px">
           <button class="btn btn-primary" onclick="runDryRun()">
             <i class="fa-solid fa-play"></i> 테스트 실행
@@ -370,6 +382,7 @@ textarea.form-control{resize:vertical;min-height:80px}
             <i class="fa-solid fa-rotate-left"></i> 초기화
           </button>
         </div>
+        <div id="footerGoLive" style="margin-top:8px"></div>
       </div>
 
       <div class="card" id="quickQCard" style="display:none;padding:16px 20px">
@@ -787,7 +800,7 @@ const RESULTS = {
       { num:'④', title:'답변 경로 결정', icon:'warn', result:'RAG·Fallback 경로', resultColor:'var(--status-review)',
         details:[
           {cls:'eval-warn', icon:'→', text:'Rule 조건 미충족 → KC 카드 미적용'},
-          {cls:'eval-warn', icon:'→', text:'RAG 레이어(약관 RAG → Clark 서비스 FAQ RAG) 검색 시도 → 결과 없으면 Fallback 제한 생성형 처리'},
+          {cls:'eval-warn', icon:'→', text:'FAQ RAG 검색 시도 → 결과 없으면 LLM Fallback 처리'},
         ]
       },
     ],
@@ -827,7 +840,7 @@ const RESULTS = {
       },
       { num:'④', title:'답변 경로 결정', icon:'warn', result:'RAG·Fallback 경로', resultColor:'var(--status-review)',
         details:[
-          {cls:'eval-warn', icon:'→', text:'KC 조건 미충족 — RAG 레이어(약관 RAG → Clark 서비스 FAQ RAG) 검색 후 결과 없으면 Fallback 제한 생성형 처리'},
+          {cls:'eval-warn', icon:'→', text:'KC 조건 미충족 — FAQ RAG 검색 후 결과 없으면 LLM Fallback 처리'},
         ]
       },
     ],
@@ -916,9 +929,13 @@ var selectedPathIdx = 0;
 // 테스트 조건 상태
 var customProfile = {
   mydata:  {},   // code → number (담보금액, 원) ; 0 = 미보유
-  promage: {},   // field → 'risk' | 'caution' | 'good' | undefined
+  promage: {},   // field → true(충족) | false(미충족)
   profile: {age:45, gender:'남', married:'무관', has_child:'무관', drives:'무관'}
 };
+
+// RAG 결과 사전 설정
+var ragMockState = 'faq';   // 'faq' | 'llm'
+var testHasRun = false;
 
 // ============================================================
 // 체인 경로 선택 UI
@@ -1037,7 +1054,10 @@ function onPathChange() {
 
 function updateRunBtnState() {
   var cardId = document.getElementById('cardSelect').value;
-  document.getElementById('runBtns').style.display = cardId ? 'flex' : 'none';
+  var show = cardId ? 'flex' : 'none';
+  document.getElementById('runBtns').style.display = show;
+  document.getElementById('ragPresetSection').style.display = cardId ? 'block' : 'none';
+  updateRagButtons();
 }
 
 // ============================================================
@@ -1075,15 +1095,12 @@ function buildCustomProfileUI(cardId) {
 
   // 프롬에이지 위험도
   var promageHtml = conds.promage.map(function(field) {
-    var val = customProfile.promage[field];
-    function gp(grade, label) {
-      return '<button class="gpill ' + grade + (val === grade ? ' active' : '') + '" onclick="setPromageGrade(\'' + field + '\',\'' + grade + '\')">' + label + '</button>';
-    }
+    var isMet = customProfile.promage[field] !== false;
     return '<div class="promage-row">' +
       '<span class="promage-lbl">' + field + '</span>' +
       '<div class="grade-pills">' +
-        gp('risk','위험') + gp('caution','주의') + gp('good','양호') +
-        '<button class="gpill none-set' + (!val ? ' active' : '') + '" onclick="setPromageGrade(\'' + field + '\',null)">미설정</button>' +
+        '<button class="gpill good' + (isMet ? ' active' : '') + '" onclick="togglePromage(\'' + field + '\',true)">✓ 충족</button>' +
+        '<button class="gpill risk' + (!isMet ? ' active' : '') + '" onclick="togglePromage(\'' + field + '\',false)">✗ 미충족</button>' +
       '</div>' +
     '</div>';
   }).join('');
@@ -1091,6 +1108,8 @@ function buildCustomProfileUI(cardId) {
 
   updateCustomSummary();
   document.getElementById('runBtns').style.display = 'flex';
+  document.getElementById('ragPresetSection').style.display = 'block';
+  updateRagButtons();
 }
 
 function setMydataAmt(code, value) {
@@ -1098,9 +1117,8 @@ function setMydataAmt(code, value) {
   updateCustomSummary();
 }
 
-function setPromageGrade(field, grade) {
-  if (grade === null) delete customProfile.promage[field];
-  else customProfile.promage[field] = grade;
+function togglePromage(field, met) {
+  customProfile.promage[field] = met;
   var cardId = document.getElementById('cardSelect').value;
   buildCustomProfileUI(cardId);
 }
@@ -1134,13 +1152,12 @@ function updateCustomSummary() {
     chips.push('<span class="psum-chip" style="background:rgba(26,74,154,.08);color:#1A4A9A">'+code+' '+fmtAmt+'</span>');
   });
   // 프롬에이지
-  var gradeLabels = {risk:'위험', caution:'주의', good:'양호'};
-  var gradeColors = {risk:'rgba(163,45,45,.12)', caution:'rgba(186,117,23,.12)', good:'rgba(15,110,86,.1)'};
-  var gradeFg     = {risk:'#A32D2D', caution:'#BA7517', good:'#0F6E56'};
   Object.keys(customProfile.promage).forEach(function(field) {
-    var g = customProfile.promage[field];
-    if (!g) return;
-    chips.push('<span class="psum-chip" style="background:'+gradeColors[g]+';color:'+gradeFg[g]+'">'+field+' '+gradeLabels[g]+'</span>');
+    var met = customProfile.promage[field];
+    if (met === undefined) return;
+    var bg = met ? 'rgba(15,110,86,.1)' : 'rgba(163,45,45,.12)';
+    var fg = met ? '#0F6E56' : '#A32D2D';
+    chips.push('<span class="psum-chip" style="background:'+bg+';color:'+fg+'">'+field+' '+(met?'충족':'미충족')+'</span>');
   });
   document.getElementById('customProfileSummary').innerHTML = chips.join('');
 }
@@ -1285,12 +1302,16 @@ function resetBelowCard() {
   document.getElementById('chainInputGroup').style.display = 'none';
   document.getElementById('playbookInputGroup').style.display = 'none';
   document.getElementById('runBtns').style.display = 'none';
+  document.getElementById('ragPresetSection').style.display = 'none';
+  document.getElementById('footerGoLive').innerHTML = '';
   document.getElementById('quickQCard').style.display = 'none';
   document.getElementById('questionInput').value = '';
   document.getElementById('emptyState').style.display = 'block';
   document.getElementById('loadingState').style.display = 'none';
   document.getElementById('resultContent').style.display = 'none';
   document.getElementById('resultTitle').textContent = '사전 테스트 결과';
+  testHasRun = false;
+  ragMockState = 'faq';
   updateQuickQButtons([]);
 }
 
@@ -1306,6 +1327,50 @@ function resetAll() {
   resetCardSection();
 }
 
+function setRagMock(state) {
+  ragMockState = state;
+  updateRagButtons();
+}
+
+function updateRagButtons() {
+  var faqBtn = document.getElementById('ragBtnFaq');
+  var llmBtn = document.getElementById('ragBtnLlm');
+  if (!faqBtn || !llmBtn) return;
+  faqBtn.style.background = ragMockState === 'faq' ? 'var(--primary)' : '';
+  faqBtn.style.color      = ragMockState === 'faq' ? '#fff' : '';
+  faqBtn.style.borderColor = ragMockState === 'faq' ? 'var(--primary)' : '';
+  llmBtn.style.background = ragMockState === 'llm' ? 'var(--primary)' : '';
+  llmBtn.style.color      = ragMockState === 'llm' ? '#fff' : '';
+  llmBtn.style.borderColor = ragMockState === 'llm' ? 'var(--primary)' : '';
+}
+
+function updateFooterGoLive(kcPass) {
+  var el = document.getElementById('footerGoLive');
+  if (!el || !testHasRun) return;
+  var cardId = document.getElementById('cardSelect').value;
+  var card = ALL_PENDING[cardId];
+  // ALL_PENDING 카드는 승인완료(approved) 상태임
+  if (kcPass && card) {
+    el.innerHTML =
+      '<button class="btn btn-primary" style="width:100%;margin-top:4px;background:#0F6E56;border-color:#0F6E56" onclick="goLive(\''+cardId+'\')">' +
+        '<i class="fa-solid fa-rocket"></i> 라이브 전환' +
+      '</button>';
+  } else {
+    el.innerHTML = '';
+  }
+}
+
+function goLive(cardId) {
+  var card = ALL_PENDING[cardId];
+  if (!card) return;
+  card.status = 'active';
+  showToast(cardId + ' 카드가 라이브 전환되었습니다.');
+  document.getElementById('footerGoLive').innerHTML =
+    '<div style="text-align:center;font-size:13px;color:#0F6E56;font-weight:600;padding:6px 0">' +
+      '<i class="fa-solid fa-circle-check"></i> 라이브 전환 완료' +
+    '</div>';
+}
+
 function getResultKey(cardId, profile) {
   var card = ALL_PENDING[cardId];
   if (!card) return profile;
@@ -1318,6 +1383,7 @@ function runDryRun() {
   var cardId = document.getElementById('cardSelect').value;
   if (!cardId) { showToast('테스트 대상 카드를 선택해 주세요'); return; }
 
+  testHasRun = true;
   var profile = evaluateCustomProfile(cardId);
   var card    = ALL_PENDING[cardId];
   var loadingP = document.getElementById('loadingState').querySelector('p');
@@ -1332,6 +1398,7 @@ function runDryRun() {
     setTimeout(function() {
       document.getElementById('loadingState').style.display = 'none';
       renderPlaybookResult(cardId, profile, scenario);
+      updateFooterGoLive(profile === ALL_PENDING[cardId].resultKey);
     }, 850);
   } else {
     var q = document.getElementById('questionInput').value.trim();
@@ -1343,6 +1410,7 @@ function runDryRun() {
     setTimeout(function() {
       document.getElementById('loadingState').style.display = 'none';
       renderResult(cardId, profile, q);
+      updateFooterGoLive(profile === ALL_PENDING[cardId].resultKey);
     }, 950);
   }
 }

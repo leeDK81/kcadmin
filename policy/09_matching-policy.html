@@ -236,7 +236,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
           <div class="flow-label">Concept 인덱스 쿼리</div>
           <div class="flow-arrow-down"><i class="fa-solid fa-arrow-down"></i></div>
           <div class="flow-box flow-box-neutral">유사도 최고점 1개 선택</div>
-          <div class="flow-label">임계값 미만 → 미매칭</div>
+          <div class="flow-label">기준값 미만 → 미매칭</div>
           <div class="flow-arrow-down"><i class="fa-solid fa-arrow-down"></i></div>
           <div class="flow-box" style="background:rgba(26,74,154,.07);border:1.5px solid rgba(26,74,154,.2);color:var(--card-concept);font-size:13px">
             매칭 시: KC 체인 진입<br>
@@ -251,7 +251,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
           <div class="flow-label">Playbook 인덱스 쿼리</div>
           <div class="flow-arrow-down"><i class="fa-solid fa-arrow-down"></i></div>
           <div class="flow-box flow-box-neutral">유사도 최고점 1개 선택</div>
-          <div class="flow-label">임계값 미만 → 미매칭</div>
+          <div class="flow-label">기준값 미만 → 미매칭</div>
           <div class="flow-arrow-down"><i class="fa-solid fa-arrow-down"></i></div>
           <div class="flow-box" style="background:rgba(107,74,154,.07);border:1.5px solid rgba(107,74,154,.2);color:var(--card-playbook);font-size:13px">
             매칭 시: CTA 레이어 준비<br>
@@ -320,7 +320,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
     </div>
 
     <div class="note note-green" style="margin-top:4px">
-      <strong>복수 매칭 처리:</strong> 임계값 이상인 결과가 여러 개일 경우 <strong>유사도 최고점 1개만</strong> 선택한다. 동점이면 카드 ID 오름차순으로 선택한다. Concept·Playbook 각각 동일한 규칙을 적용한다.
+      <strong>복수 매칭 처리:</strong> 기준값 이상인 결과가 여러 개일 경우 <strong>유사도 최고점 1개만</strong> 선택한다. 동점이면 카드 ID 오름차순으로 선택한다. Concept·Playbook 각각 동일한 규칙을 적용한다.
     </div>
   </div>
 
@@ -337,8 +337,8 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
       </thead>
       <tbody>
         <tr>
-          <td><span class="tbd-badge">TBD</span> <strong>임계값 수치</strong></td>
-          <td>유사도 점수 몇 이상을 "매칭"으로 볼 건지. Concept과 Playbook을 각각 다른 임계값으로 설정할 수 있는지 여부도 결정 필요. 너무 낮으면 오매칭, 너무 높으면 매칭률 저하.</td>
+          <td><span class="tbd-badge">TBD</span> <strong>기준값 수치</strong></td>
+          <td>유사도 점수 몇 이상을 "매칭"으로 볼 건지. Concept과 Playbook을 각각 다른 기준값으로 설정할 수 있는지 여부도 결정 필요. 너무 낮으면 오매칭, 너무 높으면 매칭률 저하.</td>
           <td style="color:var(--text-secondary);font-size:13px">개발팀 테스트 후 결정</td>
         </tr>
         <tr>

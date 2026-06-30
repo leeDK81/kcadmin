@@ -156,7 +156,6 @@ tr:hover td{background:#FAFAF8}
       <button class="tab-btn" data-filter="T03">T03</button>
       <button class="tab-btn" data-filter="T04">T04</button>
       <button class="tab-btn" data-filter="T05">T05</button>
-      <button class="tab-btn" data-filter="T06">T06</button>
       <button class="tab-btn" data-filter="T07">T07</button>
       <button class="tab-btn" data-filter="T08">T08</button>
       <label class="toggle-label">
@@ -222,11 +221,6 @@ tr:hover td{background:#FAFAF8}
           <div class="chain-node node-risk node-draft" data-id="T05" data-type="risk" onclick="goEditor('risk')" title="T05 노후돌봄보장 공백형">
             <div class="node-id">T05</div>
             <div class="node-name">노후돌봄보장 공백형</div>
-            <span class="badge badge-draft" style="font-size:11px;padding:1px 6px">임시저장</span>
-          </div>
-          <div class="chain-node node-risk node-draft" data-id="T06" data-type="risk" onclick="goEditor('risk')" title="T06 납입여력부족 우려형">
-            <div class="node-id">T06</div>
-            <div class="node-name">납입여력부족 우려형</div>
             <span class="badge badge-draft" style="font-size:11px;padding:1px 6px">임시저장</span>
           </div>
           <div class="chain-node node-risk node-draft" data-id="T07" data-type="risk" onclick="goEditor('risk')" title="T07 비용 대비 보장 비효율형">
@@ -347,7 +341,6 @@ const ROUTING_DATA = [
   {id:'T03',name:'심혈관질환보장 협소형',concept:'✅ CON002 심장 보장',conceptClass:'cell-ok',rule:'⏳ RU002 심혈관 주요 담보 부재 (검수중)',ruleClass:'cell-warn',evidence:'EV003 보닥 뇌심혈관, EV005 40대 남성 심혈관',routing:'검수 완료 후',routingType:'wait'},
   {id:'T04',name:'뇌혈관질환보장 협소형',concept:'⚠ CON003 뇌혈관 보장 (임시저장)',conceptClass:'cell-warn',rule:'❌ 없음',ruleClass:'cell-err',evidence:'-',routing:'생성형만',routingType:'gen'},
   {id:'T05',name:'노후돌봄보장 공백형',concept:'❌',conceptClass:'cell-err',rule:'❌',ruleClass:'cell-err',evidence:'-',routing:'생성형만',routingType:'gen'},
-  {id:'T06',name:'납입여력부족 우려형',concept:'❌',conceptClass:'cell-err',rule:'❌',ruleClass:'cell-err',evidence:'-',routing:'생성형만',routingType:'gen'},
   {id:'T07',name:'비용 대비 보장 비효율형',concept:'❌',conceptClass:'cell-err',rule:'❌',ruleClass:'cell-err',evidence:'-',routing:'생성형만',routingType:'gen'},
   {id:'T08',name:'생애주기 적합도 저조형',concept:'❌',conceptClass:'cell-err',rule:'❌',ruleClass:'cell-err',evidence:'-',routing:'생성형만',routingType:'gen'}
 ];
@@ -398,7 +391,7 @@ function applyFilters() {
     T02: ['CON001','T02','RU001','EV001','EV002','POL001'],
     T03: ['CON002','T03','RU002','EV003','EV005','POL001'],
     T04: ['CON003','T04'],
-    T05: ['T05'], T06: ['T06'], T07: ['T07'], T08: ['T08']
+    T05: ['T05'], T07: ['T07'], T08: ['T08']
   };
   const UNLINKED = ['EV004','CON003'];
 

@@ -137,7 +137,7 @@ const DATA=[
   {code:'CO006',name:'보험료부담',status:'paused',synonyms:[],riskTypes:['T06 납입여력부족 우려형'],updated:'2026-05-16'},
   {code:'CO007',name:'실손보험',status:'rejected',synonyms:['실비','실손','실비보험'],riskTypes:['T01 무보장형'],updated:'2026-06-20'},
 ];
-const ST={active:'🟢 라이브',review:'⏳ 승인요청',draft:'📝 임시저장',approved:'✔ 승인완료',paused:'⏸ 일시중지',rejected:'🔴 반려'};
+const ST={active:'🟢 라이브',review:'⏳ 승인요청',draft:'📝 임시저장',approved:'✔ 승인완료',paused:'⏸ 일시중지',rejected:'🚫 반려'};
 let cur='all';
 function actionBtns(d) {
   const editUrl = `06_card-editor-concept.html?id=${d.code}`;

@@ -138,7 +138,7 @@ const DATA=[
   {code:'RU011',name:'고액 보험료 유지 부담',status:'paused',scope:'공통 기준',riskType:'T10 고액 보험료 유지 부담형',evidences:[],policies:0,conditions:0,updated:'2026-05-16'},
   {code:'RU006',name:'실손 중복 보장 기준 미흡',status:'rejected',scope:'공통 기준',riskType:'T07 실손중복보장 과잉형',evidences:[],policies:0,conditions:1,updated:'2026-05-18'},
 ];
-const ST={active:'🟢 라이브',review:'⏳ 검수중',draft:'📝 임시저장',approved:'✔ 승인완료',paused:'⏸ 일시중지',rejected:'✕ 반려'};
+const ST={active:'🟢 라이브',review:'⏳ 검수중',draft:'📝 임시저장',approved:'✔ 승인완료',paused:'⏸ 일시중지',rejected:'🚫 반려'};
 let cur='all';
 function filter(s,btn){cur=s;document.querySelectorAll('.filter-tab').forEach(t=>t.classList.remove('active'));btn.classList.add('active');render();}
 function actionBtns(d) {

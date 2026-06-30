@@ -142,7 +142,7 @@ const DATA=[
   {id:'EV006',code:'EV006',name:'치매 평균 요양 비용 (NHIS 2023)',status:'paused',  agency:'NHIS',  year:'2023',indicator:'치매 평균 월 요양 비용',       value:'검토 중',  rules:[],updated:'2026-06-10'},
   {id:'EV007',code:'EV007',name:'흡연자 폐암 발생률 (KOSTAT 2023)',status:'rejected',agency:'KOSTAT',year:'2023',indicator:'흡연자 폐암 발생률',             value:'반려됨',   rules:[],updated:'2026-06-20'},
 ];
-const ST={active:'🟢 라이브',review:'⏳ 검수중',draft:'📝 임시저장',approved:'✔ 승인완료',paused:'⏸ 일시중지',rejected:'🔴 반려'};
+const ST={active:'🟢 라이브',review:'⏳ 검수중',draft:'📝 임시저장',approved:'✔ 승인완료',paused:'⏸ 일시중지',rejected:'🚫 반려'};
 let cur='all';
 function actionBtns(d) {
   const editUrl = `05_card-editor-evidence.html?id=${d.id}`;
