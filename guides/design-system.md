@@ -30,7 +30,6 @@ font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFon
 | 네비·버튼·폼 레이블 | 14px | — | `.sidebar a`, `.btn`, `label` |
 | 배지·힌트·소형 레이블 | 13px | — | `.badge`, `.field-hint` |
 | 아이콘·메타·날짜 | 12px | — | `fa-fw`, `.cell-date` |
-| nav-section uppercase | 11px | 600 | `.nav-section` |
 
 > 스케일 외 임의 크기 금지. 8px·9px·10px 극소형 사용 금지.
 

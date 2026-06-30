@@ -154,6 +154,6 @@
 
 ## 입력 / 출력
 
-**입력:** 코더(04)가 구현한 `mockups/` 폴더 HTML 파일, `00_design-system.html`.
+**입력:** 코더(04)가 구현한 `mockups_v2/` 폴더 HTML 파일, `00_design-system.html`.
 
 **출력:** 화면별 코딩 검증 리포트 (PO에게 전달).

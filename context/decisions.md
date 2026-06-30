@@ -14,6 +14,7 @@
 | `context/card-types.md` | 카드별 상세 스펙 (Evidence/Rule/Concept/Policy/Playbook/Risk-type 필드 정의) |
 | `context/answer-logic.md` | Case 1~4 매트릭스, RAG 정책, FAQ RAG 스펙, Fallback |
 | `context/workflow.md` | 카드 라이프사이클, 캔버스 UX, 캔버스 JS 함수, 사이드바 v2 표준 |
+| `context/matching-policy.md` | 벡터 유사도 매칭 처리, 기준값, Concept·Playbook 병렬 검색 정책 |
 | `guides/design-system.md` | CSS 변수, 컴포넌트 CSS, 폰트 |
 | `guides/ux-patterns.md` | 사이드바·편집기·테이블 HTML 패턴 |
 | `guides/copywriting.md` | 금지/대체 표현, 상태 메시지 템플릿 |

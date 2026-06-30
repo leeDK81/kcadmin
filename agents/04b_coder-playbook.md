@@ -139,6 +139,6 @@ function act(type, id) {
 - [ ] sum-box: "GA 수신 스펙 확정 후" 표시
 
 **16_playbook-list.html**
-- [ ] 상태 필터 탭: 전체/임시저장/승인요청/승인완료/라이브/일시중지
+- [ ] 상태 필터 탭: 전체/임시저장/승인요청/승인완료/라이브/일시중지/반려
 - [ ] 상태별 액션 버튼 패턴 정확한가? (review: 요청취소만, approved: 라이브전환+편집)
 - [ ] 행 클릭 → `16_card-editor-playbook.html` 이동

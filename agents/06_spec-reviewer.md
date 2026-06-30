@@ -73,7 +73,7 @@ v2에서 **카드 연결은 편집기가 아닌 캔버스(`00_canvas-main.html`)
 - [ ] Policy 편집기: Policy 이름(name) + Clark 앱 표시 문구(appDisplayText) 2개 필드만 있는가?
 - [ ] Policy 편집기: 규제 문서명·적용 범위·핵심 조항·출력 대상 화면·출력 제한 설정·준수 체크리스트 필드가 없는가?
 - [ ] Policy 편집기: Clark 앱 표시 문구 비어있으면 검수 요청 버튼이 비활성화되는가?
-- [ ] wf-tracker가 3단계(내용 입력 → 검수 요청 → 승인완료 → 라이브)로 구성되어 있는가?
+- [ ] wf-tracker가 4단계(내용 입력 → 검수 요청 → 승인완료 → 라이브)로 구성되어 있는가?
 - [ ] 00_canvas-main.html: 카드 클릭 시 슬라이드 패널이 열리고 읽기 전용 정보가 표시되는가?
 - [ ] 00_canvas-main.html: 패널 하단에 "편집기에서 수정" 링크가 있는가?
 - [ ] 00_canvas-main.html: 캔버스 카드 배치가 Concept → Risk → Rule → Evidence → Policy 순서인가?

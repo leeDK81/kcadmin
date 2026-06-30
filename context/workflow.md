@@ -90,16 +90,22 @@
 - `setStatusFilter(val)`: 필터 pill 토글 후 `renderPicker()` 재호출
 - `onCanvasSearch(val)`: 검색어 업데이트 후 `renderPicker()` 재호출
 
-### 테스트 모드 — RAG 결과 사전 설정 (2026-06-29 확정)
+### 테스트 모드 — RAG 결과 사전 설정 (2026-06-30 확정)
 
-**흐름:** KC 조건 설정 → RAG 결과 사전 설정 → 테스트 실행 → 전체 답변 체인 즉시 확인
+**흐름:** KC 조건 설정 → RAG 결과 사전 설정 → 테스트 실행 → 답변 체인 확인 → 라이브 전환
 
-- 설정 패널 "④ RAG 결과 설정" 섹션에서 약관 RAG / FAQ RAG 결과 사전 선택 (결과있음/결과없음 토글)
-- 기본값: 약관 RAG = 결과있음, FAQ RAG = 결과없음
-- 약관 RAG = 결과있음이면 FAQ 토글 비활성(dimmed) — 도달 불가 단계
-- "테스트 실행" 클릭 시 사전 설정값 기준으로 전체 체인(KC → 약관 → FAQ → LLM) 즉시 렌더
-- `ragMockState = {yakgwan: boolean, faq: boolean}` (null 없음)
-- `buildRagPresetHTML()`: 토글 UI 렌더 / `setRagPreset(type, val)`: 상태 갱신 + UI 재렌더
+- 설정 패널 "④ RAG 결과 설정" 섹션에서 KC 미매칭 시 발동할 경로 선택 (FAQ RAG / LLM Fallback)
+- **약관 RAG 제외:** 가상 테스트 인물에게는 MYDATA(보험계약 데이터)가 없어 약관 RAG 검색 불가 — 사전 테스트 구성에서 제거됨
+- 기본값: `ragMockState = 'faq'` (FAQ RAG 경로)
+- `ragMockState = 'faq' | 'llm'` — 두 값만 허용 (yakgwan 제거)
+- "테스트 실행" 클릭 시 사전 설정값 기준으로 KC → FAQ RAG → LLM Fallback 순서로 렌더
+- `buildRagPresetHTML()`: 2버튼 UI 렌더 / `ragMockState` 직접 갱신
+
+**라이브 전환 버튼 (2026-06-30 추가):**
+- 패널 푸터 `<div id="footerGoLive">` 슬롯에 동적 삽입
+- 노출 조건: `testHasRun === true` AND KC 통과(`kcPass`) AND 체인 내 `status === 'approved'` 카드 존재
+- `updateFooterGoLive(kcPass)`: 조건 평가 후 버튼 렌더 또는 비움
+- `goLive()`: 체인 내 approved 카드 → active 전환, `renderGrid()` + `drawLines()` 재호출, 토스트 표시
 
 ### 카드 상태 배지 (캔버스 내)
 

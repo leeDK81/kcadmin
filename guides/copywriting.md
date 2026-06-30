@@ -19,6 +19,7 @@
 | 시뮬레이션 | 사전 테스트 또는 테스트 결과 |
 | 임계값 | 기준값 / 판단 기준 |
 | 상/중/하 | 위험/주의/양호 |
+| 고/중/저 | 위험/주의/양호 |
 | Public / Baseline / Internal | 고객 공개 / 공통 기준 / 내부 전용 |
 | MYDATA (화면 표시) | 마이데이터 |
 | Promage (화면 표시) | 프롬에이지 |
@@ -27,11 +28,11 @@
 | PROMAGE없음 | 프롬에이지없음 |
 | KC Engine (운영자 화면 텍스트) | Clark AI |
 | KC 엔진 (운영자 화면 텍스트) | Clark AI |
-| 3-source | 3가지 소스 |
+| 3-source | (화면·문서 노출 금지 — 코드 내부 식별자 전용) |
 
 ## 유지 표현 (브랜드·도메인 고유 용어)
 
-Evidence, Rule, Concept, Policy, Playbook, KC Engine, ICIS, KCD, Clark AI, KC Admin,
+Evidence, Rule, Concept, Policy, Playbook, KC Engine (개발자·스펙 문서에서는 반드시 한글 "KC 엔진" 사용), ICIS, KCD, Clark AI, KC Admin,
 담보코드, T01~T10 (타입코드), A4200 등 담보코드값
 
 > **API 소스 코드:** MYDATA / PROMAGE / PROFILE 은 API 식별자로 사용되는 대문자 코드값입니다. 코드값은 JS 변수명·value 속성·API 파라미터에서만 영문 대문자 유지.
