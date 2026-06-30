@@ -4,6 +4,32 @@
 
 ---
 
+## 2026-06-30 — 전수감사 2차 소스코드 검증 · 13개 파일 잔재 수정
+
+### 수정 파일 (커밋 76f81db)
+
+| 파일 | 내용 |
+|---|---|
+| `mockups_v2/shared.js` | "26개 파일" → "24개 파일" 수 정정 |
+| `mockups_v2/shared.css` | 동일 |
+| `mockups_v2/00_design-system.html` | 화면 목록 26개→24개, 삭제된 11_dry-run·14 항목 제거, 17·18·19 링크 추가, 이모지 제거 |
+| `mockups_v2/00_canvas-main.html` | 삭제된 11_dry-run.html 링크 제거→alert 대체, "연결 검수중"→"승인요청 엣지" |
+| `mockups_v2/01_guide.html` | 11_dry-run.html 링크 → 00_canvas-main.html 캔버스 패널로 교체 |
+| `mockups_v2/02_dashboard.html` | 제거된 T06 항목 삭제, "(Rule 검수중)"→"(Rule 승인요청)" |
+| `mockups_v2/04_risk-type-list.html` | 필터탭·ST 객체 "검수중" → "승인요청" 통일 |
+| `mockups_v2/05_evidence-list.html` | 동일 |
+| `mockups_v2/06_concept-list.html` | 동일, CO006 riskTypes에서 T06 참조 제거 |
+| `mockups_v2/07_rule-list.html` | 동일, RU005 riskType T06 참조 제거 |
+| `mockups_v2/08_policy-list.html` | 동일, `limit` 컬럼 → `appDisplayText` 컬럼으로 교체 (데이터·헤더·렌더 함수 일괄) |
+| `mockups_v2/13_answer-logic.html` | GA 전달 데이터 예시 "(부분 매칭)"→"(임베딩 의미 유사도)" |
+| `mockups_v2/17_system-data-guide.html` | Risk-type 설명 "T01~T10"→"T01~T23" |
+
+### 검증 방법
+
+스크린샷 18개 시각 검증 + grep 전수 패턴 검사 (`11_dry-run`, `10_chain-visualizer`, `26개 파일`, `검수중`, `T01~T10`, `부분 매칭`, `명칭 미확인`, `T06 납입`, `.limit`, `badge-scope`, `badge-conn-cr/pr`, `banner-info` 단독 사용 등)
+
+---
+
 ## 2026-06-30 — 전수 감사 결과 일괄 수정 (🔴🟡 이슈 전체 해소)
 
 ### 삭제
