@@ -29,7 +29,7 @@
 | 항목 | 논의 내용 | 미결 이유 | 등록일 |
 |---|---|---|---|
 | Playbook ← Risk-type 연결 | Risk-type 관점의 리드 전환·배정 최적화. CONNECT_RULES.risk에 'playbook' 추가 필요 | Phase 1.5+ 이관 (리드 스코어링 스펙 확정 시 추가) | 2026-06-17 |
-| **A3201 공통 이슈** | A3201을 입원일당 대리 지표로 사용하는 Rule: T01·T12·T19 (T06은 2026-06-29 제거됨). A3xxx는 담보코드 테이블상 후유장해 계열이나 실제 MYDATA 스펙 미확인. 개발팀 확인 후 전수 교체 or 유지 결정 필요. | 개발팀 MYDATA 스펙 확인 선행 필요 | 2026-06-29 |
+| **A3201 공통 이슈** | A3201을 입원일당 대리 지표로 사용하는 Rule: T01·T12·T19 (T06·T15·T16은 2026-07-01 전체 제거됨). A3xxx는 담보코드 테이블상 후유장해 계열이나 실제 MYDATA 스펙 미확인. 개발팀 확인 후 전수 교체 or 유지 결정 필요. | 개발팀 MYDATA 스펙 확인 선행 필요 | 2026-06-29 |
 | **사전 테스트 PROFILE 입력 — 사용 필드만 표시** | 현재 Rule 조건과 무관하게 5개 필드(나이·성별·결혼여부·자녀유무·운전여부) 항상 전체 표시. 현재 Rule 조건에서 실제 사용하는 필드만 렌더링하도록 `buildProfileInputHTML(ruleId)` 개선 예정. | 미구현 (다음 세션 예정) | 2026-06-30 |
 
 ---
@@ -52,6 +52,8 @@
 
 | 날짜 | 내용 | 진실원 파일 |
 |---|---|---|
+| 2026-07-01 | **T15 자녀 건강보장 공백형 전체 제거**: RU-T15·CN-T15·PO-T15·EV020·CHAIN-014 제거. 체인 23→22개, 카드 132→127장. 사유: 마이데이터 사업자는 본인 계약만 조회 가능 — 자녀 보험 감지 구조적 불가. | contents/ 전체 |
+| 2026-07-01 | **T16 실손보험 노후화형 전체 제거**: RU-T16·CN-T16·PO-T16·CHAIN-015 제거. 체인 22→21개, 카드 5장 추가 삭제. 사유: 실손 세대(1~4세대) 구분 담보코드 없음 — 간접 판정 신뢰도 불충분. | contents/ 전체 |
 | 2026-06-30 | **사전 테스트 — 라이브 전환 버튼 추가**: 조건: KC 통과 AND 체인 내 approved 카드 존재. 위치: 패널 푸터 고정(테스트 실행 전 숨김). 클릭 시 체인 내 approved 카드 → active 전환, 캔버스 즉시 갱신. `testHasRun` 플래그, `updateFooterGoLive()`, `goLive()` 신규. 데모 데이터: PO001 status=approved, RU001→PO001 edge=pending. | `mockups_v2/00_canvas-main.html` |
 | 2026-06-30 | **사전 테스트 RAG 결과 설정 — 약관 RAG 제거, FAQ RAG·LLM Fallback 2개로 단순화**: 약관 RAG는 사용자 실제 보험 계약 정보(MYDATA) 없이 테스트 불가 — 사전 테스트는 운영자 배포 판단 관문이므로 검증 불가 항목 제거. `ragMockState`: `{yakgwan,faq}` → `'faq'\|'llm'`. `buildRagPresetHTML` 2버튼, `renderAnswerChain` Step 2→FAQ RAG·Step 3→LLM Fallback으로 재번호. hint 텍스트에 약관 RAG 제외 이유 명시. | `mockups_v2/00_canvas-main.html` |
 | 2026-06-30 | **사전 테스트 PROMAGE 조건 — 충족/미충족 토글로 통일**: 기존 위험/주의/양호/미설정 4개 등급 버튼 → MYDATA와 동일한 `✓ 충족 / ✗ 미충족` 토글. 조건에 이미 "암 종합 등급 EQ 위험"처럼 기댓값이 명시되어 있으므로 등급 재선택 불필요. `buildRuleCondRowsHTML` PROMAGE 분기, `updateTestSummary` 칩, `evaluateTestResult` 평가 로직 단순화 (`testProfile.conditions[key]` 기준으로 통일). | `mockups_v2/00_canvas-main.html` |

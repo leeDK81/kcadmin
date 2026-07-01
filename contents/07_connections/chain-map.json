@@ -1,19 +1,19 @@
 {
-  "version": "1.1",
-  "generated_at": "2026-06-29",
+  "version": "1.2",
+  "generated_at": "2026-07-01",
   "agent": "04_content-po",
   "summary": {
-    "total_risk_types": 15,
-    "total_rules": 15,
-    "total_evidence": 20,
-    "total_concepts": 16,
-    "total_policies": 15,
+    "total_risk_types": 13,
+    "total_rules": 13,
+    "total_evidence": 18,
+    "total_concepts": 14,
+    "total_policies": 13,
     "total_playbooks": 10,
-    "chains_complete": 14,
-    "chains_with_warning": 1,
+    "chains_complete": 13,
+    "chains_with_warning": 0,
     "chains_incomplete": 0,
     "critical_issues": 0,
-    "warning_issues": 1,
+    "warning_issues": 0,
     "ready_to_register": true
   },
   "chains": [
@@ -172,36 +172,6 @@
       "policy_ids": ["PO-T14"],
       "status": "완성",
       "issues": []
-    },
-    {
-      "chain_id": "CHAIN-014",
-      "domain": "특종",
-      "risk_type_id": "T15",
-      "risk_type_name": "자녀 건강보장 공백형",
-      "concept_ids": ["CN-T15"],
-      "rule_id": "RU-T15",
-      "evidence_ids": ["EV020"],
-      "policy_ids": ["PO-T15"],
-      "status": "완성",
-      "issues": []
-    },
-    {
-      "chain_id": "CHAIN-015",
-      "domain": "건강보험",
-      "risk_type_id": "T16",
-      "risk_type_name": "실손보험 노후화형",
-      "concept_ids": ["CN-T16"],
-      "rule_id": "RU-T16",
-      "evidence_ids": ["EV010"],
-      "policy_ids": ["PO-T16"],
-      "status": "완성(경고)",
-      "issues": [
-        {
-          "severity": "warning",
-          "item": "Evidence 공유",
-          "message": "EV010(실손보험 지급보험금)이 T12와 공유됩니다. Rule→Evidence N:N 정책상 허용이나, T16 전용 Evidence(실손 세대별 보험료 비교 등)를 별도 추가하면 체인 품질이 향상됩니다."
-        }
-      ]
     }
   ],
   "playbooks": [
@@ -232,12 +202,8 @@
       "T08 Policy 추가 완료: PO-T08(생애주기 적합도 분석 안내)",
       "T09 Evidence 추가 완료: EV019(단기납 보험 납입 완료 후 추가 설계 미비율)",
       "T09 Policy 추가 완료: PO-T09(단기납 만기 보장 점검 안내)",
-      "T12 Policy 추가 완료: PO-T12(수술·입원 보장 분석 안내)",
-      "T15 Evidence 추가 완료: EV020(어린이 연간 의료비)",
-      "T16 Policy 추가 완료: PO-T16(실손보험 노후화 분석 안내)"
+      "T12 Policy 추가 완료: PO-T12(수술·입원 보장 분석 안내)"
     ],
-    "remaining_warning": [
-      "T16: EV010 공유 (T12와 실손보험 지급보험금 통계 공유) — N:N 허용 범위, 선택적 개선 가능"
-    ]
+    "remaining_warning": []
   }
 }
