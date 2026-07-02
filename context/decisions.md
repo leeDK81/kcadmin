@@ -31,6 +31,7 @@
 | Playbook ← Risk-type 연결 | Risk-type 관점의 리드 전환·배정 최적화. CONNECT_RULES.risk에 'playbook' 추가 필요 | Phase 1.5+ 이관 (리드 스코어링 스펙 확정 시 추가) | 2026-06-17 |
 | **A3201 공통 이슈** | A3201을 입원일당 대리 지표로 사용하는 Rule: T01·T12·T19 (T06·T15·T16은 2026-07-01 전체 제거됨). A3xxx는 담보코드 테이블상 후유장해 계열이나 실제 MYDATA 스펙 미확인. 개발팀 확인 후 전수 교체 or 유지 결정 필요. | 개발팀 MYDATA 스펙 확인 선행 필요 | 2026-06-29 |
 | **사전 테스트 PROFILE 입력 — 사용 필드만 표시** | 현재 Rule 조건과 무관하게 5개 필드(나이·성별·결혼여부·자녀유무·운전여부) 항상 전체 표시. 현재 Rule 조건에서 실제 사용하는 필드만 렌더링하도록 `buildProfileInputHTML(ruleId)` 개선 예정. | 미구현 (다음 세션 예정) | 2026-06-30 |
+| **Risk-type·Rule 카드 재정리 — contents 근거 데이터 정밀화** | `mockups_v2/12_coverage-code-table.html`의 마이데이터 담보코드 목록 대비 `contents/`(Evidence·Rule) 근거가 러프함을 확인. 기존 contents 분석은 완료. `deep-research` skill로 공신력 있는 최신 데이터 기반 Evidence·Rule 재작성 예정. | 분석 완료, deep-research 실행 전 단계 — 실행 시 대상 T코드·담보 범위 재확인 필요 | 2026-07-02 |
 
 ---
 
