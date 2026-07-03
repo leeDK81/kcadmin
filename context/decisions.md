@@ -31,6 +31,7 @@
 |---|---|---|---|
 | Playbook ← Risk-type 연결 | Risk-type 관점의 리드 전환·배정 최적화. CONNECT_RULES.risk에 'playbook' 추가 필요 | Phase 1.5+ 이관 (리드 스코어링 스펙 확정 시 추가) | 2026-06-17 |
 | **사전 테스트 PROFILE 입력 — 사용 필드만 표시** | 현재 Rule 조건과 무관하게 5개 필드(나이·성별·결혼여부·자녀유무·운전여부) 항상 전체 표시. 현재 Rule 조건에서 실제 사용하는 필드만 렌더링하도록 `buildProfileInputHTML(ruleId)` 개선 예정. | 미구현 (다음 세션 예정) | 2026-06-30 |
+| **Risk-type·Rule 카드 재정리 — contents 근거 데이터 정밀화** | `mockups_v2/12_coverage-code-table.html`의 마이데이터 담보코드 목록 대비 `contents/`(Evidence·Rule) 근거가 러프함을 확인. 기존 contents 분석은 완료. `deep-research` skill로 공신력 있는 최신 데이터 기반 Evidence·Rule 재작성 예정. | 분석 완료, deep-research 실행 전 단계 — 실행 시 대상 T코드·담보 범위 재확인 필요 | 2026-07-02 |
 
 > T15 활성/제거, market-research.md 우선순위표, A3201 공통 이슈는 컨텐츠 트랙 전용 미결 항목이라 2026-07-03 `contents/decisions.md`로 이관됨.
 

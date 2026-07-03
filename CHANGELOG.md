@@ -27,6 +27,44 @@
 
 ---
 
+## 2026-07-01 — T15·T16 전체 제거 완료 · 미결 항목 해소 · 19개 파일
+
+### 배경
+- **T15 자녀 건강보장 공백형**: 마이데이터 사업자는 본인 계약만 조회 가능 — 자녀 보험 감지 구조적 불가
+- **T16 실손보험 노후화형**: 실손 세대(1~4세대) 구분 담보코드 없음 — 간접 판정 신뢰도 불충분
+
+### 변경 범위
+운영 체인 23→22(T15)→21(T16)개. T06·T15·T16 제거됨 기준 운영 체인 20개 (T10 paused·T11 rejected 포함 비제거 T코드 기준).
+
+### 수정 파일 (미커밋)
+
+| 파일 | 내용 |
+|---|---|
+| `contents/02_risk-type/risk-types.md` | T15·T16 섹션 제거 |
+| `contents/03_rule/rules-생명보험-노후-특종.md` | RU-T15·RU-T16 제거 |
+| `contents/04_concept/concepts.md` | CN-T15·CN-T16 제거 |
+| `contents/05_policy/policies.md` | PO-T15·PO-T16 제거 |
+| `contents/01_evidence/evidence-생명보험-노후.md` | EV020(어린이 연간 의료비) 제거 |
+| `contents/01_evidence/evidence-건강보험.md` | EV025(실손 세대별 보험료 인상률) 제거 |
+| `contents/00_taxonomy/market-research.md` | T15·T16 행 제거, 우선순위표 재번호, 생성 대상 범위·수 갱신 |
+| `contents/07_connections/chain-map.json` | v1.1→1.2, CHAIN-014·015 제거, total_evidence 19→18 |
+| `contents/html/00_index.html` | 카드 수 통계 갱신 |
+| `contents/html/01_evidence.html` | EV010 활용 방법 T16 참조 제거 |
+| `contents/html/03_rule.html` | RU-T15·RU-T16 블록 제거 |
+| `contents/html/07_chain-report.html` | T15 제거 이력 반영, T16 제거 완료 표기 |
+| `context/decisions.md` | T15·T16 제거 이력 추가, A3201 미결 항목 갱신 |
+| `context/card-policy.md` | T15·T16 제거됨 행 추가 |
+| `agents/04_coder.md` | "T06·T16 제외" → "T06·T15·T16 제외" |
+| `agents/06_spec-reviewer.md` | 동일 |
+| `agents/07_insurance-expert.md` | T15 제거됨 항목 추가 |
+| `guides/copywriting.md` | "T06·T16 제외" → "T06·T15·T16 제외" |
+| `guides/insurance-domain.md` | T15·T16 제거됨 행 반영 |
+| `policy/01_glossary.html` | "T06·T16 미사용" → "T06·T15·T16 미사용" |
+| `policy/02_card-purpose.html` | 동일 (2곳) |
+| `policy/06_field-data.html` | 동일 |
+
+---
+
 ## 2026-06-30 — 전수감사 3차 context·agents 잔재 수정 · 6개 파일
 
 ### 수정 파일
