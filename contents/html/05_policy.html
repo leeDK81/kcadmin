@@ -36,15 +36,19 @@ main { max-width: 960px; margin: 36px auto; padding: 0 24px 60px; }
 <header>
   <div class="nav"><a href="00_index.html">← 인덱스로 돌아가기</a></div>
   <h1>Policy 카드 입력 가이드</h1>
-  <p>STEP 5 · Clark 앱 표시 면책 문구 카드 · 총 25장</p>
+  <p>STEP 5 · Clark 앱 표시 면책 문구 카드 · 총 23장 (2026-07-04 도메인 전문가 검수 반영)</p>
 </header>
 <main>
 
 <div class="stats">
-  <span class="chip">📋 총 25장</span>
-  <span class="chip">건강보험·생명 8장</span>
+  <span class="chip">📋 총 23장</span>
+  <span class="chip">건강보험·생명 7장</span>
   <span class="chip">특종·상해 2장</span>
-  <span class="chip">신규 미커버 영역 16장</span>
+  <span class="chip">신규 미커버 영역 14장</span>
+</div>
+
+<div class="warn-box" style="background:#FEF2F2;border-color:#FECACA;color:#7F1D1D;">
+  <strong>2026-07-04 도메인 전문가 검수 반영 (25→24장):</strong> PO-T09(건강보험 편중 노후전환 점검 안내) 삭제 — 대응 Risk-type T09가 T05(노후돌봄보장 공백형)의 순수 부분집합으로 확인돼 폐지·흡수됨에 따라 함께 제거. 이어서 대응 Risk-type이 최종 폐지된 정책 카드 1건도 함께 제거(24→23장, 상세는 <code>contents/CHANGELOG.md</code> 참조).
 </div>
 
 <div class="warn-box">
@@ -57,7 +61,7 @@ main { max-width: 960px; margin: 36px auto; padding: 0 24px 60px; }
   Rule 연결은 캔버스에서 별도 처리합니다. 각 Policy는 해당 Risk-type의 체인에 전속됩니다.
 </div>
 
-<div class="section-label">건강보험 영역 · PO-T01 ~ PO-T05, PO-T09 ~ PO-T10</div>
+<div class="section-label">건강보험 영역 · PO-T01 ~ PO-T05, PO-T10</div>
 
 <div class="card">
   <div class="card-head"><span class="po-id">PO-T01</span><span class="card-name">무보장 분석 안내</span><span class="rt-tag">→ T01 무보장형</span></div>
@@ -110,17 +114,6 @@ main { max-width: 960px; margin: 36px auto; padding: 0 24px 60px; }
     <div class="field-row">
       <div class="field-label">Clark 앱 표시 문구 <span class="approval-badge">준법감시인 승인 필요</span></div>
       <div class="display-text">이 분석은 마이데이터 기반 보험 가입 현황을 토대로 한 노후 돌봄 보장 진단 결과입니다. 간병보험 보장 조건(장기요양등급 기준·치매 진단 기준 등)은 가입 상품에 따라 다를 수 있습니다. 정확한 보장 내용은 가입 보험사 또는 보닥 플래너에게 확인하시기 바랍니다.</div>
-    </div>
-  </div>
-</div>
-
-<div class="card">
-  <div class="card-head"><span class="po-id">PO-T09</span><span class="card-name">건강보험 편중 노후전환 점검 안내</span><span class="rt-tag">→ T09 건강보험 편중 노후전환 미비형</span></div>
-  <div class="card-body">
-    <div class="field-row"><div class="field-label">Policy 이름</div><div class="field-value">건강보험 편중 노후전환 점검 안내</div></div>
-    <div class="field-row">
-      <div class="field-label">Clark 앱 표시 문구 <span class="approval-badge">준법감시인 승인 필요</span></div>
-      <div class="display-text">이 분석은 마이데이터 기반 보험 가입 현황을 토대로 한 노후 돌봄 전환 미비 진단 결과입니다. 건강보험(암진단금)은 있으나 노후 간병보험이 없는 경우, 향후 장기 요양 비용 발생 시 전액 자부담 위험이 있습니다. 노후 보장 전환 설계는 보닥 플래너와 상담하시기 바랍니다.</div>
     </div>
   </div>
 </div>
@@ -314,17 +307,6 @@ main { max-width: 960px; margin: 36px auto; padding: 0 24px 60px; }
     <div class="field-row">
       <div class="field-label">Clark 앱 표시 문구 <span class="approval-badge">준법감시인 승인 필요</span></div>
       <div class="display-text">이 분석은 마이데이터 기반 보험 가입 현황을 토대로 한 중환자실 입원 보장 진단 결과입니다. 중환자실 입원일당 지급 기준·한도는 가입 상품에 따라 다를 수 있습니다. 정확한 보장 내용은 보닥 플래너와 확인하시기 바랍니다.</div>
-    </div>
-  </div>
-</div>
-
-<div class="card">
-  <div class="card-head"><span class="po-id">PO-T31</span><span class="card-name">정신피해치료비 보장 분석 안내</span><span class="rt-tag">→ T31 정신피해치료비 미보장형</span></div>
-  <div class="card-body">
-    <div class="field-row"><div class="field-label">Policy 이름</div><div class="field-value">정신피해치료비 보장 분석 안내</div></div>
-    <div class="field-row">
-      <div class="field-label">Clark 앱 표시 문구 <span class="approval-badge">준법감시인 승인 필요</span></div>
-      <div class="display-text">이 분석은 마이데이터 기반 보험 가입 현황을 토대로 한 정신피해치료비 보장 진단 결과입니다. 실제 보장 범위와 지급 기준은 가입 보험사 약관에 따라 다를 수 있습니다. 필요하신 경우 보닥 플래너와 편하게 상담하실 수 있습니다.</div>
     </div>
   </div>
 </div>

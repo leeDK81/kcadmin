@@ -35,20 +35,24 @@ main { max-width: 960px; margin: 36px auto; padding: 0 24px 60px; }
 <header>
   <div class="nav"><a href="00_index.html">← 인덱스로 돌아가기</a></div>
   <h1>Concept 카드 입력 가이드</h1>
-  <p>STEP 4 · 사용자 발화 키워드 매핑 카드 · 총 26장 (v2 재설계)</p>
+  <p>STEP 4 · 사용자 발화 키워드 매핑 카드 · 총 24장 (v2 재설계, 2026-07-04 도메인 전문가 검수 반영)</p>
 </header>
 <main>
 
 <div class="stats">
-  <span class="chip">🏷 총 26장</span>
+  <span class="chip">🏷 총 24장</span>
   <span class="chip">T02는 A·B 2개</span>
   <span class="chip">🆕 CN-T10</span>
   <span class="chip">🆕 CN-T24~CN-T28</span>
-  <span class="chip">🆕 CN-T29~CN-T32</span>
+  <span class="chip">🆕 CN-T29·CN-T30·CN-T32</span>
 </div>
 
 <div class="change-box" style="background:#FFF7ED;border:1px solid #FED7AA;border-radius:10px;padding:12px 18px;margin-bottom:24px;font-size:12px;color:#92400E;line-height:1.7;">
-  <strong>v2 재설계 변경 사항:</strong> 제거 — CN-T07(중복보험)·CN-T08(보험 재설계)·CN-T12(수술보험)·CN-T13(연금보험)·CN-T15(어린이보험, 2026-07-03 추가 제거) — 대응 Risk-type(T07·T08·T12·T13·T15)이 제거되어 참조 대상 없음. 신규 추가 — CN-T10(여성암보험)·CN-T24(입원일당보험, 2026-07-03 작성 완료). CN-T25(소액암보험)·CN-T26(통원치료비보험)·CN-T27(간병인지원보험)·CN-T28(인공관절보험) 신규 추가(2026-07-03, 갭 분석 기반). CN-T29(암요양병원입원비보험)·CN-T30(중환자실입원일당보험)·CN-T31(정신피해치료비보험)·CN-T32(장기입원비보험) 신규 추가(2026-07-03, 2순위 백로그 4건).
+  <strong>v2 재설계 변경 사항:</strong> 제거 — CN-T07(중복보험)·CN-T08(보험 재설계)·CN-T12(수술보험)·CN-T13(연금보험)·CN-T15(어린이보험, 2026-07-03 추가 제거) — 대응 Risk-type(T07·T08·T12·T13·T15)이 제거되어 참조 대상 없음. 신규 추가 — CN-T10(여성암보험)·CN-T24(입원일당보험, 2026-07-03 작성 완료). CN-T25(소액암보험)·CN-T26(통원치료비보험)·CN-T27(간병인지원보험)·CN-T28(인공관절보험) 신규 추가(2026-07-03, 갭 분석 기반). CN-T29(암요양병원입원비보험)·CN-T30(중환자실입원일당보험)·CN-T32(장기입원비보험) 신규 추가(2026-07-03, 2순위 백로그 4건 중 3건 잔존).
+</div>
+
+<div class="change-box" style="background:#FEF2F2;border:1px solid #FECACA;border-radius:10px;padding:12px 18px;margin-bottom:24px;font-size:12px;color:#7F1D1D;line-height:1.7;">
+  <strong>2026-07-04 도메인 전문가 검수 반영 (26→25장):</strong> CN-T09(납입 완료 보험) 폐지 — 대응 Risk-type T09가 T05(노후돌봄보장 공백형)의 순수 부분집합으로 확인돼 T05로 흡수됨에 따라, CN-T09의 동의어 7개("보험 납입 끝났어요" 등 단기납 만기 관련 표현)를 CN-T05(간병보험)로 이관. 이어서 대응 Risk-type이 최종 폐지된 개념 카드 1건도 함께 제거(25→24장, 상세는 <code>contents/CHANGELOG.md</code> 참조).
 </div>
 
 <div class="info-box">
@@ -133,11 +137,15 @@ main { max-width: 960px; margin: 36px auto; padding: 0 24px 60px; }
   <div class="card-head"><span class="cn-id">CN-T05</span><span class="card-name">간병보험</span><span class="rt-tag">→ T05</span></div>
   <div class="card-body">
     <div class="field-row"><div class="field-label">한 줄 정의</div><div class="def-text">중증 질환·장기 요양이 필요한 상태에서 간병비를 지급하는 보험</div></div>
-    <div class="field-row"><div class="field-label">동의어 목록 (11개)</div>
+    <div class="field-row"><div class="field-label">동의어 목록 (18개)</div>
       <div class="tags">
         <span class="syn-tag">간병보험</span><span class="syn-tag">간병비 보험</span><span class="syn-tag">요양보험</span>
         <span class="syn-tag">LTC 보험</span><span class="syn-tag">노후 간병 대비</span>
         <span class="syn-tag">부모님 간병보험</span><span class="syn-tag">장기요양 보험</span><span class="syn-tag">간병인 비용 보장</span>
+        <span class="syn-tag">보험 납입 끝났어요</span><span class="syn-tag">단기납 만기됐어요</span>
+        <span class="syn-tag">보험료 다 냈는데 이제 어떻게 해요</span><span class="syn-tag">납입 완료 후 보장 어떻게 되나요</span>
+        <span class="syn-tag">납입 기간 끝났는데 보험 점검 받고 싶어요</span><span class="syn-tag">단기납 끝나고 보장 공백 걱정돼요</span>
+        <span class="syn-tag">보험 납입 완료 후 추가 가입 필요한가요</span>
         <span class="syn-tag">노후 의료비 보험</span><span class="syn-tag">요양원 비용 보험 되나요</span><span class="syn-tag">간병보험 필요한가요</span>
       </div>
     </div>
@@ -160,20 +168,6 @@ main { max-width: 960px; margin: 36px auto; padding: 0 24px 60px; }
 </div>
 
 <div class="section-label">생명보험 영역</div>
-
-<div class="card">
-  <div class="card-head"><span class="cn-id">CN-T09</span><span class="card-name">납입 완료 보험</span><span class="rt-tag">→ T09</span></div>
-  <div class="card-body">
-    <div class="field-row"><div class="field-label">한 줄 정의</div><div class="def-text">단기납 보험의 납입 기간이 끝난 후 건강보험 위주 설계로 노후 돌봄 전환이 이루어지지 않은 상태</div></div>
-    <div class="field-row"><div class="field-label">동의어 목록 (7개)</div>
-      <div class="tags">
-        <span class="syn-tag">보험 납입 끝났어요</span><span class="syn-tag">단기납 만기됐어요</span><span class="syn-tag">보험료 다 냈는데 이제 어떻게 해요</span>
-        <span class="syn-tag">납입 완료 후 보장 어떻게 되나요</span><span class="syn-tag">납입 기간 끝났는데 보험 점검 받고 싶어요</span>
-        <span class="syn-tag">단기납 끝나고 보장 공백 걱정돼요</span><span class="syn-tag">보험 납입 완료 후 추가 가입 필요한가요</span>
-      </div>
-    </div>
-  </div>
-</div>
 
 <div class="card">
   <div class="card-head"><span class="cn-id">CN-T11</span><span class="card-name">종신보험</span><span class="rt-tag">→ T11</span></div>
@@ -417,19 +411,6 @@ main { max-width: 960px; margin: 36px auto; padding: 0 24px 60px; }
         <span class="syn-tag">중환자실입원일당보험</span><span class="syn-tag">중환자실보험</span><span class="syn-tag">ICU보험</span>
         <span class="syn-tag">중환자실 입원하면 보험금 나오나요</span><span class="syn-tag">중환자실 들어가면 얼마 받나요</span>
         <span class="syn-tag">중환자실 입원비 보장</span>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="card">
-  <div class="card-head"><span class="cn-id">CN-T31</span><span class="card-name">정신피해치료비보험</span><span class="rt-tag">→ T31</span></div>
-  <div class="card-body">
-    <div class="field-row"><div class="field-label">한 줄 정의</div><div class="def-text">범죄 피해로 인한 정신적 충격 치료비를 보장하는 보험</div></div>
-    <div class="field-row"><div class="field-label">동의어 목록 (5개)</div>
-      <div class="tags">
-        <span class="syn-tag">정신피해치료비보험</span><span class="syn-tag">범죄피해 치료비 보험</span><span class="syn-tag">정신적 피해 보상 보험</span>
-        <span class="syn-tag">범죄 피해 입었는데 치료비 보장되나요</span><span class="syn-tag">심리치료비 보험</span>
       </div>
     </div>
   </div>

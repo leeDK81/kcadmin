@@ -1,14 +1,14 @@
 {
-  "version": "1.6",
+  "version": "1.9",
   "generated_at": "2026-07-03",
   "agent": "contents-review",
-  "note": "2026-07-03: 2순위 백로그 4건 신규 추가 — T29(암요양병원 장기입원 미보장형)·T30(중환자실입원일당 미보장형)·T31(정신피해치료비 미보장형)·T32(장기입원비 미보장형). 21→25개 체인.",
+  "note": "2026-07-04 T31(정신피해치료비 미보장형) 폐지 — A9616 미보유+나이 조건만으로는 판별력이 없고, PROMAGE 50개 위험도 항목 전체에 범죄·정신건강 카테고리가 없어 구조적으로 좁힐 신호가 없음이 확인됨. PO 판단으로 폐지. EV040도 함께 제거. 24→23개 체인.",
   "summary": {
-    "total_risk_types": 25,
-    "total_rules": 25,
-    "total_evidence": 33,
-    "total_policies": 25,
-    "chains_complete": 25,
+    "total_risk_types": 23,
+    "total_rules": 23,
+    "total_evidence": 32,
+    "total_policies": 23,
+    "chains_complete": 23,
     "chains_with_warning": 0,
     "chains_incomplete": 0,
     "ready_to_register": true
@@ -24,7 +24,8 @@
       ],
       "rule_id": "RU-T01",
       "evidence_ids": [
-        "EV016"
+        "EV016",
+        "EV033"
       ],
       "policy_ids": [
         "PO-T01"
@@ -45,7 +46,9 @@
       "evidence_ids": [
         "EV001",
         "EV002",
-        "EV003"
+        "EV003",
+        "EV030",
+        "EV031"
       ],
       "policy_ids": [
         "PO-T02"
@@ -110,32 +113,6 @@
       ],
       "status": "완성",
       "issues": []
-    },
-    {
-      "chain_id": "CHAIN-006",
-      "domain": "건강보험",
-      "risk_type_id": "T09",
-      "risk_type_name": "건강보험 편중 노후전환 미비형",
-      "concept_ids": [
-        "CN-T09"
-      ],
-      "rule_id": "RU-T09",
-      "evidence_ids": [
-        "EV019",
-        "EV012",
-        "EV013"
-      ],
-      "policy_ids": [
-        "PO-T09"
-      ],
-      "status": "완성",
-      "issues": [
-        {
-          "severity": "info",
-          "item": "T-type명 변경",
-          "message": "구 '단기납 만기 후 공백형' → '건강보험 편중 노후전환 미비형'. EV012·EV013이 T13에서 T09로 재배정됨."
-        }
-      ]
     },
     {
       "chain_id": "CHAIN-007",
@@ -225,7 +202,8 @@
       ],
       "rule_id": "RU-T18",
       "evidence_ids": [
-        "EV023"
+        "EV023",
+        "EV030"
       ],
       "policy_ids": [
         "PO-T18"
@@ -244,7 +222,8 @@
       "rule_id": "RU-T19",
       "evidence_ids": [
         "EV024",
-        "EV010"
+        "EV010",
+        "EV033"
       ],
       "policy_ids": [
         "PO-T19"
@@ -464,24 +443,6 @@
       ],
       "policy_ids": [
         "PO-T30"
-      ],
-      "status": "완성",
-      "issues": []
-    },
-    {
-      "chain_id": "CHAIN-025",
-      "domain": "특종",
-      "risk_type_id": "T31",
-      "risk_type_name": "정신피해치료비 미보장형",
-      "concept_ids": [
-        "CN-T31"
-      ],
-      "rule_id": "RU-T31",
-      "evidence_ids": [
-        "EV040"
-      ],
-      "policy_ids": [
-        "PO-T31"
       ],
       "status": "완성",
       "issues": []

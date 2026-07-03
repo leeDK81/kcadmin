@@ -35,17 +35,17 @@ main { max-width: 960px; margin: 40px auto; padding: 0 24px; }
 <body>
 <header>
   <h1>KC Admin 카드 콘텐츠 입력 가이드</h1>
-  <p>2026-07-03 v2 재설계 완성 · 총 25개 Risk-type · 카드 총 144장 (EV 33 + RT 25 + RU 25 + CN 26 + PO 25 + PB 10)</p>
+  <p>2026-07-04 도메인 전문가 검수 완성 · 총 23개 Risk-type · 카드 총 135장 (EV 32 + RT 23 + RU 23 + CN 24 + PO 23 + PB 10)</p>
 </header>
 <main>
 
   <div class="alert" style="background:#F0FDF4;border-color:#A7F3D0;">
-    <h3 style="color:#065F46;">✅ KC Admin 등록 준비 완료 (v2, chain-map v1.6) · 25개 체인 전체 완성</h3>
-    <p style="color:#065F46;">25개 체인 완성 (T06·T07·T08·T12·T13·T16 MYDATA 구조적 한계·중복으로 제거, T15 마이데이터 자녀 명의 계약 조회 불가로 제거, T24 신규 추가 후 T25·T26·T27·T28 갭 분석 기반 신규 추가, 이어서 2순위 백로그 4건 T29·T30·T31·T32 신규 추가). CN-T29~CN-T32 작성 완료로 25개 체인 모두 Evidence·Risk-type·Rule·Concept·Policy 5종 카드 전체 완비. Critical 0건 · Warning 0건. <strong>07_chain-report.html</strong>에서 전체 검토 결과를 확인하세요.</p>
+    <h3 style="color:#065F46;">✅ KC Admin 등록 준비 완료 (v2, chain-map v1.9) · 23개 체인 전체 완성</h3>
+    <p style="color:#065F46;">23개 체인 완성 (T06·T07·T08·T12·T13·T16 MYDATA 구조적 한계·중복으로 제거, T15 마이데이터 자녀 명의 계약 조회 불가로 제거, T24 신규 추가 후 T25·T26·T27·T28 갭 분석 기반 신규 추가, 2순위 백로그 4건 T29·T30·T31·T32 신규 추가, 이어서 2026-07-04 도메인 전문가 검수로 T09가 T05의 순수 부분집합(중복 진단)으로 확인돼 폐지·흡수, T31은 특약 자체의 낮은 가입률로 "특약 미가입 성인 전체"를 잡아내는 구조적 한계가 해소 불가로 확인돼 최종 폐지). Critical 0건 · Warning 0건. <strong>07_chain-report.html</strong>에서 전체 검토 결과를 확인하세요.</p>
   </div>
 
   <div class="status-row">
-    <span class="status-chip chip-ok">✅ 완성 체인 25개</span>
+    <span class="status-chip chip-ok">✅ 완성 체인 23개</span>
     <span class="status-chip chip-ok">✅ 경고 체인 0개</span>
     <span class="status-chip chip-ok">🟢 Critical 0건</span>
     <span class="status-chip chip-ok">🟢 Warning 0건</span>
@@ -59,35 +59,35 @@ main { max-width: 960px; margin: 40px auto; padding: 0 24px; }
       <div class="card-num">STEP 2 · 01_evidence</div>
       <div class="card-title">Evidence 카드</div>
       <div class="card-desc">공인 통계 기반 근거 카드. 출처 기관·보고서명·기준값 입력.</div>
-      <span class="card-count badge-complete">EV001 ~ EV041 · 33장</span>
+      <span class="card-count badge-complete">EV001 ~ EV041 · 32장</span>
     </a>
 
     <a href="02_risk-type.html" class="card">
       <div class="card-num">STEP 1 · 02_risk-type</div>
       <div class="card-title">Risk-type 카드</div>
       <div class="card-desc">위험 유형 정의 카드. 위험 유형명·중요도·설명 입력.</div>
-      <span class="card-count badge-complete">T01 ~ T32 · 25장 (T06·T07·T08·T12·T13·T15·T16 제거, T24~T32 신규)</span>
+      <span class="card-count badge-complete">T01 ~ T32 · 23장 (T06·T07·T08·T09·T12·T13·T15·T16·T31 제거, T24~T30·T32 신규)</span>
     </a>
 
     <a href="03_rule.html" class="card">
       <div class="card-num">STEP 3 · 03_rule</div>
       <div class="card-title">Rule 카드</div>
       <div class="card-desc">마이데이터·프롬에이지·프로파일 조건 빌더 입력.</div>
-      <span class="card-count badge-complete">RU-T01 ~ RU-T32 · 25장 (1:1 카디널리티 준수)</span>
+      <span class="card-count badge-complete">RU-T01 ~ RU-T32 · 23장 (1:1 카디널리티 준수)</span>
     </a>
 
     <a href="04_concept.html" class="card">
       <div class="card-num">STEP 4 · 04_concept</div>
       <div class="card-title">Concept 카드</div>
       <div class="card-desc">사용자 발화 키워드 매핑. 용어명·동의어 입력.</div>
-      <span class="card-count badge-complete">CN · 26장 (T02 A·B 2개 포함, CN-T29~CN-T32 신규)</span>
+      <span class="card-count badge-complete">CN · 24장 (T02 A·B 2개 포함, CN-T09 폐지·CN-T05로 흡수, CN-T31 폐지)</span>
     </a>
 
     <a href="05_policy.html" class="card">
       <div class="card-num">STEP 5 · 05_policy</div>
       <div class="card-title">Policy 카드</div>
       <div class="card-desc">Clark 앱 표시 면책 문구. 준법감시인 2단계 승인 필요.</div>
-      <span class="card-count badge-complete">PO · 25장 (준법감시인 승인 필요)</span>
+      <span class="card-count badge-complete">PO · 23장 (준법감시인 승인 필요)</span>
     </a>
 
     <a href="06_playbook.html" class="card">

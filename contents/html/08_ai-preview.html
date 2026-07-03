@@ -71,10 +71,10 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
 <body>
 <header>
   <h1>AI 답변 미리보기</h1>
-  <p>Clark AI 채팅 상담 시나리오 · 25개 체인 (v2 재설계, chain-map v1.6 기준) · 마이데이터 가상 응답 기반</p>
+  <p>Clark AI 채팅 상담 시나리오 · 23개 체인 (v2 재설계, chain-map v1.9 기준, 2026-07-04 도메인 전문가 검수 반영) · 마이데이터 가상 응답 기반</p>
 </header>
 <main>
-<div class="section-label">체인별 Clark AI 채팅 시나리오 · 25개</div>
+<div class="section-label">체인별 Clark AI 채팅 시나리오 · 23개</div>
 <div class="info-banner">
   사용자 질의 → Concept 카드 감지 → Risk-type 선정 → Rule 조건 확인 → Clark AI 답변 흐름을 시뮬레이션합니다.<br>
   <strong>발화 예시</strong>는 Concept 카드 트리거 조건이며, <strong>채팅 화면</strong>은 Rule 조건 충족 시 실제 앱에 표시되는 답변 형태입니다. 클릭하면 펼쳐집니다.
@@ -335,57 +335,6 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
     </div>
   </div>
 
-  <!-- T09 건강보험 편중 노후전환 미비형 -->
-  <div class="acc-item">
-    <button class="acc-header">
-      <span class="t-badge">T09</span>
-      <span class="acc-title">건강보험 편중 노후전환 미비형</span>
-      <span class="domain-tag">건강보험</span>
-      <span class="acc-arrow">⌄</span>
-    </button>
-    <div class="acc-body">
-      <div class="acc-inner">
-        <div class="acc-block trigger-block">
-          <div class="acc-block-label">발화 예시 — Concept 카드 감지</div>
-          <div class="utterance"><span>"보험 납입 끝났어요"</span><span>"납입 완료 후 보장 어떻게 되나요"</span></div>
-          <div class="chain-path">CN-T09 → T09(건강보험 편중 노후전환 미비형) → RU-T09 [50~70세 + A4200(암진단) GTE 1원 + A4503(장기간병요양진단) LTE 0원] → 조건 충족</div>
-        </div>
-        <div class="acc-block chat-sim-block">
-          <div class="acc-block-label">Clark AI 채팅 화면</div>
-          <div class="chat-ui">
-            <div class="chat-user-row">
-              <div class="chat-user-bubble">보험료 다 냈는데 이제 어떻게 해요?</div>
-            </div>
-            <div class="chat-clark-row">
-              <div class="chat-avatar">🤖</div>
-              <div class="chat-right">
-                <div class="chat-sender">Clark</div>
-                <div class="chat-bubble">
-                  <div class="chat-text">고객님은 <strong>건강보험 편중 노후전환 미비형(T09)</strong> Risk-type에 해당합니다.</div>
-                  <div class="coverage-label">현재 가입된 보험 담보 현황입니다.</div>
-                  <table class="coverage-table">
-                    <thead><tr><th>담보 항목</th><th>담보코드</th><th>현황</th></tr></thead>
-                    <tbody>
-                      <tr><td>암진단금</td><td class="td-code">A4200</td><td><span class="status-ok">가입</span></td></tr>
-                      <tr><td>장기간병요양진단(1,2,3급)</td><td class="td-code">A4503</td><td><span class="status-none">미가입</span></td></tr>
-                    </tbody>
-                  </table>
-                  <div class="chat-text">건강보험(암진단금)은 있지만, 노후 간병보험으로의 전환 설계가 이루어지지 않은 상태입니다. 납입 완료 후 3년 이내 추가 보장 설계 없이 방치되는 가입자가 업계 추정 약 40%에 달합니다.
-
-공적연금 평균 수급액은 월 약 69.5만 원인데, 부부 기준 노후 최소 생활비는 월 240만 원입니다. 격차가 큰 만큼 건강보험 위주 설계에서 노후 돌봄 중심으로 재점검이 필요한 시점입니다.</div>
-                  <div class="chat-policy">이 분석은 마이데이터 기반 보험 가입 현황을 토대로 한 노후 돌봄 전환 미비 진단 결과입니다. 건강보험(암진단금)은 있으나 노후 간병보험이 없는 경우, 향후 장기 요양 비용 발생 시 전액 자부담 위험이 있습니다. 노후 보장 전환 설계는 보닥 플래너와 상담하시기 바랍니다.</div>
-                </div>
-              </div>
-            </div>
-            <div class="chat-cta">
-              <button class="chat-cta-btn">📋 보닥 플래너와 노후자금 계획 세우기</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <!-- T10 여성암보장 공백형 -->
   <div class="acc-item">
     <button class="acc-header">
@@ -412,17 +361,17 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
               <div class="chat-right">
                 <div class="chat-sender">Clark</div>
                 <div class="chat-bubble">
-                  <div class="chat-text">고객님은 <strong>여성암보장 공백형(T10)</strong> Risk-type에 해당합니다.</div>
+                  <div class="chat-text">고객님은 일반 진단 기준(암진단금 5,000만 원)으로도 보장이 부족하며, 여성 특화 관점에서 보면 <strong>여성암보장 공백형(T10)</strong>으로 우선순위가 한 단계 더 올라갑니다.</div>
                   <div class="coverage-label">현재 가입된 보험 담보 현황입니다.</div>
                   <table class="coverage-table">
                     <thead><tr><th>담보 항목</th><th>담보코드</th><th>현황</th></tr></thead>
                     <tbody>
-                      <tr><td>암진단금</td><td class="td-code">A4200</td><td><span class="status-warn">부족(2,000만 원 · 기준 3,000만 원 이하)</span></td></tr>
+                      <tr><td>암진단금</td><td class="td-code">A4200</td><td><span class="status-warn">여성 기준 크게 부족(2,000만 원 · 여성 기준선 3,000만 원 이하)</span></td></tr>
                     </tbody>
                   </table>
-                  <div class="chat-text">여성 암 발생 1위인 유방암은 여성 인구 10만 명당 약 115명에서 발생하며, 평균 직접 의료비는 약 2,800만 원입니다.
+                  <div class="chat-text">방금 안내드린 5,000만 원 기준은 남녀 공통 최소 기준선이었는데, 고객님처럼 3,000만 원에도 못 미치는 경우는 그보다 더 시급한 케이스입니다.
 
-5년 생존율이 94.3~94.7%로 높은 만큼, 치료 후에도 장기간 생활비가 필요합니다. 현재 암진단금이 3,000만 원 미만이면 여성 특화 보장 공백으로 볼 수 있습니다.</div>
+여성 암 발생 1위인 유방암은 여성 인구 10만 명당 약 115명에서 발생하며 평균 직접 의료비 약 2,800만 원, 5년 생존율 94.3~94.7%로 치료 후 장기간 생활비가 필요합니다. 즉 "완치는 되지만 그 이후 몇 년간의 생활비 공백이 특히 크다"는 여성암 특유의 리스크가 일반 진단금 부족 문제 위에 한 겹 더 얹혀 있는 상태입니다.</div>
                   <div class="chat-policy">이 분석은 마이데이터 기반 보험 가입 현황을 토대로 한 여성 암 보장 진단 결과입니다. 유방암·자궁경부암 등 여성 특화 암의 평균 직접 의료비는 약 2,800만 원이며, 5년 생존율이 90% 이상으로 치료 후 생활비 보장이 장기간 필요합니다. 정확한 보장 설계는 보닥 플래너와 상담하시기 바랍니다.</div>
                 </div>
               </div>
@@ -653,7 +602,7 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
         <div class="acc-block trigger-block">
           <div class="acc-block-label">발화 예시 — Concept 카드 감지</div>
           <div class="utterance"><span>"수술비 특약 빠진 것 같아요"</span><span>"심장수술 비용 보험 되나요"</span></div>
-          <div class="chain-path">CN-T19 → T19(수술·입원 정액비 미보장형) → RU-T19 [A5100(질병수술) LTE 0원 + 30~70세] → 조건 충족</div>
+          <div class="chain-path">CN-T19 → T19(수술·입원 정액비 미보장형) → RU-T19 [A5100(질병수술) LTE 0원 + 30~85세] → 조건 충족</div>
         </div>
         <div class="acc-block chat-sim-block">
           <div class="acc-block-label">Clark AI 채팅 화면</div>
@@ -878,7 +827,7 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
                       <tr><td>골절진단</td><td class="td-code">A4301</td><td><span class="status-none">미가입</span></td></tr>
                     </tbody>
                   </table>
-                  <div class="chat-text">골절 발생 시 치료비·재활비 부담을 줄여줄 진단금 담보가 없는 상태입니다. 연간 골절 환자는 약 230만 명이며, 골절 수술 평균 비용은 423만 원, 비급여 본인부담 비율은 73.9%에 달합니다.
+                  <div class="chat-text">골절 발생 시 치료비·재활비 부담을 줄여줄 진단금 담보가 없는 상태입니다. 연간 골절 환자는 약 230만 명에 달할 만큼 발생 자체가 드물지 않습니다.
 
 실손보험이 있어도 비급여 자부담과 재활 비용은 상당합니다. 골절진단금은 진단 즉시 일시금으로 받아 초기 치료비에 바로 활용할 수 있습니다.</div>
                   <div class="chat-policy">이 분석은 마이데이터 기반 보험 가입 현황을 토대로 한 상해 진단금 보장 진단 결과입니다. 골절 진단금은 골절 발생 시 일시금으로 수령하여 치료·재활 비용에 활용할 수 있는 별도 담보입니다. 정확한 보장 내용은 보닥 플래너와 상담하시기 바랍니다.</div>
@@ -957,8 +906,8 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
         <div class="acc-block trigger-block">
           <div class="acc-block-label">발화 예시 — Concept 카드 감지</div>
           <div class="utterance"><span>"갑상선암도 암보험 되나요"</span><span>"소액암 진단금 얼마 받아요"</span></div>
-          <div class="chain-path">CN-T25(소액암보험) → T25(소액암 진단금 부족형) → RU-T25 [A4200(암진단) GTE 1원 + A4210(소액암진단) LTE 5,000,000원] → 조건 충족</div>
-          <div style="font-size:11px;color:#1E40AF;margin-top:6px;">ℹ️ 참고: A4210 기준값(500만원)은 잠정치 — 상품 비교 데이터 확보 시 재검증 필요</div>
+          <div class="chain-path">CN-T25(소액암보험) → T25(소액암 진단금 부족형) → RU-T25 [A4200(암진단) GTE 1원 + A4210(소액암진단) LTE 10,000,000원 + 30~70세] → 조건 충족</div>
+          <div style="font-size:11px;color:#1E40AF;margin-top:6px;">ℹ️ 참고(2026-07-04 갱신): A4210 기준값(1,000만원)은 2022년 금융감독원 행정지도 이후 업계 표준(일반암 대비 20%)에 근거해 재산정 — T02 기준선 5,000만원의 20%</div>
         </div>
         <div class="acc-block chat-sim-block">
           <div class="acc-block-label">Clark AI 채팅 화면</div>
@@ -977,12 +926,12 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
                     <thead><tr><th>담보 항목</th><th>담보코드</th><th>현황</th></tr></thead>
                     <tbody>
                       <tr><td>암진단금</td><td class="td-code">A4200</td><td><span class="status-ok">가입</span></td></tr>
-                      <tr><td>소액암진단금</td><td class="td-code">A4210</td><td><span class="status-warn">부족(150만 원 · 기준 500만 원 이하)</span></td></tr>
+                      <tr><td>소액암진단금</td><td class="td-code">A4210</td><td><span class="status-warn">부족(150만 원 · 기준 1,000만 원 이하)</span></td></tr>
                     </tbody>
                   </table>
                   <div class="chat-text">암진단금은 가입되어 있지만, 갑상선암처럼 상대적으로 가벼운 것으로 분류되는 소액암은 진단금이 훨씬 낮게 설계돼 있는 경우가 많습니다.
 
-갑상선암은 국내에서 가장 많이 발생하는 암종 중 하나로 유병자가 58만 명을 넘지만, 소액암 진단금은 관행적으로 일반암 대비 10~30% 수준에 그칩니다. 최근에는 로봇수술 등 비급여 치료가 늘면서 평균 1,000만 원이 넘는 자부담이 발생할 수 있어, 소액암 진단금만으로는 실제 치료비를 감당하기 어려울 수 있습니다.</div>
+갑상선암은 국내에서 가장 많이 발생하는 암종 중 하나로 유병자가 58만 명을 넘지만, 소액암 진단금은 업계 관행상 일반암 대비 약 20% 수준으로 설계됩니다. 최근에는 로봇수술 등 비급여 치료가 늘면서 평균 1,000만 원이 넘는 자부담이 발생할 수 있어, 소액암 진단금만으로는 실제 치료비를 감당하기 어려울 수 있습니다.</div>
                   <div class="chat-policy">이 분석은 마이데이터 기반 보험 가입 현황을 토대로 한 소액암 보장 진단 결과입니다. 갑상선암 등 소액암은 일반암과 달리 진단금이 낮게 설계되는 경우가 많아, 가입 시 확인한 보장 금액과 실제 지급액이 다를 수 있습니다. 정확한 보장 범위는 가입 보험사 약관 또는 보닥 플래너에게 확인하시기 바랍니다.</div>
                 </div>
               </div>
@@ -1249,58 +1198,6 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
             </div>
             <div class="chat-cta">
               <button class="chat-cta-btn">📋 보닥 플래너와 보험 리모델링 시작하기</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- T31 정신피해치료비 미보장형 -->
-  <div class="acc-item">
-    <button class="acc-header">
-      <span class="t-badge">T31</span>
-      <span class="acc-title">정신피해치료비 미보장형</span>
-      <span class="domain-tag">특종</span>
-      <span class="new-tag">🆕 신규</span>
-      <span class="acc-arrow">⌄</span>
-    </button>
-    <div class="acc-body">
-      <div class="acc-inner">
-        <div class="acc-block trigger-block">
-          <div class="acc-block-label">발화 예시 — Concept 카드 감지</div>
-          <div class="utterance"><span>"범죄 피해 입었는데 치료비 보장되나요"</span><span>"심리치료비 보험 있나요"</span></div>
-          <div class="chain-path">CN-T31(정신피해치료비보험) → T31(정신피해치료비 미보장형) → RU-T31 [A9616(정신피해치료비) LTE 0원 + 20~70세] → 조건 충족</div>
-          <div style="font-size:11px;color:#1E40AF;margin-top:6px;">ℹ️ 참고: 민감 주제로 채팅 문구는 통계 수치를 직접 노출하지 않고 일반적 안내 문구로 워싱 — guides/customer-messaging.md 원칙 준수</div>
-        </div>
-        <div class="acc-block chat-sim-block">
-          <div class="acc-block-label">Clark AI 채팅 화면</div>
-          <div class="chat-ui">
-            <div class="chat-user-row">
-              <div class="chat-user-bubble">범죄 피해를 입었는데 치료비가 보장되나요?</div>
-            </div>
-            <div class="chat-clark-row">
-              <div class="chat-avatar">🤖</div>
-              <div class="chat-right">
-                <div class="chat-sender">Clark</div>
-                <div class="chat-bubble">
-                  <div class="chat-text">고객님은 <strong>정신피해치료비 미보장형(T31)</strong> Risk-type에 해당합니다.</div>
-                  <div class="coverage-label">현재 가입된 보험 담보 현황입니다.</div>
-                  <table class="coverage-table">
-                    <thead><tr><th>담보 항목</th><th>담보코드</th><th>현황</th></tr></thead>
-                    <tbody>
-                      <tr><td>정신피해치료비</td><td class="td-code">A9616</td><td><span class="status-none">미가입</span></td></tr>
-                    </tbody>
-                  </table>
-                  <div class="chat-text">예상치 못한 범죄 피해는 신체적 치료 못지않게 정신적 충격을 회복하는 과정에서도 상당한 시간과 비용이 필요합니다. 현재 이런 상황에서 치료비를 지원하는 정신피해치료비 담보가 확인되지 않습니다.
-
-국가에서도 관련 지원 제도를 운영하고 있지만, 지원 금액과 기간에는 한도가 있어 회복 과정이 길어질 경우 별도의 보장이 공백을 메우는 데 도움이 될 수 있습니다.</div>
-                  <div class="chat-policy">이 분석은 마이데이터 기반 보험 가입 현황을 토대로 한 정신피해치료비 보장 진단 결과입니다. 실제 보장 범위와 지급 기준은 가입 보험사 약관에 따라 다를 수 있습니다. 필요하신 경우 보닥 플래너와 편하게 상담하실 수 있습니다.</div>
-                </div>
-              </div>
-            </div>
-            <div class="chat-cta">
-              <button class="chat-cta-btn">📋 보닥 플래너와 상담하기</button>
             </div>
           </div>
         </div>
