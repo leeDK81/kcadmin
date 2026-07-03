@@ -35,13 +35,18 @@ main { max-width: 960px; margin: 36px auto; padding: 0 24px 60px; }
 <header>
   <div class="nav"><a href="00_index.html">← 인덱스로 돌아가기</a></div>
   <h1>Concept 카드 입력 가이드</h1>
-  <p>STEP 4 · 사용자 발화 키워드 매핑 카드 · 총 17장</p>
+  <p>STEP 4 · 사용자 발화 키워드 매핑 카드 · 총 18장 (v2 재설계)</p>
 </header>
 <main>
 
 <div class="stats">
-  <span class="chip">🏷 총 17장</span>
+  <span class="chip">🏷 총 18장</span>
   <span class="chip">T02는 A·B 2개</span>
+  <span class="chip">🆕 CN-T10·CN-T15</span>
+</div>
+
+<div class="change-box" style="background:#FFF7ED;border:1px solid #FED7AA;border-radius:10px;padding:12px 18px;margin-bottom:24px;font-size:12px;color:#92400E;line-height:1.7;">
+  <strong>v2 재설계 변경 사항:</strong> 제거 — CN-T07(중복보험)·CN-T08(보험 재설계)·CN-T12(수술보험)·CN-T13(연금보험) — 대응 Risk-type(T07·T08·T12·T13)이 제거되어 참조 대상 없음. 신규 추가 — CN-T10(여성암보험)·CN-T15(어린이보험). CN-T24(폐렴)는 캔버스에서 별도 생성 예정(미결).
 </div>
 
 <div class="info-box">
@@ -138,42 +143,15 @@ main { max-width: 960px; margin: 36px auto; padding: 0 24px 60px; }
 </div>
 
 <div class="card">
-  <div class="card-head"><span class="cn-id">CN-T07</span><span class="card-name">중복보험</span><span class="rt-tag">→ T07</span></div>
+  <div class="card-head"><span class="cn-id">CN-T10</span><span class="card-name">여성암보험</span><span class="rt-tag">→ T10</span></div>
   <div class="card-body">
-    <div class="field-row"><div class="field-label">한 줄 정의</div><div class="def-text">보험료 대비 실질 보장 효율이 낮거나 동일 보장이 중복 가입된 보험을 보유한 상태</div></div>
-    <div class="field-row"><div class="field-label">동의어 목록 (9개)</div>
+    <div class="field-row"><div class="field-label">한 줄 정의</div><div class="def-text">유방암·자궁경부암 등 여성 특화 암 진단 시 치료비·생활비를 보장하는 보험</div></div>
+    <div class="field-row"><div class="field-label">동의어 목록 (10개)</div>
       <div class="tags">
-        <span class="syn-tag">중복보험 있어요</span><span class="syn-tag">보험이 너무 많은 것 같아요</span><span class="syn-tag">보험 정리하고 싶어요</span>
-        <span class="syn-tag">보험료 낭비하는 것 같아요</span><span class="syn-tag">비슷한 보험 여러 개 들었어요</span><span class="syn-tag">보험 줄이고 싶어요</span>
-        <span class="syn-tag">쓸모없는 보험 없애고 싶어요</span><span class="syn-tag">보험 중복 확인해주세요</span><span class="syn-tag">보험 비효율 정리해주세요</span>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="card">
-  <div class="card-head"><span class="cn-id">CN-T08</span><span class="card-name">보험 재설계</span><span class="rt-tag">→ T08</span></div>
-  <div class="card-body">
-    <div class="field-row"><div class="field-label">한 줄 정의</div><div class="def-text">현재 나이·가족 구성·소득 변화에 맞게 보험 포트폴리오를 점검하고 재편하는 것</div></div>
-    <div class="field-row"><div class="field-label">동의어 목록 (9개)</div>
-      <div class="tags">
-        <span class="syn-tag">보험 재설계 받고 싶어요</span><span class="syn-tag">나이에 맞는 보험으로 바꾸고 싶어요</span><span class="syn-tag">결혼했는데 보험 바꿔야 하나요</span>
-        <span class="syn-tag">아이 생겼는데 보험 어떻게 해요</span><span class="syn-tag">내 나이에 맞는 보험 알려주세요</span><span class="syn-tag">40대 보험 추천해주세요</span>
-        <span class="syn-tag">30대인데 어떤 보험이 맞나요</span><span class="syn-tag">가족 구성 바뀌었는데 보험 점검해주세요</span><span class="syn-tag">소득 달라졌는데 보험 재설계 필요한가요</span>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="card">
-  <div class="card-head"><span class="cn-id">CN-T12</span><span class="card-name">수술보험</span><span class="rt-tag">→ T12</span></div>
-  <div class="card-body">
-    <div class="field-row"><div class="field-label">한 줄 정의</div><div class="def-text">질병·사고로 수술이 필요할 때 수술비와 입원비를 보장하는 보험</div></div>
-    <div class="field-row"><div class="field-label">동의어 목록 (9개)</div>
-      <div class="tags">
-        <span class="syn-tag">수술보험 필요한가요</span><span class="syn-tag">입원비 보험 있어야 하나요</span><span class="syn-tag">수술비 보장 보험 추천</span>
-        <span class="syn-tag">입원일당 보험</span><span class="syn-tag">수술하면 보험 나오나요</span><span class="syn-tag">비급여 수술 보장 보험</span>
-        <span class="syn-tag">입원비 보험 추천해주세요</span><span class="syn-tag">수술 보험금 얼마나 나오나요</span><span class="syn-tag">수술비 걱정돼요</span>
+        <span class="syn-tag">여성암보험</span><span class="syn-tag">유방암보험</span><span class="syn-tag">자궁경부암보험</span>
+        <span class="syn-tag">여성 특화 암보험</span><span class="syn-tag">유방암 진단금 얼마 받나요</span><span class="syn-tag">여성암 보장 부족한 것 같아요</span>
+        <span class="syn-tag">자궁암 보험 되나요</span><span class="syn-tag">유방암 걸리면 보험금 나와요</span>
+        <span class="syn-tag">여성 암보험 추천해주세요</span><span class="syn-tag">여성 암 진단금 확인하고 싶어요</span>
       </div>
     </div>
   </div>
@@ -210,22 +188,7 @@ main { max-width: 960px; margin: 36px auto; padding: 0 24px 60px; }
   </div>
 </div>
 
-<div class="section-label">노후·연금 · 특종 영역</div>
-
-<div class="card">
-  <div class="card-head"><span class="cn-id">CN-T13</span><span class="card-name">연금보험</span><span class="rt-tag">→ T13</span></div>
-  <div class="card-body">
-    <div class="field-row"><div class="field-label">한 줄 정의</div><div class="def-text">노후에 매월 일정 금액을 수령하는 사적 연금 보험</div></div>
-    <div class="field-row"><div class="field-label">동의어 목록 (11개)</div>
-      <div class="tags">
-        <span class="syn-tag">연금보험</span><span class="syn-tag">노후 준비 보험</span><span class="syn-tag">개인연금</span><span class="syn-tag">연금 보험 필요한가요</span>
-        <span class="syn-tag">노후자금 보험</span><span class="syn-tag">은퇴 준비 보험</span><span class="syn-tag">개인연금 보험</span>
-        <span class="syn-tag">연금 얼마나 받을 수 있나요</span><span class="syn-tag">국민연금 부족한데 사적 연금 필요한가요</span>
-        <span class="syn-tag">노후 생활비 보험</span><span class="syn-tag">연금저축보험</span>
-      </div>
-    </div>
-  </div>
-</div>
+<div class="section-label">특종 영역</div>
 
 <div class="card">
   <div class="card-head"><span class="cn-id">CN-T14</span><span class="card-name">운전자보험</span><span class="rt-tag">→ T14</span></div>
@@ -236,6 +199,21 @@ main { max-width: 960px; margin: 36px auto; padding: 0 24px 60px; }
         <span class="syn-tag">운전자보험</span><span class="syn-tag">운전자 보험</span><span class="syn-tag">교통사고 보험</span><span class="syn-tag">사고 냈을 때 보험</span>
         <span class="syn-tag">형사합의금 보험</span><span class="syn-tag">교통사고 합의금 보장</span><span class="syn-tag">벌금 보험</span>
         <span class="syn-tag">운전자 특약</span><span class="syn-tag">교통사고 처리 보험</span><span class="syn-tag">자동차사고 형사책임 보험</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="cn-id">CN-T15</span><span class="card-name">어린이보험</span><span class="rt-tag">→ T15</span></div>
+  <div class="card-body">
+    <div class="field-row"><div class="field-label">한 줄 정의</div><div class="def-text">자녀의 질병 입원 등 소아 특화 위험을 보장하는 어린이 전용 보험</div></div>
+    <div class="field-row"><div class="field-label">동의어 목록 (10개)</div>
+      <div class="tags">
+        <span class="syn-tag">어린이보험</span><span class="syn-tag">아이보험</span><span class="syn-tag">자녀보험</span><span class="syn-tag">태아보험</span>
+        <span class="syn-tag">아이 보험 들어야 하나요</span><span class="syn-tag">어린이보험 추천해주세요</span>
+        <span class="syn-tag">자녀 보장이 부족한 것 같아요</span><span class="syn-tag">아이 입원하면 보험금 나오나요</span>
+        <span class="syn-tag">소아 질병 보험 되나요</span><span class="syn-tag">자녀 보험 어떻게 준비해요</span>
       </div>
     </div>
   </div>
@@ -354,5 +332,6 @@ main { max-width: 960px; margin: 36px auto; padding: 0 24px 60px; }
 </div>
 
 </main>
+<script src="sidebar.js"></script>
 </body>
 </html>

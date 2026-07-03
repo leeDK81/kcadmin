@@ -35,17 +35,17 @@ main { max-width: 960px; margin: 40px auto; padding: 0 24px; }
 <body>
 <header>
   <h1>KC Admin 카드 콘텐츠 입력 가이드</h1>
-  <p>2026-06-29 완성 · 총 20개 Risk-type · 카드 총 112장 (EV 29 + RT 20 + RU 20 + CN 17 + PO 16 + PB 10)</p>
+  <p>2026-07-02 v2 재설계 완성 · 총 18개 Risk-type · 카드 총 110장 (EV 28 + RT 18 + RU 18 + CN 18 + PO 18 + PB 10)</p>
 </header>
 <main>
 
   <div class="alert" style="background:#F0FDF4;border-color:#A7F3D0;">
-    <h3 style="color:#065F46;">✅ KC Admin 등록 준비 완료 (v1.4)</h3>
-    <p style="color:#065F46;">20개 체인 완성 (T06·T15·T16 MYDATA 구조적 한계로 제거). Critical 0건 · Warning 0건. <strong>07_chain-report.html</strong>에서 전체 검토 결과를 확인하세요.</p>
+    <h3 style="color:#065F46;">✅ KC Admin 등록 준비 완료 (v2, chain-map v1.3)</h3>
+    <p style="color:#065F46;">18개 체인 완성 (T06·T07·T08·T12·T13·T16 MYDATA 구조적 한계·중복으로 제거, T24 신규 추가). Critical 0건 · Warning 0건. <strong>07_chain-report.html</strong>에서 전체 검토 결과를 확인하세요.</p>
   </div>
 
   <div class="status-row">
-    <span class="status-chip chip-ok">✅ 완성 체인 20개</span>
+    <span class="status-chip chip-ok">✅ 완성 체인 18개</span>
     <span class="status-chip chip-ok">✅ 경고 체인 0개</span>
     <span class="status-chip chip-ok">🟢 Critical 0건</span>
     <span class="status-chip chip-ok">🟢 Warning 0건</span>
@@ -59,35 +59,35 @@ main { max-width: 960px; margin: 40px auto; padding: 0 24px; }
       <div class="card-num">STEP 2 · 01_evidence</div>
       <div class="card-title">Evidence 카드</div>
       <div class="card-desc">공인 통계 기반 근거 카드. 출처 기관·보고서명·기준값 입력.</div>
-      <span class="card-count badge-complete">EV001 ~ EV029 · 29장</span>
+      <span class="card-count badge-complete">EV001 ~ EV033 · 28장</span>
     </a>
 
     <a href="02_risk-type.html" class="card">
       <div class="card-num">STEP 1 · 02_risk-type</div>
       <div class="card-title">Risk-type 카드</div>
       <div class="card-desc">위험 유형 정의 카드. 위험 유형명·중요도·설명 입력.</div>
-      <span class="card-count badge-complete">T01 ~ T23 · 20장 (T06·T15·T16 제거)</span>
+      <span class="card-count badge-complete">T01 ~ T24 · 18장 (T06·T07·T08·T12·T13·T16 제거, T24 신규)</span>
     </a>
 
     <a href="03_rule.html" class="card">
       <div class="card-num">STEP 3 · 03_rule</div>
       <div class="card-title">Rule 카드</div>
       <div class="card-desc">마이데이터·프롬에이지·프로파일 조건 빌더 입력.</div>
-      <span class="card-count badge-complete">RU-T01 ~ RU-T23 · 20장 (1:1 카디널리티 준수)</span>
+      <span class="card-count badge-complete">RU-T01 ~ RU-T24 · 18장 (1:1 카디널리티 준수)</span>
     </a>
 
     <a href="04_concept.html" class="card">
       <div class="card-num">STEP 4 · 04_concept</div>
       <div class="card-title">Concept 카드</div>
       <div class="card-desc">사용자 발화 키워드 매핑. 용어명·동의어 입력.</div>
-      <span class="card-count badge-complete">CN · 17장 (T02 A·B 2개 포함, T06·T15·T16 제거)</span>
+      <span class="card-count badge-complete">CN · 18장 (T02 A·B 2개 포함, T24는 캔버스에서 생성 예정)</span>
     </a>
 
     <a href="05_policy.html" class="card">
       <div class="card-num">STEP 5 · 05_policy</div>
       <div class="card-title">Policy 카드</div>
       <div class="card-desc">Clark 앱 표시 면책 문구. 준법감시인 2단계 승인 필요.</div>
-      <span class="card-count badge-complete">PO · 16장 (준법감시인 승인 필요, T06·T15·T16 제거)</span>
+      <span class="card-count badge-complete">PO · 18장 (준법감시인 승인 필요)</span>
     </a>
 
     <a href="06_playbook.html" class="card">
@@ -110,5 +110,6 @@ main { max-width: 960px; margin: 40px auto; padding: 0 24px; }
   </div>
 
 </main>
+<script src="sidebar.js"></script>
 </body>
 </html>

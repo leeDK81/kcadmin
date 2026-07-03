@@ -29,12 +29,12 @@ main { max-width: 960px; margin: 36px auto; padding: 0 24px 60px; }
 .field-value { font-size: 13px; color: #1A1A2E; line-height: 1.6; }
 .keywords { display: flex; flex-wrap: wrap; gap: 6px; }
 .kw-tag { font-size: 12px; background: #EFF6FF; color: #1A4A9A; border-radius: 20px; padding: 4px 12px; }
-.action-row { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #1A1A2E; padding: 8px 12px; background: #F0FDF9; border-radius: 6px; border-left: 3px solid #0F6E56; margin-bottom: 6px; }
-.action-row:last-child { margin-bottom: 0; }
-.action-row .action-type { font-size: 11px; font-weight: 700; color: #0F6E56; background: #D1FAE5; border-radius: 3px; padding: 2px 7px; margin-right: 4px; }
-.action-row-promage { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #1A1A2E; padding: 8px 12px; background: #F5F3FF; border-radius: 6px; border-left: 3px solid #7C3AED; margin-bottom: 6px; }
-.action-row-promage .action-type-promage { font-size: 11px; font-weight: 700; color: #7C3AED; background: #EDE9FE; border-radius: 3px; padding: 2px 7px; margin-right: 4px; }
-.action-row-promage .cond-note { font-size: 11px; color: #6B7280; margin-left: 4px; }
+.action-group { display: flex; flex-wrap: wrap; gap: 8px; }
+.action-row { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #fff; background: #0F6E56; border-radius: 8px; border: none; padding: 10px 18px; margin-bottom: 8px; cursor: pointer; box-shadow: 0 1px 4px rgba(15,110,86,.25); }
+.action-row .action-type { font-size: 10px; font-weight: 700; color: #fff; background: rgba(255,255,255,.2); border-radius: 3px; padding: 2px 6px; margin-right: 2px; }
+.action-row-promage { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #fff; background: #7C3AED; border-radius: 8px; border: none; padding: 10px 18px; margin-bottom: 8px; cursor: pointer; box-shadow: 0 1px 4px rgba(124,58,237,.25); }
+.action-row-promage .action-type-promage { font-size: 10px; font-weight: 700; color: #fff; background: rgba(255,255,255,.2); border-radius: 3px; padding: 2px 6px; margin-right: 2px; }
+.action-row-promage .cond-note { font-size: 11px; color: rgba(255,255,255,.7); margin-left: 4px; }
 .promage-badge { font-size: 11px; font-weight: 600; background: #EDE9FE; color: #5B21B6; border-radius: 4px; padding: 2px 8px; }
 .standalone-text { font-size: 13px; color: #374151; background: #F8FAFC; border: 1px solid #E5E9F0; border-radius: 6px; padding: 10px 14px; line-height: 1.7; }
 .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -111,8 +111,10 @@ main { max-width: 960px; margin: 36px auto; padding: 0 24px 60px; }
     </div>
     <div class="field-row">
       <div class="field-label">전환 액션</div>
-      <div class="action-row"><span class="action-type">consult</span> 보닥 플래너와 암보험 점검하기</div>
-      <div class="action-row-promage"><span class="action-type-promage">promage_connect</span> 프롬에이지를 연동하고 내 암 위험도로 진단받기 <span class="cond-note">(프롬에이지 미연동 시 노출)</span></div>
+      <div class="action-group">
+        <div class="action-row"><span class="action-type">consult</span> 보닥 플래너와 암보험 점검하기</div>
+        <div class="action-row-promage"><span class="action-type-promage">promage_connect</span> 프롬에이지를 연동하고 내 암 위험도로 진단받기 <span class="cond-note">(프롬에이지 미연동 시 노출)</span></div>
+      </div>
     </div>
     <div class="two-col">
       <div class="field-row">
@@ -143,8 +145,10 @@ main { max-width: 960px; margin: 36px auto; padding: 0 24px 60px; }
     </div>
     <div class="field-row">
       <div class="field-label">전환 액션</div>
-      <div class="action-row"><span class="action-type">consult</span> 보닥 플래너와 심뇌혈관 보장 점검하기</div>
-      <div class="action-row-promage"><span class="action-type-promage">promage_connect</span> 프롬에이지를 연동하고 내 심뇌혈관 위험도로 진단받기 <span class="cond-note">(프롬에이지 미연동 시 노출)</span></div>
+      <div class="action-group">
+        <div class="action-row"><span class="action-type">consult</span> 보닥 플래너와 심뇌혈관 보장 점검하기</div>
+        <div class="action-row-promage"><span class="action-type-promage">promage_connect</span> 프롬에이지를 연동하고 내 심뇌혈관 위험도로 진단받기 <span class="cond-note">(프롬에이지 미연동 시 노출)</span></div>
+      </div>
     </div>
     <div class="two-col">
       <div class="field-row">
@@ -175,8 +179,10 @@ main { max-width: 960px; margin: 36px auto; padding: 0 24px 60px; }
     </div>
     <div class="field-row">
       <div class="field-label">전환 액션</div>
-      <div class="action-row"><span class="action-type">consult</span> 보닥 플래너와 노후 돌봄 대비 시작하기</div>
-      <div class="action-row-promage"><span class="action-type-promage">promage_connect</span> 프롬에이지를 연동하고 내 건강 위험도로 간병 필요성 확인하기 <span class="cond-note">(프롬에이지 미연동 시 노출)</span></div>
+      <div class="action-group">
+        <div class="action-row"><span class="action-type">consult</span> 보닥 플래너와 노후 돌봄 대비 시작하기</div>
+        <div class="action-row-promage"><span class="action-type-promage">promage_connect</span> 프롬에이지를 연동하고 내 건강 위험도로 간병 필요성 확인하기 <span class="cond-note">(프롬에이지 미연동 시 노출)</span></div>
+      </div>
     </div>
     <div class="two-col">
       <div class="field-row">
@@ -377,5 +383,6 @@ main { max-width: 960px; margin: 36px auto; padding: 0 24px 60px; }
 </div>
 
 </main>
+<script src="sidebar.js"></script>
 </body>
 </html>
