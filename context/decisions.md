@@ -1,8 +1,9 @@
-# KC Admin — 확정된 설계 결정 (인덱스)
+# KC Admin — 확정된 설계 결정 (인덱스, 서비스 기획 트랙 전용)
 
 > 세션 논의를 거쳐 확정된 설계 결정. 기획서(`Data/`)와 충돌 시 이 파일이 우선.
 > **관리 주체: PO(02)** — 결정 확정 시 즉시 업데이트. 미확정 항목은 `## 미결 항목`에 먼저 등록.
 > **정책 상세는 아래 진실원 파일들을 읽는다. 이 파일은 인덱스+미결+이력 전용.**
+> **이 파일은 서비스 기획 트랙(`mockups_v2/`) 전용이다.** 컨텐츠 기획 트랙(`contents/` 실 카드 콘텐츠)의 결정·미결·이력은 `contents/decisions.md`를 별도로 참조 — 2026-07-03 트랙 분리 시 T15·market-research·A3201 미결 항목과 일부 이력을 그쪽으로 이관했다. 두 트랙이 공유하는 계약 변경 시 확인할 파일은 `context/cross-track-impact.md` 참조.
 
 ---
 
@@ -29,9 +30,9 @@
 | 항목 | 논의 내용 | 미결 이유 | 등록일 |
 |---|---|---|---|
 | Playbook ← Risk-type 연결 | Risk-type 관점의 리드 전환·배정 최적화. CONNECT_RULES.risk에 'playbook' 추가 필요 | Phase 1.5+ 이관 (리드 스코어링 스펙 확정 시 추가) | 2026-06-17 |
-| **A3201 공통 이슈** | A3201을 입원일당 대리 지표로 사용하는 Rule: T01·T12·T19 (T06은 2026-06-29 제거됨). A3xxx는 담보코드 테이블상 후유장해 계열이나 실제 MYDATA 스펙 미확인. 개발팀 확인 후 전수 교체 or 유지 결정 필요. | 개발팀 MYDATA 스펙 확인 선행 필요 | 2026-06-29 |
 | **사전 테스트 PROFILE 입력 — 사용 필드만 표시** | 현재 Rule 조건과 무관하게 5개 필드(나이·성별·결혼여부·자녀유무·운전여부) 항상 전체 표시. 현재 Rule 조건에서 실제 사용하는 필드만 렌더링하도록 `buildProfileInputHTML(ruleId)` 개선 예정. | 미구현 (다음 세션 예정) | 2026-06-30 |
-| **T15 활성/제거 최종 확인** | 2026-06-29 CHANGELOG는 T15(자녀 건강보장 공백형) 완전 제거로 기록했으나, 02_risk-type·03_rule·05_policy·chain-map.json(v1.3, 더 최신)은 T15를 활성 체인으로 다룸. 근거 Evidence(EV020)는 미작성 상태. contents/html 전수검사(2026-07-03) 중 발견 — 사용자 확인 요청했으나 무응답으로 활성 유지 가정하고 임시 처리함. | PO 최종 확인 필요 | 2026-07-03 |
+
+> T15 활성/제거, market-research.md 우선순위표, A3201 공통 이슈는 컨텐츠 트랙 전용 미결 항목이라 2026-07-03 `contents/decisions.md`로 이관됨.
 
 ---
 
@@ -53,6 +54,10 @@
 
 | 날짜 | 내용 | 진실원 파일 |
 |---|---|---|
+| 2026-07-03 | **"새 PC에서 작업 시작하기" 절차에 폴더 직접 복사 경로 추가**: 기존엔 GitHub clone 방식만 안내돼 있어 커밋 안 된 작업 내용이 복원 안 되는 문제가 있었음. 폴더 통째 복사(`.git`·`.vercel` 포함) 시 uncommitted 변경까지 이어지고 `vercel link` 재실행도 불필요하다는 점을 명시. clone 방식은 "커밋된 내용까지만 복원됨"이라는 한계를 명확히 표기. | `CLAUDE.md` |
+| 2026-07-03 | **guides/insurance-domain.md T코드 표 최신화 + CLAUDE.md 미결작업 동기화**: 컨텐츠 트랙에서 T15 제거·T25~T28 신규 추가가 있었는데 공유 계약 파일(T코드 상태의 유일한 진실원)에 반영이 안 돼 있던 것을 발견해 동기화(T01~T24/18개 → T01~T28/21개, T19 나이조건 갱신, 신규 담보코드 6개 예시 추가). `CLAUDE.md`의 "미결 작업" 안내도 이미 종결된 항목(T15·market-research·A3201) 대신 현재 실제 미결(2순위 백로그, T25 기준값 재검증)로 교체. | `guides/insurance-domain.md`, `CLAUDE.md` |
+| 2026-07-03 | **서비스·컨텐츠 트랙 분리 재정비**: `contents/agents/`(01~04)가 이미 오전부터 독립 존재했음에도 `CLAUDE.md`에 미등록이라 같은 날 세션 중 중복 문서(`context/contents-pipeline.md`, `agents/07` 저작권한 확장 등)가 발생 — 뒤늦게 발견해 전면 정리. `contents/agents/05_html-publisher.md` 신규(콘텐츠→contents/html 반영 담당 공백 해소), `context/cross-track-impact.md` 신규(공유 계약 변경 시 교차 확인), `contents/decisions.md`·`contents/CHANGELOG.md` 신설(컨텐츠 트랙 이력 분리). `card-policy.md`·`agents/07`의 T코드 표 사본을 `guides/insurance-domain.md` 단일 참조로 교체(드리프트 원인 제거). 상세는 `CHANGELOG.md` 2026-07-03 "트랙 분리 재정비" 항목 참조. | `CLAUDE.md`, `context/cross-track-impact.md` (신규), `context/card-policy.md`, `agents/07_insurance-expert.md`, `agents/08_ui-reviewer.md`, `contents/agents/00_workflow.md`, `contents/agents/05_html-publisher.md` (신규) |
+| 2026-07-03 | **리서치 도구 정책 변경**: `deep-research` skill 대신 `insane-research` skill(gptaku-plugins 마켓플레이스) 사용으로 전환 — 토큰 소모 절감 목적. 차단 사이트 접근 보조용으로 `insane-search` skill도 함께 설치(리서치 메인 도구 아님, 일반 검색엔 미사용). 두 플러그인 모두 `claude plugin install`로 설치 완료(user scope). 두 트랙 공통 적용. | `context/rules.md` |
 | 2026-06-30 | **사전 테스트 — 라이브 전환 버튼 추가**: 조건: KC 통과 AND 체인 내 approved 카드 존재. 위치: 패널 푸터 고정(테스트 실행 전 숨김). 클릭 시 체인 내 approved 카드 → active 전환, 캔버스 즉시 갱신. `testHasRun` 플래그, `updateFooterGoLive()`, `goLive()` 신규. 데모 데이터: PO001 status=approved, RU001→PO001 edge=pending. | `mockups_v2/00_canvas-main.html` |
 | 2026-06-30 | **사전 테스트 RAG 결과 설정 — 약관 RAG 제거, FAQ RAG·LLM Fallback 2개로 단순화**: 약관 RAG는 사용자 실제 보험 계약 정보(MYDATA) 없이 테스트 불가 — 사전 테스트는 운영자 배포 판단 관문이므로 검증 불가 항목 제거. `ragMockState`: `{yakgwan,faq}` → `'faq'\|'llm'`. `buildRagPresetHTML` 2버튼, `renderAnswerChain` Step 2→FAQ RAG·Step 3→LLM Fallback으로 재번호. hint 텍스트에 약관 RAG 제외 이유 명시. | `mockups_v2/00_canvas-main.html` |
 | 2026-06-30 | **사전 테스트 PROMAGE 조건 — 충족/미충족 토글로 통일**: 기존 위험/주의/양호/미설정 4개 등급 버튼 → MYDATA와 동일한 `✓ 충족 / ✗ 미충족` 토글. 조건에 이미 "암 종합 등급 EQ 위험"처럼 기댓값이 명시되어 있으므로 등급 재선택 불필요. `buildRuleCondRowsHTML` PROMAGE 분기, `updateTestSummary` 칩, `evaluateTestResult` 평가 로직 단순화 (`testProfile.conditions[key]` 기준으로 통일). | `mockups_v2/00_canvas-main.html` |

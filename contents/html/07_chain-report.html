@@ -66,35 +66,35 @@ table.chain-table { width: 100%; border-collapse: collapse; background: #fff; bo
 </header>
 <main>
 
-<div class="warn-banner">
-  <div class="ready-icon">⚠</div>
-  <div class="warn-text">
-    <h2>18개 체인 중 16개 완성 · 2개 경고</h2>
-    <p>CHAIN-010(T15)의 evidence_ids가 존재하지 않는 EV020을 참조 중 — Evidence 카드 신규 작성 또는 연결 재검토 필요. CHAIN-018(T24)은 CN-T24가 아직 캔버스에서 생성되지 않음(기 확인된 미결 항목). 나머지 16개 체인은 Critical·Warning 없음.</p>
+<div class="ready-banner">
+  <div class="ready-icon">✅</div>
+  <div class="ready-text">
+    <h2>25개 체인 전체 완성</h2>
+    <p>CHAIN-018(T24)에 이어 갭 분석 기반 CHAIN-019(T25)·CHAIN-020(T26)·CHAIN-021(T27)·CHAIN-022(T28), 그리고 2순위 백로그 CHAIN-023(T29)·CHAIN-024(T30)·CHAIN-025(T31)·CHAIN-026(T32)까지 신규 등록되어 25개 체인 모두 Concept·Risk-type·Rule·Evidence·Policy 5종 카드를 갖췄습니다. Critical·Warning 없음.</p>
   </div>
 </div>
 
 <div class="meta-row">
-  <span><strong>버전:</strong> chain-map v1.3 반영</span>
+  <span><strong>버전:</strong> chain-map v1.6 반영</span>
   <span><strong>갱신일:</strong> 2026-07-03</span>
   <span><strong>담당 에이전트:</strong> contents-review</span>
-  <span><strong>체인 수:</strong> 18개</span>
+  <span><strong>체인 수:</strong> 25개</span>
 </div>
 
 <div class="summary-grid">
-  <div class="summary-card"><div class="summary-num num-blue">18</div><div class="summary-label">Risk-type</div></div>
-  <div class="summary-card"><div class="summary-num num-blue">18</div><div class="summary-label">Rule</div></div>
-  <div class="summary-card"><div class="summary-num num-blue">28</div><div class="summary-label">Evidence</div></div>
-  <div class="summary-card"><div class="summary-num num-blue">18</div><div class="summary-label">Concept</div></div>
-  <div class="summary-card"><div class="summary-num num-blue">18</div><div class="summary-label">Policy</div></div>
+  <div class="summary-card"><div class="summary-num num-blue">25</div><div class="summary-label">Risk-type</div></div>
+  <div class="summary-card"><div class="summary-num num-blue">25</div><div class="summary-label">Rule</div></div>
+  <div class="summary-card"><div class="summary-num num-blue">33</div><div class="summary-label">Evidence</div></div>
+  <div class="summary-card"><div class="summary-num num-blue">26</div><div class="summary-label">Concept</div></div>
+  <div class="summary-card"><div class="summary-num num-blue">25</div><div class="summary-label">Policy</div></div>
   <div class="summary-card"><div class="summary-num num-blue">10</div><div class="summary-label">Playbook</div></div>
-  <div class="summary-card"><div class="summary-num num-green">16</div><div class="summary-label">완성 체인</div></div>
-  <div class="summary-card"><div class="summary-num num-yellow">2</div><div class="summary-label">경고 체인</div></div>
+  <div class="summary-card"><div class="summary-num num-green">25</div><div class="summary-label">완성 체인</div></div>
+  <div class="summary-card"><div class="summary-num num-green">0</div><div class="summary-label">경고 체인</div></div>
   <div class="summary-card"><div class="summary-num num-red">0</div><div class="summary-label">Critical</div></div>
-  <div class="summary-card"><div class="summary-num num-yellow">2</div><div class="summary-label">Warning</div></div>
+  <div class="summary-card"><div class="summary-num num-green">0</div><div class="summary-label">Warning</div></div>
 </div>
 
-<div class="section-label">체인 전체 목록 · 18개 (chain-map.json v1.3 기준)</div>
+<div class="section-label">체인 전체 목록 · 25개 (chain-map.json v1.6 기준)</div>
 
 <table class="chain-table">
   <thead>
@@ -194,16 +194,6 @@ table.chain-table { width: 100%; border-collapse: collapse; background: #fff; bo
       <td><span class="badge badge-complete">완성</span></td>
     </tr>
     <tr>
-      <td><strong>CHAIN-010</strong></td>
-      <td><span class="domain-tag">특종</span></td>
-      <td><strong>T15</strong> 자녀 건강보장 공백형</td>
-      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T15</span></div></td>
-      <td><span class="id-chip">RU-T15</span></td>
-      <td><div class="id-list"><span class="id-chip id-chip-missing">EV020 (미존재)</span></div></td>
-      <td><div class="id-list"><span class="id-chip id-chip-po">PO-T15</span></div></td>
-      <td><span class="badge badge-warning">경고</span></td>
-    </tr>
-    <tr>
       <td><strong>CHAIN-011</strong></td>
       <td><span class="domain-tag">건강보험</span></td>
       <td><strong>T17</strong> 치매진단보장 공백형</td>
@@ -277,11 +267,91 @@ table.chain-table { width: 100%; border-collapse: collapse; background: #fff; bo
       <td><strong>CHAIN-018</strong></td>
       <td><span class="domain-tag">건강보험</span></td>
       <td><strong>T24</strong> 폐렴 입원보장 공백형 <span style="font-size:10px;font-weight:700;background:#D1FAE5;color:#065F46;border-radius:3px;padding:1px 6px;">신규</span></td>
-      <td><div class="id-list"><span class="id-chip id-chip-missing">CN-T24 (미생성)</span></div></td>
+      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T24</span></div></td>
       <td><span class="id-chip">RU-T24</span></td>
       <td><div class="id-list"><span class="id-chip id-chip-ev">EV032</span></div></td>
       <td><div class="id-list"><span class="id-chip id-chip-po">PO-T24</span></div></td>
-      <td><span class="badge badge-warning">경고</span></td>
+      <td><span class="badge badge-complete">완성</span></td>
+    </tr>
+    <tr>
+      <td><strong>CHAIN-019</strong></td>
+      <td><span class="domain-tag">건강보험</span></td>
+      <td><strong>T25</strong> 소액암 진단금 부족형 <span style="font-size:10px;font-weight:700;background:#D1FAE5;color:#065F46;border-radius:3px;padding:1px 6px;">신규</span></td>
+      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T25</span></div></td>
+      <td><span class="id-chip">RU-T25</span></td>
+      <td><div class="id-list"><span class="id-chip id-chip-ev">EV034</span></div></td>
+      <td><div class="id-list"><span class="id-chip id-chip-po">PO-T25</span></div></td>
+      <td><span class="badge badge-complete">완성</span></td>
+    </tr>
+    <tr>
+      <td><strong>CHAIN-020</strong></td>
+      <td><span class="domain-tag">건강보험</span></td>
+      <td><strong>T26</strong> 통원치료비 미보장형 <span style="font-size:10px;font-weight:700;background:#D1FAE5;color:#065F46;border-radius:3px;padding:1px 6px;">신규</span></td>
+      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T26</span></div></td>
+      <td><span class="id-chip">RU-T26</span></td>
+      <td><div class="id-list"><span class="id-chip id-chip-ev">EV035</span></div></td>
+      <td><div class="id-list"><span class="id-chip id-chip-po">PO-T26</span></div></td>
+      <td><span class="badge badge-complete">완성</span></td>
+    </tr>
+    <tr>
+      <td><strong>CHAIN-021</strong></td>
+      <td><span class="domain-tag">건강보험</span></td>
+      <td><strong>T27</strong> 간병 지원 공백형 <span style="font-size:10px;font-weight:700;background:#D1FAE5;color:#065F46;border-radius:3px;padding:1px 6px;">신규</span></td>
+      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T27</span></div></td>
+      <td><span class="id-chip">RU-T27</span></td>
+      <td><div class="id-list"><span class="id-chip id-chip-ev">EV036</span></div></td>
+      <td><div class="id-list"><span class="id-chip id-chip-po">PO-T27</span></div></td>
+      <td><span class="badge badge-complete">완성</span></td>
+    </tr>
+    <tr>
+      <td><strong>CHAIN-022</strong></td>
+      <td><span class="domain-tag">건강보험</span></td>
+      <td><strong>T28</strong> 인공관절수술 미보장형 <span style="font-size:10px;font-weight:700;background:#D1FAE5;color:#065F46;border-radius:3px;padding:1px 6px;">신규</span></td>
+      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T28</span></div></td>
+      <td><span class="id-chip">RU-T28</span></td>
+      <td><div class="id-list"><span class="id-chip id-chip-ev">EV037</span></div></td>
+      <td><div class="id-list"><span class="id-chip id-chip-po">PO-T28</span></div></td>
+      <td><span class="badge badge-complete">완성</span></td>
+    </tr>
+    <tr>
+      <td><strong>CHAIN-023</strong></td>
+      <td><span class="domain-tag">건강보험</span></td>
+      <td><strong>T29</strong> 암요양병원 장기입원 미보장형 <span style="font-size:10px;font-weight:700;background:#D1FAE5;color:#065F46;border-radius:3px;padding:1px 6px;">신규</span></td>
+      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T29</span></div></td>
+      <td><span class="id-chip">RU-T29</span></td>
+      <td><div class="id-list"><span class="id-chip id-chip-ev">EV038</span></div></td>
+      <td><div class="id-list"><span class="id-chip id-chip-po">PO-T29</span></div></td>
+      <td><span class="badge badge-complete">완성</span></td>
+    </tr>
+    <tr>
+      <td><strong>CHAIN-024</strong></td>
+      <td><span class="domain-tag">건강보험</span></td>
+      <td><strong>T30</strong> 중환자실입원일당 미보장형 <span style="font-size:10px;font-weight:700;background:#D1FAE5;color:#065F46;border-radius:3px;padding:1px 6px;">신규</span></td>
+      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T30</span></div></td>
+      <td><span class="id-chip">RU-T30</span></td>
+      <td><div class="id-list"><span class="id-chip id-chip-ev">EV039</span></div></td>
+      <td><div class="id-list"><span class="id-chip id-chip-po">PO-T30</span></div></td>
+      <td><span class="badge badge-complete">완성</span></td>
+    </tr>
+    <tr>
+      <td><strong>CHAIN-025</strong></td>
+      <td><span class="domain-tag">특종</span></td>
+      <td><strong>T31</strong> 정신피해치료비 미보장형 <span style="font-size:10px;font-weight:700;background:#D1FAE5;color:#065F46;border-radius:3px;padding:1px 6px;">신규</span></td>
+      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T31</span></div></td>
+      <td><span class="id-chip">RU-T31</span></td>
+      <td><div class="id-list"><span class="id-chip id-chip-ev">EV040</span></div></td>
+      <td><div class="id-list"><span class="id-chip id-chip-po">PO-T31</span></div></td>
+      <td><span class="badge badge-complete">완성</span></td>
+    </tr>
+    <tr>
+      <td><strong>CHAIN-026</strong></td>
+      <td><span class="domain-tag">건강보험</span></td>
+      <td><strong>T32</strong> 장기입원비 미보장형 <span style="font-size:10px;font-weight:700;background:#D1FAE5;color:#065F46;border-radius:3px;padding:1px 6px;">신규</span></td>
+      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T32</span></div></td>
+      <td><span class="id-chip">RU-T32</span></td>
+      <td><div class="id-list"><span class="id-chip id-chip-ev">EV041</span></div></td>
+      <td><div class="id-list"><span class="id-chip id-chip-po">PO-T32</span></div></td>
+      <td><span class="badge badge-complete">완성</span></td>
     </tr>
   </tbody>
 </table>
@@ -308,17 +378,7 @@ table.chain-table { width: 100%; border-collapse: collapse; background: #fff; bo
   </tbody>
 </table>
 
-<div class="section-label">미해결 이슈 · 2건</div>
-
-<div class="issue-card">
-  <h3>⚠ CHAIN-010 (T15) — Evidence 연결 끊김</h3>
-  <p>chain-map.json이 T15의 근거로 EV020을 지정하고 있으나, 01_evidence.html에는 EV020 카드가 존재하지 않음(2026-06-29 T15 제거 당시 함께 삭제된 것으로 추정, 이후 T15가 v2 재설계에서 되살아나며 Evidence만 복구되지 않음). EV020을 신규 작성하거나, 기존 Evidence 중 대체 근거를 연결해야 함.</p>
-</div>
-
-<div class="issue-card">
-  <h3>⚠ CHAIN-018 (T24) — Concept 카드 미생성</h3>
-  <p>CN-T24가 아직 작성되지 않음. chain-map.json에 이미 "캔버스에서 생성 필요"로 기록된 미결 항목 — 캔버스(00_canvas-main.html)에서 신규 Concept 카드 등록 필요.</p>
-</div>
+<div class="section-label">미해결 이슈 없음</div>
 
 <div class="section-label">v2 재설계 변경 이력 · 2026-06-29 ~ 07-02</div>
 
@@ -333,8 +393,36 @@ table.chain-table { width: 100%; border-collapse: collapse; background: #fff; bo
 <div class="resolved-section">
   <h3>신규 추가 · T24(폐렴 입원보장 공백형)</h3>
   <ul class="resolved-list">
-    <li>사망원인 3위 폐렴 감지 공백 해소. RU-T24(A6100 질병입원일당 LTE 0원 + 60~85세)·EV032(KOSTAT 2024 사망원인통계)·PO-T24 작성 완료.</li>
-    <li>CN-T24만 미생성 — 위 미해결 이슈 참조.</li>
+    <li>사망원인 3위 폐렴 감지 공백 해소. RU-T24(A6100 질병입원일당 LTE 0원 + 60~85세)·EV032(KOSTAT 2024 사망원인통계)·PO-T24·CN-T24(입원일당보험) 작성 완료 — CHAIN-018 5종 카드 전체 완결.</li>
+  </ul>
+</div>
+
+<div class="section-label">v2 재설계 변경 이력 · 2026-07-03 갭 분석 신규 추가</div>
+
+<div class="resolved-section">
+  <h3>신규 추가 · T25~T28 (갭 분석 기반, 17→21개 체인)</h3>
+  <ul class="resolved-list">
+    <li>CHAIN-019 T25(소액암 진단금 부족형) — RU-T25(A4200 GTE 1원 + A4210 LTE 500만원)·EV034(갑상선암 유병 현황·소액암 저보장 실태)·PO-T25·CN-T25(소액암보험) 작성 완료.</li>
+    <li>CHAIN-020 T26(통원치료비 미보장형) — RU-T26(A7100·A7300 LTE 0원 + 40~79세)·EV035(국내 외래진료 이용 현황)·PO-T26·CN-T26(통원치료비보험) 작성 완료.</li>
+    <li>CHAIN-021 T27(간병 지원 공백형) — RU-T27(A6120·A6303 LTE 0원 + 40~85세)·EV036(사적 간병비 부담·간호간병통합서비스 사각지대)·PO-T27·CN-T27(간병인지원보험) 작성 완료.</li>
+    <li>CHAIN-022 T28(인공관절수술 미보장형) — RU-T28(A5508 LTE 0원 + 50~85세)·EV037(인공관절 치환술 증가·비용 현황)·PO-T28·CN-T28(인공관절보험) 작성 완료.</li>
+  </ul>
+</div>
+
+<div class="issue-card" style="background:#EFF6FF;border-color:#BFDBFE;">
+  <h3 style="color:#1E40AF;">ℹ️ 참고 · CHAIN-019(T25) 기준값 잠정치</h3>
+  <p style="color:#1E40AF;">RU-T25의 A4210(소액암진단) 기준값 500만원 이하는 잠정치입니다. 업계 관행상 소액암 진단금이 일반암 대비 10~30%대 수준으로 설계되는 관행을 근거로 추정한 값이며, 상품 비교 데이터 확보 시 재검증이 필요합니다. Critical·Warning은 아닌 info 수준 참고 사항입니다.</p>
+</div>
+
+<div class="section-label">v2 재설계 변경 이력 · 2026-07-03 2순위 백로그 신규 추가</div>
+
+<div class="resolved-section">
+  <h3>신규 추가 · T29~T32 (2순위 백로그 4건, 21→25개 체인)</h3>
+  <ul class="resolved-list">
+    <li>CHAIN-023 T29(암요양병원 장기입원 미보장형) — RU-T29(A4200 GTE 1원 + A6201 LTE 0원 + 40~80세)·EV038(암환자 요양병원 입원 현황·5년 초과 생존자 규모)·PO-T29·CN-T29(암요양병원입원비보험) 작성 완료.</li>
+    <li>CHAIN-024 T30(중환자실입원일당 미보장형) — RU-T30(A6100 GTE 1원 + A6112·A6302 LTE 0원 + 30~80세)·EV039(중환자실 입원 및 재난적의료비 지원 현황)·PO-T30·CN-T30(중환자실입원일당보험) 작성 완료.</li>
+    <li>CHAIN-025 T31(정신피해치료비 미보장형) — RU-T31(A9616 LTE 0원 + 20~70세)·EV040(범죄피해자 정신적 피해 및 국가 지원 한도 현황)·PO-T31·CN-T31(정신피해치료비보험) 작성 완료. 민감 주제 특성상 08_ai-preview.html 문구는 통계 직접 노출 없이 워싱.</li>
+    <li>CHAIN-026 T32(장기입원비 미보장형) — RU-T32(A6100 GTE 1원 + A6510·A6550 LTE 0원 + 40~85세)·EV041(장기입원 현황 및 입원일당 지급 한도 관행)·PO-T32·CN-T32(장기입원비보험) 작성 완료.</li>
   </ul>
 </div>
 

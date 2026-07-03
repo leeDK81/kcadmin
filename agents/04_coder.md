@@ -13,9 +13,7 @@ UI 디자이너(03)의 설계 명세를 바탕으로 인터랙티브 HTML 목업
 Evidence 편집기 구현 → `agents/04a_coder-evidence.md` 전담.
 Playbook 편집기 구현 → `agents/04b_coder-playbook.md` 전담.
 
-> **CONNECT_RULES (최종):**
-> concept → risk-type (필수) / risk → rule (필수, 정확히 1개, 1:1 전속·공유 불가) / rule → evidence (필수, 최소 1개) / rule → policy (선택) / evidence → (단말) / policy → (단말) / playbook → (단말, 독립 체인)
-> Concept → Risk-type 연결은 필수. 연결 없으면 KC 체인 미진입. Concept에 Standalone 기능 없음.
+> **CONNECT_RULES:** `context/card-policy.md` "CONNECT_RULES" 섹션 참조 (여기 재서술하지 않음). Concept에 Standalone 기능 없음.
 
 ---
 

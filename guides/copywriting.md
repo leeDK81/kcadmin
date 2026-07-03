@@ -33,7 +33,7 @@
 ## 유지 표현 (브랜드·도메인 고유 용어)
 
 Evidence, Rule, Concept, Policy, Playbook, KC Engine (개발자·스펙 문서에서는 반드시 한글 "KC 엔진" 사용), ICIS, KCD, Clark AI, KC Admin,
-담보코드, T01~T23 (T06·T15·T16 제외) (타입코드), A4200 등 담보코드값
+담보코드(타입코드 범위·활성상태는 `guides/insurance-domain.md` 참조 — 여기 사본 두지 않음), A4200 등 담보코드값
 
 > **API 소스 코드:** MYDATA / PROMAGE / PROFILE 은 API 식별자로 사용되는 대문자 코드값입니다. 코드값은 JS 변수명·value 속성·API 파라미터에서만 영문 대문자 유지.
 

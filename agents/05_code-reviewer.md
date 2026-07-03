@@ -38,8 +38,7 @@
 - [ ] Risk-type 편집기: 중요도 라디오 그룹 3개(높음/보통/낮음)가 있는가? 기본값 "보통"이 checked인가? 라디오 레이블에 가중치(×3/×2/×1) 표기가 없는가? (가중치 완전 제거됨)
 - [ ] 09_review-workflow.html: 승인완료(approved) 카드 액션이 "캔버스에서 연결" 버튼인가? ("라이브 전환" 버튼이 없는가? — 라이브 전환은 사전 테스트 후 캔버스에서 처리)
 - [ ] 09_review-workflow.html: 승인요청(pending/review) 카드에 conn(연결정보) 데이터가 없는가?
-- [ ] Playbook 편집기 Card ②에 `standaloneGuide` textarea가 border-top 구분선으로 분리되어 있는가? (Standalone 답변 가이드 섹션)
-- [ ] Standalone 배너의 케이스 가이드 링크가 `13_answer-logic.html`로 연결되어 있는가? (`14_answer-logic-guide.html` 및 `17_playbook-answer-guide.html`은 삭제된 파일 — 연결 시 404 오류)
+- [ ] Playbook 편집기 Card ②에 `standaloneGuide` textarea가 border-top 구분선으로 분리되어 있는가? (Standalone 답변 가이드 섹션 — 배너 링크·글자수 표시 등 UI 상세는 `agents/08_ui-reviewer.md` 소관, 여기서는 구조 존재 여부만 확인)
 - [ ] `standaloneGuide` textarea에 `oninput="updateStandaloneCounter()"` 핸들러가 있는가?
 - [ ] `standaloneCount` span이 있고 `updateStandaloneCounter()` 함수가 정의되어 있는가? (선택사항 — 최소 글자 수 제한 없음, 150자 초과 시 주황 #BA7517)
 - [ ] `requestReview()`에서 `standaloneGuide` 20자 미만 시 toast 경고 후 return 처리되는가? → **삭제 대상**: standaloneGuide는 선택사항(minlength=20 검증 제거됨). 빈 값이면 Clark 기본 문구 사용. 이 검증 로직이 남아있으면 수정 필요.
@@ -108,11 +107,10 @@
 **금지 표현 — `guides/copywriting.md` 금지어 전수 확인 (화면/레이블/placeholder/toast).**
 
 **카드 구조 규칙:**
-- [ ] Risk-type 중요도 옵션(높음/보통/낮음) 레이블에 가중치 표기 없는가? (`×3` / `×2` / `×1` 등 — 완전 제거됨)
-- [ ] Concept 편집기에 Standalone 라디오·토글·섹션 없는가? (위 B 섹션과 중복 확인)
-- [ ] Policy 편집기 form-group이 정확히 2개인가? (`name` + `appDisplayText` — 위 B 섹션과 중복 확인)
-- [ ] Playbook `standaloneGuide` textarea에 `minlength` 속성 또는 최소 글자 수 강제 검증이 없는가?
-- [ ] CONNECT_RULES Concept → Risk-type 연결이 필수로 처리되는가? (위 B 섹션과 중복 확인)
+- [ ] Policy 편집기 form-group이 정확히 2개인가? (`name` + `appDisplayText`)
+
+> 중요도 가중치·Concept Standalone·Playbook `minlength`·CONNECT_RULES 필수 연결 체크는 위 B 섹션에 이미 있다 — 여기 다시 나열하지 않는다(2026-07-03 자체 중복 제거).
+> **CONNECT_RULES 체크(B 섹션)는 "코드가 정책대로 구현됐는지"만 본다.** 정책 표 자체가 기획서·`card-policy.md`와 일치하는지는 `agents/06_spec-reviewer.md`의 몫이다 — 같은 사실을 두 관점에서 보는 것이지 중복이 아니다.
 
 ---
 

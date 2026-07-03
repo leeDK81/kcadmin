@@ -36,16 +36,18 @@ a { color: #1A4A9A; }
 <header>
   <div class="nav"><a href="00_index.html">← 인덱스로 돌아가기</a></div>
   <h1>Evidence 카드 입력 가이드</h1>
-  <p>STEP 2 · 공인 통계 기반 근거 카드 · 총 28장</p>
+  <p>STEP 2 · 공인 통계 기반 근거 카드 · 총 36장</p>
 </header>
 <main>
 
 <div class="stats">
-  <span class="chip">📊 총 28장</span>
+  <span class="chip">📊 총 36장</span>
   <span class="chip">건강보험 11장 (EV001~010, 016)</span>
   <span class="chip">생명·노후·특종 5장 (EV011~013, 015, 019)</span>
   <span class="chip">신규 미커버 영역 8장 (EV021~024, 026~029)</span>
   <span class="chip">데이터 보완 4장 (EV030~031, 032, 033)</span>
+  <span class="chip">신규 위험유형(T25~T28) 보완 4장 (EV034~037)</span>
+  <span class="chip">2순위 백로그(T29~T32) 보완 4장 (EV038~041)</span>
 </div>
 
 <div class="info-box">
@@ -64,7 +66,7 @@ a { color: #1A4A9A; }
     <tr><th>지표명</th><td>암환자 1인당 연평균 직접 의료비</td></tr>
     <tr class="val-row"><th>기준값</th><td>약 520만원 (건강보험 급여 진료비 기준); 비급여·간병·생활비 포함 총 직접 의료비 업계 추정 2,000만~3,500만원</td></tr>
     <tr><th>출처 URL</th><td><a href="https://www.hira.or.kr" target="_blank">https://www.hira.or.kr</a></td></tr>
-    <tr class="usage-row"><th>활용 방법</th><td>T02(암투병생활비 부족형) Rule의 암진단금 기준값(5천만원 이하) 설정 근거. 건강보험 급여 진료비 520만원에 비급여·간병·생활비를 합산하면 총 의료비 2,000만~3,500만원 수준이며, 장기 치료 고려 시 5천만원이 현실적 최소 기준선.</td></tr>
+    <tr class="usage-row"><th>활용 방법</th><td>T02(암진단금 부족형) Rule의 암진단금 기준값(5천만원 이하) 설정 근거. 건강보험 급여 진료비 520만원에 비급여·간병·생활비를 합산하면 총 의료비 2,000만~3,500만원 수준이며, 장기 치료 고려 시 5천만원이 현실적 최소 기준선.</td></tr>
   </table>
 </div>
 
@@ -77,7 +79,7 @@ a { color: #1A4A9A; }
     <tr><th>지표명</th><td>기대수명까지 생존 시 암 발생 확률</td></tr>
     <tr class="val-row"><th>기준값</th><td>남성 44.6%, 여성 38.2%</td></tr>
     <tr><th>출처 URL</th><td><a href="https://www.cancer.go.kr" target="_blank">https://www.cancer.go.kr</a></td></tr>
-    <tr class="usage-row"><th>활용 방법</th><td>T02(암투병생활비 부족형) 상담 시 암보험 필요성 설명 근거. "한국 남성 2명 중 1명이 평생 암을 경험한다"는 설득 논거로 활용.</td></tr>
+    <tr class="usage-row"><th>활용 방법</th><td>T02(암진단금 부족형) 상담 시 암보험 필요성 설명 근거. "한국 남성 2명 중 1명이 평생 암을 경험한다"는 설득 논거로 활용.</td></tr>
   </table>
 </div>
 
@@ -218,26 +220,26 @@ a { color: #1A4A9A; }
 <div class="card">
   <div class="card-head"><span class="ev-id">EV012</span><span class="card-title">국민 노후 최소 생활비 (부부 기준)</span></div>
   <table class="fields">
-    <tr><th>출처 기관</th><td>국민연금연구원 (NPS Research Institute)</td></tr>
-    <tr><th>보고서명</th><td>2024년 국민노후보장패널조사 제10차 부가조사</td></tr>
+    <tr><th>출처 기관</th><td>통계청·금융감독원·한국은행</td></tr>
+    <tr><th>보고서명</th><td>2024년 가계금융복지조사 결과</td></tr>
     <tr><th>기준 연도</th><td>2024</td></tr>
     <tr><th>지표명</th><td>부부 기준 노후 최소 생활비</td></tr>
-    <tr class="val-row"><th>기준값</th><td>최소생활비: 부부 월 216.6만원 (개인 월 139.2만원) / 적정생활비: 부부 월 298.1만원 (개인 월 197.6만원)</td></tr>
+    <tr class="val-row"><th>기준값</th><td>최소생활비 부부 월 240만원 / 적정생활비 부부 월 336만원</td></tr>
     <tr><th>출처 URL</th><td><a href="https://www.kiri.or.kr" target="_blank">https://www.kiri.or.kr</a></td></tr>
-    <tr class="usage-row"><th>활용 방법</th><td>T09(건강보험 편중 노후전환 미비형) 근거. 공적 국민연금 평균 수령액이 월 65만원 수준으로 최소 노후 생활비(277만원) 대비 212만원 부족 — 건강보험 편중 포트폴리오를 노후 전환 설계로 전환해야 하는 수치 근거.</td></tr>
+    <tr class="usage-row"><th>활용 방법</th><td>T09(건강보험 편중 노후전환 미비형) 근거. 공적 국민연금 평균 수령액이 월 69.5만원 수준으로 최소 노후 생활비(240만원) 대비 170.5만원 부족 — 건강보험 편중 포트폴리오를 노후 전환 설계로 전환해야 하는 수치 근거.</td></tr>
   </table>
 </div>
 
 <div class="card">
-  <div class="card-head"><span class="ev-id">EV013</span><span class="card-title">국민연금 평균 월 수령액</span></div>
+  <div class="card-head"><span class="ev-id">EV013</span><span class="card-title">공적연금 월평균 수급액</span></div>
   <table class="fields">
-    <tr><th>출처 기관</th><td>국민연금공단 (NPS)</td></tr>
-    <tr><th>보고서명</th><td>2024년 국민연금 통계연보</td></tr>
+    <tr><th>출처 기관</th><td>통계청·금융감독원·한국은행</td></tr>
+    <tr><th>보고서명</th><td>2024년 가계금융복지조사 결과</td></tr>
     <tr><th>기준 연도</th><td>2024</td></tr>
     <tr><th>지표명</th><td>노령연금 월평균 수령액</td></tr>
-    <tr class="val-row"><th>기준값</th><td>약 67만원 (2025년 기준. 100만원 이상 수급자는 전체의 13.55%에 불과)</td></tr>
+    <tr class="val-row"><th>기준값</th><td>약 69.5만원 (수급자 평균)</td></tr>
     <tr><th>출처 URL</th><td><a href="https://www.nps.or.kr" target="_blank">https://www.nps.or.kr</a></td></tr>
-    <tr class="usage-row"><th>활용 방법</th><td>T09 Rule 근거. 최소 노후 생활비(277만원)와의 격차(212만원/월)가 건강보험 편중에서 노후 전환 설계가 필요한 수치 근거.</td></tr>
+    <tr class="usage-row"><th>활용 방법</th><td>T09 Rule 근거. 최소 노후 생활비(240만원)와의 격차(170.5만원/월)가 건강보험 편중에서 노후 전환 설계가 필요한 수치 근거.</td></tr>
   </table>
 </div>
 
@@ -248,7 +250,7 @@ a { color: #1A4A9A; }
     <tr><th>보고서명</th><td>교통사고 형사합의금 실태 및 운전자보험 담보 기준 (2024)</td></tr>
     <tr><th>기준 연도</th><td>2024</td></tr>
     <tr><th>지표명</th><td>교통사고 사망·중상 형사합의금 추정치</td></tr>
-    <tr class="val-row"><th>기준값</th><td>중상해 기준 3,000만원 전후 (실무 통설); 사망·12대 중과실 사고 시 예외적으로 1억원 이상 사례 있음. 사안별 편차 매우 큼.</td></tr>
+    <tr class="val-row"><th>기준값</th><td>형사합의금 사망사고 통상 4,000만~5,000만원, 상해사고 진단주수당 50만~100만원. 변호사 선임비용 착수금 330만~770만원 + 성공보수 7~25%. (모두 비공식 참고치, 사안별 편차 큼)</td></tr>
     <tr><th>출처 URL</th><td>(손해보험협회 운전자보험 약관 / 법무법인 최선 사례집 참고)</td></tr>
     <tr style="background:#FFF8E1;"><th>⚠ 주의</th><td>공인 기관 집계 통계는 없으며, 법무법인 사례·보험사 약관 기준 수치임. 손해보험협회 운전자보험 약관(2024)에서 담보한도로 역산 가능.</td></tr>
     <tr class="usage-row"><th>활용 방법</th><td>T14(운전자보험 미가입형) Rule 근거. 운전자보험 미가입 시 형사합의금 전액 자부담 위험 설명.</td></tr>
@@ -372,9 +374,9 @@ a { color: #1A4A9A; }
     <tr><th>보고서명</th><td>(출처 재조사 필요 — HIRA 공개 목록 미확인)</td></tr>
     <tr><th>기준 연도</th><td>2023</td></tr>
     <tr><th>지표명</th><td>골절 환자 수, 수술 평균 비용, 비급여 본인부담 비율</td></tr>
-    <tr class="val-row"><th>기준값</th><td>골절 환자 연 230만명. 골절 수술 평균 423만원, 비급여 본인부담 73.9%. 고관절 골절 평균 441만원. 스포츠·레저 상해 증가 추세. (레저상해 수술비 423만원·비급여 73.9%는 공인 출처 재확인 필요)</td></tr>
+    <tr class="val-row"><th>기준값</th><td>골절 환자 225만 3,113명(여 115.7만/남 109.7만, HIRA 공식). 골절 수술 평균 423만원, 비급여 본인부담 73.9%. 고관절 골절 평균 441만원. 스포츠·레저 상해 증가 추세. (레저상해 수술비 423만원·비급여 73.9%는 공인 출처 재확인 필요)</td></tr>
     <tr><th>출처 URL</th><td><a href="https://www.hira.or.kr" target="_blank">https://www.hira.or.kr</a></td></tr>
-    <tr class="usage-row"><th>활용 방법</th><td>T23(골절·상해진단금 공백형) 전용 근거. 골절은 연 230만명 발생, 수술비의 73.9%가 비급여 — 골절진단금(A4301) 미보유 시 수백만원 자부담. 나이·성별 무관 범국민적 위험을 수치로 뒷받침.</td></tr>
+    <tr class="usage-row"><th>활용 방법</th><td>T23(골절·상해진단금 공백형) 전용 근거. 골절은 연 225만명 발생(HIRA 공식), 수술비의 73.9%가 비급여(업계 추정치) — 골절진단금(A4301) 미보유 시 수백만원 자부담. 나이·성별 무관 범국민적 위험을 수치로 뒷받침.</td></tr>
   </table>
 </div>
 
@@ -430,6 +432,120 @@ a { color: #1A4A9A; }
     <tr class="val-row"><th>기준값</th><td>건강보험 보장률 64.9%(2023년 하락 후 2024년 동일 수준 유지 (KIRI 2026.1 발표: 2024년도 64.9%)). 실손보험 가입률 69.0% → 미가입자 약 31%(추정 1,595만명). 실손보험 비급여 지급 비중 약 60%.</td></tr>
     <tr><th>출처 URL</th><td><a href="https://www.kiri.or.kr" target="_blank">https://www.kiri.or.kr</a></td></tr>
     <tr class="usage-row"><th>활용 방법</th><td>T01(실손·사망 이중 무보장형), T19(수술·입원 정액비 미보장형) 근거. 건강보험이 전체 의료비의 35%를 커버 못 하는 상황에서 실손보험 미가입은 즉각적 재정 위험. EV016(미가입 인구)과 함께 사용 시 시너지.</td></tr>
+  </table>
+</div>
+
+<div class="section-label">신규 위험유형(T25~T28) 보완 영역 · EV034~EV037</div>
+
+<div class="card">
+  <div class="card-head"><span class="ev-id">EV034</span><span class="card-title">소액암(갑상선암 등) 발생 현황 및 저보장 실태</span></div>
+  <table class="fields">
+    <tr><th>출처 기관</th><td>국립암센터 / 보건복지부 / 손해보험업계(뱅크샐러드 재가공)</td></tr>
+    <tr><th>보고서명</th><td>2023년 국가암등록통계 / 비급여 보고제도 분석결과 / 소액·유사암 진단비 비교자료</td></tr>
+    <tr><th>기준 연도</th><td>2023~2025</td></tr>
+    <tr><th>지표명</th><td>갑상선암 유병자수, 로봇수술 비급여 비용, 소액암-일반암 진단금 지급 비율</td></tr>
+    <tr class="val-row"><th>기준값</th><td>갑상선암 유병자수 58만 7,292명(전체 암유병자의 21.5%, 전체 암종 중 최다, 2023). 갑상선암 로봇수술 비급여 평균 약 1,030만원(2024~2025, 병원별 1,000만~2,500만원). 소액암 진단금은 일반암 대비 통상 10~30% 수준으로 설계(갑상선암 약 30%, 기타피부암 약 10% — 업계 약관 사례 종합, 공식 통계 아님)</td></tr>
+    <tr><th>출처 URL</th><td><a href="https://www.ncc.re.kr/webzine/202602/sub_04_view.jsp?tab=tab1" target="_blank">https://www.ncc.re.kr/webzine/202602/sub_04_view.jsp?tab=tab1</a> (유병자수), <a href="https://www.mohw.go.kr/board.es?mid=a10503000000&amp;bid=0027&amp;list_no=1483136&amp;act=view" target="_blank">https://www.mohw.go.kr/board.es?mid=a10503000000&amp;bid=0027&amp;list_no=1483136&amp;act=view</a> (비급여 비용)</td></tr>
+    <tr style="background:#FFF8E1;"><th>⚠ 주의</th><td>일부 수치 재확인 권장: 소액암-일반암 지급 비율(10~30%)은 업계 약관 사례를 종합한 2차 자료로, 금융감독원 공식 소비자경보 원문 대조는 실패(동적 페이지). 공식 확인 시 갱신 권고.</td></tr>
+    <tr class="usage-row"><th>활용 방법</th><td>T25(소액암 진단금 부족형) Rule 근거. 갑상선암 등 소액암은 발생 빈도가 낮지 않은데도 진단금이 일반암 대비 대폭 낮게 설계되는 구조적 격차를 설명. 로봇수술 등 비급여 부담(평균 1,030만원)과 대비해 부족분 체감 강조.</td></tr>
+  </table>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="ev-id">EV035</span><span class="card-title">국내 외래(통원) 진료 이용 현황</span></div>
+  <table class="fields">
+    <tr><th>출처 기관</th><td>건강보험심사평가원(HIRA) / OECD</td></tr>
+    <tr><th>보고서명</th><td>2024년 기준 의료서비스 이용현황 / OECD Health Statistics 국제비교</td></tr>
+    <tr><th>기준 연도</th><td>2023~2024</td></tr>
+    <tr><th>지표명</th><td>1인당 연간 외래진료 횟수, 국제비교, 연령별 수진율</td></tr>
+    <tr class="val-row"><th>기준값</th><td>국민 1인당 연간 외래진료 17.9회(2024년, 전년비 -0.6%). 국제비교 기준 한국 14.7회 vs OECD 평균 6.0회(약 2.5배, 2023). 연령별 수진율 20~24세 8.7회 → 75~79세 40.8회(정점), 여성 21.8회·남성 17.3회(2024)</td></tr>
+    <tr><th>출처 URL</th><td><a href="https://www.kpanews.co.kr/news/articleView.html?idxno=532136" target="_blank">https://www.kpanews.co.kr/news/articleView.html?idxno=532136</a></td></tr>
+    <tr class="usage-row"><th>활용 방법</th><td>T26(통원치료비 미보장형) Rule 근거. 국내 외래 이용 빈도가 OECD 대비 압도적으로 높아 통원 정액 담보 공백이 실질적 리스크임을 설명. 실손 통원 한도(1회 20만원, 연 100~180회) 초과분은 이 담보 없이는 자부담.</td></tr>
+  </table>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="ev-id">EV036</span><span class="card-title">사적 간병비 부담 및 간호간병통합서비스 사각지대</span></div>
+  <table class="fields">
+    <tr><th>출처 기관</th><td>보건복지부</td></tr>
+    <tr><th>보고서명</th><td>국민 간병비 부담 경감방안 / 제8차 건강보험정책심의위원회 자료 / 간호간병통합서비스 운영현황</td></tr>
+    <tr><th>기준 연도</th><td>2025~2026</td></tr>
+    <tr><th>지표명</th><td>사적 간병인 1일 비용, 간호간병통합서비스 병상 참여율, 사적 간병비 시장 규모</td></tr>
+    <tr class="val-row"><th>기준값</th><td>사적 간병인 1일 비용 약 12만~13만원(2026). 간호간병통합서비스 병상 참여율 34.4%(798개 기관·8만 6,443병상, 2025년 6월) — 전체 병상의 65.6%는 서비스 대상 자체가 아님. 사적 간병비 시장 규모 연 10조원(2022년 추정, 2008년 3.6조원 대비 급증). 요양병원 간병비 급여화는 2026년 하반기 약 200곳 → 2030년 500곳까지 순차 확대 예정(전체 요양병원 약 1,400여 곳 중 일부)</td></tr>
+    <tr><th>출처 URL</th><td><a href="https://www.mohw.go.kr/board.es?mid=a10503000000&amp;bid=0027&amp;act=view&amp;list_no=1479678" target="_blank">https://www.mohw.go.kr/board.es?mid=a10503000000&amp;bid=0027&amp;act=view&amp;list_no=1479678</a></td></tr>
+    <tr style="background:#FFF8E1;"><th>⚠ 주의</th><td>일부 수치 재확인 권장: 사적 간병인 1일 비용(12만~13만원, 2026)은 서울신문이 보건복지부 건정심 자료를 인용 보도한 2차 출처. 원문(제8차 건강보험정책심의위원회 회의자료) 직접 확보 시 갱신 권고.</td></tr>
+    <tr class="usage-row"><th>활용 방법</th><td>T27(간병 지원 공백형) Rule 근거. "국가 서비스가 있으니 안심"이라는 인식과 달리 병상 참여율이 낮고 요양병원은 적용 대상이 아니어서 실제로는 사적 간병 의존 상황이 많다는 점을 설명.</td></tr>
+  </table>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="ev-id">EV037</span><span class="card-title">인공관절 치환술 증가 및 비용 현황</span></div>
+  <table class="fields">
+    <tr><th>출처 기관</th><td>국민건강보험공단 / 건강보험심사평가원 / 질병관리청</td></tr>
+    <tr><th>보고서명</th><td>2024년 주요수술 통계연보 / 비급여 진료비용 공개자료 / 국민건강통계</td></tr>
+    <tr><th>기준 연도</th><td>2017~2024</td></tr>
+    <tr><th>지표명</th><td>슬관절 치환술 건수·증가율, 수술 평균비용, 65세 이상 골관절염 유병률</td></tr>
+    <tr class="val-row"><th>기준값</th><td>슬관절 치환술 건수 2020년 7만 2,382건 → 2024년 8만 6,269건(4년간 +19%). 70대 여성 최다 수술군(2만 6,615명, 남성 6,765명의 약 4배). 무릎 전체 치환술 평균비용 611만원(432만~952만원, 2021년 11월 기준). 65세 이상 골관절염 유병률 30.2%(여성 43.5%, 남성 13%, 2017-2021)</td></tr>
+    <tr><th>출처 URL</th><td><a href="https://www.etnews.com/20251021000357" target="_blank">https://www.etnews.com/20251021000357</a> (수술건수), <a href="https://health.kdca.go.kr/healthinfo/biz/health/gnrlzHealthInfo/gnrlzHealthInfo/gnrlzHealthInfoView.do?cntnts_sn=1988" target="_blank">https://health.kdca.go.kr/healthinfo/biz/health/gnrlzHealthInfo/gnrlzHealthInfo/gnrlzHealthInfoView.do?cntnts_sn=1988</a> (유병률)</td></tr>
+    <tr class="usage-row"><th>활용 방법</th><td>T28(인공관절수술 미보장형) Rule 근거. 고령화로 인공관절 수술이 빠르게 증가하는데도(4년간 +19%) 평균 611만원의 수술비가 정액 담보 없이는 자부담이라는 점을 설명. 여성 유병률이 남성의 3배 이상임을 강조.</td></tr>
+  </table>
+</div>
+
+<div class="section-label">2순위 백로그(T29~T32) 보완 영역 · EV038~EV041</div>
+
+<div class="card">
+  <div class="card-head"><span class="ev-id">EV038</span><span class="card-title">암환자 요양병원 입원 현황 및 장기생존자 규모</span></div>
+  <table class="fields">
+    <tr><th>출처 기관</th><td>국립암센터(중앙암등록본부) / 보건복지부 / 국민건강보험공단 건강보험연구원</td></tr>
+    <tr><th>보고서명</th><td>2023년 국가암등록통계 참고자료 / 요양병원의 암환자 현황과 특성(보건경제와 정책연구, 2025)</td></tr>
+    <tr><th>기준 연도</th><td>2023~2025</td></tr>
+    <tr><th>지표명</th><td>암유병자 수, 5년 초과 생존자 비율, 요양병원 입원환자 중 암환자 비중</td></tr>
+    <tr class="val-row"><th>기준값</th><td>전체 암유병자 273만 2,906명(전체인구의 5.3%, 국민 19명당 1명, 2024.1.1 기준). 이 중 5년 초과 생존자 169만 7,799명(62.1%). 요양병원 입원환자 중 암환자 비율 28.4%(매년 증가 추세, 2025년 연구)</td></tr>
+    <tr><th>출처 URL</th><td><a href="https://www.cancer.go.kr/download.do?uuid=cfcd35c3-391f-4060-9688-641db3d86cbd.pdf" target="_blank">국립암센터 참고자료</a> / <a href="https://www.mohw.go.kr/board.es?mid=a10503010100&amp;bid=0027&amp;act=view&amp;list_no=1488742" target="_blank">보건복지부</a></td></tr>
+    <tr style="background:#FFF8E1;"><th>⚠ 주의</th><td>일부 수치 재확인 권장: 요양병원 암환자 비율(28.4%)·암환자 요양병원 이용률(15.3%)은 언론(뉴스1) 경유로 확인된 건강보험연구원 연구 결과로, KCI 원문 논문 직접 대조는 못함.</td></tr>
+    <tr class="usage-row"><th>활용 방법</th><td>T29(암요양병원 장기입원 미보장형) Rule 근거. 암 생존자의 다수가 5년 넘게 투병·회복 국면에 있고, 요양병원 입원환자 중 암환자 비중이 커지는 추세를 보여줌 — 진단금(T02)·항암치료비(T18)와는 다른 국면(요양병원 장기 입원)의 보장 필요성 근거.</td></tr>
+  </table>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="ev-id">EV039</span><span class="card-title">중환자실 입원 및 고액 비급여 부담 현황</span></div>
+  <table class="fields">
+    <tr><th>출처 기관</th><td>건강보험심사평가원(HIRA) / 국민건강보험공단·보건복지부</td></tr>
+    <tr><th>보고서명</th><td>중환자실 입원환자 연령군별 건강보험 진료 통계 / 2024년도 재난적의료비 지원사업 실적 보도자료 / 2023년(4차) 중환자실 적정성평가 결과</td></tr>
+    <tr><th>기준 연도</th><td>2023~2024</td></tr>
+    <tr><th>지표명</th><td>중환자실 적정성평가 대상 기관 수, 재난적의료비 지원 건수·금액, 건강보험 보장률·비급여 본인부담률</td></tr>
+    <tr class="val-row"><th>기준값</th><td>중환자실 적정성평가 대상 303개 기관(상급종합병원 45·종합병원 258). 재난적의료비 지원 5만 735건·1,582억원(2024년, 전년비 건수 +51.1%·금액 +56.6%, 건당 평균 312만원, 역대 최고). 건강보험 보장률 64.9%(비급여 본인부담률 15.2%, 2023년)</td></tr>
+    <tr><th>출처 URL</th><td><a href="https://www.hira.or.kr/bbsDummy.do?brdScnBltNo=4&amp;pageIndex2=1&amp;brdBltNo=11228&amp;pgmid=HIRAA020041000100" target="_blank">HIRA 중환자실 적정성평가</a> / <a href="https://www.mohw.go.kr/board.es?mid=a10503010100&amp;bid=0027&amp;act=view&amp;list_no=1484751" target="_blank">보건복지부 재난적의료비 실적</a></td></tr>
+    <tr style="background:#FFF8E1;"><th>⚠ 주의</th><td>일부 수치 미확인: 중환자실 1일 평균 비급여 부담액·전국 연간 실입원 환자수·평균 재원일수는 HIRA 공공데이터셋(data.go.kr)에 원자료가 존재하나 오픈API 인증 없이는 집계값 확인 불가.</td></tr>
+    <tr class="usage-row"><th>활용 방법</th><td>T30(중환자실입원일당 미보장형) Rule 근거. 중환자실 입원이 드물지 않고(연 303개 평가대상 기관), 재난적의료비 지원 건당 평균 312만원 수준의 고액 비급여 부담이 실재함을 보여줌 — 일반 입원일당 하나로는 중환자실급 부담을 보전하기 어렵다는 근거.</td></tr>
+  </table>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="ev-id">EV040</span><span class="card-title">범죄피해자 정신적 피해 및 국가 지원 한도 현황</span></div>
+  <table class="fields">
+    <tr><th>출처 기관</th><td>한국여성정책연구원 / 법무부 / 서울동부스마일센터(법무부 산하) 임상연구</td></tr>
+    <tr><th>보고서명</th><td>성인지통계시스템(GSIS, 원자료 대검찰청 「범죄분석」) / 범죄피해자에 대한 경제적 지원 업무처리지침 / 스마일센터 임상 데이터 분석 연구</td></tr>
+    <tr><th>기준 연도</th><td>2017~2021</td></tr>
+    <tr><th>지표명</th><td>여성 대상 강력범죄 피해 건수, 범죄피해자 정신장애 진단 비율, 국가 지원 한도</td></tr>
+    <tr class="val-row"><th>기준값</th><td>여성 대상 강력범죄(흉악) 2만 8,228건·(폭력) 18만 460건(2021년). 스마일센터 임상 분석에서 정신장애 진단 비율(전체 대상 473명 중 314명): 살인 유가족 83.8%·강간 73.0%·폭행치상 60.4%·성추행 60.2%(2017년, 2012.1~2017.6 치료 사례). 국가 지원 한도: 치료비·심리치료비 합산 연 1,500만원·총액 5,000만원(범죄 발생 후 5년 경과 시 미지원), 심리치료 회당 상한 자격별 5만~10만원</td></tr>
+    <tr><th>출처 URL</th><td><a href="https://gsis.kwdi.re.kr/gsis/kr/stat/StatDetail.html?stat_seq=18" target="_blank">성인지통계시스템(GSIS)</a> / <a href="https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&amp;csmSeq=734&amp;ccfNo=3&amp;cciNo=1&amp;cnpClsNo=2" target="_blank">범죄피해자 경제적 지원 업무처리지침</a></td></tr>
+    <tr style="background:#FFF8E1;"><th>⚠ 주의</th><td>일부 수치 재확인 권장: 정신장애 진단 비율(2017년, 서울동부스마일센터 임상 사례 473명 대상)은 특정 센터·기간의 임상 표본으로 전국 대표성 있는 유병률 통계는 아님. 최신 강력범죄 발생건수(남녀 합계, 2023~2024)는 대검찰청 범죄분석 동적 페이지 제약으로 확인 못함.</td></tr>
+    <tr class="usage-row"><th>활용 방법</th><td>T31(정신피해치료비 미보장형) Rule 근거. 강력범죄 피해자의 정신장애 진단 비율이 높고, 국가 지원은 총액·기간(5년) 한도가 있어 장기 치료 국면에서 자부담이 발생할 수 있음을 보여줌. 주제 민감성으로 인해 고객향 문구는 통계를 직접 노출하지 않고 <code>guides/customer-messaging.md</code> 원칙에 따라 신중히 워싱할 것.</td></tr>
+  </table>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="ev-id">EV041</span><span class="card-title">장기입원 현황 및 입원일당 지급 한도 관행</span></div>
+  <table class="fields">
+    <tr><th>출처 기관</th><td>한국보건사회연구원(KIHASA) / 보건복지부·국립정신건강센터 / 한국보건경제정책학회 / 삼성화재(상품 약관)</td></tr>
+    <tr><th>보고서명</th><td>정신건강 의료이용의 현황과 과제(보건복지포럼 제282호, 2020) / 국가 정신건강현황 보고서 2023 / 요양병원의 선택입원군 환자 현황과 특성(보건경제와 정책연구, 2024) / 무배당 삼성화재 건강보험 마이헬스 파트너 상품 및 약관 요약서</td></tr>
+    <tr><th>기준 연도</th><td>2018~2024</td></tr>
+    <tr><th>지표명</th><td>정신질환 퇴원환자 평균재원일수, 정신의료기관 1년 이상 재원 비율, 요양병원 선택입원군(사회적 입원) 비중, 입원일당 지급 한도 관행</td></tr>
+    <tr class="val-row"><th>기준값</th><td>정신질환 퇴원건당 평균 재원일수 131.5일(2018년, OECD 평균 49.0일의 2.7배). 정신의료기관 입원환자 중 1년 이상 재원 비율 9.9%(2023년, 1~3년 8.1%+3~5년 0.9%+5~10년 0.7%+10년 이상 0.2%). 요양병원 입원환자 55만 7,678명 중 26.9%가 1회 이상 선택입원군(2022.7~2023.6). 업계 상품 사례: 입원일당 지급한도 1일~180일(181~185일은 추가지급), 암 요양병원 입원일당은 90일 한도(2024년 삼성화재 상품)</td></tr>
+    <tr><th>출처 URL</th><td><a href="https://repository.kihasa.re.kr/bitstream/201002/35122/1/2020.4.No.282.03.pdf" target="_blank">한국보건사회연구원</a> / <a href="https://www.kci.go.kr/kciportal/ci/sereArticleSearch/ciSereArtiView.kci?sereArticleSearchBean.artiId=ART003161234" target="_blank">한국보건경제정책학회</a> / <a href="https://www.samsungfire.com/download/product/P_P02_03_02_042_2301.pdf" target="_blank">삼성화재 상품약관</a></td></tr>
+    <tr style="background:#FFF8E1;"><th>⚠ 주의</th><td>일부 수치 재확인 권장: "장기입원 환자 수·비율"을 국가 단위로 직접 집계한 공식 통계는 없어(HIRA/NHIS 미공표), 정신질환·요양병원 선택입원군 통계를 대리지표로 사용. 삼성화재 180일 한도는 개별 상품 사례이며 업계 전체 표준은 아님.</td></tr>
+    <tr class="usage-row"><th>활용 방법</th><td>T32(장기입원비 미보장형) Rule 근거. 정신질환·요양병원 장기 재원 케이스가 실제로 존재하고, 업계 입원일당 상품이 통상 180일 전후로 지급 한도를 두는 관행(1차 출처 PDF 직접 확인)이 있어 이를 넘는 장기 입원은 별도 담보 없이는 보장 공백이 된다는 근거.</td></tr>
   </table>
 </div>
 

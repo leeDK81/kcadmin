@@ -34,19 +34,19 @@ main { max-width: 960px; margin: 36px auto; padding: 0 24px 60px; }
 <header>
   <div class="nav"><a href="00_index.html">← 인덱스로 돌아가기</a></div>
   <h1>Risk-type 카드 입력 가이드</h1>
-  <p>STEP 1 · 위험 유형 정의 카드 · 총 18장 (v2 재설계)</p>
+  <p>STEP 1 · 위험 유형 정의 카드 · 총 25장 (v2 재설계)</p>
 </header>
 <main>
 
 <div class="stats">
-  <span class="chip">📋 총 18장</span>
-  <span class="chip">🔴 중요도 높음 10장</span>
-  <span class="chip">🟡 중요도 보통 8장</span>
-  <span class="chip">🆕 신규 T24 폐렴</span>
+  <span class="chip">📋 총 25장</span>
+  <span class="chip">🔴 중요도 높음 13장</span>
+  <span class="chip">🟡 중요도 보통 12장</span>
+  <span class="chip">🆕 신규 T24·T25~T28·T29~T32</span>
 </div>
 
 <div class="change-box">
-  <strong>v2 재설계 변경 사항:</strong> 제거 — T06(갱신형보험 가입형)·T07(비용대비비효율형)·T08(생애주기적합도저조형)·T12(T19 통합)·T13(T11 나이 확장으로 흡수)·T16(실손노후화형 — 세대구분 불가). 신규 추가 — T24(폐렴 입원보장 공백형, 사망원인 3위). 코드 전면 교체 — A1001→A1100+A1300 / A3201→A6100 / A4300→A4503.
+  <strong>v2 재설계 변경 사항:</strong> 제거 — T06(갱신형보험 가입형)·T07(비용대비비효율형)·T08(생애주기적합도저조형)·T12(T19 통합)·T13(T11 나이 확장으로 흡수)·T16(실손노후화형 — 세대구분 불가)·T15(자녀 건강보장 공백형 — 2026-07-03 제거, 마이데이터로 자녀 명의 계약 조회 불가 확인). 신규 추가 — T24(폐렴 입원보장 공백형, 사망원인 3위), T25(소액암 진단금 부족형)·T26(통원치료비 미보장형)·T27(간병 지원 공백형)·T28(인공관절수술 미보장형)(2026-07-03, 갭 분석 기반), T29(암요양병원 장기입원 미보장형)·T30(중환자실입원일당 미보장형)·T31(정신피해치료비 미보장형)·T32(장기입원비 미보장형)(2026-07-03, 2순위 백로그 4건). 코드 전면 교체 — A1001→A1100+A1300 / A3201→A6100 / A4300→A4503.
 </div>
 
 <div class="info-box">
@@ -54,7 +54,7 @@ main { max-width: 960px; margin: 36px auto; padding: 0 24px 60px; }
   중요도는 Clark AI의 Risk-type 감지 우선순위에 직접 영향을 줍니다 (높음 우선 처리).
 </div>
 
-<div class="section-label">건강·질병 영역 (10개)</div>
+<div class="section-label">건강·질병 영역 (17개)</div>
 
 <div class="card">
   <div class="card-head"><span class="rt-id">T01</span><span class="card-name">무보장형</span><span class="imp-high">중요도: 높음</span></div>
@@ -68,7 +68,15 @@ main { max-width: 960px; margin: 36px auto; padding: 0 24px 60px; }
   <div class="card-head"><span class="rt-id">T02</span><span class="card-name">암진단금 부족형</span><span class="imp-high">중요도: 높음</span></div>
   <div class="desc">
     <div class="desc-label">중요도 설명</div>
-    암 진단 후 치료·생활비를 충당하기에 암진단금이 부족한 상태. 한국인 평생 암 발생 확률 남 44.6%·여 38.2%(국립암센터 2024). 암 직접 의료비 평균 3,200만원, 비급여 항암 신약 비용 별도를 감안하면 5천만원 미만은 실질 보장 공백.
+    암 진단 후 치료·생활비를 충당하기에 암진단금이 부족한 상태. 한국인 평생 암 발생 확률 남 44.6%·여 38.2%(국립암센터 2023년 국가암등록통계). 건강보험 급여 기준 암환자 1인당 연평균 직접 의료비 약 520만원이지만, 비급여·간병·생활비까지 포함하면 업계 추정 2,000만~3,500만원 수준 — 5천만원 미만은 실질 보장 공백.
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="rt-id">T25</span><span class="card-name">소액암 진단금 부족형</span><span class="imp-high">중요도: 높음</span><span class="new-badge">신규</span></div>
+  <div class="desc">
+    <div class="desc-label">중요도 설명</div>
+    일반암진단금(A4200)은 있으나 소액암진단금(A4210)이 낮거나 없는 상태. 갑상선암은 국내 발생 순위 1위(여성 2위) 암종으로 유병자 58만 7,292명에 달하지만, 소액암 진단금은 관행적으로 일반암 대비 10~30% 수준(갑상선암 기준 약 30%)으로 설계돼 로봇수술 등 평균 1,030만원의 비급여 부담을 충당하기 어렵다.
   </div>
 </div>
 
@@ -76,7 +84,7 @@ main { max-width: 960px; margin: 36px auto; padding: 0 24px 60px; }
   <div class="card-head"><span class="rt-id">T03</span><span class="card-name">심혈관질환보장 협소형</span><span class="imp-high">중요도: 높음</span></div>
   <div class="desc">
     <div class="desc-label">중요도 설명</div>
-    급성심근경색 담보는 있으나 허혈성심장질환(협심증·심부전·심근병증 등) 진단 담보가 없는 협소 보장 구조. 심혈관 사망의 80% 이상이 급성심근경색 외 허혈성 질환. 사망원인 2위(통계청 2023) 질환이나 담보 하나로는 보장이 반쪽.
+    급성심근경색 담보는 있으나 허혈성심장질환(협심증·심부전·심근병증 등) 진단 담보가 없는 협소 보장 구조. 허혈성심장질환 연간 진료비 1조 2,425억원, 환자수 102만 7,842명(2022, 심평원)으로 급성심근경색 외에도 큰 진료 부담이 존재. 사망원인 2위(통계청 2024) 질환이나 담보 하나로는 보장이 반쪽.
   </div>
 </div>
 
@@ -84,7 +92,7 @@ main { max-width: 960px; margin: 36px auto; padding: 0 24px 60px; }
   <div class="card-head"><span class="rt-id">T04</span><span class="card-name">뇌혈관질환보장 협소형</span><span class="imp-high">중요도: 높음</span></div>
   <div class="desc">
     <div class="desc-label">중요도 설명</div>
-    뇌출혈 담보만 있고 뇌졸중(뇌경색 포함) 전체를 포괄하는 담보가 없는 협소 보장 구조. 뇌졸중 환자의 약 75~80%가 뇌경색(허혈성)이므로 실질 보장이 극히 제한적. 사망원인 4위(통계청 2023).
+    뇌출혈 담보만 있고 뇌졸중(뇌경색 포함) 전체를 포괄하는 담보가 없는 협소 보장 구조. 뇌졸중 환자의 약 75~76%가 뇌경색(허혈성)이며, 최대 80%까지 보는 자료(대한뇌졸중학회 2024)도 있어 실질 보장이 극히 제한적. 사망원인 4위(통계청 2024).
   </div>
 </div>
 
@@ -97,10 +105,26 @@ main { max-width: 960px; margin: 36px auto; padding: 0 24px 60px; }
 </div>
 
 <div class="card">
+  <div class="card-head"><span class="rt-id">T27</span><span class="card-name">간병 지원 공백형</span><span class="imp-high">중요도: 높음</span><span class="new-badge">신규</span></div>
+  <div class="desc">
+    <div class="desc-label">중요도 설명</div>
+    입원 시 간병인 고용 비용을 지원하는 담보(간병인지원입원일당)가 전혀 없는 상태. 사적 간병인 비용은 1일 12만~13만원(2026년 기준)으로 임금근로자 월평균소득에 맞먹는 부담이 되지만, 간호간병통합서비스 병상 참여율은 34.4%(2025년 6월)에 불과하고 간병 수요가 큰 요양병원은 적용 대상에서 제외돼 있어 국가 서비스만으로는 사각지대가 크다.
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="rt-id">T28</span><span class="card-name">인공관절수술 미보장형</span><span class="imp-high">중요도: 높음</span><span class="new-badge">신규</span></div>
+  <div class="desc">
+    <div class="desc-label">중요도 설명</div>
+    인공관절(슬관절·고관절) 치환술 정액 담보가 전혀 없는 상태. 슬관절 치환술은 2024년 8만 6,269건으로 4년간 19% 증가했고 70대 여성이 최다 수술군(26,615명, 남성의 약 4배)이다. 평균 수술비는 611만원(무릎 전체 치환술 기준)이며 65세 이상 골관절염 유병률이 30.2%(여성 43.5%)에 달해 고령층 정형외과 수술 리스크가 크다.
+  </div>
+</div>
+
+<div class="card">
   <div class="card-head"><span class="rt-id">T10</span><span class="card-name">여성암보장 공백형</span><span class="imp-high">중요도: 높음</span></div>
   <div class="desc">
     <div class="desc-label">중요도 설명</div>
-    여성으로서 암진단금이 3천만원 이하인 상태. 유방암 직접 의료비 평균 2,800만원, 5년 생존율 93.8%로 치료 후 장기 생활비 부담이 특히 큼. 프롬에이지 유방암·자궁경부암 위험도와 연계하여 정밀 감지.
+    여성으로서 암진단금이 3천만원 이하인 상태. 유방암 직접 의료비 평균 2,800만원, 5년 생존율 94.7%(2019-2023 진단자, 국립암센터)로 치료 후 장기 생활비 부담이 특히 큼. 프롬에이지 유방암·자궁경부암 위험도와 연계하여 정밀 감지.
   </div>
 </div>
 
@@ -108,7 +132,7 @@ main { max-width: 960px; margin: 36px auto; padding: 0 24px 60px; }
   <div class="card-head"><span class="rt-id">T17</span><span class="card-name">치매진단보장 공백형</span><span class="imp-high">중요도: 높음</span></div>
   <div class="desc">
     <div class="desc-label">중요도 설명</div>
-    치매 진단 시 지급되는 진단금(치매보험) 미가입 상태. 국내 65세 이상 치매 유병률 10.3%, 85세 이상 21.18%(보건복지부·중앙치매센터 2023). 중증 치매 환자 월 요양 비용 250~400만원, 공적 장기요양보험 급여만으로는 감당 불가.
+    치매 진단 시 지급되는 진단금(치매보험) 미가입 상태. 국내 65세 이상 치매 유병률 9.25%, 85세 이상 21.18%(보건복지부·중앙치매센터 2023년 치매역학조사). 중증 치매 환자 월 요양 비용 250~400만원, 공적 장기요양보험 급여만으로는 감당 불가.
   </div>
 </div>
 
@@ -116,7 +140,7 @@ main { max-width: 960px; margin: 36px auto; padding: 0 24px 60px; }
   <div class="card-head"><span class="rt-id">T18</span><span class="card-name">항암치료비 미보장형</span><span class="imp-high">중요도: 높음</span></div>
   <div class="desc">
     <div class="desc-label">중요도 설명</div>
-    암진단금은 있으나 항암방사선약물치료비·고액항암치료비 담보가 없는 상태. 표적치료제·면역항암제 등 비급여 신약 급증으로 암진단금만으로 실제 치료비 충당 불가. 암은 사망원인 1위(통계청 2023)이나 치료 단계 보장 공백이 사각지대.
+    암진단금은 있으나 항암방사선약물치료비·고액항암치료비 담보가 없는 상태. 표적치료제·면역항암제 등 비급여 신약 급증으로 암진단금만으로 실제 치료비 충당 불가. 암은 사망원인 1위(통계청 2024)이나 치료 단계 보장 공백이 사각지대.
   </div>
 </div>
 
@@ -129,10 +153,42 @@ main { max-width: 960px; margin: 36px auto; padding: 0 24px 60px; }
 </div>
 
 <div class="card">
+  <div class="card-head"><span class="rt-id">T26</span><span class="card-name">통원치료비 미보장형</span><span class="imp-mid">중요도: 보통</span><span class="new-badge">신규</span></div>
+  <div class="desc">
+    <div class="desc-label">중요도 설명</div>
+    질병·상해 통원(외래) 치료 시 지급되는 정액 담보가 전혀 없는 상태. 국내 1인당 연간 외래진료 횟수는 17.9회로 OECD 평균(6.0회)의 약 3배에 달하지만, 실손보험 통원 한도(1회당 급여·비급여 각 20만원, 연 100~180회)를 넘는 비급여 부담은 별도 정액 담보 없이는 보전되지 않는다.
+  </div>
+</div>
+
+<div class="card">
   <div class="card-head"><span class="rt-id">T24</span><span class="card-name">폐렴 입원보장 공백형</span><span class="imp-mid">중요도: 보통</span><span class="new-badge">신규</span></div>
   <div class="desc">
     <div class="desc-label">중요도 설명</div>
-    60세 이상 고령자로서 질병입원일당 담보가 없는 상태. 폐렴은 국내 사망원인 3위(통계청 2023)이며 65세 이상에서 급격히 발생률 증가. 건강보험 적용되나 장기 입원 시 비급여 본인부담·생활비 공백이 발생하며 입원일당 없이는 고스란히 자부담.
+    60세 이상 고령자로서 질병입원일당 담보가 없는 상태. 폐렴은 국내 사망원인 3위(통계청 2024)이며 65세 이상에서 급격히 발생률 증가. 건강보험 적용되나 장기 입원 시 비급여 본인부담·생활비 공백이 발생하며 입원일당 없이는 고스란히 자부담.
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="rt-id">T29</span><span class="card-name">암요양병원 장기입원 미보장형</span><span class="imp-mid">중요도: 보통</span><span class="new-badge">신규</span></div>
+  <div class="desc">
+    <div class="desc-label">중요도 설명</div>
+    암보험은 있으나 암 치료 후 요양병원 장기 입원 국면을 보장하는 암요양병원입원일당(A6201) 담보가 없는 상태. 암 5년 초과 생존자가 169만 7,799명(전체 암유병자 273만 2,906명의 62.1%, 2023년 국가암등록통계·국립암센터)에 달할 만큼 장기 투병·회복 국면이 길고, 요양병원 입원환자 중 암환자 비중이 28.4%(건강보험연구원, 2025)로 매년 증가 추세다. 암진단금(T02)은 진단 시점 일시금, 항암치료비(T18)는 항암 치료 단계 비용만 다뤄 "요양병원 장기 입원" 국면의 정액 보장은 별도 담보 없이는 공백으로 남는다.
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="rt-id">T30</span><span class="card-name">중환자실입원일당 미보장형</span><span class="imp-mid">중요도: 보통</span><span class="new-badge">신규</span></div>
+  <div class="desc">
+    <div class="desc-label">중요도 설명</div>
+    일반 질병입원일당(A6100)은 있으나 중환자실 전용 정액 담보(질병중환자실입원일당 A6112·상해중환자실입원일당 A6302)가 없는 상태. 재난적의료비 지원 실적이 5만 735건·1,582억원(2024년, 건당 평균 312만원, 역대 최고)으로 고액 의료비 부담이 실재하며, 중환자실 적정성평가 대상만 303개 기관(2023년, HIRA)에 달할 만큼 중환자실 입원 자체가 드물지 않다. 일반 입원일당 하나로는 중환자실의 높은 비급여 부담(특실료·간병·고가 처치)을 보전하기 어렵다.
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="rt-id">T32</span><span class="card-name">장기입원비 미보장형</span><span class="imp-mid">중요도: 보통</span><span class="new-badge">신규</span></div>
+  <div class="desc">
+    <div class="desc-label">중요도 설명</div>
+    일반 질병입원일당(A6100)은 있으나 통상 지급 한도(업계 관행상 180일 전후, 삼성화재 상품약관 확인)를 초과하는 장기 입원 시 별도로 지급되는 장기입원비(질병장기입원비 A6510·상해장기입원비 A6550) 담보가 없는 상태. 정신질환 퇴원환자 평균재원일수 131.5일(OECD 평균의 2.7배, 한국보건사회연구원 2020)·정신의료기관 입원환자 중 1년 이상 재원 비율 9.9%(국가 정신건강현황 2023)·요양병원 선택입원군(사회적 입원 성격) 비중 26.9%(보건경제와 정책연구 2024) 등 장기 재원 케이스가 실재해, 일반 입원일당 한도를 넘어서는 순간 보장이 끊기는 공백이 발생한다.
   </div>
 </div>
 
@@ -150,7 +206,7 @@ main { max-width: 960px; margin: 36px auto; padding: 0 24px 60px; }
   <div class="card-head"><span class="rt-id">T11</span><span class="card-name">사망보장 미비형</span><span class="imp-high">중요도: 높음</span><span class="merged-badge">구 T13 흡수</span></div>
   <div class="desc">
     <div class="desc-label">중요도 설명</div>
-    부양가족이 있음에도 질병사망·상해사망 보장이 전혀 없는 상태. 25~60세 생산가능인구에서 가장 긴급한 보장 공백. 기혼·자녀 있음 시 가장 사망 시 가족 생계 위협이 즉각 발생. (35~60세 노후 이중 무대비 케이스 포함)
+    부양가족이 있음에도 질병사망·상해사망 보장이 전혀 없는 상태. 25~60세 생산가능인구에서 가장 긴급한 보장 공백. 기혼·자녀 있음 시 가장 사망 시 가족 생계 위협이 즉각 발생.
   </div>
 </div>
 
@@ -181,14 +237,6 @@ main { max-width: 960px; margin: 36px auto; padding: 0 24px 60px; }
 </div>
 
 <div class="card">
-  <div class="card-head"><span class="rt-id">T15</span><span class="card-name">자녀건강보장 공백형</span><span class="imp-mid">중요도: 보통</span></div>
-  <div class="desc">
-    <div class="desc-label">중요도 설명</div>
-    자녀가 있으나 어린이다발성질병 입원일당(A6114) 담보가 없는 상태. 소아 의료비·소아암·선천성이상 관련 보장 공백. 자녀 보험은 부모가 계약자, 자녀가 피보험자인 구조로 부모 마이데이터에서 간접 감지.
-  </div>
-</div>
-
-<div class="card">
   <div class="card-head"><span class="rt-id">T22</span><span class="card-name">상해 특화 보장 공백형</span><span class="imp-mid">중요도: 보통</span></div>
   <div class="desc">
     <div class="desc-label">중요도 설명</div>
@@ -200,7 +248,15 @@ main { max-width: 960px; margin: 36px auto; padding: 0 24px 60px; }
   <div class="card-head"><span class="rt-id">T23</span><span class="card-name">골절·상해진단금 공백형</span><span class="imp-mid">중요도: 보통</span></div>
   <div class="desc">
     <div class="desc-label">중요도 설명</div>
-    골절 진단 시 지급되는 일시금 담보(A4301)가 없는 상태. 연간 골절 환자 약 230만명, 수술 평균 비용 423만원, 비급여 본인부담 73.9%. 고령자 낙상 고관절 골절 위험 특히 높음. T22(상해 입원·수술 공백)와 별개로 진단 시점 일시금 보장 공백.
+    골절 진단 시 지급되는 일시금 담보(A4301)가 없는 상태. 연간 골절 진료인원 225만 3,113명(HIRA), 수술 평균 비용 423만원·비급여 본인부담 73.9%(업계 추정치, 출처 재확인 중). 고령자 낙상 고관절 골절 위험 특히 높음. T22(상해 입원·수술 공백)와 별개로 진단 시점 일시금 보장 공백.
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="rt-id">T31</span><span class="card-name">정신피해치료비 미보장형</span><span class="imp-mid">중요도: 보통</span><span class="new-badge">신규</span></div>
+  <div class="desc">
+    <div class="desc-label">중요도 설명</div>
+    강력범죄(흉악·폭력) 피해로 인한 정신적 충격 치료비를 보장하는 정신피해치료비(A9616) 담보가 없는 상태. 여성 대상 강력범죄만 흉악 2만 8,228건·폭력 18만 460건(2021년, 한국여성정책연구원 성인지통계)에 달하고, 스마일센터 임상 데이터 분석에서는 강력범죄 피해자 중 정신장애 진단을 받은 비율이 살인 유가족 83.8%·강간 73.0%·폭행치상 60.4%(2017년, 임상연구)로 나타났다. 국가 지원(스마일센터 등)은 치료비·심리치료비 합산 연 1,500만원, 총액 5,000만원 한도이며 범죄 발생 후 5년이 지나면 지원이 끊겨(법무부 범죄피해자 경제적 지원 업무처리지침) 장기 치료 국면의 보장 공백이 발생한다.
   </div>
 </div>
 

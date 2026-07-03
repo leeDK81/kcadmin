@@ -1,7 +1,8 @@
-# KC Admin — 정책 변경 영향 파일 매핑
+# KC Admin — 정책 변경 영향 파일 매핑 (서비스 기획 트랙 전용)
 
 > 정책이 바뀔 때 이 파일을 먼저 열어 수정 대상 파일과 구체적 변경 위치를 확인한다.
 > **진실원 파일 수정 → 아래 "구체적 변경 위치" 순서로 반영한다.**
+> 이 파일은 **서비스 기획 트랙**(`mockups_v2/`) 내부 영향 파일만 다룬다. 컨텐츠 기획 트랙(`contents/`) 내부 영향은 `contents/agents/00_workflow.md`를 참조하고, 트랙 경계를 넘는 공유 계약 변경은 `context/cross-track-impact.md`를 먼저 확인한다.
 
 ---
 
@@ -301,6 +302,22 @@
 | 영향 파일 | 변경 위치 |
 |---|---|
 | `policy/09_matching-policy.html` | 기준값 수치 테이블, `THRESHOLDS` 객체 |
+
+---
+
+### 23. 컨텐츠 기획 트랙 파이프라인 변경 (2026-07-03 정정 — 진실원 위치 변경)
+
+> 2026-07-03 초판은 `context/contents-pipeline.md`를 진실원으로 뒀으나, 그날 중 이미 존재하던 `contents/agents/00_workflow.md`와 중복임이 발견돼 그 파일은 삭제하고 아래로 통합했다.
+
+**진실원:** `contents/agents/00_workflow.md` (컨텐츠 트랙 내부), 트랙 경계를 넘는 영향은 `context/cross-track-impact.md`
+
+| 영향 파일 | 변경 위치 |
+|---|---|
+| `contents/agents/01~05` | 각 담당 Step 스펙 |
+| `guides/customer-messaging.md` | 고객향 메시지 워싱 원칙 (소유자: `contents/agents/03_copywriter.md`) |
+| `CLAUDE.md` | 컨텐츠 트랙 인덱스 섹션 |
+| `mockups_v2/12_coverage-code-table.html` | Step 0.5 게이트 판단 기준(담보코드 표) 자체 — 서비스 트랙 파일이므로 변경 시 양 트랙 모두 확인 |
+| `contents/00_taxonomy/source-corpus.md` | Step 0·2 데이터 비축 대상·갱신 주기 (관리: `contents/agents/01_researcher.md`) |
 
 ---
 

@@ -1,14 +1,14 @@
 {
-  "version": "1.3",
-  "generated_at": "2026-07-02",
+  "version": "1.6",
+  "generated_at": "2026-07-03",
   "agent": "contents-review",
-  "note": "v2 재설계 반영. T06·T07·T08·T12·T13·T16 제거. T24 신규. T11 중복 발화 방지. EV012·013 → T09. PO-T10·T17~T24 연결 완료.",
+  "note": "2026-07-03: 2순위 백로그 4건 신규 추가 — T29(암요양병원 장기입원 미보장형)·T30(중환자실입원일당 미보장형)·T31(정신피해치료비 미보장형)·T32(장기입원비 미보장형). 21→25개 체인.",
   "summary": {
-    "total_risk_types": 18,
-    "total_rules": 18,
-    "total_evidence": 28,
-    "total_policies": 18,
-    "chains_complete": 18,
+    "total_risk_types": 25,
+    "total_rules": 25,
+    "total_evidence": 33,
+    "total_policies": 25,
+    "chains_complete": 25,
     "chains_with_warning": 0,
     "chains_incomplete": 0,
     "ready_to_register": true
@@ -19,10 +19,16 @@
       "domain": "건강보험",
       "risk_type_id": "T01",
       "risk_type_name": "무보장형",
-      "concept_ids": ["CN-T01"],
+      "concept_ids": [
+        "CN-T01"
+      ],
       "rule_id": "RU-T01",
-      "evidence_ids": ["EV016"],
-      "policy_ids": ["PO-T01"],
+      "evidence_ids": [
+        "EV016"
+      ],
+      "policy_ids": [
+        "PO-T01"
+      ],
       "status": "완성",
       "issues": []
     },
@@ -31,10 +37,19 @@
       "domain": "건강보험",
       "risk_type_id": "T02",
       "risk_type_name": "암진단금 부족형",
-      "concept_ids": ["CN-T02A", "CN-T02B"],
+      "concept_ids": [
+        "CN-T02A",
+        "CN-T02B"
+      ],
       "rule_id": "RU-T02",
-      "evidence_ids": ["EV001", "EV002", "EV003"],
-      "policy_ids": ["PO-T02"],
+      "evidence_ids": [
+        "EV001",
+        "EV002",
+        "EV003"
+      ],
+      "policy_ids": [
+        "PO-T02"
+      ],
       "status": "완성",
       "issues": []
     },
@@ -43,10 +58,16 @@
       "domain": "건강보험",
       "risk_type_id": "T03",
       "risk_type_name": "심혈관질환보장 협소형",
-      "concept_ids": ["CN-T03"],
+      "concept_ids": [
+        "CN-T03"
+      ],
       "rule_id": "RU-T03",
-      "evidence_ids": ["EV004"],
-      "policy_ids": ["PO-T03"],
+      "evidence_ids": [
+        "EV004"
+      ],
+      "policy_ids": [
+        "PO-T03"
+      ],
       "status": "완성",
       "issues": []
     },
@@ -55,10 +76,17 @@
       "domain": "건강보험",
       "risk_type_id": "T04",
       "risk_type_name": "뇌혈관질환보장 협소형",
-      "concept_ids": ["CN-T04"],
+      "concept_ids": [
+        "CN-T04"
+      ],
       "rule_id": "RU-T04",
-      "evidence_ids": ["EV004", "EV005"],
-      "policy_ids": ["PO-T04"],
+      "evidence_ids": [
+        "EV004",
+        "EV005"
+      ],
+      "policy_ids": [
+        "PO-T04"
+      ],
       "status": "완성",
       "issues": []
     },
@@ -67,10 +95,19 @@
       "domain": "건강보험",
       "risk_type_id": "T05",
       "risk_type_name": "노후돌봄보장 공백형",
-      "concept_ids": ["CN-T05"],
+      "concept_ids": [
+        "CN-T05"
+      ],
       "rule_id": "RU-T05",
-      "evidence_ids": ["EV006", "EV007", "EV008", "EV009"],
-      "policy_ids": ["PO-T05"],
+      "evidence_ids": [
+        "EV006",
+        "EV007",
+        "EV008",
+        "EV009"
+      ],
+      "policy_ids": [
+        "PO-T05"
+      ],
       "status": "완성",
       "issues": []
     },
@@ -79,10 +116,18 @@
       "domain": "건강보험",
       "risk_type_id": "T09",
       "risk_type_name": "건강보험 편중 노후전환 미비형",
-      "concept_ids": ["CN-T09"],
+      "concept_ids": [
+        "CN-T09"
+      ],
       "rule_id": "RU-T09",
-      "evidence_ids": ["EV019", "EV012", "EV013"],
-      "policy_ids": ["PO-T09"],
+      "evidence_ids": [
+        "EV019",
+        "EV012",
+        "EV013"
+      ],
+      "policy_ids": [
+        "PO-T09"
+      ],
       "status": "완성",
       "issues": [
         {
@@ -97,10 +142,16 @@
       "domain": "건강보험",
       "risk_type_id": "T10",
       "risk_type_name": "여성암보장 공백형",
-      "concept_ids": ["CN-T10"],
+      "concept_ids": [
+        "CN-T10"
+      ],
       "rule_id": "RU-T10",
-      "evidence_ids": ["EV021"],
-      "policy_ids": ["PO-T10"],
+      "evidence_ids": [
+        "EV021"
+      ],
+      "policy_ids": [
+        "PO-T10"
+      ],
       "status": "완성",
       "issues": []
     },
@@ -109,10 +160,16 @@
       "domain": "생명보험",
       "risk_type_id": "T11",
       "risk_type_name": "사망보장 미비형",
-      "concept_ids": ["CN-T11"],
+      "concept_ids": [
+        "CN-T11"
+      ],
       "rule_id": "RU-T11",
-      "evidence_ids": ["EV011"],
-      "policy_ids": ["PO-T11"],
+      "evidence_ids": [
+        "EV011"
+      ],
+      "policy_ids": [
+        "PO-T11"
+      ],
       "status": "완성",
       "issues": [
         {
@@ -127,22 +184,16 @@
       "domain": "특종",
       "risk_type_id": "T14",
       "risk_type_name": "운전자보험 미가입형",
-      "concept_ids": ["CN-T14"],
+      "concept_ids": [
+        "CN-T14"
+      ],
       "rule_id": "RU-T14",
-      "evidence_ids": ["EV015"],
-      "policy_ids": ["PO-T14"],
-      "status": "완성",
-      "issues": []
-    },
-    {
-      "chain_id": "CHAIN-010",
-      "domain": "특종",
-      "risk_type_id": "T15",
-      "risk_type_name": "자녀 건강보장 공백형",
-      "concept_ids": ["CN-T15"],
-      "rule_id": "RU-T15",
-      "evidence_ids": ["EV020"],
-      "policy_ids": ["PO-T15"],
+      "evidence_ids": [
+        "EV015"
+      ],
+      "policy_ids": [
+        "PO-T14"
+      ],
       "status": "완성",
       "issues": []
     },
@@ -151,10 +202,16 @@
       "domain": "건강보험",
       "risk_type_id": "T17",
       "risk_type_name": "치매진단보장 공백형",
-      "concept_ids": ["CN-T17"],
+      "concept_ids": [
+        "CN-T17"
+      ],
       "rule_id": "RU-T17",
-      "evidence_ids": ["EV022"],
-      "policy_ids": ["PO-T17"],
+      "evidence_ids": [
+        "EV022"
+      ],
+      "policy_ids": [
+        "PO-T17"
+      ],
       "status": "완성",
       "issues": []
     },
@@ -163,10 +220,16 @@
       "domain": "건강보험",
       "risk_type_id": "T18",
       "risk_type_name": "항암치료비 미보장형",
-      "concept_ids": ["CN-T18"],
+      "concept_ids": [
+        "CN-T18"
+      ],
       "rule_id": "RU-T18",
-      "evidence_ids": ["EV023"],
-      "policy_ids": ["PO-T18"],
+      "evidence_ids": [
+        "EV023"
+      ],
+      "policy_ids": [
+        "PO-T18"
+      ],
       "status": "완성",
       "issues": []
     },
@@ -175,10 +238,17 @@
       "domain": "건강보험",
       "risk_type_id": "T19",
       "risk_type_name": "수술·입원 정액비 미보장형",
-      "concept_ids": ["CN-T19"],
+      "concept_ids": [
+        "CN-T19"
+      ],
       "rule_id": "RU-T19",
-      "evidence_ids": ["EV024", "EV010"],
-      "policy_ids": ["PO-T19"],
+      "evidence_ids": [
+        "EV024",
+        "EV010"
+      ],
+      "policy_ids": [
+        "PO-T19"
+      ],
       "status": "완성",
       "issues": [
         {
@@ -193,10 +263,16 @@
       "domain": "상해",
       "risk_type_id": "T20",
       "risk_type_name": "후유장해보장 공백형",
-      "concept_ids": ["CN-T20"],
+      "concept_ids": [
+        "CN-T20"
+      ],
       "rule_id": "RU-T20",
-      "evidence_ids": ["EV026"],
-      "policy_ids": ["PO-T20"],
+      "evidence_ids": [
+        "EV026"
+      ],
+      "policy_ids": [
+        "PO-T20"
+      ],
       "status": "완성",
       "issues": []
     },
@@ -205,10 +281,16 @@
       "domain": "특종",
       "risk_type_id": "T21",
       "risk_type_name": "치과보장 공백형",
-      "concept_ids": ["CN-T21"],
+      "concept_ids": [
+        "CN-T21"
+      ],
       "rule_id": "RU-T21",
-      "evidence_ids": ["EV027"],
-      "policy_ids": ["PO-T21"],
+      "evidence_ids": [
+        "EV027"
+      ],
+      "policy_ids": [
+        "PO-T21"
+      ],
       "status": "완성",
       "issues": []
     },
@@ -217,10 +299,16 @@
       "domain": "상해",
       "risk_type_id": "T22",
       "risk_type_name": "상해 특화 보장 공백형",
-      "concept_ids": ["CN-T22"],
+      "concept_ids": [
+        "CN-T22"
+      ],
       "rule_id": "RU-T22",
-      "evidence_ids": ["EV028"],
-      "policy_ids": ["PO-T22"],
+      "evidence_ids": [
+        "EV028"
+      ],
+      "policy_ids": [
+        "PO-T22"
+      ],
       "status": "완성",
       "issues": []
     },
@@ -229,10 +317,16 @@
       "domain": "상해",
       "risk_type_id": "T23",
       "risk_type_name": "골절·상해진단금 공백형",
-      "concept_ids": ["CN-T23"],
+      "concept_ids": [
+        "CN-T23"
+      ],
       "rule_id": "RU-T23",
-      "evidence_ids": ["EV029"],
-      "policy_ids": ["PO-T23"],
+      "evidence_ids": [
+        "EV029"
+      ],
+      "policy_ids": [
+        "PO-T23"
+      ],
       "status": "완성",
       "issues": []
     },
@@ -241,38 +335,256 @@
       "domain": "건강보험",
       "risk_type_id": "T24",
       "risk_type_name": "폐렴 입원보장 공백형",
-      "concept_ids": ["CN-T24"],
+      "concept_ids": [
+        "CN-T24"
+      ],
       "rule_id": "RU-T24",
-      "evidence_ids": ["EV032"],
-      "policy_ids": ["PO-T24"],
+      "evidence_ids": [
+        "EV032"
+      ],
+      "policy_ids": [
+        "PO-T24"
+      ],
+      "status": "완성",
+      "issues": []
+    },
+    {
+      "chain_id": "CHAIN-019",
+      "domain": "건강보험",
+      "risk_type_id": "T25",
+      "risk_type_name": "소액암 진단금 부족형",
+      "concept_ids": [
+        "CN-T25"
+      ],
+      "rule_id": "RU-T25",
+      "evidence_ids": [
+        "EV034"
+      ],
+      "policy_ids": [
+        "PO-T25"
+      ],
       "status": "완성",
       "issues": [
         {
           "severity": "info",
-          "item": "신규 Risk-type",
-          "message": "v2 재설계 신규 추가. EV032·PO-T24 신규 작성 완료. CN-T24 캔버스에서 생성 필요."
+          "item": "신규 Risk-type (2026-07-03 갭 분석)",
+          "message": "RU-T25 기준값(A4210 LTE 500만원)은 잠정치 — 업계 관행상 일반암 대비 10~30%대 설계 관행 기준 추정. 상품 비교 데이터 확보 시 재검증 필요."
         }
       ]
+    },
+    {
+      "chain_id": "CHAIN-020",
+      "domain": "건강보험",
+      "risk_type_id": "T26",
+      "risk_type_name": "통원치료비 미보장형",
+      "concept_ids": [
+        "CN-T26"
+      ],
+      "rule_id": "RU-T26",
+      "evidence_ids": [
+        "EV035"
+      ],
+      "policy_ids": [
+        "PO-T26"
+      ],
+      "status": "완성",
+      "issues": []
+    },
+    {
+      "chain_id": "CHAIN-021",
+      "domain": "건강보험",
+      "risk_type_id": "T27",
+      "risk_type_name": "간병 지원 공백형",
+      "concept_ids": [
+        "CN-T27"
+      ],
+      "rule_id": "RU-T27",
+      "evidence_ids": [
+        "EV036"
+      ],
+      "policy_ids": [
+        "PO-T27"
+      ],
+      "status": "완성",
+      "issues": [
+        {
+          "severity": "info",
+          "item": "신규 Risk-type (2026-07-03 갭 분석)",
+          "message": "T05(A4503 진단금형 장기요양)와 보장 메커니즘이 달라 의도적으로 중복 발화 허용(배타 조건 없음) — 서로 다른 두 가지 보장 공백으로 취급."
+        }
+      ]
+    },
+    {
+      "chain_id": "CHAIN-022",
+      "domain": "건강보험",
+      "risk_type_id": "T28",
+      "risk_type_name": "인공관절수술 미보장형",
+      "concept_ids": [
+        "CN-T28"
+      ],
+      "rule_id": "RU-T28",
+      "evidence_ids": [
+        "EV037"
+      ],
+      "policy_ids": [
+        "PO-T28"
+      ],
+      "status": "완성",
+      "issues": []
+    },
+    {
+      "chain_id": "CHAIN-023",
+      "domain": "건강보험",
+      "risk_type_id": "T29",
+      "risk_type_name": "암요양병원 장기입원 미보장형",
+      "concept_ids": [
+        "CN-T29"
+      ],
+      "rule_id": "RU-T29",
+      "evidence_ids": [
+        "EV038"
+      ],
+      "policy_ids": [
+        "PO-T29"
+      ],
+      "status": "완성",
+      "issues": []
+    },
+    {
+      "chain_id": "CHAIN-024",
+      "domain": "건강보험",
+      "risk_type_id": "T30",
+      "risk_type_name": "중환자실입원일당 미보장형",
+      "concept_ids": [
+        "CN-T30"
+      ],
+      "rule_id": "RU-T30",
+      "evidence_ids": [
+        "EV039"
+      ],
+      "policy_ids": [
+        "PO-T30"
+      ],
+      "status": "완성",
+      "issues": []
+    },
+    {
+      "chain_id": "CHAIN-025",
+      "domain": "특종",
+      "risk_type_id": "T31",
+      "risk_type_name": "정신피해치료비 미보장형",
+      "concept_ids": [
+        "CN-T31"
+      ],
+      "rule_id": "RU-T31",
+      "evidence_ids": [
+        "EV040"
+      ],
+      "policy_ids": [
+        "PO-T31"
+      ],
+      "status": "완성",
+      "issues": []
+    },
+    {
+      "chain_id": "CHAIN-026",
+      "domain": "건강보험",
+      "risk_type_id": "T32",
+      "risk_type_name": "장기입원비 미보장형",
+      "concept_ids": [
+        "CN-T32"
+      ],
+      "rule_id": "RU-T32",
+      "evidence_ids": [
+        "EV041"
+      ],
+      "policy_ids": [
+        "PO-T32"
+      ],
+      "status": "완성",
+      "issues": []
     }
   ],
   "removed_types": [
-    {"risk_type_id": "T06", "reason": "갱신형 세대구분 감지 MYDATA 코드 없음."},
-    {"risk_type_id": "T07", "reason": "보험료 합산 비율 MYDATA 없음."},
-    {"risk_type_id": "T08", "reason": "생애주기 합산 MYDATA 없음."},
-    {"risk_type_id": "T12", "reason": "T19(수술·입원 정액비 미보장형)으로 통합."},
-    {"risk_type_id": "T13", "reason": "T11 나이 상한 55→60세 확장으로 흡수."},
-    {"risk_type_id": "T16", "reason": "실손 세대구분 MYDATA 코드 없음."}
+    {
+      "risk_type_id": "T06",
+      "reason": "갱신형 세대구분 감지 MYDATA 코드 없음."
+    },
+    {
+      "risk_type_id": "T07",
+      "reason": "보험료 합산 비율 MYDATA 없음."
+    },
+    {
+      "risk_type_id": "T08",
+      "reason": "생애주기 합산 MYDATA 없음."
+    },
+    {
+      "risk_type_id": "T12",
+      "reason": "T19(수술·입원 정액비 미보장형)으로 통합."
+    },
+    {
+      "risk_type_id": "T13",
+      "reason": "T11 나이 상한 55→60세 확장으로 흡수."
+    },
+    {
+      "risk_type_id": "T16",
+      "reason": "실손 세대구분 MYDATA 코드 없음."
+    },
+    {
+      "risk_type_id": "T15",
+      "reason": "마이데이터는 본인 명의 계약만 조회 가능 — 자녀 명의 계약 조회 구조적 불가 확인(2026-07-03 PO 확인). EV020·CN-T15·RU-T15·PO-T15 전체 삭제."
+    }
   ],
   "playbooks": [
-    {"playbook_id": "PB01", "name": "무보장 긴급 상담 전환", "status": "완성"},
-    {"playbook_id": "PB02", "name": "암보험 보장 공백 상담 전환", "status": "완성"},
-    {"playbook_id": "PB03", "name": "심뇌혈관 보장 상담 전환", "status": "완성"},
-    {"playbook_id": "PB04", "name": "간병보험 상담 전환", "status": "완성"},
-    {"playbook_id": "PB05", "name": "종신·정기보험 상담 전환", "status": "완성"},
-    {"playbook_id": "PB06", "name": "노후연금 상담 전환", "status": "완성"},
-    {"playbook_id": "PB07", "name": "보험 리모델링 상담 전환", "status": "완성"},
-    {"playbook_id": "PB08", "name": "운전자보험 상담 전환", "status": "완성"},
-    {"playbook_id": "PB09", "name": "어린이보험 상담 전환", "status": "완성"},
-    {"playbook_id": "PB10", "name": "실손보험 전환 상담", "status": "완성"}
+    {
+      "playbook_id": "PB01",
+      "name": "무보장 긴급 상담 전환",
+      "status": "완성"
+    },
+    {
+      "playbook_id": "PB02",
+      "name": "암보험 보장 공백 상담 전환",
+      "status": "완성"
+    },
+    {
+      "playbook_id": "PB03",
+      "name": "심뇌혈관 보장 상담 전환",
+      "status": "완성"
+    },
+    {
+      "playbook_id": "PB04",
+      "name": "간병보험 상담 전환",
+      "status": "완성"
+    },
+    {
+      "playbook_id": "PB05",
+      "name": "종신·정기보험 상담 전환",
+      "status": "완성"
+    },
+    {
+      "playbook_id": "PB06",
+      "name": "노후연금 상담 전환",
+      "status": "완성"
+    },
+    {
+      "playbook_id": "PB07",
+      "name": "보험 리모델링 상담 전환",
+      "status": "완성"
+    },
+    {
+      "playbook_id": "PB08",
+      "name": "운전자보험 상담 전환",
+      "status": "완성"
+    },
+    {
+      "playbook_id": "PB09",
+      "name": "어린이보험 상담 전환",
+      "status": "완성"
+    },
+    {
+      "playbook_id": "PB10",
+      "name": "실손보험 전환 상담",
+      "status": "완성"
+    }
   ]
 }

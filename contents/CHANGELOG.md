@@ -1,0 +1,311 @@
+# KC Admin — 컨텐츠 기획 트랙 변경 이력
+
+> **컨텐츠 기획 트랙**(`contents/` — 실제 카드 콘텐츠 저작) 전용 변경 이력. 서비스 기획 트랙(`mockups_v2/`) 이력은 최상위 `CHANGELOG.md` 참조.
+> 2026-07-03 트랙 분리 시 최상위 `CHANGELOG.md`에서 이 트랙 관련 항목(2026-07-02~07-03) 전체를 이관.
+> 에이전트가 참조하지 않는 히스토리 문서. 컨텐츠 에이전트는 `CLAUDE.md` → `contents/agents/00_workflow.md` → 각 역할 파일 순서로 읽는다.
+
+---
+
+## 2026-07-03 — 2순위 백로그 4건(T29~T32) 저작 완료 · 25개 체인으로 확장
+
+### 배경
+`contents/decisions.md`에 2순위로 등록돼 있던 신규 Risk-type 후보 4건에 착수. Step 0(시장 리서치)을 4개 병렬 에이전트로 수행해 공인 통계를 확보하고, Step 0.5(담보코드 게이트, `mockups_v2/12_coverage-code-table.html` 대조)를 통과한 것을 확인한 뒤 Risk-type·Rule·Evidence·Concept·Policy 20개 카드를 신규 작성.
+
+### 신규 체인 4개
+
+| T코드 | 명칭 | 핵심 감지 조건 | 근거 |
+|---|---|---|---|
+| T29 | 암요양병원 장기입원 미보장형 | A4200(암진단) 보유 + A6201(암요양병원입원일당) 미보유, 40~80세 | 암 5년 초과 생존자 169.7만명(전체 암유병자의 62.1%), 요양병원 입원환자 중 암환자 비중 28.4% |
+| T30 | 중환자실입원일당 미보장형 | A6100(질병입원일당) 보유 + A6112·A6302(중환자실입원일당) 모두 미보유, 30~80세 | 재난적의료비 지원 건당 평균 312만원(역대 최고), 중환자실 적정성평가 대상 303개 기관 |
+| T31 | 정신피해치료비 미보장형 | A9616(정신피해치료비) 미보유, 20~70세 | 강력범죄 피해자 정신장애 진단 비율 60~84%(임상표본), 국가 지원 5년 시한·5,000만원 한도 |
+| T32 | 장기입원비 미보장형 | A6100(질병입원일당) 보유 + A6510·A6550(장기입원비) 모두 미보유, 40~85세 | 정신질환 퇴원 평균재원 131.5일(OECD 2.7배), 요양병원 선택입원군 비중 26.9%, 업계 180일 한도 관행 |
+
+### 설계 시 주의한 점
+- **T29**: T02(진단금 부족, 진단 시점 일시금)·T18(항암치료비, 치료 단계 비용)과 담보 축이 달라 배타 조건 없음(T27과 동일 원칙). A4200 GTE 1원("보유 확인") 조건으로 개념 중복 우려를 구조적으로 차별화.
+- **T30**: A6100(일반 입원일당) "보유"를 필수 조건으로 둬 A6100 미보유가 필수인 T24·T27과 배타적으로 분리.
+- **T31**: 민감 주제 — Rule의 Evidence 근거(스마일센터 임상표본 등)는 통계 그대로지만, Policy(PO-T31) 문구는 통계를 노출하지 않고 `guides/customer-messaging.md` 원칙에 따라 일반적 안내 문구로 작성. Concept 동의어도 자극적 표현 배제.
+- **T32**: T30과 마찬가지로 A6100 "보유"를 필수 조건으로 둬 T01·T19(A6100 자체가 없는 케이스)와 배타적으로 분리. T05(진단금형 LTC)·T27(간병인 고용비)과는 보장 메커니즘이 달라 배타 조건 없음.
+- 리서치 과정에서 감사원 통계로 오인된 수치 1건(요양병원 경증환자 비율 변화)이 원문 PDF 대조 결과 할루시네이션으로 확인돼 최종 자료에서 배제 — Evidence 근거는 전부 원문 재확인된 수치만 채택.
+
+### 후속 작업
+- `contents/00_taxonomy/source-corpus.md`에 17절(2순위 백로그 4건) 신규 추가.
+- `contents/html/*.html` 반영(Step 8, 05_html-publisher) 완료 — 8개 파일 전체 동기화(06_playbook 제외, 변경 없음). 반영 과정에서 `concepts.md` CN-T32 동의어 목록에 섞여 있던 인공관절 관련 문구 2건(오류)을 원본에서 제거.
+- 일부 통계(요양병원 암환자 비율 등, 언론 경유)는 원문 직접 대조 권장 — `contents/decisions.md` 미결 항목 참조.
+
+---
+
+## 2026-07-03 — 신규 Risk-type 4건(T25~T28) 저작 완료 · 21개 체인으로 확장
+
+### 배경
+2026-07-03 갭 분석(담보코드 공급측 152개 중 미사용 126개 대조 + 시장 수요측 대조)에서 도출된 "높음" 등급 8개 후보 중 1순위 4건이 PO 승인을 받아 실제 저작에 착수. 각 후보마다 리서치 에이전트를 별도로 배정해 공인 통계를 조사하고, 그 결과로 20개 카드(4체인 × 5종)를 신규 작성.
+
+### 신규 체인 4개
+
+| T코드 | 명칭 | 핵심 감지 조건 | 근거 |
+|---|---|---|---|
+| T25 | 소액암 진단금 부족형 | A4200(암진단) 보유 + A4210(소액암진단) 5백만원 이하 | 갑상선암 유병자 58.7만명(전체 암유병자 최다), 소액암 진단금은 일반암 대비 10~30% 수준 |
+| T26 | 통원치료비 미보장형 | A7100(질병통원)·A7300(상해통원) 모두 미보유, 40~79세 | 국내 외래진료 17.9회로 OECD 평균(6.0회)의 약 2.5~3배 |
+| T27 | 간병 지원 공백형 | A6120·A6303(간병인지원 입원일당) 모두 미보유, 40~85세 | 사적 간병비 1일 12~13만원, 간호간병통합서비스 병상 참여율 34.4%에 불과 |
+| T28 | 인공관절수술 미보장형 | A5508(인공관절수술) 미보유, 50~85세 | 슬관절 치환술 4년간 +19%(8.6만건), 65세 이상 골관절염 유병률 30.2% |
+
+### 설계 시 주의한 점
+- **T25**: A4210 기준값(500만원)은 공식 통계가 아닌 업계 관행 추정치 — `contents/decisions.md`에 재검증 필요 항목으로 등록.
+- **T26**: T18(항암치료비, 고액 일시금)과 담보 축이 달라(통원 정액 vs 치료 일시금) 개념 중복 방지.
+- **T27**: T05(장기요양 진단금)와 의도적으로 배타 조건을 두지 않음 — 서로 다른 보장 메커니즘이라 동시 발화를 허용.
+- **T28**: 나이 50~85세로 설정해 T19(30~59세)와 배타적으로 분리, 중복 발화 없음.
+
+### 후속 작업
+- `contents/00_taxonomy/source-corpus.md`에 13~16절(소액암·통원치료·간병지원·인공관절수술) 신규 추가 — 향후 재사용 가능하도록 캐싱.
+- `contents/00_taxonomy/market-research.md` 우선순위표를 21개 체인 기준으로 갱신(T25→3위, T27→5위, T28→6위, T26→18위).
+- `chain-map.json` v1.4→v1.5, summary 17→21개 체인.
+- 2순위 백로그 4건(암요양병원 장기입원·중환자실입원일당·정신피해치료비·장기입원비)은 계속 대기.
+
+### 수정 파일
+`contents/02_risk-type/risk-types.md`, `contents/03_rule/rules-건강보험.md`, `contents/01_evidence/evidence-건강보험.md`, `contents/04_concept/concepts.md`, `contents/05_policy/policies.md`, `contents/07_connections/chain-map.json`, `contents/00_taxonomy/source-corpus.md`, `contents/00_taxonomy/market-research.md`, `contents/decisions.md`, `contents/html/*`
+
+---
+
+## 2026-07-03 — CN-T24 신규 저작 · 17개 체인 전부 완결
+
+### 배경
+T24(폐렴 입원보장 공백형)는 v2 재설계(2026-07-02)로 신규 추가됐으나 Concept 카드(CN-T24)만 미생성 상태로 남아있었다(`chain-map.json` CHAIN-018 issues에 계속 기록되던 항목). Risk-type·Rule(RU-T24)·Evidence(EV032)·Policy(PO-T24)는 이미 완성돼 있었음.
+
+### 신규 카드
+**CN-T24 | 입원일당보험** — 폐렴 등 호흡기 질환으로 장기 입원 시 정액 입원비를 보장하는 보험(고령자 특화)으로 정의. 동의어 12개: 입원일당보험·폐렴보험·고령자 입원보험·"폐렴 걸리면 보험 나오나요"·"입원하면 하루에 얼마 받나요"·"부모님 폐렴 걱정돼요" 등. T19(수술·입원 정액비 미보장형, 30~59세 대상)와 용어·연령대가 겹치지 않도록 폐렴·고령자 입원 특화 표현 위주로 설계.
+
+### 결과
+`chain-map.json` CHAIN-018의 `issues` 배열 비움(해소). **T01~T24 중 활성 17개 체인이 전부 5종 카드(Concept·Risk-type·Rule·Evidence·Policy) 완결 상태.**
+
+### 수정 파일
+`contents/04_concept/concepts.md`, `contents/07_connections/chain-map.json`, `contents/decisions.md`, `contents/html/00_index.html`, `contents/html/04_concept.html`, `contents/html/07_chain-report.html`, `contents/html/08_ai-preview.html`
+
+---
+
+## 2026-07-03 — T15(자녀 건강보장 공백형) 최종 제거
+
+### 배경
+전수 감사에서 "EV020 끊긴 참조" 문제는 해소된 상태임이 확인됐으나, T15 활성화의 원래 전제("마이데이터로 자녀 명의 계약 조회 가능한가")는 별도 사실 확인이 남아있었다. PO 확인 결과: **불가능** — 마이데이터 사업자는 본인 명의 계약만 조회 가능, 자녀 명의 계약은 구조적으로 조회 불가. 2026-06-29에 한 번 제거됐던 것과 동일한 결론으로 최종 확정.
+
+### 처리
+- 카드 5개 완전 삭제: Risk-type(T15), Rule(RU-T15), Concept(CN-T15), Policy(PO-T15), Evidence(EV020)
+- `chain-map.json`: CHAIN-010 삭제, `removed_types`에 T15 등록, version 1.3→1.4, summary 18→17개 체인으로 갱신 (Evidence 총 개수도 28→25로 재계산 — 이전 summary의 28은 이미 부정확했던 것으로 확인)
+- `contents/html/` 8개 파일(00_index·01_evidence·02_risk-type·03_rule·04_concept·05_policy·07_chain-report·08_ai-preview) 전체 동기화
+- **Playbook PB09(어린이보험 상담 전환)는 삭제하지 않음** — Playbook은 KC 체인과 독립적으로 발화 키워드만으로 동작하므로(card-policy.md), MYDATA 기반 감지가 불가능해도 "자녀 보험 관심" 키워드 자체는 여전히 유효한 상담 전환 트리거
+
+### 수정 파일
+`contents/02_risk-type/risk-types.md`, `contents/03_rule/rules-생명보험-노후-특종.md`, `contents/04_concept/concepts.md`, `contents/05_policy/policies.md`, `contents/01_evidence/evidence-생명보험-노후.md`, `contents/07_connections/chain-map.json`, `contents/html/00_index.html`, `contents/html/01_evidence.html`, `contents/html/02_risk-type.html`, `contents/html/03_rule.html`, `contents/html/04_concept.html`, `contents/html/05_policy.html`, `contents/html/07_chain-report.html`, `contents/html/08_ai-preview.html`, `contents/decisions.md`
+
+---
+
+## 2026-07-03 — 18개 체인 전수 감사 및 일괄 수정
+
+### 배경
+"서비스 관점에서 놓친 진단이 없어야 한다"는 요청으로 0단계(신규 Risk-type 갭 분석: 담보코드 공급측 + 시장 수요측 대조) → 1단계(담보코드 적합성) → 2단계(데이터 대조) → 3단계(연결 무결성) 순서로 18개 활성 체인 전수 감사 실시. 3개 병렬 에이전트로 그룹 감사(암/심뇌혈관, 노후/실손/사망, 운전자/자녀/수술입원+상해/치과/폐렴).
+
+### 갭 분석 결과 (0단계)
+- 담보코드 152개 중 126개 미사용 확인. 신규 Risk-type 후보 "높음" 8건 도출, 그 중 **소액암(A4210)·통원(A7xxx)·간병인지원 입원일당(A6120/A6303)·인공관절수술(A5508)** 4건을 1순위로 승인, 5~8순위(암요양병원 장기입원·중환자실입원일당·정신피해치료비·장기입원비)는 백로그 등록.
+- 시장 수요측 후보 중 "실손 세대노후화·갱신보험료(구 T16·T06)"·"노후소득/연금 부족형(구 T13)"은 **담보코드 게이트 재확인 결과 기각** — 특히 연금은 마이데이터 담보코드 테이블에 관련 카테고리 자체가 없음을 확인.
+
+### 감사에서 발견 및 수정한 문제
+
+| 체인 | 문제 | 조치 |
+|---|---|---|
+| T09 | EV012·EV013·Risk-type 문구가 "노후 최소생활비"를 각각 216.6만/277만/240만원으로 다르게 제시(3중 수치 충돌) | `source-corpus.md`(통계청·금감원·한국은행 2024 가계금융복지조사) 기준 최소240만/적정336만/국민연금평균69.5만원으로 통일 |
+| T19 | Evidence(EV024, 3,500~3,700만원)와 Policy(500~2,000만원)가 같은 심장수술비를 다르게 안내 | Policy를 EV024 기준으로 통일 |
+| T10 | "5년 생존율 93.8%" — 자기 근거(EV021)에도 코퍼스에도 없는 출처불명 수치 | 94.7%(EV021·코퍼스 일치값)로 수정 |
+| T15 | "EV020 끊긴 참조"로 알려졌던 이슈 — 재확인 결과 EV020은 이미 존재, 연결 정상 | `contents/decisions.md`·이 CHANGELOG의 과거 기록은 등록 시점 상태로 보존, 최신 상태는 decisions.md 미결 항목에 반영. 명칭 공백 표기(risk-types.md vs chain-map.json) 통일 |
+| T11/T13 | "T13→T11 통합"이 명목상 문구("35~60세 노후 이중 무대비 포함")만 있고 실제 근거 데이터 없음. 연금 개념카드 CN-T13도 고아로 잔존 | T11 문구에서 근거없는 표현 삭제, `concepts.md`의 CN-T13 삭제. 통합 방식 재검토는 미결로 등록 |
+| T19·T24 | Rule 나이 조건이 60~70세 구간에서 중복(A6100 조건 겹침) → 동일 사용자에게 두 Risk-type 동시 발화 가능 | T19 나이 상한 70→59세로 조정, T24(60~85세)와 배타적 분리 |
+| T03 | "심혈관 사망의 80% 이상이 허혈성질환" 근거 없음 — 실제로는 T04(뇌혈관)용 통계를 차용한 것으로 추정 | 코퍼스의 허혈성심장질환 전용 통계(연간 진료비 1조 2,425억원, 환자수 102만 7,842명, 2022 심평원)로 교체 |
+| T03·T04·T18·T24 | 사망원인 순위 인용이 "통계청 2023"으로 코퍼스 최신치(2024)보다 뒤처짐 (순위 자체는 동일) | 전부 "통계청 2024"로 갱신 |
+| T17 | 치매 유병률 "10.3%"가 코퍼스 실측치(9.25%)와 불일치, MCI→치매 전환율 "10~15%"는 코퍼스에 없는 추정값 | 9.25%로 수정, 전환율은 국제 메타분석치(4.9~9.6%/년, Mitchell & Shiri-Feshki 2009)로 교체 |
+| T14 | EV015(교통사고 형사합의금)가 코퍼스와 다른 프레이밍의 비공식 추정치 사용 | 코퍼스 7절 수치(사망사고 4,000~5,000만원, 상해사고 진단주당 50~100만원)로 통일. 여전히 공인 통계 아님(경고 유지) |
+| T23 | EV029·risk-types.md의 골절 환자수 "약 230만명"이 출처 미상 추정치 | HIRA 공식 수치(225만 3,113명, 2020년/2021.11 발표)로 교체. 레저상해 수술비·본인부담률은 여전히 미확인(경고 유지) |
+| T02 | "암 직접 의료비 3,200만원" 출처불명, "국립암센터 2024" 연도 오표기 | 코퍼스 기준(급여 520만원 + 업계추정 2,000~3,500만원)으로 교체, "국립암센터 2023년 국가암등록통계"로 연도 정정 |
+| `concepts.md` | CN-T13 외 이미 제거된 T코드(T06·T07·T08·T12·T16)용 고아 Concept 카드 5개 추가 발견 | 전부 삭제 (총 6개 고아 카드 정리) |
+
+### 감사 결과 이상 없음 확인
+T01·T18·T20·T21·T22 — 담보코드·데이터·연결 무결성 전부 정상.
+
+### 추가 정리 (최종 스캔에서 발견)
+- `T20·T21`이 `chain-map.json`의 domain 필드(상해/특종)와 다르게 risk-types.md "사망·노후 영역"에 잘못 분류돼 있어 "특종·상해 영역"으로 재배치(4개→2개, 4개→6개)
+- T02 구명칭 "암투병생활비 부족형"이 `market-research.md`·`evidence-건강보험.md`(EV001·EV002)·`mockups_v2/12_coverage-code-table.html`(서비스 트랙)·해당 html 미러까지 잔존 — 전부 "암진단금 부족형"으로 교체
+- T09 노후생활비 수치 불일치가 Evidence 외에 `contents/06_playbook/playbooks.md`(PB, Standalone 가이드)·`contents/html/08_ai-preview.html`(채팅 시뮬레이션)에도 잔존(각각 다른 제3의 숫자 사용 중) — 전부 통일
+- T23 골절 환자수 잔존 표기(rules-생명보험-노후-특종.md RU-T23 주석, evidence-건강보험.md 활용방법 필드) 추가 수정
+- T15 명칭 공백 불일치(risk-types.md "자녀건강보장" → "자녀 건강보장")를 chain-map.json 표기에 맞춰 통일
+
+### 수정 파일
+`contents/00_taxonomy/market-research.md`, `contents/01_evidence/evidence-생명보험-노후.md`, `contents/01_evidence/evidence-건강보험.md`, `contents/02_risk-type/risk-types.md`, `contents/03_rule/rules-건강보험.md`, `contents/03_rule/rules-생명보험-노후-특종.md`, `contents/04_concept/concepts.md`, `contents/05_policy/policies.md`, `contents/06_playbook/playbooks.md`, `contents/decisions.md`, `contents/html/01_evidence.html`, `contents/html/02_risk-type.html`, `contents/html/03_rule.html`, `contents/html/05_policy.html`, `contents/html/06_playbook.html`, `contents/html/07_chain-report.html`, `contents/html/08_ai-preview.html`, `mockups_v2/12_coverage-code-table.html`
+
+### 미결 (다음 세션)
+- T15 MYDATA 자녀계약 조회 가능 여부 사실 확인 (PO)
+- T11/T13 통합 방식 재검토 (PO 선택)
+- market-research.md 우선순위표 재작성 여부 (PO, 이번엔 T02 명칭만 수정 — 전체 재작성은 아님)
+- CN-T24 신규 저작
+- 신규 Risk-type 후보 4건(소액암·통원·간병인지원·인공관절수술) 실제 저작 착수 — Step 0(시장리서치 상세)부터 별도 진행 필요
+- `contents/html/02_risk-type.html`에 T20·T21 카드 위치를 risk-types.md와 동일하게 물리적으로 재배치(현재는 텍스트만 동기화, 섹션 배치는 구조 그대로 — 표시 순서 외 기능적 문제 없음)
+
+---
+
+## 2026-07-03 — contents/html 전수 검사 · 카드 체인 ID 불일치 4개 파일 수정
+
+### 배경
+"어제 만든 contents/html 카드 체인 아이디가 서로 안 맞는다"는 지적으로 chain-map.json(v1.3, 진실원)을 기준 삼아 00·04·07·08 4개 파일을 전수 대조. 02·03·05·06(Risk-type/Rule/Policy/Playbook)은 이미 18개 체인 기준으로 정합성이 맞아 수정 불필요.
+
+### 발견한 문제
+- **04_concept.html**: 이미 제거된 T07·T08·T12·T13 Concept 카드 4개가 잔존, 반대로 활성 상태인 CN-T10·CN-T15가 아예 누락. 헤더 카운트(17장)도 실제 카드 수(20장)와 불일치.
+- **00_index.html·07_chain-report.html·08_ai-preview.html**: 셋 다 2026-06-29 v1.4 스냅샷(20개 체인)에 정지되어 있었고, 07-02 v2 재설계(18개 체인, T07·T08·T12·T13 제거 + T24 신규)를 전혀 반영하지 못함. 08_ai-preview.html은 살아있는 체인(T01~05 등)의 채팅 시뮬레이션조차 구버전 담보코드(A1000·A4000·A5000·A6000·A6100·A6200 등)를 사용 중이었음 — 03_rule.html의 "코드 전면 교체"(A1100·A1300·A4200·A4104·A4105 등) 이전 상태.
+- **T15 상태 불일치**: CHANGELOG(2026-06-29)는 T15 완전 제거로 기록했으나, 02·03·05 및 chain-map.json(더 최신)은 T15를 활성 체인으로 다룸. 근거 Evidence로 지정된 EV020은 파일에 존재하지 않음(끊긴 참조).
+- **T24(CN-T24)**: 캔버스에서 아직 생성되지 않음(chain-map.json 자체에 기 기록된 미결 항목).
+
+### 처리 결정
+- T15는 진실원 3개 파일(Risk-type·Rule·Policy)과 chain-map.json이 이미 활성으로 다루므로 **활성 유지**로 판단(사용자 확인 대기 중 무응답 — 추후 재확인 필요). EV020 누락은 07_chain-report.html·08_ai-preview.html에 경고로 명시.
+- CN-T24는 기존 결정대로 캔버스 생성 보류, 04_concept.html에는 추가하지 않음.
+
+### 수정 파일
+| 파일 | 내용 |
+|---|---|
+| `contents/html/04_concept.html` | CN-T07·T08·T12·T13 삭제, CN-T10(여성암보험)·CN-T15(어린이보험) 신규 작성. 17장→18장 |
+| `contents/html/00_index.html` | 카드 수·문구 실제 파일과 일치(Risk-type/Rule/Policy 20→18장, Evidence 29→28장, Concept 17→18장) |
+| `contents/html/07_chain-report.html` | chain-map.json 기준 18개 체인 표 전체 재작성. EV020·CN-T24 경고 명시 |
+| `contents/html/08_ai-preview.html` | 18개 체인 채팅 시뮬레이션 전체 재작성 — 담보코드·수치·Policy 문구를 현재 Rule/Evidence/Policy 카드와 일치시킴. T15는 Evidence 미연결 경고 표시, T24는 CN 미생성 임시안으로 표시 |
+
+### 미결 (다음 세션)
+- EV020 신규 작성 또는 T15 Evidence 재연결
+- CN-T24 캔버스 생성
+- T15 활성/제거 여부 최종 확인 필요 (`contents/decisions.md`에 등록됨)
+
+---
+
+## 2026-07-02 — Evidence 카드 29개 웹 대조 검증 및 일괄 수정 · 3개 파일
+
+### 배경
+병렬 에이전트 워크플로우(31개 에이전트)로 Evidence 카드 29개 전수 웹 검증. INACCURATE 7개·OUTDATED 3개·SOURCE_MISSING 2개·PLAUSIBLE 보완 5개 확인 후 MD+HTML 일괄 수정.
+
+### 검증 결과
+| 판정 | 건수 | 카드 |
+|---|---|---|
+| CONFIRMED | 9 | EV003·008·010·011·013·030·031·002·033 |
+| PLAUSIBLE (보완) | 8 | EV005·007·009·015·016·020·022·023 |
+| OUTDATED | 3 | EV006·026·027 |
+| INACCURATE | 7 | EV001·004·012·021·024·028·032 |
+| SOURCE_MISSING | 2 | EV019·029 |
+
+### 주요 수정 내용
+- **EV001**: 암환자 의료비 3,200만원 → 급여 기준 520만원 + 업계 추정 2,000~3,500만원 (6배 오류 수정)
+- **EV004**: 뇌심혈관 치료비 3,000~5,000만원 → 급여 기준 1,300~1,600만원 + 업계 추정 (출처 보고서명 정정)
+- **EV012**: 출처 기관 KIRI → 국민연금연구원, 수치 277만원 → 최소 216.6만/적정 298.1만 (2종 분리)
+- **EV021**: 유방암 발생률 160명 → 115명/10만 여성 (40% 과대 수정), 생존율 93.8% → 94.3~94.7%
+- **EV024**: 출처 HIRA → NHIS, 심장수술 500~2,000만원 → 3,500~3,700만원
+- **EV028**: 출처 HIRA → 질병관리청(KDCA), 보고서명·수치 정정
+- **EV032**: 폐렴 사망 23,949명 → 약 30,120명 (2024년 KOSTAT 기준, 26% 차이 수정)
+- **EV019·EV029**: 출처 불명 명시, 수치에 "(공인 출처 재확인 필요)" 주석 추가
+
+### 수정 파일
+| 파일 | 수정 카드 |
+|---|---|
+| `contents/01_evidence/evidence-건강보험.md` | EV001·002·004·005·006·021·023·024·026·027·028·029·032 (13개) |
+| `contents/01_evidence/evidence-생명보험-노후.md` | EV012·015·019·020 (4개) |
+| `contents/html/01_evidence.html` | EV001~006·012·015·019·021·023·024·026·027·028·029·032·033 (17개) |
+
+---
+
+## 2026-07-02 — Policy 카드 18개 전수 정비 · T15·T24 신규·구 타입 6개 삭제 · 3개 파일
+
+### 배경
+검수 2차 완료 후 Policy 카드 연결 작업. policies.md·05_policy.html에 구 타입(T06·T07·T08·T12·T13·T16) 카드가 잔존해 있었으며 PO-T15·PO-T24 누락 확인. chain-map.json v1.2 policy_ids[] 9개 공란도 일괄 연결.
+
+### 변경 사항
+
+**Policy 카드 정비:**
+- PO-T06·PO-T07·PO-T08·PO-T12·PO-T13·PO-T16 삭제 — 제거된 T코드 전용 구 카드
+- PO-T15(자녀보장 분석 안내) HTML 추가 (policies.md에는 기존 존재)
+- PO-T24(폐렴 입원 보장 분석 안내) MD+HTML 신규 작성
+
+**chain-map.json:**
+- v1.2 → v1.3: 18개 체인 policy_ids 전부 연결 완료
+- summary: chains_complete 18, chains_with_warning 0, ready_to_register true
+- T10·T17~T24 policy_ids: [] → PO-T10·PO-T17~PO-T24 연결
+
+### 수정 파일
+
+| 파일 | 내용 |
+|---|---|
+| `contents/05_policy/policies.md` | PO-T06·T07·T08·T12·T13·T16 삭제, PO-T24 신규 추가 |
+| `contents/html/05_policy.html` | 구 타입 카드 삭제·PO-T15·T24 추가·stats 총 18장 업데이트 |
+| `contents/07_connections/chain-map.json` | v1.3 — 18개 policy_ids 전부 연결, ready_to_register: true |
+
+---
+
+## 2026-07-02 — contents/ 검수 2차 · Evidence·Rule·chain-map 정합성 수정 · 7개 파일
+
+### 배경
+v2 재설계 후 contents/ 폴더 체인 구조 검수. 제거된 T코드에 연결된 고아 Evidence 삭제, T24 Evidence 신규 작성, T01↔T11 중복 발화 방지 조건 추가, chain-map.json을 18개 체인으로 전면 업데이트.
+
+### 변경 사항
+
+**Evidence 처리:**
+- EV017(T06)·EV014(T07)·EV018(T08)·EV025(T16) 삭제 — 제거된 T코드 전용 고아 Evidence
+- EV012·EV013(T13→T09 재배정): T13 제거로 T09(건강보험 편중 노후전환 미비형)에 재연결
+- EV010 활용 방법 수정: T12 → T19 재연결
+- EV011 활용 방법 수정: T13 언급 삭제 (T11 단독)
+- EV019 활용 방법 수정: T09 이름 업데이트 (단기납 만기 → 건강보험 편중 노후전환 미비형)
+- **EV032 신규**: 폐렴 사망 현황 및 고령자 입원 비용 (T24 전용, 통계청·심평원)
+
+**Rule 수정:**
+- RU-T11: 실손담보 유효계약 GTE 1건 필수 조건 추가 → T01↔T11 중복 발화 완전 분리
+
+**chain-map.json:**
+- v1.1(15개, 2026-06-29) → v1.2(18개, 2026-07-02) 전면 재작성
+- T06·T07·T08·T12·T13·T16 체인 제거, removed_types 섹션으로 이관
+- T09 명칭 업데이트, T10·T17~T24 체인 신규 등록
+
+### 수정 파일
+
+| 파일 | 내용 |
+|---|---|
+| `contents/01_evidence/evidence-건강보험.md` | EV010 재연결, EV017·EV025 삭제, EV032 신규 |
+| `contents/01_evidence/evidence-생명보험-노후.md` | EV011·012·013·019 텍스트 수정, EV014·EV018 삭제 |
+| `contents/03_rule/rules-생명보험-노후-특종.md` | RU-T11 실손 조건 추가 |
+| `contents/html/01_evidence.html` | EV010·011·012·013·019·033 텍스트, EV014·018 삭제, EV032 추가, stats 업데이트 |
+| `contents/html/03_rule.html` | RU-T11 실손 조건 행 추가 |
+| `contents/07_connections/chain-map.json` | v1.2 전면 재작성 (18개 체인) |
+
+---
+
+## 2026-07-02 — Risk-type·Rule 제로베이스 재설계 · 5개 파일
+
+### 배경
+마이데이터 담보코드 테이블([12_coverage-code-table.html]) 대조 결과, 기존 contents/ 파일에 존재하지 않는 코드(A1001·A1002·A4300), 오분류 코드(A3201 — 후유장해 계열을 입원일당으로 오용), 감지 불가 타입(T06·T07·T08 — 보험료 합산 데이터 없음), 세대구분 불가(T16 — 실손담보코드 세대 테이블 없음)가 확인됨. Deep-research + 서비스 관점 재분류로 제로베이스 재설계 진행.
+
+### 변경 사항
+
+**구조 재설계:**
+- 제거: T06(갱신형)·T07(비효율형)·T08(생애주기)·T12(→T19 통합)·T13(→T11 흡수)·T16(실손노후화) — 총 6개 제거
+- 신규 추가: T24(폐렴 입원보장 공백형) — 사망원인 3위 감지 공백 해소
+- 최종: 20개 → 18개
+
+**코드 전면 교체:**
+- A1001·A1002(존재하지 않음) → A1100(질병사망) + A1300(상해사망)
+- A3201(후유장해 계열 오분류) → A6100(질병입원일당)
+- A4300(존재하지 않음) → A4503(장기간병요양진단 1,2,3급)
+- T01 실손: A3201 대리 지표 → 실손담보코드 별도 테이블([첨부15]-[3]) 직접 사용
+- T03: A5107(허혈성심장질환수술) → A4105(허혈성심장질환진단) 동류 비교
+- T15: A3201(오코드) → A6114(어린이다발성질병입원일당)
+- T14: 운전여부 프로파일 조건 필수 추가(비운전자 오감지 방지)
+
+### 수정 파일
+
+| 파일 | 내용 |
+|---|---|
+| `contents/02_risk-type/risk-types.md` | 20개 → 18개 전면 재작성 (서비스 관점 + 검증 통계 기반) |
+| `contents/03_rule/rules-건강보험.md` | 건강·질병 영역 10개 Rule 전면 재작성 (올바른 MYDATA 코드) |
+| `contents/03_rule/rules-생명보험-노후-특종.md` | 사망·노후·특종·상해 8개 Rule 전면 재작성 |
+| `contents/html/02_risk-type.html` | HTML 버전 18개 반영 (v2 재설계 배너 포함) |
+| `contents/html/03_rule.html` | HTML 버전 18개 Rule 반영 (코드 교체 이력 명시) |
+
+---
+
+## 2026-07-03 — 트랙 분리 재정비 (서비스 기획 ↔ 컨텐츠 기획)
+
+`contents/agents/`(01~04 기존 + 05 신규)를 컨텐츠 기획 트랙 공식 에이전트로 확정하고 `CLAUDE.md`에 등록. 이 CHANGELOG.md·`contents/decisions.md` 신설(최상위 CHANGELOG.md·decisions.md에서 컨텐츠 관련 이력 이관). `contents/agents/00_workflow.md`에 담보코드 적합성 게이트(Step 0.5)·05_html-publisher(Step 8) 추가, 실제 산출물 형식(도메인별 통합 .md)에 맞게 문서 현행화. 상세 배경은 최상위 `CHANGELOG.md` 2026-07-03 "트랙 분리 재정비" 항목 참조.

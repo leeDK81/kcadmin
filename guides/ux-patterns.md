@@ -250,35 +250,13 @@ function showToast(msg) {
 
 ## CASE 매트릭스 — KC매칭 × Playbook감지
 
-KC 체인 매칭 결과와 Playbook 감지 여부 조합으로 분기를 결정한다.
-
-| | Playbook 미감지 | Playbook 감지O |
-|---|---|---|
-| **KC Concept 매칭O** | Case 1: KC 구조화 답변 | Case 2: KC 구조화 + CTA 버튼 |
-| **KC 미매칭** | Case 3: RAG(약관→FAQ) → Fallback 생성형 | Case 4: Standalone 가이드 주입 + CTA 버튼 |
-
-- Case 3·4: KC 체인 미매칭 → RAG(약관 → Clark 서비스 FAQ) → Fallback 순서 적용
-- Playbook이 Case 4로 모든 KC 미매칭 시나리오를 커버하므로 Concept Standalone 기능 없음
+> **진실원:** `context/answer-logic.md` "Case 1~4 분기 매트릭스" 섹션. 캔버스·답변 화면 구현 시 반드시 원본을 대조한다 (여기 재서술하지 않음 — 단일 진실원 원칙).
 
 ---
 
 ## CONNECT_RULES (카드 연결 정책)
 
-카드 연결은 캔버스(00_canvas-main.html)에서만 수행. 편집기에서는 읽기 전용 배지 + "캔버스에서 변경" 버튼만 표시.
-
-```
-concept  → risk-type  (필수, N:N)     ← Concept에 Risk-type 미연결 시 KC 체인 미진입
-risk     → rule       (필수, 최소 1개, 1:1 전용 — Rule 하나는 반드시 하나의 Risk-type에만 연결됨. 공유 불가)
-rule     → evidence   (필수, 최소 1개, N:N)
-rule     → policy     (선택, N:N)
-evidence → (단말)
-policy   → (단말)
-playbook → (단말, 독립 체인)
-```
-
-> **Concept → Risk-type 연결은 필수.** 연결 없으면 KC 체인 미진입.
-> Concept 미매칭 시 Case 3(RAG→Fallback) 또는 Case 4(Playbook 감지) 분기.
-> Concept에 Standalone 기능 없음.
+> **진실원:** `context/card-policy.md` "CONNECT_RULES" + "카드 연결 카디널리티" 섹션. 카드 연결은 캔버스(00_canvas-main.html)에서만 수행 — 편집기에서는 읽기 전용 배지 + "캔버스에서 변경" 버튼만 표시.
 
 ---
 

@@ -41,19 +41,19 @@ table.cond tr.opt td { background: #FFFDF5; color: #6B7280; }
 <header>
   <div class="nav"><a href="00_index.html">← 인덱스로 돌아가기</a></div>
   <h1>Rule 카드 입력 가이드</h1>
-  <p>STEP 3 · 마이데이터·프롬에이지·프로파일 판단 조건 카드 · 총 18장 (v2 재설계)</p>
+  <p>STEP 3 · 마이데이터·프롬에이지·프로파일 판단 조건 카드 · 총 25장 (v2 재설계)</p>
 </header>
 <main>
 
 <div class="stats">
-  <span class="chip">📋 총 18장</span>
+  <span class="chip">📋 총 25장</span>
   <span class="chip">✅ 필수 조건</span>
   <span class="chip">⚡ 선택 조건</span>
-  <span class="chip">🆕 신규 RU-T24</span>
+  <span class="chip">🆕 신규 RU-T24·RU-T25~RU-T28·RU-T29~RU-T32</span>
 </div>
 
 <div class="change-box">
-  <strong>v2 코드 전면 교체:</strong> A1001·A1002(존재하지 않음) → A1100(질병사망)+A1300(상해사망) / A3201(후유장해 계열 오분류) → A6100(질병입원일당) / A4300(존재하지 않음) → A4503(장기간병요양진단 1,2,3급) / T01 실손: 실손담보코드 별도 테이블 직접 사용 / T03: A5107(수술) → A4105(허혈성심장질환진단) 교체 / T15: A3201 → A6114(어린이다발성질병입원일당) 교체
+  <strong>v2 코드 전면 교체:</strong> A1001·A1002(존재하지 않음) → A1100(질병사망)+A1300(상해사망) / A3201(후유장해 계열 오분류) → A6100(질병입원일당) / A4300(존재하지 않음) → A4503(장기간병요양진단 1,2,3급) / T01 실손: 실손담보코드 별도 테이블 직접 사용 / T03: A5107(수술) → A4105(허혈성심장질환진단) 교체. <strong>T15 제거:</strong> 자녀 명의 계약은 마이데이터로 조회 불가하여 Rule 자체 성립 불가 확인 — RU-T15 삭제. <strong>2026-07-03 신규(1차):</strong> RU-T25(소액암 진단금 부족 판정)·RU-T26(통원치료비 미보장 판정)·RU-T27(간병 지원 공백 판정)·RU-T28(인공관절수술 미보장 판정) 추가(갭 분석 기반). <strong>2026-07-03 신규(2차, 2순위 백로그):</strong> RU-T29(암요양병원 장기입원 미보장 판정)·RU-T30(중환자실입원일당 미보장 판정)·RU-T31(정신피해치료비 미보장 판정)·RU-T32(장기입원비 미보장 판정) 추가.
 </div>
 
 <div class="info-box">
@@ -61,7 +61,7 @@ table.cond tr.opt td { background: #FFFDF5; color: #6B7280; }
   Risk-type 연결·Evidence 연결은 캔버스에서 별도 처리합니다. 조건 Row는 표의 행 순서대로 입력하세요.
 </div>
 
-<div class="section-label">건강·질병 영역 (10개)</div>
+<div class="section-label">건강·질병 영역 (17개)</div>
 
 <div class="card">
   <div class="card-head"><span class="ru-id">RU-T01</span><span class="card-name">실손·사망 이중 무보장 판정</span><span class="rt-tag">→ T01 무보장형</span></div>
@@ -92,6 +92,21 @@ table.cond tr.opt td { background: #FFFDF5; color: #6B7280; }
     </table>
   </div>
   <div class="note">※ 암진단금 5천만원 이하(0원 포함)를 단일 기준으로 통합. 미가입(0원)과 보장 부족(≤5천만원) 모두 포괄. T10(여성암 공백형)은 3천만원 이하 여성 특화 판정으로 구분.</div>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="ru-id">RU-T25</span><span class="card-name">소액암 진단금 부족 판정</span><span class="rt-tag">→ T25 소액암 진단금 부족형</span><span class="new-badge">신규</span></div>
+  <div class="card-body">
+    <div class="cond-label">판단 조건</div>
+    <table class="cond">
+      <tr><th>소스</th><th>항목</th><th>조건</th><th>기준값</th><th>구분</th></tr>
+      <tr class="req"><td>마이데이터</td><td>A4200 (암진단)</td><td>이상(GTE)</td><td>1원</td><td><span class="badge-req">필수</span></td></tr>
+      <tr class="req"><td>마이데이터</td><td>A4210 (소액암진단)</td><td>이하(LTE)</td><td>5,000,000원</td><td><span class="badge-req">필수</span></td></tr>
+      <tr class="opt"><td>프로파일</td><td>성별</td><td>같음(EQ)</td><td>여</td><td><span class="badge-opt">선택</span></td></tr>
+      <tr class="opt"><td>프롬에이지</td><td>암위험도 &gt; thca_ca (갑상선암)</td><td>같음(EQ)</td><td>위험</td><td><span class="badge-opt">선택</span></td></tr>
+    </table>
+  </div>
+  <div class="note">※ A4200(일반암 진단금) 보유 + A4210(소액암 진단금) 낮음/미보유를 함께 봐야 "암보험은 가입했는데 소액암은 사각지대"인 케이스를 정확히 감지. 500만원 기준값은 잠정치(업계 관행상 일반암 대비 10~30%대 설계 관행 기준 추정) — 상품 비교 데이터 확보 시 재검증 필요. 여성은 갑상선암 발생 순위 2위(남성 6위)라 성별 선택 조건으로 우선순위 가중.</div>
 </div>
 
 <div class="card">
@@ -144,6 +159,35 @@ table.cond tr.opt td { background: #FFFDF5; color: #6B7280; }
 </div>
 
 <div class="card">
+  <div class="card-head"><span class="ru-id">RU-T27</span><span class="card-name">간병 지원 공백 판정</span><span class="rt-tag">→ T27 간병 지원 공백형</span><span class="new-badge">신규</span></div>
+  <div class="card-body">
+    <div class="cond-label">판단 조건</div>
+    <table class="cond">
+      <tr><th>소스</th><th>항목</th><th>조건</th><th>기준값</th><th>구분</th></tr>
+      <tr class="req"><td>마이데이터</td><td>A6120 (간병인지원질병입원일당)</td><td>이하(LTE)</td><td>0원</td><td><span class="badge-req">필수</span></td></tr>
+      <tr class="req"><td>마이데이터</td><td>A6303 (간병인지원상해입원일당)</td><td>이하(LTE)</td><td>0원</td><td><span class="badge-req">필수</span></td></tr>
+      <tr class="req"><td>프로파일</td><td>나이</td><td>사이(BETWEEN)</td><td>40세 ~ 85세</td><td><span class="badge-req">필수</span></td></tr>
+      <tr class="opt"><td>마이데이터</td><td>A6100 (질병입원일당)</td><td>이하(LTE)</td><td>0원</td><td><span class="badge-opt">선택</span></td></tr>
+    </table>
+  </div>
+  <div class="note">※ A6120·A6303 둘 다 LTE 0원 = 입원 중 간병인지원 담보 완전 공백. T05(노후돌봄보장 공백형, A4503 진단금형 장기요양)와는 보장 메커니즘이 다름(진단금 vs 입원일당형 간병 지원) — 두 Risk-type이 동시 발화해도 중복이 아니라 서로 다른 공백을 알리는 것이므로 배타 조건을 두지 않는다. A6100(질병입원일당) 선택 조건은 입원 중 소득공백까지 겹치는 신호로 활용.</div>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="ru-id">RU-T28</span><span class="card-name">인공관절수술 미보장 판정</span><span class="rt-tag">→ T28 인공관절수술 미보장형</span><span class="new-badge">신규</span></div>
+  <div class="card-body">
+    <div class="cond-label">판단 조건</div>
+    <table class="cond">
+      <tr><th>소스</th><th>항목</th><th>조건</th><th>기준값</th><th>구분</th></tr>
+      <tr class="req"><td>마이데이터</td><td>A5508 (인공관절수술)</td><td>이하(LTE)</td><td>0원</td><td><span class="badge-req">필수</span></td></tr>
+      <tr class="req"><td>프로파일</td><td>나이</td><td>사이(BETWEEN)</td><td>50세 ~ 85세</td><td><span class="badge-req">필수</span></td></tr>
+      <tr class="opt"><td>프로파일</td><td>성별</td><td>같음(EQ)</td><td>여</td><td><span class="badge-opt">선택</span></td></tr>
+    </table>
+  </div>
+  <div class="note">※ 골관절염 유병률이 50세부터(4.7%) 60대(14.0%)·70대 이상 여성(36.1%)으로 급증하는 시점을 나이 하한으로 반영. 여성 유병률이 남성의 3.7배(50세 이상 기준)라 성별 선택 조건으로 우선순위 가중. T19(수술·입원 정액비 미보장형, 30~59세)와 나이대가 배타적으로 분리돼 중복 발화 없음.</div>
+</div>
+
+<div class="card">
   <div class="card-head"><span class="ru-id">RU-T10</span><span class="card-name">여성 암 보장 공백 판정</span><span class="rt-tag">→ T10 여성암보장 공백형</span></div>
   <div class="card-body">
     <div class="cond-label">판단 조건</div>
@@ -156,7 +200,7 @@ table.cond tr.opt td { background: #FFFDF5; color: #6B7280; }
       <tr class="opt"><td>프롬에이지</td><td>암위험도 &gt; utca_ca (자궁암)</td><td>같음(EQ)</td><td>주의</td><td><span class="badge-opt">선택</span></td></tr>
     </table>
   </div>
-  <div class="note">※ T02(암진단금 부족형)는 5천만원 이하 남녀 공통 판정. T10은 3천만원 이하 여성 특화 판정으로 차별화. 유방암 직접 의료비 평균 2,800만원, 5년 생존율 93.8%로 치료 후 장기 생활비 보장 핵심.</div>
+  <div class="note">※ T02(암진단금 부족형)는 5천만원 이하 남녀 공통 판정. T10은 3천만원 이하 여성 특화 판정으로 차별화. 유방암 직접 의료비 평균 2,800만원, 5년 생존율 94.7%(2019-2023 진단자, 국립암센터)로 치료 후 장기 생활비 보장 핵심.</div>
 </div>
 
 <div class="card">
@@ -172,7 +216,7 @@ table.cond tr.opt td { background: #FFFDF5; color: #6B7280; }
       <tr class="opt"><td>프롬에이지</td><td>질병위험도 &gt; 당뇨병</td><td>같음(EQ)</td><td>위험</td><td><span class="badge-opt">선택</span></td></tr>
     </table>
   </div>
-  <div class="note">※ T05(노후돌봄보장 공백형)는 간병요양 진단금(A4503) 미가입 감지. T17은 치매 진단 시 지급되는 진단금(A4109) 미가입을 별도 감지. 나이 하한 50세: 경도인지장애(MCI) → 치매 연간 전환율 10~15%로 사전 확보 필요.</div>
+  <div class="note">※ T05(노후돌봄보장 공백형)는 간병요양 진단금(A4503) 미가입 감지. T17은 치매 진단 시 지급되는 진단금(A4109) 미가입을 별도 감지. 나이 하한 50세: 경도인지장애(MCI) → 치매 연간 전환율 4.9~9.6%(국제 메타분석, Mitchell & Shiri-Feshki 2009)로 사전 확보 필요. 나이 상한 85세: 85세 이상 치매 유병률 21.18%까지 포괄(보건복지부·중앙치매센터 2023년 치매역학조사).</div>
 </div>
 
 <div class="card">
@@ -199,13 +243,29 @@ table.cond tr.opt td { background: #FFFDF5; color: #6B7280; }
     <table class="cond">
       <tr><th>소스</th><th>항목</th><th>조건</th><th>기준값</th><th>구분</th></tr>
       <tr class="req"><td>마이데이터</td><td>A5100 (질병수술)</td><td>이하(LTE)</td><td>0원</td><td><span class="badge-req">필수</span></td></tr>
-      <tr class="req"><td>프로파일</td><td>나이</td><td>사이(BETWEEN)</td><td>30세 ~ 70세</td><td><span class="badge-req">필수</span></td></tr>
+      <tr class="req"><td>프로파일</td><td>나이</td><td>사이(BETWEEN)</td><td>30세 ~ 59세</td><td><span class="badge-req">필수</span></td></tr>
       <tr class="opt"><td>마이데이터</td><td>A6100 (질병입원일당)</td><td>이하(LTE)</td><td>0원</td><td><span class="badge-opt">선택</span></td></tr>
       <tr class="opt"><td>프롬에이지</td><td>질병위험도 &gt; 허혈성심장질환</td><td>같음(EQ)</td><td>위험</td><td><span class="badge-opt">선택</span></td></tr>
       <tr class="opt"><td>프롬에이지</td><td>암위험도 &gt; canr_ca (암 종합)</td><td>같음(EQ)</td><td>위험</td><td><span class="badge-opt">선택</span></td></tr>
     </table>
   </div>
   <div class="note">※ A5100(질병수술) LTE 0원 = 수술 정액비 미보장(필수). A6100(질병입원일당) LTE 0원은 선택 — 이 조건 충족 시 "수술비+입원일당 모두 없음"으로 우선순위 상승(구 T12 케이스). 기존 A3201(후유장해 계열 오코드)은 A6100(질병입원일당)으로 전면 교체.</div>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="ru-id">RU-T26</span><span class="card-name">통원치료비 미보장 판정</span><span class="rt-tag">→ T26 통원치료비 미보장형</span><span class="new-badge">신규</span></div>
+  <div class="card-body">
+    <div class="cond-label">판단 조건</div>
+    <table class="cond">
+      <tr><th>소스</th><th>항목</th><th>조건</th><th>기준값</th><th>구분</th></tr>
+      <tr class="req"><td>마이데이터</td><td>A7100 (질병통원)</td><td>이하(LTE)</td><td>0원</td><td><span class="badge-req">필수</span></td></tr>
+      <tr class="req"><td>마이데이터</td><td>A7300 (상해통원)</td><td>이하(LTE)</td><td>0원</td><td><span class="badge-req">필수</span></td></tr>
+      <tr class="req"><td>프로파일</td><td>나이</td><td>사이(BETWEEN)</td><td>40세 ~ 79세</td><td><span class="badge-req">필수</span></td></tr>
+      <tr class="opt"><td>마이데이터</td><td>A7200 (암통원)</td><td>이하(LTE)</td><td>0원</td><td><span class="badge-opt">선택</span></td></tr>
+      <tr class="opt"><td>프롬에이지</td><td>질병위험도 &gt; 당뇨병</td><td>같음(EQ)</td><td>위험</td><td><span class="badge-opt">선택</span></td></tr>
+    </table>
+  </div>
+  <div class="note">※ A7100·A7300 둘 다 LTE 0원이어야 "통원 축 전체 공백"으로 판정 — 하나만 없으면 우선순위 낮음. A7200(암통원) 선택 조건 충족 시 암 통원치료 중 정액 보장까지 없다는 뜻이라 우선순위 상승. T18(항암치료비 미보장형, A9617 고액 항암 일시금)과는 담보 축이 달라(통원 정액 vs 치료 일시금) 개념 중복 아님. 나이 40~79세: HIRA 통계상 외래 이용률이 40대부터 증가해 75~79세(40.8회)에서 정점.</div>
 </div>
 
 <div class="card">
@@ -220,7 +280,55 @@ table.cond tr.opt td { background: #FFFDF5; color: #6B7280; }
       <tr class="opt"><td>프롬에이지</td><td>질병위험도 &gt; 당뇨병</td><td>같음(EQ)</td><td>위험</td><td><span class="badge-opt">선택</span></td></tr>
     </table>
   </div>
-  <div class="note">※ 폐렴은 사망원인 3위(통계청 2023), 60세 이상에서 급격히 증가. A6100(질병입원일당) LTE 0원 = 입원 시 정액 일당 없음. 당뇨병은 폐렴 합병증 위험 증가 인자로 선택 조건 활용. 신규 T24 — 기존 T01~T23에 없던 사망원인 3위 감지 공백 해소.</div>
+  <div class="note">※ 폐렴은 사망원인 3위(통계청 2024), 60세 이상에서 급격히 증가. A6100(질병입원일당) LTE 0원 = 입원 시 정액 일당 없음. 당뇨병은 폐렴 합병증 위험 증가 인자로 선택 조건 활용. 신규 T24 — 기존 T01~T23에 없던 사망원인 3위 감지 공백 해소.</div>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="ru-id">RU-T29</span><span class="card-name">암요양병원 장기입원 미보장 판정</span><span class="rt-tag">→ T29 암요양병원 장기입원 미보장형</span><span class="new-badge">신규</span></div>
+  <div class="card-body">
+    <div class="cond-label">판단 조건</div>
+    <table class="cond">
+      <tr><th>소스</th><th>항목</th><th>조건</th><th>기준값</th><th>구분</th></tr>
+      <tr class="req"><td>마이데이터</td><td>A4200 (암진단)</td><td>이상(GTE)</td><td>1원</td><td><span class="badge-req">필수</span></td></tr>
+      <tr class="req"><td>마이데이터</td><td>A6201 (암요양병원입원일당)</td><td>이하(LTE)</td><td>0원</td><td><span class="badge-req">필수</span></td></tr>
+      <tr class="req"><td>프로파일</td><td>나이</td><td>사이(BETWEEN)</td><td>40세 ~ 80세</td><td><span class="badge-req">필수</span></td></tr>
+      <tr class="opt"><td>프롬에이지</td><td>암위험도 &gt; canr_ca (암 종합)</td><td>같음(EQ)</td><td>위험</td><td><span class="badge-opt">선택</span></td></tr>
+    </table>
+  </div>
+  <div class="note">※ A4200(암진단) GTE 1원 = 암보험 있음 확인. A6201(암요양병원입원일당) LTE 0원 = 요양병원 장기 입원 국면의 정액 보장 없음. T02(암진단금 부족형)는 진단 시점 일시금, T18(항암치료비 미보장형)은 항암 치료 단계(A9617) 비용 공백으로 담보 축이 달라 T29와 동시 발화해도 중복이 아니라 서로 다른 국면의 공백을 알리는 것이므로 배타 조건을 두지 않는다(T27과 동일 원칙). 나이 하한 40세: 암유병자 누적 시작 연령대 반영.</div>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="ru-id">RU-T30</span><span class="card-name">중환자실입원일당 미보장 판정</span><span class="rt-tag">→ T30 중환자실입원일당 미보장형</span><span class="new-badge">신규</span></div>
+  <div class="card-body">
+    <div class="cond-label">판단 조건</div>
+    <table class="cond">
+      <tr><th>소스</th><th>항목</th><th>조건</th><th>기준값</th><th>구분</th></tr>
+      <tr class="req"><td>마이데이터</td><td>A6100 (질병입원일당)</td><td>이상(GTE)</td><td>1원</td><td><span class="badge-req">필수</span></td></tr>
+      <tr class="req"><td>마이데이터</td><td>A6112 (질병중환자실입원일당)</td><td>이하(LTE)</td><td>0원</td><td><span class="badge-req">필수</span></td></tr>
+      <tr class="req"><td>마이데이터</td><td>A6302 (상해중환자실입원일당)</td><td>이하(LTE)</td><td>0원</td><td><span class="badge-req">필수</span></td></tr>
+      <tr class="req"><td>프로파일</td><td>나이</td><td>사이(BETWEEN)</td><td>30세 ~ 80세</td><td><span class="badge-req">필수</span></td></tr>
+      <tr class="opt"><td>프롬에이지</td><td>질병위험도 &gt; 허혈성심장질환</td><td>같음(EQ)</td><td>위험</td><td><span class="badge-opt">선택</span></td></tr>
+      <tr class="opt"><td>프롬에이지</td><td>질병위험도 &gt; 뇌혈관질환</td><td>같음(EQ)</td><td>위험</td><td><span class="badge-opt">선택</span></td></tr>
+    </table>
+  </div>
+  <div class="note">※ A6100(질병입원일당) GTE 1원 = 일반 입원일당은 있음 확인 — 이 조건으로 T24(폐렴, A6100 LTE 0 필수)·T27(간병지원, A6100 선택)과 배타적으로 구분. A6112·A6302 둘 다 LTE 0원 = 중환자실 전용 일당 완전 공백. 재난적의료비 지원 건당 평균 312만원(2024, 보건복지부)으로 중환자실급 고액 비급여 부담이 실재. 심혈관·뇌혈관 위험도는 중환자실 입원으로 이어지기 쉬운 대표 질환이라 선택 조건 활용.</div>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="ru-id">RU-T32</span><span class="card-name">장기입원비 미보장 판정</span><span class="rt-tag">→ T32 장기입원비 미보장형</span><span class="new-badge">신규</span></div>
+  <div class="card-body">
+    <div class="cond-label">판단 조건</div>
+    <table class="cond">
+      <tr><th>소스</th><th>항목</th><th>조건</th><th>기준값</th><th>구분</th></tr>
+      <tr class="req"><td>마이데이터</td><td>A6100 (질병입원일당)</td><td>이상(GTE)</td><td>1원</td><td><span class="badge-req">필수</span></td></tr>
+      <tr class="req"><td>마이데이터</td><td>A6510 (질병장기입원비)</td><td>이하(LTE)</td><td>0원</td><td><span class="badge-req">필수</span></td></tr>
+      <tr class="req"><td>마이데이터</td><td>A6550 (상해장기입원비)</td><td>이하(LTE)</td><td>0원</td><td><span class="badge-req">필수</span></td></tr>
+      <tr class="req"><td>프로파일</td><td>나이</td><td>사이(BETWEEN)</td><td>40세 ~ 85세</td><td><span class="badge-req">필수</span></td></tr>
+      <tr class="opt"><td>프롬에이지</td><td>질병위험도 &gt; 치매</td><td>같음(EQ)</td><td>위험</td><td><span class="badge-opt">선택</span></td></tr>
+    </table>
+  </div>
+  <div class="note">※ A6100(질병입원일당) GTE 1원 = 일반 입원일당은 있음(T30과 동일하게 "있음"을 필수 조건으로 둬 일반 입원일당조차 없는 T01·T19 케이스와 구분). A6510·A6550 둘 다 LTE 0원 = 통상 지급 한도(업계 관행 180일 전후, 삼성화재 상품약관 확인)를 넘는 장기 입원 시 추가 보장 없음. 정신질환·요양병원 장기 재원 통계가 장기 입원 국면의 실재를 뒷받침. 치매 위험도는 장기 요양 전환 가능성이 높은 대표 신호라 선택 조건 활용. T05(노후돌봄보장 공백형, 진단금형 LTC)·T27(간병지원, 간병인 고용비)과는 보장 메커니즘이 달라(장기 재원 일당 vs 진단금/간병인비) 배타 조건 없음.</div>
 </div>
 
 <div class="section-label">사망·노후 영역 (4개)</div>
@@ -307,20 +415,6 @@ table.cond tr.opt td { background: #FFFDF5; color: #6B7280; }
 </div>
 
 <div class="card">
-  <div class="card-head"><span class="ru-id">RU-T15</span><span class="card-name">자녀 건강보장 공백 판정</span><span class="rt-tag">→ T15 자녀건강보장 공백형</span></div>
-  <div class="card-body">
-    <div class="cond-label">판단 조건</div>
-    <table class="cond">
-      <tr><th>소스</th><th>항목</th><th>조건</th><th>기준값</th><th>구분</th></tr>
-      <tr class="req"><td>프로파일</td><td>자녀유무</td><td>같음(EQ)</td><td>있음</td><td><span class="badge-req">필수</span></td></tr>
-      <tr class="req"><td>마이데이터</td><td>A6114 (어린이다발성질병입원일당)</td><td>이하(LTE)</td><td>0원</td><td><span class="badge-req">필수</span></td></tr>
-      <tr class="req"><td>프로파일</td><td>나이</td><td>사이(BETWEEN)</td><td>25세 ~ 45세</td><td><span class="badge-req">필수</span></td></tr>
-    </table>
-  </div>
-  <div class="note">※ 기존 A3201(후유장해 계열 오분류)에서 A6114(어린이다발성질병입원일당)로 교체. A6114는 어린이 특화 질병 입원 담보코드로 어린이보험 가입 여부의 대리 지표로 적합. 자녀 보험은 부모(계약자)·자녀(피보험자) 구조 — 부모 마이데이터에서 간접 감지. <strong>한계:</strong> 자녀 명의의 별도 보험 계약은 자녀 마이데이터에서만 확인 가능.</div>
-</div>
-
-<div class="card">
   <div class="card-head"><span class="ru-id">RU-T22</span><span class="card-name">상해 특화 보장 공백 판정</span><span class="rt-tag">→ T22 상해 특화 보장 공백형</span></div>
   <div class="card-body">
     <div class="cond-label">판단 조건</div>
@@ -349,6 +443,19 @@ table.cond tr.opt td { background: #FFFDF5; color: #6B7280; }
     </table>
   </div>
   <div class="note">※ A4301(골절진단) LTE 0원 = 골절 발생 시 일시금 미보장. T22(상해 입원·수술 공백)와 차이: T22는 수술·입원 정액 보장 공백, T23은 골절 진단 시점 일시금 공백. 고령자 낙상 고관절 골절 위험으로 나이 상한 80세 포괄. A4301 코드는 진단 계열(A4xxx) 정확히 확인됨.</div>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="ru-id">RU-T31</span><span class="card-name">정신피해치료비 미보장 판정</span><span class="rt-tag">→ T31 정신피해치료비 미보장형</span><span class="new-badge">신규</span></div>
+  <div class="card-body">
+    <div class="cond-label">판단 조건</div>
+    <table class="cond">
+      <tr><th>소스</th><th>항목</th><th>조건</th><th>기준값</th><th>구분</th></tr>
+      <tr class="req"><td>마이데이터</td><td>A9616 (정신피해치료비)</td><td>이하(LTE)</td><td>0원</td><td><span class="badge-req">필수</span></td></tr>
+      <tr class="req"><td>프로파일</td><td>나이</td><td>사이(BETWEEN)</td><td>20세 ~ 70세</td><td><span class="badge-req">필수</span></td></tr>
+    </table>
+  </div>
+  <div class="note">※ A9616(정신피해치료비) LTE 0원 = 범죄 피해로 인한 정신적 충격 치료비 보장 완전 공백. 국가 지원(스마일센터 등)은 치료비·심리치료비 합산 연 1,500만원·총액 5,000만원 한도이며 범죄 발생 후 5년 경과 시 지원 종료(법무부 범죄피해자 경제적 지원 업무처리지침)돼 장기 치료 국면에서 공백이 발생. 프롬에이지 카테고리 중 범죄 피해 위험을 나타내는 항목이 없어 선택 조건 없음(T21 치과와 동일하게 프롬에이지 미사용 패턴). 주제 민감성으로 인해 Concept·Policy 문구는 신중히 작성 — <code>guides/customer-messaging.md</code> 워싱 원칙 준수.</div>
 </div>
 
 </main>
