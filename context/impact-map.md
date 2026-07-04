@@ -321,14 +321,14 @@
 
 ---
 
-### 24. Clark 실제 앱 답변 출력 형식 변경 (진단 선언·운영자 식별자 비노출·Evidence 인용 표기) — 2026-07-05 신설
+### 24. Clark 실제 앱 답변 출력 형식 변경 (진단 선언·운영자 식별자 비노출·Evidence 인용 표기·PROMAGE 선택조건 반영) — 2026-07-05 신설, 2026-07-05 4번째 원칙 추가
 
-**진실원:** `context/answer-logic.md` "FAQ RAG 매칭 방식" 위 섹션 및 Evidence 활용 표의 "인용 표기 원칙"
+**진실원:** `context/answer-logic.md` "Rule 선택 조건(PROMAGE) — 매칭 시 답변 반영 원칙" 및 "FAQ RAG 매칭 방식" 위 섹션·Evidence 활용 표의 "인용 표기 원칙". 선택 조건 자체의 정의는 `context/card-types.md` Rule 조건 구분 표.
 
 | 영향 파일 | 변경 위치 |
 |---|---|
-| `mockups_v2/13_answer-logic.html` | Step 7 답변 예시 하단 note-box (출력 형식 원칙 3가지) |
-| `contents/html/08_ai-preview.html` | T01~T32 23개 체인 전체 — 모바일 폰 프레임 목업, 진단 선언 문장, Evidence 출처+연도 인용 (트랙 경계를 넘는 영향은 `context/cross-track-impact.md` 참조) |
+| `mockups_v2/13_answer-logic.html` | Step 7 답변 예시 하단 note-box (출력 형식 원칙 4가지) |
+| `contents/html/08_ai-preview.html` | T01~T32 23개 체인 전체 — 모바일 폰 프레임 목업, 진단 선언 문장, Evidence 출처+연도 인용. 이 중 17개 체인(PROMAGE 선택조건 등록된 Risk-type)은 "①기본 케이스 ②선택조건 매칭 시" 2-variant 비교 (트랙 경계를 넘는 영향은 `context/cross-track-impact.md` 참조) |
 
 ---
 
