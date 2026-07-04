@@ -207,6 +207,27 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
                   <div class="app-cta-row">
                     <span class="app-cta-chip">📋 보닥 플래너와 암보험 점검하기</span>
                   </div>
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>다른 보장 공백도 확인해보시겠어요?</p>
+                    </div>
+                  </div>
+                  <div class="app-result-cards">
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">암진단금 부족형</span><span class="app-result-card-desc">진단금 2,000만 원 · 부족</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">항암치료비 미보장형</span><span class="app-result-card-desc">치료 단계 비용 공백</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">암요양병원 장기입원 미보장형</span><span class="app-result-card-desc">회복기 입원 공백</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:15</div>
                 </div>
                 <div class="app-input-bar">
                   <div class="app-input-fake">메시지 입력...</div>
@@ -215,7 +236,7 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
               </div>
             </div>
           </div>
-          <div class="proto-note">※ 카드 탭은 사용자가 "소액암 진단금 부족형 자세히 알려줘"라고 타이핑한 것과 동일하게 처리되며, 새 페이지를 열지 않고 같은 채팅 스레드 안에 새 말풍선으로 이어집니다(위 심층 답변은 하단 T25 체인 내용을 그대로 재사용). 두 번째 턴의 CTA는 첫 턴 CTA와 무관하게 그 턴에서 Playbook이 매칭됐을 때만 독립적으로 노출됩니다(Case 1~4 로직 그대로).</div>
+          <div class="proto-note">※ 카드 탭은 사용자가 "소액암 진단금 부족형 자세히 알려줘"라고 타이핑한 것과 동일하게 처리되며, 새 페이지를 열지 않고 같은 채팅 스레드 안에 새 말풍선으로 이어집니다(위 심층 답변은 하단 T25 체인 내용을 그대로 재사용). 두 번째 턴의 CTA는 첫 턴 CTA와 무관하게 그 턴에서 Playbook이 매칭됐을 때만 독립적으로 노출됩니다(Case 1~4 로직 그대로). <strong>탭한 카드는 남은 카드 목록에서 제외</strong>되고, 심층 답변 뒤에 나머지 카드가 다시 노출돼 사용자가 스크롤 없이 이어서 다른 항목을 확인할 수 있습니다.</div>
         </div>
       </div>
     </div>
@@ -306,6 +327,31 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
                   <div class="app-cta-row">
                     <span class="app-cta-chip">📋 보닥 플래너와 보험 리모델링 시작하기</span>
                   </div>
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>다른 보장 공백도 확인해보시겠어요?</p>
+                    </div>
+                  </div>
+                  <div class="app-result-cards">
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">수술·입원 정액비 미보장형</span><span class="app-result-card-desc">수술비 정액 담보 없음</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">폐렴 입원보장 공백형</span><span class="app-result-card-desc">고령자 입원일당 없음</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">통원치료비 미보장형</span><span class="app-result-card-desc">통원 정액 담보 없음</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">장기입원비 미보장형</span><span class="app-result-card-desc">장기입원 한도초과 보장 없음</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:15</div>
                 </div>
                 <div class="app-input-bar">
                   <div class="app-input-fake">메시지 입력...</div>
@@ -314,7 +360,7 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
               </div>
             </div>
           </div>
-          <div class="proto-note">※ 심층 답변은 하단 T30 체인 내용을 그대로 재사용합니다. 기존 협소 Concept(CN-T19·T24·T26·T30·T32)은 그대로 유지되며, "입원비 전반"처럼 포괄적인 질의만 이 카드가 별도로 감지합니다.</div>
+          <div class="proto-note">※ 심층 답변은 하단 T30 체인 내용을 그대로 재사용합니다. 기존 협소 Concept(CN-T19·T24·T26·T30·T32)은 그대로 유지되며, "입원비 전반"처럼 포괄적인 질의만 이 카드가 별도로 감지합니다. 탭한 카드는 남은 카드 목록에서 제외되고, 심층 답변 뒤에 나머지 카드가 다시 노출됩니다.</div>
         </div>
       </div>
     </div>
@@ -397,6 +443,23 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
                   <div class="app-cta-row">
                     <span class="app-cta-chip">📋 보닥 플래너와 보험 리모델링 시작하기</span>
                   </div>
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>다른 보장 공백도 확인해보시겠어요?</p>
+                    </div>
+                  </div>
+                  <div class="app-result-cards">
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">상해 특화 보장 공백형</span><span class="app-result-card-desc">상해수술·입원 담보 없음</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">골절·상해진단금 공백형</span><span class="app-result-card-desc">골절 진단 일시금 없음</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:15</div>
                 </div>
                 <div class="app-input-bar">
                   <div class="app-input-fake">메시지 입력...</div>
@@ -405,7 +468,7 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
               </div>
             </div>
           </div>
-          <div class="proto-note">※ 심층 답변은 하단 T20 체인 내용을 그대로 재사용합니다. CN-T22(상해보험, 명칭은 포괄적이나 실제론 T22 전용)는 그대로 유지되며, 포괄 질의만 이 신규 카드가 별도로 감지합니다.</div>
+          <div class="proto-note">※ 심층 답변은 하단 T20 체인 내용을 그대로 재사용합니다. CN-T22(상해보험, 명칭은 포괄적이나 실제론 T22 전용)는 그대로 유지되며, 포괄 질의만 이 신규 카드가 별도로 감지합니다. 탭한 카드는 남은 카드 목록에서 제외되고, 심층 답변 뒤에 나머지 카드가 다시 노출됩니다.</div>
         </div>
       </div>
     </div>
@@ -485,6 +548,19 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
                   <div class="app-cta-row">
                     <span class="app-cta-chip">📋 보닥 플래너와 노후 대비 점검하기</span>
                   </div>
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>다른 보장 공백도 확인해보시겠어요?</p>
+                    </div>
+                  </div>
+                  <div class="app-result-cards">
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">간병 지원 공백형</span><span class="app-result-card-desc">간병인지원 입원일당 없음</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:15</div>
                 </div>
                 <div class="app-input-bar">
                   <div class="app-input-fake">메시지 입력...</div>
@@ -493,7 +569,7 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
               </div>
             </div>
           </div>
-          <div class="proto-note">※ 심층 답변은 하단 T05 체인 내용을 그대로 재사용합니다. CN-T05(간병보험, LTC 전용)는 그대로 유지되며, 포괄 질의만 이 신규 카드가 별도로 감지합니다.</div>
+          <div class="proto-note">※ 심층 답변은 하단 T05 체인 내용을 그대로 재사용합니다. CN-T05(간병보험, LTC 전용)는 그대로 유지되며, 포괄 질의만 이 신규 카드가 별도로 감지합니다. 탭한 카드는 남은 카드 목록에서 제외되고, 심층 답변 뒤에 나머지 카드가 다시 노출됩니다.</div>
         </div>
       </div>
     </div>
@@ -594,6 +670,39 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
                   <div class="app-cta-row">
                     <span class="app-cta-chip">📋 보닥 플래너와 암보험 점검하기</span>
                   </div>
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>다른 보장 공백도 확인해보시겠어요?</p>
+                    </div>
+                  </div>
+                  <div class="app-result-cards">
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">무보장형</span><span class="app-result-card-desc">실손·사망보장 모두 없음</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">노후돌봄보장 공백형</span><span class="app-result-card-desc">장기간병요양진단 없음</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">사망보장 미비형</span><span class="app-result-card-desc">실손만 있고 사망보장 없음</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">후유장해보장 공백형</span><span class="app-result-card-desc">질병·상해 후유장해 없음</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">골절·상해진단금 공백형</span><span class="app-result-card-desc">골절진단 담보 없음</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">운전자보험 미가입형</span><span class="app-result-card-desc">형사합의지원금 없음</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:15</div>
                 </div>
                 <div class="app-input-bar">
                   <div class="app-input-fake">메시지 입력...</div>
@@ -602,7 +711,7 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
               </div>
             </div>
           </div>
-          <div class="proto-note">※ 심층 답변은 하단 T02 체인 내용을 그대로 재사용합니다. 도메인 그룹핑은 하지 않습니다(2026-07-05 확정 — UI 일관성 우선). N=0(공백 없음)일 때는 "특별한 보장 공백이 확인되지 않아요. 잘 준비하고 계세요!" 류의 안심 메시지로 대체되며 카드 자체가 노출되지 않습니다.</div>
+          <div class="proto-note">※ 심층 답변은 하단 T02 체인 내용을 그대로 재사용합니다. 도메인 그룹핑은 하지 않습니다(2026-07-05 확정 — UI 일관성 우선). N=0(공백 없음)일 때는 "특별한 보장 공백이 확인되지 않아요. 잘 준비하고 계세요!" 류의 안심 메시지로 대체되며 카드 자체가 노출되지 않습니다. 탭한 카드는 남은 카드 목록에서 제외되고, 심층 답변 뒤에 나머지 카드가 다시 노출됩니다.</div>
         </div>
       </div>
     </div>
