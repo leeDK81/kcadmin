@@ -84,6 +84,10 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
         <li>Playbook 카드는 CONNECT_RULES 적용 안 함 (독립 체인)</li>
       </ul>
     </div>
+    <div class="notice notice-info" style="margin-top:12px">
+      <i class="fa-solid fa-circle-info fa-fw"></i>
+      <span><strong>화면 표시 범위와 연결 조작 범위는 다릅니다(2026-07-05 확정).</strong> 카드를 선택하면 그 카드가 속한 Risk-type 축 파이프라인(Concept→Risk-type→Rule→Evidence·Policy) 전체가 화면에 보이지만(무관한 다른 파이프라인은 안 섞임), "연결 추가·제거"는 항상 지금 선택한 카드와 직접(1홉) 연결된 카드에만 가능합니다. 몇 단계 떨어진 카드를 연결·해제하려면 그 카드를 클릭(탐색)해 기준 카드로 전환해야 합니다.</span>
+    </div>
   </div>
 
   <!-- CONNECT_RULES -->
@@ -342,7 +346,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
       <p style="margin-bottom:12px"><strong>연결 추가:</strong></p>
       <ol style="padding-left:20px;margin-bottom:16px">
         <li>캔버스 상단 피커에서 포컬 카드 선택</li>
-        <li>하단 그리드에서 "연결 가능" 섹션의 카드에 "연결 추가" 버튼 클릭</li>
+        <li>하단 그리드에서 "연결 가능" 섹션의 카드에 "연결 추가" 버튼 클릭 — 포컬 카드와 직접 연결 가능한 카드만 이 섹션에 뜬다</li>
         <li>확인 모달에서 승인 → 엣지 생성
           <ul style="margin-top:4px;padding-left:20px">
             <li>양쪽 모두 active → active 엣지(실선 초록)</li>
@@ -352,8 +356,8 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
       </ol>
       <p style="margin-bottom:12px"><strong>연결 제거:</strong></p>
       <ol style="padding-left:20px">
-        <li>그리드의 "연결됨" 섹션에서 해당 카드의 "연결 제거" 버튼 클릭</li>
-        <li>확인 모달에서 승인 → 엣지 삭제</li>
+        <li>그리드의 "연결됨" 섹션에서 해당 카드의 "연결 제거" 버튼 클릭 — 포컬 카드와 직접 연결된 카드에만 이 버튼이 붙는다. 같은 파이프라인이라도 몇 단계 떨어진 카드는 읽기 전용(탐색만 가능)으로 표시되며, 그 카드를 새 기준으로 전환해야 연결 제거 버튼이 나타난다</li>
+        <li>확인 모달에서 승인 → 엣지 삭제. 제거 후 그 카드가 여전히 포컬과 연결 가능한 상태면 "연결 가능" 섹션으로 자동 이동한다</li>
       </ol>
     </div>
     <div class="notice" style="margin-top:12px">
