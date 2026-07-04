@@ -45,12 +45,12 @@ main { max-width: 960px; margin: 36px auto; padding: 0 24px 60px; }
 <header>
   <div class="nav"><a href="00_index.html">← 인덱스로 돌아가기</a></div>
   <h1>Playbook 카드 입력 가이드</h1>
-  <p>STEP 6 · 상담 전환 시나리오 카드 · 총 10장 · Risk-type과 독립 체인</p>
+  <p>STEP 6 · 상담 전환 시나리오 카드 · 총 12장 · Risk-type과 독립 체인</p>
 </header>
 <main>
 
 <div class="stats">
-  <span class="chip">📗 총 10장</span>
+  <span class="chip">📗 총 12장</span>
   <span class="chip">마이데이터 없음 작동 3장 (PB01·02·07)</span>
   <span class="chip">프롬에이지 없음 CTA 3장 (PB02·03·04)</span>
   <span class="chip">consult 액션 전체 포함</span>
@@ -61,7 +61,7 @@ main { max-width: 960px; margin: 36px auto; padding: 0 24px 60px; }
   Playbook은 Risk-type과 직접 연결하지 않습니다. 독립 체인으로 등록됩니다.
 </div>
 
-<div class="section-label">Playbook 10장 · PB01 ~ PB10</div>
+<div class="section-label">Playbook 12장 · PB01 ~ PB12</div>
 
 <div class="card">
   <div class="card-head"><span class="pb-id">PB01</span><span class="card-name">무보장 긴급 상담 전환</span><span class="mydata-badge">마이데이터 없음 작동</span></div>
@@ -373,6 +373,70 @@ main { max-width: 960px; margin: 36px auto; padding: 0 24px 60px; }
       <div class="field-row">
         <div class="field-label">Standalone 답변 (선택)</div>
         <div class="standalone-text">2026년 출시된 5세대 실손보험은 급여·중증 비급여 보장을 강화했습니다. 보닥 플래너가 현재 가입 세대와 전환 여부를 안내해드릴 수 있습니다.</div>
+      </div>
+      <div class="field-row">
+        <div class="field-label">데이터 미보유 감지</div>
+        <div class="field-value">— 없음</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="pb-id">PB11</span><span class="card-name">치아보험 상담 전환</span></div>
+  <div class="card-body">
+    <div class="field-row"><div class="field-label">설명 (필수)</div><div class="field-value">치아보험 가입·비교·보장 확인에 관심을 보이는 사용자를 보닥 플래너에게 연결</div></div>
+    <div class="field-row">
+      <div class="field-label">발화 키워드 (6개)</div>
+      <div class="keywords">
+        <span class="kw-tag">치아보험 추천해주세요</span>
+        <span class="kw-tag">치아보험 비교해주세요</span>
+        <span class="kw-tag">임플란트 보장되는 보험 있나요</span>
+        <span class="kw-tag">치아보험 가입하고 싶어요</span>
+        <span class="kw-tag">크라운·레진도 보장되나요</span>
+        <span class="kw-tag">치아보험 갱신형 비갱신형 뭐가 나아요</span>
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field-label">전환 액션</div>
+      <div class="action-row"><span class="action-type">consult</span> 보닥 플래너와 치아보험 비교하기</div>
+    </div>
+    <div class="two-col">
+      <div class="field-row">
+        <div class="field-label">Standalone 답변 (선택)</div>
+        <div class="standalone-text">치아보험은 상품마다 크라운·레진·임플란트 등 시술별 보장 한도와 연간 횟수 제한이 크게 달라 비교가 중요합니다. 보닥 플래너가 필요한 시술 범위에 맞는 상품을 안내해드릴 수 있습니다.</div>
+      </div>
+      <div class="field-row">
+        <div class="field-label">데이터 미보유 감지</div>
+        <div class="field-value">— 없음 (치아 보장은 건강 위험도 데이터로 진단할 수 없는 영역이라 프롬에이지 연동 여부와 무관하게 작동)</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head"><span class="pb-id">PB12</span><span class="card-name">자동차보험 상담 전환</span></div>
+  <div class="card-body">
+    <div class="field-row"><div class="field-label">설명 (필수)</div><div class="field-value">자동차보험 가입·비교·갱신에 관심을 보이는 사용자를 보닥 플래너에게 연결</div></div>
+    <div class="field-row">
+      <div class="field-label">발화 키워드 (6개)</div>
+      <div class="keywords">
+        <span class="kw-tag">자동차보험 비교해주세요</span>
+        <span class="kw-tag">자동차보험 추천해주세요</span>
+        <span class="kw-tag">자동차보험 가입하고 싶어요</span>
+        <span class="kw-tag">자동차보험료 보험사별로 비교하고 싶어요</span>
+        <span class="kw-tag">자동차보험 갱신해야 하는데</span>
+        <span class="kw-tag">자동차보험 가격비교해줘</span>
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field-label">전환 액션</div>
+      <div class="action-row"><span class="action-type">consult</span> 보닥 플래너와 자동차보험 비교하기</div>
+    </div>
+    <div class="two-col">
+      <div class="field-row">
+        <div class="field-label">Standalone 답변 (선택)</div>
+        <div class="standalone-text">자동차보험은 갱신 시점마다 보험사별 보험료·특약 구성을 비교하는 것이 유리합니다. 보닥 플래너가 차량·운전자 조건에 맞는 견적 비교를 도와드릴 수 있습니다.</div>
       </div>
       <div class="field-row">
         <div class="field-label">데이터 미보유 감지</div>

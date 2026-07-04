@@ -546,6 +546,16 @@
       "playbook_id": "PB10",
       "name": "실손보험 전환 상담",
       "status": "완성"
+    },
+    {
+      "playbook_id": "PB11",
+      "name": "치아보험 상담 전환",
+      "status": "완성"
+    },
+    {
+      "playbook_id": "PB12",
+      "name": "자동차보험 상담 전환",
+      "status": "완성"
     }
   ]
 }

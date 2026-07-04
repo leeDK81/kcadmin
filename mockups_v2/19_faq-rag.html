@@ -55,11 +55,11 @@
 <main class="main">
   <div class="page-header">
     <h1>FAQ RAG 관리</h1>
-    <p>약관 RAG가 커버하지 못하는 <strong>Clark 서비스 전용 Q&A</strong>(앱 사용 안내, 보닥 플래너 연결, 서비스 정책 등)를 운영자가 직접 등록·관리합니다. 보험 약관 관련 질문은 약관 RAG가 자동 처리하므로 이 화면에 등록하지 않습니다.</p>
+    <p>약관 RAG가 커버하지 못하는 <strong>Clark 서비스 전용 Q&A</strong>(앱 사용 안내, 보닥 플래너 연결, 서비스 정책 등)와 <strong>계약과 무관한 보험 일반 판단 노하우</strong>(청구 분류 기준·용어 비교 등)를 운영자가 직접 등록·관리합니다. 특정 개인의 계약 조회가 필요한 질문(보장금액·청구 가능 여부 등)은 약관 RAG·KC 체인이 처리하므로 이 화면에 등록하지 않습니다.</p>
   </div>
 
   <div class="guide-box">
-    <strong>FAQ RAG</strong>는 Clark 서비스 전용 Q&A를 운영자가 직접 관리하는 인덱스입니다. 등록하면 바로 인덱스에 추가되어 Clark AI가 약관 RAG 결과 없을 때 참조합니다.
+    <strong>FAQ RAG</strong>는 Clark 서비스 전용 Q&A + 계약 무관 보험 판단 노하우를 운영자가 직접 관리하는 인덱스입니다. 등록하면 바로 인덱스에 추가되어 Clark AI가 약관 RAG 결과 없을 때 참조합니다. (2026-07-04 정교화: <code>context/answer-logic.md</code> "FAQ RAG 등록 기준" 표 참조)
   </div>
 
   <!-- 상단 액션 바 -->
@@ -86,12 +86,12 @@
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
       <div class="form-group" style="margin-bottom:0">
         <label>질문 (Q) <span style="color:#A32D2D">*</span></label>
-        <textarea class="form-control" id="newQ" placeholder="예) 보닥 플래너 상담 신청은 어떻게 하나요? (약관·보장·담보 관련 질문 등록 불가)" style="min-height:80px"></textarea>
+        <textarea class="form-control" id="newQ" placeholder="예) 보닥 플래너 상담 신청은 어떻게 하나요? / 용종제거가 질병수술에 해당하나요? (개인 계약 조회가 필요한 질문 등록 불가)" style="min-height:80px"></textarea>
       </div>
       <div class="form-group" style="margin-bottom:0">
         <label>답변 (A) <span style="color:#A32D2D">*</span></label>
-        <textarea class="form-control" id="newA" placeholder="Clark 서비스 안내 답변을 입력하세요. 보장 금액·청구 가능 여부·타사 비교 금지." style="min-height:80px"></textarea>
-        <span class="field-hint">등록하면 바로 인덱스에 추가됩니다. Clark 서비스 전용 내용만 등록하세요.</span>
+        <textarea class="form-control" id="newA" placeholder="Clark 서비스 안내 또는 계약 무관 보험 판단 노하우 답변을 입력하세요. 특정 개인의 보장 금액·청구 가능 여부·타사 비교는 금지." style="min-height:80px"></textarea>
+        <span class="field-hint">등록하면 바로 인덱스에 추가됩니다. Clark 서비스 전용 내용 또는 계약 무관 보험 판단 노하우만 등록하세요.</span>
       </div>
     </div>
     <div style="display:flex;gap:8px;margin-top:14px">

@@ -122,7 +122,8 @@ contents/
   05_policy/        ← Policy 카드 (policies.md)
   06_playbook/      ← Playbook 카드 (playbooks.md)
   07_connections/   ← 연결 구조 확정본 (chain-map.json)
-  html/             ← 브라우저에서 직접 여는 콘텐츠 어드민 + Clark AI 채팅 시뮬레이션 (9개 HTML, mockups_v2와 별개·서버 불필요)
+  08_faq/           ← FAQ RAG 콘텐츠 (faq-rag.md, 2026-07-04 신규 — 계약 무관 보험 판단 노하우 + 서비스 이용 안내 Q&A)
+  html/             ← 브라우저에서 직접 여는 콘텐츠 어드민 + Clark AI 채팅 시뮬레이션 (10개 HTML, mockups_v2와 별개·서버 불필요)
   decisions.md      ← 컨텐츠 트랙 미결 항목·결정 이력 인덱스
   CHANGELOG.md      ← 컨텐츠 트랙 변경 이력 (카드 데이터 변경 상세 포함)
 ```
@@ -137,7 +138,7 @@ contents/
 | 04 | `contents/agents/04_content-po.md` | 연결 정합성 검토 + 체인 완성 승인 | 전체 연결 구조 |
 | 05 | `contents/agents/05_html-publisher.md` | 확정 콘텐츠를 `contents/html/`에 실제 반영 (2026-07-03 신규) | contents/html/*.html |
 
-### contents/html/ 파일 목록 (9개 + sidebar.js)
+### contents/html/ 파일 목록 (10개 + sidebar.js)
 
 | 파일 | 설명 |
 |---|---|
@@ -150,6 +151,7 @@ contents/
 | 06_playbook.html | Playbook 카드 편집기 (CTA 버튼 포함) |
 | 07_chain-report.html | 체인 검토 보고서 |
 | 08_ai-preview.html | Clark AI 채팅 답변 시뮬레이션 |
+| 09_faq-rag.html | FAQ RAG 콘텐츠 미리보기 (2026-07-05 신규) |
 | sidebar.js | 좌측 공통 사이드바 JS 인젝션 |
 
 ### Clark AI 채팅 답변 표준 구조 (`guides/customer-messaging.md` 진실원)

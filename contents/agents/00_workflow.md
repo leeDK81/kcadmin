@@ -89,8 +89,14 @@ Step 7  [04] 전체 연결 구조 검토 및 확정
              → 산출물: contents/07_connections/chain-map.json
 
 Step 8  [05] 확정된 콘텐츠를 contents/html/*.html에 실제 반영 (2026-07-03 신규)
-             → chain-map.json + Step 1~6 산출물 기준으로 contents/html/00~08 갱신
+             → chain-map.json + Step 1~6 산출물 기준으로 contents/html/00~09 갱신
              → 반영 후 chain-map.json 대비 담보코드·수치·카드 상태 불일치 없는지 자체 대조
+
+Step 9  [01+02+03] FAQ RAG 콘텐츠 저작 (2026-07-04 신규)
+             → 산출물: contents/08_faq/faq-rag.md, contents/html/09_faq-rag.html(미리보기, 2026-07-05 추가)
+             → KC 체인(Concept)으로 감지되지 않거나 감지 후에도 "계약과 무관한 일반 판단"이 필요한 질문 유형 도출
+             → 01(공인 통계)이 근거 확인, 02(도메인 전문가)가 판단 기준 검증, 03(카피라이터)이 고객향 워싱
+             → 등록 기준은 `context/answer-logic.md` "FAQ RAG 등록 기준" 표 준수 — 계약 특정적 질문은 절대 등록 금지
 ```
 
 ---
@@ -108,6 +114,7 @@ contents/
   05_policy/        ← Policy 카드 (통합 .md)
   06_playbook/      ← Playbook 카드 (통합 .md)
   07_connections/   ← 캔버스 연결 구조 정의 (chain-map.json)
+  08_faq/           ← Step 9 산출물 — FAQ RAG 콘텐츠 (faq-rag.md, 2026-07-04 신규)
   html/             ← Step 8 산출물 — 브라우저에서 직접 여는 콘텐츠 어드민 + 채팅 시뮬레이션 (05 담당)
 ```
 

@@ -9,6 +9,7 @@
     { file: '06_playbook.html',   icon: '📖', label: 'Playbook',         group: '카드 편집기' },
     { file: '07_chain-report.html', icon: '🔗', label: '체인 검토 보고서', group: '보고서' },
     { file: '08_ai-preview.html', icon: '🤖', label: 'AI 답변 미리보기', group: '보고서' },
+    { file: '09_faq-rag.html',    icon: '💬', label: 'FAQ RAG',          group: 'FAQ RAG' },
   ];
 
   var current = window.location.pathname.split('/').pop() || '00_index.html';
