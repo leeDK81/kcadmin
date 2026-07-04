@@ -89,6 +89,7 @@
 ### 둘 다 미매칭일 때
 - 약관 RAG → FAQ RAG → LLM Fallback 순으로 진행 (answer-logic.md 참조).
 - Playbook CTA 없음.
+- **FAQ RAG도 이 문서의 임베딩 유사도 엔진을 그대로 재사용한다** (2026-07-05 확정). FAQ 인덱싱 대상·매칭 절차·미결 항목 상세는 `answer-logic.md` "FAQ RAG 매칭 방식" 섹션 참조.
 
 ---
 
