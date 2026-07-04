@@ -62,30 +62,30 @@ table.chain-table { width: 100%; border-collapse: collapse; background: #fff; bo
 <header>
   <div class="nav"><a href="00_index.html">← 인덱스로 돌아가기</a></div>
   <h1>체인 연결 검토 보고서</h1>
-  <p>STEP 7 · contents-review 검토 · v2 재설계 반영 · 2026-07-04(3차) 갱신</p>
+  <p>STEP 7 · contents-review 검토 · v2 재설계 반영 · 2026-07-05 N:N 다건 매칭 반영 갱신</p>
 </header>
 <main>
 
 <div class="ready-banner">
   <div class="ready-icon">✅</div>
   <div class="ready-text">
-    <h2>23개 체인 전체 완성</h2>
-    <p>CHAIN-018(T24)에 이어 갭 분석 기반 CHAIN-019(T25)·CHAIN-020(T26)·CHAIN-021(T27)·CHAIN-022(T28), 2순위 백로그 CHAIN-023(T29)·CHAIN-024(T30)·CHAIN-025(T31)·CHAIN-026(T32)까지 신규 등록됐으나, 2026-07-04 도메인 전문가 검수에서 CHAIN-006(T09)이 CHAIN-005(T05)의 순수 부분집합(중복 진단)으로 확인돼 폐지되었고, 이어서 CHAIN-025(T31)도 A9616 미보유 조건이 "특약 미가입 성인 전체"를 잡아내는 구조적 한계를 해소할 방법이 없다는 최종 결론에 따라 폐지되어, 최종 23개 체인이 Concept·Risk-type·Rule·Evidence·Policy 5종 카드를 갖췄습니다. Critical·Warning 없음.</p>
+    <h2>23개 체인 전체 완성 + N:N 다건 매칭 콘텐츠 반영</h2>
+    <p>CHAIN-018(T24)에 이어 갭 분석 기반 CHAIN-019(T25)·CHAIN-020(T26)·CHAIN-021(T27)·CHAIN-022(T28), 2순위 백로그 CHAIN-023(T29)·CHAIN-024(T30)·CHAIN-025(T31)·CHAIN-026(T32)까지 신규 등록됐으나, 2026-07-04 도메인 전문가 검수에서 CHAIN-006(T09)이 CHAIN-005(T05)의 순수 부분집합(중복 진단)으로 확인돼 폐지되었고, 이어서 CHAIN-025(T31)도 A9616 미보유 조건이 "특약 미가입 성인 전체"를 잡아내는 구조적 한계를 해소할 방법이 없다는 최종 결론에 따라 폐지되어, 최종 23개 체인이 Concept·Risk-type·Rule·Evidence·Policy 5종 카드를 갖췄습니다. <strong>2026-07-05:</strong> Concept↔Risk-type N:N 아키텍처(2026-06-21 확정)를 실제 컨텐츠에 반영 — CN-T02A(암보험)를 T18·T25·T29에도 연결, 신규 CN-HOSPALL(입원비보험 종합, T19·T24·T26·T30·T32)·CN-INJURYALL(상해보험 종합, T20·T22·T23)·CN-CAREALL(간병보험 종합, T05·T27)·CN-ALL(종합진단, 23개 전체) 4개 그룹 Concept 추가, Concept 24→28개. 기존 24개 단독 Concept은 전부 그대로 유지. 상세는 `contents/decisions.md` 참조. Critical·Warning 없음.</p>
   </div>
 </div>
 
 <div class="meta-row">
-  <span><strong>버전:</strong> chain-map v1.9 반영</span>
-  <span><strong>갱신일:</strong> 2026-07-04</span>
+  <span><strong>버전:</strong> chain-map v1.9 + N:N 반영</span>
+  <span><strong>갱신일:</strong> 2026-07-05</span>
   <span><strong>담당 에이전트:</strong> contents-review</span>
-  <span><strong>체인 수:</strong> 23개</span>
+  <span><strong>체인 수:</strong> 23개 (Risk-type 기준) · Concept 28개</span>
 </div>
 
 <div class="summary-grid">
   <div class="summary-card"><div class="summary-num num-blue">23</div><div class="summary-label">Risk-type</div></div>
   <div class="summary-card"><div class="summary-num num-blue">23</div><div class="summary-label">Rule</div></div>
   <div class="summary-card"><div class="summary-num num-blue">32</div><div class="summary-label">Evidence</div></div>
-  <div class="summary-card"><div class="summary-num num-blue">24</div><div class="summary-label">Concept</div></div>
+  <div class="summary-card"><div class="summary-num num-blue">28</div><div class="summary-label">Concept</div></div>
   <div class="summary-card"><div class="summary-num num-blue">23</div><div class="summary-label">Policy</div></div>
   <div class="summary-card"><div class="summary-num num-blue">12</div><div class="summary-label">Playbook</div></div>
   <div class="summary-card"><div class="summary-num num-green">23</div><div class="summary-label">완성 체인</div></div>
@@ -93,6 +93,45 @@ table.chain-table { width: 100%; border-collapse: collapse; background: #fff; bo
   <div class="summary-card"><div class="summary-num num-red">0</div><div class="summary-label">Critical</div></div>
   <div class="summary-card"><div class="summary-num num-green">0</div><div class="summary-label">Warning</div></div>
 </div>
+
+<div class="section-label" style="margin-top:0">N:N 다건 매칭 그룹 Concept · 4개 신규 (2026-07-05)</div>
+<table class="chain-table" style="margin-bottom:32px">
+  <thead>
+    <tr><th>Concept</th><th>용어명</th><th>연결 Risk-type (N)</th><th>비고</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><span class="id-chip id-chip-cn">CN-T02A</span></td>
+      <td>암보험 (기존 카드 확장)</td>
+      <td><div class="id-list"><span class="domain-tag">T02</span><span class="domain-tag">T18</span><span class="domain-tag">T25</span><span class="domain-tag">T29</span></div></td>
+      <td>4개 — 기존 CN-T02A(암진단금 부족형 전용)를 정의에 맞게 암 관련 4개 Risk-type 전체로 확장</td>
+    </tr>
+    <tr>
+      <td><span class="id-chip id-chip-cn">CN-HOSPALL</span></td>
+      <td>입원비보험 (신규)</td>
+      <td><div class="id-list"><span class="domain-tag">T19</span><span class="domain-tag">T24</span><span class="domain-tag">T26</span><span class="domain-tag">T30</span><span class="domain-tag">T32</span></div></td>
+      <td>5개 — 기존 협소 Concept(CN-T19·T24·T26·T30·T32)은 그대로 유지, 포괄 질의만 별도 카드로 분리</td>
+    </tr>
+    <tr>
+      <td><span class="id-chip id-chip-cn">CN-INJURYALL</span></td>
+      <td>상해보험 종합 (신규)</td>
+      <td><div class="id-list"><span class="domain-tag">T20</span><span class="domain-tag">T22</span><span class="domain-tag">T23</span></div></td>
+      <td>3개 — CN-T22(상해보험, 명칭은 포괄적이나 실제론 T22 전용) 확장 대신 별도 신규 카드로 분리</td>
+    </tr>
+    <tr>
+      <td><span class="id-chip id-chip-cn">CN-CAREALL</span></td>
+      <td>간병보험 종합 (신규)</td>
+      <td><div class="id-list"><span class="domain-tag">T05</span><span class="domain-tag">T27</span></div></td>
+      <td>2개 — CN-T05(간병보험, LTC 전용) 확장 대신 별도 신규 카드로 분리</td>
+    </tr>
+    <tr>
+      <td><span class="id-chip id-chip-cn">CN-ALL</span></td>
+      <td>종합진단 (신규)</td>
+      <td><div class="id-list"><span class="domain-tag">활성 23개 전체</span></div></td>
+      <td>23개 — "내 보험 전체 진단해줘" 트리거. T코드 신규/폐지 시 이 카드 risk_type_refs도 함께 갱신 필요</td>
+    </tr>
+  </tbody>
+</table>
 
 <div class="section-label">체인 전체 목록 · 23개 (chain-map.json v1.9 기준)</div>
 
@@ -107,7 +146,7 @@ table.chain-table { width: 100%; border-collapse: collapse; background: #fff; bo
       <td><strong>CHAIN-001</strong></td>
       <td><span class="domain-tag">건강보험</span></td>
       <td><strong>T01</strong> 무보장형</td>
-      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T01</span></div></td>
+      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T01</span><span class="id-chip id-chip-cn">CN-ALL</span></div></td>
       <td><span class="id-chip">RU-T01</span></td>
       <td><div class="id-list"><span class="id-chip id-chip-ev">EV016</span><span class="id-chip id-chip-ev">EV033</span></div></td>
       <td><div class="id-list"><span class="id-chip id-chip-po">PO-T01</span></div></td>
@@ -117,7 +156,7 @@ table.chain-table { width: 100%; border-collapse: collapse; background: #fff; bo
       <td><strong>CHAIN-002</strong></td>
       <td><span class="domain-tag">건강보험</span></td>
       <td><strong>T02</strong> 암진단금 부족형</td>
-      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T02A</span><span class="id-chip id-chip-cn">CN-T02B</span></div></td>
+      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T02A</span><span class="id-chip id-chip-cn">CN-T02B</span><span class="id-chip id-chip-cn">CN-ALL</span></div></td>
       <td><span class="id-chip">RU-T02</span></td>
       <td><div class="id-list"><span class="id-chip id-chip-ev">EV001</span><span class="id-chip id-chip-ev">EV002</span><span class="id-chip id-chip-ev">EV003</span><span class="id-chip id-chip-ev">EV030</span><span class="id-chip id-chip-ev">EV031</span></div></td>
       <td><div class="id-list"><span class="id-chip id-chip-po">PO-T02</span></div></td>
@@ -127,7 +166,7 @@ table.chain-table { width: 100%; border-collapse: collapse; background: #fff; bo
       <td><strong>CHAIN-003</strong></td>
       <td><span class="domain-tag">건강보험</span></td>
       <td><strong>T03</strong> 심혈관질환보장 협소형</td>
-      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T03</span></div></td>
+      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T03</span><span class="id-chip id-chip-cn">CN-ALL</span></div></td>
       <td><span class="id-chip">RU-T03</span></td>
       <td><div class="id-list"><span class="id-chip id-chip-ev">EV004</span></div></td>
       <td><div class="id-list"><span class="id-chip id-chip-po">PO-T03</span></div></td>
@@ -137,7 +176,7 @@ table.chain-table { width: 100%; border-collapse: collapse; background: #fff; bo
       <td><strong>CHAIN-004</strong></td>
       <td><span class="domain-tag">건강보험</span></td>
       <td><strong>T04</strong> 뇌혈관질환보장 협소형</td>
-      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T04</span></div></td>
+      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T04</span><span class="id-chip id-chip-cn">CN-ALL</span></div></td>
       <td><span class="id-chip">RU-T04</span></td>
       <td><div class="id-list"><span class="id-chip id-chip-ev">EV004</span><span class="id-chip id-chip-ev">EV005</span></div></td>
       <td><div class="id-list"><span class="id-chip id-chip-po">PO-T04</span></div></td>
@@ -147,7 +186,7 @@ table.chain-table { width: 100%; border-collapse: collapse; background: #fff; bo
       <td><strong>CHAIN-005</strong></td>
       <td><span class="domain-tag">건강보험</span></td>
       <td><strong>T05</strong> 노후돌봄보장 공백형</td>
-      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T05</span></div></td>
+      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T05</span><span class="id-chip id-chip-cn">CN-CAREALL</span><span class="id-chip id-chip-cn">CN-ALL</span></div></td>
       <td><span class="id-chip">RU-T05</span></td>
       <td><div class="id-list"><span class="id-chip id-chip-ev">EV006</span><span class="id-chip id-chip-ev">EV007</span><span class="id-chip id-chip-ev">EV008</span><span class="id-chip id-chip-ev">EV009</span></div></td>
       <td><div class="id-list"><span class="id-chip id-chip-po">PO-T05</span></div></td>
@@ -157,7 +196,7 @@ table.chain-table { width: 100%; border-collapse: collapse; background: #fff; bo
       <td><strong>CHAIN-007</strong></td>
       <td><span class="domain-tag">건강보험</span></td>
       <td><strong>T10</strong> 여성암보장 공백형</td>
-      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T10</span></div></td>
+      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T10</span><span class="id-chip id-chip-cn">CN-ALL</span></div></td>
       <td><span class="id-chip">RU-T10</span></td>
       <td><div class="id-list"><span class="id-chip id-chip-ev">EV021</span></div></td>
       <td><div class="id-list"><span class="id-chip id-chip-po">PO-T10</span></div></td>
@@ -167,7 +206,7 @@ table.chain-table { width: 100%; border-collapse: collapse; background: #fff; bo
       <td><strong>CHAIN-008</strong></td>
       <td><span class="domain-tag">생명보험</span></td>
       <td><strong>T11</strong> 사망보장 미비형</td>
-      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T11</span></div></td>
+      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T11</span><span class="id-chip id-chip-cn">CN-ALL</span></div></td>
       <td><span class="id-chip">RU-T11</span></td>
       <td><div class="id-list"><span class="id-chip id-chip-ev">EV011</span></div></td>
       <td><div class="id-list"><span class="id-chip id-chip-po">PO-T11</span></div></td>
@@ -177,7 +216,7 @@ table.chain-table { width: 100%; border-collapse: collapse; background: #fff; bo
       <td><strong>CHAIN-009</strong></td>
       <td><span class="domain-tag">특종</span></td>
       <td><strong>T14</strong> 운전자보험 미가입형</td>
-      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T14</span></div></td>
+      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T14</span><span class="id-chip id-chip-cn">CN-ALL</span></div></td>
       <td><span class="id-chip">RU-T14</span></td>
       <td><div class="id-list"><span class="id-chip id-chip-ev">EV015</span></div></td>
       <td><div class="id-list"><span class="id-chip id-chip-po">PO-T14</span></div></td>
@@ -187,7 +226,7 @@ table.chain-table { width: 100%; border-collapse: collapse; background: #fff; bo
       <td><strong>CHAIN-011</strong></td>
       <td><span class="domain-tag">건강보험</span></td>
       <td><strong>T17</strong> 치매진단보장 공백형</td>
-      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T17</span></div></td>
+      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T17</span><span class="id-chip id-chip-cn">CN-ALL</span></div></td>
       <td><span class="id-chip">RU-T17</span></td>
       <td><div class="id-list"><span class="id-chip id-chip-ev">EV022</span></div></td>
       <td><div class="id-list"><span class="id-chip id-chip-po">PO-T17</span></div></td>
@@ -197,7 +236,7 @@ table.chain-table { width: 100%; border-collapse: collapse; background: #fff; bo
       <td><strong>CHAIN-012</strong></td>
       <td><span class="domain-tag">건강보험</span></td>
       <td><strong>T18</strong> 항암치료비 미보장형</td>
-      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T18</span></div></td>
+      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T18</span><span class="id-chip id-chip-cn">CN-T02A</span><span class="id-chip id-chip-cn">CN-ALL</span></div></td>
       <td><span class="id-chip">RU-T18</span></td>
       <td><div class="id-list"><span class="id-chip id-chip-ev">EV023</span><span class="id-chip id-chip-ev">EV030</span></div></td>
       <td><div class="id-list"><span class="id-chip id-chip-po">PO-T18</span></div></td>
@@ -207,7 +246,7 @@ table.chain-table { width: 100%; border-collapse: collapse; background: #fff; bo
       <td><strong>CHAIN-013</strong></td>
       <td><span class="domain-tag">건강보험</span></td>
       <td><strong>T19</strong> 수술·입원 정액비 미보장형</td>
-      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T19</span></div></td>
+      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T19</span><span class="id-chip id-chip-cn">CN-HOSPALL</span><span class="id-chip id-chip-cn">CN-ALL</span></div></td>
       <td><span class="id-chip">RU-T19</span></td>
       <td><div class="id-list"><span class="id-chip id-chip-ev">EV024</span><span class="id-chip id-chip-ev">EV010</span><span class="id-chip id-chip-ev">EV033</span></div></td>
       <td><div class="id-list"><span class="id-chip id-chip-po">PO-T19</span></div></td>
@@ -217,7 +256,7 @@ table.chain-table { width: 100%; border-collapse: collapse; background: #fff; bo
       <td><strong>CHAIN-014</strong></td>
       <td><span class="domain-tag">상해</span></td>
       <td><strong>T20</strong> 후유장해보장 공백형</td>
-      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T20</span></div></td>
+      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T20</span><span class="id-chip id-chip-cn">CN-INJURYALL</span><span class="id-chip id-chip-cn">CN-ALL</span></div></td>
       <td><span class="id-chip">RU-T20</span></td>
       <td><div class="id-list"><span class="id-chip id-chip-ev">EV026</span></div></td>
       <td><div class="id-list"><span class="id-chip id-chip-po">PO-T20</span></div></td>
@@ -227,7 +266,7 @@ table.chain-table { width: 100%; border-collapse: collapse; background: #fff; bo
       <td><strong>CHAIN-015</strong></td>
       <td><span class="domain-tag">특종</span></td>
       <td><strong>T21</strong> 치과보장 공백형</td>
-      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T21</span></div></td>
+      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T21</span><span class="id-chip id-chip-cn">CN-ALL</span></div></td>
       <td><span class="id-chip">RU-T21</span></td>
       <td><div class="id-list"><span class="id-chip id-chip-ev">EV027</span></div></td>
       <td><div class="id-list"><span class="id-chip id-chip-po">PO-T21</span></div></td>
@@ -237,7 +276,7 @@ table.chain-table { width: 100%; border-collapse: collapse; background: #fff; bo
       <td><strong>CHAIN-016</strong></td>
       <td><span class="domain-tag">상해</span></td>
       <td><strong>T22</strong> 상해 특화 보장 공백형</td>
-      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T22</span></div></td>
+      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T22</span><span class="id-chip id-chip-cn">CN-INJURYALL</span><span class="id-chip id-chip-cn">CN-ALL</span></div></td>
       <td><span class="id-chip">RU-T22</span></td>
       <td><div class="id-list"><span class="id-chip id-chip-ev">EV028</span></div></td>
       <td><div class="id-list"><span class="id-chip id-chip-po">PO-T22</span></div></td>
@@ -247,7 +286,7 @@ table.chain-table { width: 100%; border-collapse: collapse; background: #fff; bo
       <td><strong>CHAIN-017</strong></td>
       <td><span class="domain-tag">상해</span></td>
       <td><strong>T23</strong> 골절·상해진단금 공백형</td>
-      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T23</span></div></td>
+      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T23</span><span class="id-chip id-chip-cn">CN-INJURYALL</span><span class="id-chip id-chip-cn">CN-ALL</span></div></td>
       <td><span class="id-chip">RU-T23</span></td>
       <td><div class="id-list"><span class="id-chip id-chip-ev">EV029</span></div></td>
       <td><div class="id-list"><span class="id-chip id-chip-po">PO-T23</span></div></td>
@@ -257,7 +296,7 @@ table.chain-table { width: 100%; border-collapse: collapse; background: #fff; bo
       <td><strong>CHAIN-018</strong></td>
       <td><span class="domain-tag">건강보험</span></td>
       <td><strong>T24</strong> 폐렴 입원보장 공백형 <span style="font-size:10px;font-weight:700;background:#D1FAE5;color:#065F46;border-radius:3px;padding:1px 6px;">신규</span></td>
-      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T24</span></div></td>
+      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T24</span><span class="id-chip id-chip-cn">CN-HOSPALL</span><span class="id-chip id-chip-cn">CN-ALL</span></div></td>
       <td><span class="id-chip">RU-T24</span></td>
       <td><div class="id-list"><span class="id-chip id-chip-ev">EV032</span></div></td>
       <td><div class="id-list"><span class="id-chip id-chip-po">PO-T24</span></div></td>
@@ -267,7 +306,7 @@ table.chain-table { width: 100%; border-collapse: collapse; background: #fff; bo
       <td><strong>CHAIN-019</strong></td>
       <td><span class="domain-tag">건강보험</span></td>
       <td><strong>T25</strong> 소액암 진단금 부족형 <span style="font-size:10px;font-weight:700;background:#D1FAE5;color:#065F46;border-radius:3px;padding:1px 6px;">신규</span></td>
-      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T25</span></div></td>
+      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T25</span><span class="id-chip id-chip-cn">CN-T02A</span><span class="id-chip id-chip-cn">CN-ALL</span></div></td>
       <td><span class="id-chip">RU-T25</span></td>
       <td><div class="id-list"><span class="id-chip id-chip-ev">EV034</span></div></td>
       <td><div class="id-list"><span class="id-chip id-chip-po">PO-T25</span></div></td>
@@ -277,7 +316,7 @@ table.chain-table { width: 100%; border-collapse: collapse; background: #fff; bo
       <td><strong>CHAIN-020</strong></td>
       <td><span class="domain-tag">건강보험</span></td>
       <td><strong>T26</strong> 통원치료비 미보장형 <span style="font-size:10px;font-weight:700;background:#D1FAE5;color:#065F46;border-radius:3px;padding:1px 6px;">신규</span></td>
-      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T26</span></div></td>
+      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T26</span><span class="id-chip id-chip-cn">CN-HOSPALL</span><span class="id-chip id-chip-cn">CN-ALL</span></div></td>
       <td><span class="id-chip">RU-T26</span></td>
       <td><div class="id-list"><span class="id-chip id-chip-ev">EV035</span></div></td>
       <td><div class="id-list"><span class="id-chip id-chip-po">PO-T26</span></div></td>
@@ -287,7 +326,7 @@ table.chain-table { width: 100%; border-collapse: collapse; background: #fff; bo
       <td><strong>CHAIN-021</strong></td>
       <td><span class="domain-tag">건강보험</span></td>
       <td><strong>T27</strong> 간병 지원 공백형 <span style="font-size:10px;font-weight:700;background:#D1FAE5;color:#065F46;border-radius:3px;padding:1px 6px;">신규</span></td>
-      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T27</span></div></td>
+      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T27</span><span class="id-chip id-chip-cn">CN-CAREALL</span><span class="id-chip id-chip-cn">CN-ALL</span></div></td>
       <td><span class="id-chip">RU-T27</span></td>
       <td><div class="id-list"><span class="id-chip id-chip-ev">EV036</span></div></td>
       <td><div class="id-list"><span class="id-chip id-chip-po">PO-T27</span></div></td>
@@ -297,7 +336,7 @@ table.chain-table { width: 100%; border-collapse: collapse; background: #fff; bo
       <td><strong>CHAIN-022</strong></td>
       <td><span class="domain-tag">건강보험</span></td>
       <td><strong>T28</strong> 인공관절수술 미보장형 <span style="font-size:10px;font-weight:700;background:#D1FAE5;color:#065F46;border-radius:3px;padding:1px 6px;">신규</span></td>
-      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T28</span></div></td>
+      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T28</span><span class="id-chip id-chip-cn">CN-ALL</span></div></td>
       <td><span class="id-chip">RU-T28</span></td>
       <td><div class="id-list"><span class="id-chip id-chip-ev">EV037</span></div></td>
       <td><div class="id-list"><span class="id-chip id-chip-po">PO-T28</span></div></td>
@@ -307,7 +346,7 @@ table.chain-table { width: 100%; border-collapse: collapse; background: #fff; bo
       <td><strong>CHAIN-023</strong></td>
       <td><span class="domain-tag">건강보험</span></td>
       <td><strong>T29</strong> 암요양병원 장기입원 미보장형 <span style="font-size:10px;font-weight:700;background:#D1FAE5;color:#065F46;border-radius:3px;padding:1px 6px;">신규</span></td>
-      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T29</span></div></td>
+      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T29</span><span class="id-chip id-chip-cn">CN-T02A</span><span class="id-chip id-chip-cn">CN-ALL</span></div></td>
       <td><span class="id-chip">RU-T29</span></td>
       <td><div class="id-list"><span class="id-chip id-chip-ev">EV038</span></div></td>
       <td><div class="id-list"><span class="id-chip id-chip-po">PO-T29</span></div></td>
@@ -317,7 +356,7 @@ table.chain-table { width: 100%; border-collapse: collapse; background: #fff; bo
       <td><strong>CHAIN-024</strong></td>
       <td><span class="domain-tag">건강보험</span></td>
       <td><strong>T30</strong> 중환자실입원일당 미보장형 <span style="font-size:10px;font-weight:700;background:#D1FAE5;color:#065F46;border-radius:3px;padding:1px 6px;">신규</span></td>
-      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T30</span></div></td>
+      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T30</span><span class="id-chip id-chip-cn">CN-HOSPALL</span><span class="id-chip id-chip-cn">CN-ALL</span></div></td>
       <td><span class="id-chip">RU-T30</span></td>
       <td><div class="id-list"><span class="id-chip id-chip-ev">EV039</span></div></td>
       <td><div class="id-list"><span class="id-chip id-chip-po">PO-T30</span></div></td>
@@ -327,7 +366,7 @@ table.chain-table { width: 100%; border-collapse: collapse; background: #fff; bo
       <td><strong>CHAIN-026</strong></td>
       <td><span class="domain-tag">건강보험</span></td>
       <td><strong>T32</strong> 장기입원비 미보장형 <span style="font-size:10px;font-weight:700;background:#D1FAE5;color:#065F46;border-radius:3px;padding:1px 6px;">신규</span></td>
-      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T32</span></div></td>
+      <td><div class="id-list"><span class="id-chip id-chip-cn">CN-T32</span><span class="id-chip id-chip-cn">CN-HOSPALL</span><span class="id-chip id-chip-cn">CN-ALL</span></div></td>
       <td><span class="id-chip">RU-T32</span></td>
       <td><div class="id-list"><span class="id-chip id-chip-ev">EV041</span></div></td>
       <td><div class="id-list"><span class="id-chip id-chip-po">PO-T32</span></div></td>

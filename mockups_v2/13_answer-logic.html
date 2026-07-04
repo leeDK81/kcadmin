@@ -417,42 +417,55 @@
 
   <!-- 다건 매칭 시 답변 처리 -->
   <div class="section">
-    <div class="section-title"><i class="fa-solid fa-list-check fa-fw" style="color:var(--card-risk)"></i> 다건 매칭 시 답변 처리 — 요약형 vs 단건 심층형 <span style="font-size:12px;font-weight:400;color:var(--text-hint);margin-left:8px">2026-07-05 확정</span></div>
+    <div class="section-title"><i class="fa-solid fa-list-check fa-fw" style="color:var(--card-risk)"></i> 매칭 시 답변 처리 — 카드 우선 UI로 통일 <span style="font-size:12px;font-weight:400;color:var(--text-hint);margin-left:8px">2026-07-05 확정, N=1도 카드로 통일</span></div>
     <p style="font-size:14px;color:var(--text-secondary);margin-bottom:14px">
-      Case 1·2는 매칭된 Risk-type이 <strong>1개</strong>일 때의 포맷이다. Concept↔Risk-type는 N:N이라 하나의 발화로 여러 Risk-type이 동시에 매칭될 수 있는데(예: "암보험 괜찮나요?" → 암 도메인 내 여러 유형), 지금까지는 이 경우의 답변 포맷이 정의돼 있지 않았다.
+      Case 1·2는 원래 매칭된 Risk-type이 <strong>1개</strong>일 때의 포맷이었다. Concept↔Risk-type의 N:N은 <strong>2026-06-21부터 이미 확정된 아키텍처</strong>이며 새로 설계할 능력이 아니다 — 다만 실제로 N개가 매칭되면 답변을 어떻게 보여줄지는 지금까지 정의가 없었다.
     </p>
+    <div class="note-box" style="margin-bottom:14px;background:#FFF3CD">
+      <strong>⚠ 실제 컨텐츠 현황(2026-07-05 확인):</strong> 현재 등록된 Concept 24개는 <strong>전부 Risk-type 1개에만 연결</strong>돼 있다(`contents/07_connections/chain-map.json` 확인). 즉 아래는 새 기능 제안이 아니라, <strong>이미 있는 N:N 아키텍처를 컨텐츠가 아직 활용하지 않고 있는 갭</strong>을 메우는 작업이다.
+    </div>
+    <div class="note-box" style="margin-bottom:14px">
+      <strong>N=1이어도 항상 카드 우선(2026-07-05 확정):</strong> 처음엔 "N≥2일 때만 요약 카드, N=1이면 바로 심층 답변"이었다. 하지만 N에 따라 응답 형태가 갈리면 개발 쪽 분기 로직이 늘어난다. 그래서 <strong>N과 무관하게 항상 결과 카드 방식으로 통일</strong>한다 — 1개든 23개든 "말풍선 + 결과 카드(1장 이상) + 카드 탭 → 심층 답변"으로 동일하게 처리. 사용자는 탭 한 번을 더 하지만, 개발은 "N개수에 따른 조건 분기"가 아예 없어진다.
+    </div>
     <table class="spec-table" style="margin-bottom:14px">
-      <thead><tr><th style="width:160px">경로</th><th>예시</th><th style="width:140px">매칭 규모(N)</th></tr></thead>
+      <thead><tr><th style="width:140px">경로</th><th>예시</th><th style="width:140px">매칭 규모(N)</th></tr></thead>
       <tbody>
-        <tr><td><strong>경로 A — 토픽형 다건 매칭</strong></td><td>"암보험 괜찮나요?" → 암 도메인 안에서 T02·T18·T25·T29 등 동시 충족</td><td>보통 2~4개</td></tr>
-        <tr><td><strong>경로 B — 전체 진단 트리거</strong></td><td>"내 보험 전체 진단해줘"</td><td>최대 23개(활성 Risk-type 전체)</td></tr>
+        <tr><td><strong>단일 매칭</strong></td><td>단독 주제 Concept(예: 무보장형)</td><td>1개</td></tr>
+        <tr><td><strong>토픽형 다건 매칭</strong></td><td>"암보험 괜찮나요?" → 암보험 Concept이 T02·T18·T25·T29 전부에 연결</td><td>보통 2~5개</td></tr>
+        <tr><td><strong>종합진단 트리거</strong></td><td>"내 보험 전체 진단해줘" → risk_type_refs=활성 23개 전체 연결한 Concept 1장</td><td>최대 23개(활성 Risk-type 전체)</td></tr>
       </tbody>
     </table>
     <div class="note-box" style="margin-bottom:14px">
-      두 경로는 사용자 의도는 다르지만 <strong>답변 처리 메커니즘은 동일</strong>하다 — "매칭된 Risk-type이 N개일 때 어떻게 보여줄지"라는 같은 문제이며 차이는 N의 규모뿐이다. 별도 매칭 엔진이나 새 카드 타입은 만들지 않는다.<br><br>
-      <strong>경로 B(전체 진단)는 신규 엔지니어링 없이 처리 가능:</strong> 활성 Risk-type 23개 전부를 <code style="background:#FFF0D0;padding:1px 5px;border-radius:3px;font-size:12px">risk_type_refs</code>로 연결한 전용 Concept 카드 1장(가칭 <code style="background:#FFF0D0;padding:1px 5px;border-radius:3px;font-size:12px">CN-ALL</code>, 동의어: "전체 진단해줘"·"전체적으로 봐줘"·"다 점검해줘" 등)을 등록하면 기존 N:N 구조 그대로 처리된다.
+      셋은 사용자 의도는 다르지만 <strong>답변 처리 메커니즘은 완전히 동일</strong>하다 — "매칭된 Risk-type이 N개일 때 카드로 보여주고 탭하면 심층 답변"이라는 하나의 로직이며 차이는 N의 규모뿐이다. 별도 매칭 엔진이나 새 카드 타입은 만들지 않는다. "종합진단"도 예외적인 신규 카드 타입이 아니라 동일한 N:N 메커니즘을 규모만 크게(23개) 적용한 것뿐이다.
     </div>
 
-    <div class="section-sub">요약형 포맷 (N ≥ 2일 때)</div>
-    <p style="font-size:14px;color:var(--text-secondary);margin-bottom:10px">Case 1·2의 심층 포맷(진단 선언+이유+Evidence 인용+면책+CTA)을 N개 전부에 반복하지 않는다 — 채팅 버블 하나에 담기엔 너무 길다.</p>
+    <div class="section-sub">UI 구현 방식 — 텍스트 나열이 아니라 탭 가능한 결과 카드 (N=1 포함 전부 동일)</div>
+    <p style="font-size:14px;color:var(--text-secondary);margin-bottom:10px">Clark은 모바일 웹 채팅 앱이므로 N개 항목을 말풍선 하나에 텍스트로 나열하는 건 실제 구현 가능한 UI가 아니다. 채팅 UI에 흔한 <strong>"메시지 + 리스트 템플릿(첨부 카드)"</strong> 패턴을 N=1 포함 모든 경우에 동일하게 따른다.</p>
     <table class="spec-table">
       <thead><tr><th style="width:50px">순서</th><th style="width:160px">구성 요소</th><th>내용</th></tr></thead>
       <tbody>
-        <tr><td>1</td><td>한 줄 총평</td><td>"고객님은 총 N개의 보장 공백이 확인돼요" (경로 A는 도메인 단서 포함 — "암 관련해서 총 N개...")</td></tr>
-        <tr><td>2</td><td>도메인 그룹핑</td><td>N이 크거나 도메인이 섞일 때만(경로 B). Risk-type의 도메인 분류(건강보험/생명보험/상해/특종) 기준. 이미 한 도메인 안(경로 A)이면 생략</td></tr>
-        <tr><td>3</td><td>항목별 1줄</td><td>위험유형명 + 매우 짧은 공백 요약 1줄. Evidence 인용·상세 근거는 넣지 않음. 내부 "중요도" 라벨은 그대로 노출하지 않고 <strong>정렬 순서로만</strong> 반영</td></tr>
-        <tr><td>4</td><td>정렬 기준</td><td>기존 "다중 Risk-type 감지 우선순위"(1순위 중요도, 2순위 선택조건 충족 개수, 3순위 최근 배포순)를 그대로 재사용 — 용도만 "1개 선택"에서 "N개 나열 순서"로 확장</td></tr>
-        <tr><td>5</td><td>PROMAGE 매칭 표시</td><td>선택조건(프롬에이지) 매칭 시 문장 전체를 넣지 않고 짧은 단서만 표시. 전체 설명은 상세형(2단계)에서 노출</td></tr>
-        <tr><td>6</td><td>닫음</td><td>"궁금한 항목을 말씀해주시면 자세히 설명해드릴게요" + CTA(경로 B: "보닥 플래너와 전체 보장 점검하기" / 경로 A: 해당 도메인 CTA)</td></tr>
+        <tr><td>1</td><td>말풍선</td><td>한 줄 총평(N=1이면 "고객님은 [위험유형명]에 해당하는 것 같아요" 정도로 축약 가능) + "아래 항목을 눌러보시면 자세히 안내해드려요" 짧은 안내만. Evidence·근거는 넣지 않음</td></tr>
+        <tr><td>2</td><td>결과 카드 (말풍선 밖)</td><td>항목별 탭 가능한 카드 1장씩 — 위험유형명 + 매우 짧은 공백 요약 1줄 + 화살표. N=1이어도 카드 1장으로 동일 렌더링. 진단 선언·근거 문장은 카드에 넣지 않음</td></tr>
+        <tr><td>3</td><td>도메인 그룹핑 없음</td><td>건강보험/생명보험/상해/특종 그룹 타이틀을 넣지 않는다. N이 아무리 커도(종합진단 최대 23개) 카드를 평평하게(flat) 나열 — UI 일관성 우선</td></tr>
+        <tr><td>4</td><td>정렬 기준</td><td>기존 "다중 Risk-type 감지 우선순위"(1순위 중요도, 2순위 선택조건 충족 개수, 3순위 최근 배포순)를 그대로 재사용 — 용도는 "카드 나열 순서". "중요도" 라벨 텍스트 자체는 카드에 노출 안 함</td></tr>
+        <tr><td>5</td><td>PROMAGE 매칭 표시</td><td>선택조건(프롬에이지) 매칭 시 문장 전체를 넣지 않고 카드에 짧은 배지만 표시(예: "⚠️건강정보 매칭"). 전체 설명은 카드를 탭했을 때(상세형)에서 노출</td></tr>
+        <tr><td>6</td><td>CTA</td><td>카드 리스트 아래 기존과 동일한 CTA 버튼</td></tr>
       </tbody>
     </table>
+    <p style="font-size:13px;color:var(--text-hint);margin-top:8px">실제 UI 예시는 <code style="background:#FFF0D0;padding:1px 5px;border-radius:3px;font-size:12px">contents/html/08_ai-preview.html</code> 참조 (2026-07-05: 페이지 전체를 이 카드 우선 패턴으로 Concept/발화 단위 재구성 예정, N=1 포함).</p>
 
-    <div class="section-sub">상세형 포맷 — 요약 다음 턴</div>
-    <p style="font-size:14px;color:var(--text-secondary);margin-bottom:10px">사용자가 요약 리스트 중 하나를 지목하면("암진단금 부족형 자세히 알려줘" 등), 그 Risk-type 하나에 대해 <strong>기존 Case 1·2 심층 포맷을 그대로 사용</strong>한다. 새 포맷을 만들지 않는다 — <code style="background:#FFF0D0;padding:1px 5px;border-radius:3px;font-size:12px">contents/html/08_ai-preview.html</code>의 기존 23개 체인 답변이 이 상세형의 실제 예시다.</p>
+    <div class="section-sub">상세형 포맷 — 카드 탭 다음 턴</div>
+    <p style="font-size:14px;color:var(--text-secondary);margin-bottom:10px">사용자가 결과 카드 하나를 탭하면(또는 "암진단금 부족형 자세히 알려줘"처럼 직접 지목하면), 그 Risk-type 하나에 대해 <strong>기존 Case 1·2 심층 포맷을 그대로 사용</strong>한다. 새 포맷을 만들지 않는다 — <code style="background:#FFF0D0;padding:1px 5px;border-radius:3px;font-size:12px">contents/html/08_ai-preview.html</code>의 기존 23개 체인 답변이 이 상세형의 실제 예시다.</p>
+
+    <div class="note-box" style="margin-bottom:14px">
+      <strong>같은 채팅 스레드 유지 — 새 페이지 열지 않음:</strong> Clark은 모바일 웹 "채팅" 앱이다. 카드 탭은 사용자가 그 항목명을 타이핑한 것과 동일하게 처리되며, 새 페이지·새 화면으로 이동하지 않고 <strong>같은 채팅창 안에 새 말풍선으로 이어진다</strong>(요약 카드 화면은 위로 스크롤되며 그대로 남아있음). 카카오톡 플러스친구·은행 챗봇에서 카드를 탭했을 때 같은 대화창에 메시지가 이어지는 것과 동일한 문법 — 페이지 네비게이션을 쓰면 "챗봇과 대화한다"는 느낌이 깨진다.<br><br>
+      <strong>CTA는 턴마다 독립 결정(additive):</strong> 요약 카드 턴과 카드 탭 이후 턴은 서로 다른 발화이므로, 각 턴마다 Concept·Playbook 매칭이 독립적으로 실행된다. 요약 카드 턴의 CTA가 다음 턴에 자동으로 이어지는 게 아니라, 카드 탭 이후 턴에서 Playbook이 (같거나 다르게) 감지되면 그 턴만의 CTA가 별도로 붙는다 — 한 대화에 서로 다른 CTA가 두 번 나오는 건 중복이 아니라 기존 Case 1~4 로직이 턴마다 그대로 적용된 결과다.
+    </div>
 
     <div class="note-box">
-      <strong>N = 0 처리:</strong> 경로 B에서 23개 Rule을 전부 평가했는데 하나도 충족하지 않으면 "특별한 보장 공백이 확인되지 않아요. 잘 준비하고 계세요!" 류의 안심 메시지로 응답한다 — 빈 리스트를 어색하게 보여주지 않는다.<br><br>
-      <strong>미결:</strong> ① CN-ALL 카드 실제 저작(컨텐츠 트랙) ② 요약형 UI 목업(`08_ai-preview.html`에 경로 A·B 예시 추가 검토) ③ PROMAGE 선택조건 "짧은 표시" 형태(아이콘 vs 텍스트, UI 디자이너 확인 필요). 상세는 <code style="background:#FFF0D0;padding:1px 5px;border-radius:3px;font-size:12px">context/answer-logic.md</code> "다건 매칭 시 답변 처리" 참조.
+      <strong>N = 0 처리:</strong> 경로 B에서 23개 Rule을 전부 평가했는데 하나도 충족하지 않으면 결과 카드 없이 "특별한 보장 공백이 확인되지 않아요. 잘 준비하고 계세요!" 류의 안심 메시지로 응답한다.<br><br>
+      <strong>완료(2026-07-05):</strong> Concept 카드 실제 저작(CN-T02A 확장 + CN-HOSPALL·CN-INJURYALL·CN-CAREALL·CN-ALL 신규, `contents/04_concept/concepts.md`·`chain-map.json`), `contents/html/08_ai-preview.html` 전체를 카드 우선 UI로 재구성 완료(그룹 5개 + 단독 23개).<br>
+      <strong>미결:</strong> ① 결과 카드 컴포넌트 실장(mockups_v2 서비스 트랙 — 현재는 08_ai-preview.html의 정적 목업만 존재) ② PROMAGE 선택조건 배지 형태(아이콘 vs 텍스트, UI 디자이너 확인 필요). 상세는 <code style="background:#FFF0D0;padding:1px 5px;border-radius:3px;font-size:12px">context/answer-logic.md</code> "다건 매칭 시 답변 처리" 참조.
     </div>
   </div>
 

@@ -87,15 +87,16 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
 .app-msg-clark { background: #fff; padding: 12px 14px; border-radius: 4px 16px 16px 16px; font-size: 13.5px; line-height: 1.7; color: #1A1A2E; max-width: 84%; box-shadow: 0 1px 2px rgba(0,0,0,.06); }
 .app-msg-clark p { margin-bottom: 8px; }
 .app-msg-clark p:last-of-type { margin-bottom: 0; }
-.summary-list { margin: 4px 0 10px; }
-.summary-group { margin-bottom: 10px; }
-.summary-group:last-child { margin-bottom: 0; }
-.summary-group-title { font-size: 11.5px; font-weight: 700; color: #6B7280; margin-bottom: 4px; }
-.summary-item { display: flex; justify-content: space-between; gap: 8px; padding: 6px 8px; background: #F8FAFC; border-radius: 6px; margin-bottom: 4px; font-size: 12.5px; }
-.summary-item:last-child { margin-bottom: 0; }
-.summary-item-name { font-weight: 600; color: #1A1A2E; }
-.summary-item-desc { color: #6B7280; text-align: right; flex-shrink: 0; }
-.summary-item-flag { color: #B45309; font-size: 11px; margin-left: 4px; }
+.app-result-cards { margin: 2px 0 4px 34px; display: flex; flex-direction: column; gap: 6px; max-width: 84%; }
+.app-result-group-title { font-size: 11px; font-weight: 700; color: #6B7280; margin: 8px 0 1px; }
+.app-result-group-title:first-child { margin-top: 2px; }
+.app-result-card { display: flex; align-items: center; justify-content: space-between; gap: 10px; background: #fff; border: 1px solid #E5E9F0; border-radius: 12px; padding: 10px 12px; box-shadow: 0 1px 2px rgba(0,0,0,.05); }
+.app-result-card-main { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.app-result-card-name { font-size: 12.5px; font-weight: 700; color: #1A1A2E; }
+.app-result-card-desc { font-size: 11px; color: #6B7280; }
+.app-result-card-flag { color: #B45309; font-size: 10.5px; font-weight: 600; margin-left: 5px; }
+.app-result-card-chevron { color: #C4C9D4; font-size: 16px; flex-shrink: 0; }
+.app-tap-divider { text-align: center; font-size: 10.5px; color: #9CA3AF; margin: 14px 0 8px; }
 .app-msg-clark .disclaimer { font-size: 10.5px; color: #9CA3AF; margin-top: 10px; padding-top: 8px; border-top: 1px solid #F0F0F5; line-height: 1.5; }
 .app-msg-clark-time { font-size: 10px; color: #9CA3AF; margin: 3px 0 0 34px; }
 .app-cta-row { margin: 8px 0 4px 34px; }
@@ -109,39 +110,38 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
 <body>
 <header>
   <h1>AI 답변 미리보기</h1>
-  <p>Clark AI 채팅 상담 시나리오 · 23개 체인 (v2 재설계, chain-map v1.9 기준, 2026-07-04 도메인 전문가 검수 반영) · 마이데이터 가상 응답 기반</p>
+  <p>Clark AI 채팅 상담 시나리오 · Concept 28개(그룹 5 + 단독 23), Risk-type 23개 체인 (v2 재설계, chain-map v1.9 + N:N 반영, 2026-07-05 카드 우선 UI 통일) · 마이데이터 가상 응답 기반</p>
 </header>
 <main>
-<div class="section-label">체인별 Clark AI 채팅 시나리오 · 23개</div>
+<div class="section-label">Clark AI 채팅 상담 시나리오 · 카드 우선 UI로 통일 (2026-07-05)</div>
 <div class="info-banner">
-  사용자 질의 → Concept 카드 감지 → Risk-type 선정 → Rule 조건 확인 → Clark AI 답변 흐름을 시뮬레이션합니다.<br>
-  <strong>발화 예시</strong>는 Concept 카드 트리거 조건이며, <strong>채팅 화면</strong>은 Rule 조건 충족 시 실제 앱에 표시되는 답변 형태입니다. 클릭하면 펼쳐집니다.
+  사용자 질의 → Concept 카드 감지 → Risk-type 선정(N개) → Rule 조건 확인 → Clark AI 답변 흐름을 시뮬레이션합니다.<br>
+  <strong>발화 예시</strong>는 Concept 카드 트리거 조건이며, <strong>채팅 화면</strong>은 Rule 조건 충족 시 실제 앱에 표시되는 답변 형태입니다. N=1이든 N=23이든 항상 "말풍선 + 결과 카드 → 탭 → 심층 답변"으로 동일하게 처리합니다(도메인 그룹핑 없음, UI 일관성 우선). 클릭하면 펼쳐집니다.
 </div>
 
-<div class="section-label">다건 매칭 시 답변 예시 · 개념 검증용 (2026-07-05 신규)</div>
-<div class="info-banner" style="background:#FFF9EC;border-color:#F0D880;color:#7A5A00;">
-  Concept↔Risk-type는 N:N이라 하나의 발화로 여러 Risk-type이 동시에 매칭될 수 있습니다. 아래 2개는 <strong>아직 등록되지 않은 카드(CN-ALL 등)를 가정한 개념 검증용 예시</strong>이며, 나머지 23개 체인과 달리 실제 라이브 카드 기반이 아닙니다. 정책 상세는 <code style="background:#F5E8A0;padding:1px 5px;border-radius:3px;font-size:12px">context/answer-logic.md</code> "다건 매칭 시 답변 처리" 참조.
+<div class="section-label">N:N 다건 매칭 Concept · 5개 (2026-07-05 실제 저작)</div>
+<div class="info-banner" style="background:#EFF6FF;border-color:#BFDBFE;color:#1E40AF;">
+  Concept↔Risk-type N:N 아키텍처(2026-06-21 확정)를 실제 컨텐츠에 반영한 5개 그룹 Concept입니다. <code style="background:#DCEAFB;padding:1px 5px;border-radius:3px;font-size:12px">contents/04_concept/concepts.md</code>·<code style="background:#DCEAFB;padding:1px 5px;border-radius:3px;font-size:12px">contents/07_connections/chain-map.json</code>에 실제 등록됐습니다. 각 카드 탭 시 이어지는 심층 답변은 기존 개별 Risk-type 체인의 내용을 그대로 재사용합니다(하단 "단독 매칭 Concept" 섹션 참조).
 </div>
 <div class="acc-wrap">
 
-  <!-- 예시: 경로 A 토픽형 다건 매칭 -->
+  <!-- CN-T02A 암보험 (N:N 그룹) -->
   <div class="acc-item">
     <button class="acc-header">
-      <span class="t-badge" style="background:#B45309;">예시 A</span>
-      <span class="acc-title">토픽형 다건 매칭 — "암보험 괜찮나요?"</span>
+      <span class="t-badge" style="background:#1A4A9A;">CN-T02A</span>
+      <span class="acc-title">암보험 — "암보험 괜찮나요?"</span>
       <span class="domain-tag">건강보험 · 4건 동시 매칭</span>
       <span class="acc-arrow">⌄</span>
     </button>
     <div class="acc-body">
       <div class="acc-inner">
         <div class="acc-block trigger-block">
-          <div class="acc-block-label">발화 예시 — Concept 카드 감지 (개념 검증)</div>
+          <div class="acc-block-label">발화 예시 — Concept 카드 감지</div>
           <div class="utterance"><span>"암보험 괜찮나요?"</span><span>"암 관련 보장 전체적으로 봐줘"</span></div>
-          <div class="chain-path">CN-T02A/CN-T02B(기존 등록) → 동시 충족: T02(암진단금 부족형)·T18(항암치료비 미보장형)·T25(소액암 진단금 부족형)·T29(암요양병원 장기입원 미보장형) → 요약형 포맷 적용</div>
-          <div style="font-size:11px;color:#B45309;margin-top:6px;">⚠️ "암보험 괜찮나요?"가 4개 Risk-type을 동시 트리거하는 것은 각 Concept의 실제 risk_type_refs 설정에 따라 달라지며, 현재 CN-T02A/B는 T02 1개만 연결돼 있어 이 예시는 향후 확장을 가정한 시나리오입니다.</div>
+          <div class="chain-path">CN-T02A(암보험) → T02(암진단금 부족형)·T18(항암치료비 미보장형)·T25(소액암 진단금 부족형)·T29(암요양병원 장기입원 미보장형) 4개 동시 평가 → 4건 필수조건 충족</div>
         </div>
         <div class="acc-block" style="background:transparent;padding:0;">
-          <div class="acc-block-label" style="padding-left:2px;">Clark 모바일 웹 실제 화면 — 요약형 (도메인 그룹핑 생략, 한 도메인 안)</div>
+          <div class="acc-block-label" style="padding-left:2px;">Clark 모바일 웹 실제 화면 — 카드 리스트 → 탭 이후 (같은 채팅 스레드)</div>
           <div class="phone-mockup-wrap">
             <div class="phone-frame">
               <div class="phone-screen">
@@ -162,20 +162,48 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
                   <div class="app-msg-clark-row">
                     <div class="app-avatar">🤖</div>
                     <div class="app-msg-clark">
-                      <p>암 관련해서 총 4개의 보장 공백이 확인돼요.</p>
-                      <div class="summary-list">
-                        <div class="summary-group">
-                          <div class="summary-item"><span class="summary-item-name">암진단금 부족형</span><span class="summary-item-desc">진단금 2,000만 원 · 부족</span></div>
-                          <div class="summary-item"><span class="summary-item-name">항암치료비 미보장형</span><span class="summary-item-desc">치료 단계 비용 공백</span></div>
-                          <div class="summary-item"><span class="summary-item-name">소액암 진단금 부족형<span class="summary-item-flag">⚠️건강정보 매칭</span></span><span class="summary-item-desc">갑상선암 등 저보장</span></div>
-                          <div class="summary-item"><span class="summary-item-name">암요양병원 장기입원 미보장형</span><span class="summary-item-desc">회복기 입원 공백</span></div>
-                        </div>
-                      </div>
-                      <p>궁금한 항목을 말씀해주시면 자세히 설명해드릴게요.</p>
-                      <div class="disclaimer">이 분석은 마이데이터 기반 보험 가입 현황을 활용한 요약 진단 결과예요. 항목별 상세 근거·수치는 개별 질문 시 안내돼요.</div>
+                      <p>암 관련해서 총 4개의 보장 공백이 확인돼요. 아래 항목을 눌러보시면 자세히 안내해드려요.</p>
+                      <div class="disclaimer">이 분석은 마이데이터 기반 보험 가입 현황을 활용한 요약 진단 결과예요. 항목별 상세 근거·수치는 눌러서 확인할 수 있어요.</div>
+                    </div>
+                  </div>
+                  <div class="app-result-cards">
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">암진단금 부족형</span><span class="app-result-card-desc">진단금 2,000만 원 · 부족</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">항암치료비 미보장형</span><span class="app-result-card-desc">치료 단계 비용 공백</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">소액암 진단금 부족형<span class="app-result-card-flag">⚠️건강정보 매칭</span></span><span class="app-result-card-desc">갑상선암 등 저보장</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">암요양병원 장기입원 미보장형</span><span class="app-result-card-desc">회복기 입원 공백</span></div>
+                      <span class="app-result-card-chevron">›</span>
                     </div>
                   </div>
                   <div class="app-msg-clark-time">오후 2:14</div>
+                  <div class="app-cta-row">
+                    <span class="app-cta-chip">📋 보닥 플래너와 암보험 점검하기</span>
+                  </div>
+                  <div class="app-tap-divider">— 사용자가 "소액암 진단금 부족형" 카드 탭 (같은 채팅창에서 계속) —</div>
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">소액암 진단금 부족형 자세히 알려줘</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 2:15</div>
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>고객님은 <strong>소액암 진단금 부족형</strong>에 해당하는 상태예요.</p>
+                      <p>암진단금은 가입돼 있지만, 갑상선암처럼 상대적으로 가벼운 것으로 분류되는 소액암은 진단금이 훨씬 낮게 설계돼 있는 경우가 많은데, 프롬에이지로 연동하신 건강정보를 보니 <strong>갑상선암 위험도가 '위험' 등급</strong>으로 확인돼요.</p>
+                      <p>국립암센터 2023년 통계 기준 갑상선암은 국내에서 가장 많이 발생하는 암종으로 유병자가 58만 명을 넘는데, 소액암 진단금은 업계 관행상 일반암 대비 약 20% 수준으로 설계돼요. 최근에는 로봇수술 등 비급여 치료가 늘면서 평균 1,000만 원이 넘는 자부담이 발생할 수 있어, 소액암 진단금만으로는 실제 치료비를 감당하기 어려울 수 있어요.</p>
+                      <p>위험 등급으로 확인된 만큼, 이 부분은 더 미루지 말고 점검해보시는 걸 권해드려요.</p>
+                      <div class="disclaimer">이 분석은 마이데이터·프롬에이지 기반 보험 가입 현황 및 건강 위험도를 활용한 소액암 보장 진단 결과예요. 프롬에이지 위험도는 의학적 진단이 아닌 참고 지표이며, "일반암 대비 20%"는 법적 강제 기준이 아니라 금융당국 행정지도 이후 업계가 자율적으로 맞춘 결과이며 상품마다 다를 수 있어요. 정확한 보장 범위는 가입 보험사 약관 또는 보닥 플래너에게 확인해보세요.</div>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:15</div>
                   <div class="app-cta-row">
                     <span class="app-cta-chip">📋 보닥 플래너와 암보험 점검하기</span>
                   </div>
@@ -187,30 +215,308 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
               </div>
             </div>
           </div>
-          <div class="proto-note">※ 항목별 상세(진단선언+근거+Evidence+면책)는 사용자가 "소액암 진단금 부족형 자세히"처럼 개별 지목 시, 기존 T25 체인과 동일한 단건 심층 포맷으로 전환됩니다.</div>
+          <div class="proto-note">※ 카드 탭은 사용자가 "소액암 진단금 부족형 자세히 알려줘"라고 타이핑한 것과 동일하게 처리되며, 새 페이지를 열지 않고 같은 채팅 스레드 안에 새 말풍선으로 이어집니다(위 심층 답변은 하단 T25 체인 내용을 그대로 재사용). 두 번째 턴의 CTA는 첫 턴 CTA와 무관하게 그 턴에서 Playbook이 매칭됐을 때만 독립적으로 노출됩니다(Case 1~4 로직 그대로).</div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- 예시: 경로 B 전체 진단 트리거 -->
+  <!-- CN-HOSPALL 입원비보험 종합 (N:N 그룹) -->
   <div class="acc-item">
     <button class="acc-header">
-      <span class="t-badge" style="background:#B45309;">예시 B</span>
-      <span class="acc-title">전체 진단 트리거 — "내 보험 전체 진단해줘"</span>
-      <span class="domain-tag">4개 도메인 · 7건 동시 매칭</span>
+      <span class="t-badge" style="background:#1A4A9A;">CN-HOSPALL</span>
+      <span class="acc-title">입원비보험 — "입원비 전반적으로 괜찮은가요?"</span>
+      <span class="domain-tag">건강보험 · 5건 동시 매칭</span>
       <span class="acc-arrow">⌄</span>
     </button>
     <div class="acc-body">
       <div class="acc-inner">
         <div class="acc-block trigger-block">
-          <div class="acc-block-label">발화 예시 — Concept 카드 감지 (개념 검증)</div>
-          <div class="utterance"><span>"내 보험 전체 진단해줘"</span><span>"전체적으로 봐줘"</span></div>
-          <div class="chain-path">CN-ALL(신규 제안, 미등록) → risk_type_refs=활성 23개 전체 → 이 사용자는 7건 필수조건 충족 → 도메인 그룹핑 요약형 포맷 적용</div>
-          <div style="font-size:11px;color:#B45309;margin-top:6px;">⚠️ CN-ALL 카드는 아직 등록되지 않았습니다. 이 예시는 등록됐다고 가정했을 때의 화면입니다.</div>
+          <div class="acc-block-label">발화 예시 — Concept 카드 감지</div>
+          <div class="utterance"><span>"입원비 전반적으로 괜찮은가요?"</span><span>"입원 관련 보장 전체적으로 봐줘"</span></div>
+          <div class="chain-path">CN-HOSPALL(입원비보험, 신규) → T19(수술·입원 정액비 미보장형)·T24(폐렴 입원보장 공백형)·T26(통원치료비 미보장형)·T30(중환자실입원일당 미보장형)·T32(장기입원비 미보장형) 5개 동시 평가 → 5건 필수조건 충족</div>
         </div>
         <div class="acc-block" style="background:transparent;padding:0;">
-          <div class="acc-block-label" style="padding-left:2px;">Clark 모바일 웹 실제 화면 — 요약형 (도메인 그룹핑 적용)</div>
+          <div class="acc-block-label" style="padding-left:2px;">Clark 모바일 웹 실제 화면 — 카드 리스트 → 탭 이후 (같은 채팅 스레드)</div>
+          <div class="phone-mockup-wrap">
+            <div class="phone-frame">
+              <div class="phone-screen">
+                <div class="phone-statusbar"><span>9:41</span><span>●●● 5G 100%</span></div>
+                <div class="app-topbar">
+                  <span class="back-arrow">‹</span>
+                  <span class="app-avatar-top">🤖</span>
+                  <div class="app-title-group">
+                    <div class="app-title">Clark</div>
+                    <div class="app-sub">보험 진단 · 상담 도우미</div>
+                  </div>
+                </div>
+                <div class="app-chat-area">
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">입원비 전반적으로 괜찮은가요?</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 2:14</div>
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>입원 관련해서 총 5개의 보장 공백이 확인돼요. 아래 항목을 눌러보시면 자세히 안내해드려요.</p>
+                      <div class="disclaimer">이 분석은 마이데이터 기반 보험 가입 현황을 활용한 요약 진단 결과예요. 항목별 상세 근거·수치는 눌러서 확인할 수 있어요.</div>
+                    </div>
+                  </div>
+                  <div class="app-result-cards">
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">수술·입원 정액비 미보장형</span><span class="app-result-card-desc">수술비 정액 담보 없음</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">폐렴 입원보장 공백형</span><span class="app-result-card-desc">고령자 입원일당 없음</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">통원치료비 미보장형</span><span class="app-result-card-desc">통원 정액 담보 없음</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">중환자실입원일당 미보장형<span class="app-result-card-flag">⚠️건강정보 매칭</span></span><span class="app-result-card-desc">중환자실 전용 입원일당 없음</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">장기입원비 미보장형</span><span class="app-result-card-desc">장기입원 한도초과 보장 없음</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:14</div>
+                  <div class="app-cta-row">
+                    <span class="app-cta-chip">📋 보닥 플래너와 입원 보장 점검하기</span>
+                  </div>
+                  <div class="app-tap-divider">— 사용자가 "중환자실입원일당 미보장형" 카드 탭 (같은 채팅창에서 계속) —</div>
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">중환자실입원일당 미보장형 자세히 알려줘</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 2:15</div>
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>고객님은 <strong>중환자실입원일당 미보장형</strong>에 해당하는 상태예요.</p>
+                      <p>일반 입원일당은 있지만, 중환자실(ICU)에 입원했을 때 별도로 지급되는 정액 담보는 없으신데, 프롬에이지로 연동하신 건강정보를 보니 <strong>허혈성심장질환 위험도가 '위험' 등급</strong>으로 확인돼요. 중환자실 입원으로 이어지기 쉬운 대표 질환이라 이 공백이 더 크게 다가올 수 있어요.</p>
+                      <p>건강보험심사평가원·국민건강보험공단·보건복지부 2023~2024년 통계 기준 재난적의료비 지원 실적을 보면 건당 평균 312만 원 수준의 고액 의료비 부담 사례가 매년 늘고 있어요. 중환자실 전용 입원일당이 없다면 고액 비급여 부담을 고스란히 자부담해야 할 수 있어요.</p>
+                      <div class="disclaimer">이 분석은 마이데이터·프롬에이지 기반 보험 가입 현황 및 건강 위험도를 활용한 중환자실 입원 보장 진단 결과예요. 프롬에이지 위험도는 의학적 진단이 아닌 참고 지표이며, 중환자실 입원일당 지급 기준·한도는 가입 상품에 따라 다를 수 있어요. 정확한 보장 내용은 보닥 플래너와 확인해보세요.</div>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:15</div>
+                  <div class="app-cta-row">
+                    <span class="app-cta-chip">📋 보닥 플래너와 보험 리모델링 시작하기</span>
+                  </div>
+                </div>
+                <div class="app-input-bar">
+                  <div class="app-input-fake">메시지 입력...</div>
+                  <div class="app-send-btn">➤</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="proto-note">※ 심층 답변은 하단 T30 체인 내용을 그대로 재사용합니다. 기존 협소 Concept(CN-T19·T24·T26·T30·T32)은 그대로 유지되며, "입원비 전반"처럼 포괄적인 질의만 이 카드가 별도로 감지합니다.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CN-INJURYALL 상해보험 종합 (N:N 그룹) -->
+  <div class="acc-item">
+    <button class="acc-header">
+      <span class="t-badge" style="background:#1A4A9A;">CN-INJURYALL</span>
+      <span class="acc-title">상해보험 종합 — "사고 나면 보험금 다 나오나요?"</span>
+      <span class="domain-tag">상해 · 3건 동시 매칭</span>
+      <span class="acc-arrow">⌄</span>
+    </button>
+    <div class="acc-body">
+      <div class="acc-inner">
+        <div class="acc-block trigger-block">
+          <div class="acc-block-label">발화 예시 — Concept 카드 감지</div>
+          <div class="utterance"><span>"사고 나면 보험금 다 나오나요?"</span><span>"상해보험 전체적으로 봐줘"</span></div>
+          <div class="chain-path">CN-INJURYALL(상해보험 종합, 신규) → T20(후유장해보장 공백형)·T22(상해 특화 보장 공백형)·T23(골절·상해진단금 공백형) 3개 동시 평가 → 3건 필수조건 충족</div>
+        </div>
+        <div class="acc-block" style="background:transparent;padding:0;">
+          <div class="acc-block-label" style="padding-left:2px;">Clark 모바일 웹 실제 화면 — 카드 리스트 → 탭 이후 (같은 채팅 스레드)</div>
+          <div class="phone-mockup-wrap">
+            <div class="phone-frame">
+              <div class="phone-screen">
+                <div class="phone-statusbar"><span>9:41</span><span>●●● 5G 100%</span></div>
+                <div class="app-topbar">
+                  <span class="back-arrow">‹</span>
+                  <span class="app-avatar-top">🤖</span>
+                  <div class="app-title-group">
+                    <div class="app-title">Clark</div>
+                    <div class="app-sub">보험 진단 · 상담 도우미</div>
+                  </div>
+                </div>
+                <div class="app-chat-area">
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">사고 나면 보험금 다 나오나요?</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 2:14</div>
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>상해 관련해서 총 3개의 보장 공백이 확인돼요. 아래 항목을 눌러보시면 자세히 안내해드려요.</p>
+                      <div class="disclaimer">이 분석은 마이데이터 기반 보험 가입 현황을 활용한 요약 진단 결과예요. 항목별 상세 근거·수치는 눌러서 확인할 수 있어요.</div>
+                    </div>
+                  </div>
+                  <div class="app-result-cards">
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">후유장해보장 공백형<span class="app-result-card-flag">⚠️건강정보 매칭</span></span><span class="app-result-card-desc">후유장해 진단금 없음</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">상해 특화 보장 공백형</span><span class="app-result-card-desc">상해수술·입원 담보 없음</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">골절·상해진단금 공백형</span><span class="app-result-card-desc">골절 진단 일시금 없음</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:14</div>
+                  <div class="app-cta-row">
+                    <span class="app-cta-chip">📋 보닥 플래너와 상해보험 점검하기</span>
+                  </div>
+                  <div class="app-tap-divider">— 사용자가 "후유장해보장 공백형" 카드 탭 (같은 채팅창에서 계속) —</div>
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">후유장해보장 공백형 자세히 알려줘</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 2:15</div>
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>고객님은 <strong>후유장해보장 공백형</strong>에 해당하는 상태예요.</p>
+                      <p>질병·상해로 인한 영구적 신체 기능 손상(후유장해) 진단금이 전혀 없으신데, 프롬에이지로 연동하신 건강정보를 보니 <strong>골절 위험도가 '위험' 등급</strong>으로 확인돼요. 낙상·골절이 후유장해로 이어질 가능성까지 고려하면 이 공백이 더 크게 다가올 수 있어요.</p>
+                      <p>보건복지부 2023년 통계 기준 국내 등록 장애인 약 263만 명의 88.1%가 후천적 원인(질환·사고)으로 발생해요. 후유장해는 사망보다 발생 빈도가 높고, 발생 시 영구적 소득 상실과 장기 의료비가 이어지지만 사망보험·실손보험으로는 보전할 수 없어요.</p>
+                      <div class="disclaimer">이 분석은 마이데이터·프롬에이지 기반 보험 가입 현황 및 건강 위험도를 활용한 후유장해 보장 진단 결과예요. 프롬에이지 위험도는 의학적 진단이 아닌 참고 지표예요. 정확한 보장 설계는 보닥 플래너와 상담해보세요.</div>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:15</div>
+                  <div class="app-cta-row">
+                    <span class="app-cta-chip">📋 보닥 플래너와 보험 리모델링 시작하기</span>
+                  </div>
+                </div>
+                <div class="app-input-bar">
+                  <div class="app-input-fake">메시지 입력...</div>
+                  <div class="app-send-btn">➤</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="proto-note">※ 심층 답변은 하단 T20 체인 내용을 그대로 재사용합니다. CN-T22(상해보험, 명칭은 포괄적이나 실제론 T22 전용)는 그대로 유지되며, 포괄 질의만 이 신규 카드가 별도로 감지합니다.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CN-CAREALL 간병보험 종합 (N:N 그룹) -->
+  <div class="acc-item">
+    <button class="acc-header">
+      <span class="t-badge" style="background:#1A4A9A;">CN-CAREALL</span>
+      <span class="acc-title">간병보험 종합 — "노후 돌봄 준비 잘 돼있나요?"</span>
+      <span class="domain-tag">건강보험 · 2건 동시 매칭</span>
+      <span class="acc-arrow">⌄</span>
+    </button>
+    <div class="acc-body">
+      <div class="acc-inner">
+        <div class="acc-block trigger-block">
+          <div class="acc-block-label">발화 예시 — Concept 카드 감지</div>
+          <div class="utterance"><span>"노후 돌봄 준비 잘 돼있나요?"</span><span>"간병비랑 요양 관련 보험 점검해줘"</span></div>
+          <div class="chain-path">CN-CAREALL(간병보험 종합, 신규) → T05(노후돌봄보장 공백형)·T27(간병 지원 공백형) 2개 동시 평가 → 2건 필수조건 충족</div>
+        </div>
+        <div class="acc-block" style="background:transparent;padding:0;">
+          <div class="acc-block-label" style="padding-left:2px;">Clark 모바일 웹 실제 화면 — 카드 리스트 → 탭 이후 (같은 채팅 스레드)</div>
+          <div class="phone-mockup-wrap">
+            <div class="phone-frame">
+              <div class="phone-screen">
+                <div class="phone-statusbar"><span>9:41</span><span>●●● 5G 100%</span></div>
+                <div class="app-topbar">
+                  <span class="back-arrow">‹</span>
+                  <span class="app-avatar-top">🤖</span>
+                  <div class="app-title-group">
+                    <div class="app-title">Clark</div>
+                    <div class="app-sub">보험 진단 · 상담 도우미</div>
+                  </div>
+                </div>
+                <div class="app-chat-area">
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">노후 돌봄 준비 잘 돼있나요?</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 2:14</div>
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>간병 관련해서 총 2개의 보장 공백이 확인돼요. 아래 항목을 눌러보시면 자세히 안내해드려요.</p>
+                      <div class="disclaimer">이 분석은 마이데이터 기반 보험 가입 현황을 활용한 요약 진단 결과예요. 항목별 상세 근거·수치는 눌러서 확인할 수 있어요.</div>
+                    </div>
+                  </div>
+                  <div class="app-result-cards">
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">노후돌봄보장 공백형<span class="app-result-card-flag">⚠️건강정보 매칭</span></span><span class="app-result-card-desc">장기간병요양보험 미가입</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">간병 지원 공백형</span><span class="app-result-card-desc">간병인지원 입원일당 없음</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:14</div>
+                  <div class="app-cta-row">
+                    <span class="app-cta-chip">📋 보닥 플래너와 노후 대비 점검하기</span>
+                  </div>
+                  <div class="app-tap-divider">— 사용자가 "노후돌봄보장 공백형" 카드 탭 (같은 채팅창에서 계속) —</div>
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">노후돌봄보장 공백형 자세히 알려줘</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 2:15</div>
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>고객님은 <strong>노후돌봄보장 공백형</strong>에 해당하는 상태예요.</p>
+                      <p>장기간병요양진단(1,2,3급) 관련 보장이 전혀 없으신데, 프롬에이지로 연동하신 건강정보를 보니 <strong>치매 위험도가 '위험' 등급</strong>으로 확인돼요. 보장 공백과 건강 위험이 겹쳐 있어서 더 서둘러 준비하시는 게 좋아 보여요.</p>
+                      <p>보험연구원(KIRI) 2024년 통계 기준 65세 이상 치매 환자는 약 105만 명이며, 1인당 연간 관리 비용은 약 2,639만 원에 달해요. 사적 간병인을 고용하면 월 300만~400만 원이 추가로 발생할 수 있어요.</p>
+                      <p>공적 장기요양보험만으로는 이 비용을 감당하기 어려워요. 특히 위험 등급으로 확인된 만큼, 진단금이 없는 상태로 오래 두는 것보다 지금 점검해보시는 걸 권해드려요.</p>
+                      <div class="disclaimer">이 분석은 마이데이터·프롬에이지 기반 보험 가입 현황 및 건강 위험도를 토대로 한 노후 돌봄 보장 진단 결과예요. 프롬에이지 위험도는 의학적 진단이 아닌 참고 지표이며, 간병보험 보장 조건은 가입 상품에 따라 다를 수 있어요. 정확한 보장 내용은 가입 보험사 또는 보닥 플래너에게 확인해보세요.</div>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:15</div>
+                  <div class="app-cta-row">
+                    <span class="app-cta-chip">📋 보닥 플래너와 노후 대비 점검하기</span>
+                  </div>
+                </div>
+                <div class="app-input-bar">
+                  <div class="app-input-fake">메시지 입력...</div>
+                  <div class="app-send-btn">➤</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="proto-note">※ 심층 답변은 하단 T05 체인 내용을 그대로 재사용합니다. CN-T05(간병보험, LTC 전용)는 그대로 유지되며, 포괄 질의만 이 신규 카드가 별도로 감지합니다.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CN-ALL 종합진단 (N:N 그룹, 전체 스캔 트리거) -->
+  <div class="acc-item">
+    <button class="acc-header">
+      <span class="t-badge" style="background:#1A4A9A;">CN-ALL</span>
+      <span class="acc-title">종합진단 — "내 보험 전체 진단해줘"</span>
+      <span class="domain-tag">4개 도메인 · 활성 23개 전체 평가</span>
+      <span class="acc-arrow">⌄</span>
+    </button>
+    <div class="acc-body">
+      <div class="acc-inner">
+        <div class="acc-block trigger-block">
+          <div class="acc-block-label">발화 예시 — Concept 카드 감지</div>
+          <div class="utterance"><span>"내 보험 전체 진단해줘"</span><span>"전체적으로 봐줘"</span></div>
+          <div class="chain-path">CN-ALL(종합진단, 신규) → risk_type_refs=활성 23개 전체 동시 평가 → 이 사용자는 7건 필수조건 충족(나머지 16건은 이미 보장돼 카드 미노출)</div>
+          <div style="font-size:11px;color:#1E40AF;margin-top:6px;">ℹ️ CN-T02A·CN-HOSPALL·CN-INJURYALL·CN-CAREALL과 동일한 N:N 메커니즘을 규모만 크게(23개) 적용한 것뿐 — 새 카드 타입이 아닙니다. 실제 노출 카드 수는 사용자 데이터에 따라 0~23개까지 달라집니다.</div>
+        </div>
+        <div class="acc-block" style="background:transparent;padding:0;">
+          <div class="acc-block-label" style="padding-left:2px;">Clark 모바일 웹 실제 화면 — 카드 리스트(도메인 그룹핑 없음, flat) → 탭 이후</div>
           <div class="phone-mockup-wrap">
             <div class="phone-frame">
               <div class="phone-screen">
@@ -231,35 +537,62 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
                   <div class="app-msg-clark-row">
                     <div class="app-avatar">🤖</div>
                     <div class="app-msg-clark">
-                      <p>고객님의 보험을 전체적으로 살펴봤어요. 총 7개의 보장 공백이 확인됐어요.</p>
-                      <div class="summary-list">
-                        <div class="summary-group">
-                          <div class="summary-group-title">🏥 건강보험 3건</div>
-                          <div class="summary-item"><span class="summary-item-name">무보장형</span><span class="summary-item-desc">실손·사망보장 모두 없음</span></div>
-                          <div class="summary-item"><span class="summary-item-name">암진단금 부족형<span class="summary-item-flag">⚠️건강정보 매칭</span></span><span class="summary-item-desc">2,000만 원 · 부족</span></div>
-                          <div class="summary-item"><span class="summary-item-name">노후돌봄보장 공백형</span><span class="summary-item-desc">장기간병요양진단 없음</span></div>
-                        </div>
-                        <div class="summary-group">
-                          <div class="summary-group-title">❤️ 생명보험 1건</div>
-                          <div class="summary-item"><span class="summary-item-name">사망보장 미비형</span><span class="summary-item-desc">실손만 있고 사망보장 없음</span></div>
-                        </div>
-                        <div class="summary-group">
-                          <div class="summary-group-title">🩹 상해 2건</div>
-                          <div class="summary-item"><span class="summary-item-name">후유장해보장 공백형</span><span class="summary-item-desc">질병·상해 후유장해 없음</span></div>
-                          <div class="summary-item"><span class="summary-item-name">골절·상해진단금 공백형</span><span class="summary-item-desc">골절진단 담보 없음</span></div>
-                        </div>
-                        <div class="summary-group">
-                          <div class="summary-group-title">🚗 특종 1건</div>
-                          <div class="summary-item"><span class="summary-item-name">운전자보험 미가입형</span><span class="summary-item-desc">형사합의지원금 없음</span></div>
-                        </div>
-                      </div>
-                      <p>궁금한 항목을 말씀해주시면 자세히 설명해드릴게요.</p>
-                      <div class="disclaimer">이 분석은 마이데이터 기반 보험 가입 현황을 활용한 전체 요약 진단 결과예요. 항목별 상세 근거·수치는 개별 질문 시 안내돼요.</div>
+                      <p>고객님의 보험을 전체적으로 살펴봤어요. 총 7개의 보장 공백이 확인됐어요. 아래 항목을 눌러보시면 자세히 안내해드려요.</p>
+                      <div class="disclaimer">이 분석은 마이데이터 기반 보험 가입 현황을 활용한 전체 요약 진단 결과예요. 항목별 상세 근거·수치는 눌러서 확인할 수 있어요.</div>
+                    </div>
+                  </div>
+                  <div class="app-result-cards">
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">무보장형</span><span class="app-result-card-desc">실손·사망보장 모두 없음</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">암진단금 부족형<span class="app-result-card-flag">⚠️건강정보 매칭</span></span><span class="app-result-card-desc">2,000만 원 · 부족</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">노후돌봄보장 공백형</span><span class="app-result-card-desc">장기간병요양진단 없음</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">사망보장 미비형</span><span class="app-result-card-desc">실손만 있고 사망보장 없음</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">후유장해보장 공백형</span><span class="app-result-card-desc">질병·상해 후유장해 없음</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">골절·상해진단금 공백형</span><span class="app-result-card-desc">골절진단 담보 없음</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">운전자보험 미가입형</span><span class="app-result-card-desc">형사합의지원금 없음</span></div>
+                      <span class="app-result-card-chevron">›</span>
                     </div>
                   </div>
                   <div class="app-msg-clark-time">오후 2:14</div>
                   <div class="app-cta-row">
                     <span class="app-cta-chip">📋 보닥 플래너와 전체 보장 점검하기</span>
+                  </div>
+                  <div class="app-tap-divider">— 사용자가 "암진단금 부족형" 카드 탭 (같은 채팅창에서 계속) —</div>
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">암진단금 부족형 자세히 알려줘</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 2:15</div>
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>고객님은 <strong>암진단금 부족형</strong>에 해당하는 상태예요.</p>
+                      <p>현재 암진단금이 2,000만 원인데, 프롬에이지로 연동하신 건강정보를 보니 <strong>암 위험도가 '위험' 등급</strong>으로 확인돼요. 보장 부족과 건강 위험이 겹쳐 있어서 더 서둘러 점검해보시는 게 좋아 보여요.</p>
+                      <p>건강보험심사평가원(HIRA) 2023년 통계 기준 암환자 1인당 연평균 직접 의료비는 약 520만 원이지만, 비급여·간병·생활비까지 포함하면 업계 추정 2,000만~3,500만 원 수준이에요. 장기 치료를 감안하면 5,000만 원이 현실적인 최소 기준선이에요.</p>
+                      <p>특히 위험 등급으로 확인된 만큼, 진단금이 부족한 상태로 오래 두는 것보다 지금 보완을 검토해보시는 걸 권해드려요.</p>
+                      <div class="disclaimer">이 분석은 마이데이터·프롬에이지 기반 보험 가입 현황 및 건강 위험도를 활용한 보장 진단 결과예요. 프롬에이지 위험도는 의학적 진단이 아닌 참고 지표이며, 암 보험금 지급 여부와 금액은 가입하신 보험 약관 및 보험사 심사 기준에 따라 달라질 수 있어요. 더 정확한 보장 내용은 가입 보험사 또는 보닥 플래너에게 확인해보세요.</div>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:15</div>
+                  <div class="app-cta-row">
+                    <span class="app-cta-chip">📋 보닥 플래너와 암보험 점검하기</span>
                   </div>
                 </div>
                 <div class="app-input-bar">
@@ -269,13 +602,16 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
               </div>
             </div>
           </div>
-          <div class="proto-note">※ 항목별 상세는 사용자가 개별 지목 시 해당 T코드의 기존 단건 심층 포맷(예: T01·T11·T20 등)으로 전환됩니다. N=0(공백 없음)일 때는 "특별한 보장 공백이 확인되지 않아요. 잘 준비하고 계세요!" 류의 안심 메시지로 대체됩니다.</div>
+          <div class="proto-note">※ 심층 답변은 하단 T02 체인 내용을 그대로 재사용합니다. 도메인 그룹핑은 하지 않습니다(2026-07-05 확정 — UI 일관성 우선). N=0(공백 없음)일 때는 "특별한 보장 공백이 확인되지 않아요. 잘 준비하고 계세요!" 류의 안심 메시지로 대체되며 카드 자체가 노출되지 않습니다.</div>
         </div>
       </div>
     </div>
   </div>
 
-<div class="section-label">체인별 Clark AI 채팅 시나리오 · 23개 (단건 심층형)</div>
+<div class="section-label">단독 매칭 Concept · 23개 (Risk-type 1:1)</div>
+<div class="info-banner">
+  각 Risk-type의 협소(narrow) Concept — 위 5개 그룹 Concept과 별개로 그대로 유지됩니다. N=1이어도 카드 우선 UI로 동일하게 처리됩니다.
+</div>
 
   <!-- T01 무보장형 -->
   <div class="acc-item">
@@ -311,6 +647,25 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
                     <div class="app-msg-user">보험이 하나도 없는데 괜찮나요?</div>
                   </div>
                   <div class="app-msg-user-time">오후 2:14</div>
+                  
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>말씀하신 내용 확인해보니 관련된 보장 유형이 있어요. 아래 항목을 눌러보시면 자세히 안내해드려요.</p>
+                    </div>
+                  </div>
+                  <div class="app-result-cards">
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">무보장형</span><span class="app-result-card-desc">실손·사망보장 모두 없음</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:14</div>
+                  <div class="app-tap-divider">— 사용자가 "무보장형" 카드 탭 (같은 채팅창에서 계속) —</div>
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">무보장형 자세히 알려줘</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 2:15</div>
                   <div class="app-msg-clark-row">
                     <div class="app-avatar">🤖</div>
                     <div class="app-msg-clark">
@@ -374,6 +729,25 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
                     <div class="app-msg-user">암보험이 충분한지 모르겠어요</div>
                   </div>
                   <div class="app-msg-user-time">오후 2:14</div>
+                  
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>말씀하신 내용 확인해보니 관련된 보장 유형이 있어요. 아래 항목을 눌러보시면 자세히 안내해드려요.</p>
+                    </div>
+                  </div>
+                  <div class="app-result-cards">
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">암진단금 부족형</span><span class="app-result-card-desc">진단금 2,000만 원 · 부족</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:14</div>
+                  <div class="app-tap-divider">— 사용자가 "암진단금 부족형" 카드 탭 (같은 채팅창에서 계속) —</div>
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">암진단금 부족형 자세히 알려줘</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 2:15</div>
                   <div class="app-msg-clark-row">
                     <div class="app-avatar">🤖</div>
                     <div class="app-msg-clark">
@@ -416,6 +790,25 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
                     <div class="app-msg-user">암보험이 충분한지 모르겠어요</div>
                   </div>
                   <div class="app-msg-user-time">오후 2:14</div>
+                  
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>말씀하신 내용 확인해보니 관련된 보장 유형이 있어요. 아래 항목을 눌러보시면 자세히 안내해드려요.</p>
+                    </div>
+                  </div>
+                  <div class="app-result-cards">
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">암진단금 부족형</span><span class="app-result-card-desc">진단금 2,000만 원 · 부족</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:14</div>
+                  <div class="app-tap-divider">— 사용자가 "암진단금 부족형" 카드 탭 (같은 채팅창에서 계속) —</div>
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">암진단금 부족형 자세히 알려줘</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 2:15</div>
                   <div class="app-msg-clark-row">
                     <div class="app-avatar">🤖</div>
                     <div class="app-msg-clark">
@@ -479,6 +872,25 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
                     <div class="app-msg-user">심장 보험 들었는데 충분한가요?</div>
                   </div>
                   <div class="app-msg-user-time">오후 2:14</div>
+                  
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>말씀하신 내용 확인해보니 관련된 보장 유형이 있어요. 아래 항목을 눌러보시면 자세히 안내해드려요.</p>
+                    </div>
+                  </div>
+                  <div class="app-result-cards">
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">심혈관질환보장 협소형</span><span class="app-result-card-desc">허혈성심장질환 담보 없음</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:14</div>
+                  <div class="app-tap-divider">— 사용자가 "심혈관질환보장 협소형" 카드 탭 (같은 채팅창에서 계속) —</div>
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">심혈관질환보장 협소형 자세히 알려줘</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 2:15</div>
                   <div class="app-msg-clark-row">
                     <div class="app-avatar">🤖</div>
                     <div class="app-msg-clark">
@@ -521,6 +933,25 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
                     <div class="app-msg-user">심장 보험 들었는데 충분한가요?</div>
                   </div>
                   <div class="app-msg-user-time">오후 2:14</div>
+                  
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>말씀하신 내용 확인해보니 관련된 보장 유형이 있어요. 아래 항목을 눌러보시면 자세히 안내해드려요.</p>
+                    </div>
+                  </div>
+                  <div class="app-result-cards">
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">심혈관질환보장 협소형</span><span class="app-result-card-desc">허혈성심장질환 담보 없음</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:14</div>
+                  <div class="app-tap-divider">— 사용자가 "심혈관질환보장 협소형" 카드 탭 (같은 채팅창에서 계속) —</div>
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">심혈관질환보장 협소형 자세히 알려줘</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 2:15</div>
                   <div class="app-msg-clark-row">
                     <div class="app-avatar">🤖</div>
                     <div class="app-msg-clark">
@@ -584,6 +1015,25 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
                     <div class="app-msg-user">뇌혈관 보험 점검해주세요</div>
                   </div>
                   <div class="app-msg-user-time">오후 2:14</div>
+                  
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>말씀하신 내용 확인해보니 관련된 보장 유형이 있어요. 아래 항목을 눌러보시면 자세히 안내해드려요.</p>
+                    </div>
+                  </div>
+                  <div class="app-result-cards">
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">뇌혈관질환보장 협소형</span><span class="app-result-card-desc">뇌졸중 전체 보장 안 됨</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:14</div>
+                  <div class="app-tap-divider">— 사용자가 "뇌혈관질환보장 협소형" 카드 탭 (같은 채팅창에서 계속) —</div>
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">뇌혈관질환보장 협소형 자세히 알려줘</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 2:15</div>
                   <div class="app-msg-clark-row">
                     <div class="app-avatar">🤖</div>
                     <div class="app-msg-clark">
@@ -626,6 +1076,25 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
                     <div class="app-msg-user">뇌혈관 보험 점검해주세요</div>
                   </div>
                   <div class="app-msg-user-time">오후 2:14</div>
+                  
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>말씀하신 내용 확인해보니 관련된 보장 유형이 있어요. 아래 항목을 눌러보시면 자세히 안내해드려요.</p>
+                    </div>
+                  </div>
+                  <div class="app-result-cards">
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">뇌혈관질환보장 협소형</span><span class="app-result-card-desc">뇌졸중 전체 보장 안 됨</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:14</div>
+                  <div class="app-tap-divider">— 사용자가 "뇌혈관질환보장 협소형" 카드 탭 (같은 채팅창에서 계속) —</div>
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">뇌혈관질환보장 협소형 자세히 알려줘</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 2:15</div>
                   <div class="app-msg-clark-row">
                     <div class="app-avatar">🤖</div>
                     <div class="app-msg-clark">
@@ -689,6 +1158,25 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
                     <div class="app-msg-user">간병보험 들어야 하나요?</div>
                   </div>
                   <div class="app-msg-user-time">오후 2:14</div>
+                  
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>말씀하신 내용 확인해보니 관련된 보장 유형이 있어요. 아래 항목을 눌러보시면 자세히 안내해드려요.</p>
+                    </div>
+                  </div>
+                  <div class="app-result-cards">
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">노후돌봄보장 공백형</span><span class="app-result-card-desc">장기간병요양보험 미가입</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:14</div>
+                  <div class="app-tap-divider">— 사용자가 "노후돌봄보장 공백형" 카드 탭 (같은 채팅창에서 계속) —</div>
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">노후돌봄보장 공백형 자세히 알려줘</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 2:15</div>
                   <div class="app-msg-clark-row">
                     <div class="app-avatar">🤖</div>
                     <div class="app-msg-clark">
@@ -732,6 +1220,25 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
                     <div class="app-msg-user">간병보험 들어야 하나요?</div>
                   </div>
                   <div class="app-msg-user-time">오후 2:14</div>
+                  
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>말씀하신 내용 확인해보니 관련된 보장 유형이 있어요. 아래 항목을 눌러보시면 자세히 안내해드려요.</p>
+                    </div>
+                  </div>
+                  <div class="app-result-cards">
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">노후돌봄보장 공백형</span><span class="app-result-card-desc">장기간병요양보험 미가입</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:14</div>
+                  <div class="app-tap-divider">— 사용자가 "노후돌봄보장 공백형" 카드 탭 (같은 채팅창에서 계속) —</div>
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">노후돌봄보장 공백형 자세히 알려줘</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 2:15</div>
                   <div class="app-msg-clark-row">
                     <div class="app-avatar">🤖</div>
                     <div class="app-msg-clark">
@@ -795,6 +1302,25 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
                     <div class="app-msg-user">여성암 보장이 부족한 것 같아요</div>
                   </div>
                   <div class="app-msg-user-time">오후 2:14</div>
+                  
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>말씀하신 내용 확인해보니 관련된 보장 유형이 있어요. 아래 항목을 눌러보시면 자세히 안내해드려요.</p>
+                    </div>
+                  </div>
+                  <div class="app-result-cards">
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">여성암보장 공백형</span><span class="app-result-card-desc">여성암 진단금 3천만원 이하</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:14</div>
+                  <div class="app-tap-divider">— 사용자가 "여성암보장 공백형" 카드 탭 (같은 채팅창에서 계속) —</div>
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">여성암보장 공백형 자세히 알려줘</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 2:15</div>
                   <div class="app-msg-clark-row">
                     <div class="app-avatar">🤖</div>
                     <div class="app-msg-clark">
@@ -837,6 +1363,25 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
                     <div class="app-msg-user">여성암 보장이 부족한 것 같아요</div>
                   </div>
                   <div class="app-msg-user-time">오후 2:14</div>
+                  
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>말씀하신 내용 확인해보니 관련된 보장 유형이 있어요. 아래 항목을 눌러보시면 자세히 안내해드려요.</p>
+                    </div>
+                  </div>
+                  <div class="app-result-cards">
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">여성암보장 공백형</span><span class="app-result-card-desc">여성암 진단금 3천만원 이하</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:14</div>
+                  <div class="app-tap-divider">— 사용자가 "여성암보장 공백형" 카드 탭 (같은 채팅창에서 계속) —</div>
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">여성암보장 공백형 자세히 알려줘</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 2:15</div>
                   <div class="app-msg-clark-row">
                     <div class="app-avatar">🤖</div>
                     <div class="app-msg-clark">
@@ -899,6 +1444,25 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
                     <div class="app-msg-user">사망보험 필요한가요?</div>
                   </div>
                   <div class="app-msg-user-time">오후 2:14</div>
+                  
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>말씀하신 내용 확인해보니 관련된 보장 유형이 있어요. 아래 항목을 눌러보시면 자세히 안내해드려요.</p>
+                    </div>
+                  </div>
+                  <div class="app-result-cards">
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">사망보장 미비형</span><span class="app-result-card-desc">질병·상해 사망보장 없음</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:14</div>
+                  <div class="app-tap-divider">— 사용자가 "사망보장 미비형" 카드 탭 (같은 채팅창에서 계속) —</div>
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">사망보장 미비형 자세히 알려줘</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 2:15</div>
                   <div class="app-msg-clark-row">
                     <div class="app-avatar">🤖</div>
                     <div class="app-msg-clark">
@@ -960,6 +1524,25 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
                     <div class="app-msg-user">운전자보험 필요한가요?</div>
                   </div>
                   <div class="app-msg-user-time">오후 2:14</div>
+                  
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>말씀하신 내용 확인해보니 관련된 보장 유형이 있어요. 아래 항목을 눌러보시면 자세히 안내해드려요.</p>
+                    </div>
+                  </div>
+                  <div class="app-result-cards">
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">운전자보험 미가입형</span><span class="app-result-card-desc">형사합의금·벌금 보장 없음</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:14</div>
+                  <div class="app-tap-divider">— 사용자가 "운전자보험 미가입형" 카드 탭 (같은 채팅창에서 계속) —</div>
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">운전자보험 미가입형 자세히 알려줘</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 2:15</div>
                   <div class="app-msg-clark-row">
                     <div class="app-avatar">🤖</div>
                     <div class="app-msg-clark">
@@ -1022,6 +1605,25 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
                     <div class="app-msg-user">치매 보험금 얼마 받나요?</div>
                   </div>
                   <div class="app-msg-user-time">오후 2:14</div>
+                  
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>말씀하신 내용 확인해보니 관련된 보장 유형이 있어요. 아래 항목을 눌러보시면 자세히 안내해드려요.</p>
+                    </div>
+                  </div>
+                  <div class="app-result-cards">
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">치매진단보장 공백형</span><span class="app-result-card-desc">치매 진단금 미가입</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:14</div>
+                  <div class="app-tap-divider">— 사용자가 "치매진단보장 공백형" 카드 탭 (같은 채팅창에서 계속) —</div>
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">치매진단보장 공백형 자세히 알려줘</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 2:15</div>
                   <div class="app-msg-clark-row">
                     <div class="app-avatar">🤖</div>
                     <div class="app-msg-clark">
@@ -1064,6 +1666,25 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
                     <div class="app-msg-user">치매 보험금 얼마 받나요?</div>
                   </div>
                   <div class="app-msg-user-time">오후 2:14</div>
+                  
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>말씀하신 내용 확인해보니 관련된 보장 유형이 있어요. 아래 항목을 눌러보시면 자세히 안내해드려요.</p>
+                    </div>
+                  </div>
+                  <div class="app-result-cards">
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">치매진단보장 공백형</span><span class="app-result-card-desc">치매 진단금 미가입</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:14</div>
+                  <div class="app-tap-divider">— 사용자가 "치매진단보장 공백형" 카드 탭 (같은 채팅창에서 계속) —</div>
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">치매진단보장 공백형 자세히 알려줘</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 2:15</div>
                   <div class="app-msg-clark-row">
                     <div class="app-avatar">🤖</div>
                     <div class="app-msg-clark">
@@ -1126,6 +1747,25 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
                     <div class="app-msg-user">항암치료비 보장 있나요?</div>
                   </div>
                   <div class="app-msg-user-time">오후 2:14</div>
+                  
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>말씀하신 내용 확인해보니 관련된 보장 유형이 있어요. 아래 항목을 눌러보시면 자세히 안내해드려요.</p>
+                    </div>
+                  </div>
+                  <div class="app-result-cards">
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">항암치료비 미보장형</span><span class="app-result-card-desc">항암치료비 담보 없음</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:14</div>
+                  <div class="app-tap-divider">— 사용자가 "항암치료비 미보장형" 카드 탭 (같은 채팅창에서 계속) —</div>
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">항암치료비 미보장형 자세히 알려줘</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 2:15</div>
                   <div class="app-msg-clark-row">
                     <div class="app-avatar">🤖</div>
                     <div class="app-msg-clark">
@@ -1168,6 +1808,25 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
                     <div class="app-msg-user">항암치료비 보장 있나요?</div>
                   </div>
                   <div class="app-msg-user-time">오후 2:14</div>
+                  
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>말씀하신 내용 확인해보니 관련된 보장 유형이 있어요. 아래 항목을 눌러보시면 자세히 안내해드려요.</p>
+                    </div>
+                  </div>
+                  <div class="app-result-cards">
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">항암치료비 미보장형</span><span class="app-result-card-desc">항암치료비 담보 없음</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:14</div>
+                  <div class="app-tap-divider">— 사용자가 "항암치료비 미보장형" 카드 탭 (같은 채팅창에서 계속) —</div>
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">항암치료비 미보장형 자세히 알려줘</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 2:15</div>
                   <div class="app-msg-clark-row">
                     <div class="app-avatar">🤖</div>
                     <div class="app-msg-clark">
@@ -1230,6 +1889,25 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
                     <div class="app-msg-user">수술비 보장 부족한 것 같아요</div>
                   </div>
                   <div class="app-msg-user-time">오후 2:14</div>
+                  
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>말씀하신 내용 확인해보니 관련된 보장 유형이 있어요. 아래 항목을 눌러보시면 자세히 안내해드려요.</p>
+                    </div>
+                  </div>
+                  <div class="app-result-cards">
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">수술·입원 정액비 미보장형</span><span class="app-result-card-desc">수술비 정액 담보 없음</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:14</div>
+                  <div class="app-tap-divider">— 사용자가 "수술·입원 정액비 미보장형" 카드 탭 (같은 채팅창에서 계속) —</div>
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">수술·입원 정액비 미보장형 자세히 알려줘</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 2:15</div>
                   <div class="app-msg-clark-row">
                     <div class="app-avatar">🤖</div>
                     <div class="app-msg-clark">
@@ -1272,6 +1950,25 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
                     <div class="app-msg-user">수술비 보장 부족한 것 같아요</div>
                   </div>
                   <div class="app-msg-user-time">오후 2:14</div>
+                  
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>말씀하신 내용 확인해보니 관련된 보장 유형이 있어요. 아래 항목을 눌러보시면 자세히 안내해드려요.</p>
+                    </div>
+                  </div>
+                  <div class="app-result-cards">
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">수술·입원 정액비 미보장형</span><span class="app-result-card-desc">수술비 정액 담보 없음</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:14</div>
+                  <div class="app-tap-divider">— 사용자가 "수술·입원 정액비 미보장형" 카드 탭 (같은 채팅창에서 계속) —</div>
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">수술·입원 정액비 미보장형 자세히 알려줘</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 2:15</div>
                   <div class="app-msg-clark-row">
                     <div class="app-avatar">🤖</div>
                     <div class="app-msg-clark">
@@ -1334,6 +2031,25 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
                     <div class="app-msg-user">사고로 장애 생기면 보험금 나와요?</div>
                   </div>
                   <div class="app-msg-user-time">오후 2:14</div>
+                  
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>말씀하신 내용 확인해보니 관련된 보장 유형이 있어요. 아래 항목을 눌러보시면 자세히 안내해드려요.</p>
+                    </div>
+                  </div>
+                  <div class="app-result-cards">
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">후유장해보장 공백형</span><span class="app-result-card-desc">후유장해 진단금 없음</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:14</div>
+                  <div class="app-tap-divider">— 사용자가 "후유장해보장 공백형" 카드 탭 (같은 채팅창에서 계속) —</div>
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">후유장해보장 공백형 자세히 알려줘</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 2:15</div>
                   <div class="app-msg-clark-row">
                     <div class="app-avatar">🤖</div>
                     <div class="app-msg-clark">
@@ -1376,6 +2092,25 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
                     <div class="app-msg-user">사고로 장애 생기면 보험금 나와요?</div>
                   </div>
                   <div class="app-msg-user-time">오후 2:14</div>
+                  
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>말씀하신 내용 확인해보니 관련된 보장 유형이 있어요. 아래 항목을 눌러보시면 자세히 안내해드려요.</p>
+                    </div>
+                  </div>
+                  <div class="app-result-cards">
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">후유장해보장 공백형</span><span class="app-result-card-desc">후유장해 진단금 없음</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:14</div>
+                  <div class="app-tap-divider">— 사용자가 "후유장해보장 공백형" 카드 탭 (같은 채팅창에서 계속) —</div>
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">후유장해보장 공백형 자세히 알려줘</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 2:15</div>
                   <div class="app-msg-clark-row">
                     <div class="app-avatar">🤖</div>
                     <div class="app-msg-clark">
@@ -1437,6 +2172,25 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
                     <div class="app-msg-user">임플란트 비용 보험 적용되나요?</div>
                   </div>
                   <div class="app-msg-user-time">오후 2:14</div>
+                  
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>말씀하신 내용 확인해보니 관련된 보장 유형이 있어요. 아래 항목을 눌러보시면 자세히 안내해드려요.</p>
+                    </div>
+                  </div>
+                  <div class="app-result-cards">
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">치과보장 공백형</span><span class="app-result-card-desc">임플란트·보철 보장 없음</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:14</div>
+                  <div class="app-tap-divider">— 사용자가 "치과보장 공백형" 카드 탭 (같은 채팅창에서 계속) —</div>
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">치과보장 공백형 자세히 알려줘</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 2:15</div>
                   <div class="app-msg-clark-row">
                     <div class="app-avatar">🤖</div>
                     <div class="app-msg-clark">
@@ -1499,6 +2253,25 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
                     <div class="app-msg-user">다쳐서 수술하면 보험 나와요?</div>
                   </div>
                   <div class="app-msg-user-time">오후 2:14</div>
+                  
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>말씀하신 내용 확인해보니 관련된 보장 유형이 있어요. 아래 항목을 눌러보시면 자세히 안내해드려요.</p>
+                    </div>
+                  </div>
+                  <div class="app-result-cards">
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">상해 특화 보장 공백형</span><span class="app-result-card-desc">상해수술·입원 담보 없음</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:14</div>
+                  <div class="app-tap-divider">— 사용자가 "상해 특화 보장 공백형" 카드 탭 (같은 채팅창에서 계속) —</div>
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">상해 특화 보장 공백형 자세히 알려줘</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 2:15</div>
                   <div class="app-msg-clark-row">
                     <div class="app-avatar">🤖</div>
                     <div class="app-msg-clark">
@@ -1541,6 +2314,25 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
                     <div class="app-msg-user">다쳐서 수술하면 보험 나와요?</div>
                   </div>
                   <div class="app-msg-user-time">오후 2:14</div>
+                  
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>말씀하신 내용 확인해보니 관련된 보장 유형이 있어요. 아래 항목을 눌러보시면 자세히 안내해드려요.</p>
+                    </div>
+                  </div>
+                  <div class="app-result-cards">
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">상해 특화 보장 공백형</span><span class="app-result-card-desc">상해수술·입원 담보 없음</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:14</div>
+                  <div class="app-tap-divider">— 사용자가 "상해 특화 보장 공백형" 카드 탭 (같은 채팅창에서 계속) —</div>
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">상해 특화 보장 공백형 자세히 알려줘</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 2:15</div>
                   <div class="app-msg-clark-row">
                     <div class="app-avatar">🤖</div>
                     <div class="app-msg-clark">
@@ -1603,6 +2395,25 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
                     <div class="app-msg-user">골절 진단금 보험 있나요?</div>
                   </div>
                   <div class="app-msg-user-time">오후 2:14</div>
+                  
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>말씀하신 내용 확인해보니 관련된 보장 유형이 있어요. 아래 항목을 눌러보시면 자세히 안내해드려요.</p>
+                    </div>
+                  </div>
+                  <div class="app-result-cards">
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">골절·상해진단금 공백형</span><span class="app-result-card-desc">골절 진단 일시금 없음</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:14</div>
+                  <div class="app-tap-divider">— 사용자가 "골절·상해진단금 공백형" 카드 탭 (같은 채팅창에서 계속) —</div>
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">골절·상해진단금 공백형 자세히 알려줘</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 2:15</div>
                   <div class="app-msg-clark-row">
                     <div class="app-avatar">🤖</div>
                     <div class="app-msg-clark">
@@ -1645,6 +2456,25 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
                     <div class="app-msg-user">골절 진단금 보험 있나요?</div>
                   </div>
                   <div class="app-msg-user-time">오후 2:14</div>
+                  
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>말씀하신 내용 확인해보니 관련된 보장 유형이 있어요. 아래 항목을 눌러보시면 자세히 안내해드려요.</p>
+                    </div>
+                  </div>
+                  <div class="app-result-cards">
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">골절·상해진단금 공백형</span><span class="app-result-card-desc">골절 진단 일시금 없음</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:14</div>
+                  <div class="app-tap-divider">— 사용자가 "골절·상해진단금 공백형" 카드 탭 (같은 채팅창에서 계속) —</div>
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">골절·상해진단금 공백형 자세히 알려줘</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 2:15</div>
                   <div class="app-msg-clark-row">
                     <div class="app-avatar">🤖</div>
                     <div class="app-msg-clark">
@@ -1708,6 +2538,25 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
                     <div class="app-msg-user">폐렴으로 입원했는데 보험금 나오나요?</div>
                   </div>
                   <div class="app-msg-user-time">오후 2:14</div>
+                  
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>말씀하신 내용 확인해보니 관련된 보장 유형이 있어요. 아래 항목을 눌러보시면 자세히 안내해드려요.</p>
+                    </div>
+                  </div>
+                  <div class="app-result-cards">
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">폐렴 입원보장 공백형</span><span class="app-result-card-desc">고령자 입원일당 없음</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:14</div>
+                  <div class="app-tap-divider">— 사용자가 "폐렴 입원보장 공백형" 카드 탭 (같은 채팅창에서 계속) —</div>
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">폐렴 입원보장 공백형 자세히 알려줘</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 2:15</div>
                   <div class="app-msg-clark-row">
                     <div class="app-avatar">🤖</div>
                     <div class="app-msg-clark">
@@ -1750,6 +2599,25 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
                     <div class="app-msg-user">폐렴으로 입원했는데 보험금 나오나요?</div>
                   </div>
                   <div class="app-msg-user-time">오후 2:14</div>
+                  
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>말씀하신 내용 확인해보니 관련된 보장 유형이 있어요. 아래 항목을 눌러보시면 자세히 안내해드려요.</p>
+                    </div>
+                  </div>
+                  <div class="app-result-cards">
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">폐렴 입원보장 공백형</span><span class="app-result-card-desc">고령자 입원일당 없음</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:14</div>
+                  <div class="app-tap-divider">— 사용자가 "폐렴 입원보장 공백형" 카드 탭 (같은 채팅창에서 계속) —</div>
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">폐렴 입원보장 공백형 자세히 알려줘</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 2:15</div>
                   <div class="app-msg-clark-row">
                     <div class="app-avatar">🤖</div>
                     <div class="app-msg-clark">
@@ -1813,6 +2681,25 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
                     <div class="app-msg-user">갑상선암도 암보험 되나요?</div>
                   </div>
                   <div class="app-msg-user-time">오후 2:14</div>
+                  
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>말씀하신 내용 확인해보니 관련된 보장 유형이 있어요. 아래 항목을 눌러보시면 자세히 안내해드려요.</p>
+                    </div>
+                  </div>
+                  <div class="app-result-cards">
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">소액암 진단금 부족형</span><span class="app-result-card-desc">갑상선암 등 저보장</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:14</div>
+                  <div class="app-tap-divider">— 사용자가 "소액암 진단금 부족형" 카드 탭 (같은 채팅창에서 계속) —</div>
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">소액암 진단금 부족형 자세히 알려줘</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 2:15</div>
                   <div class="app-msg-clark-row">
                     <div class="app-avatar">🤖</div>
                     <div class="app-msg-clark">
@@ -1855,6 +2742,25 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
                     <div class="app-msg-user">갑상선암도 암보험 되나요?</div>
                   </div>
                   <div class="app-msg-user-time">오후 2:14</div>
+                  
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>말씀하신 내용 확인해보니 관련된 보장 유형이 있어요. 아래 항목을 눌러보시면 자세히 안내해드려요.</p>
+                    </div>
+                  </div>
+                  <div class="app-result-cards">
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">소액암 진단금 부족형</span><span class="app-result-card-desc">갑상선암 등 저보장</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:14</div>
+                  <div class="app-tap-divider">— 사용자가 "소액암 진단금 부족형" 카드 탭 (같은 채팅창에서 계속) —</div>
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">소액암 진단금 부족형 자세히 알려줘</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 2:15</div>
                   <div class="app-msg-clark-row">
                     <div class="app-avatar">🤖</div>
                     <div class="app-msg-clark">
@@ -1919,6 +2825,25 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
                     <div class="app-msg-user">병원 자주 다니는데 실비로 충분할까요?</div>
                   </div>
                   <div class="app-msg-user-time">오후 2:14</div>
+                  
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>말씀하신 내용 확인해보니 관련된 보장 유형이 있어요. 아래 항목을 눌러보시면 자세히 안내해드려요.</p>
+                    </div>
+                  </div>
+                  <div class="app-result-cards">
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">통원치료비 미보장형</span><span class="app-result-card-desc">통원 정액 담보 없음</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:14</div>
+                  <div class="app-tap-divider">— 사용자가 "통원치료비 미보장형" 카드 탭 (같은 채팅창에서 계속) —</div>
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">통원치료비 미보장형 자세히 알려줘</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 2:15</div>
                   <div class="app-msg-clark-row">
                     <div class="app-avatar">🤖</div>
                     <div class="app-msg-clark">
@@ -1961,6 +2886,25 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
                     <div class="app-msg-user">병원 자주 다니는데 실비로 충분할까요?</div>
                   </div>
                   <div class="app-msg-user-time">오후 2:14</div>
+                  
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>말씀하신 내용 확인해보니 관련된 보장 유형이 있어요. 아래 항목을 눌러보시면 자세히 안내해드려요.</p>
+                    </div>
+                  </div>
+                  <div class="app-result-cards">
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">통원치료비 미보장형</span><span class="app-result-card-desc">통원 정액 담보 없음</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:14</div>
+                  <div class="app-tap-divider">— 사용자가 "통원치료비 미보장형" 카드 탭 (같은 채팅창에서 계속) —</div>
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">통원치료비 미보장형 자세히 알려줘</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 2:15</div>
                   <div class="app-msg-clark-row">
                     <div class="app-avatar">🤖</div>
                     <div class="app-msg-clark">
@@ -2023,6 +2967,25 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
                     <div class="app-msg-user">부모님 병원비 말고 간병비도 걱정돼요</div>
                   </div>
                   <div class="app-msg-user-time">오후 2:14</div>
+                  
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>말씀하신 내용 확인해보니 관련된 보장 유형이 있어요. 아래 항목을 눌러보시면 자세히 안내해드려요.</p>
+                    </div>
+                  </div>
+                  <div class="app-result-cards">
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">간병 지원 공백형</span><span class="app-result-card-desc">간병인지원 입원일당 없음</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:14</div>
+                  <div class="app-tap-divider">— 사용자가 "간병 지원 공백형" 카드 탭 (같은 채팅창에서 계속) —</div>
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">간병 지원 공백형 자세히 알려줘</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 2:15</div>
                   <div class="app-msg-clark-row">
                     <div class="app-avatar">🤖</div>
                     <div class="app-msg-clark">
@@ -2085,6 +3048,25 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
                     <div class="app-msg-user">인공관절 수술비 보장되나요?</div>
                   </div>
                   <div class="app-msg-user-time">오후 2:14</div>
+                  
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>말씀하신 내용 확인해보니 관련된 보장 유형이 있어요. 아래 항목을 눌러보시면 자세히 안내해드려요.</p>
+                    </div>
+                  </div>
+                  <div class="app-result-cards">
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">인공관절수술 미보장형</span><span class="app-result-card-desc">인공관절 수술 정액 없음</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:14</div>
+                  <div class="app-tap-divider">— 사용자가 "인공관절수술 미보장형" 카드 탭 (같은 채팅창에서 계속) —</div>
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">인공관절수술 미보장형 자세히 알려줘</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 2:15</div>
                   <div class="app-msg-clark-row">
                     <div class="app-avatar">🤖</div>
                     <div class="app-msg-clark">
@@ -2148,6 +3130,25 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
                     <div class="app-msg-user">암 치료 후 요양병원 가면 보험금 나오나요?</div>
                   </div>
                   <div class="app-msg-user-time">오후 2:14</div>
+                  
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>말씀하신 내용 확인해보니 관련된 보장 유형이 있어요. 아래 항목을 눌러보시면 자세히 안내해드려요.</p>
+                    </div>
+                  </div>
+                  <div class="app-result-cards">
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">암요양병원 장기입원 미보장형</span><span class="app-result-card-desc">회복기 입원 공백</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:14</div>
+                  <div class="app-tap-divider">— 사용자가 "암요양병원 장기입원 미보장형" 카드 탭 (같은 채팅창에서 계속) —</div>
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">암요양병원 장기입원 미보장형 자세히 알려줘</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 2:15</div>
                   <div class="app-msg-clark-row">
                     <div class="app-avatar">🤖</div>
                     <div class="app-msg-clark">
@@ -2190,6 +3191,25 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
                     <div class="app-msg-user">암 치료 후 요양병원 가면 보험금 나오나요?</div>
                   </div>
                   <div class="app-msg-user-time">오후 2:14</div>
+                  
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>말씀하신 내용 확인해보니 관련된 보장 유형이 있어요. 아래 항목을 눌러보시면 자세히 안내해드려요.</p>
+                    </div>
+                  </div>
+                  <div class="app-result-cards">
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">암요양병원 장기입원 미보장형</span><span class="app-result-card-desc">회복기 입원 공백</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:14</div>
+                  <div class="app-tap-divider">— 사용자가 "암요양병원 장기입원 미보장형" 카드 탭 (같은 채팅창에서 계속) —</div>
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">암요양병원 장기입원 미보장형 자세히 알려줘</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 2:15</div>
                   <div class="app-msg-clark-row">
                     <div class="app-avatar">🤖</div>
                     <div class="app-msg-clark">
@@ -2253,6 +3273,25 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
                     <div class="app-msg-user">중환자실 입원하면 보험금 따로 나오나요?</div>
                   </div>
                   <div class="app-msg-user-time">오후 2:14</div>
+                  
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>말씀하신 내용 확인해보니 관련된 보장 유형이 있어요. 아래 항목을 눌러보시면 자세히 안내해드려요.</p>
+                    </div>
+                  </div>
+                  <div class="app-result-cards">
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">중환자실입원일당 미보장형</span><span class="app-result-card-desc">중환자실 전용 입원일당 없음</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:14</div>
+                  <div class="app-tap-divider">— 사용자가 "중환자실입원일당 미보장형" 카드 탭 (같은 채팅창에서 계속) —</div>
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">중환자실입원일당 미보장형 자세히 알려줘</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 2:15</div>
                   <div class="app-msg-clark-row">
                     <div class="app-avatar">🤖</div>
                     <div class="app-msg-clark">
@@ -2295,6 +3334,25 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
                     <div class="app-msg-user">중환자실 입원하면 보험금 따로 나오나요?</div>
                   </div>
                   <div class="app-msg-user-time">오후 2:14</div>
+                  
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>말씀하신 내용 확인해보니 관련된 보장 유형이 있어요. 아래 항목을 눌러보시면 자세히 안내해드려요.</p>
+                    </div>
+                  </div>
+                  <div class="app-result-cards">
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">중환자실입원일당 미보장형</span><span class="app-result-card-desc">중환자실 전용 입원일당 없음</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:14</div>
+                  <div class="app-tap-divider">— 사용자가 "중환자실입원일당 미보장형" 카드 탭 (같은 채팅창에서 계속) —</div>
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">중환자실입원일당 미보장형 자세히 알려줘</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 2:15</div>
                   <div class="app-msg-clark-row">
                     <div class="app-avatar">🤖</div>
                     <div class="app-msg-clark">
@@ -2358,6 +3416,25 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
                     <div class="app-msg-user">입원일당 한도 넘으면 어떻게 되나요?</div>
                   </div>
                   <div class="app-msg-user-time">오후 2:14</div>
+                  
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>말씀하신 내용 확인해보니 관련된 보장 유형이 있어요. 아래 항목을 눌러보시면 자세히 안내해드려요.</p>
+                    </div>
+                  </div>
+                  <div class="app-result-cards">
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">장기입원비 미보장형</span><span class="app-result-card-desc">장기입원 한도초과 보장 없음</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:14</div>
+                  <div class="app-tap-divider">— 사용자가 "장기입원비 미보장형" 카드 탭 (같은 채팅창에서 계속) —</div>
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">장기입원비 미보장형 자세히 알려줘</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 2:15</div>
                   <div class="app-msg-clark-row">
                     <div class="app-avatar">🤖</div>
                     <div class="app-msg-clark">
@@ -2400,6 +3477,25 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
                     <div class="app-msg-user">입원일당 한도 넘으면 어떻게 되나요?</div>
                   </div>
                   <div class="app-msg-user-time">오후 2:14</div>
+                  
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>말씀하신 내용 확인해보니 관련된 보장 유형이 있어요. 아래 항목을 눌러보시면 자세히 안내해드려요.</p>
+                    </div>
+                  </div>
+                  <div class="app-result-cards">
+                    <div class="app-result-card">
+                      <div class="app-result-card-main"><span class="app-result-card-name">장기입원비 미보장형</span><span class="app-result-card-desc">장기입원 한도초과 보장 없음</span></div>
+                      <span class="app-result-card-chevron">›</span>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:14</div>
+                  <div class="app-tap-divider">— 사용자가 "장기입원비 미보장형" 카드 탭 (같은 채팅창에서 계속) —</div>
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">장기입원비 미보장형 자세히 알려줘</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 2:15</div>
                   <div class="app-msg-clark-row">
                     <div class="app-avatar">🤖</div>
                     <div class="app-msg-clark">

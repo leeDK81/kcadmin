@@ -2,7 +2,7 @@
   "version": "1.9",
   "generated_at": "2026-07-03",
   "agent": "contents-review",
-  "note": "2026-07-04 T31(정신피해치료비 미보장형) 폐지 — A9616 미보유+나이 조건만으로는 판별력이 없고, PROMAGE 50개 위험도 항목 전체에 범죄·정신건강 카테고리가 없어 구조적으로 좁힐 신호가 없음이 확인됨. PO 판단으로 폐지. EV040도 함께 제거. 24→23개 체인.",
+  "note": "2026-07-04 T31(정신피해치료비 미보장형) 폐지 — A9616 미보유+나이 조건만으로는 판별력이 없고, PROMAGE 50개 위험도 항목 전체에 범죄·정신건강 카테고리가 없어 구조적으로 좁힐 신호가 없음이 확인됨. PO 판단으로 폐지. EV040도 함께 제거. 24→23개 체인. | 2026-07-05: N:N 다건 매칭 콘텐츠 반영 — CN-T02A(암보험)를 T18/T25/T29에도 연결, 신규 CN-HOSPALL(입원비보험, T19/T24/T26/T30/T32)·CN-INJURYALL(상해보험 종합, T20/T22/T23)·CN-CAREALL(간병보험 종합, T05/T27)·CN-ALL(종합진단, 활성 23개 전체) 추가. 기존 24개 단독 Concept은 전부 그대로 유지.",
   "summary": {
     "total_risk_types": 23,
     "total_rules": 23,
@@ -11,7 +11,8 @@
     "chains_complete": 23,
     "chains_with_warning": 0,
     "chains_incomplete": 0,
-    "ready_to_register": true
+    "ready_to_register": true,
+    "total_concepts": 28
   },
   "chains": [
     {
@@ -20,7 +21,8 @@
       "risk_type_id": "T01",
       "risk_type_name": "무보장형",
       "concept_ids": [
-        "CN-T01"
+        "CN-T01",
+        "CN-ALL"
       ],
       "rule_id": "RU-T01",
       "evidence_ids": [
@@ -40,7 +42,8 @@
       "risk_type_name": "암진단금 부족형",
       "concept_ids": [
         "CN-T02A",
-        "CN-T02B"
+        "CN-T02B",
+        "CN-ALL"
       ],
       "rule_id": "RU-T02",
       "evidence_ids": [
@@ -62,7 +65,8 @@
       "risk_type_id": "T03",
       "risk_type_name": "심혈관질환보장 협소형",
       "concept_ids": [
-        "CN-T03"
+        "CN-T03",
+        "CN-ALL"
       ],
       "rule_id": "RU-T03",
       "evidence_ids": [
@@ -80,7 +84,8 @@
       "risk_type_id": "T04",
       "risk_type_name": "뇌혈관질환보장 협소형",
       "concept_ids": [
-        "CN-T04"
+        "CN-T04",
+        "CN-ALL"
       ],
       "rule_id": "RU-T04",
       "evidence_ids": [
@@ -99,7 +104,9 @@
       "risk_type_id": "T05",
       "risk_type_name": "노후돌봄보장 공백형",
       "concept_ids": [
-        "CN-T05"
+        "CN-T05",
+        "CN-CAREALL",
+        "CN-ALL"
       ],
       "rule_id": "RU-T05",
       "evidence_ids": [
@@ -120,7 +127,8 @@
       "risk_type_id": "T10",
       "risk_type_name": "여성암보장 공백형",
       "concept_ids": [
-        "CN-T10"
+        "CN-T10",
+        "CN-ALL"
       ],
       "rule_id": "RU-T10",
       "evidence_ids": [
@@ -138,7 +146,8 @@
       "risk_type_id": "T11",
       "risk_type_name": "사망보장 미비형",
       "concept_ids": [
-        "CN-T11"
+        "CN-T11",
+        "CN-ALL"
       ],
       "rule_id": "RU-T11",
       "evidence_ids": [
@@ -162,7 +171,8 @@
       "risk_type_id": "T14",
       "risk_type_name": "운전자보험 미가입형",
       "concept_ids": [
-        "CN-T14"
+        "CN-T14",
+        "CN-ALL"
       ],
       "rule_id": "RU-T14",
       "evidence_ids": [
@@ -180,7 +190,8 @@
       "risk_type_id": "T17",
       "risk_type_name": "치매진단보장 공백형",
       "concept_ids": [
-        "CN-T17"
+        "CN-T17",
+        "CN-ALL"
       ],
       "rule_id": "RU-T17",
       "evidence_ids": [
@@ -198,7 +209,9 @@
       "risk_type_id": "T18",
       "risk_type_name": "항암치료비 미보장형",
       "concept_ids": [
-        "CN-T18"
+        "CN-T18",
+        "CN-T02A",
+        "CN-ALL"
       ],
       "rule_id": "RU-T18",
       "evidence_ids": [
@@ -217,7 +230,9 @@
       "risk_type_id": "T19",
       "risk_type_name": "수술·입원 정액비 미보장형",
       "concept_ids": [
-        "CN-T19"
+        "CN-T19",
+        "CN-HOSPALL",
+        "CN-ALL"
       ],
       "rule_id": "RU-T19",
       "evidence_ids": [
@@ -243,7 +258,9 @@
       "risk_type_id": "T20",
       "risk_type_name": "후유장해보장 공백형",
       "concept_ids": [
-        "CN-T20"
+        "CN-T20",
+        "CN-INJURYALL",
+        "CN-ALL"
       ],
       "rule_id": "RU-T20",
       "evidence_ids": [
@@ -261,7 +278,8 @@
       "risk_type_id": "T21",
       "risk_type_name": "치과보장 공백형",
       "concept_ids": [
-        "CN-T21"
+        "CN-T21",
+        "CN-ALL"
       ],
       "rule_id": "RU-T21",
       "evidence_ids": [
@@ -279,7 +297,9 @@
       "risk_type_id": "T22",
       "risk_type_name": "상해 특화 보장 공백형",
       "concept_ids": [
-        "CN-T22"
+        "CN-T22",
+        "CN-INJURYALL",
+        "CN-ALL"
       ],
       "rule_id": "RU-T22",
       "evidence_ids": [
@@ -297,7 +317,9 @@
       "risk_type_id": "T23",
       "risk_type_name": "골절·상해진단금 공백형",
       "concept_ids": [
-        "CN-T23"
+        "CN-T23",
+        "CN-INJURYALL",
+        "CN-ALL"
       ],
       "rule_id": "RU-T23",
       "evidence_ids": [
@@ -315,7 +337,9 @@
       "risk_type_id": "T24",
       "risk_type_name": "폐렴 입원보장 공백형",
       "concept_ids": [
-        "CN-T24"
+        "CN-T24",
+        "CN-HOSPALL",
+        "CN-ALL"
       ],
       "rule_id": "RU-T24",
       "evidence_ids": [
@@ -333,7 +357,9 @@
       "risk_type_id": "T25",
       "risk_type_name": "소액암 진단금 부족형",
       "concept_ids": [
-        "CN-T25"
+        "CN-T25",
+        "CN-T02A",
+        "CN-ALL"
       ],
       "rule_id": "RU-T25",
       "evidence_ids": [
@@ -357,7 +383,9 @@
       "risk_type_id": "T26",
       "risk_type_name": "통원치료비 미보장형",
       "concept_ids": [
-        "CN-T26"
+        "CN-T26",
+        "CN-HOSPALL",
+        "CN-ALL"
       ],
       "rule_id": "RU-T26",
       "evidence_ids": [
@@ -375,7 +403,9 @@
       "risk_type_id": "T27",
       "risk_type_name": "간병 지원 공백형",
       "concept_ids": [
-        "CN-T27"
+        "CN-T27",
+        "CN-CAREALL",
+        "CN-ALL"
       ],
       "rule_id": "RU-T27",
       "evidence_ids": [
@@ -399,7 +429,8 @@
       "risk_type_id": "T28",
       "risk_type_name": "인공관절수술 미보장형",
       "concept_ids": [
-        "CN-T28"
+        "CN-T28",
+        "CN-ALL"
       ],
       "rule_id": "RU-T28",
       "evidence_ids": [
@@ -417,7 +448,9 @@
       "risk_type_id": "T29",
       "risk_type_name": "암요양병원 장기입원 미보장형",
       "concept_ids": [
-        "CN-T29"
+        "CN-T29",
+        "CN-T02A",
+        "CN-ALL"
       ],
       "rule_id": "RU-T29",
       "evidence_ids": [
@@ -435,7 +468,9 @@
       "risk_type_id": "T30",
       "risk_type_name": "중환자실입원일당 미보장형",
       "concept_ids": [
-        "CN-T30"
+        "CN-T30",
+        "CN-HOSPALL",
+        "CN-ALL"
       ],
       "rule_id": "RU-T30",
       "evidence_ids": [
@@ -453,7 +488,9 @@
       "risk_type_id": "T32",
       "risk_type_name": "장기입원비 미보장형",
       "concept_ids": [
-        "CN-T32"
+        "CN-T32",
+        "CN-HOSPALL",
+        "CN-ALL"
       ],
       "rule_id": "RU-T32",
       "evidence_ids": [
