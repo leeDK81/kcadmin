@@ -152,12 +152,6 @@ body{overflow:hidden;height:100vh}
 .form-label{display:block;font-size:13px;font-weight:600;margin-bottom:5px}
 .chip{display:inline-flex;align-items:center;background:var(--bg-page);border:1px solid var(--border);border-radius:4px;padding:2px 8px;font-size:12px;font-weight:600;margin:2px}
 
-/* ── Panel tabs ── */
-.panel-tabs{display:flex;border-bottom:2px solid var(--border);flex-shrink:0}
-.panel-tab{flex:1;padding:10px 12px;font-size:13px;font-weight:600;border:none;background:none;cursor:pointer;color:var(--text-secondary);border-bottom:2.5px solid transparent;margin-bottom:-2px;transition:all .15s;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:5px}
-.panel-tab.active{color:var(--step-active);border-bottom-color:var(--step-active)}
-.panel-tab:hover:not(.active){background:var(--bg-page);color:var(--text-primary)}
-
 /* ── Test panel ── */
 .test-chain-flow{display:flex;align-items:flex-start;gap:6px;flex-wrap:wrap;padding:10px 12px;background:var(--bg-page);border-radius:8px;margin-bottom:16px}
 .test-chain-group{display:flex;flex-direction:column;gap:4px;align-items:center}
@@ -224,15 +218,6 @@ body{overflow:hidden;height:100vh}
 .test-pass-banner.fail{background:#FFF0F0;border-color:#F0C0C0;color:#8A0000}
 .test-fail-list{padding:8px 10px;background:#FFF8F8;border-radius:6px;margin-top:6px;font-size:12px;line-height:1.8;color:#8A4040}
 
-/* ── Chain selector ── */
-.chain-sel-wrap{margin-bottom:2px}
-.chain-sel-row{display:grid;grid-template-columns:18px 62px 1fr 14px;align-items:center;gap:5px;margin-bottom:5px}
-.chain-sel-row.focal{background:rgba(26,74,154,.05);border-radius:5px;padding:3px 6px;margin-left:-6px;margin-right:-6px}
-.chain-sel-type-lbl{font-size:10px;font-weight:700;color:var(--text-secondary);white-space:nowrap;text-transform:uppercase;letter-spacing:.03em}
-.chain-sel-dd{width:100%;padding:4px 6px;border:1px solid var(--border);border-radius:5px;font-size:11px;font-family:inherit;background:#fff;color:var(--text-primary);cursor:pointer;outline:none}
-.chain-sel-dd:focus{border-color:var(--step-active)}
-.chain-sel-single{font-size:11px;color:var(--text-primary);padding:3px 6px;background:var(--bg-page);border:1px solid var(--border);border-radius:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.chain-focal-mark{font-size:11px;color:#1A4A9A;font-weight:900;text-align:center}
 /* ── Chat answer preview ── */
 .chat-preview-wrap{background:#EEF3FF;border-radius:10px;padding:12px 12px 10px;margin-top:10px}
 .chat-question{display:flex;justify-content:flex-end;margin-bottom:10px}
@@ -269,6 +254,7 @@ body{overflow:hidden;height:100vh}
 /* ── Grid card test mode ── */
 .gc-test-check{width:17px;height:17px;border-radius:4px;border:1.5px solid #B0BBC6;background:#fff;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0;margin-left:auto}
 .gc-test-check.checked{background:var(--step-active);border-color:var(--step-active)}
+.gc-auto-badge{font-size:9px;font-weight:700;color:#5A5A55;background:#EDEDEE;border-radius:4px;padding:2px 6px;margin-left:auto;white-space:nowrap}
 .gc-card.test-checked{border-color:var(--step-active)!important;box-shadow:0 0 0 2px rgba(15,110,86,.12)}
 .gc-focal.test-checked{border:2px solid var(--step-active)!important;box-shadow:0 0 0 2px rgba(15,110,86,.12)}
 .gc-card.test-mode-card{cursor:pointer}
@@ -323,7 +309,7 @@ body{overflow:hidden;height:100vh}
         <i class="fa-solid fa-circle-dot" style="font-size:9px"></i>
         <span id="pendingCount">0</span>개 준비 연결
       </span>
-      <button class="btn btn-secondary btn-sm" onclick="alert('사전 테스트는 이 캔버스 하단 패널에서 진행합니다.')"><i class="fa-solid fa-flask" style="font-size:10px"></i> 사전 테스트</button>
+      <button class="btn btn-secondary btn-sm" onclick="switchCanvasMode('test')"><i class="fa-solid fa-flask" style="font-size:10px"></i> 테스트 모드로 이동</button>
     </div>
   </div>
 
@@ -399,19 +385,11 @@ body{overflow:hidden;height:100vh}
   </div>
 </div>
 
-<!-- Slide panel -->
+<!-- Slide panel — 카드 정보(연결 모드에서 카드 클릭·상세보기) 전용. 사전 테스트는 별도 진입경로(테스트 모드 → 테스트 실행)만 사용 -->
 <div class="slide-panel" id="slidePanel">
   <div class="panel-hd">
     <span class="panel-title" id="panelTitle">카드 정보</span>
     <button class="panel-close" onclick="closePanel()"><i class="fa-solid fa-xmark"></i></button>
-  </div>
-  <div class="panel-tabs">
-    <button class="panel-tab active" id="tabInfo" onclick="switchPanelTab('info')">
-      <i class="fa-solid fa-circle-info" style="font-size:11px"></i> 카드 정보
-    </button>
-    <button class="panel-tab" id="tabTest" onclick="switchPanelTab('test')">
-      <i class="fa-solid fa-flask" style="font-size:11px"></i> 사전 테스트
-    </button>
   </div>
   <div class="panel-bd" id="panelBody"></div>
   <div class="panel-ft" id="panelFooter"></div>
@@ -561,16 +539,14 @@ const PICKER_COLS = [
 let selectedCardId = null;
 let pendingAction  = null;
 let panelCardId    = null;
-let panelTab       = 'info';
 let testProfile    = {
   conditions: {},    // "RU001_0" → true(충족) | false(미충족)
   promage:    {},    // "RU001_4" → 'risk'|'caution'|'good'|null
   profile:    { age: 45, gender: '남', married: '무관', has_child: '무관', drives: '무관' }
 };
-let testChain     = {};        // type → cardId (체인 구성 선택)
+let testChain     = {};        // type → cardId, evidence/policy → cardId[] (테스트 실행 시 확정된 체인)
 let canvasMode    = 'connect'; // 'connect' | 'test'
-let testSelection = {};        // type → cardId (테스트 모드 체크 선택)
-let panelTestMode = 'chain';   // 'chain' (연결모드 열기) | 'canvas' (테스트모드 열기)
+let testSelection = {};        // type → cardId, evidence → cardId[] (테스트 모드 체크 선택. policy는 선택 대상 아님 — 항상 자동 전체 적용)
 let ragMockState  = 'faq'; // 'faq' | 'llm'
 let testHasRun    = false;
 let canvasStatusFilter = 'all';   // 'all' | 'active' | 'approved'
@@ -612,35 +588,6 @@ function edgeExists(fromId, toId) {
 
 function getEdge(fromId, toId) {
   return EDGES.find(e => e.from === fromId && e.to === toId);
-}
-
-// Bidirectional BFS from cardId → returns Set of all connected card IDs
-function computeChain(cardId) {
-  const visited = new Set([cardId]);
-  const queue = [cardId];
-  while (queue.length) {
-    const id = queue.shift();
-    EDGES.forEach(e => {
-      if (e.from === id && !visited.has(e.to))   { visited.add(e.to);   queue.push(e.to); }
-      if (e.to   === id && !visited.has(e.from)) { visited.add(e.from); queue.push(e.from); }
-    });
-  }
-  return visited;
-}
-
-// 체인 연결 엣지 탐색 — 포컬 카드와의 직접 엣지를 우선 반환
-function findChainEdge(cardId, chainSet, focalId) {
-  if (focalId) {
-    const direct = EDGES.find(e =>
-      (e.from === cardId && e.to   === focalId) ||
-      (e.to   === cardId && e.from === focalId)
-    );
-    if (direct) return direct;
-  }
-  return EDGES.find(e =>
-    (e.from === cardId && chainSet.has(e.to)) ||
-    (e.to   === cardId && chainSet.has(e.from))
-  ) || null;
 }
 
 // 선택된 카드(focalCard)와 직접 연결 가능한지만 체크 (체인 경유 X)
@@ -735,10 +682,6 @@ function hexToRgba(hex, alpha) {
 // ============================================================
 // CANVAS MODE
 // ============================================================
-function hasEdge(cardId) {
-  return EDGES.some(function(e) { return e.from === cardId || e.to === cardId; });
-}
-
 function switchCanvasMode(mode) {
   canvasMode = mode;
   document.getElementById('modeConnect').classList.toggle('active', mode === 'connect');
@@ -749,8 +692,10 @@ function switchCanvasMode(mode) {
     if (labelEl) labelEl.textContent = '① 체인 탐색';
     if (hintEl)  hintEl.textContent  = '— 클릭해 체인 구조 확인 후 캔버스에서 카드를 체크하세요';
     testSelection = {};
-    updateTestFloatBar();
     document.getElementById('slidePanel').classList.remove('open');
+    // 이미 포컬로 선택돼 있던 카드가 있으면(연결 모드에서 넘어온 경우) 그 카드도 곧바로
+    // 테스트 대상으로 자동 등록한다 — selectCard()의 등록 로직을 재사용.
+    if (selectedCardId) { selectCard(selectedCardId); } else { updateTestFloatBar(); }
   } else {
     if (labelEl) labelEl.textContent = '① 카드 선택';
     if (hintEl)  hintEl.textContent  = '— 카드를 클릭하면 연결 현황이 아래에 표시됩니다';
@@ -761,22 +706,23 @@ function switchCanvasMode(mode) {
   renderGrid();
 }
 
-function onTestPickerClick(cardId) {
-  var card = CARDS.find(function(c) { return c.id === cardId; });
-  if (!card || !hasEdge(cardId)) return;
-  if (testSelection[card.type] === cardId) {
-    delete testSelection[card.type];
-  } else {
-    testSelection[card.type] = cardId;
-  }
-  renderPicker();
-  updateTestFloatBar();
+// Evidence는 Rule 1개에 여러 개가 붙을 수 있고 실제로도 LLM이 맥락별로 골라 인용하므로
+// 여러 개를 동시에 체크해 "이 조합이면 이렇게 나온다"를 미리볼 수 있게 다중 선택으로 둔다.
+// Policy는 선택 대상이 아니다 — connectedPolicyIds()로 항상 전부 자동 적용되므로 클릭 무시.
+function toggleTestEvidence(cardId) {
+  if (!Array.isArray(testSelection.evidence)) testSelection.evidence = [];
+  var idx = testSelection.evidence.indexOf(cardId);
+  if (idx >= 0) testSelection.evidence.splice(idx, 1);
+  else          testSelection.evidence.push(cardId);
 }
 
 function onTestGridClick(cardId) {
   var card = CARDS.find(function(c) { return c.id === cardId; });
   if (!card) return;
-  if (testSelection[card.type] === cardId) {
+  if (card.type === 'policy') return; // Policy는 항상 자동 적용, 개별 선택 불가
+  if (card.type === 'evidence') {
+    toggleTestEvidence(cardId);
+  } else if (testSelection[card.type] === cardId) {
     delete testSelection[card.type];
   } else {
     testSelection[card.type] = cardId;
@@ -789,8 +735,9 @@ function updateTestFloatBar() {
   var bar    = document.getElementById('testFloatBar');
   var chips  = document.getElementById('testFloatChips');
   var runBtn = document.getElementById('testFloatBtn');
-  var order  = ['concept','risk','rule','evidence','policy'];
-  var selected = order.map(function(t) { return testSelection[t]; }).filter(Boolean);
+  var order  = ['concept','risk','rule'];
+  var selected = order.map(function(t) { return testSelection[t]; }).filter(Boolean)
+    .concat(testSelection.evidence || []);
 
   if (!selected.length) {
     if (chips) chips.innerHTML = '<span class="test-float-empty">캔버스에서 카드를 체크하세요</span>';
@@ -802,9 +749,7 @@ function updateTestFloatBar() {
   var hasRule = !!testSelection.rule;
   if (runBtn) runBtn.disabled = !hasRule;
 
-  var chipHTML = order.map(function(type) {
-    var id = testSelection[type];
-    if (!id) return '';
+  var chipHTML = selected.map(function(id) {
     var c = CARDS.find(function(cc) { return cc.id === id; });
     if (!c) return '';
     var color = TYPE_COLORS[c.type];
@@ -819,13 +764,32 @@ function updateTestFloatBar() {
   if (chips) chips.innerHTML = chipHTML;
 }
 
+// Policy는 사용자가 고르는 게 아니라 선택된 Rule에 연결된 전부를 항상 적용한다
+// (context/answer-logic.md "Policy — 연결된 전부 적용" 원칙과 동일. Evidence는 반대로
+// LLM이 맥락에 맞게 골라 인용하므로 여러 개를 미리 체크해 비교해볼 수 있게 한다.)
+function connectedPolicyIds(ruleId) {
+  if (!ruleId) return [];
+  return EDGES.filter(function(e) { return e.from === ruleId; })
+    .map(function(e) { return e.to; })
+    .filter(function(id) {
+      var c = CARDS.find(function(cc) { return cc.id === id; });
+      return c && c.type === 'policy';
+    });
+}
+
 function runCanvasTest() {
   if (!testSelection.rule) return;
-  testChain     = Object.assign({}, testSelection);
-  panelTestMode = 'canvas';
-  panelCardId   = testSelection.concept || testSelection.rule;
-  initTestProfile(testSelection.rule);
-  switchPanelTab('test');
+  var ruleId = testSelection.rule;
+  testChain = {
+    concept:  testSelection.concept || null,
+    risk:     testSelection.risk    || null,
+    rule:     ruleId,
+    evidence: (testSelection.evidence || []).slice(),
+    policy:   connectedPolicyIds(ruleId),
+  };
+  panelCardId = testSelection.concept || ruleId;
+  initTestProfile(ruleId);
+  renderPanelTest();
   document.getElementById('slidePanel').classList.add('open');
 }
 
@@ -852,19 +816,41 @@ function buildSelectedChainVisual(chainCards) {
 // ============================================================
 // SELECT CARD
 // ============================================================
+// 2026-07-05 확정: 카드를 선택해 기준(포컬)으로 삼는 것과 카드 정보를 보는 것은 별개 동작이다.
+// selectCard()는 그리드만 갱신하고 정보 패널은 열지 않는다 — 패널은 "탐색"·"상세 보기" 버튼을
+// 명시적으로 클릭했을 때만 연다(exploreCard(), viewCard() 참조). 그래야 체인을 따라 이동하며
+// 그리드를 보는 중에 패널이 계속 튀어나와 화면을 가리는 문제가 없다.
 function selectCard(id) {
   selectedCardId = id;
+  var card = CARDS.find(function(c){ return c.id === id; });
+
+  // 테스트 모드: 지금 보고 있는(포컬) 카드는 곧 "이걸로 테스트하겠다"는 의사이므로 따로
+  // 체크할 필요 없이 자동으로 테스트 대상에 포함된다. Policy는 애초에 개별 선택 대상이
+  // 아니므로 제외(항상 연결된 전부 자동 적용).
+  if (canvasMode === 'test' && card.type !== 'policy') {
+    if (card.type === 'evidence') {
+      if (!Array.isArray(testSelection.evidence)) testSelection.evidence = [];
+      if (!testSelection.evidence.includes(id)) testSelection.evidence.push(id);
+    } else {
+      testSelection[card.type] = id;
+    }
+  }
+
   renderPicker();
   renderGrid();
   requestAnimationFrame(drawLines);
+  if (canvasMode === 'test') updateTestFloatBar();
 
-  var card = CARDS.find(function(c){ return c.id === id; });
   var chip = document.getElementById('focalChip');
   chip.style.background = TYPE_COLORS[card.type];
   chip.classList.add('visible');
   document.getElementById('focalChipLabel').textContent = card.id + ' · ' + card.title;
+}
 
-  if (canvasMode !== 'test') openPanel(id, 'info');
+// "탐색" 버튼 전용 — 포컬로 전환 + 카드 정보 패널까지 함께 연다
+function exploreCard(id) {
+  selectCard(id);
+  if (canvasMode !== 'test') openPanel(id);
 }
 
 function clearSelection() {
@@ -880,20 +866,94 @@ function clearSelection() {
 // ============================================================
 // RENDER GRID — 전체 체인 기반
 // ============================================================
+// 2026-07-05 확정(3차, 최종): "연결됨"·"연결 가능" 모두 포컬 카드 기준 직접(1홉) 연결로
+// 한정한다. 전체 체인을 다 보여주는 방식(2차)도 시도해봤으나, 카드가 많아질수록(특히
+// Evidence처럼 여러 Rule에 공유되는 카드가 있으면) 한 카테고리가 통째로 연결된 것처럼
+// 보여 오히려 복잡도가 커지는 문제가 있었다. 최종적으로 "화면에 보이는 것 = 액션 가능한
+// 것"으로 완전히 통일한다 — 포컬과 같은 타입의 형제 카드(직접 연결 불가)나 몇 홉 떨어진
+// 카드는 표시하지 않는다. 더 깊은 체인을 보고 싶으면 그 카드를 클릭해 새 포컬로 탐색해
+// 들어간다.
+// Risk-type을 축으로 포컬 카드가 속한 파이프라인(Concept→Risk-type→Rule→Evidence·Policy)
+// 전체를 계산한다 — 포컬이 어느 단계에 있든 "이 카드에 이르기 위한/이 카드로부터 이어지는"
+// 카드는 전부 포함하되, 무관한 다른 파이프라인으로는 넘어가지 않는다(예: Evidence 하나가
+// 다른 Rule과도 공유되더라도, 포컬이 그 Evidence 자신이 아닌 이상 그 다른 Rule 쪽으로는
+// 확장하지 않는다). 방향: 포컬 → 관련 Risk-type(들) 파악 → 그 Risk-type의 Concept 전체 +
+// Rule + 그 Rule의 Evidence·Policy 전체.
+function computePipeline(focalCard) {
+  const riskIds = new Set();
+  if (focalCard.type === 'risk') {
+    riskIds.add(focalCard.id);
+  } else if (focalCard.type === 'concept') {
+    EDGES.forEach(e => {
+      if (e.from !== focalCard.id) return;
+      const t = CARDS.find(c => c.id === e.to);
+      if (t && t.type === 'risk') riskIds.add(t.id);
+    });
+  } else if (focalCard.type === 'rule') {
+    EDGES.forEach(e => {
+      if (e.to !== focalCard.id) return;
+      const f = CARDS.find(c => c.id === e.from);
+      if (f && f.type === 'risk') riskIds.add(f.id);
+    });
+  } else if (focalCard.type === 'evidence' || focalCard.type === 'policy') {
+    const ruleIds = new Set();
+    EDGES.forEach(e => {
+      if (e.to !== focalCard.id) return;
+      const f = CARDS.find(c => c.id === e.from);
+      if (f && f.type === 'rule') ruleIds.add(f.id);
+    });
+    ruleIds.forEach(rid => {
+      EDGES.forEach(e => {
+        if (e.to !== rid) return;
+        const f = CARDS.find(c => c.id === e.from);
+        if (f && f.type === 'risk') riskIds.add(f.id);
+      });
+    });
+  }
+
+  const pipeline = new Set([focalCard.id]);
+  riskIds.forEach(id => pipeline.add(id));
+
+  // 그 Risk-type(들)에 연결된 Concept 전체
+  EDGES.forEach(e => {
+    if (!riskIds.has(e.to)) return;
+    const f = CARDS.find(c => c.id === e.from);
+    if (f && f.type === 'concept') pipeline.add(f.id);
+  });
+
+  // 그 Risk-type(들)의 Rule(1:1)
+  const ruleIds = new Set();
+  EDGES.forEach(e => {
+    const f = CARDS.find(c => c.id === e.from);
+    if (!(f && riskIds.has(f.id))) return;
+    const t = CARDS.find(c => c.id === e.to);
+    if (t && t.type === 'rule') { pipeline.add(t.id); ruleIds.add(t.id); }
+  });
+
+  // 그 Rule(들)의 Evidence·Policy 전체
+  EDGES.forEach(e => {
+    if (!ruleIds.has(e.from)) return;
+    const t = CARDS.find(c => c.id === e.to);
+    if (t && (t.type === 'evidence' || t.type === 'policy')) pipeline.add(t.id);
+  });
+
+  return pipeline;
+}
+
 function renderGrid() {
   if (!selectedCardId) return;
 
   const focalCard    = CARDS.find(c => c.id === selectedCardId);
-  const visibleCards = CARDS.filter(c => c.status !== 'draft'); // active + approved + review (draft 제외)
-  const chain        = computeChain(selectedCardId);
+  const visibleCards = CARDS.filter(c => c.status !== 'draft'); // active + approved + review (dra제외)
+  const pipeline      = computePipeline(focalCard);
 
   document.getElementById('gridEmpty').style.display = 'none';
   document.getElementById('gridContent').style.display = 'flex';
 
-  const chainSize    = chain.size - 1; // 포컬 제외
-  // 직접 연결 가능 카드 수 (포컬과 타입 규칙이 맞고 아직 미연결)
+  const pipelineSize = pipeline.size - 1; // 포컬 제외
+  // 직접 연결 가능 카드 수 (포컬과 타입 규칙이 맞고 아직 미연결, 같은 클러스터)
   const availableCount = visibleCards.filter(c =>
-    !chain.has(c.id) && c.type !== focalCard.type && findDirectTarget(c, focalCard)
+    c.id !== focalCard.id && c.cluster === focalCard.cluster && findDirectTarget(c, focalCard)
   ).length;
 
   document.getElementById('gridHeader').innerHTML =
@@ -901,14 +961,11 @@ function renderGrid() {
     '<span class="grid-focal-label" style="color:' + TYPE_COLORS[focalCard.type] + '">' + focalCard.title + '</span>' +
     '<span class="grid-focal-badge"><i class="fa-solid fa-fw fa-tag" style="font-size:9px"></i>' + focalCard.id + ' · ' + TYPE_NAMES[focalCard.type] + ' · ' + focalCard.cluster + '</span>' +
     '<div class="grid-stats">' +
-      (chainSize > 0
-        ? '<div class="grid-stat-chip"><span style="color:var(--status-active);font-size:10px">●</span> 체인 ' + chainSize + '개 연결됨</div>'
+      (pipelineSize > 0
+        ? '<div class="grid-stat-chip"><span style="color:var(--status-active);font-size:10px">●</span> 파이프라인 ' + pipelineSize + '개</div>'
         : '<div class="grid-stat-chip" style="color:#C94B1A"><i class="fa-solid fa-triangle-exclamation" style="font-size:10px"></i> 연결 없음</div>') +
       (availableCount > 0
         ? '<div class="grid-stat-chip" style="color:var(--step-active)"><i class="fa-solid fa-circle-plus" style="font-size:10px"></i> 연결 가능 ' + availableCount + '개</div>'
-        : '') +
-      (canvasMode !== 'test'
-        ? '<button class="btn btn-secondary btn-sm" onclick="openTest(\'' + focalCard.id + '\')"><i class="fa-solid fa-flask"></i> 답변 테스트</button>'
         : '') +
       '<a href="' + EDITOR_MAP[focalCard.type] + '" class="btn btn-secondary btn-sm" style="text-decoration:none"><i class="fa-solid fa-pen-to-square"></i> 카드 편집</a>' +
     '</div>';
@@ -930,23 +987,35 @@ function renderGrid() {
     bodyEl.className = 'gc-col-body';
 
     if (isFocalCol) {
-      // 선택된 카드 자체
+      // 선택된 카드 자체 + 파이프라인에 속한 같은 타입의 다른 카드(형제 — 같은 타입끼리는
+      // 직접 연결이 불가하므로 연결 모드에선 탐색만 가능, 연결 해제 없음). 테스트 모드에서는
+      // "연결 가능" 섹션 자체가 없어 이게 유일한 선택지이므로, 형제 카드도 체크 가능해야 한다
+      // (예: Rule이 파이프라인의 Risk-type이 아니라도 그 Risk-type에 딸린 여러 Concept 중
+      // 테스트할 하나를 여기서 바로 고를 수 있어야 함).
       bodyEl.innerHTML = focalCardHTML(focalCard);
+      const siblings = visibleCards.filter(c => col.types.includes(c.type) && c.id !== focalCard.id && pipeline.has(c.id));
+      siblings.forEach(c => { bodyEl.innerHTML += (canvasMode === 'test' ? chainCardHTML(c, focalCard) : indirectCardHTML(c)); });
     } else {
-      // 이 컬럼의 카드(active+review): 체인 속한 것 / 포컬과 직접 연결 가능한 것 구분
+      // 이 컬럼의 카드(active+review): 파이프라인에 속한 것(연결됨, 직접/간접 구분) / 포컬과 직접 연결 가능한 것(연결 가능)
       const colCards  = visibleCards.filter(c => col.types.includes(c.type));
-      const inChain   = colCards.filter(c => chain.has(c.id));
-      const available = colCards.filter(c => !chain.has(c.id) && findDirectTarget(c, focalCard) && c.cluster === focalCard.cluster);
+      const inPipe    = colCards.filter(c => pipeline.has(c.id));
+      const direct    = inPipe.filter(c => edgeExists(focalCard.id, c.id) || edgeExists(c.id, focalCard.id));
+      const indirect  = inPipe.filter(c => !direct.includes(c));
+      const available = colCards.filter(c => !inPipe.includes(c) && c.cluster === focalCard.cluster && findDirectTarget(c, focalCard));
 
-      if (inChain.length) {
-        bodyEl.innerHTML += sectionHTML('연결됨', 'connected', inChain.length);
-        inChain.forEach(c => { bodyEl.innerHTML += chainCardHTML(c, chain, selectedCardId); });
+      if (inPipe.length) {
+        bodyEl.innerHTML += sectionHTML('연결됨', 'connected', inPipe.length);
+        direct.forEach(c => { bodyEl.innerHTML += chainCardHTML(c, focalCard); });
+        // 간접(포컬과 직접 연결은 아니지만 같은 파이프라인) 카드 — 연결 모드에서는 "연결 제거"
+        // 대상이 아니므로 탐색만 가능(그 카드를 새 포컬로 전환해야 해제 가능). 테스트 모드에서는
+        // "연결 가능" 섹션이 없어 이 카드들이 유일한 후보 목록이므로 똑같이 체크 가능해야 한다.
+        indirect.forEach(c => { bodyEl.innerHTML += (canvasMode === 'test' ? chainCardHTML(c, focalCard) : indirectCardHTML(c)); });
       }
       if (available.length && canvasMode !== 'test') {
         bodyEl.innerHTML += sectionHTML('연결 가능', 'available', available.length);
         available.forEach(c => { bodyEl.innerHTML += availableCardHTML(c, focalCard); });
       }
-      if (!inChain.length && !available.length) {
+      if (!inPipe.length && !available.length) {
         bodyEl.innerHTML = '<div class="gc-na">해당 없음</div>';
         colEl.classList.add('na-col');
       }
@@ -955,6 +1024,30 @@ function renderGrid() {
     colEl.appendChild(bodyEl);
     colsEl.appendChild(colEl);
   });
+}
+
+// 같은 파이프라인에 속하지만 포컬과 직접 연결은 아닌 카드(형제 카드 포함) — 탐색만 가능,
+// 연결 해제 버튼은 없다(연결 해제는 항상 포컬 기준 직접 연결에서만).
+function indirectCardHTML(card) {
+  const color = TYPE_COLORS[card.type];
+  const sBadge = card.status === 'active'
+    ? '<span class="gc-status-badge gc-badge-live">라이브</span>'
+    : card.status === 'approved'
+      ? '<span class="gc-status-badge gc-badge-approved">승인완료</span>'
+      : '<span class="gc-status-badge gc-badge-review">승인요청</span>';
+  return '<div class="gc-card gc-connected" data-card-id="' + card.id + '" style="border-color:' + hexToRgba(color,0.5) + '" onclick="selectCard(\'' + card.id + '\')">' +
+    '<div class="gc-card-header">' +
+      '<span class="gc-card-type" style="color:' + color + '">' + TYPE_NAMES[card.type] + '</span>' +
+      '<span class="gc-card-id">' + card.id + '</span>' +
+      sBadge +
+    '</div>' +
+    '<div class="gc-card-title">' + card.title + '</div>' +
+    '<span class="gc-card-cluster">' + card.cluster + '</span>' +
+    '<div class="gc-card-actions">' +
+      '<button class="gc-btn gc-btn-explore" onclick="event.stopPropagation();exploreCard(\'' + card.id + '\')">' +
+        '<i class="fa-solid fa-expand" style="font-size:9px"></i> 탐색</button>' +
+    '</div>' +
+  '</div>';
 }
 
 function sectionHTML(label, type, count) {
@@ -966,16 +1059,31 @@ function sectionHTML(label, type, count) {
     ' <span style="font-weight:400;opacity:.7">(' + count + ')</span></div>';
 }
 
+// Policy는 개별 선택이 아니라 선택된 Rule에 연결된 전부가 자동 적용되므로, 테스트 모드
+// 그리드에서 체크박스 대신 "자동 적용" 배지로 안내하고 클릭해도 선택 상태가 바뀌지 않는다.
+function testCheckBadgeHTML(card) {
+  if (card.type === 'policy') {
+    return '<span class="gc-auto-badge">자동 적용</span>';
+  }
+  var isChecked = card.type === 'evidence'
+    ? (testSelection.evidence || []).includes(card.id)
+    : testSelection[card.type] === card.id;
+  return '<div class="gc-test-check' + (isChecked ? ' checked' : '') + '">' +
+    (isChecked ? '<i class="fa-solid fa-check" style="color:#fff;font-size:9px"></i>' : '') +
+  '</div>';
+}
+
 function focalCardHTML(card) {
   const color = TYPE_COLORS[card.type];
   if (canvasMode === 'test') {
-    var isChecked = testSelection[card.type] === card.id;
-    return '<div class="gc-focal test-mode-card' + (isChecked ? ' test-checked' : '') + '" data-card-id="' + card.id + '" onclick="onTestGridClick(\'' + card.id + '\')" style="cursor:pointer">' +
+    // 포컬(지금 보고 있는) 카드는 selectCard()가 선택 즉시 테스트 대상으로 자동 등록하므로
+    // 여기선 토글 체크박스가 아니라 "이미 선택됨"을 알려주는 고정 배지만 보여준다.
+    return '<div class="gc-focal test-mode-card test-checked" data-card-id="' + card.id + '">' +
       '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">' +
         '<div class="gc-focal-badge"><i class="fa-solid fa-star" style="font-size:9px"></i> 탐색 중</div>' +
-        '<div class="gc-test-check' + (isChecked ? ' checked' : '') + '">' +
-          (isChecked ? '<i class="fa-solid fa-check" style="color:#fff;font-size:9px"></i>' : '') +
-        '</div>' +
+        (card.type === 'policy'
+          ? '<span class="gc-auto-badge">자동 적용</span>'
+          : '<div class="gc-test-check checked"><i class="fa-solid fa-check" style="color:#fff;font-size:9px"></i></div>') +
       '</div>' +
       '<div class="gc-focal-type" style="color:' + color + '">' + TYPE_NAMES[card.type] + '</div>' +
       '<div class="gc-focal-id">' + card.id + ' · ' + card.cluster + '</div>' +
@@ -997,23 +1105,19 @@ function focalCardHTML(card) {
   '</div>';
 }
 
-// 체인에 속한 카드 — 연결 경로 + 제거 버튼
-function chainCardHTML(card, chainSet, focalId) {
+// 포컬 카드와 직접(1홉) 연결된 카드 — 연결 방향 표시 + 제거 버튼
+function chainCardHTML(card, focalCard) {
   const color  = TYPE_COLORS[card.type];
-  const cedge  = findChainEdge(card.id, chainSet, focalId);
+  const cedge  = getEdge(focalCard.id, card.id) || getEdge(card.id, focalCard.id);
   const fromId = cedge ? cedge.from : null;
   const toId   = cedge ? cedge.to   : null;
 
-  const isCross      = false; // crossCluster 엣지 타입 폐기 — active/pending 2종만 사용
   const isReviewEdge = cedge && cedge.status === 'review';
 
-  // 경유 카드 표시 (포컬 카드 제외 체인 내 연결선)
-  const viaCard = cedge
-    ? CARDS.find(c => c.id === (cedge.from === card.id ? cedge.to : cedge.from))
-    : null;
-  const viaLabel = viaCard
+  // 포컬 카드 기준 연결 방향 표시
+  const viaLabel = cedge
     ? '<div style="font-size:9px;color:var(--text-hint);margin-bottom:4px;display:flex;align-items:center;gap:4px">' +
-        (cedge.from === card.id ? '→ ' : '← ') + viaCard.id +
+        (cedge.from === card.id ? '→ ' : '← ') + focalCard.id +
         (isReviewEdge ? '<span class="gc-review-badge">승인요청 엣지</span>' : '') +
       '</div>'
     : '';
@@ -1025,16 +1129,18 @@ function chainCardHTML(card, chainSet, focalId) {
       : '<span class="gc-status-badge gc-badge-review">승인요청</span>';
 
   if (canvasMode === 'test') {
-    var isChecked = testSelection[card.type] === card.id;
+    var isChecked = card.type === 'evidence'
+      ? (testSelection.evidence || []).includes(card.id)
+      : testSelection[card.type] === card.id;
+    var clickable = card.type !== 'policy';
     return '<div class="gc-card gc-connected test-mode-card' + (isChecked ? ' test-checked' : '') + '" data-card-id="' + card.id + '" ' +
-      'style="border-color:' + (isChecked ? 'var(--step-active)' : color) + ';cursor:pointer" onclick="onTestGridClick(\'' + card.id + '\')">' +
+      'style="border-color:' + (isChecked ? 'var(--step-active)' : color) + (clickable ? ';cursor:pointer' : '') + '"' +
+      (clickable ? ' onclick="onTestGridClick(\'' + card.id + '\')"' : '') + '>' +
       '<div class="gc-card-header">' +
         '<span class="gc-card-type" style="color:' + color + '">' + TYPE_NAMES[card.type] + '</span>' +
         '<span class="gc-card-id">' + card.id + '</span>' +
         sBadge +
-        '<div class="gc-test-check' + (isChecked ? ' checked' : '') + '">' +
-          (isChecked ? '<i class="fa-solid fa-check" style="color:#fff;font-size:9px"></i>' : '') +
-        '</div>' +
+        testCheckBadgeHTML(card) +
       '</div>' +
       viaLabel +
       '<div class="gc-card-title">' + card.title + '</div>' +
@@ -1044,7 +1150,6 @@ function chainCardHTML(card, chainSet, focalId) {
   return '<div class="gc-card gc-connected" data-card-id="' + card.id + '" style="border-color:' + color + '" onclick="selectCard(\'' + card.id + '\')">' +
     '<div class="gc-card-header">' +
       '<span class="gc-card-type" style="color:' + color + '">' + TYPE_NAMES[card.type] + '</span>' +
-      (isCross ? '<span style="font-size:9px;font-weight:700;color:#7A4AC9;background:#F0EAFC;padding:1px 5px;border-radius:3px;margin-left:3px">크로스</span>' : '') +
       '<span class="gc-card-id">' + card.id + '</span>' +
       sBadge +
     '</div>' +
@@ -1052,7 +1157,7 @@ function chainCardHTML(card, chainSet, focalId) {
     '<div class="gc-card-title">' + card.title + '</div>' +
     '<span class="gc-card-cluster">' + card.cluster + '</span>' +
     '<div class="gc-card-actions">' +
-      '<button class="gc-btn gc-btn-explore" onclick="event.stopPropagation();selectCard(\'' + card.id + '\')">' +
+      '<button class="gc-btn gc-btn-explore" onclick="event.stopPropagation();exploreCard(\'' + card.id + '\')">' +
         '<i class="fa-solid fa-expand" style="font-size:9px"></i> 탐색</button>' +
       (fromId && toId
         ? '<button class="gc-btn gc-btn-disconnect" onclick="event.stopPropagation();openDisconnect(\'' + fromId + '\',\'' + toId + '\')">' +
@@ -1232,22 +1337,14 @@ const TEST_QUERIES = {
   'PB001':'암 진단 후 상담 연결은 어떻게 하나요?',
 };
 
-function openPanel(id, tab) {
+// 카드 정보 패널 — 연결 모드에서 카드 클릭·상세보기로만 진입 (사전 테스트는 별도 진입경로)
+function openPanel(id) {
   panelCardId = id;
-  switchPanelTab(tab || 'info');
+  renderPanelInfo();
   document.getElementById('slidePanel').classList.add('open');
 }
 
-function viewCard(id)  { openPanel(id, 'info'); }
-function openTest(id)  { panelTestMode = 'chain'; openPanel(id, 'test'); }
-
-function switchPanelTab(tab) {
-  panelTab = tab;
-  document.getElementById('tabInfo').classList.toggle('active', tab === 'info');
-  document.getElementById('tabTest').classList.toggle('active', tab === 'test');
-  if (tab === 'info') renderPanelInfo();
-  else                renderPanelTest();
-}
+function viewCard(id) { openPanel(id); }
 
 function renderPanelInfo() {
   var card = CARDS.find(function(c){ return c.id === panelCardId; });
@@ -1260,25 +1357,12 @@ function renderPanelInfo() {
   document.getElementById('panelBody').innerHTML = renderCardDetailHTML(panelCardId);
 
   document.getElementById('panelFooter').innerHTML =
-    '<button class="btn btn-secondary" onclick="closePanel()">닫기</button>' +
-    '<button class="btn btn-secondary" onclick="switchPanelTab(\'test\')"><i class="fa-solid fa-flask"></i> 사전 테스트</button>';
+    '<button class="btn btn-secondary" onclick="closePanel()">닫기</button>';
 }
 
 // ────────────────────────────────────────────────────────────────
-// 사전 테스트 탭
+// 사전 테스트 — 테스트 모드에서 카드 체크 후 "테스트 실행"으로만 진입 (runCanvasTest 참조)
 // ────────────────────────────────────────────────────────────────
-
-function initTestChain(cardId) {
-  var chain      = computeChain(cardId);
-  var chainCards = CARDS.filter(function(c) { return chain.has(c.id); });
-  testChain = {};
-  ['concept','risk','rule','evidence','policy'].forEach(function(type) {
-    var available = chainCards.filter(function(c) { return c.type === type; });
-    if (available.length) {
-      testChain[type] = (available.find(function(c) { return c.id === cardId; }) || available[0]).id;
-    }
-  });
-}
 
 function initTestProfile(ruleId) {
   var conds = (CARD_DETAILS[ruleId] || {}).conditions || [];
@@ -1303,49 +1387,26 @@ function renderPanelTest() {
   document.getElementById('panelTitle').innerHTML =
     '<i class="fa-solid fa-flask" style="color:var(--step-active);margin-right:6px"></i>사전 테스트';
 
-  var ruleId = '';
-  var html   = '';
+  var ruleId = testChain.rule || '';
+  var chainIds   = [testChain.concept, testChain.risk, testChain.rule]
+    .concat(testChain.evidence || [], testChain.policy || [])
+    .filter(Boolean);
+  var chainCards = CARDS.filter(function(c) { return chainIds.indexOf(c.id) >= 0; });
 
-  if (panelTestMode === 'canvas') {
-    // ── 테스트 모드: 캔버스에서 선택된 체인 ──
-    ruleId = testChain.rule || '';
-    var chainIds   = Object.values(testChain).filter(Boolean);
-    var chainCards = CARDS.filter(function(c) { return chainIds.indexOf(c.id) >= 0; });
-    html += buildSelectedChainVisual(chainCards);
-    html +=
-      '<div style="margin:10px 0 4px">' +
-        '<label style="font-size:10px;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.05em">' +
-          '테스트 질문 <span style="font-weight:400;text-transform:none;font-size:10px">(편집 가능)</span>' +
-        '</label>' +
-      '</div>' +
-      '<textarea id="testQueryInput" class="test-query">' +
-        (TEST_QUERIES[testChain.concept] || card.title + '에 대해 알려주세요') +
-      '</textarea>';
-    html +=
-      '<div class="test-cond-section first">' +
-        '<i class="fa-solid fa-user" style="font-size:9px;margin-right:3px"></i>테스트 조건 설정' +
-      '</div>';
-  } else {
-    // ── 연결 모드: 포컬 카드 기준 체인 자동 구성 ──
-    initTestChain(card.id);
-    ruleId = testChain.rule || '';
-    if (ruleId) initTestProfile(ruleId);
-    html += buildChainVisual(card, computeChain(card.id));
-    html += buildChainSelectorHTML(card);
-    html +=
-      '<div style="margin:12px 0 4px">' +
-        '<label style="font-size:10px;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.05em">' +
-          '테스트 질문 <span style="font-weight:400;text-transform:none;font-size:10px">(편집 가능)</span>' +
-        '</label>' +
-      '</div>' +
-      '<textarea id="testQueryInput" class="test-query">' +
-        (TEST_QUERIES[testChain.concept] || TEST_QUERIES[card.id] || card.title + '에 대해 알려주세요') +
-      '</textarea>';
-    html +=
-      '<div class="test-cond-section">' +
-        '<i class="fa-solid fa-user" style="font-size:9px;margin-right:3px"></i>② 테스트 조건 설정' +
-      '</div>';
-  }
+  var html = buildSelectedChainVisual(chainCards);
+  html +=
+    '<div style="margin:10px 0 4px">' +
+      '<label style="font-size:10px;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.05em">' +
+        '테스트 질문 <span style="font-weight:400;text-transform:none;font-size:10px">(편집 가능)</span>' +
+      '</label>' +
+    '</div>' +
+    '<textarea id="testQueryInput" class="test-query">' +
+      (TEST_QUERIES[testChain.concept] || card.title + '에 대해 알려주세요') +
+    '</textarea>';
+  html +=
+    '<div class="test-cond-section first">' +
+      '<i class="fa-solid fa-user" style="font-size:9px;margin-right:3px"></i>테스트 조건 설정' +
+    '</div>';
 
   html +=
     '<div id="testProfileSection">' + buildProfileInputHTML() + '</div>' +
@@ -1354,14 +1415,11 @@ function renderPanelTest() {
     '</div>' +
     '<div id="testCondSection">' + buildRuleCondRowsHTML(ruleId) + '</div>' +
     '<div class="test-summary-bar">' +
-      '<div style="font-size:10px;font-weight:700;color:var(--text-secondary);letter-spacing:.04em">' +
-        (panelTestMode === 'canvas' ? '현재 조건 요약' : '③ 현재 조건 요약') +
-      '</div>' +
+      '<div style="font-size:10px;font-weight:700;color:var(--text-secondary);letter-spacing:.04em">현재 조건 요약</div>' +
       '<div class="test-sum-chips" id="testSummaryChips"></div>' +
     '</div>' +
     '<div style="font-size:10px;font-weight:700;color:var(--text-secondary);margin:10px 0 6px;letter-spacing:.04em;text-transform:uppercase">' +
-      '<i class="fa-solid fa-database" style="font-size:9px;margin-right:3px;color:#6B4A9A"></i>' +
-      (panelTestMode === 'canvas' ? 'RAG 결과 설정' : '④ RAG 결과 설정') +
+      '<i class="fa-solid fa-database" style="font-size:9px;margin-right:3px;color:#6B4A9A"></i>RAG 결과 설정' +
     '</div>' +
     '<div id="ragPresetSection">' + buildRagPresetHTML() + '</div>' +
     '<div id="testResultArea" style="margin-top:8px"></div>';
@@ -1370,106 +1428,14 @@ function renderPanelTest() {
   var ruleCard = ruleId ? CARDS.find(function(c) { return c.id === ruleId; }) : null;
   updateTestSummary(ruleCard);
 
-  var backBtn = panelTestMode === 'canvas'
-    ? '<button class="btn btn-secondary" onclick="closePanel()">' +
-        '<i class="fa-solid fa-xmark" style="font-size:11px"></i> 닫기</button>'
-    : '<button class="btn btn-secondary" onclick="switchPanelTab(\'info\')">' +
-        '<i class="fa-solid fa-arrow-left" style="font-size:11px"></i> 카드 정보</button>';
-
   testHasRun = false;
   document.getElementById('panelFooter').innerHTML =
-    backBtn +
+    '<button class="btn btn-secondary" onclick="closePanel()">' +
+      '<i class="fa-solid fa-xmark" style="font-size:11px"></i> 닫기</button>' +
     '<button class="btn btn-primary" style="flex:1;justify-content:center" onclick="runTest(\'' + card.id + '\')">' +
       '<i class="fa-solid fa-play" style="font-size:11px"></i> 테스트 실행' +
     '</button>' +
     '<div id="footerGoLive"></div>';
-}
-
-function buildChainSelectorHTML(card) {
-  var chain      = computeChain(card.id);
-  var chainCards = CARDS.filter(function(c) { return chain.has(c.id); });
-  var TYPE_CONFIG = [
-    { type:'concept',  icon:'fa-lightbulb',         label:'Concept',   color:'#1A4A9A' },
-    { type:'risk',     icon:'fa-circle-exclamation', label:'Risk-type', color:'#C94B1A' },
-    { type:'rule',     icon:'fa-scale-balanced',     label:'Rule',      color:'#9A1A1A' },
-    { type:'evidence', icon:'fa-database',           label:'Evidence',  color:'#1A7A4A' },
-    { type:'policy',   icon:'fa-file-shield',        label:'Policy',    color:'#5A5A55' },
-  ];
-
-  var html = '<div class="test-cond-section first">' +
-    '<i class="fa-solid fa-sitemap" style="font-size:9px;margin-right:3px;color:#1A4A9A"></i>① 테스트 체인 구성' +
-  '</div><div class="chain-sel-wrap">';
-
-  TYPE_CONFIG.forEach(function(tc) {
-    var available = chainCards.filter(function(c) { return c.type === tc.type; });
-    if (!available.length) return;
-    var selected = testChain[tc.type];
-    var isFocal  = available.some(function(c) { return c.id === card.id; });
-    var single   = available.length === 1;
-
-    html += '<div class="chain-sel-row' + (isFocal ? ' focal' : '') + '">';
-    html += '<i class="fa-solid ' + tc.icon + '" style="font-size:10px;color:' + tc.color + ';text-align:center"></i>';
-    html += '<span class="chain-sel-type-lbl">' + tc.label + '</span>';
-    if (single) {
-      html += '<div class="chain-sel-single"><strong style="color:' + tc.color + '">' + available[0].id + '</strong> ' + available[0].title + '</div>';
-    } else {
-      html += '<select class="chain-sel-dd" onchange="onTestChainSelect(\'' + tc.type + '\', this.value)">';
-      available.forEach(function(c) {
-        html += '<option value="' + c.id + '"' + (selected === c.id ? ' selected' : '') + '>' + c.id + ' — ' + c.title + '</option>';
-      });
-      html += '</select>';
-    }
-    html += isFocal ? '<span class="chain-focal-mark">★</span>' : '<span></span>';
-    html += '</div>';
-  });
-
-  html += '</div>';
-  return html;
-}
-
-function onTestChainSelect(type, id) {
-  testChain[type] = id;
-  if (type === 'rule') initTestProfile(id);
-  if (type === 'concept') {
-    var qEl = document.getElementById('testQueryInput');
-    if (qEl) {
-      var c = CARDS.find(function(cc) { return cc.id === id; });
-      qEl.value = TEST_QUERIES[id] || (c ? c.title + '에 대해 알려주세요' : qEl.value);
-    }
-  }
-  var ruleId   = testChain.rule;
-  var ruleCard = ruleId ? CARDS.find(function(c) { return c.id === ruleId; }) : null;
-  var condSec  = document.getElementById('testCondSection');
-  if (condSec) condSec.innerHTML = buildRuleCondRowsHTML(ruleId);
-  updateTestSummary(ruleCard);
-  var ra = document.getElementById('testResultArea');
-  if (ra) ra.innerHTML = '';
-}
-
-function buildChainVisual(card, chain) {
-  var TYPE_ORDER = ['concept','risk','rule','evidence','policy'];
-  var chainCards = CARDS.filter(function(c) { return chain.has(c.id); });
-  var groups     = TYPE_ORDER
-    .map(function(t) { return chainCards.filter(function(c) { return c.type === t; }); })
-    .filter(function(g) { return g.length; });
-
-  var html = '<div class="test-chain-flow">';
-  groups.forEach(function(group, gi) {
-    if (gi > 0) html += '<span class="test-chain-arrow">→</span>';
-    html += '<div class="test-chain-group">';
-    group.forEach(function(c) {
-      var color   = TYPE_COLORS[c.type];
-      var isFocal = c.id === panelCardId;
-      html += '<span class="test-chain-badge" style="' +
-        'background:' + hexToRgba(color, isFocal ? 0.18 : 0.08) + ';color:' + color + ';' +
-        (isFocal ? 'outline:1.5px solid ' + color + ';font-weight:800;' : '') + '">' +
-        '<i class="fa-solid ' + TYPE_ICONS[c.type] + '" style="font-size:8px"></i> ' + c.id +
-        (isFocal ? ' ★' : '') + '</span>';
-    });
-    html += '</div>';
-  });
-  html += '</div>';
-  return html;
 }
 
 function buildProfileInputHTML() {
@@ -1830,14 +1796,13 @@ function evaluateTestResult() {
 }
 
 function buildChatAnswerHTML() {
-  var rtCard = testChain.risk     ? CARDS.find(function(c) { return c.id === testChain.risk; })     : null;
-  var evCard = testChain.evidence ? CARDS.find(function(c) { return c.id === testChain.evidence; }) : null;
-  var poCard = testChain.policy   ? CARDS.find(function(c) { return c.id === testChain.policy; })   : null;
-  var ruCard = testChain.rule     ? CARDS.find(function(c) { return c.id === testChain.rule; })     : null;
+  var rtCard  = testChain.risk ? CARDS.find(function(c) { return c.id === testChain.risk; }) : null;
+  var evIds   = testChain.evidence || [];
+  var poIds   = testChain.policy   || [];
+  var evCards = evIds.map(function(id) { return CARDS.find(function(c) { return c.id === id; }); }).filter(Boolean);
+  var poCards = poIds.map(function(id) { return CARDS.find(function(c) { return c.id === id; }); }).filter(Boolean);
 
   var rtDet = rtCard ? (CARD_DETAILS[rtCard.id] || {}) : {};
-  var evDet = evCard ? (CARD_DETAILS[evCard.id] || {}) : {};
-  var poDet = poCard ? (CARD_DETAILS[poCard.id] || {}) : {};
 
   var paras = [];
   if (rtCard) {
@@ -1845,21 +1810,30 @@ function buildChatAnswerHTML() {
     else if (rtCard.id === 'RT02') paras.push('뇌혈관 질환 관련 보장에 대해 안내드릴게요.');
     else paras.push((rtDet.description || rtCard.title).split('.')[0] + '에 대해 안내드릴게요.');
   }
-  if (evCard && evDet.indicator && evDet.value) {
-    paras.push(evDet.indicator + '은(는) <strong>' + evDet.value + '</strong>이에요' +
-      (evDet.orgLabel ? ' <span style="font-size:10px;color:var(--text-hint)">(' + evDet.orgLabel + ' ' + (evDet.year || '') + ')</span>' : '') + '.');
-  }
+  // Evidence는 Rule 1개에 여러 개가 붙을 수 있고 실제 Clark은 LLM이 맥락에 맞는 것만 선택
+  // 인용한다(연결된 전부를 나열하지 않음) — 여기서는 체크한 것들을 전부 미리보기로 보여준다.
+  evCards.forEach(function(evCard) {
+    var evDet = CARD_DETAILS[evCard.id] || {};
+    if (evDet.indicator && evDet.value) {
+      paras.push(evDet.indicator + '은(는) <strong>' + evDet.value + '</strong>이에요' +
+        (evDet.orgLabel ? ' <span style="font-size:10px;color:var(--text-hint)">(' + evDet.orgLabel + ' ' + (evDet.year || '') + ')</span>' : '') + '.');
+    }
+  });
   if (rtDet.warningMsg) {
     paras.push(rtDet.warningMsg + ' 보장 공백을 함께 확인해 드릴게요.');
   }
   paras.push('상담을 통해 딱 맞는 보장 금액을 함께 살펴봐 드릴게요.');
 
-  var bodyHTML   = paras.map(function(p) { return '<p>' + p + '</p>'; }).join('');
-  var policyHTML = poDet.appDisplayText
-    ? '<div class="chat-policy-block"><strong>⚠ 유의사항</strong> ' + poDet.appDisplayText + '</div>'
-    : '';
+  var bodyHTML = paras.map(function(p) { return '<p>' + p + '</p>'; }).join('');
+  // Policy는 Evidence와 달리 연결된 전부를 항상 고지한다(선택적 인용 대상이 아님)
+  var policyHTML = poCards.map(function(poCard) {
+    var poDet = CARD_DETAILS[poCard.id] || {};
+    return poDet.appDisplayText
+      ? '<div class="chat-policy-block"><strong>⚠ 유의사항</strong> ' + poDet.appDisplayText + '</div>'
+      : '';
+  }).join('');
 
-  var usedIds  = [testChain.rule, testChain.evidence, testChain.policy].filter(Boolean);
+  var usedIds  = [testChain.rule].filter(Boolean).concat(evIds, poIds);
   var usedHTML = usedIds.map(function(id) {
     var c = CARDS.find(function(cc) { return cc.id === id; });
     if (!c) return '';
@@ -2056,7 +2030,8 @@ function drawLines() {
   if (old) old.remove();
   if (!selectedCardId) return;
 
-  const chain = computeChain(selectedCardId);
+  const focalCard = CARDS.find(c => c.id === selectedCardId);
+  const pipeline  = computePipeline(focalCard);
   const containerRect = gridCols.getBoundingClientRect();
 
   const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -2085,9 +2060,9 @@ function drawLines() {
   });
   svg.appendChild(defs);
 
-  // Draw each edge whose both endpoints are in the current chain
+  // 파이프라인 안에서 양 끝이 모두 있는 엣지를 전부 그린다 (renderGrid()가 그 카드들만 렌더링하므로 일치)
   EDGES.forEach(edge => {
-    if (!chain.has(edge.from) || !chain.has(edge.to)) return;
+    if (!pipeline.has(edge.from) || !pipeline.has(edge.to)) return;
 
     const fromEl = gridCols.querySelector('[data-card-id="' + edge.from + '"]');
     const toEl   = gridCols.querySelector('[data-card-id="' + edge.to   + '"]');
@@ -2106,10 +2081,11 @@ function drawLines() {
     const markerId = edge.status === 'active' ? 'arr-active' : 'arr-pending';
     const dash     = edge.status === 'pending' ? '6,4' : 'none';
 
-    // Focal-card edges are slightly bolder
-    const isFocal   = edge.from === selectedCardId || edge.to === selectedCardId;
-    const strokeW   = '2';
-    const opacity   = isFocal ? '0.9' : '0.55';
+    // 포컬 카드에 직접 닿은 엣지는 진하게, 더 먼 체인 엣지는 옅게
+    // 포컬 카드에 직접 닿은 엣지는 진하게, 파이프라인 내 다른 엣지는 옅게
+    const isFocal = edge.from === selectedCardId || edge.to === selectedCardId;
+    const strokeW = '2';
+    const opacity = isFocal ? '0.9' : '0.5';
 
     // Orthogonal routing: right → vertical → right (L-shape)
     const midX = x1 + (x2 - x1) * 0.5;
