@@ -34,7 +34,7 @@ const CONNECT_RULES = {
 
 | 연결 | 카디널리티 | 설명 |
 |---|---|---|
-| Concept ↔ Risk-type | **N:N** | 여러 Concept이 같은 Risk-type을 트리거 가능. 하나의 Concept이 여러 Risk-type을 동시에 트리거 가능 |
+| Concept ↔ Risk-type | **N:N** | 여러 Concept이 같은 Risk-type을 트리거 가능. 하나의 Concept이 여러 Risk-type을 동시에 트리거 가능 — N개 매칭 시 답변 처리(요약형 vs 단건 심층형)는 `context/answer-logic.md` "다건 매칭 시 답변 처리" 참조. "전체 진단해줘" 같은 전체 스캔 요청도 이 N:N 구조를 재사용하는 전용 Concept(가칭 `CN-ALL`, risk_type_refs=활성 전체)로 처리 |
 | Risk-type ↔ Rule | **1:1** | Risk-type 1개에 Rule 1개 전속. 공유 불가. 조건이 여러 개이면 Rule 카드 내 Row를 추가 |
 | Rule ↔ Evidence | **N:N** | 하나의 Rule이 여러 Evidence를 근거로 인용 가능. 동일 Evidence를 여러 Rule이 공유 가능 |
 | Rule ↔ Policy | **N:N** | 하나의 Rule에 여러 Policy 고지 연결 가능. 동일 Policy를 여러 Rule이 공유 가능 |

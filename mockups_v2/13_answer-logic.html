@@ -415,6 +415,47 @@
     </div>
   </div>
 
+  <!-- 다건 매칭 시 답변 처리 -->
+  <div class="section">
+    <div class="section-title"><i class="fa-solid fa-list-check fa-fw" style="color:var(--card-risk)"></i> 다건 매칭 시 답변 처리 — 요약형 vs 단건 심층형 <span style="font-size:12px;font-weight:400;color:var(--text-hint);margin-left:8px">2026-07-05 확정</span></div>
+    <p style="font-size:14px;color:var(--text-secondary);margin-bottom:14px">
+      Case 1·2는 매칭된 Risk-type이 <strong>1개</strong>일 때의 포맷이다. Concept↔Risk-type는 N:N이라 하나의 발화로 여러 Risk-type이 동시에 매칭될 수 있는데(예: "암보험 괜찮나요?" → 암 도메인 내 여러 유형), 지금까지는 이 경우의 답변 포맷이 정의돼 있지 않았다.
+    </p>
+    <table class="spec-table" style="margin-bottom:14px">
+      <thead><tr><th style="width:160px">경로</th><th>예시</th><th style="width:140px">매칭 규모(N)</th></tr></thead>
+      <tbody>
+        <tr><td><strong>경로 A — 토픽형 다건 매칭</strong></td><td>"암보험 괜찮나요?" → 암 도메인 안에서 T02·T18·T25·T29 등 동시 충족</td><td>보통 2~4개</td></tr>
+        <tr><td><strong>경로 B — 전체 진단 트리거</strong></td><td>"내 보험 전체 진단해줘"</td><td>최대 23개(활성 Risk-type 전체)</td></tr>
+      </tbody>
+    </table>
+    <div class="note-box" style="margin-bottom:14px">
+      두 경로는 사용자 의도는 다르지만 <strong>답변 처리 메커니즘은 동일</strong>하다 — "매칭된 Risk-type이 N개일 때 어떻게 보여줄지"라는 같은 문제이며 차이는 N의 규모뿐이다. 별도 매칭 엔진이나 새 카드 타입은 만들지 않는다.<br><br>
+      <strong>경로 B(전체 진단)는 신규 엔지니어링 없이 처리 가능:</strong> 활성 Risk-type 23개 전부를 <code style="background:#FFF0D0;padding:1px 5px;border-radius:3px;font-size:12px">risk_type_refs</code>로 연결한 전용 Concept 카드 1장(가칭 <code style="background:#FFF0D0;padding:1px 5px;border-radius:3px;font-size:12px">CN-ALL</code>, 동의어: "전체 진단해줘"·"전체적으로 봐줘"·"다 점검해줘" 등)을 등록하면 기존 N:N 구조 그대로 처리된다.
+    </div>
+
+    <div class="section-sub">요약형 포맷 (N ≥ 2일 때)</div>
+    <p style="font-size:14px;color:var(--text-secondary);margin-bottom:10px">Case 1·2의 심층 포맷(진단 선언+이유+Evidence 인용+면책+CTA)을 N개 전부에 반복하지 않는다 — 채팅 버블 하나에 담기엔 너무 길다.</p>
+    <table class="spec-table">
+      <thead><tr><th style="width:50px">순서</th><th style="width:160px">구성 요소</th><th>내용</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>한 줄 총평</td><td>"고객님은 총 N개의 보장 공백이 확인돼요" (경로 A는 도메인 단서 포함 — "암 관련해서 총 N개...")</td></tr>
+        <tr><td>2</td><td>도메인 그룹핑</td><td>N이 크거나 도메인이 섞일 때만(경로 B). Risk-type의 도메인 분류(건강보험/생명보험/상해/특종) 기준. 이미 한 도메인 안(경로 A)이면 생략</td></tr>
+        <tr><td>3</td><td>항목별 1줄</td><td>위험유형명 + 매우 짧은 공백 요약 1줄. Evidence 인용·상세 근거는 넣지 않음. 내부 "중요도" 라벨은 그대로 노출하지 않고 <strong>정렬 순서로만</strong> 반영</td></tr>
+        <tr><td>4</td><td>정렬 기준</td><td>기존 "다중 Risk-type 감지 우선순위"(1순위 중요도, 2순위 선택조건 충족 개수, 3순위 최근 배포순)를 그대로 재사용 — 용도만 "1개 선택"에서 "N개 나열 순서"로 확장</td></tr>
+        <tr><td>5</td><td>PROMAGE 매칭 표시</td><td>선택조건(프롬에이지) 매칭 시 문장 전체를 넣지 않고 짧은 단서만 표시. 전체 설명은 상세형(2단계)에서 노출</td></tr>
+        <tr><td>6</td><td>닫음</td><td>"궁금한 항목을 말씀해주시면 자세히 설명해드릴게요" + CTA(경로 B: "보닥 플래너와 전체 보장 점검하기" / 경로 A: 해당 도메인 CTA)</td></tr>
+      </tbody>
+    </table>
+
+    <div class="section-sub">상세형 포맷 — 요약 다음 턴</div>
+    <p style="font-size:14px;color:var(--text-secondary);margin-bottom:10px">사용자가 요약 리스트 중 하나를 지목하면("암진단금 부족형 자세히 알려줘" 등), 그 Risk-type 하나에 대해 <strong>기존 Case 1·2 심층 포맷을 그대로 사용</strong>한다. 새 포맷을 만들지 않는다 — <code style="background:#FFF0D0;padding:1px 5px;border-radius:3px;font-size:12px">contents/html/08_ai-preview.html</code>의 기존 23개 체인 답변이 이 상세형의 실제 예시다.</p>
+
+    <div class="note-box">
+      <strong>N = 0 처리:</strong> 경로 B에서 23개 Rule을 전부 평가했는데 하나도 충족하지 않으면 "특별한 보장 공백이 확인되지 않아요. 잘 준비하고 계세요!" 류의 안심 메시지로 응답한다 — 빈 리스트를 어색하게 보여주지 않는다.<br><br>
+      <strong>미결:</strong> ① CN-ALL 카드 실제 저작(컨텐츠 트랙) ② 요약형 UI 목업(`08_ai-preview.html`에 경로 A·B 예시 추가 검토) ③ PROMAGE 선택조건 "짧은 표시" 형태(아이콘 vs 텍스트, UI 디자이너 확인 필요). 상세는 <code style="background:#FFF0D0;padding:1px 5px;border-radius:3px;font-size:12px">context/answer-logic.md</code> "다건 매칭 시 답변 처리" 참조.
+    </div>
+  </div>
+
   <!-- 전체 처리 흐름 -->
   <div class="section">
     <div class="section-title"><i class="fa-solid fa-route fa-fw" style="color:var(--step-active)"></i> 전체 처리 흐름</div>

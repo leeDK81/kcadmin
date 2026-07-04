@@ -87,6 +87,15 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
 .app-msg-clark { background: #fff; padding: 12px 14px; border-radius: 4px 16px 16px 16px; font-size: 13.5px; line-height: 1.7; color: #1A1A2E; max-width: 84%; box-shadow: 0 1px 2px rgba(0,0,0,.06); }
 .app-msg-clark p { margin-bottom: 8px; }
 .app-msg-clark p:last-of-type { margin-bottom: 0; }
+.summary-list { margin: 4px 0 10px; }
+.summary-group { margin-bottom: 10px; }
+.summary-group:last-child { margin-bottom: 0; }
+.summary-group-title { font-size: 11.5px; font-weight: 700; color: #6B7280; margin-bottom: 4px; }
+.summary-item { display: flex; justify-content: space-between; gap: 8px; padding: 6px 8px; background: #F8FAFC; border-radius: 6px; margin-bottom: 4px; font-size: 12.5px; }
+.summary-item:last-child { margin-bottom: 0; }
+.summary-item-name { font-weight: 600; color: #1A1A2E; }
+.summary-item-desc { color: #6B7280; text-align: right; flex-shrink: 0; }
+.summary-item-flag { color: #B45309; font-size: 11px; margin-left: 4px; }
 .app-msg-clark .disclaimer { font-size: 10.5px; color: #9CA3AF; margin-top: 10px; padding-top: 8px; border-top: 1px solid #F0F0F5; line-height: 1.5; }
 .app-msg-clark-time { font-size: 10px; color: #9CA3AF; margin: 3px 0 0 34px; }
 .app-cta-row { margin: 8px 0 4px 34px; }
@@ -108,7 +117,165 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
   사용자 질의 → Concept 카드 감지 → Risk-type 선정 → Rule 조건 확인 → Clark AI 답변 흐름을 시뮬레이션합니다.<br>
   <strong>발화 예시</strong>는 Concept 카드 트리거 조건이며, <strong>채팅 화면</strong>은 Rule 조건 충족 시 실제 앱에 표시되는 답변 형태입니다. 클릭하면 펼쳐집니다.
 </div>
+
+<div class="section-label">다건 매칭 시 답변 예시 · 개념 검증용 (2026-07-05 신규)</div>
+<div class="info-banner" style="background:#FFF9EC;border-color:#F0D880;color:#7A5A00;">
+  Concept↔Risk-type는 N:N이라 하나의 발화로 여러 Risk-type이 동시에 매칭될 수 있습니다. 아래 2개는 <strong>아직 등록되지 않은 카드(CN-ALL 등)를 가정한 개념 검증용 예시</strong>이며, 나머지 23개 체인과 달리 실제 라이브 카드 기반이 아닙니다. 정책 상세는 <code style="background:#F5E8A0;padding:1px 5px;border-radius:3px;font-size:12px">context/answer-logic.md</code> "다건 매칭 시 답변 처리" 참조.
+</div>
 <div class="acc-wrap">
+
+  <!-- 예시: 경로 A 토픽형 다건 매칭 -->
+  <div class="acc-item">
+    <button class="acc-header">
+      <span class="t-badge" style="background:#B45309;">예시 A</span>
+      <span class="acc-title">토픽형 다건 매칭 — "암보험 괜찮나요?"</span>
+      <span class="domain-tag">건강보험 · 4건 동시 매칭</span>
+      <span class="acc-arrow">⌄</span>
+    </button>
+    <div class="acc-body">
+      <div class="acc-inner">
+        <div class="acc-block trigger-block">
+          <div class="acc-block-label">발화 예시 — Concept 카드 감지 (개념 검증)</div>
+          <div class="utterance"><span>"암보험 괜찮나요?"</span><span>"암 관련 보장 전체적으로 봐줘"</span></div>
+          <div class="chain-path">CN-T02A/CN-T02B(기존 등록) → 동시 충족: T02(암진단금 부족형)·T18(항암치료비 미보장형)·T25(소액암 진단금 부족형)·T29(암요양병원 장기입원 미보장형) → 요약형 포맷 적용</div>
+          <div style="font-size:11px;color:#B45309;margin-top:6px;">⚠️ "암보험 괜찮나요?"가 4개 Risk-type을 동시 트리거하는 것은 각 Concept의 실제 risk_type_refs 설정에 따라 달라지며, 현재 CN-T02A/B는 T02 1개만 연결돼 있어 이 예시는 향후 확장을 가정한 시나리오입니다.</div>
+        </div>
+        <div class="acc-block" style="background:transparent;padding:0;">
+          <div class="acc-block-label" style="padding-left:2px;">Clark 모바일 웹 실제 화면 — 요약형 (도메인 그룹핑 생략, 한 도메인 안)</div>
+          <div class="phone-mockup-wrap">
+            <div class="phone-frame">
+              <div class="phone-screen">
+                <div class="phone-statusbar"><span>9:41</span><span>●●● 5G 100%</span></div>
+                <div class="app-topbar">
+                  <span class="back-arrow">‹</span>
+                  <span class="app-avatar-top">🤖</span>
+                  <div class="app-title-group">
+                    <div class="app-title">Clark</div>
+                    <div class="app-sub">보험 진단 · 상담 도우미</div>
+                  </div>
+                </div>
+                <div class="app-chat-area">
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">암보험 괜찮나요?</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 2:14</div>
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>암 관련해서 총 4개의 보장 공백이 확인돼요.</p>
+                      <div class="summary-list">
+                        <div class="summary-group">
+                          <div class="summary-item"><span class="summary-item-name">암진단금 부족형</span><span class="summary-item-desc">진단금 2,000만 원 · 부족</span></div>
+                          <div class="summary-item"><span class="summary-item-name">항암치료비 미보장형</span><span class="summary-item-desc">치료 단계 비용 공백</span></div>
+                          <div class="summary-item"><span class="summary-item-name">소액암 진단금 부족형<span class="summary-item-flag">⚠️건강정보 매칭</span></span><span class="summary-item-desc">갑상선암 등 저보장</span></div>
+                          <div class="summary-item"><span class="summary-item-name">암요양병원 장기입원 미보장형</span><span class="summary-item-desc">회복기 입원 공백</span></div>
+                        </div>
+                      </div>
+                      <p>궁금한 항목을 말씀해주시면 자세히 설명해드릴게요.</p>
+                      <div class="disclaimer">이 분석은 마이데이터 기반 보험 가입 현황을 활용한 요약 진단 결과예요. 항목별 상세 근거·수치는 개별 질문 시 안내돼요.</div>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:14</div>
+                  <div class="app-cta-row">
+                    <span class="app-cta-chip">📋 보닥 플래너와 암보험 점검하기</span>
+                  </div>
+                </div>
+                <div class="app-input-bar">
+                  <div class="app-input-fake">메시지 입력...</div>
+                  <div class="app-send-btn">➤</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="proto-note">※ 항목별 상세(진단선언+근거+Evidence+면책)는 사용자가 "소액암 진단금 부족형 자세히"처럼 개별 지목 시, 기존 T25 체인과 동일한 단건 심층 포맷으로 전환됩니다.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 예시: 경로 B 전체 진단 트리거 -->
+  <div class="acc-item">
+    <button class="acc-header">
+      <span class="t-badge" style="background:#B45309;">예시 B</span>
+      <span class="acc-title">전체 진단 트리거 — "내 보험 전체 진단해줘"</span>
+      <span class="domain-tag">4개 도메인 · 7건 동시 매칭</span>
+      <span class="acc-arrow">⌄</span>
+    </button>
+    <div class="acc-body">
+      <div class="acc-inner">
+        <div class="acc-block trigger-block">
+          <div class="acc-block-label">발화 예시 — Concept 카드 감지 (개념 검증)</div>
+          <div class="utterance"><span>"내 보험 전체 진단해줘"</span><span>"전체적으로 봐줘"</span></div>
+          <div class="chain-path">CN-ALL(신규 제안, 미등록) → risk_type_refs=활성 23개 전체 → 이 사용자는 7건 필수조건 충족 → 도메인 그룹핑 요약형 포맷 적용</div>
+          <div style="font-size:11px;color:#B45309;margin-top:6px;">⚠️ CN-ALL 카드는 아직 등록되지 않았습니다. 이 예시는 등록됐다고 가정했을 때의 화면입니다.</div>
+        </div>
+        <div class="acc-block" style="background:transparent;padding:0;">
+          <div class="acc-block-label" style="padding-left:2px;">Clark 모바일 웹 실제 화면 — 요약형 (도메인 그룹핑 적용)</div>
+          <div class="phone-mockup-wrap">
+            <div class="phone-frame">
+              <div class="phone-screen">
+                <div class="phone-statusbar"><span>9:41</span><span>●●● 5G 100%</span></div>
+                <div class="app-topbar">
+                  <span class="back-arrow">‹</span>
+                  <span class="app-avatar-top">🤖</span>
+                  <div class="app-title-group">
+                    <div class="app-title">Clark</div>
+                    <div class="app-sub">보험 진단 · 상담 도우미</div>
+                  </div>
+                </div>
+                <div class="app-chat-area">
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">내 보험 전체 진단해줘</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 2:14</div>
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>고객님의 보험을 전체적으로 살펴봤어요. 총 7개의 보장 공백이 확인됐어요.</p>
+                      <div class="summary-list">
+                        <div class="summary-group">
+                          <div class="summary-group-title">🏥 건강보험 3건</div>
+                          <div class="summary-item"><span class="summary-item-name">무보장형</span><span class="summary-item-desc">실손·사망보장 모두 없음</span></div>
+                          <div class="summary-item"><span class="summary-item-name">암진단금 부족형<span class="summary-item-flag">⚠️건강정보 매칭</span></span><span class="summary-item-desc">2,000만 원 · 부족</span></div>
+                          <div class="summary-item"><span class="summary-item-name">노후돌봄보장 공백형</span><span class="summary-item-desc">장기간병요양진단 없음</span></div>
+                        </div>
+                        <div class="summary-group">
+                          <div class="summary-group-title">❤️ 생명보험 1건</div>
+                          <div class="summary-item"><span class="summary-item-name">사망보장 미비형</span><span class="summary-item-desc">실손만 있고 사망보장 없음</span></div>
+                        </div>
+                        <div class="summary-group">
+                          <div class="summary-group-title">🩹 상해 2건</div>
+                          <div class="summary-item"><span class="summary-item-name">후유장해보장 공백형</span><span class="summary-item-desc">질병·상해 후유장해 없음</span></div>
+                          <div class="summary-item"><span class="summary-item-name">골절·상해진단금 공백형</span><span class="summary-item-desc">골절진단 담보 없음</span></div>
+                        </div>
+                        <div class="summary-group">
+                          <div class="summary-group-title">🚗 특종 1건</div>
+                          <div class="summary-item"><span class="summary-item-name">운전자보험 미가입형</span><span class="summary-item-desc">형사합의지원금 없음</span></div>
+                        </div>
+                      </div>
+                      <p>궁금한 항목을 말씀해주시면 자세히 설명해드릴게요.</p>
+                      <div class="disclaimer">이 분석은 마이데이터 기반 보험 가입 현황을 활용한 전체 요약 진단 결과예요. 항목별 상세 근거·수치는 개별 질문 시 안내돼요.</div>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:14</div>
+                  <div class="app-cta-row">
+                    <span class="app-cta-chip">📋 보닥 플래너와 전체 보장 점검하기</span>
+                  </div>
+                </div>
+                <div class="app-input-bar">
+                  <div class="app-input-fake">메시지 입력...</div>
+                  <div class="app-send-btn">➤</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="proto-note">※ 항목별 상세는 사용자가 개별 지목 시 해당 T코드의 기존 단건 심층 포맷(예: T01·T11·T20 등)으로 전환됩니다. N=0(공백 없음)일 때는 "특별한 보장 공백이 확인되지 않아요. 잘 준비하고 계세요!" 류의 안심 메시지로 대체됩니다.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div class="section-label">체인별 Clark AI 채팅 시나리오 · 23개 (단건 심층형)</div>
 
   <!-- T01 무보장형 -->
   <div class="acc-item">
