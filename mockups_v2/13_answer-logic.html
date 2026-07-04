@@ -963,6 +963,13 @@
           <span class="answer-src-tag">PO001 출력 형식 통제</span>
         </div>
       </div>
+      <div class="note-box" style="margin-top:12px">
+        <strong>Clark 실제 앱 출력 형식 원칙 (2026-07-05 확정, <code style="background:#FFF0D0;padding:1px 5px;border-radius:3px;font-size:12px">context/answer-logic.md</code> 참조):</strong><br>
+        ① <strong>진단 선언 우선</strong> — "고객님은 [위험유형명]에 해당하는 상태예요"처럼 Risk-type의 한글 위험유형명(카드에 이미 있는 필드)으로 먼저 결론을 선언한 뒤 이유·근거를 설명한다. 위 예시가 이 원칙을 따르고 있다.<br>
+        ② <strong>운영자 식별자 비노출</strong> — T코드(T02)·영문 "Risk-type"·담보코드(A4200 등)·연산자(GTE/LTE) 같은 운영자·개발자 전용 식별자는 실제 사용자 화면에 절대 노출하지 않는다. 이 페이지의 카드 코드 표기(T02, RU001 등)는 어디까지나 <strong>기획자·개발자용 설명 목적</strong>이며, 실제 Clark 앱 답변 텍스트에는 포함되지 않는다.<br>
+        ③ <strong>Evidence 인용 시 출처+연도 명시</strong> — "심평원 2024"처럼 출처 기관과 기준 연도를 답변 문장에 자연스럽게 포함해 사용자가 근거를 신뢰·검증할 수 있게 한다. 보고서 정식 명칭·URL까지는 넣지 않는다.<br>
+        실제 모바일 앱 UI 적용 예시는 <code style="background:#FFF0D0;padding:1px 5px;border-radius:3px;font-size:12px">contents/html/08_ai-preview.html</code>(T01~T32 23개 체인 전체 적용) 참조.
+      </div>
     </div>
   </div>
 

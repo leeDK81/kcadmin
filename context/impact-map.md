@@ -321,6 +321,17 @@
 
 ---
 
+### 24. Clark 실제 앱 답변 출력 형식 변경 (진단 선언·운영자 식별자 비노출·Evidence 인용 표기) — 2026-07-05 신설
+
+**진실원:** `context/answer-logic.md` "FAQ RAG 매칭 방식" 위 섹션 및 Evidence 활용 표의 "인용 표기 원칙"
+
+| 영향 파일 | 변경 위치 |
+|---|---|
+| `mockups_v2/13_answer-logic.html` | Step 7 답변 예시 하단 note-box (출력 형식 원칙 3가지) |
+| `contents/html/08_ai-preview.html` | T01~T32 23개 체인 전체 — 모바일 폰 프레임 목업, 진단 선언 문장, Evidence 출처+연도 인용 (트랙 경계를 넘는 영향은 `context/cross-track-impact.md` 참조) |
+
+---
+
 ## 신규 화면 추가 시 체크리스트 (shared.js 도입 후)
 
 새 HTML 파일을 `mockups_v2/`에 추가할 때:
