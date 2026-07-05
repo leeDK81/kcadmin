@@ -93,7 +93,9 @@ Step 8  [05] 확정된 콘텐츠를 contents/html/*.html에 실제 반영 (2026-
              → 반영 후 chain-map.json 대비 담보코드·수치·카드 상태 불일치 없는지 자체 대조
 
 Step 9  [01+02+03] FAQ RAG 콘텐츠 저작 (2026-07-04 신규)
-             → 산출물: contents/08_faq/faq-rag.md, contents/html/09_faq-rag.html(미리보기, 2026-07-05 추가)
+             → 산출물: contents/08_faq/faq-rag.md, contents/html/09_faq-rag.html(콘텐츠 미리보기, 2026-07-05 추가),
+               contents/html/10_faq-ai-preview.html(Clark 채팅 답변 시뮬레이션, 2026-07-06 추가 — 08_ai-preview.html과
+               동일 폰 프레임 템플릿 재사용, 카테고리 A만 대상. 카테고리 B는 플레이스홀더 상태라 제외)
              → KC 체인(Concept)으로 감지되지 않거나 감지 후에도 "계약과 무관한 일반 판단"이 필요한 질문 유형 도출
              → 01(공인 통계)이 근거 확인, 02(도메인 전문가)가 판단 기준 검증, 03(카피라이터)이 고객향 워싱
              → 등록 기준은 `context/answer-logic.md` "FAQ RAG 등록 기준" 표 준수 — 계약 특정적 질문은 절대 등록 금지

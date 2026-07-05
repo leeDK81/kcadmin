@@ -387,7 +387,7 @@ const COVERAGE_CODES_BY_CAT = {
   ]
 };
 
-// 프롬에이지 위험도 항목 (암위험도 + 질병위험도 통합, 위험/주의/양호 3단계)
+// 프롬에이지 위험도 항목 (암위험도 + 질병위험도 통합, 고위험/위험/경고/주의/양호 5단계)
 const PROMAGE_FIELDS = [
   {code:'canr_ca',name:'암 종합 등급'},{code:'lung_ca',name:'폐암'},{code:'gaca_ca',name:'위암'},
   {code:'lica_ca',name:'간암'},{code:'coca_ca',name:'대장암'},{code:'brca_ca',name:'유방암'},
@@ -475,6 +475,15 @@ function opSelectHtml(op) {
   const ops = [
     {v:'LTE',l:'이하 (≤)'},{v:'GTE',l:'이상 (≥)'},
     {v:'LT',l:'미만 (<)'},{v:'GT',l:'초과 (>)'},{v:'EQ',l:'같음 (=)'},
+  ];
+  return ops.map(o=>`<option value="${o.v}"${op===o.v?' selected':''}>${o.l}</option>`).join('');
+}
+
+// 프롬에이지 위험도 5단계(고위험>위험>경고>주의>양호)는 서수 등급이라 이상/이하 비교가 의미
+// 있다 — MYDATA처럼 미만/초과까지는 필요치 않아 EQ/GTE/LTE 3종만 제공 (2026-07-06 신규)
+function promageOpSelectHtml(op) {
+  const ops = [
+    {v:'EQ',l:'같음 (=)'},{v:'GTE',l:'이상 (≥)'},{v:'LTE',l:'이하 (≤)'},
   ];
   return ops.map(o=>`<option value="${o.v}"${op===o.v?' selected':''}>${o.l}</option>`).join('');
 }
@@ -601,11 +610,15 @@ function addConditionRow(init) {
           <optgroup label="질병위험도">${diseaseOpts}</optgroup>
         </select>
       </div>
-      <div style="display:flex;align-items:center;padding:0 4px;font-size:12px;color:var(--text-secondary);font-weight:600">같음 (=)</div>
+      <div>
+        <select class="form-control" style="font-size:13px" id="op-${id}">${promageOpSelectHtml(pop)}</select>
+      </div>
       <div>
         <select class="form-control" style="font-size:13px" id="val-${id}">
           <option value="">등급 선택</option>
+          <option value="고위험"${pval==='고위험'?' selected':''}>고위험</option>
           <option value="위험"${pval==='위험'?' selected':''}>위험</option>
+          <option value="경고"${pval==='경고'?' selected':''}>경고</option>
           <option value="주의"${pval==='주의'?' selected':''}>주의</option>
           <option value="양호"${pval==='양호'?' selected':''}>양호</option>
         </select>
@@ -613,7 +626,7 @@ function addConditionRow(init) {
       ${reqRadioHtml(id, isRequired)}
       <button class="cond-delete" onclick="removeCondition(this)" title="조건 삭제"><i class="fa fa-trash"></i></button>
       <div style="grid-column:1/-1">
-        <span class="cond-hint">프롬에이지 — 위험도는 위험/주의/양호 3단계. <strong style="color:#A32D2D">선택 조건 권장:</strong> Clark 사용자 중 PROMAGE(건강정보)를 연동하지 않은 비율이 높습니다. 필수로 설정하면 미연동 사용자는 이 Rule에 걸리지 않아 KC 체인 답변 대신 RAG·Fallback으로 빠집니다. 선택으로 두면 연동 사용자는 더 정밀하게, 미연동 사용자는 나머지 조건만으로 평가됩니다.</span>
+        <span class="cond-hint">프롬에이지 — 위험도는 고위험 &gt; 위험 &gt; 경고 &gt; 주의 &gt; 양호 심각도 5단계(2026-07-06 3단계→확장). "이상"·"이하"로 여러 등급을 한 번에 포함할 수 있습니다(예: 위험 이상 = 고위험+위험). <strong style="color:#A32D2D">선택 조건 권장:</strong> Clark 사용자 중 PROMAGE(건강정보)를 연동하지 않은 비율이 높습니다. 필수로 설정하면 미연동 사용자는 이 Rule에 걸리지 않아 KC 체인 답변 대신 RAG·Fallback으로 빠집니다. 선택으로 두면 연동 사용자는 더 정밀하게, 미연동 사용자는 나머지 조건만으로 평가됩니다.</span>
       </div>`;
   } else {
     row.className = 'cond-row cond-row-mydata';

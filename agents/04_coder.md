@@ -90,7 +90,7 @@ HTML 패턴 → `guides/ux-patterns.md` 참조.
 | 07_rule | 조건 추가/삭제(3-source). 게이트: 내용 필드 충족 시 검수 요청 활성 |
 | 09_review | 카드 내용 통합 목록. 필터(전체/검수대기/처리완료). 승인→완료. 반려→사유 입력 모달. 승인완료 상태 액션: "상세 보기" + "캔버스에서 연결" 버튼 (라이브 전환 버튼 없음 — 라이브 전환은 사전 테스트 후 캔버스에서 처리). 승인요청 상태 카드: 연결정보(conn) 없음 |
 | 18_system-settings | LLM Fallback 설정 폼. KC 미매칭(Case 3) 시 적용되는 제한 규칙. 저장 즉시 반영. KC 체인과 독립적으로 동작 |
-| 19_faq-rag | Clark 서비스 전용 FAQ Q&A 목록(상태 필터·검색) + 인라인 등록 패널(Q·A 직접 입력) + 상세 모달(수정·삭제·인덱스 등록). 상태 2종: 초안/인덱스등록됨. 승인 프로세스 없음. 약관·보장 관련 Q&A 등록 금지 문구 상단 안내 필수 |
+| 19_faq-rag | Clark 서비스 전용 FAQ Q&A 목록(상태 필터·검색) + 인라인 등록 패널(Q·A 필수 + 출처·⚠️유의사항 선택 입력, 2026-07-06 4필드 확장) + 상세 모달(수정·삭제·인덱스 등록, ⚠️유의사항은 "LLM 재구성 없이 원문 그대로 고정 부착" 안내 문구 포함). 상태 2종: 초안/인덱스등록됨. 승인 프로세스 없음. 약관·보장 관련 Q&A 등록 금지 문구 상단 안내 필수 |
 | 16_playbook-list | 상태 필터 탭. 상태별 액션 버튼 → `agents/04b_coder-playbook.md` |
 | 16_card-editor-playbook | 키워드 Enter 추가/× 제거 (최소 3개 필수). updatePreview() 실시간. Card ③ standaloneGuide: 선택사항 textarea (chip-opt), minlength 검증 없음 — 비워두면 Clark 기본 안내 문구 사용. consult CTA 버튼 필수. approved 상태에서 캔버스 연결 없이 직접 "라이브 전환" 가능. 상세 → `agents/04b_coder-playbook.md` |
 
@@ -146,7 +146,7 @@ HTML 패턴 → `guides/ux-patterns.md` 참조.
 - [ ] LEFT 컬럼 5개 독립 `.card` (①기본정보→②Risk-type→③판단조건→④Evidence→⑤액션)
 - [ ] 게이트 카드: Risk-type ☑ + 판단조건 ☑ + Evidence ☑ 충족 시 버튼 활성
 - [ ] MYDATA 행: 담보코드+확인항목+조건+기준값+힌트+구분(필수/선택)+삭제 7열. required=true 기본값 (필수). 화면 표기: "마이데이터"
-- [ ] Promage 행: 위험도 select(50개 항목)+조건(같음 고정)+기준값(위험/주의/양호)+구분(필수/선택)+삭제. required=false 기본값 (선택). 화면 표기: "프롬에이지". 힌트: "선택 조건 권장 — 필수 설정 시 미연동 사용자 Rule 미발동"
+- [ ] Promage 행: 위험도 select(50개 항목)+조건(같음/이상/이하 select, 2026-07-06 EQ only→3종 확장)+기준값(고위험/위험/경고/주의/양호 select, 3단계→5단계 확장)+구분(필수/선택)+삭제. required=false 기본값 (선택). 화면 표기: "프롬에이지". 힌트: "선택 조건 권장 — 필수 설정 시 미연동 사용자 Rule 미발동"
 - [ ] 프로파일 행: 항목+조건+기준값+구분(필수/선택)+삭제. required=true 기본값 (필수). 화면 표기: "프로파일"
 - [ ] ConditionRow 데이터 구조에 required:boolean 속성 포함 (소스별 기본값 다름)
 - [ ] 구분 라디오: 필수(빨간 텍스트) / 선택(회색 텍스트). `name="req-${id}"` 패턴

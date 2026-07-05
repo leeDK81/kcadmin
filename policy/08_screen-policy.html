@@ -171,7 +171,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
           <td><span class="file-code">07_card-editor-rule.html</span></td>
           <td>Rule 편집기</td>
           <td>Rule 카드 신규 등록·수정. 기본정보 + 조건 빌더(MYDATA·PROMAGE·PROFILE, 필수/선택 구분) + Evidence 연결(읽기 전용) + 액션.</td>
-          <td>조건 빌더 데이터 소스: MYDATA·PROMAGE·프로파일(Amplitude 없음). 등급명: 위험/주의/양호(상/중/하 금지).</td>
+          <td>조건 빌더 데이터 소스: MYDATA·PROMAGE·프로파일(Amplitude 없음). 등급명: 고위험/위험/경고/주의/양호(2026-07-06 3단계→5단계 확장, 상/중/하 금지).</td>
         </tr>
 
         <!-- Policy -->
@@ -212,8 +212,8 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
         <tr>
           <td><span class="file-code">19_faq-rag.html</span></td>
           <td>FAQ RAG 관리</td>
-          <td>약관 RAG가 커버하지 못하는 Clark 서비스 전용 Q&A 등록·검수·관리. 목록 테이블(상태 필터·검색), Q&A 직접 등록 패널, 상세 모달(수정·승인·반려·재검수). 약관·보장 관련 Q&A 등록 금지.</td>
-          <td>운영자가 Q&A 직접 등록 → 검수자 승인 → 인덱스 자동 등록. 상태 4종: 초안 / 검수대기 / 인덱스 등록됨 / 반려됨. 반려 시 사유 필수 입력.</td>
+          <td>약관 RAG가 커버하지 못하는 Clark 서비스 전용 Q&A + 계약 무관 보험 판단 노하우 등록·관리. 목록 테이블(상태 필터·검색), 등록 패널(Q·A 필수 + 출처·⚠️유의사항 선택, 2026-07-06 4필드 확장), 상세 모달(수정·삭제·인덱스 등록). 계약 특정적 질문 등록 금지.</td>
+          <td>운영자가 Q&A 직접 등록 → 즉시 인덱스 등록(승인 프로세스 없음). 상태 2종: 초안 / 인덱스 등록됨. ⚠️ 유의사항은 LLM이 재구성하지 않고 원문 그대로 답변에 고정 부착(Policy 면책 문구와 동일 원칙).</td>
         </tr>
 
         <!-- Playbook -->

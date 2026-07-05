@@ -193,7 +193,7 @@ const COVERAGE_CODES = {
 };
 
 const FROMAGE_SECTIONS = {
-  '위험도 (위험/주의/양호)': [
+  '위험도 (고위험·위험·경고·주의·양호)': [
     {code:'canr_ca',desc:'암 종합 등급'},{code:'lung_ca',desc:'폐암'},{code:'gaca_ca',desc:'위암'},
     {code:'lica_ca',desc:'간암'},{code:'coca_ca',desc:'대장암'},{code:'brca_ca',desc:'유방암'},
     {code:'thca_ca',desc:'갑상선암'},{code:'prca_ca',desc:'전립선암'},{code:'ovca_ca',desc:'난소암'},
@@ -217,7 +217,7 @@ const FROMAGE_SECTIONS = {
 
 // 프롬에이지 카테고리별 조건 유형 설명
 const FROMAGE_COND = {
-  '위험도 (위험/주의/양호)': {icon:'fa-circle-dot', color:'#6B4A9A', text:'Rule 조건: <b>위험</b> / <b>주의</b> / <b>양호</b> 등급 선택 — 암위험도·질병위험도 항목 통합 (총 50개)'}
+  '위험도 (고위험·위험·경고·주의·양호)': {icon:'fa-circle-dot', color:'#6B4A9A', text:'Rule 조건: <b>EQ</b>(같음) / <b>GTE</b>(이상) / <b>LTE</b>(이하) — <b>고위험</b> &gt; <b>위험</b> &gt; <b>경고</b> &gt; <b>주의</b> &gt; <b>양호</b> 심각도 5단계 (2026-07-06 3단계→확장). 암위험도·질병위험도 항목 통합 (총 50개)'}
 };
 
 function switchTab(source) {
@@ -271,8 +271,8 @@ function renderFromageSections() {
   const note = `
     <div class="banner-warn" style="margin-bottom:20px">
       <i class="fa fa-circle-exclamation fa-fw"></i>
-      <strong>민감정보 처리 원칙 (§3-8)</strong> — 프롬에이지 데이터는 사용자 출력 시 <b>위험 / 주의 / 양호</b> 3단계 등급명만 허용.
-      원본 수치(canr_ca 실수값 등) 직접 노출 금지. Rule 조건 빌더에서 프롬에이지를 소스로 선택하면 건강위험도 등급 조건을 설정할 수 있습니다 (위험/주의/양호). 원본 수치는 직접 노출하지 않습니다.
+      <strong>민감정보 처리 원칙 (§3-8)</strong> — 프롬에이지 데이터는 사용자 출력 시 <b>고위험 / 위험 / 경고 / 주의 / 양호</b> 5단계 등급명만 허용(2026-07-06 3단계→확장).
+      원본 수치(canr_ca 실수값 등) 직접 노출 금지. Rule 조건 빌더에서 프롬에이지를 소스로 선택하면 건강위험도 등급 조건을 EQ(같음)뿐 아니라 GTE(이상)·LTE(이하)로도 설정할 수 있습니다. 원본 수치는 직접 노출하지 않습니다.
     </div>`;
 
   const cats = Object.entries(FROMAGE_SECTIONS).map(([cat, fields]) => {
@@ -375,7 +375,7 @@ function renderProfileFields() {
             <span style="padding-top:3px">암진단(A4200) 담보금액 <b>≤ 30,000,000원</b></span>
             <span style="padding-top:3px;color:var(--text-hint)">AND</span>
             <span style="padding:3px 10px;border-radius:12px;background:rgba(107,74,154,.1);color:#6B4A9A;font-size:13px;font-weight:600;white-space:nowrap">🧬 프롬에이지</span>
-            <span style="padding-top:3px">위험도 <b>= 위험</b></span>
+            <span style="padding-top:3px">위험도 <b>≥ 위험</b> (고위험·위험 매칭)</span>
           </div>
           <div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border);font-size:13px;color:var(--text-hint)">
             → T02 암진단금 부족형 판정

@@ -91,7 +91,19 @@
       <div class="form-group" style="margin-bottom:0">
         <label>답변 (A) <span style="color:#A32D2D">*</span></label>
         <textarea class="form-control" id="newA" placeholder="Clark 서비스 안내 또는 계약 무관 보험 판단 노하우 답변을 입력하세요. 특정 개인의 보장 금액·청구 가능 여부·타사 비교는 금지." style="min-height:80px"></textarea>
-        <span class="field-hint">등록하면 바로 인덱스에 추가됩니다. Clark 서비스 전용 내용 또는 계약 무관 보험 판단 노하우만 등록하세요.</span>
+        <span class="field-hint">매칭 시 이 텍스트를 근거로 LLM이 자연스러운 문장으로 재구성해 답변합니다. Clark 서비스 전용 내용 또는 계약 무관 보험 판단 노하우만 등록하세요.</span>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px">
+      <div class="form-group" style="margin-bottom:0">
+        <label>출처 <span style="color:var(--text-hint);font-weight:400">(선택)</span></label>
+        <input class="form-control" id="newCitation" type="text" placeholder="예) 금융감독원, 「소비자 유의사항」 보도자료, 2024.6">
+        <span class="field-hint">공인 기관·보고서 등 근거 출처입니다. 운영자 검수용이며 고객 화면에 원문 그대로 노출되지 않습니다 — 답변(A) 재구성 시 참고 근거로만 쓰입니다.</span>
+      </div>
+      <div class="form-group" style="margin-bottom:0">
+        <label>⚠️ 유의사항 <span style="color:var(--text-hint);font-weight:400">(선택)</span></label>
+        <textarea class="form-control" id="newCaution" placeholder="예) 개별 계약의 면책 조항·특약 구성에 따라 결과가 달라질 수 있습니다. 정확한 확인은 보닥 플래너와 하세요." style="min-height:60px"></textarea>
+        <span class="field-hint">법적·보상 관련 유의사항입니다. Policy(면책 문구)와 동일하게 <strong>LLM이 재구성하지 않고 원문 그대로</strong> 답변 끝에 고정 부착됩니다.</span>
       </div>
     </div>
     <div style="display:flex;gap:8px;margin-top:14px">
@@ -144,8 +156,13 @@
         <div class="a-display" id="mADisplay"></div>
         <textarea class="form-control" id="mAEdit" style="min-height:110px;margin-top:6px;display:none"></textarea>
       </div>
+      <div class="form-group">
+        <label style="font-size:13px;font-weight:600;color:var(--text-hint)">⚠️ 유의사항 <span style="font-weight:400">(LLM 재구성 없이 원문 그대로 답변 끝에 고정 부착됨)</span></label>
+        <div class="a-display" id="mCautionDisplay"></div>
+        <textarea class="form-control" id="mCautionEdit" style="min-height:70px;margin-top:6px;display:none"></textarea>
+      </div>
       <div class="meta-row">
-        <span class="meta-k">출처</span><span class="meta-v" id="mSource"></span>
+        <span class="meta-k">출처</span><span class="meta-v" id="mCitation"></span>
         <span class="meta-k">등록자</span><span class="meta-v" id="mReg"></span>
         <span class="meta-k">등록일</span><span class="meta-v" id="mDate"></span>
       </div>
@@ -162,10 +179,11 @@ let currentId = null;
 let editMode = false;
 
 let faqs = [
-  {id:'FAQ001',q:'보닥 플래너 상담은 어떻게 신청하나요?',a:'Clark 화면 우측 하단 "상담 신청" 버튼을 탭하거나, 상담사 연결 메시지에서 "연결하기"를 선택하시면 됩니다. 보닥 플래너가 배정되면 알림으로 안내드립니다.',status:'active',source:'운영자',registrar:'김운영',date:'2026-06-15'},
-  {id:'FAQ002',q:'Clark AI 답변이 내 실제 보장과 다를 수 있나요?',a:'Clark AI는 등록된 KC 카드 기준으로 안내합니다. 정확한 보장 내용은 가입 약관 또는 보닥 플래너 상담을 통해 확인하세요.',status:'active',source:'운영자',registrar:'박운영',date:'2026-06-19'},
-  {id:'FAQ003',q:'Clark에서 제공하는 서비스 범위가 어떻게 되나요?',a:'Clark AI는 가입 보험 기반 보장 안내, KC 카드 기반 답변, 보닥 플래너 연결을 제공합니다.',status:'draft',source:'운영자',registrar:'이운영',date:'2026-06-18'},
-  {id:'FAQ004',q:'Clark을 통해 타사 보험료 비교가 가능한가요?',a:'타사 보험료 직접 비교는 제공하지 않습니다.',status:'draft',source:'운영자',registrar:'박운영',date:'2026-06-21'}
+  {id:'FAQ001',q:'보닥 플래너 상담은 어떻게 신청하나요?',a:'Clark 화면 우측 하단 "상담 신청" 버튼을 탭하거나, 상담사 연결 메시지에서 "연결하기"를 선택하시면 됩니다. 보닥 플래너가 배정되면 알림으로 안내드립니다.',citation:'',caution:'',status:'active',registrar:'김운영',date:'2026-06-15'},
+  {id:'FAQ002',q:'Clark AI 답변이 내 실제 보장과 다를 수 있나요?',a:'Clark AI는 등록된 KC 카드 기준으로 안내합니다. 정확한 보장 내용은 가입 약관 또는 보닥 플래너 상담을 통해 확인하세요.',citation:'',caution:'',status:'active',registrar:'박운영',date:'2026-06-19'},
+  {id:'FAQ003',q:'Clark에서 제공하는 서비스 범위가 어떻게 되나요?',a:'Clark AI는 가입 보험 기반 보장 안내, KC 카드 기반 답변, 보닥 플래너 연결을 제공합니다.',citation:'',caution:'',status:'draft',registrar:'이운영',date:'2026-06-18'},
+  {id:'FAQ004',q:'Clark을 통해 타사 보험료 비교가 가능한가요?',a:'타사 보험료 직접 비교는 제공하지 않습니다.',citation:'',caution:'',status:'draft',registrar:'박운영',date:'2026-06-21'},
+  {id:'FAQ005',q:'용종제거도 수술비 나오나요? / 대장 용종제거 청구 가능한가요?',a:'용종제거(폴립절제술)는 원칙적으로 질병수술비 특약 지급 대상입니다. 약관에서 정한 "수술"의 정의(치료 목적으로 기구를 사용해 절단·절제하는 것)에 해당하고, 면책 제외 대상(흡인·천자 등 6가지)에도 포함되지 않습니다. 다만 일부 간편고지 상품은 대장용종을 별도 면책 처리해두기도 하고, 조직검사 결과(저등급 선종 vs 고등급 이형성·상피내암)에 따라 "질병수술비"와 "유사암 특약" 중 어느 쪽으로 지급되는지가 갈립니다.',citation:'보험연구원 연구보고서 2023-13(양승현·손민숙), 「보험약관상 수술의 정의와 쟁점」, 2023',caution:'원칙은 지급 대상이나, 개별 계약의 면책 조항·특약 구성에 따라 결과가 달라질 수 있습니다. 정확한 지급 여부는 보닥 플래너와 확인하세요.',status:'active',registrar:'이운영',date:'2026-07-05'}
 ];
 
 const SL = {active:'인덱스 등록됨', draft:'초안'};
@@ -203,7 +221,7 @@ function renderTable() {
     return `<tr>
       <td class="cell-q" title="${f.q}">${f.q}</td>
       <td class="cell-a" title="${f.a}">${f.a}</td>
-      <td style="font-size:13px;color:var(--text-hint)">${f.source}</td>
+      <td class="cell-a" style="font-size:13px;color:var(--text-hint)" title="${f.citation||''}">${f.citation ? f.citation : '—'}</td>
       <td><span class="badge ${SB[f.status]}">${SL[f.status]}</span></td>
       <td style="font-size:12px;color:var(--text-hint)">${f.date}</td>
       <td>${btns}</td>
@@ -223,12 +241,16 @@ function closeReg() { document.getElementById('regPanel').classList.remove('open
 function submitRegister(asDraft) {
   const q = document.getElementById('newQ').value.trim();
   const a = document.getElementById('newA').value.trim();
+  const citation = document.getElementById('newCitation').value.trim();
+  const caution = document.getElementById('newCaution').value.trim();
   if (!q) { showToast('질문을 입력하세요.'); return; }
   if (!a) { showToast('답변을 입력하세요.'); return; }
   const today = new Date().toISOString().split('T')[0];
-  faqs.push({id:'FAQ0'+(++idSeq),q,a,status:asDraft?'draft':'active',source:'운영자',registrar:'현재 사용자',date:today});
+  faqs.push({id:'FAQ0'+(++idSeq),q,a,citation,caution,status:asDraft?'draft':'active',registrar:'현재 사용자',date:today});
   document.getElementById('newQ').value='';
   document.getElementById('newA').value='';
+  document.getElementById('newCitation').value='';
+  document.getElementById('newCaution').value='';
   closeReg();
   renderTable();
   showToast(asDraft ? '초안으로 저장되었습니다.' : '인덱스에 등록되었습니다.');
@@ -258,7 +280,10 @@ function openModal(id) {
   document.getElementById('mADisplay').textContent = f.a;
   document.getElementById('mADisplay').style.display='block';
   document.getElementById('mAEdit').style.display='none';
-  document.getElementById('mSource').textContent = f.source;
+  document.getElementById('mCautionDisplay').textContent = f.caution || '(등록 안 됨)';
+  document.getElementById('mCautionDisplay').style.display='block';
+  document.getElementById('mCautionEdit').style.display='none';
+  document.getElementById('mCitation').textContent = f.citation || '—';
   document.getElementById('mReg').textContent = f.registrar||'-';
   document.getElementById('mDate').textContent = f.date;
   renderFooter(f);
@@ -287,6 +312,9 @@ function startEdit() {
   document.getElementById('mADisplay').style.display='none';
   const ta = document.getElementById('mAEdit');
   ta.style.display='block'; ta.value=f.a;
+  document.getElementById('mCautionDisplay').style.display='none';
+  const ct = document.getElementById('mCautionEdit');
+  ct.style.display='block'; ct.value=f.caution||'';
   document.getElementById('mFooter').innerHTML=`
     <button class="btn btn-ghost" onclick="cancelEdit()">취소</button>
     <button class="btn btn-primary" onclick="saveEdit()"><i class="fa-solid fa-floppy-disk fa-fw"></i> 저장</button>`;
@@ -295,13 +323,17 @@ function cancelEdit() {
   editMode=false;
   document.getElementById('mADisplay').style.display='block';
   document.getElementById('mAEdit').style.display='none';
+  document.getElementById('mCautionDisplay').style.display='block';
+  document.getElementById('mCautionEdit').style.display='none';
   renderFooter(faqs.find(x=>x.id===currentId));
 }
 function saveEdit() {
   const val = document.getElementById('mAEdit').value.trim();
   if (!val) { showToast('답변을 입력하세요.'); return; }
-  const f = faqs.find(x=>x.id===currentId); f.a=val;
+  const cautionVal = document.getElementById('mCautionEdit').value.trim();
+  const f = faqs.find(x=>x.id===currentId); f.a=val; f.caution=cautionVal;
   document.getElementById('mADisplay').textContent=val;
+  document.getElementById('mCautionDisplay').textContent=cautionVal || '(등록 안 됨)';
   cancelEdit(); showToast('수정되었습니다.');
 }
 function deleteModal() {

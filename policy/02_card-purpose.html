@@ -187,7 +187,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
     <p><strong>역할:</strong> 고객의 보험 보장 공백 여부를 실제로 판단하는 조건 집합. 마이데이터·프롬에이지·사용자 프로파일 3개 데이터 소스를 조건 빌더로 설정.</p>
     <p><strong>조건 빌더 데이터 소스 3종:</strong><br>
     · <strong>마이데이터(MyData):</strong> 담보코드 select + 담보금액(coverage_amt) + 조건(LTE/GTE) + 기준값. 존재여부·갱신여부·보험유형·날짜 조건 불가.<br>
-    · <strong>프롬에이지(Promage):</strong> 위험도 항목 select(50개 flat, 암위험도 23개 + 질병위험도 27개 구성) + 같음(EQ 고정) + 등급(위험/주의/양호). 생체나이·의료비예측 사용 불가.<br>
+    · <strong>프롬에이지(Promage):</strong> 위험도 항목 select(50개 flat, 암위험도 23개 + 질병위험도 27개 구성) + 조건(같음/이상/이하, 2026-07-06 EQ only→3종 확장) + 등급(고위험/위험/경고/주의/양호, 3단계→5단계 확장). 생체나이·의료비예측 사용 불가.<br>
     · <strong>사용자 프로파일:</strong> 나이(BETWEEN, 시작세~종료세) / 성별(무관/남/여) / 결혼여부(무관/기혼/미혼) / 자녀유무(무관/있음/없음) / 운전여부(무관/유/무) 5개 항목. 직업위험도·출산예정·거주지 삭제됨.</p>
     <p><strong>약관 DB:</strong> 약관 DB 확보 시 Rule 조건 충족 → 담보코드 기준으로 자동 조회 → Clark 답변에 면책조항 섹션 자동 포함. (별도 플래그 없이 엔진이 자동 처리)</p>
     <div class="meta">
@@ -288,7 +288,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
         <tr>
           <td>원본 수치 (<code>rawData</code>)</td>
           <td style="color:#A32D2D;font-weight:700">금지</td>
-          <td>프롬에이지 원본 수치 고객 공개 금지 [§3-8]. 반드시 3단계 등급(위험/주의/양호)으로 변환 후 포함</td>
+          <td>프롬에이지 원본 수치 고객 공개 금지 [§3-8]. 반드시 5단계 등급(고위험/위험/경고/주의/양호, 2026-07-06 3단계→확장)으로 변환 후 포함</td>
         </tr>
         <tr style="border-top:2px solid var(--border)">
           <td style="color:var(--card-policy);font-weight:700">⑤ Policy</td>

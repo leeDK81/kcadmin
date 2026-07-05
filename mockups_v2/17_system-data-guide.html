@@ -94,7 +94,7 @@
         <div class="flow-step-desc">개인 식별 정보를 제외한 데이터가 Clark AI로 전달됩니다.</div>
         <div class="flow-data-chips">
           <span class="flow-chip chip-mydata"><i class="fa-solid fa-shield-halved fa-fw"></i> 마이데이터 — 보험 보유 현황 (담보 종류·보장 금액 등)</span>
-          <span class="flow-chip chip-fromage"><i class="fa-solid fa-heartbeat fa-fw"></i> 프롬에이지 — 위험도 등급 (암·질병 50개 항목, 위험/주의/양호)</span>
+          <span class="flow-chip chip-fromage"><i class="fa-solid fa-heartbeat fa-fw"></i> 프롬에이지 — 위험도 등급 (암·질병 50개 항목, 고위험/위험/경고/주의/양호)</span>
           <span class="flow-chip chip-profile"><i class="fa-solid fa-user fa-fw"></i> 프로파일 — 나이·성별·결혼여부·운전여부 등 기본 정보</span>
         </div>
       </div>
@@ -151,7 +151,7 @@
         <div class="stat-card-title">마이데이터 + 프롬에이지 + 프로파일 <span style="font-size:12px;font-weight:400;color:var(--text-hint)">자동 전달</span></div>
         <ul class="stat-card-list">
           <li><i class="fa-solid fa-circle fa-fw" style="font-size:6px;color:var(--card-concept);margin-top:5px"></i><strong>마이데이터</strong> — coverage_amt (보장 금액) / renewal_status (갱신 여부) / insu_type (보험 유형) / start_date (가입일) / end_date (만기일)</li>
-          <li><i class="fa-solid fa-circle fa-fw" style="font-size:6px;color:var(--card-concept);margin-top:5px"></i><strong>프롬에이지</strong> — 건강 위험도 등급 (위험/주의/양호)</li>
+          <li><i class="fa-solid fa-circle fa-fw" style="font-size:6px;color:var(--card-concept);margin-top:5px"></i><strong>프롬에이지</strong> — 건강 위험도 등급 (고위험/위험/경고/주의/양호)</li>
           <li><i class="fa-solid fa-circle fa-fw" style="font-size:6px;color:var(--card-concept);margin-top:5px"></i><strong>프로파일</strong> — age (나이: 시작세~종료세 범위) / gender (성별: 무관/남/여) / married (결혼여부: 무관/기혼/미혼) / has_child (자녀유무: 무관/있음/없음) / drives (운전여부: 무관/유/무)</li>
         </ul>
         <div class="stat-card-note">상담 시 실시간 전달. Rule 조건 판단에 직접 활용. Evidence 카드 등록 불필요.</div>
@@ -254,7 +254,7 @@
           <li><span class="mark" style="color:#0F6E56;font-weight:700">✓</span> 보험 담보 종류 (예: 암진단, 뇌졸중, 입원일당)</li>
           <li><span class="mark" style="color:#0F6E56;font-weight:700">✓</span> 담보별 보장 금액 범위</li>
           <li><span class="mark" style="color:#0F6E56;font-weight:700">✓</span> 납입 방식 (갱신형/비갱신형)</li>
-          <li><span class="mark" style="color:#0F6E56;font-weight:700">✓</span> 프롬에이지 건강 위험도 등급 (위험/주의/양호)</li>
+          <li><span class="mark" style="color:#0F6E56;font-weight:700">✓</span> 프롬에이지 건강 위험도 등급 (고위험/위험/경고/주의/양호)</li>
           <li><span class="mark" style="color:#0F6E56;font-weight:700">✓</span> 나이, 성별, 결혼여부, 자녀유무, 운전여부 기본 프로파일 5개 항목</li>
         </ul>
       </div>
@@ -273,7 +273,7 @@
     </div>
     <div class="warn-box">
       <i class="fa-solid fa-triangle-exclamation fa-fw"></i>
-      <strong>프롬에이지 건강 정보는 민감 개인정보이므로, Clark 답변에서도 원본 수치는 절대 출력하지 않습니다.</strong> 위험/주의/양호 등급명과 백분위 형태로만 제공됩니다. [§3-8 준수]
+      <strong>프롬에이지 건강 정보는 민감 개인정보이므로, Clark 답변에서도 원본 수치는 절대 출력하지 않습니다.</strong> 고위험/위험/경고/주의/양호 등급명과 백분위 형태로만 제공됩니다(2026-07-06 3단계→5단계 확장). [§3-8 준수]
     </div>
   </div>
 
@@ -297,7 +297,7 @@
       <div class="caution-card">
         <div class="caution-icon" style="color:var(--card-rule)"><i class="fa-solid fa-scale-balanced"></i></div>
         <div class="caution-title">유의 ③ Rule 조건의 프롬에이지 — 등급 기준만 가능, 선택 조건으로 설정 권장</div>
-        <div class="caution-body">Rule 조건에서 프롬에이지 항목을 사용할 때는 수치가 아닌 등급(위험/주의/양호)으로만 조건을 설정할 수 있습니다. "위험도가 위험 등급인 경우"는 가능하지만, "위험도 점수가 85점 이상인 경우"처럼 원본 수치로 조건을 설정하는 것은 불가합니다.<br><br>
+        <div class="caution-body">Rule 조건에서 프롬에이지 항목을 사용할 때는 수치가 아닌 등급(고위험&gt;위험&gt;경고&gt;주의&gt;양호 5단계, 2026-07-06 3단계→확장)으로만 조건을 설정할 수 있습니다. "위험도가 위험 등급인 경우"(EQ)뿐 아니라 "위험도가 위험 등급 이상인 경우"(GTE, 고위험·위험 매칭)·"주의 등급 이하인 경우"(LTE, 주의·양호 매칭)도 가능합니다. 다만 "위험도 점수가 85점 이상인 경우"처럼 원본 수치로 조건을 설정하는 것은 여전히 불가합니다.<br><br>
         <strong>프롬에이지 조건은 선택 조건으로 설정하세요.</strong> 필수 조건으로 설정하면 프롬에이지 미연동 사용자는 해당 Rule이 발동하지 않습니다. 선택 조건으로 설정하면 미연동 사용자도 Rule이 발동하며, 프롬에이지 충족 여부는 Risk-type 노출 우선순위(2순위: 선택 조건 충족 개수)에만 반영됩니다.</div>
       </div>
 

@@ -138,7 +138,7 @@ contents/
 | 04 | `contents/agents/04_content-po.md` | 연결 정합성 검토 + 체인 완성 승인 | 전체 연결 구조 |
 | 05 | `contents/agents/05_html-publisher.md` | 확정 콘텐츠를 `contents/html/`에 실제 반영 (2026-07-03 신규) | contents/html/*.html |
 
-### contents/html/ 파일 목록 (10개 + sidebar.js)
+### contents/html/ 파일 목록 (11개 + sidebar.js)
 
 | 파일 | 설명 |
 |---|---|
@@ -152,6 +152,7 @@ contents/
 | 07_chain-report.html | 체인 검토 보고서 |
 | 08_ai-preview.html | Clark AI 채팅 답변 시뮬레이션 |
 | 09_faq-rag.html | FAQ RAG 콘텐츠 미리보기 (2026-07-05 신규) |
+| 10_faq-ai-preview.html | FAQ RAG Clark AI 채팅 답변 시뮬레이션 (2026-07-06 신규, 카테고리 A 19건 전체 반영) |
 | sidebar.js | 좌측 공통 사이드바 JS 인젝션 |
 
 ### Clark AI 채팅 답변 표준 구조 (`guides/customer-messaging.md` 진실원)

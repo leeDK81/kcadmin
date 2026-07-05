@@ -10,6 +10,7 @@
     { file: '07_chain-report.html', icon: '🔗', label: '체인 검토 보고서', group: '보고서' },
     { file: '08_ai-preview.html', icon: '🤖', label: 'AI 답변 미리보기', group: '보고서' },
     { file: '09_faq-rag.html',    icon: '💬', label: 'FAQ RAG',          group: 'FAQ RAG' },
+    { file: '10_faq-ai-preview.html', icon: '📱', label: 'FAQ RAG 답변 미리보기', group: 'FAQ RAG' },
   ];
 
   var current = window.location.pathname.split('/').pop() || '00_index.html';
