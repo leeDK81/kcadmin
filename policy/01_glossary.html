@@ -120,7 +120,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
     <div class="section-title">카드 유형 6종</div>
     <div class="term-row">
       <div class="term-name"><span class="tag tag-risk">Risk-type</span> 리스크 유형</div>
-      <div class="term-def">사용자의 보험 보장 공백 유형을 분류하는 카드. Clark AI 답변 체인의 핵심 분류 기준. 코드 형식: <code>T01~T23</code> (T06·T15·T16 미사용, 총 20개). 공개범위: 고객 공개.</div>
+      <div class="term-def">사용자의 보험 보장 공백 유형을 분류하는 카드. Clark AI 답변 체인의 핵심 분류 기준. 코드 형식: <code>T01~T32</code> 중 23개 활성(2026-07-04 최신, 상세는 <code>guides/insurance-domain.md</code>). 공개범위: 고객 공개.</div>
     </div>
     <div class="term-row">
       <div class="term-name"><span class="tag tag-evidence">Evidence</span> 근거 자료</div>
@@ -171,7 +171,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
     </div>
     <div class="term-row">
       <div class="term-name">검수자</div>
-      <div class="term-def">운영자가 요청한 카드를 검토·승인·반려하는 역할. Policy 카드 외 1단계 검수 담당. FAQ RAG Q&A(Clark 서비스 전용) 검토 후 인덱스 등록(승인) 권한도 보유.</div>
+      <div class="term-def">운영자가 요청한 카드를 검토·승인·반려하는 역할. Policy 카드 외 1단계 검수 담당. <strong>FAQ RAG Q&A는 승인 프로세스 대상이 아니다</strong>(운영자 직접 등록 즉시 인덱스 반영, 2026-07-06 확정) — 검수자 권한과 무관.</div>
     </div>
     <div class="term-row">
       <div class="term-name">준법감시인 <span style="font-size:12px;color:var(--text-hint)">Compliance Officer</span></div>
@@ -223,7 +223,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
     <div class="section-title">상태·기타</div>
     <div class="term-row">
       <div class="term-name">등급명</div>
-      <div class="term-def">Clark AI 출력 시 사용하는 3단계 표현: <strong>위험 / 주의 / 양호</strong>. 상/중/하·고/중/저 표현은 사용 금지.</div>
+      <div class="term-def">Clark AI 출력 시 사용하는 5단계 표현(심각도 순, 2026-07-06 3단계→확장): <strong>고위험 &gt; 위험 &gt; 경고 &gt; 주의 &gt; 양호</strong>. 상/중/하·고/중/저 표현은 사용 금지.</div>
     </div>
     <div class="term-row">
       <div class="term-name">공개범위</div>
@@ -252,7 +252,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
     </div>
     <div class="term-row">
       <div class="term-name">FAQ RAG</div>
-      <div class="term-def">Clark 서비스 전용 Q&A(앱 사용 안내, 보닥 플래너 연결, 서비스 정책 등)를 인덱스로 사용하는 RAG 소스. 약관 RAG가 처리하지 못하는 서비스 고유 질의를 커버한다. 약관·보장 관련 질의는 약관 RAG가 담당하므로 FAQ RAG에 등록하지 않는다. 운영자가 Q&A를 직접 등록 → 검수자 승인 → 인덱스 등록. 등록 권한: 운영자. 인덱스 등록(승인) 권한: 검수자.</div>
+      <div class="term-def">① Clark 서비스 전용 Q&A(앱 사용 안내, 보닥 플래너 연결, 서비스 정책 등) + ② 계약과 무관하게 답할 수 있는 보험 일반 판단 노하우(청구 분류 기준·용어 비교 등, 2026-07-04 확정)를 인덱스로 사용하는 RAG 소스. 계약 특정적 질문(개인 보장금액·청구 가능 여부 등)은 등록 금지 — 약관 RAG·KC 체인이 담당. <strong>운영자가 Q&A를 직접 등록하면 승인 절차 없이 즉시 인덱스에 반영된다(2026-07-06 확정 — 검수자 승인 단계 없음).</strong> 필드는 질문(Q)·답변(A) 외에 출처·⚠️유의사항도 선택 입력 가능(2026-07-06 4필드 확장).</div>
     </div>
     <div class="term-row">
       <div class="term-name">유사도 기준값 <span style="font-size:12px;color:var(--text-hint)">Similarity Threshold</span></div>

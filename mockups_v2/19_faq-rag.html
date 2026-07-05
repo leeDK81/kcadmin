@@ -162,7 +162,10 @@
         <textarea class="form-control" id="mCautionEdit" style="min-height:70px;margin-top:6px;display:none"></textarea>
       </div>
       <div class="meta-row">
-        <span class="meta-k">출처</span><span class="meta-v" id="mCitation"></span>
+        <span class="meta-k">출처</span><span class="meta-v">
+          <span id="mCitation"></span>
+          <input class="form-control" id="mCitationEdit" type="text" style="display:none;font-size:13px;padding:4px 8px">
+        </span>
         <span class="meta-k">등록자</span><span class="meta-v" id="mReg"></span>
         <span class="meta-k">등록일</span><span class="meta-v" id="mDate"></span>
       </div>
@@ -315,6 +318,9 @@ function startEdit() {
   document.getElementById('mCautionDisplay').style.display='none';
   const ct = document.getElementById('mCautionEdit');
   ct.style.display='block'; ct.value=f.caution||'';
+  document.getElementById('mCitation').style.display='none';
+  const cit = document.getElementById('mCitationEdit');
+  cit.style.display='inline-block'; cit.value=f.citation||'';
   document.getElementById('mFooter').innerHTML=`
     <button class="btn btn-ghost" onclick="cancelEdit()">취소</button>
     <button class="btn btn-primary" onclick="saveEdit()"><i class="fa-solid fa-floppy-disk fa-fw"></i> 저장</button>`;
@@ -325,13 +331,17 @@ function cancelEdit() {
   document.getElementById('mAEdit').style.display='none';
   document.getElementById('mCautionDisplay').style.display='block';
   document.getElementById('mCautionEdit').style.display='none';
+  document.getElementById('mCitation').style.display='inline';
+  document.getElementById('mCitationEdit').style.display='none';
   renderFooter(faqs.find(x=>x.id===currentId));
 }
 function saveEdit() {
   const val = document.getElementById('mAEdit').value.trim();
   if (!val) { showToast('답변을 입력하세요.'); return; }
   const cautionVal = document.getElementById('mCautionEdit').value.trim();
-  const f = faqs.find(x=>x.id===currentId); f.a=val; f.caution=cautionVal;
+  const citationVal = document.getElementById('mCitationEdit').value.trim();
+  const f = faqs.find(x=>x.id===currentId); f.a=val; f.caution=cautionVal; f.citation=citationVal;
+  document.getElementById('mCitation').textContent = citationVal || '—';
   document.getElementById('mADisplay').textContent=val;
   document.getElementById('mCautionDisplay').textContent=cautionVal || '(등록 안 됨)';
   cancelEdit(); showToast('수정되었습니다.');

@@ -10,7 +10,7 @@
 
 ### 1. 체인 수 · T코드 추가/변경
 
-**진실원:** `context/project.md` (체인 목록) · `context/decisions.md` (이력)
+**진실원:** `guides/insurance-domain.md` (T코드 목록·개수·상태, 2026-07-06 정정 — `context/project.md`엔 체인 구조만 있고 T코드별 목록·개수는 없음) · `context/decisions.md` (이력)
 
 | 영향 파일 | 변경 위치 |
 |---|---|
@@ -50,7 +50,7 @@
 | `agents/06_spec-reviewer.md` | 체크리스트 D섹션 상태 목록 |
 | `agents/08_ui-reviewer.md` | 뱃지 색상 매핑 표 |
 | 목록 6개 (04~08·16 list) | `STATUS_LABEL` 객체 / `FILTER_OPTIONS` 배열 |
-| 편집기 7개 (04~08·16·16b) | 상태 select `<option>` 목록 |
+| 편집기 6개 (04~08·16 editor, 2026-07-06 정정 — "16b" 파일 없음) | 상태 select `<option>` 목록 |
 
 ---
 

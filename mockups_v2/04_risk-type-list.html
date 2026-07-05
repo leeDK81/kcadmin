@@ -76,18 +76,33 @@
 <script src="shared.js"></script>
 <script>
 renderSidebar(); // shared.js: 사이드바 렌더링 + 토스트 주입
+// 2026-07-06 전수감사 반영 — 실제 23개 활성 T코드(T01~T32 범위)로 전면 교체.
+// 진실원: guides/insurance-domain.md·contents/02_risk-type/risk-types.md. 이전 데이터는 T01~T11
+// 11개만 있었고 그나마 T02·T09·T10·T11 명칭이 실제와 전혀 달라(옛 v1 기획 잔재) 전면 교체함.
 const DATA = [
-  {code:'T01',name:'무보장형',status:'active',priority:'high',concepts:2,desc:'어떤 보장 담보도 없는 순수 저축·사망보험 보유자',rule:'RU006 무보장 기본 판정',updated:'2026-05-10'},
-  {code:'T02',name:'암투병생활비 부족형',status:'active',priority:'high',concepts:1,desc:'암 진단금 담보 없음 또는 소액 보유자',rule:'RU001 암진단금 미보유 또는 소액',updated:'2026-05-14'},
-  {code:'T03',name:'심혈관질환보장 협소형',status:'review',priority:'high',concepts:1,desc:'심혈관 관련 담보 미보유 또는 보장 범위 협소',rule:'RU003 심혈관 보장 미흡',updated:'2026-05-12'},
-  {code:'T04',name:'뇌혈관질환보장 협소형',status:'active',priority:'high',concepts:1,desc:'뇌혈관 관련 담보 미보유 또는 보장 범위 협소',rule:'RU002 뇌혈관 보장 범위 협소',updated:'2026-05-10'},
-  {code:'T05',name:'노후돌봄보장 공백형',status:'draft',priority:'mid',concepts:1,desc:'노후 간병·요양 관련 담보 부재 또는 미흡',rule:null,updated:'2026-05-08'},
-  {code:'T06',name:'납입여력부족 우려형',status:'draft',priority:'mid',concepts:1,desc:'소득 대비 보험료 납입 부담이 과도한 상태',rule:null,updated:'2026-05-08'},
-  {code:'T07',name:'비용 대비 보장 비효율형',status:'draft',priority:'low',concepts:0,desc:'납입 보험료 대비 실질 보장 가치가 낮은 상태',rule:null,updated:'2026-05-08'},
-  {code:'T08',name:'생애주기 적합도 저조형',status:'draft',priority:'low',concepts:0,desc:'지금 나이나 상황에 맞지 않는 보장을 가진 고객',rule:null,updated:'2026-05-08'},
-  {code:'T09',name:'단기납 만기 후 공백형',status:'approved',priority:'mid',concepts:0,desc:'단기납 보험 만기 후 갱신·전환 보장이 없는 상태',rule:'RU010 단기납 만기 후 공백',updated:'2026-05-15'},
-  {code:'T10',name:'고액 보험료 유지 부담형',status:'paused',priority:'mid',concepts:0,desc:'시장 기준 개정으로 재정의 중인 유형 — 운영 일시중지',rule:null,updated:'2026-05-16'},
-  {code:'T11',name:'실손보장 중복 가입형',status:'rejected',priority:'low',concepts:0,desc:'실손보험 중복 가입으로 판정 기준 재검토 필요 — 반려됨',rule:null,updated:'2026-05-20'},
+  {code:'T01',name:'무보장형',status:'active',priority:'high',concepts:1,desc:'실손담보 0건 + 사망·상해 담보 미보유',rule:'RU-T01 무보장 기본 판정',updated:'2026-07-04'},
+  {code:'T02',name:'암진단금 부족형',status:'active',priority:'high',concepts:1,desc:'암진단금 5천만원 이하 보유',rule:'RU-T02 암진단금 미보유 또는 소액',updated:'2026-07-04'},
+  {code:'T03',name:'심혈관질환보장 협소형',status:'active',priority:'high',concepts:1,desc:'급성심근경색 보유 + 허혈성심장질환 미보유',rule:'RU-T03 심혈관 보장 협소',updated:'2026-07-04'},
+  {code:'T04',name:'뇌혈관질환보장 협소형',status:'active',priority:'high',concepts:1,desc:'뇌출혈 보유 + 뇌졸중 미보유',rule:'RU-T04 뇌혈관 보장 협소',updated:'2026-07-04'},
+  {code:'T05',name:'노후돌봄보장 공백형',status:'active',priority:'mid',concepts:1,desc:'장기간병요양진단 담보 미보유',rule:'RU-T05 노후돌봄 공백',updated:'2026-07-04'},
+  {code:'T10',name:'여성암보장 공백형',status:'active',priority:'high',concepts:1,desc:'여성 + 암진단금 3천만원 이하 보유',rule:'RU-T10 여성암보장 공백',updated:'2026-07-04'},
+  {code:'T11',name:'사망보장 미비형',status:'active',priority:'mid',concepts:1,desc:'사망·상해사망 담보 미보유, 25~60세',rule:'RU-T11 사망보장 미비',updated:'2026-07-03'},
+  {code:'T14',name:'운전자보험 미가입형',status:'active',priority:'mid',concepts:1,desc:'운전자 + 형사합의지원금·벌금비용 미보유',rule:'RU-T14 운전자보험 미가입',updated:'2026-05-20'},
+  {code:'T17',name:'치매진단보장 공백형',status:'active',priority:'mid',concepts:1,desc:'치매진단 담보 미보유, 50~85세',rule:'RU-T17 치매진단 공백',updated:'2026-07-03'},
+  {code:'T18',name:'항암치료비 미보장형',status:'active',priority:'high',concepts:1,desc:'암진단금 보유 + 항암방사선약물치료비 미보유',rule:'RU-T18 항암치료비 미보장',updated:'2026-07-03'},
+  {code:'T19',name:'수술·입원 정액비 미보장형',status:'active',priority:'high',concepts:1,desc:'질병수술 담보 미보유, 30~85세',rule:'RU-T19 수술·입원 정액비 미보장',updated:'2026-07-04'},
+  {code:'T20',name:'후유장해보장 공백형',status:'active',priority:'mid',concepts:1,desc:'질병·상해 후유장해 담보 미보유',rule:'RU-T20 후유장해 공백',updated:'2026-07-03'},
+  {code:'T21',name:'치과보장 공백형',status:'active',priority:'low',concepts:1,desc:'치과 보존·보철치료 담보 미보유',rule:'RU-T21 치과보장 공백',updated:'2026-07-03'},
+  {code:'T22',name:'상해 특화 보장 공백형',status:'active',priority:'mid',concepts:1,desc:'상해수술 보유 + 상해입원일당 미보유',rule:'RU-T22 상해 특화 보장 공백',updated:'2026-07-03'},
+  {code:'T23',name:'골절·상해진단금 공백형',status:'active',priority:'mid',concepts:1,desc:'골절진단 담보 미보유',rule:'RU-T23 골절·상해진단금 공백',updated:'2026-07-03'},
+  {code:'T24',name:'폐렴 입원보장 공백형',status:'active',priority:'mid',concepts:1,desc:'60~85세 + 질병입원일당 미보유',rule:'RU-T24 폐렴 입원보장 공백',updated:'2026-07-03'},
+  {code:'T25',name:'소액암 진단금 부족형',status:'active',priority:'high',concepts:1,desc:'암진단금 보유 + 소액암진단 1천만원 이하, 30~70세',rule:'RU-T25 소액암 진단금 부족',updated:'2026-07-04'},
+  {code:'T26',name:'통원치료비 미보장형',status:'active',priority:'mid',concepts:1,desc:'질병·상해통원 담보 미보유, 40~79세',rule:'RU-T26 통원치료비 미보장',updated:'2026-07-03'},
+  {code:'T27',name:'간병 지원 공백형',status:'active',priority:'mid',concepts:1,desc:'간병인지원 질병·상해입원일당 미보유, 40~85세',rule:'RU-T27 간병 지원 공백',updated:'2026-07-03'},
+  {code:'T28',name:'인공관절수술 미보장형',status:'active',priority:'low',concepts:1,desc:'인공관절수술 담보 미보유, 50~85세',rule:'RU-T28 인공관절수술 미보장',updated:'2026-07-04'},
+  {code:'T29',name:'암요양병원 장기입원 미보장형',status:'active',priority:'mid',concepts:1,desc:'암진단금 보유 + 암요양병원입원일당 미보유, 40~80세',rule:'RU-T29 암요양병원 장기입원 미보장',updated:'2026-07-03'},
+  {code:'T30',name:'중환자실입원일당 미보장형',status:'active',priority:'mid',concepts:1,desc:'질병입원일당 보유 + 중환자실입원일당 미보유, 30~80세',rule:'RU-T30 중환자실입원일당 미보장',updated:'2026-07-03'},
+  {code:'T32',name:'장기입원비 미보장형',status:'active',priority:'mid',concepts:1,desc:'질병입원일당 보유 + 장기입원비 미보유, 40~85세',rule:'RU-T32 장기입원비 미보장',updated:'2026-07-03'},
 ];
 const ST={active:'🟢 라이브',review:'⏳ 승인요청',draft:'📝 임시저장',approved:'✔ 승인완료',paused:'⏸ 일시중지',rejected:'🚫 반려'};
 const PRI={high:{label:'높음',cls:'pri-high'},mid:{label:'보통',cls:'pri-mid'},low:{label:'낮음',cls:'pri-low'}};

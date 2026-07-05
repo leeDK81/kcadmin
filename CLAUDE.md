@@ -123,7 +123,7 @@ contents/
   06_playbook/      ← Playbook 카드 (playbooks.md)
   07_connections/   ← 연결 구조 확정본 (chain-map.json)
   08_faq/           ← FAQ RAG 콘텐츠 (faq-rag.md, 2026-07-04 신규 — 계약 무관 보험 판단 노하우 + 서비스 이용 안내 Q&A)
-  html/             ← 브라우저에서 직접 여는 콘텐츠 어드민 + Clark AI 채팅 시뮬레이션 (10개 HTML, mockups_v2와 별개·서버 불필요)
+  html/             ← 브라우저에서 직접 여는 콘텐츠 어드민 + Clark AI 채팅 시뮬레이션 (11개 HTML, mockups_v2와 별개·서버 불필요)
   decisions.md      ← 컨텐츠 트랙 미결 항목·결정 이력 인덱스
   CHANGELOG.md      ← 컨텐츠 트랙 변경 이력 (카드 데이터 변경 상세 포함)
 ```
@@ -155,15 +155,16 @@ contents/
 | 10_faq-ai-preview.html | FAQ RAG Clark AI 채팅 답변 시뮬레이션 (2026-07-06 신규, 카테고리 A 19건 전체 반영) |
 | sidebar.js | 좌측 공통 사이드바 JS 인젝션 |
 
-### Clark AI 채팅 답변 표준 구조 (`guides/customer-messaging.md` 진실원)
+### Clark AI 채팅 답변 표준 구조 (`guides/customer-messaging.md` 진실원 — 2026-07-05 갱신)
 
 ```
-사용자 질의 → Concept 감지 → Risk-type 선정 → Rule 조건 확인 → Clark AI 채팅 답변:
-  1. "고객님은 [T코드] [Risk-type명]에 해당합니다."
-  2. 현재 담보 현황 (마이데이터 가상 응답)
-  3. 상황 설명 + 왜 위험한지 + 통계 (자연스러운 문장으로 워싱, 출처 각주 그대로 노출 금지)
-  4. 면책 고지 (Policy, 분리 블록)
-  5. CTA 버튼 — "보닥 플래너와 상담하기"
+사용자 질의 → Concept 감지 → Risk-type 선정(N개, N:N 가능) → Rule 조건 확인 → Clark AI 채팅 답변:
+  1. 진단 선언 우선 — "고객님은 [위험유형명(한글)]에 해당하는 상태예요" (T코드·영문 표기 절대 비노출)
+  2. 상황 설명 + Evidence 통계를 자연스러운 문장으로 (출처 기관은 한글 자연스럽게, 영문 약어 비노출)
+  3. (선택) 프롬에이지 선택조건 매칭 시 등급명(고위험/위험/경고/주의/양호)만 반영해 경각심 문장 추가
+  4. 면책 고지 (Policy appDisplayText 원문 그대로, 분리 블록)
+  5. CTA 버튼 — Playbook 감지 시 "보닥 플래너와 상담하기" 계열 (가산 요소)
+  ※ N:N 다건 매칭 시 1번 대신 말풍선+결과 카드 리스트 → 카드 탭 시 해당 항목의 1~4단계가 같은 스레드에 이어짐
 ```
 
 ### 미결 작업

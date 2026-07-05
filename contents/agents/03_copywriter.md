@@ -13,6 +13,7 @@
 - **Concept 카드** (Step 4)
 - **Policy 카드** (Step 5)
 - **Playbook 카드** (Step 6)
+- **FAQ RAG 문구 워싱** (Step 9, 2026-07-04 신규 — [01+02+03] 중 03 역할): `contents/08_faq/faq-rag.md`의 Q(질문 표현)를 실제 사용자 언어로 다듬고, A(답변)가 `guides/customer-messaging.md` 워싱 원칙(출처 기관 자연스럽게 녹이기 등)을 따르는지 확인. 산출물·절차는 `contents/agents/00_workflow.md` Step 9 참조.
 
 ---
 

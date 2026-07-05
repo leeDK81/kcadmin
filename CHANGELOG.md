@@ -5,6 +5,51 @@
 
 ---
 
+## 2026-07-06 — 전수감사 4차: 5개 영역 병렬 감사(컨텐츠·목업·문서·에이전트·계층간 정합성) 후 25건 수정
+
+### 배경
+
+"기획 정책과 의도·방향성을 기반으로 올바른 AI 답변을 제공하기 위해" 프로젝트 전체를 최종 검수해달라는 요청으로, 5개 병렬 에이전트(컨텐츠 데이터 정합성·서비스 목업 기능·지침 MD 문서·에이전트 역할 정의·계층 간 정합성)를 띄워 감사한 뒤, 발견된 🔴심각 14건·🟡경고 11건을 전부 수정했다. 대부분 오늘 세션(프롬에이지 5단계·FAQ RAG 4필드 확장) 작업 도중 일부 파일에만 반영되고 놓친 자기모순, 그리고 훨씬 이전부터 누적된 문서-코드-콘텐츠 드리프트였다.
+
+### 가장 심각했던 발견
+
+- **`mockups_v2/04_risk-type-list.html`**: 실제 23개 활성 T코드 중 11개만 샘플 데이터로 남아있었고, 그마저 T02·T10·T11 명칭이 실제와 전혀 다른 옛 v1 기획 잔재였다 → 23개 전체로 전면 교체.
+- **`CLAUDE.md`·`guides/customer-messaging.md`**: 2026-07-05에 이미 폐기된 "T코드·영문 Risk-type을 답변에 노출하는" 옛 5단계 답변 구조를 여전히 "진실원"으로 제시하고 있었다 → 진단 선언 우선 원칙 기반 현재 구조로 교체.
+- **`agents/06_spec-reviewer.md`**: 독자 T코드 표를 유지하고 있었는데 T09·T10·T11 상태가 실제와 정반대였고 T24~T32 전체가 누락돼, 이 표 기준으로 검수하면 정반대 판정이 나는 상태였다 → 표 삭제, 단일 진실원(`guides/insurance-domain.md`) 참조로 교체.
+- **`contents/html/04_concept.html`·`00_index.html`**: 2026-07-05에 저작한 N:N 그룹 Concept 4개(CN-HOSPALL 등)가 실제 콘텐츠에는 있는데 이 운영 화면에는 전혀 반영이 안 돼 있었다(24장으로 표시, 실제 28장) → 4개 카드 추가 + CN-T02A 기존 카드도 함께 최신화.
+- **오늘 작업한 4개 파일 자기모순**: `01_glossary.html`·`02_card-purpose.html`·`08_screen-policy.html`·`contents/agents/02_insurance-domain.md`이 프롬에이지 5단계로 고쳤다고 생각한 곳 바로 옆줄에 3단계 잔재가 남아있었다.
+- **FAQ RAG 승인 프로세스 정반대 서술**: `01_glossary.html`·`07_permission.html`은 "검수자 승인 필요"라고 하는데 실제 정책(`answer-logic.md`)은 승인 없음·즉시 등록이었다.
+
+### 그 외 수정 사항 (요약)
+
+파일 개수 불일치("26개 화면"·"10개 HTML" 등, 실제 24/11개), 삭제된 `11_dry-run.html`을 현재 화면처럼 서술하던 문서, Concept 카드 코드 프리픽스 3갈래(CN/CO/CON) 통일, Playbook 편집기에 실제로 있으나 문서 어디에도 없던 7번째 카드("데이터 미보유 감지 조건") 문서화, `chain-map.json`의 폐지 T코드 목록 누락(T09·T31)과 T25 stale 근거 수치(500만원→1,000만원, 실제 Rule은 이미 정정됨) 정리, CN-T05/CN-T27 동의어 근사 중복 제거(과거 CN-T02A/B 사례와 동일 패턴), FAQ-013 질문 문구 중 계약 특정적으로 오인될 수 있는 표현 정정, `19_faq-rag.html` 수정 모달에 누락돼 있던 출처 편집 UI 추가, 화면 텍스트 카피라이팅 위반(MYDATA 영문 노출·"파라미터") 2건, 컨텐츠 에이전트 3개(01·03·05)에 FAQ RAG(Step 9) 역할 명시 누락 보완, `context/impact-map.md`의 진실원 오기재·존재하지 않는 편집기 파일("16b") 언급, `guides/ux-patterns.md`의 이미 삭제된 Policy 필드("출력제한") 잔존, Policy 카드 코드 프리픽스 오기(PL001→PO001) 등.
+
+### 검증
+
+전체 25개 항목 수정 후 관련 화면(mockups_v2 6개, contents/html 3개, policy 5개) 전부 브라우저로 재확인 — 콘솔 에러 0건, chain-map.json JSON 유효성 확인. | `CLAUDE.md`, `context/*.md`(4개), `guides/*.md`(3개), `agents/*.md`(5개), `contents/agents/*.md`(4개), `contents/00_taxonomy/source-corpus.md`, `contents/04_concept/concepts.md`, `contents/07_connections/chain-map.json`, `contents/08_faq/faq-rag.md`, `contents/html/*.html`(3개), `mockups_v2/*.html`(8개), `policy/*.html`(6개)
+
+---
+
+## 2026-07-06 — 프롬에이지 5단계 확장 · FAQ RAG 필드 정비 · 카드 필드별 AI 참조 여부 분류 신규
+
+### 변경 사항
+
+| 파일 | 내용 |
+|---|---|
+| `context/card-types.md` | ① 프롬에이지 위험도 3단계(위험/주의/양호)→5단계(고위험/위험/경고/주의/양호) 확장, Rule 조건 EQ 전용→EQ/GTE/LTE 확장 ② 신규 "필드별 AI 참조 여부 총정리" 섹션 — 6종 카드+FAQ RAG 전체 필드를 발화(원문)/발화(재구성)/매칭 전용/내부 전용 4분류로 정리 |
+| `mockups_v2/07_card-editor-rule.html` | 프롬에이지 조건 빌더에 실제 이상(GTE)·이하(LTE) select 추가, 등급 select 5단계로 확장 |
+| `mockups_v2/19_faq-rag.html` | 등록 폼이 Q·A 2필드만 지원해 실 콘텐츠(Q/A/출처/⚠️유의사항 4필드)와 안 맞던 것을 발견해 출처·⚠️유의사항 필드 추가(등록·상세모달·수정 전체 반영) |
+| `context/answer-logic.md` | FAQ RAG 필드 구조 표 신규 — ⚠️ 유의사항은 Policy 면책 문구와 동일하게 LLM 재구성 없이 원문 그대로 고정 부착된다는 원칙 확정 |
+| `contents/html/10_faq-ai-preview.html` | 신규 — FAQ RAG Clark 채팅 답변 시뮬레이션(08_ai-preview.html과 짝). 카테고리 A(판단노하우) 19건 전체 반영 |
+| `policy/01·02·05·06·08` | 프롬에이지 5단계·FAQ RAG 4필드 구조 반영. `06_field-data.html`에 "AI 참조 여부" 범례 카드 + 전 카드 타입 테이블에 AI 참조 컬럼 추가, FAQ RAG 테이블 신규. Rule 테이블의 존재하지 않던 "출력 등급" 필드를 실제 필드인 "Clark 경고 메시지(clarkMessage)"로 정정 |
+| `agents/01·03·04·06`, `contents/agents/00·02·03` | 위 변경사항 반영한 에이전트 역할 정의 갱신 |
+
+### 결정 근거 — KC 체인 vs FAQ RAG의 AI 개입 방식 차이
+
+개발자가 헷갈리기 쉬운 지점이라 명시적으로 분리했다: **KC 체인(Risk-type→Rule→Evidence→Policy) 매칭 성공 시에는 별도 생성형 LLM 호출이 없다** — Risk-type 명칭·설명, Rule의 `clarkMessage`, Evidence 지표(자연어 재구성), Policy `appDisplayText`를 그대로 템플릿 조합한다. 반면 **FAQ RAG는 매칭된 답변(A)을 LLM이 런타임에 재구성**한다(단 ⚠️ 유의사항은 Policy와 동일하게 예외 — 원문 그대로). 이 구분이 안 되어 있으면 "AI가 이 필드를 어떻게 다루는지" 프롬프트 설계 단계에서 매번 재확인해야 하는 문제가 있어 문서로 못박았다.
+
+---
+
 ## 2026-07-05 — 연결·테스트 캔버스 파이프라인 표시/액션 범위 확정 · 테스트 모드 선택 개선
 
 ### 변경 사항

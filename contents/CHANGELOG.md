@@ -6,6 +6,24 @@
 
 ---
 
+## 2026-07-06 — 전수감사 4차 후속: 컨텐츠 트랙 반영분 (서비스 트랙 감사 항목 25건 중 컨텐츠 관련분)
+
+전체 프로젝트 5개 영역 병렬 전수감사(상세는 최상위 `CHANGELOG.md` 2026-07-06 항목) 결과 중 컨텐츠 트랙에 해당하는 수정:
+
+- **`contents/html/04_concept.html`·`00_index.html`**: 2026-07-05에 저작한 N:N 그룹 Concept 4개(CN-HOSPALL·CN-INJURYALL·CN-CAREALL·CN-ALL)가 실 콘텐츠(`concepts.md`)에는 있는데 이 운영 화면 반영이 통째로 누락돼 24장으로 표시되고 있었다(실제 28장) — 4개 카드 추가, 기존 CN-T02A 카드도 최신 N:N 확장(T02·T18·T25·T29) 반영해 동기화.
+- **CN-T05(간병보험)/CN-T27(간병인지원보험) 동의어 근사 중복**: "간병비 보험"(CN-T05)과 "간병비보험"(CN-T27)이 공백 차이만 있는 사실상 동일 문구, "간병인 비용 보장"(CN-T05)과 "간병인 고용 비용 보험"(CN-T27)도 마찬가지 — 임베딩 매칭 시 두 카드를 구분 못 하는 문제 예방을 위해 CN-T05 쪽에서 제거(과거 CN-T02A/B "암진단금" 사례와 동일 패턴). T05=LTC 진단금형, T27=입원 간병인 고용비 일당형으로 실제 다른 담보.
+- **`contents/07_connections/chain-map.json`**: `removed_types` 배열에 T09·T31이 누락돼 있었다(note 필드 서술에는 있었으나 구조화 데이터엔 없음) — 추가. CHAIN-019(T25)의 stale 잠정 근거 수치("500만원, 재검증 필요") 제거 — `rules-건강보험.md`가 이미 2026-07-04 2차 갱신으로 1,000만원 확정·재근거화(T02 기준선의 20%, EV034) 완료된 상태였는데 chain-map만 옛 수치를 issue로 물고 있었음.
+- **`guides/insurance-domain.md`**: T25 행의 "500만원"도 같은 이유로 "1,000만원"으로 정정.
+- **FAQ-013 질문 문구**: "제가 가진 보험에서 암 치료비 반복보장 되나요?" 변형이 계약 특정적 질문("제 보험에 이 담보 있어요?")과 유사하게 읽혀 FAQ RAG 등록 금지 대상으로 오인될 소지 — "재진단암 특약이 뭔가요?"(일반 판단 노하우 질문)로 교체. `contents/html/09_faq-rag.html` 동기화.
+- **에이전트 역할 보완**: `contents/agents/01_researcher.md`·`03_copywriter.md`에 Step 9(FAQ RAG) 역할 명시 누락 보완, `05_html-publisher.md`에 FAQ RAG 파일(`08_faq/faq-rag.md`→`09_faq-rag.html`·`10_faq-ai-preview.html`) 반영 절차·체크리스트 추가, `02_insurance-domain.md`에 07_insurance-expert.md의 T코드 표가 "v1 체계 기준 재검토 대기" 자인 상태임을 명시.
+- **`contents/00_taxonomy/source-corpus.md`**: "25개 활성 체인" 문구가 조사 당시(2026-07-03) 스냅샷이라는 점을 명시(현재는 T09·T31 폐지로 23개).
+
+### 검증
+
+`contents/html/04_concept.html` 브라우저 렌더링 확인(28개 카드 정확히 표시, 콘솔 에러 0건), `chain-map.json` JSON 유효성 확인.
+
+---
+
 ## 2026-07-05 (3차) — PB04 키워드 보강 + 유병자보험 FAQ 3건(FAQ-020~022) · 16건→19건
 
 ### 배경

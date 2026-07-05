@@ -140,8 +140,8 @@ renderSidebar();
 /* ── 카드 상세 필드 데이터 ── */
 var CARD_DETAILS = {
   // ── Concept ──
-  'CO001':{ synonyms:['암보험 필요','암보험 가입해야 할까요','암보험 필요한가요','암보험 알아보는 중','암보험 추천'] },
-  'CO003':{ synonyms:['암 위험군','암 고위험','암 위험 높음','암 발생 위험','암 위험 높은 편'] },
+  'CN001':{ synonyms:['암보험 필요','암보험 가입해야 할까요','암보험 필요한가요','암보험 알아보는 중','암보험 추천'] },
+  'CN003':{ synonyms:['암 위험군','암 고위험','암 위험 높음','암 발생 위험','암 위험 높은 편'] },
   // ── Rule ──
   'RU001':{
     description:'마이데이터 보험 현황과 프롬에이지 위험도를 종합하여 암 보장 공백 여부를 판정합니다.',
@@ -180,7 +180,7 @@ const PENDING_DATA = [
     href:'07_card-editor-rule.html', conn:null
   },
   {
-    id:'CO003', name:'암진단 위험군', type:'concept', typeLabel:'Concept',
+    id:'CN003', name:'암진단 위험군', type:'concept', typeLabel:'Concept',
     reqDate:'2026-05-14', state:'pending', doneDate:'',
     href:'06_card-editor-concept.html', conn:null
   },
@@ -195,12 +195,12 @@ const PENDING_DATA = [
     href:'05_card-editor-evidence.html', conn:null
   },
   {
-    id:'CO001', name:'암보험 필요성 인지', type:'concept', typeLabel:'Concept',
+    id:'CN001', name:'암보험 필요성 인지', type:'concept', typeLabel:'Concept',
     reqDate:'2026-05-07', state:'approved', doneDate:'2026-05-09',
     href:'06_card-editor-concept.html',
     conn:{
       badgeClass:'badge-concept', label:'Concept → Risk-type',
-      from:{color:'var(--card-concept)', text:'CO001 암보험 필요성 인지'},
+      from:{color:'var(--card-concept)', text:'CN001 암보험 필요성 인지'},
       to:{color:'var(--card-risk)', text:'T01 암진단 보장 공백형'}
     }
   },

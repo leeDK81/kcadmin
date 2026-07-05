@@ -24,7 +24,7 @@ Playbook 편집기 구현 → `agents/04b_coder-playbook.md` 전담.
 - 순수 HTML / CSS / JS. CDN 허용: Font Awesome(아이콘) + Pretendard(폰트).
 - **Google Fonts(Noto Sans KR) 사용 금지.**
 - 데스크탑 기준 1280px. 모바일 대응 불필요.
-- API 연동 없음. `const MOCK_DATA = {}` 하드코딩. 기획서 실제 값 사용 (T01~T23 (T06·T15·T16 제외), 담보코드 A4200 등).
+- API 연동 없음. `const MOCK_DATA = {}` 하드코딩. 기획서 실제 값 사용 (T01~T32 중 23개 활성 — 상세는 `guides/insurance-domain.md` 참조, 담보코드 A4200 등).
 
 ### CSS
 
@@ -164,7 +164,7 @@ HTML 패턴 → `guides/ux-patterns.md` 참조.
 
 **카피라이팅**
 - [ ] `guides/copywriting.md` 금지어 전수 확인 (화면·레이블·placeholder·toast 모두)
-- [ ] MOCK_DATA: T01~T23 (T06·T15·T16 제외), 실제 담보코드 사용
+- [ ] MOCK_DATA: T01~T32 중 23개 활성(`guides/insurance-domain.md` 참조), 실제 담보코드 사용
 - [ ] `console.log` 없음
 - [ ] Pretendard CDN 사용 (Google Fonts 아님)
 

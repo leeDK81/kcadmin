@@ -199,7 +199,7 @@
 | 05 Evidence | 100px | 185px | 출처기관 140px | 참조Rule 230px | 110px | 80px | 지표명·기준값 151px |
 | 06 Concept | 100px | 245px | Risk-type 200px + 동의어수 140px | — | 110px | 80px | 동의어 121px |
 | 07 Rule | 90px | 245px | Risk-type 160px | Evidence auto + Policy 180px | 110px | 80px | — |
-| 08 Policy | 100px | 230px | 공개범위 110px | 적용Rule 145px | 110px | 80px | 출력제한 221px |
+| 08 Policy | 130px | 200px | 공개범위 130px | 연결 120px | 100px | — | 앱 표시 문구 미리보기(2026-07-06 정정 — "출력제한" 필드는 삭제됨, `context/card-types.md` 참조) |
 
 ### 목록 페이지 공통 패턴 (2026-06-24 확정)
 
