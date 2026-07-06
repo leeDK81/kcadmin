@@ -25,6 +25,12 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
 .domain-tag { font-size: 11px; background: #F3EEFA; color: #6B4A9A; border-radius: 4px; padding: 2px 7px; white-space: nowrap; }
 .acc-arrow { font-size: 18px; color: #6B4A9A; transition: transform .2s; margin-left: auto; font-weight: 700; }
 .acc-header.open .acc-arrow { transform: rotate(180deg); }
+/* 2026-07-06 모바일 반응형 — 좁은 화면에서 배지·태그·화살표가 제목 칸을 짓눌러
+   글자가 한 글자씩 줄바꿈되던 버그 수정(08_ai-preview.html과 동일 수정). 제목을 둘째 줄로 내려 전체 폭을 쓰게 함. */
+@media (max-width: 480px) {
+  .acc-header { flex-wrap: wrap; gap: 6px 8px; padding: 12px 14px; }
+  .acc-title { flex: 1 1 100%; order: 3; font-size: 13px; }
+}
 .acc-body { display: none; }
 .acc-body.open { display: block; }
 .acc-inner { padding: 16px 20px; display: flex; flex-direction: column; gap: 12px; }

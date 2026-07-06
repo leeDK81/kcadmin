@@ -5,6 +5,18 @@
 
 ---
 
+## 2026-07-06 — Case 0(데이터 조회형) 신규 도입 + Playbook 병행 원칙 정정 + 실제 예시 제작
+
+가장 최근 세션(위 "Evidence sourceOrg·usage" 항목보다도 나중). 사용자가 "내가 가진 보험 리스트 알려줘", "나 운전자보험 가입되어 있어?" 같은 실제 예상 질문을 던지며 "이건 KC·FAQ·약관·LLM 넷 다 안 되는 것 같은데 어떻게 하냐"고 문제 제기 — 확인 결과 이 4개 경로는 전부 "저작된 콘텐츠 매칭" 구조라 사용자 본인의 마이데이터 원본 값을 그대로 조회하는 요청에는 원천적으로 대응 불가함을 확인(Rule의 MYDATA 조건이 담보금액 1종만 허용하도록 의도적으로 제한돼 있어 갱신·만료 조회는 Rule 체계로 절대 구현 불가한 것도 함께 확인). Concept 매칭보다 먼저 실행되는 "Case 0" 선행 게이트를 신설 — 감지되면 Concept/KC 진단 체인 없이 마이데이터를 직접 조회해 고정 템플릿으로 응답.
+
+**1차 설계 오류와 정정:** 처음엔 "Case 0 감지 시 Concept·Playbook 매칭을 모두 건너뛴다"고 설계했으나, 사용자가 실제 예시 제작을 요청하는 과정에서 "조회형 답변이어도 Playbook은 별개로 동작 가능하지 않냐"고 지적 — `context/matching-policy.md`의 원래 원칙(Concept과 Playbook은 항상 독립 병행 실행)과 충돌하는 설계 오류였음을 확인해 정정. Case 0이 건너뛰는 건 Concept뿐이고 Playbook은 Case 0 여부와 무관하게 항상 병행 실행되도록 바로잡음.
+
+`contents/html/08_ai-preview.html`에 Case 0 실제 예시 2건 신규 제작 — "운전자보험 가입되어 있어?"(PB08 매칭 → CTA 있음)와 "보험 리스트 알려줘"(Playbook 미매칭 → CTA 없음)를 나란히 배치해 Case 0과 CTA 유무가 서로 무관한 판정임을 시연. 상세는 `context/decisions.md` 2026-07-06 항목(2건) 참조.
+
+**수정 파일:** `context/answer-logic.md`, `context/matching-policy.md`, `context/impact-map.md`, `context/decisions.md`, `agents/01_ai-rag-architect.md`, `agents/03_ui-designer.md`, `agents/04_coder.md`, `agents/06_spec-reviewer.md`, `mockups_v2/13_answer-logic.html`, `policy/02_card-purpose.html`, `policy/01_glossary.html`, `policy/08_screen-policy.html`, `contents/html/08_ai-preview.html`
+
+---
+
 ## 2026-07-06 — Evidence sourceOrg·usage "AI 참조 여부" 재분류 정정 + Playbook "설명" 필드 삭제
 
 바로 아래 항목(전수감사 4차)보다 나중 세션. 사용자가 "Evidence는 증거 카드인데 출처 기관·활용 방법을 AI가 참조하는 게 맞지 않냐"고 문제 제기 — 확인 결과 `context/answer-logic.md`(2026-07-05 확정)·`mockups_v2/05_card-editor-evidence.html`·`13_answer-logic.html`에는 이미 두 필드 모두 AI가 참조한다고 정확히 반영돼 있었는데, 같은 날 만든 "필드별 AI 참조 여부 총정리"(`context/card-types.md`)에만 둘 다 "내부 전용"으로 잘못 분류돼 있던 **문서 동기화 누락 버그**였음. sourceOrg→발화(재구성, 영문 약어만 비노출), usage→매칭/선택 전용으로 정정. 정정 과정에서 `guides/customer-messaging.md` 자체의 20행·33행 모순(한글 기관명 허용 vs 전면 금지)과 `contents/html/08_ai-preview.html`의 영문 약어 20건 노출도 함께 발견해 수정. 이어서 Playbook "설명" 필드도 논의 — 실제 12개 전수 확인 결과 명칭·발화 키워드·전환 액션의 재진술일 뿐이라 필드 자체를 삭제. 상세는 `context/decisions.md`·`contents/decisions.md` 2026-07-06 항목 참조.

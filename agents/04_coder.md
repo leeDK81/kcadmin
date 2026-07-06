@@ -174,11 +174,13 @@ HTML 패턴 → `guides/ux-patterns.md` 참조.
 - [ ] appDisplayText 비어있으면 "검수 요청" 버튼 비활성 처리
 - [ ] 승인 2단계 안내 표시: 도메인 검수자 → 준법감시인
 
-**Case 1~4 분기 (KC매칭 × Playbook감지 매트릭스)**
+**Case 0~4 분기 (Case 0 선행 게이트 + KC매칭 × Playbook감지 매트릭스, 2026-07-06 Case 0 추가)**
+- Case 0: 데이터 조회형 발화 감지 → **Concept 매칭만** 건너뛰고 마이데이터 직접 조회 응답. **Playbook 매칭은 Case 0 여부와 무관하게 항상 별도 실행** — 감지되면 조회 응답에 CTA 가산(`context/answer-logic.md` "Case 0 — 데이터 조회형" 참조)
+- Case 0 미감지 시에만 아래 4케이스 매트릭스 적용:
 - Case 1: KC Concept 매칭O + Playbook 미감지 → KC 구조화 답변
 - Case 2: KC Concept 매칭O + Playbook 감지O → KC 구조화 + CTA 버튼
 - Case 3: KC 미매칭 + Playbook 미감지 → RAG(약관→FAQ) → Fallback 생성형
 - Case 4: KC 미매칭 + Playbook 감지O → Standalone 가이드 주입 + CTA 버튼
-- [ ] Case 분기 표현 시 위 4케이스 레이블 사용 (라우팅/매칭 등 기술 용어 금지)
+- [ ] Case 분기 표현 시 위 5케이스 레이블 사용 (라우팅/매칭 등 기술 용어 금지)
 
 **Playbook 편집기 → `agents/04b_coder-playbook.md` 체크리스트 참조**

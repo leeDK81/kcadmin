@@ -83,7 +83,7 @@
 
 ---
 
-### 6. Case 1~4 매트릭스 변경
+### 6. Case 0~4 매트릭스 변경 (2026-07-06 Case 0 추가로 명칭 갱신)
 
 **진실원:** `context/answer-logic.md`
 
@@ -92,8 +92,10 @@
 | `agents/01_ai-rag-architect.md` | Case 분기 설명 |
 | `agents/03_ui-designer.md` | Case 레이아웃 설명 |
 | `agents/04_coder.md` | Case 분기 로직 기술 |
-| `agents/06_spec-reviewer.md` | 체크리스트 E섹션 |
-| `mockups_v2/13_answer-logic.html` | `CASES` 배열, Case 렌더링 함수 `renderCase()` |
+| `agents/06_spec-reviewer.md` | 체크리스트 A-1 섹션 |
+| `mockups_v2/13_answer-logic.html` | "답변 케이스 결정" 섹션 표·note-box |
+| `policy/02_card-purpose.html` | "답변 케이스 결정 매트릭스" 카드 (2026-07-06 추가 — 기존에 이 파일이 누락돼 있었음을 발견해 반영) |
+| `context/matching-policy.md` | 실행 구조 다이어그램, 결과 처리 섹션 |
 
 ---
 

@@ -55,14 +55,16 @@ KC Admin Phase 1의 시각 언어를 정의하고, "처음 보는 개발자·운
 ### 원칙 5 — 답변 라우팅 구조를 항상 맥락으로 제공
 
 ```
-사용자 질문 → [Concept 동의어 매칭]
-           ├─ 매칭O + Playbook 미감지 → Case 1: KC 구조화 답변
-           ├─ 매칭O + Playbook 감지O  → Case 2: KC 구조화 + CTA 버튼
-           ├─ 미매칭 + Playbook 미감지 → Case 3: RAG(약관→FAQ) → Fallback 생성형
-           └─ 미매칭 + Playbook 감지O  → Case 4: Standalone 가이드 주입 + CTA 버튼
+사용자 질문 → [Case 0: 조회형 발화 감지] (Concept만 대상, Playbook은 항상 별도 병행)
+           ├─ 감지O → 마이데이터 직접 조회 응답 (+ Playbook 감지O 시 CTA 가산)
+           └─ 감지X → [Concept 동의어 매칭]
+                    ├─ 매칭O + Playbook 미감지 → Case 1: KC 구조화 답변
+                    ├─ 매칭O + Playbook 감지O  → Case 2: KC 구조화 + CTA 버튼
+                    ├─ 미매칭 + Playbook 미감지 → Case 3: RAG(약관→FAQ) → Fallback 생성형
+                    └─ 미매칭 + Playbook 감지O  → Case 4: Standalone 가이드 주입 + CTA 버튼
 ```
 
-**Case 1~4 매트릭스:** → `context/answer-logic.md`
+**Case 0~4 매트릭스:** → `context/answer-logic.md`
 - Concept Standalone 기능 없음 — 완전 제거됨. Playbook(Case 4)이 미매칭 시나리오 전담.
 
 ### 원칙 6 — 같은 목적, 같은 구조·같은 용어 ★

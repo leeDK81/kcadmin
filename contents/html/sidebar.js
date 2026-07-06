@@ -45,6 +45,34 @@
       font-weight: 600; border-left-color: #60A5FA;
     }
     .kc-page-wrap { margin-left: 220px; flex: 1; min-width: 0; }
+    .kc-sb-toggle { display: none; }
+    .kc-sb-backdrop { display: none; }
+
+    /* 2026-07-06 모바일 반응형 추가 — 좁은 화면에서 220px 고정 사이드바가 본문을 짓눌러
+       텍스트가 한 글자씩 줄바꿈되던 버그 수정. 사이드바를 오프캔버스 드로어로 전환. */
+    @media (max-width: 768px) {
+      body { display: block !important; }
+      .kc-sidebar {
+        transform: translateX(-100%);
+        transition: transform .2s ease;
+        width: 240px;
+        box-shadow: 2px 0 12px rgba(0,0,0,.25);
+      }
+      .kc-sidebar.kc-open { transform: translateX(0); }
+      .kc-page-wrap { margin-left: 0; padding-top: 54px; }
+      .kc-sb-toggle {
+        display: flex; align-items: center; justify-content: center;
+        position: fixed; top: 12px; left: 12px; z-index: 101;
+        width: 38px; height: 38px; border-radius: 8px;
+        background: #1A2B5F; color: #fff; font-size: 18px;
+        border: none; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,.25);
+      }
+      .kc-sb-backdrop.kc-open {
+        display: block; position: fixed; inset: 0; z-index: 99;
+        background: rgba(0,0,0,.4);
+      }
+      .kc-sidebar.kc-open ~ .kc-sb-toggle { opacity: 0; pointer-events: none; }
+    }
   `;
 
   var styleEl = document.createElement('style');
@@ -68,11 +96,32 @@
   sidebar.innerHTML = html;
   document.body.insertBefore(sidebar, document.body.firstChild);
 
+  var backdrop = document.createElement('div');
+  backdrop.className = 'kc-sb-backdrop';
+  document.body.insertBefore(backdrop, sidebar.nextSibling);
+
+  var toggle = document.createElement('button');
+  toggle.className = 'kc-sb-toggle';
+  toggle.setAttribute('aria-label', '메뉴 열기');
+  toggle.textContent = '☰';
+  document.body.insertBefore(toggle, backdrop.nextSibling);
+
+  function closeSidebar() {
+    sidebar.classList.remove('kc-open');
+    backdrop.classList.remove('kc-open');
+  }
+  toggle.addEventListener('click', function () {
+    sidebar.classList.toggle('kc-open');
+    backdrop.classList.toggle('kc-open');
+  });
+  backdrop.addEventListener('click', closeSidebar);
+
   var wrap = document.createElement('div');
   wrap.className = 'kc-page-wrap';
   var children = [];
-  for (var i = 1; i < document.body.children.length; i++) {
-    children.push(document.body.children[i]);
+  for (var i = 0; i < document.body.children.length; i++) {
+    var el = document.body.children[i];
+    if (el !== sidebar && el !== backdrop && el !== toggle) children.push(el);
   }
   children.forEach(function (c) { wrap.appendChild(c); });
   document.body.appendChild(wrap);

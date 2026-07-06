@@ -89,8 +89,12 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 
   <!-- 답변 케이스 결정 매트릭스 -->
   <div class="card">
-    <div class="section-title">답변 케이스 결정 — KC 매칭 × Playbook 감지 <span style="font-size:12px;font-weight:400;color:#A32D2D;margin-left:8px">마이데이터 연동 상태(③④) 전용</span></div>
-    <p style="font-size:14px;color:var(--text-secondary);margin-bottom:14px">사용자 발화는 KC 메인 체인과 Playbook 체인이 <strong>동시에 독립 분석</strong>됩니다. 두 결과의 조합에 따라 4가지 답변 케이스 중 하나가 결정됩니다. Case 1~4는 마이데이터 연동(상태 ③④)에서만 적용되며, 미연동 상태(①②)는 별도 분기 규칙을 따릅니다.</p>
+    <div class="section-title">답변 케이스 결정 — Case 0(조회형 게이트) + KC 매칭 × Playbook 감지 <span style="font-size:12px;font-weight:400;color:#A32D2D;margin-left:8px">Case 1~4는 마이데이터 연동 상태(③④) 전용</span></div>
+    <p style="font-size:14px;color:var(--text-secondary);margin-bottom:14px">사용자 발화는 먼저 <strong>Case 0(데이터 조회형)</strong> 여부를 판별하고, 아니면 KC 메인 체인과 Playbook 체인이 <strong>동시에 독립 분석</strong>됩니다. 그 결과 조합에 따라 Case 1~4 중 하나가 결정됩니다. Case 1~4는 마이데이터 연동(상태 ③④)에서만 적용되며, 미연동 상태(①②)는 별도 분기 규칙을 따릅니다.</p>
+    <div class="notice" style="background:#EEF4FF;border-color:#A8C4F0;color:#1A3A6B;margin-bottom:14px">
+      <i class="fa-solid fa-circle-info fa-fw"></i>
+      <span><strong>Case 0 — 데이터 조회형 (2026-07-06 신규):</strong> "내가 가진 보험 리스트 알려줘", "나 운전자보험 가입되어 있어?", "갱신되는 보험 있어?", "만료된 보험 몇 개야?" 같은 발화는 위험 진단(Concept)이 아닌 <strong>마이데이터 원본 값 조회</strong> 요청입니다. Concept 매칭보다 먼저 이 의도를 판별하고, 감지되면 아래 매트릭스를 타지 않고 마이데이터를 직접 조회해 고정 템플릿으로 응답합니다(LLM 재구성 없음). Rule 카드로 구현하지 않습니다 — MYDATA Rule 조건은 담보금액 1종만 허용해서 갱신·만료 조회는 Rule 체계 밖입니다.<br><strong style="color:#0F6E56">⚠ Playbook은 예외:</strong> Playbook 매칭은 Case 0 판별과 무관하게 항상 병행 실행되며, 조회 발화가 Playbook 키워드와 겹치면 조회 응답 + CTA가 같이 노출됩니다. 상세는 <code style="background:#DCEAFB;padding:1px 5px;border-radius:3px;font-size:12px">context/answer-logic.md</code> "Case 0 — 데이터 조회형" 참조.</span>
+    </div>
     <table class="tbl" style="margin-bottom:14px">
       <thead>
         <tr>

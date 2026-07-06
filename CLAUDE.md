@@ -27,7 +27,7 @@
 | `context/rules.md` | 협업 고정 규칙, 단일 진실원 원칙 |
 | `context/card-policy.md` | CONNECT_RULES, 카드 상태/엣지, 공개범위, 카드블록 구조 |
 | `context/card-types.md` | 카드별 상세 스펙 (Evidence/Rule/Concept/Policy/Playbook/Risk-type 필드 정의) |
-| `context/answer-logic.md` | Case 1~4 매트릭스, RAG 정책, FAQ RAG 스펙 |
+| `context/answer-logic.md` | Case 0~4 매트릭스, RAG 정책, FAQ RAG 스펙 |
 | `context/matching-policy.md` | Concept·Playbook 감지 정책 (임베딩 유사도) |
 | `guides/insurance-domain.md` | T코드·담보코드·KCD 도메인 지식 (T코드 상태의 유일한 진실원 — 다른 파일에 사본 두지 않음) |
 | `context/cross-track-impact.md` | 위 공유 계약이 바뀔 때 양 트랙에서 확인할 파일 매핑 |

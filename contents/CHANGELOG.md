@@ -6,6 +6,32 @@
 
 ---
 
+## 2026-07-06 — Case 0 예시 구조 정정: 구조화 데이터를 말풍선 밖 카드로 분리
+
+바로 아래 항목(모바일 반응형 수정) 직후. 사용자가 "가입한 보험명·납입료·가입일 정보가 실제 모바일 채팅 UI에서 이렇게 구성이 안 되지 않냐"고 지적 — 이 페이지 기존 관례(`.app-result-cards`는 말풍선 밖 별도 카드)와 달리 신설한 `.mydata-list`를 말풍선 안에 넣었던 실수를 확인해 수정. `.mydata-list-outer` 래퍼로 결과카드와 동일한 위치(말풍선 다음)로 이동, 4개 예시 전체 반영.
+
+**수정 파일:** `contents/html/08_ai-preview.html`
+
+---
+
+## 2026-07-06 — contents/html 모바일 반응형 버그 수정 + Case 0 예시 4건으로 확장
+
+사용자가 실제 폰에서 확인하다 "모바일 화면이 깨져서 보이고 있어"라고 제보 — Playwright로 375px 뷰포트를 직접 렌더링해 원인을 확인했다. ① `sidebar.js`(11개 페이지 공유)의 220px 고정폭 사이드바가 반응형 처리가 없어 좁은 화면에서 본문을 짓눌러 글자가 한 글자씩 깨져 보이던 버그 — 768px 이하에서 오프캔버스 드로어(햄버거 토글)로 전환해 수정. ② `.acc-header`(아코디언 헤더) flex 레이아웃도 동일 증상이라(`08_ai-preview.html`·`10_faq-ai-preview.html` 둘 다 중복 정의) 제목을 480px 이하에서 둘째 줄 전체 폭으로 내리도록 수정.
+
+이어서 "가입된 보험 리스트 예시가 있어야 이해되고, 보험명·월납입액·가입일 같은 인지 가능한 정보도 보여줘야 한다"는 요청으로 Case 0 예시를 2건→4건(가입여부·전체목록·갱신예정·만료건수, 1차 지원 4종 전체)으로 확장. 처음 `<table>` 그리드로 만들었으나 좁은 채팅 말풍선에서 `table-layout:auto`가 "보험명" 열을 극단 압축해 세로로 깨지는 2차 버그가 나서, 표 대신 스택형 리스트(`.mydata-list`)로 최종 교체.
+
+**수정 파일:** `contents/html/sidebar.js`, `contents/html/08_ai-preview.html`, `contents/html/10_faq-ai-preview.html`
+
+---
+
+## 2026-07-06 — Case 0(데이터 조회형) 실제 예시 신규 제작 + Playbook 병행 원칙 정정
+
+Case 0을 서비스 트랙에 처음 도입할 때 "감지되면 Concept·Playbook 매칭을 건너뛴다"고 설계했으나, 사용자가 예시 제작을 요청하는 과정에서 "조회형이어도 Playbook은 별개로 동작 가능하지 않냐"고 지적해 확인한 결과 맞는 지적이었음 — Playbook은 Concept·Case 0 판별과 무관하게 항상 독립 병행되는 게 원래 원칙이었는데 잘못 묶여 있었음(정정 상세는 최상위 `context/decisions.md` 참조). `contents/html/08_ai-preview.html` 최상단에 Case 0 예시 2건 신규 추가 — "운전자보험 가입되어 있어?"(PB08 매칭 → CTA 있음)와 "보험 리스트 알려줘"(Playbook 미매칭 → CTA 없음)를 나란히 배치해 Case 0과 CTA 유무가 서로 무관한 판정임을 대비로 보여줌.
+
+**수정 파일:** `contents/html/08_ai-preview.html`
+
+---
+
 ## 2026-07-06 — 출처 기관 영문 약어 노출 버그 수정 + Playbook "설명" 필드 삭제
 
 `guides/customer-messaging.md` 자체 모순(한글 기관명 허용 vs 전면 금지) 정리와 함께, `contents/html/08_ai-preview.html`에 노출돼 있던 영문 약어(HIRA·NHIS·KOSTAT·FSS) 20건 제거(한글 기관명은 유지). Playbook "설명" 필드는 PB01~PB12 전수 확인 결과 명칭·발화 키워드·전환 액션의 재진술일 뿐이라 삭제 — `playbooks.md`·`06_playbook.html`·`03_copywriter.md` 출력 JSON 스펙 반영. 서비스 트랙(Evidence AI참조 재분류·Playbook 편집기 필드 삭제) 반영은 최상위 `CHANGELOG.md` 참조. 상세는 `contents/decisions.md` 2026-07-06 항목.
