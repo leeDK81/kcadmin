@@ -23,7 +23,7 @@
 | Rule | 대상 Risk-type, 판단 조건(조건 빌더 — MYDATA·프롬에이지·프로파일 3-source, 행별 required boolean), 기준값, 경고 메시지, 연결 Evidence(필수) | |
 | Evidence | 단일 유형(공인 외부 통계) · 출처 기관(HIRA/NHIS/KOSTAT/FSS/기타) · 보고서명 · 기준 연도 · 지표명 · 기준값(단위 포함) · 출처 URL(선택) · 활용 방법 | |
 | Policy | **확정 필드 2개만:** Policy 이름(name) + Clark 앱 표시 문구(appDisplayText). 표시 문구 비어있으면 검수 요청 불가. 삭제 필드(절대 미포함): 규제 문서명, 적용 범위, 핵심 조항, 출력 대상 화면, 출력 제한 설정, 준수 체크리스트 | |
-| Playbook | **MVP 구현 완료** — Playbook명, 설명 (공개범위: 내부 전용 고정, 편집기 미표시), 전환 발화 키워드(최소 3개 필수), 기본 버튼(consult 필수), 추가 버튼 N개, **Standalone 답변 가이드** (선택사항 — 비워두면 Clark 기본 안내 문구 사용) | |
+| Playbook | **MVP 구현 완료** — Playbook명 (공개범위: 내부 전용 고정, 편집기 미표시. 2026-07-06 "설명" 필드 삭제 — 명칭·키워드·전환 액션만으로 용도 파악 충분), 전환 발화 키워드(최소 3개 필수), 기본 버튼(consult 필수), 추가 버튼 N개, **Standalone 답변 가이드** (선택사항 — 비워두면 Clark 기본 안내 문구 사용) | |
 | Case | *(Phase 1.5 이후 — 목업 범위 외)* | — |
 
 ### A-1. Case 1~4 매트릭스 — KC매칭 × Playbook감지

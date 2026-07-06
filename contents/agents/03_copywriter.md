@@ -146,7 +146,6 @@ Playbook = 특정 발화 키워드 감지 시 CTA 버튼을 노출하는 리드 
   "card_type": "playbook",
   "file_id": "PB001",
   "name": "암보험 보장 공백 상담 전환",
-  "description": "암 관련 보장 공백이 감지되거나 사용자가 상담 의향을 보일 때 보닥 플래너 연결",
   "keywords": [
     "암보험 더 들어야 할까요",
     "암 보장이 부족한 것 같아요",
@@ -175,8 +174,7 @@ Playbook = 특정 발화 키워드 감지 시 CTA 버튼을 노출하는 리드 
 | 필드 | 필수 | 설명 |
 |---|---|---|
 | name | ✅ | Playbook 내부 명칭 |
-| description | ✅ | 어떤 상황에서 작동하는지 설명 |
-| keywords | ✅ | 최소 3개. 실제 발화 기반 배열 |
+| keywords | ✅ | 최소 3개. 실제 발화 기반 배열 (2026-07-06 "description" 필드 삭제 — 명칭·키워드·전환 액션만으로 용도 파악 충분해 중복 판단) |
 | actions | ✅ | consult 필수 포함. 배열 |
 | standalone_guide | 선택 | KC 미매칭 시 표시할 안내 문구. 비워두면 Clark 기본 문구 사용 |
 | data_absence_conditions | 선택 | 특정 데이터 없는 사용자만 타겟 시 true |

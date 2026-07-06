@@ -6,6 +6,14 @@
 
 ---
 
+## 2026-07-06 — 출처 기관 영문 약어 노출 버그 수정 + Playbook "설명" 필드 삭제
+
+`guides/customer-messaging.md` 자체 모순(한글 기관명 허용 vs 전면 금지) 정리와 함께, `contents/html/08_ai-preview.html`에 노출돼 있던 영문 약어(HIRA·NHIS·KOSTAT·FSS) 20건 제거(한글 기관명은 유지). Playbook "설명" 필드는 PB01~PB12 전수 확인 결과 명칭·발화 키워드·전환 액션의 재진술일 뿐이라 삭제 — `playbooks.md`·`06_playbook.html`·`03_copywriter.md` 출력 JSON 스펙 반영. 서비스 트랙(Evidence AI참조 재분류·Playbook 편집기 필드 삭제) 반영은 최상위 `CHANGELOG.md` 참조. 상세는 `contents/decisions.md` 2026-07-06 항목.
+
+**수정 파일:** `guides/customer-messaging.md`, `contents/html/08_ai-preview.html`, `contents/06_playbook/playbooks.md`, `contents/html/06_playbook.html`, `contents/agents/03_copywriter.md`
+
+---
+
 ## 2026-07-06 — 전수감사 4차 후속: 컨텐츠 트랙 반영분 (서비스 트랙 감사 항목 25건 중 컨텐츠 관련분)
 
 전체 프로젝트 5개 영역 병렬 전수감사(상세는 최상위 `CHANGELOG.md` 2026-07-06 항목) 결과 중 컨텐츠 트랙에 해당하는 수정:

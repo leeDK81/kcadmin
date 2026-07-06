@@ -5,6 +5,14 @@
 
 ---
 
+## 2026-07-06 — Evidence sourceOrg·usage "AI 참조 여부" 재분류 정정 + Playbook "설명" 필드 삭제
+
+바로 아래 항목(전수감사 4차)보다 나중 세션. 사용자가 "Evidence는 증거 카드인데 출처 기관·활용 방법을 AI가 참조하는 게 맞지 않냐"고 문제 제기 — 확인 결과 `context/answer-logic.md`(2026-07-05 확정)·`mockups_v2/05_card-editor-evidence.html`·`13_answer-logic.html`에는 이미 두 필드 모두 AI가 참조한다고 정확히 반영돼 있었는데, 같은 날 만든 "필드별 AI 참조 여부 총정리"(`context/card-types.md`)에만 둘 다 "내부 전용"으로 잘못 분류돼 있던 **문서 동기화 누락 버그**였음. sourceOrg→발화(재구성, 영문 약어만 비노출), usage→매칭/선택 전용으로 정정. 정정 과정에서 `guides/customer-messaging.md` 자체의 20행·33행 모순(한글 기관명 허용 vs 전면 금지)과 `contents/html/08_ai-preview.html`의 영문 약어 20건 노출도 함께 발견해 수정. 이어서 Playbook "설명" 필드도 논의 — 실제 12개 전수 확인 결과 명칭·발화 키워드·전환 액션의 재진술일 뿐이라 필드 자체를 삭제. 상세는 `context/decisions.md`·`contents/decisions.md` 2026-07-06 항목 참조.
+
+**수정 파일:** `context/card-types.md`, `policy/06_field-data.html`, `guides/customer-messaging.md`, `contents/html/08_ai-preview.html`, `agents/06_spec-reviewer.md`, `mockups_v2/16_card-editor-playbook.html`, `mockups_v2/16_playbook-list.html`, `contents/06_playbook/playbooks.md`, `contents/html/06_playbook.html`, `contents/agents/03_copywriter.md`
+
+---
+
 ## 2026-07-06 — 전수감사 4차: 5개 영역 병렬 감사(컨텐츠·목업·문서·에이전트·계층간 정합성) 후 25건 수정
 
 ### 배경

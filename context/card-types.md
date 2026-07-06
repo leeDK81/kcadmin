@@ -36,8 +36,9 @@
 | Concept | 개념명(name)·설명(desc) | 🔒 내부 전용 — 매칭 성공 후 답변은 Risk-type부터 시작, Concept 자체 내용은 발화 안 됨 |
 | Concept | 연결 Risk-type | 🔒 내부 전용 — 라우팅 정보 |
 | Evidence | 지표명(indicatorName)·기준값(baseValue)·기준연도(baseYear) | 🗣️ 발화(재구성) — "2024년 기준 ○○이 △△%" 식으로 자연스럽게 녹임 |
-| Evidence | 출처 기관(sourceOrg)·보고서명(reportName)·출처 URL | 🔒 내부 전용 — 기관명·보고서 번호를 문장에 그대로 노출하지 않음(`guides/customer-messaging.md`). 재구성 시 참고 재료로만 간접 반영 |
-| Evidence | 활용 방법(usage) | 🔒 내부 전용 — 저작 가이드용(어느 Rule 근거인지), 답변 생성에 직접 안 쓰임 |
+| Evidence | 출처 기관(sourceOrg) | 🗣️ 발화(재구성) — 기준 연도와 함께 자연스러운 한글 문장에 포함(예: "금융감독원 2025년 통계 기준"). 영문 약어(HIRA·NHIS·FSS 등)는 노출하지 않음(`guides/customer-messaging.md`, `context/answer-logic.md` "인용 표기 원칙", 2026-07-05 확정) |
+| Evidence | 보고서명(reportName)·출처 URL | 🔒 내부 전용 — 보고서 정식 명칭·URL은 채팅 문장에 넣지 않음(딱딱해짐) |
+| Evidence | 활용 방법(usage) | 🔍 매칭/선택 전용 — LLM이 Rule에 연결된 여러 Evidence 중 사용자 질문 맥락에 맞는 것을 고르는 선택 기준(`context/answer-logic.md` "Evidence — LLM 맥락 선택"). 텍스트 자체가 답변에 발화되지는 않음 |
 | Evidence | 제목(title)·카드 코드 | 🔒 내부 전용 |
 | Rule | Clark 경고 메시지(clarkMessage) | 🗣️ 발화(원문) — KC 구조화 답변의 핵심 문장. LLM 재구성 없음 |
 | Rule | 판단 조건(conditions: MYDATA/PROMAGE/PROFILE) | 🔍 매칭 전용 — 조건식(필드명·연산자·기준값) 자체는 발화 안 됨. 단 PROMAGE 선택조건이 매칭되면 **그 결과 등급명만** 발화에 반영(예: "위험 등급으로 확인돼요") — 조건식(GTE/LTE 등)은 여전히 비노출 |
@@ -48,7 +49,7 @@
 | Playbook | Standalone 답변 가이드 | 🗣️ 발화(원문에 가까움) — Case 4(KC 미매칭+Playbook 감지) 시 이 텍스트를 답변 방향으로 사용. 비어있으면 Clark 기본 안내 문구로 대체 |
 | Playbook | 전환 액션(ctaButtons) label | 🗣️ 발화(원문) — 버튼 UI 요소로 그대로 노출 |
 | Playbook | 발화 키워드(triggerKeywords) | 🔍 매칭 전용 |
-| Playbook | Playbook명(name)·설명(desc) | 🔒 내부 전용 |
+| Playbook | Playbook명(name) | 🔒 내부 전용 |
 | FAQ RAG | 질문(Q) | 🔍 매칭 전용 |
 | FAQ RAG | 답변(A) | 🗣️ 발화(재구성) — LLM이 자연스러운 문장으로 재작성 |
 | FAQ RAG | ⚠️ 유의사항 | 🗣️ 발화(원문) — LLM 재구성 없이 원문 그대로 고정 부착(Policy와 동일 원칙) |
@@ -108,7 +109,7 @@
 | 지표명 | ✅ | 활용할 통계 지표 명칭 |
 | 기준값 | ✅ | 단위 포함 입력 (예: 3,800만원, 68%) |
 | 출처 URL | 선택 | 원본 자료 링크 |
-| 활용 방법 | ✅ | 어떤 Rule 기준값의 근거인지, 왜 이 수치가 기준인지 |
+| 활용 방법 | ✅ | 어떤 Rule 기준값의 근거인지, 왜 이 수치가 기준인지. Clark AI가 이 필드를 기준으로 Rule에 연결된 여러 Evidence 중 답변에 인용할 것을 선택함(`context/answer-logic.md` "Evidence — LLM 맥락 선택") — 명확하게 작성할수록 인용 품질 향상 |
 
 **폐지 항목:** 보닥통계(stat)·프롬에이지(fromage) 유형 — 완전 제거됨.
 
@@ -204,7 +205,7 @@
 
 | 카드 | 내용 |
 |---|---|
-| Card ① | 기본정보 — Playbook명, 설명 |
+| Card ① | 기본정보 — Playbook명 (2026-07-06 "설명" 필드 삭제 — 명칭·발화 키워드·전환 액션만으로 용도 파악 충분해 중복 판단) |
 | 연결 안내 | Playbook은 다른 카드와 직접 연결 없음 (Phase 1.5+ 검토 중) |
 | 데이터 미보유 감지 조건 | (선택) PROFILE 없음 / 마이데이터 없음 / 프롬에이지 없음 중복 체크 — 체크된 데이터가 없는 사용자에게만 이 Playbook이 감지됨. `context/answer-logic.md` 사용자 상태 4종(①~④)의 CTA 유도 컬럼과 대응(예: "PROFILE 없음" 체크 → 회원가입 유도 CTA 전용 Playbook). 아무것도 체크 안 하면 데이터 보유 여부 무관하게 키워드만으로 감지 |
 | Card ② | 리드 전환 레이어 — 발화 키워드(최소 3개) + 전환 액션(consult 필수 + 추가 버튼 N개) + Standalone 답변 가이드(선택사항) |

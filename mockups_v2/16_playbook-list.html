@@ -62,8 +62,7 @@
     <thead>
       <tr>
         <th style="width:130px">상태</th>
-        <th style="width:200px">명칭</th>
-        <th>설명</th>
+        <th style="width:280px">명칭</th>
         <th style="width:100px">전환 키워드</th>
         <th style="width:140px">Risk-type 스코어</th>
         <th style="width:100px">수정일</th>
@@ -79,17 +78,14 @@ renderSidebar();
 const DATA = [
   {
     id:'PB001', name:'기본 리드 전환 설정', status:'active',
-    desc:'전체 Risk-type 대상 기본 전환 발화 감지 및 스코어 설정. 모든 Clark 진단 세션에 적용됩니다.',
     kwCount:7, rtCount:10, updated:'2026-06-01'
   },
   {
     id:'PB002', name:'고령 고객 특화 전환 설정', status:'draft',
-    desc:'60세 이상 고객의 간병·치매 관련 발화에서 리드 전환 감도를 높이는 특화 설정.',
     kwCount:4, rtCount:3, updated:'2026-06-05'
   },
   {
     id:'PB003', name:'실손보험 갱신 안내 전환 설정', status:'rejected',
-    desc:'실손보험 갱신 도래 고객 대상 전환 발화 감지 설정. 검수자 의견: 발화 키워드 범위가 과도하게 넓어 오감지 가능성 있음 — 키워드 재구성 후 재검수 요청 바람.',
     kwCount:2, rtCount:5, updated:'2026-06-10'
   },
 ];
@@ -112,12 +108,11 @@ function render(){
         <div class="cell-code">${d.id}</div>
         <div class="cell-name" title="${d.name}">${d.name}</div>
       </td>
-      <td style="max-width:0"><div style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text-secondary);font-size:13px" title="${d.desc}">${d.desc}</div></td>
       <td><span class="count-chip chip-kw"><i class="fa-solid fa-comment-dots"></i> ${d.kwCount}개</span></td>
       <td><span class="count-chip chip-rt"><i class="fa-solid fa-circle-exclamation"></i> ${d.rtCount}개</span></td>
       <td class="cell-date">${d.updated}</td>
     </tr>`).join('')
-    :`<tr class="empty-row"><td colspan="6">해당 상태의 Playbook이 없습니다</td></tr>`;
+    :`<tr class="empty-row"><td colspan="5">해당 상태의 Playbook이 없습니다</td></tr>`;
   const cnt={all:DATA.length,active:0,review:0,draft:0,approved:0,paused:0,rejected:0};
   DATA.forEach(d=>cnt[d.status]++);
   ['all','active','review','draft','approved','paused','rejected'].forEach(k=>{const el=document.getElementById('c-'+k);if(el)el.textContent=cnt[k]});

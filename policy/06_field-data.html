@@ -105,13 +105,13 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
       <tbody>
         <tr><td>카드 코드</td><td><code>code</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>EV001~ 형식. 시스템 자동 부여</td><td>🔒 내부 전용</td></tr>
         <tr><td>제목</td><td><code>title</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>핵심 내용 한 줄 요약. 최대 60자</td><td>🔒 내부 전용(운영자 식별 라벨)</td></tr>
-        <tr><td>출처 기관</td><td><code>sourceOrg</code></td><td><span class="chip chip-req">필수</span></td><td>enum</td><td>HIRA(건강보험심사평가원) / NHIS(국민건강보험공단) / 통계청(KOSTAT) / FSS(금융감독원) / 기타(OTHER)</td><td>🔒 내부 전용 — 기관명 그대로 노출 안 함, 재구성 재료로만 참조</td></tr>
-        <tr><td>보고서명</td><td><code>reportName</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>인용한 공식 보고서명</td><td>🔒 내부 전용</td></tr>
+        <tr><td>출처 기관</td><td><code>sourceOrg</code></td><td><span class="chip chip-req">필수</span></td><td>enum</td><td>HIRA(건강보험심사평가원) / NHIS(국민건강보험공단) / 통계청(KOSTAT) / FSS(금융감독원) / 기타(OTHER)</td><td>🗣️ 발화(재구성, 2026-07-06 정정) — 기준 연도와 함께 자연스러운 한글 문장에 포함(예: "금융감독원 2025년 통계 기준"). 영문 약어(HIRA 등)는 비노출</td></tr>
+        <tr><td>보고서명</td><td><code>reportName</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>인용한 공식 보고서명</td><td>🔒 내부 전용 — 보고서 정식 명칭은 채팅 문장에 넣지 않음</td></tr>
         <tr><td>기준 연도</td><td><code>baseYear</code></td><td><span class="chip chip-req">필수</span></td><td>select</td><td>통계 발행 연도. 2021~현재 연도 중 선택</td><td>🗣️ 발화(재구성) — "2024년 기준" 식으로 자연스럽게</td></tr>
         <tr><td>지표명</td><td><code>indicatorName</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>활용할 통계 지표 명칭</td><td>🗣️ 발화(재구성)</td></tr>
         <tr><td>기준값</td><td><code>baseValue</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>단위 포함 입력. 예: "3,800만원", "68%"</td><td>🗣️ 발화(재구성)</td></tr>
         <tr><td>출처 URL</td><td><code>sourceUrl</code></td><td><span class="chip chip-opt">선택</span></td><td>string(url)</td><td>원본 자료 링크</td><td>🔒 내부 전용</td></tr>
-        <tr><td>활용 방법</td><td><code>usage</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>어떤 Rule 판단 기준값의 근거인지, 왜 이 수치가 기준인지</td><td>🔒 내부 전용(저작 가이드용, 답변 생성에 직접 안 쓰임)</td></tr>
+        <tr><td>활용 방법</td><td><code>usage</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>어떤 Rule 판단 기준값의 근거인지, 왜 이 수치가 기준인지</td><td>🔍 매칭/선택 전용(2026-07-06 정정) — LLM이 Rule에 연결된 여러 Evidence 중 인용할 것을 고르는 선택 기준. 텍스트 자체는 발화 안 됨</td></tr>
         <tr><td>카드 유형</td><td><code>evidenceType</code></td><td>자동</td><td>string</td><td>"external" 고정. 단일 유형</td><td>🔒 내부 전용</td></tr>
         <tr><td>공개범위</td><td><code>scope</code></td><td>자동</td><td>string</td><td>"internal" 고정</td><td>🔒 내부 전용</td></tr>
       </tbody>
@@ -182,8 +182,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
       <thead><tr><th>필드명</th><th>API 키</th><th>필수</th><th>타입</th><th>설명 / 유효성</th><th>AI 참조</th></tr></thead>
       <tbody>
         <tr><td>카드 코드</td><td><code>code</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>PB001~ 형식. 시스템 자동 부여</td><td>🔒 내부 전용</td></tr>
-        <tr><td>Playbook명</td><td><code>name</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>최대 60자</td><td>🔒 내부 전용</td></tr>
-        <tr><td>설명</td><td><code>desc</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>이 Playbook의 목적과 발동 조건 설명</td><td>🔒 내부 전용</td></tr>
+        <tr><td>Playbook명</td><td><code>name</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>최대 60자(2026-07-06 "설명" 필드 삭제 — 명칭·발화 키워드·전환 액션만으로 용도 파악 충분해 중복 판단)</td><td>🔒 내부 전용</td></tr>
         <tr><td>데이터 미보유 감지 조건</td><td><code>missingDataConditions</code></td><td><span class="chip chip-opt">선택</span></td><td>string[]</td><td>PROFILE 없음 / 마이데이터 없음 / 프롬에이지 없음 중복 선택. 체크된 데이터가 없는 사용자에게만 감지됨(2026-07-06 문서화 — `context/answer-logic.md` 사용자 상태 4종과 대응)</td><td>🔒 내부 전용(감지 조건, 발화 아님)</td></tr>
         <tr><td>발화 키워드</td><td><code>triggerKeywords</code></td><td><span class="chip chip-req">필수</span></td><td>string[]</td><td>최소 3개. 사용자 질의에서 감지될 키워드 목록</td><td>🔍 매칭 전용</td></tr>
         <tr><td>전환 액션(CTA)</td><td><code>ctaButtons</code></td><td><span class="chip chip-req">필수</span></td><td>CTAButton[]</td><td>기본 버튼(consult) 필수. 추가 버튼 N개 선택</td><td>🗣️ 발화(원문) — 버튼 label이 UI 요소로 그대로 노출</td></tr>

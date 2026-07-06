@@ -57,7 +57,8 @@ main { max-width: 960px; margin: 36px auto; padding: 0 24px 60px; }
 </div>
 
 <div class="info-box">
-  <strong>입력 순서:</strong> Playbook명 → 설명(필수) → 발화 키워드(각 항목 개별 입력, 최소 3개) → 전환 액션 → Standalone 답변(선택) → 데이터 미보유 감지 조건<br>
+  <strong>입력 순서:</strong> Playbook명 → 발화 키워드(각 항목 개별 입력, 최소 3개) → 전환 액션 → Standalone 답변(선택) → 데이터 미보유 감지 조건<br>
+  <span style="color:#92400E">(2026-07-06 "설명" 필드 삭제 — 명칭·발화 키워드·전환 액션만으로 용도 파악 충분해 중복 판단)</span><br>
   Playbook은 Risk-type과 직접 연결하지 않습니다. 독립 체인으로 등록됩니다.
 </div>
 
@@ -66,7 +67,6 @@ main { max-width: 960px; margin: 36px auto; padding: 0 24px 60px; }
 <div class="card">
   <div class="card-head"><span class="pb-id">PB01</span><span class="card-name">무보장 긴급 상담 전환</span><span class="mydata-badge">마이데이터 없음 작동</span></div>
   <div class="card-body">
-    <div class="field-row"><div class="field-label">설명 (필수)</div><div class="field-value">실손·사망보장이 전무하거나 처음 보험 가입을 원하는 사용자를 보닥 플래너에게 연결</div></div>
     <div class="field-row">
       <div class="field-label">발화 키워드 (5개)</div>
       <div class="keywords">
@@ -97,7 +97,6 @@ main { max-width: 960px; margin: 36px auto; padding: 0 24px 60px; }
 <div class="card">
   <div class="card-head"><span class="pb-id">PB02</span><span class="card-name">암보험 보장 공백 상담 전환</span><span class="mydata-badge">마이데이터 없음 작동</span><span class="promage-badge">프롬에이지 없음 CTA</span></div>
   <div class="card-body">
-    <div class="field-row"><div class="field-label">설명 (필수)</div><div class="field-value">암 관련 보장이 부족하거나 암보험 상담 의향을 보이는 사용자를 보닥 플래너에게 연결. 프롬에이지 미연동 시 건강 위험도 기반 진단 유도.</div></div>
     <div class="field-row">
       <div class="field-label">발화 키워드 (6개)</div>
       <div class="keywords">
@@ -132,7 +131,6 @@ main { max-width: 960px; margin: 36px auto; padding: 0 24px 60px; }
 <div class="card">
   <div class="card-head"><span class="pb-id">PB03</span><span class="card-name">심뇌혈관 보장 상담 전환</span><span class="promage-badge">프롬에이지 없음 CTA</span></div>
   <div class="card-body">
-    <div class="field-row"><div class="field-label">설명 (필수)</div><div class="field-value">심혈관·뇌혈관 보장 공백이 감지되거나 관련 보험 상담 의향을 보이는 사용자 연결. 프롬에이지 미연동 시 심뇌혈관 질병위험도 기반 진단 유도.</div></div>
     <div class="field-row">
       <div class="field-label">발화 키워드 (5개)</div>
       <div class="keywords">
@@ -166,7 +164,6 @@ main { max-width: 960px; margin: 36px auto; padding: 0 24px 60px; }
 <div class="card">
   <div class="card-head"><span class="pb-id">PB04</span><span class="card-name">간병보험 상담 전환</span><span class="promage-badge">프롬에이지 없음 CTA</span></div>
   <div class="card-body">
-    <div class="field-row"><div class="field-label">설명 (필수)</div><div class="field-value">노후 간병·치매 보장에 관심을 보이거나 보장 공백이 감지된 사용자를 보닥 플래너에게 연결. 프롬에이지 미연동 시 건강 위험도 기반 간병 필요성 진단 유도.</div></div>
     <div class="field-row">
       <div class="field-label">발화 키워드 (7개)</div>
       <div class="keywords">
@@ -202,7 +199,6 @@ main { max-width: 960px; margin: 36px auto; padding: 0 24px 60px; }
 <div class="card">
   <div class="card-head"><span class="pb-id">PB05</span><span class="card-name">종신·정기보험 상담 전환</span></div>
   <div class="card-body">
-    <div class="field-row"><div class="field-label">설명 (필수)</div><div class="field-value">사망 보장이 없거나 가족을 위한 보험에 관심을 보이는 사용자를 보닥 플래너에게 연결</div></div>
     <div class="field-row">
       <div class="field-label">발화 키워드 (5개)</div>
       <div class="keywords">
@@ -233,7 +229,6 @@ main { max-width: 960px; margin: 36px auto; padding: 0 24px 60px; }
 <div class="card">
   <div class="card-head"><span class="pb-id">PB06</span><span class="card-name">노후연금 상담 전환</span></div>
   <div class="card-body">
-    <div class="field-row"><div class="field-label">설명 (필수)</div><div class="field-value">노후자금·연금 준비에 관심을 보이는 사용자를 보닥 플래너에게 연결</div></div>
     <div class="field-row">
       <div class="field-label">발화 키워드 (5개)</div>
       <div class="keywords">
@@ -264,7 +259,6 @@ main { max-width: 960px; margin: 36px auto; padding: 0 24px 60px; }
 <div class="card">
   <div class="card-head"><span class="pb-id">PB07</span><span class="card-name">보험 리모델링 상담 전환</span><span class="mydata-badge">마이데이터 없음 작동</span></div>
   <div class="card-body">
-    <div class="field-row"><div class="field-label">설명 (필수)</div><div class="field-value">보험료 부담, 갱신 문제, 중복 가입 등 보험 재설계 필요성을 느끼는 사용자 연결</div></div>
     <div class="field-row">
       <div class="field-label">발화 키워드 (5개)</div>
       <div class="keywords">
@@ -295,7 +289,6 @@ main { max-width: 960px; margin: 36px auto; padding: 0 24px 60px; }
 <div class="card">
   <div class="card-head"><span class="pb-id">PB08</span><span class="card-name">운전자보험 상담 전환</span></div>
   <div class="card-body">
-    <div class="field-row"><div class="field-label">설명 (필수)</div><div class="field-value">운전자보험 미가입 또는 교통사고 보장에 관심을 보이는 사용자를 보닥 플래너에게 연결</div></div>
     <div class="field-row">
       <div class="field-label">발화 키워드 (4개)</div>
       <div class="keywords">
@@ -325,7 +318,6 @@ main { max-width: 960px; margin: 36px auto; padding: 0 24px 60px; }
 <div class="card">
   <div class="card-head"><span class="pb-id">PB09</span><span class="card-name">어린이보험 상담 전환</span></div>
   <div class="card-body">
-    <div class="field-row"><div class="field-label">설명 (필수)</div><div class="field-value">자녀 보험에 관심을 보이거나 자녀 보장 공백이 감지된 사용자를 보닥 플래너에게 연결</div></div>
     <div class="field-row">
       <div class="field-label">발화 키워드 (5개)</div>
       <div class="keywords">
@@ -356,7 +348,6 @@ main { max-width: 960px; margin: 36px auto; padding: 0 24px 60px; }
 <div class="card">
   <div class="card-head"><span class="pb-id">PB10</span><span class="card-name">실손보험 전환 상담</span></div>
   <div class="card-body">
-    <div class="field-row"><div class="field-label">설명 (필수)</div><div class="field-value">구세대 실손보험을 보유하거나 실손보험 관련 상담 의향을 보이는 사용자 연결</div></div>
     <div class="field-row">
       <div class="field-label">발화 키워드 (5개)</div>
       <div class="keywords">
@@ -387,7 +378,6 @@ main { max-width: 960px; margin: 36px auto; padding: 0 24px 60px; }
 <div class="card">
   <div class="card-head"><span class="pb-id">PB11</span><span class="card-name">치아보험 상담 전환</span></div>
   <div class="card-body">
-    <div class="field-row"><div class="field-label">설명 (필수)</div><div class="field-value">치아보험 가입·비교·보장 확인에 관심을 보이는 사용자를 보닥 플래너에게 연결</div></div>
     <div class="field-row">
       <div class="field-label">발화 키워드 (6개)</div>
       <div class="keywords">
@@ -419,7 +409,6 @@ main { max-width: 960px; margin: 36px auto; padding: 0 24px 60px; }
 <div class="card">
   <div class="card-head"><span class="pb-id">PB12</span><span class="card-name">자동차보험 상담 전환</span></div>
   <div class="card-body">
-    <div class="field-row"><div class="field-label">설명 (필수)</div><div class="field-value">자동차보험 가입·비교·갱신에 관심을 보이는 사용자를 보닥 플래너에게 연결</div></div>
     <div class="field-row">
       <div class="field-label">발화 키워드 (6개)</div>
       <div class="keywords">
