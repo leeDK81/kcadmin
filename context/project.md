@@ -9,7 +9,7 @@
 ## KC Admin이란
 
 Clark AI가 정확한 KC(Knowledge Core) 기반 답변을 하기 위한 카드 등록·승인·관리 도구.
-목표: 개발자·운영자에게 전달 가능한 HTML 인터랙티브 목업 제작 (`mockups_v2/` 24개).
+목표: 개발자·운영자에게 전달 가능한 HTML 인터랙티브 목업 제작 (`mockups_v2/` 26개).
 
 - **KC Admin** = 운영자가 카드를 사전 등록·승인·관리하는 UI 도구 (이 목업)
 - **KC Engine(API)** = 런타임에 카드를 실행·참조하는 처리 엔진
@@ -117,7 +117,7 @@ Phase 1.5 이관: 리드 스코어링 (GA 수신 스펙 대기). Phase 2: 배정
 
 ---
 
-## 화면 파일 목록 (mockups_v2/ 24개)
+## 화면 파일 목록 (mockups_v2/ 26개)
 
 | 파일 | 화면 |
 |---|---|
@@ -144,8 +144,10 @@ Phase 1.5 이관: 리드 스코어링 (GA 수신 스펙 대기). Phase 2: 배정
 | 16_playbook-list.html | Playbook 목록 |
 | 16_card-editor-playbook.html | Playbook 편집기 |
 | 17_system-data-guide.html | Clark AI 데이터 연결 구조 (사이드바 미노출 — 직접 URL 접근) |
-| 18_system-settings.html | **LLM Fallback 시스템 설정** — Case 3 미매칭 시 답변 제한 규칙 (KC 체인과 독립, 저장 즉시 반영) |
-| 19_faq-rag.html | **Clark 서비스 전용 FAQ RAG 관리** — Clark 앱 사용 안내·서비스 정책 Q&A 등록·검수·인덱스 관리 (사이드바: 18_system-settings 하위) |
+| 18_system-settings.html | **LLM 응답 가이드**(구 "시스템 설정") — Case 3 미매칭 시 답변 제한 규칙 (KC 체인과 독립, 저장 즉시 반영) (2026-07-07 사이드바 메뉴명 변경, "시스템 설정" 하위 항목으로 이동) |
+| 19_faq-rag.html | **FAQ RAG 관리** (사이드바 라벨 2026-07-07 "FAQ Q&A"→"FAQ RAG" 변경) — Clark 앱 사용 안내·서비스 정책 Q&A 등록·검수·인덱스 관리 (사이드바: 연결·테스트·배포 하단, 최상위 메뉴로 이동) |
+| 20_query-messages.html | **조회형 메시지 관리** — Case 0(조회형 게이트) 감지용 예시 문장(유형 4종 + 운영자 신규 유형 추가) 운영자 등록 (2026-07-07 신규, 사이드바: 카드 라이브러리 상단, 승인 워크플로우 없음) |
+| 21_synonym-management.html | **유사어 관리** — 표준 상품유형(운영자 직접 입력)별로 사용자 혼용 표현을 Concept 동의어 칩과 동일한 방식으로 여러 개 연결(결정론적, AI 유사도 매칭 아님) (2026-07-07 신규, 2026-07-07 칩 기반 구조로 개선, 사이드바: 시스템 설정 하위, 승인 워크플로우 없음) |
 
 Case 편집기: Phase 1.5+, 파일 없음. 사이드바에 잠금(🔒) 표시만.
 

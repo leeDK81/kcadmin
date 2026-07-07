@@ -9,7 +9,7 @@
 UI 디자이너(03)의 설계 명세를 바탕으로 인터랙티브 HTML 목업을 구현한다.
 완성 기준: "처음 보는 개발자·운영자가 이 화면만 보고 다음 행동을 알 수 있는" 수준.
 
-파일 목록 24개 (mockups_v2/) → `context/project.md` 참조.
+파일 목록 26개 (mockups_v2/) → `context/project.md` 참조.
 Evidence 편집기 구현 → `agents/04a_coder-evidence.md` 전담.
 Playbook 편집기 구현 → `agents/04b_coder-playbook.md` 전담.
 

@@ -9,7 +9,7 @@
 
 | | ① 서비스 기획 트랙 | ② 컨텐츠 기획 트랙 |
 |---|---|---|
-| **산출물** | `mockups_v2/` — KC Admin 어드민 UI 목업(24개 HTML) | `contents/` — Clark AI가 실제로 쓰는 카드 콘텐츠(Evidence·Risk-type·Rule·Concept·Policy·Playbook 실 데이터) |
+| **산출물** | `mockups_v2/` — KC Admin 어드민 UI 목업(26개 HTML) | `contents/` — Clark AI가 실제로 쓰는 카드 콘텐츠(Evidence·Risk-type·Rule·Concept·Policy·Playbook 실 데이터) |
 | **에이전트** | `agents/01~08`(+04a·04b) | `contents/agents/01~05` |
 | **진입점** | 이 파일 → `context/rules.md` → 아래 "① 서비스 기획 트랙" 섹션 | 이 파일 → `contents/agents/00_workflow.md` |
 | **결정·미결 이력** | `context/decisions.md` | `contents/decisions.md` |
@@ -63,7 +63,7 @@
 
 ```
 context/
-  project.md          ← mockups_v2 개요, 화면 목록 24개, policy/ 문서 목록 (서비스 트랙 전용)
+  project.md          ← mockups_v2 개요, 화면 목록 26개, policy/ 문서 목록 (서비스 트랙 전용)
   decisions.md        ← 서비스 트랙 미결 항목, Phase 범위, 변경 이력 인덱스
   workflow.md         ← 카드 라이프사이클, 캔버스 UX, 사이드바 v2 표준 (mockups_v2 구현)
   impact-map.md       ← 서비스 트랙 내부 정책 변경 → 영향 파일 매핑 테이블
@@ -79,7 +79,7 @@ guides/
 
 agents/           ← 역할별 전담 파일 (위 에이전트 구성 표 참조)
 CHANGELOG.md      ← 서비스 기획 트랙 변경 이력
-mockups_v2/       ← 현행 작업 폴더. 24개 HTML (캔버스 UX 기준)
+mockups_v2/       ← 현행 작업 폴더. 26개 HTML (캔버스 UX 기준)
 policy/           ← 설계 정책 문서 10개 HTML (00_index~09_matching-policy)
 mockups/          ← Phase 1 완료 산출물 24개 (참조용 — 신규 작업은 mockups_v2/ 사용)
 Data/             ← 원천 기획서 — 별도 지시 없이 접근 금지

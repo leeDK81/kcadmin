@@ -42,6 +42,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 .sidebar a:hover{background:rgba(255,255,255,.08);color:#fff}
 .sidebar a.active{background:rgba(255,255,255,.15);color:#fff;font-weight:600;border-left:3px solid #5A8AE0}
 .nav-divider{border-top:1px solid #333;margin:8px 0}
+.nav-header{padding:10px 16px 4px;color:#7A7A76;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
 .nav-locked{color:#555!important;cursor:not-allowed;display:flex;align-items:center;gap:8px;padding:8px 16px;font-size:14px}
 
 /* ── 메인 레이아웃 ── */

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>조회형 메시지 관리 — KC Admin</title>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>
+.btn-ghost{background:transparent;color:var(--text-secondary);border:1px solid var(--border)}
+/* 동의어 칩 (06_card-editor-concept.html과 동일 패턴) */
+.chip-area{display:flex;flex-wrap:wrap;align-items:center;gap:4px;padding:8px 10px;border:1px solid var(--border);border-radius:6px;background:#fff;min-height:40px;cursor:text}
+.chip-area:focus-within{border-color:var(--step-active);box-shadow:0 0 0 2px rgba(26,58,107,.12)}
+.chip-remove{background:none;border:none;color:var(--text-hint);cursor:pointer;padding:0;font-size:12px;line-height:1;display:flex;align-items:center}
+.chip-remove:hover{color:var(--status-rejected)}
+.chip-input{border:none;outline:none;font-size:13px;font-family:inherit;min-width:120px;flex:1;background:transparent;color:var(--text-primary)}
+/* 등록 패널 */
+.inline-panel{border-radius:var(--radius);padding:20px 24px;margin-bottom:16px;display:none}
+.inline-panel.open{display:block}
+.panel-reg{background:#EEF4FF;border:1.5px solid #A8C4F0}
+.panel-header{font-size:15px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
+.panel-header-title{display:flex;align-items:center;gap:8px}
+</style>
+</head>
+<body>
+<div class="layout">
+<nav class="sidebar" id="sidebar"></nav>
+
+<main class="main">
+  <div class="page-header">
+    <h1>조회형 메시지 관리</h1>
+    <p>마이데이터 조회형 질문(예: "내가 가진 보험 뭐 있어?")을 감지하는 <strong>예시 문장</strong>을 유형별로 운영자가 직접 관리합니다. Concept·FAQ와 마찬가지로 개발 배포 없이 바로 반영됩니다.</p>
+  </div>
+
+  <div class="guide-box">
+    <strong>Case 0(조회형 게이트)</strong>은 위험 진단이 아니라 마이데이터 원본 값을 그대로 보여달라는 질문을 Concept 매칭보다 먼저 걸러내는 판단 로직입니다. 이 판단에 쓰이는 인덱스는 Concept 인덱스와 완전히 분리돼 있고, 기준값도 Concept보다 보수적으로(더 높게) 설정됩니다 — 애매하면 위험 진단 쪽을 우선합니다. 감지 기준값·우선순위 수치는 개발팀이 관리하고, 이 화면은 그 판단에 쓰이는 <strong>예시 문장 데이터</strong>만 관리합니다. 아래 유형은 1차 지원 세트일 뿐이며, <strong>새 조회 유형은 운영자가 직접 추가</strong>할 수 있습니다(단, 실제 응답 로직은 개발팀 구현 후 반영). 상세 정책은 <code>context/answer-logic.md</code> "Case 0 — 데이터 조회형" 참조.
+  </div>
+
+  <div class="top-bar" style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+    <div style="flex:1"></div>
+    <button class="btn btn-primary" onclick="toggleTypeReg()"><i class="fa-solid fa-plus fa-fw"></i> 새 조회 유형 추가</button>
+  </div>
+
+  <div class="inline-panel panel-reg" id="typeRegPanel">
+    <div class="panel-header">
+      <span class="panel-header-title" style="color:#1A3A6B"><i class="fa-solid fa-pen-to-square fa-fw"></i> 새 조회 유형 등록</span>
+      <button class="btn btn-ghost btn-sm" onclick="closeTypeReg()">닫기</button>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+      <div class="form-group" style="margin-bottom:0">
+        <label>유형 이름 <span style="color:#A32D2D">*</span></label>
+        <input class="form-control" id="newTypeLabel" type="text" placeholder="예) 월 보험료 총액 조회">
+      </div>
+      <div class="form-group" style="margin-bottom:0">
+        <label>설명 <span style="color:#A32D2D">*</span></label>
+        <input class="form-control" id="newTypeDesc" type="text" placeholder="예) 매달 나가는 보험료 총합을 물어보는 질문">
+      </div>
+    </div>
+    <div class="banner" style="background:#FFF6E9;border:1px solid #E8C888;color:#7A4A00;margin-top:14px">
+      <i class="fa-solid fa-triangle-exclamation fa-fw"></i> 유형을 등록해도 예시 문장 감지만 가능해질 뿐, <strong>실제 조회·응답 로직은 개발팀이 구현해야</strong> 서비스에 반영됩니다. 등록 직후엔 "개발 반영 대기" 상태로 표시됩니다.
+    </div>
+    <div style="display:flex;gap:8px;margin-top:14px">
+      <button class="btn btn-primary" onclick="submitType()"><i class="fa-solid fa-circle-check fa-fw"></i> 등록</button>
+      <button class="btn btn-secondary" onclick="closeTypeReg()">취소</button>
+    </div>
+  </div>
+
+  <div id="typeCards"></div>
+</main>
+</div>
+
+<script src="shared.js"></script>
+<script>
+renderSidebar('20_query-messages.html');
+
+let queryTypes = [
+  {key:'full_list',     label:'전체 보유 목록',      desc:'가입한 보험 전체 목록을 물어보는 질문',      status:'implemented',
+    examples:['내가 가진 보험 리스트 알려줘','내가 가입한 보험 뭐 있어','가입한 거 목록 좀 보여줘','내 보험 전체 보여줘']},
+  {key:'product_check', label:'특정 상품 가입 여부',  desc:'특정 상품에 가입돼 있는지 물어보는 질문',   status:'implemented',
+    examples:['나 운전자보험 가입되어 있어?','암보험 있어?','실손보험 가입했나?']},
+  {key:'renewal',        label:'갱신 예정 조회',       desc:'갱신 예정인 보험을 물어보는 질문',          status:'implemented',
+    examples:['나 보험 갱신되는 게 있어?','갱신 예정인 보험 몇 개야?','곧 갱신되는 보험 있나요']},
+  {key:'expiry',         label:'만료 건수 조회',       desc:'만료된 보험 건수를 물어보는 질문',          status:'implemented',
+    examples:['나 만료된 보험은 몇 개야?','만기 지난 보험 있어?']}
+];
+let typeIdSeq = 0;
+
+const TYPE_STATUS_LABEL = {implemented:'구현됨', pending:'개발 반영 대기'};
+const TYPE_STATUS_BADGE = {implemented:'badge-active', pending:'badge-review'};
+
+function renderTypeCards() {
+  document.getElementById('typeCards').innerHTML = queryTypes.map(t => `
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:15px;font-weight:700">${t.label}</span>
+            <span class="badge ${TYPE_STATUS_BADGE[t.status]}">${TYPE_STATUS_LABEL[t.status]}</span>
+          </div>
+          <div style="font-size:13px;color:var(--text-secondary);margin-top:2px">${t.desc}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span style="font-size:12px;color:var(--text-hint)" id="count-${t.key}">${t.examples.length}개 등록됨</span>
+          ${t.status === 'pending' ? `<button class="btn btn-danger btn-sm" onclick="removeType('${t.key}')" title="유형 삭제"><i class="fa-solid fa-trash fa-fw"></i></button>` : ''}
+        </div>
+      </div>
+      <div class="chip-area" onclick="document.getElementById('input-${t.key}').focus()">
+        <div id="chips-${t.key}"></div>
+        <input class="chip-input" id="input-${t.key}" data-key="${t.key}" type="text" placeholder="예시 문장 추가 후 Enter">
+      </div>
+    </div>
+  `).join('');
+
+  queryTypes.forEach(t => renderChips(t.key));
+
+  queryTypes.forEach(t => {
+    document.getElementById('input-' + t.key).addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        const val = this.value.trim();
+        const type = queryTypes.find(x => x.key === t.key);
+        if (val && !type.examples.includes(val)) {
+          type.examples.push(val);
+          this.value = '';
+          renderChips(t.key);
+          updateCount(t.key);
+          this.focus();
+          showToast('예시 문장이 추가되었습니다.');
+        }
+      }
+    });
+  });
+}
+
+function renderChips(key) {
+  const type = queryTypes.find(x => x.key === key);
+  document.getElementById('chips-' + key).innerHTML = type.examples.map((s, i) => `
+    <span class="chip">
+      ${s}
+      <button class="chip-remove" onclick="removeExample('${key}', ${i})" title="삭제"><i class="fa-solid fa-xmark"></i></button>
+    </span>
+  `).join('');
+}
+
+function removeExample(key, idx) {
+  const type = queryTypes.find(x => x.key === key);
+  type.examples.splice(idx, 1);
+  renderChips(key);
+  updateCount(key);
+  showToast('삭제되었습니다.');
+}
+
+function updateCount(key) {
+  const type = queryTypes.find(x => x.key === key);
+  document.getElementById('count-' + key).textContent = type.examples.length + '개 등록됨';
+}
+
+/* 새 조회 유형 등록 */
+function toggleTypeReg() {
+  const p = document.getElementById('typeRegPanel');
+  if (p.classList.contains('open')) { p.classList.remove('open'); }
+  else { p.classList.add('open'); setTimeout(() => document.getElementById('newTypeLabel').focus(), 50); }
+}
+function closeTypeReg() { document.getElementById('typeRegPanel').classList.remove('open'); }
+
+function submitType() {
+  const label = document.getElementById('newTypeLabel').value.trim();
+  const desc = document.getElementById('newTypeDesc').value.trim();
+  if (!label) { showToast('유형 이름을 입력하세요.'); return; }
+  if (!desc) { showToast('설명을 입력하세요.'); return; }
+  const key = 'custom_' + (++typeIdSeq);
+  queryTypes.push({key, label, desc, status:'pending', examples:[]});
+  document.getElementById('newTypeLabel').value = '';
+  document.getElementById('newTypeDesc').value = '';
+  closeTypeReg();
+  renderTypeCards();
+  showToast('새 조회 유형이 등록되었습니다. (개발 반영 대기)');
+}
+
+function removeType(key) {
+  queryTypes = queryTypes.filter(t => t.key !== key);
+  renderTypeCards();
+  showToast('유형이 삭제되었습니다.');
+}
+
+/* 초기 렌더 */
+renderTypeCards();
+</script>
+</body>
+</html>

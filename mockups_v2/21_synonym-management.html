@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>유사어 관리 — KC Admin</title>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>
+.btn-ghost{background:transparent;color:var(--text-secondary);border:1px solid var(--border)}
+/* 동의어 칩 (06_card-editor-concept.html과 동일 패턴) */
+.chip-area{display:flex;flex-wrap:wrap;align-items:center;gap:4px;padding:8px 10px;border:1px solid var(--border);border-radius:6px;background:#fff;min-height:40px;cursor:text}
+.chip-area:focus-within{border-color:var(--step-active);box-shadow:0 0 0 2px rgba(26,58,107,.12)}
+.chip-remove{background:none;border:none;color:var(--text-hint);cursor:pointer;padding:0;font-size:12px;line-height:1;display:flex;align-items:center}
+.chip-remove:hover{color:var(--status-rejected)}
+.chip-input{border:none;outline:none;font-size:13px;font-family:inherit;min-width:120px;flex:1;background:transparent;color:var(--text-primary)}
+/* 등록 패널 */
+.inline-panel{border-radius:var(--radius);padding:20px 24px;margin-bottom:16px;display:none}
+.inline-panel.open{display:block}
+.panel-reg{background:#EEF4FF;border:1.5px solid #A8C4F0}
+.panel-header{font-size:15px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
+.panel-header-title{display:flex;align-items:center;gap:8px}
+</style>
+</head>
+<body>
+<div class="layout">
+<nav class="sidebar" id="sidebar"></nav>
+
+<main class="main">
+  <div class="page-header">
+    <h1>유사어 관리</h1>
+    <p>사용자가 혼용하는 상품명·구어체 표현을 마이데이터 표준 상품유형에 연결합니다. 표준 상품유형도 운영자가 직접 입력합니다. 등록 즉시 반영되며 승인 절차는 없습니다.</p>
+  </div>
+
+  <div class="guide-box">
+    이 연결은 <strong>AI 유사도 매칭이 아니라 결정론적(1:1) 연결</strong>입니다. "조회형 메시지 감지"와 달리 여기는 <strong>사실 조회</strong>라 정확해야 하기 때문입니다 — 벡터 유사도에 맡기면 "자동차보험"과 "운전자보험"처럼 단어는 비슷해도 실제로는 다른 상품을 같은 것으로 잘못 묶을 위험이 있습니다. <strong>이름이 비슷해도 실제로 다른 상품(보장 내용이 다른 상품)은 절대 등록하지 마세요</strong> — 등록 대상은 "실비보험=실손의료보험"처럼 <strong>완전히 같은 상품의 다른 이름</strong>일 때만입니다. 표준 상품유형을 먼저 만든 뒤, 그 밑에 사용자 표현(유사어)을 Concept 카드의 동의어처럼 여러 개 추가하세요 — 표현을 다양하게 등록할수록 실제 매칭이 잘 걸립니다.
+  </div>
+
+  <div class="top-bar" style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+    <div style="flex:1"></div>
+    <button class="btn btn-primary" onclick="toggleGroupReg()"><i class="fa-solid fa-plus fa-fw"></i> 새 표준 상품유형 추가</button>
+  </div>
+
+  <div class="inline-panel panel-reg" id="groupRegPanel">
+    <div class="panel-header">
+      <span class="panel-header-title" style="color:#1A3A6B"><i class="fa-solid fa-pen-to-square fa-fw"></i> 새 표준 상품유형 등록</span>
+      <button class="btn btn-ghost btn-sm" onclick="closeGroupReg()">닫기</button>
+    </div>
+    <div class="form-group" style="margin-bottom:0">
+      <label>표준 상품유형 이름 <span style="color:#A32D2D">*</span></label>
+      <input class="form-control" id="newStandardName" type="text" placeholder="예) 실손의료보험">
+      <span class="field-hint">마이데이터 API가 실제로 쓰는 표준 상품유형 명칭을 그대로 입력하세요.</span>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:14px">
+      <button class="btn btn-primary" onclick="submitGroup()"><i class="fa-solid fa-circle-check fa-fw"></i> 등록</button>
+      <button class="btn btn-secondary" onclick="closeGroupReg()">취소</button>
+    </div>
+  </div>
+
+  <div id="groupCards"></div>
+</main>
+</div>
+
+<script src="shared.js"></script>
+<script>
+renderSidebar('21_synonym-management.html');
+
+let synonymGroups = [
+  {key:'g1', standard:'실손의료보험', synonyms:['실비보험','실손보험']},
+  {key:'g2', standard:'치아보험',     synonyms:['치과보험']},
+  {key:'g3', standard:'암보험',       synonyms:['암진단보험']}
+];
+let groupIdSeq = 3;
+
+function renderGroupCards() {
+  document.getElementById('groupCards').innerHTML = synonymGroups.map(g => `
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <div style="font-size:15px;font-weight:700">${g.standard}</div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span style="font-size:12px;color:var(--text-hint)" id="count-${g.key}">${g.synonyms.length}개 유사어</span>
+          <button class="btn btn-danger btn-sm" onclick="removeGroup('${g.key}')" title="표준 상품유형 삭제"><i class="fa-solid fa-trash fa-fw"></i></button>
+        </div>
+      </div>
+      <div class="chip-area" onclick="document.getElementById('input-${g.key}').focus()">
+        <div id="chips-${g.key}"></div>
+        <input class="chip-input" id="input-${g.key}" data-key="${g.key}" type="text" placeholder="유사어 추가 후 Enter">
+      </div>
+    </div>
+  `).join('');
+
+  synonymGroups.forEach(g => renderChips(g.key));
+
+  synonymGroups.forEach(g => {
+    document.getElementById('input-' + g.key).addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        const val = this.value.trim();
+        const group = synonymGroups.find(x => x.key === g.key);
+        if (val && !group.synonyms.includes(val)) {
+          group.synonyms.push(val);
+          this.value = '';
+          renderChips(g.key);
+          updateCount(g.key);
+          this.focus();
+          showToast('유사어가 추가되었습니다.');
+        }
+      }
+    });
+  });
+}
+
+function renderChips(key) {
+  const group = synonymGroups.find(x => x.key === key);
+  document.getElementById('chips-' + key).innerHTML = group.synonyms.map((s, i) => `
+    <span class="chip">
+      ${s}
+      <button class="chip-remove" onclick="removeSynonym('${key}', ${i})" title="삭제"><i class="fa-solid fa-xmark"></i></button>
+    </span>
+  `).join('');
+}
+
+function removeSynonym(key, idx) {
+  const group = synonymGroups.find(x => x.key === key);
+  group.synonyms.splice(idx, 1);
+  renderChips(key);
+  updateCount(key);
+  showToast('삭제되었습니다.');
+}
+
+function updateCount(key) {
+  const group = synonymGroups.find(x => x.key === key);
+  document.getElementById('count-' + key).textContent = group.synonyms.length + '개 유사어';
+}
+
+/* 새 표준 상품유형 등록 */
+function toggleGroupReg() {
+  const p = document.getElementById('groupRegPanel');
+  if (p.classList.contains('open')) { p.classList.remove('open'); }
+  else { p.classList.add('open'); setTimeout(() => document.getElementById('newStandardName').focus(), 50); }
+}
+function closeGroupReg() { document.getElementById('groupRegPanel').classList.remove('open'); }
+
+function submitGroup() {
+  const name = document.getElementById('newStandardName').value.trim();
+  if (!name) { showToast('표준 상품유형 이름을 입력하세요.'); return; }
+  if (synonymGroups.some(g => g.standard === name)) { showToast('이미 등록된 표준 상품유형입니다.'); return; }
+  const key = 'g' + (++groupIdSeq);
+  synonymGroups.push({key, standard:name, synonyms:[]});
+  document.getElementById('newStandardName').value = '';
+  closeGroupReg();
+  renderGroupCards();
+  showToast('표준 상품유형이 등록되었습니다.');
+}
+
+function removeGroup(key) {
+  synonymGroups = synonymGroups.filter(g => g.key !== key);
+  renderGroupCards();
+  showToast('삭제되었습니다.');
+}
+
+/* 초기 렌더 */
+renderGroupCards();
+</script>
+</body>
+</html>

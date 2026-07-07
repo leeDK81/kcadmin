@@ -75,6 +75,17 @@ contents/06_playbook/*.json
 | Evidence | Rule에서 참조되지 않음 |
 | Policy | Rule에서 참조되지 않음 |
 
+### 5. 동의어·예상질의 중복 검사 (2026-07-07 신규)
+
+신규·수정된 Concept의 동의어·예문, Playbook의 예상질의를 **기존 전체 카드**와 대조해 중복도를 확인한다. 겹치는 표현이 많으면 임베딩 유사도 매칭 시 동점(또는 근접 동점)이 발생해 항상 같은 카드만 선택되는 편향이 생긴다 — 실제 사례: CN-T02A·CN-T02B가 "암진단금" 동의어를 공유해 CN-T02A만 항상 선택됐던 문제(2026-07-05 발견, 컨텐츠 중복 제거로 해결).
+
+| 대상 | 검사 방식 | 겹침 발견 시 |
+|---|---|---|
+| Concept ↔ Concept | 동의어·예문 전체 상호 대조 | 겹치는 표현을 더 구체적인 카드 쪽에만 남기고 다른 카드에서 제거 요청(03_copywriter로 반환) |
+| Playbook ↔ Playbook | 예상질의 전체 상호 대조 | 동일하게 겹치는 표현 정리 요청 |
+
+> 완전 동점 시 최종 선택 규칙(최근 배포순)은 `context/matching-policy.md` 참조 — 이 검사는 사전 예방이고, matching-policy.md 규칙은 그래도 남는 드문 경우의 안전망이다.
+
 ---
 
 ## 출력 — 연결 구조 JSON
@@ -181,5 +192,6 @@ contents/06_playbook/*.json
 □ 고립 카드 없음 (Evidence·Policy 미참조 포함)
 □ 모든 Policy의 app_display_text 비어있지 않음
 □ 모든 Playbook의 keywords 최소 3개, consult 액션 포함
+□ Concept·Playbook 동의어/예상질의 중복 검사 완료(2026-07-07 신규)
 □ critical 이슈 0건
 ```

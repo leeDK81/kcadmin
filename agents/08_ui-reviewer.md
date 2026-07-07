@@ -148,7 +148,7 @@
 | auto 컬럼 vs 고정 컬럼 균형 | auto 컬럼이 텅 빈데 옆 고정 컬럼이 "..."으로 잘리는 경우 없는지 확인. 잘리면 고정 컬럼 확대 + auto 축소로 재배분 |
 | 컬럼 폭 기준 | `guides/ux-patterns.md` 컬럼 폭 배분 표 참조 |
 | rule-tag 스타일 | 인라인 style 금지. `.rule-tag` CSS 클래스 사용 |
-| 사이드바 구분선 | 대시보드 아래, 카드 라이브러리 위에 `<div class="nav-divider"></div>` 있는가? 모든 24개 파일 확인 |
+| 사이드바 구분선 | 대시보드 아래, 카드 라이브러리 위에 `<div class="nav-divider"></div>` 있는가? 모든 26개 파일 확인 |
 | 공개범위 표시 | 한국어 사용: "고객 공개" / "공통 기준" / "내부 전용". 영문("Public", "Baseline") 사용 금지. select 아님 — 배지로만 표시 |
 | 헤더 두 줄 방지 | `.list-table th`에 `white-space:nowrap;overflow:hidden` 있는가? 헤더가 두 줄이면 레이아웃 틀어짐 |
 

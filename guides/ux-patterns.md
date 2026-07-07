@@ -65,6 +65,7 @@
   <a href="01_guide.html"><i class="fa-solid fa-clipboard-list fa-fw"></i> 업무 가이드</a>
   <a href="02_dashboard.html"><i class="fa-solid fa-chart-bar fa-fw"></i> 대시보드</a>
   <div class="nav-divider"></div>
+  <a href="20_query-messages.html"><i class="fa-solid fa-comment-dots fa-fw"></i> 조회형 메시지 관리</a>
   <a href="03_card-library.html"><i class="fa-solid fa-folder-open fa-fw"></i> 카드 라이브러리</a>
   <a href="04_risk-type-list.html" style="padding-left:20px"><i class="fa-solid fa-circle-exclamation fa-fw"></i> ① Risk-type</a>
   <a href="05_evidence-list.html" style="padding-left:20px"><i class="fa-solid fa-database fa-fw"></i> ② Evidence</a>
@@ -76,8 +77,10 @@
   <div class="nav-divider"></div>
   <a href="09_review-workflow.html"><i class="fa-solid fa-check-double fa-fw"></i> 검수·승인</a>
   <a href="00_canvas-main.html"><i class="fa-solid fa-diagram-project fa-fw"></i> 연결·테스트·배포</a>
-  <a href="18_system-settings.html"><i class="fa-solid fa-sliders fa-fw"></i> 시스템 설정</a>
-  <a href="19_faq-rag.html" style="padding-left:20px"><i class="fa-solid fa-list-check fa-fw"></i> FAQ Q&A</a>
+  <a href="19_faq-rag.html"><i class="fa-solid fa-list-check fa-fw"></i> FAQ RAG</a>
+  <div class="nav-header">시스템 설정</div>
+  <a href="18_system-settings.html" style="padding-left:20px"><i class="fa-solid fa-robot fa-fw"></i> LLM 응답 가이드</a>
+  <a href="21_synonym-management.html" style="padding-left:20px"><i class="fa-solid fa-tags fa-fw"></i> 유사어 관리</a>
   <div class="nav-divider"></div>
   <a href="00_design-system.html"><i class="fa-solid fa-palette fa-fw"></i> 디자인 시스템</a>
   <a href="13_answer-logic.html"><i class="fa-solid fa-sitemap fa-fw"></i> AI 답변 생성 로직</a>
@@ -85,6 +88,8 @@
   <a href="12_coverage-code-table.html"><i class="fa-solid fa-table-list fa-fw"></i> 담보코드</a>
 </nav>
 ```
+
+> **`.nav-header`(2026-07-07 신규):** 클릭 불가능한 순수 그룹 라벨. 상위 항목이 자체 페이지 없이 하위 항목만 묶는 카테고리일 때 사용(예: "시스템 설정" — 예전엔 `18_system-settings.html` 자체가 상위 링크였으나, 그 페이지가 "LLM 응답 가이드"로 이름이 바뀌어 하위 항목으로 내려가면서 상위는 순수 라벨로 전환됨). `mockups_v2/shared.js`의 `SIDEBAR_ITEMS`에 `{ type:'header', label:'...' }` 추가로 렌더링.
 
 ### 카드 편집기 뼈대 (2/3/5-card 구조)
 

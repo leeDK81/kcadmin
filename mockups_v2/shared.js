@@ -11,6 +11,7 @@ var SIDEBAR_ITEMS = [
   { type:'link', href:'01_guide.html',            icon:'fa-clipboard-list',   label:'업무 가이드' },
   { type:'link', href:'02_dashboard.html',         icon:'fa-chart-bar',        label:'대시보드' },
   { type:'divider' },
+  { type:'link', href:'20_query-messages.html',    icon:'fa-comment-dots',     label:'조회형 메시지 관리' },
   { type:'link', href:'03_card-library.html',      icon:'fa-folder-open',      label:'카드 라이브러리' },
   { type:'link', href:'04_risk-type-list.html',    icon:'fa-circle-exclamation',label:'① Risk-type', indent:true },
   { type:'link', href:'05_evidence-list.html',     icon:'fa-database',         label:'② Evidence', indent:true },
@@ -22,8 +23,10 @@ var SIDEBAR_ITEMS = [
   { type:'divider' },
   { type:'link', href:'09_review-workflow.html',   icon:'fa-check-double',     label:'검수·승인' },
   { type:'link', href:'00_canvas-main.html',       icon:'fa-diagram-project',  label:'연결·테스트·배포' },
-  { type:'link', href:'18_system-settings.html',   icon:'fa-sliders',          label:'시스템 설정' },
-  { type:'link', href:'19_faq-rag.html',           icon:'fa-list-check',       label:'FAQ Q&A', indent:true },
+  { type:'link', href:'19_faq-rag.html',           icon:'fa-list-check',       label:'FAQ RAG' },
+  { type:'header', label:'시스템 설정' },
+  { type:'link', href:'18_system-settings.html',   icon:'fa-robot',            label:'LLM 응답 가이드', indent:true },
+  { type:'link', href:'21_synonym-management.html',icon:'fa-tags',             label:'유사어 관리', indent:true },
   { type:'divider' },
   { type:'link', href:'00_design-system.html',     icon:'fa-palette',          label:'디자인 시스템' },
   { type:'link', href:'13_answer-logic.html',      icon:'fa-sitemap',          label:'AI 답변 생성 로직' },
@@ -46,6 +49,10 @@ function renderSidebar(currentFile) {
   SIDEBAR_ITEMS.forEach(function(item) {
     if (item.type === 'divider') {
       html += '<div class="nav-divider"></div>';
+      return;
+    }
+    if (item.type === 'header') {
+      html += '<div class="nav-header">' + item.label + '</div>';
       return;
     }
     var indent = item.indent ? ' style="padding-left:20px"' : '';

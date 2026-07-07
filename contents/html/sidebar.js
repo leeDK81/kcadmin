@@ -11,6 +11,8 @@
     { file: '08_ai-preview.html', icon: '🤖', label: 'AI 답변 미리보기', group: '보고서' },
     { file: '09_faq-rag.html',    icon: '💬', label: 'FAQ RAG',          group: 'FAQ RAG' },
     { file: '10_faq-ai-preview.html', icon: '📱', label: 'FAQ RAG 답변 미리보기', group: 'FAQ RAG' },
+    { file: '11_query-messages.html', icon: '🔍', label: '조회형 메시지', group: 'Case 0' },
+    { file: '12_synonym-management.html', icon: '🏷️', label: '유사어 관리', group: 'Case 0' },
   ];
 
   var current = window.location.pathname.split('/').pop() || '00_index.html';

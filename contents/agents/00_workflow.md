@@ -99,6 +99,14 @@ Step 9  [01+02+03] FAQ RAG 콘텐츠 저작 (2026-07-04 신규)
              → KC 체인(Concept)으로 감지되지 않거나 감지 후에도 "계약과 무관한 일반 판단"이 필요한 질문 유형 도출
              → 01(공인 통계)이 근거 확인, 02(도메인 전문가)가 판단 기준 검증, 03(카피라이터)이 고객향 워싱
              → 등록 기준은 `context/answer-logic.md` "FAQ RAG 등록 기준" 표 준수 — 계약 특정적 질문은 절대 등록 금지
+
+Step 10 [02+03] Case 0(조회형 게이트) 콘텐츠 저작 (2026-07-07 신규)
+             → 산출물: contents/09_query-messages/query-messages.md + contents/html/11_query-messages.html(콘텐츠 미리보기),
+               contents/10_synonym/synonyms.md + contents/html/12_synonym-management.html(콘텐츠 미리보기)
+             → 위험 진단(Concept)이 아니라 "마이데이터 원본 값을 그대로 보여달라"는 조회형 발화를 처리하는 별도 콘텐츠 타입
+             → 조회형 예시 발화(4개 유형)는 02(도메인 전문가)가 실사용 질문 패턴 기준으로 다양화, 03(카피라이터)이 자연스러운 구어체 표현으로 다듬음
+             → 상품유형 유사어는 02(도메인 전문가)가 `guides/insurance-domain.md` T코드·담보코드 기준으로 실제 존재하는 상품군만 등록하고, "이름은 비슷해도 실제로 다른 상품"(자동차보험≠운전자보험 등)을 반드시 걸러 등록 금지 예로 별도 관리
+             → 등록 기준은 `context/answer-logic.md` "Case 0 — 데이터 조회형" 참조. mockups_v2 운영 화면은 `mockups_v2/20_query-messages.html`·`21_synonym-management.html`
 ```
 
 ---
@@ -117,6 +125,8 @@ contents/
   06_playbook/      ← Playbook 카드 (통합 .md)
   07_connections/   ← 캔버스 연결 구조 정의 (chain-map.json)
   08_faq/           ← Step 9 산출물 — FAQ RAG 콘텐츠 (faq-rag.md, 2026-07-04 신규)
+  09_query-messages/ ← Step 10 산출물 — Case 0 조회형 예시 발화 (query-messages.md, 2026-07-07 신규)
+  10_synonym/       ← Step 10 산출물 — Case 0 상품유형 유사어 연결 (synonyms.md, 2026-07-07 신규)
   html/             ← Step 8 산출물 — 브라우저에서 직접 여는 콘텐츠 어드민 + 채팅 시뮬레이션 (05 담당)
 ```
 
