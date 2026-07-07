@@ -34,7 +34,7 @@ const CONNECT_RULES = {
 
 | 연결 | 카디널리티 | 설명 |
 |---|---|---|
-| Concept ↔ Risk-type | **N:N** | 여러 Concept이 같은 Risk-type을 트리거 가능. 하나의 Concept이 여러 Risk-type을 동시에 트리거 가능 — 이 능력은 확정 당시(2026-06-21)부터 존재했으나 2026-07-05 확인 시점엔 등록된 24개 Concept이 전부 1개 Risk-type에만 연결된 컨텐츠 갭이었다. **같은 날(2026-07-05) 그룹 Concept 5개(`CN-T02A` 확장 + `CN-HOSPALL`·`CN-INJURYALL`·`CN-CAREALL`·`CN-ALL` 신규)를 저작해 이 갭을 해소** — 현재 Concept 28개 중 5개가 실제로 N:N(2개 이상 Risk-type) 연결을 사용 중이다(`contents/07_connections/chain-map.json` 참조). N개 매칭 시 답변 처리(요약형 vs 단건 심층형, 탭 가능한 결과 카드 UI)는 `context/answer-logic.md` "다건 매칭 시 답변 처리" 참조. "전체 진단해줘" 같은 전체 스캔 요청도 새 카드 타입이 아니라 이 N:N 구조를 규모만 크게(risk_type_refs=활성 23개 전체) 적용한 `CN-ALL` 카드로 이미 구현돼 있다 |
+| Concept ↔ Risk-type | **N:N** | 여러 Concept이 같은 Risk-type을 트리거 가능, 하나의 Concept이 여러 Risk-type을 동시에 트리거 가능(확정 2026-06-21). N개 매칭 시 답변 처리(카드 우선 UI 등)·실제 등록된 그룹 Concept 현황·"전체 진단" 처리 방식은 **`context/answer-logic.md`**(단일 진실원, 2026-07-07 정리 — 이전엔 저작 이력이 여기 그대로 복사돼 있었음) 참조 |
 | Risk-type ↔ Rule | **1:1** | Risk-type 1개에 Rule 1개 전속. 공유 불가. 조건이 여러 개이면 Rule 카드 내 Row를 추가 |
 | Rule ↔ Evidence | **N:N** | 하나의 Rule이 여러 Evidence를 근거로 인용 가능. 동일 Evidence를 여러 Rule이 공유 가능 |
 | Rule ↔ Policy | **N:N** | 하나의 Rule에 여러 Policy 고지 연결 가능. 동일 Policy를 여러 Rule이 공유 가능 |

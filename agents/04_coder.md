@@ -123,7 +123,7 @@ HTML 패턴 → `guides/ux-patterns.md` 참조.
 - [ ] `confirmAction`: edgeStatus = approved 포함 시 'pending', 모두 active면 'active'
 - [ ] "연결 추가" 버튼: `gc-btn-connect` 클래스, 전폭(width:100%), 파란 배경
 - [ ] `findDirectTarget` 사용: CONNECT_RULES 직접 연결만 (체인 경유 금지)
-- [ ] CONNECT_RULES 코드: concept→risk (required:true 표기), risk→rule (required:true), rule→evidence (required:true), rule→policy (required:false)
+- [ ] CONNECT_RULES 코드 값이 `context/card-policy.md`의 CONNECT_RULES와 정확히 일치하는지 확인(2026-07-07 정리 — 이전엔 이 줄에 실제 값이 그대로 복사돼 있어 위 "여기 재서술하지 않음" 원칙과 자기모순이었음)
 
 **오른쪽 컬럼**
 - [ ] wf-tracker 4단계만. rel-box 없음.
@@ -145,9 +145,7 @@ HTML 패턴 → `guides/ux-patterns.md` 참조.
 **Rule 편집기**
 - [ ] LEFT 컬럼 5개 독립 `.card` (①기본정보→②Risk-type→③판단조건→④Evidence→⑤액션)
 - [ ] 게이트 카드: Risk-type ☑ + 판단조건 ☑ + Evidence ☑ 충족 시 버튼 활성
-- [ ] MYDATA 행: 담보코드+확인항목+조건+기준값+힌트+구분(필수/선택)+삭제 7열. required=true 기본값 (필수). 화면 표기: "마이데이터"
-- [ ] Promage 행: 위험도 select(50개 항목)+조건(같음/이상/이하 select, 2026-07-06 EQ only→3종 확장)+기준값(고위험/위험/경고/주의/양호 select, 3단계→5단계 확장)+구분(필수/선택)+삭제. required=false 기본값 (선택). 화면 표기: "프롬에이지". 힌트: "선택 조건 권장 — 필수 설정 시 미연동 사용자 Rule 미발동"
-- [ ] 프로파일 행: 항목+조건+기준값+구분(필수/선택)+삭제. required=true 기본값 (필수). 화면 표기: "프로파일"
+- [ ] MYDATA/Promage/프로파일 3개 행의 열 구성·선택지·기본 required 값이 `context/card-types.md`(단일 진실원, 2026-07-07 정리 — 항목 수·등급명 등 구체값 중복 제거)와 일치하는지 확인. 화면 표기는 각각 "마이데이터"/"프롬에이지"/"프로파일". Promage 행 힌트 문구: "선택 조건 권장 — 필수 설정 시 미연동 사용자 Rule 미발동"
 - [ ] ConditionRow 데이터 구조에 required:boolean 속성 포함 (소스별 기본값 다름)
 - [ ] 구분 라디오: 필수(빨간 텍스트) / 선택(회색 텍스트). `name="req-${id}"` 패턴
 - [ ] AMPLITUDE 행 없음

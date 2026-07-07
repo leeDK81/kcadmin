@@ -106,9 +106,7 @@
 | 항목 | 기준 |
 |---|---|
 | ConditionRow 필수/선택 토글 | 각 조건 행에 필수/선택 구분 토글 또는 표시 있는가? |
-| MYDATA 기본값 | MYDATA(마이데이터) 소스 조건 행: required=true (필수) 기본값 |
-| PROMAGE 기본값 | PROMAGE(프롬에이지) 소스 조건 행: required=false (선택) 기본값 — 미연동 사용자 대응 |
-| PROFILE 기본값 | PROFILE 소스 조건 행: required=true (필수) 기본값 |
+| 소스별 기본값 | MYDATA/PROMAGE/PROFILE 각 행의 필수·선택 기본값이 `context/card-types.md`(단일 진실원, 2026-07-07 정리)와 일치하는가 |
 | 소스 3종 | MYDATA/PROMAGE/PROFILE 3개. Amplitude 소스 없어야 함 |
 | 약관 DB | 약관 DB 연동 체크박스 없는가? (엔진 자동 처리 — 체크박스 있으면 오류) |
 
@@ -181,14 +179,7 @@
 
 ### F. 상태 표시 일관성
 
-| 상태 | 색상 | 배지 텍스트 |
-|---|---|---|
-| 임시저장 | `#9C9C94` (회색) | `📝 임시저장` |
-| 승인요청 | `#BA7517` (주황) | `⏳ 승인요청` |
-| 승인완료 | `#1A4A9A` (파랑) | `✔ 승인완료` |
-| 라이브 | `#0F6E56` (녹색) | `🟢 라이브` |
-| 일시중지 | `#7A4A00` (갈색) | `⏸ 일시중지` |
-| 반려 | `var(--status-rejected)` (적색 계열) | `✕ 반려` |
+6개 상태(임시저장/승인요청/승인완료/라이브/일시중지/반려)의 색상·배지 텍스트가 **`guides/design-system.md`**(단일 진실원, 2026-07-07 정리 — 이전엔 hex 값·이모지가 전부 사본으로 있었음)와 화면마다 동일하게 적용됐는지 확인한다.
 
 ### G. 첫 방문자 안내 (원칙 0)
 
@@ -231,13 +222,12 @@
 |---|---|
 | 피커 패널 | 상단 4컬럼 (CONCEPT / RISK-TYPE / RULE / EVIDENCE·POLICY) — 각 컬럼 카드 목록 표시 |
 | 카드 표시 범위 | active + approved + review 카드 (draft 제외) |
-| 상태 배지 | active → "라이브" (초록 `gc-badge-live`), approved → "승인완료" (파랑 `gc-badge-approved`), review → "승인요청" (주황 `gc-badge-review`) |
+| 상태 배지 | active/approved/review 배지 텍스트·색상이 `context/card-policy.md`(카드 상태)·`guides/design-system.md`(색상)와 일치하는가 |
 | 연결 가능 범위 | active + approved만 연결 가능. review 카드는 "연결 추가" 버튼 없어야 함 |
 | 그리드 섹션 헤더 | "연결됨" → 초록 헤더(`sh-connected`). "연결 가능" → 파란 헤더(`sh-available`) |
-| 연결 가능 판정 | `findDirectTarget` 기준 — CONNECT_RULES 직접 연결만 (체인 경유 불가) |
+| 연결 가능 판정 | `findDirectTarget` 기준 — CONNECT_RULES 직접 연결만(체인 경유 불가). 규칙 값은 `context/card-policy.md` 참조 |
 | 연결 추가 버튼 | "연결 가능" 카드에 전폭 파란 "연결 추가" 버튼 (`gc-btn-connect`) 존재 |
-| pending 엣지 | `edge.status === 'pending'` 시 점선 파랑(`stroke-dasharray:6,4`, `#1A4A9A`) SVG 선 + arr-pending 마커 |
-| active 엣지 | `edge.status === 'active'` 시 실선 초록(`#0F6E56`) SVG 선 + arr-active 마커 |
+| 엣지 스타일 | pending/active 엣지의 선 스타일·색상이 `context/card-policy.md`(단일 진실원, 2026-07-07 정리 — hex·dasharray 값 사본 제거)과 일치하는가 |
 | 포컬 헤더 경고 | 체인 0개 카드: "⚠ 연결 없음" 배지 표시. "연결 가능 N개" 있으면 파란 정보 배지 함께 표시 |
 
 ### I. 19_faq-rag.html 검수 포인트 (2026-06-21 추가)

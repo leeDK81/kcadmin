@@ -60,7 +60,7 @@
 **[폰트 & Montage 토큰 — 2026-06-09 추가]**
 - [ ] `<link>` 태그: Pretendard CDN 사용 (`pretendard-dynamic-subset.min.css`). Google Fonts(Noto Sans KR) 사용 절대 금지.
 - [ ] `body` font-family: `'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif` 형식인가?
-- [ ] `:root` Montage 베이스 토큰 포함 여부: `--bg-page:#F4F4F5`, `--text-primary:#171719`, `--text-secondary:#70737C`, `--text-hint:#989BA2`, `--border:#E1E2E4`, `--shadow:0px 2px 4px -2px rgba(23,23,23,.06)...`
+- [ ] `:root` Montage 베이스 토큰(`--bg-page`·`--text-primary`·`--text-secondary`·`--text-hint`·`--border`·`--shadow` 등)이 `guides/design-system.md`의 값과 정확히 일치하는가(2026-07-07 정리 — 이전엔 hex 값이 여기 그대로 하드코딩돼 있어 design-system.md 갱신 시 이 파일이 따라가지 못할 위험이 있었음)
 - [ ] 폰트 크기가 타이포그래피 스케일(24/20/17/16/15/14/13/12/11px) 외 임의 크기를 사용하지 않는가? 8px·9px·10px 등 극소형 금지.
 
 ### C-추가. CSS 변수 완전성 체크 (실제 발생한 버그 기준)
@@ -91,16 +91,7 @@
 
 ### F. Evidence 구조 (공인 외부 통계 기반)
 
-- [ ] Evidence 유형 select 없는가? (단일 유형 — select 제거됨, stat/fromage 옵션 없어야 함)
-- [ ] 출처 기관 select: 5개 옵션 (HIRA/NHIS/KOSTAT/FSS/OTHER) 있는가?
-- [ ] OTHER 선택 시 기관명 직접 입력 필드(#agencyOtherSection) 노출되는가?
-- [ ] 보고서명·기준연도·지표명·기준값 필드 모두 있는가?
-- [ ] 기준값: 단위 포함 자유 입력 필드인가? (수치만 입력 강요하는 구조 아님)
-- [ ] 출처 URL: 선택사항 표기 있는가?
-- [ ] staticSection / promageSection / metricSection / populationSection 없는가?
-- [ ] N-segment 빌더 함수(addExtraSegment 등) 없는가?
-- [ ] MOCK_DATA Evidence type: 'external' (stat/fromage 아님)
-- [ ] requestReview(): 7개 필수 필드(제목·기관·보고서명·연도·지표명·기준값·활용방법) 검증하는가?
+Evidence 편집기 필드 목록·옵션·검증 규칙은 `agents/04a_coder-evidence.md`(구현 스펙, 궁극적으로 `context/card-types.md`가 진실원)와 정확히 일치하는지만 확인한다 — 필드 목록을 이 파일에 다시 나열하지 않는다(2026-07-07 정리, 동일 목록이 04a·05·06·08에 각각 있어 드리프트 위험이 있었음). 특히 확인할 것: 유형 select 없음(단일 유형), OTHER 선택 시 기관명 입력 노출, N-segment류 폐기된 UI 잔재 없음.
 
 ### G. 금지어 및 구조 규칙
 

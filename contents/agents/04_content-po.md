@@ -22,21 +22,25 @@
 
 ## 입력
 
-Step 1~6 완료 후 수집한 전체 카드 JSON 목록
+Step 1~6(+9~10) 완료 후 수집한 전체 카드 콘텐츠. **실제 파일 형식은 도메인별/전체 통합 Markdown이며 개별 카드당 JSON이 아니다** — 상세는 `contents/agents/00_workflow.md` "출력 형식에 대한 중요 공지" 참조(2026-07-07 정정, 사본 아님).
 
 ```
-contents/00_taxonomy/risk-types.json
-contents/01_evidence/*.json
-contents/02_risk-type/*.json
-contents/03_rule/*.json
-contents/04_concept/*.json
-contents/05_policy/*.json
-contents/06_playbook/*.json
+contents/01_evidence/evidence-{도메인}.md
+contents/02_risk-type/risk-types.md
+contents/03_rule/rules-{도메인}.md
+contents/04_concept/concepts.md
+contents/05_policy/policies.md
+contents/06_playbook/playbooks.md
+contents/08_faq/faq-rag.md            (FAQ RAG — KC 카드 체인과 독립)
+contents/09_query-messages/query-messages.md  (Case 0 조회형 예시 발화 — KC 카드 체인과 독립)
+contents/10_synonym/synonyms.md              (Case 0 상품유형 유사어 — KC 카드 체인과 독립)
 ```
 
 ---
 
 ## 검토 항목 — CONNECT_RULES 기준
+
+> **진실원: `context/card-policy.md`** "CONNECT_RULES"·"카드 연결 카디널리티" 섹션. 아래는 그 규칙을 실제 체인 검토에 쓰는 체크리스트일 뿐이며, 규칙 자체가 바뀌면 card-policy.md만 수정하고 이 파일은 체크리스트 문구만 맞춰 갱신한다(2026-07-07 정리 — 이전엔 카디널리티 표가 출처 표기 없이 그대로 복제돼 있었음).
 
 ### 1. 필수 연결 존재 여부
 
@@ -55,15 +59,7 @@ contents/06_playbook/*.json
 
 ### 3. 카디널리티 위반 탐지
 
-```
-✅ 허용: Concept N:N Risk-type (하나의 Concept이 여러 Risk-type 가리켜도 됨)
-✅ 허용: Rule N:N Evidence (여러 Evidence 참조 가능)
-✅ 허용: Rule N:N Policy
-
-❌ 금지: Risk-type:Rule 1:N (Risk-type 하나에 Rule 여러 개 — 공유 불가)
-❌ 금지: Rule이 Risk-type 없이 단독 존재
-❌ 금지: Policy, Evidence, Playbook에서 outgoing 연결
-```
+`context/card-policy.md` "카드 연결 카디널리티" 표(Concept↔Risk-type N:N, Risk-type↔Rule 1:1 전속, Rule↔Evidence N:N, Rule↔Policy N:N) 기준으로 위반 여부만 확인한다 — 규칙 값 자체는 여기 복제하지 않는다. 특히 Risk-type↔Rule은 1:1 전속이라 공유되면 위반이다.
 
 ### 4. 고립 카드 탐지
 

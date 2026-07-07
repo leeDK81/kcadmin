@@ -17,6 +17,8 @@ KC 엔진이 자동 접근 불가한 공인 기관 통계를 운영자가 직접
 
 ## 편집기 필드 구조
 
+> 아래 필드·옵션 목록은 `context/card-types.md` Evidence 스펙을 이 화면 구현에 맞게 옮긴 것이다(2026-07-07 표기 — card-types.md가 단일 진실원). card-types.md가 바뀌면 이 목록도 함께 갱신할 것.
+
 ```
 [카드 ID — disabled, 자동생성 안내]
 [제목 input — 필수]

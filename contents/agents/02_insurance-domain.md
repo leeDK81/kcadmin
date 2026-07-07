@@ -30,9 +30,7 @@
 | 어린이·교육보험 | 태아, 어린이, 교육비 |
 | 운전자보험 | 벌금, 면허취소, 변호사선임비 |
 
-### Risk-type 출력 — taxonomy JSON
-
-파일 위치: `contents/00_taxonomy/risk-types.json`
+### Risk-type 출력 — 필드 스키마 참고용 (2026-07-07 정정: 실제 저장 위치는 `contents/02_risk-type/risk-types.md` 전체 통합 파일 1개, 개별 JSON이 아니다)
 
 ```json
 {
@@ -66,7 +64,7 @@
 | 필드 | 필수 | 설명 |
 |---|---|---|
 | file_id | ✅ | RT01, RT02 … 전체 순번 |
-| type_code | ✅ | T01~T99 (기존 T01~T10 이어서 부여) |
+| type_code | ✅ | 다음 순번 T코드. **현재 활성 T코드 목록·최근 사용 번호는 `guides/insurance-domain.md`가 단일 진실원** — 여기 범위를 고정 표기하지 않는다(2026-07-07 정정: "T01~T99" 표기가 실제 T코드 운영 범위와 안 맞아 제거) |
 | name | ✅ | 운영자·고객 모두 이해 가능한 한국어 명칭 |
 | domain | ✅ | 생명보험 / 건강보험 / 연금보험 / 손해보험 / 어린이보험 / 운전자보험 |
 | sub_domain | ✅ | 암보험 / 실손 / 심혈관 / 간병 등 세부 영역 |
@@ -80,9 +78,7 @@
 
 ## Step 3 — Rule 조건 설계
 
-### Rule 출력 JSON
-
-파일 위치: `contents/03_rule/RU{순번}_{RT코드}.json`
+### Rule 출력 — 필드 스키마 참고용 (2026-07-07 정정: 실제 저장 위치는 `contents/03_rule/rules-{도메인}.md` 도메인별 통합 파일, 개별 `RU{순번}.json` 파일이 아니다)
 
 ```json
 {
@@ -149,9 +145,8 @@
 | 필드 | 형식 |
 |---|---|
 | source | "PROMAGE" |
-| category | 위험도 항목 코드 (암위험도: canr_ca 등 23개 / 질병위험도 27개) |
-| op | "EQ" / "GTE" / "LTE" (2026-07-06 EQ 고정→3종 확장) |
-| value | "고위험" / "위험" / "경고" / "주의" / "양호" (심각도 순, 3단계→5단계 확장) |
+| category | 위험도 항목 코드 (암위험도·질병위험도 50개 flat 목록) |
+| op / value | **`context/card-types.md`가 단일 진실원** — op 종류·등급명 5단계는 그 파일 기준(2026-07-07 정리, 사본 두지 않음) |
 | required | false (기본 — 미연동 사용자 대응) |
 
 ---
@@ -167,14 +162,14 @@
 
 ---
 
-## 현장 판단 기준 (기존 T01~T10 확장 참조)
+## 현장 판단 기준
 
-`agents/07_insurance-expert.md`의 T01~T08 현장 검토 내용을 참고하되, **그 표는 07 스스로 "v1 체계 기준, v2 재검토 대기"라고 자인한 낡은 자료다**(T09·T10 명칭·상태가 현재 `guides/insurance-domain.md`와 다를 수 있음, 2026-07-06 확인) — 검토 관점(왜 그 유형이 중요한지)만 참고하고, T코드 명칭·상태·존재 여부는 반드시 `guides/insurance-domain.md`(단일 진실원)로 재확인한다. 이 에이전트는 **콘텐츠 생성** 역할이므로 검토가 아닌 실제 카드 초안 작성을 목표로 한다.
+`agents/07_insurance-expert.md`가 실제로 실행돼 도메인 관점 검토를 남겨두면 참고할 수 있으나(2026-07-07 기준 그 표는 재작성 대기 상태로 비어 있음 — 옛 v1 체계 기반의 잘못된 표는 제거됨), T코드 명칭·상태·존재 여부는 이 파일이 아니라 반드시 `guides/insurance-domain.md`(단일 진실원)로 확인한다. 이 에이전트는 **콘텐츠 생성** 역할이므로 검토가 아닌 실제 카드 초안 작성을 목표로 한다.
 
 ---
 
 ## 다음 단계 핸드오프
 
-- Risk-type JSON → `contents/00_taxonomy/`, `contents/02_risk-type/` 저장 후 **01_researcher**에 Evidence 요청
-- Rule JSON → `contents/03_rule/` 저장 후 **04_content-po**에 검토 요청
+- Risk-type → `contents/02_risk-type/risk-types.md`에 반영 후 **01_researcher**에 Evidence 요청
+- Rule → `contents/03_rule/rules-{도메인}.md`에 반영 후 **04_content-po**에 검토 요청
 - 담보코드 확인 필요 시 → `guides/insurance-domain.md` 참조
