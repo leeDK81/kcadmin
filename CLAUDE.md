@@ -123,7 +123,9 @@ contents/
   06_playbook/      ← Playbook 카드 (playbooks.md)
   07_connections/   ← 연결 구조 확정본 (chain-map.json)
   08_faq/           ← FAQ RAG 콘텐츠 (faq-rag.md, 2026-07-04 신규 — 계약 무관 보험 판단 노하우 + 서비스 이용 안내 Q&A)
-  html/             ← 브라우저에서 직접 여는 콘텐츠 어드민 + Clark AI 채팅 시뮬레이션 (11개 HTML, mockups_v2와 별개·서버 불필요)
+  09_query-messages/← Case 0(조회형 게이트) 감지용 예시 발화 (query-messages.md, 2026-07-07 신규)
+  10_synonym/       ← 상품유형 유사어 결정론적 연결 (synonyms.md, 2026-07-07 신규 — AI 유사도 매칭 아님)
+  html/             ← 브라우저에서 직접 여는 콘텐츠 어드민 + Clark AI 채팅 시뮬레이션 (13개 HTML, mockups_v2와 별개·서버 불필요)
   decisions.md      ← 컨텐츠 트랙 미결 항목·결정 이력 인덱스
   CHANGELOG.md      ← 컨텐츠 트랙 변경 이력 (카드 데이터 변경 상세 포함)
 ```
@@ -138,7 +140,7 @@ contents/
 | 04 | `contents/agents/04_content-po.md` | 연결 정합성 검토 + 체인 완성 승인 | 전체 연결 구조 |
 | 05 | `contents/agents/05_html-publisher.md` | 확정 콘텐츠를 `contents/html/`에 실제 반영 (2026-07-03 신규) | contents/html/*.html |
 
-### contents/html/ 파일 목록 (11개 + sidebar.js)
+### contents/html/ 파일 목록 (13개 + sidebar.js)
 
 | 파일 | 설명 |
 |---|---|
@@ -153,6 +155,8 @@ contents/
 | 08_ai-preview.html | Clark AI 채팅 답변 시뮬레이션 |
 | 09_faq-rag.html | FAQ RAG 콘텐츠 미리보기 (2026-07-05 신규) |
 | 10_faq-ai-preview.html | FAQ RAG Clark AI 채팅 답변 시뮬레이션 (2026-07-06 신규, 카테고리 A 19건 전체 반영) |
+| 11_query-messages.html | Case 0(조회형 게이트) 예시 발화 미리보기 (2026-07-07 신규) |
+| 12_synonym-management.html | 상품유형 유사어 관리 콘텐츠 (2026-07-07 신규, 2026-07-08 5차 갱신) |
 | sidebar.js | 좌측 공통 사이드바 JS 인젝션 |
 
 ### Clark AI 채팅 답변 표준 구조 (`guides/customer-messaging.md` 진실원 — 2026-07-05 갱신)
