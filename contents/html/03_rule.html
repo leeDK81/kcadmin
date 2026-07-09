@@ -76,10 +76,10 @@ table.cond tr.opt td { background: #FFFDF5; color: #6B7280; }
       <tr class="req"><td>마이데이터-실손</td><td>실손담보 유효계약</td><td>같음(EQ)</td><td>0건</td><td><span class="badge-req">필수</span></td></tr>
       <tr class="req"><td>마이데이터</td><td>A1100 (질병사망)</td><td>이하(LTE)</td><td>0원</td><td><span class="badge-req">필수</span></td></tr>
       <tr class="req"><td>마이데이터</td><td>A1300 (상해사망)</td><td>이하(LTE)</td><td>0원</td><td><span class="badge-req">필수</span></td></tr>
-      <tr class="req"><td>프로파일</td><td>나이</td><td>사이(BETWEEN)</td><td>20세 ~ 65세</td><td><span class="badge-req">필수</span></td></tr>
+      <tr class="req"><td>프로파일</td><td>나이</td><td>사이(BETWEEN)</td><td>20세 ~ 85세</td><td><span class="badge-req">필수</span></td></tr>
     </table>
   </div>
-  <div class="note">※ 실손담보코드는 비실손 담보(A-코드 테이블)와 별도 테이블([첨부15]-[3])로 관리됨. 유효계약 0건 = 실손보험 미가입 직접 감지. A1100+A1300 모두 0원 = 사망보장 완전 공백. 기존 A3201(입원일당 대리 지표)·A1001(없는 코드) 전면 교체.</div>
+  <div class="note">※ 실손담보코드는 비실손 담보(A-코드 테이블)와 별도 테이블([첨부15]-[3])로 관리됨. 유효계약 0건 = 실손보험 미가입 직접 감지. A1100+A1300 모두 0원 = 사망보장 완전 공백. 기존 A3201(입원일당 대리 지표)·A1001(없는 코드) 전면 교체.<br>※ (2026-07-09) 나이 상한 65세→85세 확장 — 보험연구원 세미나자료(2023) 원문 대조 결과 70대 26.5%·80세 이상 1.1%로 실손 가입률이 급락해 기존 65세 상한이 미가입률 최고 구간을 감지 대상에서 제외하던 사각지대였음을 확인. T05·T17·T19·T24·T27·T28·T32와 동일한 85세 상한 컨벤션에 정렬.</div>
 </div>
 
 <div class="card">

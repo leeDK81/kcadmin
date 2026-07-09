@@ -6,6 +6,30 @@
 
 ---
 
+## 2026-07-09 — 어린이보험 유사어 6차 재검증: "아동보험" 등록 금지 예 이관, "키즈보험" 최종 미등록
+
+2026-07-08 5차 리서치 때 WebSearch 도구가 검색결과 0건 상태에서도 답을 지어내는 현상이 확인돼 미결로만 등록해뒀던 "아동보험"·"키즈보험" 두 후보를 insane-search 방식으로 재조사. "아동보험"은 어린이보험의 유사어가 아니라 서민금융진흥원이 운영하는 저소득 한부모가정 대상 정부지원 소액보험(중위소득 52% 이하 한부모·조손가정 18세 미만 자녀 대상, 보험료 전액 정부 지원)의 실제 명칭으로 다건 확인돼(신아일보 등 언론·서민금융진흥원·복수 지자체 공지) 유사어 등록 대신 "등록 금지 예"로 이관 — 대상 자격·보장범위·보험료 부담 주체가 전혀 달라 혼동 시 사실관계 오류로 이어지는 구조. "키즈보험"은 다각도 검색에도 실사용 원문 근거를 전혀 찾지 못해 최종 미등록으로 결론. 등록 금지 예 15→16건.
+
+**수정 파일:** `contents/10_synonym/synonyms.md`, `contents/html/12_synonym-management.html`, `contents/html/00_index.html`, `contents/decisions.md`
+
+---
+
+## 2026-07-09 — PASONA 후킹 설계 브리프 반영: 23개 Risk-type·30개 Evidence·12개 Playbook 전체 카피 개정
+
+사용자가 `Data/진단기반후킹_기획브리프_PASONA-분산.docx`(2026-07-07)를 학습시킨 뒤 "이걸 바탕으로 contents를 재정비해도 될까?"라고 문의 — PO 판단으로 카드 구조·Rule 조건·chain-map.json은 그대로 두고 **순수 카피 개정**으로 범위를 확정했다(브리프 자체도 "새 데이터가 아니라 배열과 연결이 바뀐 것뿐"이라고 명시). PASONA 6요소(P·A·S·O·N·A)를 새 카드 없이 기존 카드에 매핑: P(문제)=Risk-type, A(공감)=Evidence, S(해결)=Playbook, O·N·A(제안·맞춤·행동)는 설계사+코파일럿 영역이라 컨텐츠 트랙 범위 밖.
+
+논의 중 "Evidence가 명확하려면 Rule 기반 진단(현재 얼마나 부족한지)도 필요하지 않냐"는 제안이 나와 P와 A 사이에 **"진단"** 단계를 신설(새 카드 아님 — 이미 있는 Rule 매칭값+Evidence 기준값을 답변 문장에서 명시적으로 조합). 단, `0원 < 기준값` 형태의 "부족형" Rule(T02·T10·T25 3개 체인)에서만 격차 계산이 성립하고, `LTE 0원`·`EQ 0건` 완전부재형(나머지 대다수)은 대상이 아님을 확인 — 이 패턴을 `guides/customer-messaging.md` 표준 답변 구조 Step 2에 공식 등록.
+
+**1차(파일럿):** T02·T10·T25 채팅 예시(`08_ai-preview.html`)에 "기준 대비 OOO원 부족한 셈이에요" 격차 문장 직접 반영.
+
+**2차(전체 확대):** 나머지 20개 Risk-type + 12개 Playbook의 P·A·S 카피를 6개 병렬 작업(건강보험 도메인 4그룹 + 생명보험 포함 그룹 + Playbook 전담)으로 진행 — Risk-type "중요도 설명", Evidence "활용 방법", `08_ai-preview.html` 채팅 예시(P 선언 강화·A 공감 프레이밍·CTA 직전 S 당위성 문장 신규), Playbook "Standalone 답변 가이드"(2026-07-06에 삭제된 "설명" 필드는 재추가하지 않고, 이 필드에만 당위성 문구 보강)까지 전부 동기화. 새 통계·수치는 일절 추가하지 않고 기존 Evidence 카드 수치만 재배열.
+
+**사후 검증에서 발견·수정한 이슈 2건:** ① `08_ai-preview.html` 앞부분(406~1002행)의 "N:N 다건 매칭 그룹" 데모(CN-T02A·CN-CAREALL·CN-INJURYALL)가 개별 카드 아코디언과 같은 T02·T05·T20 텍스트를 재사용하는데, 병렬 작업 중 한 세션이 범위 밖 텍스트를 실수로 건드렸다 되돌리는 과정에서 구버전으로 방치돼 있었음 — 개별 카드의 최신 버전과 동일하게 재동기화. ② Evidence "활용 방법" 필드에 공감 문구를 추가할지 에이전트마다 판단이 갈려(T10·T11·T14·T17·T18 담당은 "운영자 전용 필드"라며 건너뜀) 30개 카드 중 5개가 누락돼 있었는데, 사용자가 "그 필드도 AI가 답변에 참조하는 거면 동일해야 하지 않냐"고 지적 — 정확한 지적이라 EV021·EV022·EV023·EV011·EV015 5개 카드에 공감 근거 문장을 추가해 30개 전체를 일관되게 맞췄다.
+
+**수정 파일:** `guides/customer-messaging.md`, `contents/02_risk-type/risk-types.md`, `contents/01_evidence/evidence-건강보험.md`, `contents/01_evidence/evidence-생명보험-노후.md`, `contents/06_playbook/playbooks.md`, `contents/html/02_risk-type.html`, `contents/html/01_evidence.html`, `contents/html/06_playbook.html`, `contents/html/08_ai-preview.html`, `contents/decisions.md`
+
+---
+
 ## 2026-07-06 — Case 0 예시 구조 정정: 구조화 데이터를 말풍선 밖 카드로 분리
 
 바로 아래 항목(모바일 반응형 수정) 직후. 사용자가 "가입한 보험명·납입료·가입일 정보가 실제 모바일 채팅 UI에서 이렇게 구성이 안 되지 않냐"고 지적 — 이 페이지 기존 관례(`.app-result-cards`는 말풍선 밖 별도 카드)와 달리 신설한 `.mydata-list`를 말풍선 안에 넣었던 실수를 확인해 수정. `.mydata-list-outer` 래퍼로 결과카드와 동일한 위치(말풍선 다음)로 이동, 4개 예시 전체 반영.
