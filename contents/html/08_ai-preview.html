@@ -1015,7 +1015,7 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
         <div class="acc-block trigger-block">
           <div class="acc-block-label">발화 예시 — Concept 카드 감지</div>
           <div class="utterance"><span>"보험이 하나도 없는데 괜찮나요?"</span><span>"실손도 없고 사망보험도 없어요"</span></div>
-          <div class="chain-path">CN-T01 → T01(무보장형) → RU-T01 [실손담보 유효계약 EQ 0건 + A1100(질병사망) LTE 0원 + A1300(상해사망) LTE 0원 + 20~85세] → 조건 충족</div>
+          <div class="chain-path">CN-T01 → T01(무보장형) → RU-T01 [필수: 실손담보 유효계약 EQ 0건 + 20~85세 / 선택(우선순위 가중): A1100(질병사망) LTE 0원 + A1300(상해사망) LTE 0원 — 이 예시는 선택 조건까지 매칭된 이중 무보장 케이스] → 조건 충족</div>
         </div>
         <div class="acc-block" style="background:transparent;padding:0;">
           <div class="acc-block-label" style="padding-left:2px;">Clark 모바일 웹 실제 화면 (2026-07-05 프로토타입)</div>
