@@ -9,6 +9,13 @@
 <link rel="stylesheet" href="shared.css">
 <style>
 .btn-ghost{background:transparent;color:var(--text-secondary);border:1px solid var(--border)}
+/* 질문(Q) 칩 입력 — 06_card-editor-concept.html 동의어 칩 패턴과 동일(2026-07-14 통일) */
+.chip-area{display:flex;flex-wrap:wrap;align-items:center;gap:4px;padding:8px 10px;border:1px solid var(--border);border-radius:6px;background:#fff;min-height:40px;cursor:text}
+.chip-area:focus-within{border-color:var(--step-active);box-shadow:0 0 0 2px rgba(26,58,107,.12)}
+.chip-remove{background:none;border:none;color:var(--text-hint);cursor:pointer;padding:0;font-size:12px;line-height:1;display:flex;align-items:center}
+.chip-remove:hover{color:var(--status-rejected)}
+.chip-input{border:none;outline:none;font-size:13px;font-family:inherit;min-width:120px;flex:1;background:transparent;color:var(--text-primary)}
+.q-tags-modal{display:flex;flex-wrap:wrap;gap:5px}
 /* 통계 바 */
 .stats-bar{display:flex;gap:20px;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--border)}
 .stat-item{font-size:13px;color:var(--text-secondary)}
@@ -85,8 +92,13 @@
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
       <div class="form-group" style="margin-bottom:0">
-        <label>질문 (Q) <span style="color:#A32D2D">*</span></label>
-        <textarea class="form-control" id="newQ" placeholder="예) 보닥 플래너 상담 신청은 어떻게 하나요? / 용종제거가 질병수술에 해당하나요? (개인 계약 조회가 필요한 질문 등록 불가)" style="min-height:80px"></textarea>
+        <label>질문 표현 (Q) <span style="color:#A32D2D">*</span>
+          <span class="field-hint">사용자가 다르게 물어볼 수 있는 발화 예시를 모두 등록하세요(Concept 동의어와 동일한 인덱싱 방식 — 많을수록 매칭 정확도가 높아집니다). Enter로 추가.</span>
+        </label>
+        <div class="chip-area" id="qChipArea" onclick="document.getElementById('newQInput').focus()">
+          <div id="qChipsContainer"></div>
+          <input class="chip-input" id="newQInput" type="text" placeholder="예) 용종제거가 질병수술에 해당하나요? (개인 계약 조회가 필요한 질문 등록 불가)">
+        </div>
       </div>
       <div class="form-group" style="margin-bottom:0">
         <label>답변 (A) <span style="color:#A32D2D">*</span></label>
@@ -143,7 +155,7 @@
     <div class="modal-header">
       <div style="flex:1;min-width:0">
         <div class="modal-meta-id" id="mId"></div>
-        <div class="modal-q" id="mQ"></div>
+        <div class="modal-q q-tags-modal" id="mQ"></div>
       </div>
       <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;margin-left:14px">
         <span class="badge" id="mBadge"></span>
@@ -182,11 +194,11 @@ let currentId = null;
 let editMode = false;
 
 let faqs = [
-  {id:'FAQ001',q:'보닥 플래너 상담은 어떻게 신청하나요?',a:'Clark 화면 우측 하단 "상담 신청" 버튼을 탭하거나, 상담사 연결 메시지에서 "연결하기"를 선택하시면 됩니다. 보닥 플래너가 배정되면 알림으로 안내드립니다.',citation:'',caution:'',status:'active',registrar:'김운영',date:'2026-06-15'},
-  {id:'FAQ002',q:'Clark AI 답변이 내 실제 보장과 다를 수 있나요?',a:'Clark AI는 등록된 KC 카드 기준으로 안내합니다. 정확한 보장 내용은 가입 약관 또는 보닥 플래너 상담을 통해 확인하세요.',citation:'',caution:'',status:'active',registrar:'박운영',date:'2026-06-19'},
-  {id:'FAQ003',q:'Clark에서 제공하는 서비스 범위가 어떻게 되나요?',a:'Clark AI는 가입 보험 기반 보장 안내, KC 카드 기반 답변, 보닥 플래너 연결을 제공합니다.',citation:'',caution:'',status:'draft',registrar:'이운영',date:'2026-06-18'},
-  {id:'FAQ004',q:'Clark을 통해 타사 보험료 비교가 가능한가요?',a:'타사 보험료 직접 비교는 제공하지 않습니다.',citation:'',caution:'',status:'draft',registrar:'박운영',date:'2026-06-21'},
-  {id:'FAQ005',q:'용종제거도 수술비 나오나요? / 대장 용종제거 청구 가능한가요?',a:'용종제거(폴립절제술)는 원칙적으로 질병수술비 특약 지급 대상입니다. 약관에서 정한 "수술"의 정의(치료 목적으로 기구를 사용해 절단·절제하는 것)에 해당하고, 면책 제외 대상(흡인·천자 등 6가지)에도 포함되지 않습니다. 다만 일부 간편고지 상품은 대장용종을 별도 면책 처리해두기도 하고, 조직검사 결과(저등급 선종 vs 고등급 이형성·상피내암)에 따라 "질병수술비"와 "유사암 특약" 중 어느 쪽으로 지급되는지가 갈립니다.',citation:'보험연구원 연구보고서 2023-13(양승현·손민숙), 「보험약관상 수술의 정의와 쟁점」, 2023',caution:'원칙은 지급 대상이나, 개별 계약의 면책 조항·특약 구성에 따라 결과가 달라질 수 있습니다. 정확한 지급 여부는 보닥 플래너와 확인하세요.',status:'active',registrar:'이운영',date:'2026-07-05'}
+  {id:'FAQ001',q:['보닥 플래너 상담은 어떻게 신청하나요?'],a:'Clark 화면 우측 하단 "상담 신청" 버튼을 탭하거나, 상담사 연결 메시지에서 "연결하기"를 선택하시면 됩니다. 보닥 플래너가 배정되면 알림으로 안내드립니다.',citation:'',caution:'',status:'active',registrar:'김운영',date:'2026-06-15'},
+  {id:'FAQ002',q:['Clark AI 답변이 내 실제 보장과 다를 수 있나요?'],a:'Clark AI는 등록된 KC 카드 기준으로 안내합니다. 정확한 보장 내용은 가입 약관 또는 보닥 플래너 상담을 통해 확인하세요.',citation:'',caution:'',status:'active',registrar:'박운영',date:'2026-06-19'},
+  {id:'FAQ003',q:['Clark에서 제공하는 서비스 범위가 어떻게 되나요?'],a:'Clark AI는 가입 보험 기반 보장 안내, KC 카드 기반 답변, 보닥 플래너 연결을 제공합니다.',citation:'',caution:'',status:'draft',registrar:'이운영',date:'2026-06-18'},
+  {id:'FAQ004',q:['Clark을 통해 타사 보험료 비교가 가능한가요?'],a:'타사 보험료 직접 비교는 제공하지 않습니다.',citation:'',caution:'',status:'draft',registrar:'박운영',date:'2026-06-21'},
+  {id:'FAQ005',q:['용종제거도 수술비 나오나요?','대장 용종제거 청구 가능한가요?','폴립절제 보험금 받을 수 있나요?'],a:'용종제거(폴립절제술)는 원칙적으로 질병수술비 특약 지급 대상입니다. 약관에서 정한 "수술"의 정의(치료 목적으로 기구를 사용해 절단·절제하는 것)에 해당하고, 면책 제외 대상(흡인·천자 등 6가지)에도 포함되지 않습니다. 다만 일부 간편고지 상품은 대장용종을 별도 면책 처리해두기도 하고, 조직검사 결과(저등급 선종 vs 고등급 이형성·상피내암)에 따라 "질병수술비"와 "유사암 특약" 중 어느 쪽으로 지급되는지가 갈립니다.',citation:'보험연구원 연구보고서 2023-13(양승현·손민숙), 「보험약관상 수술의 정의와 쟁점」, 2023',caution:'원칙은 지급 대상이나, 개별 계약의 면책 조항·특약 구성에 따라 결과가 달라질 수 있습니다. 정확한 지급 여부는 보닥 플래너와 확인하세요.',status:'active',registrar:'이운영',date:'2026-07-05'}
 ];
 
 const SL = {active:'인덱스 등록됨', draft:'초안'};
@@ -195,7 +207,7 @@ const SB = {active:'badge-active', draft:'badge-draft'};
 function getFiltered() {
   const q = (document.getElementById('searchInput').value||'').toLowerCase();
   const s = document.getElementById('statusFilter').value;
-  return faqs.filter(f => (!s || f.status===s) && (!q || f.q.toLowerCase().includes(q)));
+  return faqs.filter(f => (!s || f.status===s) && (!q || f.q.some(s2 => s2.toLowerCase().includes(q))));
 }
 
 function renderStats() {
@@ -221,8 +233,9 @@ function renderTable() {
     } else {
       btns += `<button class="btn btn-danger btn-sm" onclick="remove('${f.id}')"><i class="fa-solid fa-trash fa-fw"></i></button>`;
     }
+    const qJoined = f.q.join(' / ');
     return `<tr>
-      <td class="cell-q" title="${f.q}">${f.q}</td>
+      <td class="cell-q" title="${qJoined}">${qJoined}${f.q.length > 1 ? ` <span class="badge" style="font-size:11px">+${f.q.length - 1}</span>` : ''}</td>
       <td class="cell-a" title="${f.a}">${f.a}</td>
       <td class="cell-a" style="font-size:13px;color:var(--text-hint)" title="${f.citation||''}">${f.citation ? f.citation : '—'}</td>
       <td><span class="badge ${SB[f.status]}">${SL[f.status]}</span></td>
@@ -232,25 +245,46 @@ function renderTable() {
   }).join('');
 }
 
+/* 질문(Q) 칩 입력 — 06_card-editor-concept.html 동의어 칩 패턴과 동일(2026-07-14 통일) */
+let newQChips = [];
+function renderQChips() {
+  document.getElementById('qChipsContainer').innerHTML = newQChips.map((s, i) => `
+    <span class="chip">
+      ${s}
+      <button class="chip-remove" onclick="removeQChip(${i})" title="삭제"><i class="fa-solid fa-xmark"></i></button>
+    </span>
+  `).join('');
+}
+function removeQChip(idx) { newQChips.splice(idx, 1); renderQChips(); }
+document.getElementById('newQInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    const val = this.value.trim();
+    if (val && !newQChips.includes(val)) { newQChips.push(val); renderQChips(); }
+    this.value = '';
+  }
+});
+
 /* 등록 패널 토글 */
 function toggleReg() {
   const p = document.getElementById('regPanel');
   if (p.classList.contains('open')) { p.classList.remove('open'); }
-  else { p.classList.add('open'); setTimeout(()=>document.getElementById('newQ').focus(), 50); }
+  else { p.classList.add('open'); setTimeout(()=>document.getElementById('newQInput').focus(), 50); }
 }
 function closeReg() { document.getElementById('regPanel').classList.remove('open'); }
 
 /* 직접 등록 */
 function submitRegister(asDraft) {
-  const q = document.getElementById('newQ').value.trim();
+  const q = newQChips.slice();
   const a = document.getElementById('newA').value.trim();
   const citation = document.getElementById('newCitation').value.trim();
   const caution = document.getElementById('newCaution').value.trim();
-  if (!q) { showToast('질문을 입력하세요.'); return; }
+  if (!q.length) { showToast('질문 표현을 1개 이상 입력하세요.'); return; }
   if (!a) { showToast('답변을 입력하세요.'); return; }
   const today = new Date().toISOString().split('T')[0];
   faqs.push({id:'FAQ0'+(++idSeq),q,a,citation,caution,status:asDraft?'draft':'active',registrar:'현재 사용자',date:today});
-  document.getElementById('newQ').value='';
+  newQChips = [];
+  renderQChips();
   document.getElementById('newA').value='';
   document.getElementById('newCitation').value='';
   document.getElementById('newCaution').value='';
@@ -277,7 +311,7 @@ function openModal(id) {
   const f = faqs.find(x=>x.id===id);
   if (!f) return;
   document.getElementById('mId').textContent = f.id;
-  document.getElementById('mQ').textContent = f.q;
+  document.getElementById('mQ').innerHTML = f.q.map(s => `<span class="chip" style="cursor:default">${s}</span>`).join('');
   document.getElementById('mBadge').className = 'badge '+SB[f.status];
   document.getElementById('mBadge').textContent = SL[f.status];
   document.getElementById('mADisplay').textContent = f.a;
