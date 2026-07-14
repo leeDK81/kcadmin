@@ -25,6 +25,7 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
 .domain-tag { font-size: 11px; background: #EFF6FF; color: #1A4A9A; border-radius: 4px; padding: 2px 7px; white-space: nowrap; }
 .new-tag { font-size: 10px; font-weight: 700; background: #D1FAE5; color: #065F46; border-radius: 3px; padding: 1px 6px; white-space: nowrap; }
 .warn-tag { font-size: 10px; font-weight: 700; background: #FEE2E2; color: #DC2626; border-radius: 3px; padding: 1px 6px; white-space: nowrap; }
+.placeholder-badge { font-size: 10px; font-weight: 700; background: #FEF3C7; color: #92400E; border-radius: 3px; padding: 1px 6px; white-space: nowrap; }
 .acc-arrow { font-size: 18px; color: #1A4A9A; transition: transform .2s; margin-left: auto; font-weight: 700; }
 .acc-header.open .acc-arrow { transform: rotate(180deg); }
 /* 2026-07-06 모바일 반응형 — 좁은 화면에서 배지·태그·화살표가 제목 칸을 짓눌러
@@ -135,7 +136,7 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
   <strong>발화 예시</strong>는 Concept 카드 트리거 조건이며, <strong>채팅 화면</strong>은 Rule 조건 충족 시 실제 앱에 표시되는 답변 형태입니다. N=1이든 N=23이든 항상 "말풍선 + 결과 카드 → 탭 → 심층 답변"으로 동일하게 처리합니다(도메인 그룹핑 없음, UI 일관성 우선). 클릭하면 펼쳐집니다.
 </div>
 
-<div class="section-label">Case 0 — 데이터 조회형 (2026-07-06 신규, 4종 전체 예시)</div>
+<div class="section-label">Case 0 — 데이터 조회형 (2026-07-06 신규, 2026-07-14 QM-05 추가 · 5종 전체 예시)</div>
 <div class="info-banner" style="background:#EEF4FF;border-color:#A8C4F0;color:#1A3A6B;">
   "위험을 진단해달라"가 아니라 "내가 가진 데이터를 그대로 보여달라"는 발화는 Concept 매칭을 타지 않고 마이데이터를 직접 조회해 고정 템플릿으로 답합니다(LLM 재구성 없음). 가입된 보험을 언급할 때는 <strong>보험명·월납입액·가입일</strong>처럼 사용자가 실제로 인지할 수 있는 정보를 표로 보여줍니다. <strong>Playbook 매칭은 이 게이트와 무관하게 항상 별도로 병행 실행</strong>되므로, 조회 발화가 Playbook 키워드와 겹치면 CTA가 그대로 가산됩니다 — 아래 4개 예시로 "발화 키워드 기반 CTA"·"조회 결과값 기반 CTA"·"CTA 없음" 세 가지 패턴을 비교하세요. 상세 정책은 <code style="background:#DCEAFB;padding:1px 5px;border-radius:3px;font-size:12px">context/answer-logic.md</code> "Case 0 — 데이터 조회형" 참조.
 </div>
@@ -390,6 +391,68 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
             </div>
           </div>
           <div class="proto-note">※ 이미 종료된 단기 상품(여행자보험)이라 갱신·리드 전환 여지가 없어 CTA 조건 자체가 성립하지 않는 케이스입니다.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Case 0 예시 5 — 계약대출 가능 여부 조회 (QM-05, 개발 반영 대기) -->
+  <div class="acc-item">
+    <button class="acc-header">
+      <span class="t-badge" style="background:#1A3A6B;">CASE 0</span>
+      <span class="acc-title">계약대출 가능 여부 조회 (QM-05)</span>
+      <span class="domain-tag">계약대출 조회</span>
+      <span class="placeholder-badge">개발 반영 대기</span>
+      <span class="acc-arrow">⌄</span>
+    </button>
+    <div class="acc-body">
+      <div class="acc-inner">
+        <div class="acc-block trigger-block">
+          <div class="acc-block-label">발화 예시 — Case 0 감지, Playbook 미매칭</div>
+          <div class="utterance"><span>"나 보험으로 대출받을 수 있어?"</span></div>
+          <div class="chain-path">Case 0 조회형 감지(Concept 매칭 스킵) → 마이데이터 직접 조회("대출상품" 카테고리) &nbsp;∥&nbsp; Playbook 벡터 검색(항상 병행) → 기준값 미만 → CTA 없음 — ※ 응답 로직 자체는 개발 반영 대기, 아래는 참고용 목업</div>
+        </div>
+        <div class="acc-block" style="background:transparent;padding:0;">
+          <div class="acc-block-label" style="padding-left:2px;">Clark 모바일 웹 실제 화면 (목업 — 실제 서비스 값 아님)</div>
+          <div class="phone-mockup-wrap">
+            <div class="phone-frame">
+              <div class="phone-screen">
+                <div class="phone-statusbar"><span>9:41</span><span>●●● 5G 100%</span></div>
+                <div class="app-topbar">
+                  <span class="back-arrow">‹</span>
+                  <span class="app-avatar-top">🤖</span>
+                  <div class="app-title-group">
+                    <div class="app-title">Clark</div>
+                    <div class="app-sub">보험 진단 · 상담 도우미</div>
+                  </div>
+                </div>
+                <div class="app-chat-area">
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">나 보험으로 대출받을 수 있어?</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 2:30</div>
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>무배당종신보험에서 계약대출이 가능하시네요. 대출 가능액은 약 320만원이에요.</p>
+                      <div class="disclaimer">이 답변은 진단·추천이 아니라 마이데이터에 연동된 가입 현황을 그대로 조회한 결과예요. 실제 대출 신청은 보험사 앱·고객센터에서 진행하실 수 있어요.</div>
+                    </div>
+                  </div>
+                  <div class="mydata-list-outer">
+                    <div class="mydata-list">
+                      <div class="mydata-row"><div class="mydata-name">무배당종신보험</div><div class="mydata-meta">대출 가능액 약 320만원 (해지환급금의 80%) · 2020.04.10 가입</div></div>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:30</div>
+                </div>
+                <div class="app-input-bar">
+                  <div class="app-input-fake">메시지 입력...</div>
+                  <div class="app-send-btn">➤</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="proto-note">※ QM-05는 2026-07-14 신규 등록된 조회 유형으로 아직 개발 반영 대기 상태입니다 — 위 화면은 실제 서비스 값이 아니라 개발팀이 참고할 응답 형태 목업입니다. 마이데이터 "대출상품" 카테고리 필드(developers.mydatakorea.org 규격 확인됨)를 실제 조회해 대출 가능액을 계산하는 로직 구현이 필요합니다.</div>
         </div>
       </div>
     </div>
