@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>조회형 답변 미리보기 — KC Admin</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #F5F7FA; color: #1A1A2E; min-height: 100vh; }
+header { background: #1A2B5F; color: #fff; padding: 24px 40px; }
+header h1 { font-size: 20px; font-weight: 700; }
+header p { font-size: 13px; color: rgba(255,255,255,0.65); margin-top: 5px; }
+main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
+.section-label { font-size: 11px; font-weight: 700; color: #9CA3AF; text-transform: uppercase; letter-spacing: 1px; margin: 32px 0 12px; padding-bottom: 8px; border-bottom: 2px solid #E5E9F0; }
+.info-banner { background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 10px; padding: 14px 18px; margin-bottom: 20px; font-size: 13px; color: #1E40AF; line-height: 1.7; }
+.warn-banner { background: #FFFBEB; border: 1px solid #FCD34D; border-radius: 10px; padding: 14px 18px; margin-bottom: 20px; font-size: 13px; color: #92400E; line-height: 1.7; }
+/* 아코디언 */
+.acc-wrap { margin-bottom: 32px; }
+.acc-item { border: 1px solid #E5E9F0; border-radius: 10px; margin-bottom: 8px; overflow: hidden; background: #fff; }
+.acc-header { width: 100%; background: #fff; border: none; border-left: 4px solid #1A2B5F; cursor: pointer; display: flex; align-items: center; gap: 12px; padding: 14px 18px; text-align: left; transition: background .15s, border-color .15s; }
+.acc-header:hover { background: #EFF6FF; border-left-color: #1A4A9A; }
+.acc-header.open { background: #EFF6FF; border-left-color: #1A4A9A; border-bottom: 1px solid #BFDBFE; }
+.t-badge { font-size: 12px; font-weight: 800; color: #fff; background: #1A2B5F; padding: 4px 10px; border-radius: 5px; white-space: nowrap; }
+.acc-title { font-size: 14px; font-weight: 700; color: #1A1A2E; flex: 1; }
+.domain-tag { font-size: 11px; background: #EFF6FF; color: #1A4A9A; border-radius: 4px; padding: 2px 7px; white-space: nowrap; }
+.new-tag { font-size: 10px; font-weight: 700; background: #D1FAE5; color: #065F46; border-radius: 3px; padding: 1px 6px; white-space: nowrap; }
+.warn-tag { font-size: 10px; font-weight: 700; background: #FEE2E2; color: #DC2626; border-radius: 3px; padding: 1px 6px; white-space: nowrap; }
+.placeholder-badge { font-size: 10px; font-weight: 700; background: #FEF3C7; color: #92400E; border-radius: 3px; padding: 1px 6px; white-space: nowrap; }
+.acc-arrow { font-size: 18px; color: #1A4A9A; transition: transform .2s; margin-left: auto; font-weight: 700; }
+.acc-header.open .acc-arrow { transform: rotate(180deg); }
+@media (max-width: 480px) {
+  .acc-header { flex-wrap: wrap; gap: 6px 8px; padding: 12px 14px; }
+  .acc-title { flex: 1 1 100%; order: 3; font-size: 13px; }
+}
+.acc-body { display: none; }
+.acc-body.open { display: block; }
+.acc-inner { padding: 16px 20px; display: flex; flex-direction: column; gap: 12px; }
+/* 블록 공통 */
+.acc-block { border-radius: 8px; padding: 14px 16px; }
+.acc-block-label { font-size: 10px; font-weight: 700; color: #6B7280; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; }
+/* 발화 예시 블록 */
+.trigger-block { background: #F3F4F6; }
+.trigger-block .utterance { font-size: 13px; color: #374151; margin-bottom: 8px; }
+.trigger-block .utterance span { background: #E5E7EB; border-radius: 4px; padding: 2px 8px; margin-right: 6px; font-style: italic; }
+.chain-path { font-size: 11px; color: #6B7280; background: #E5E7EB; border-radius: 4px; padding: 6px 10px; font-family: monospace; }
+/* Case 0 조회 결과 리스트 — 말풍선 밖에 배치하는 별도 카드 블록 */
+.mydata-list-outer { margin: 2px 0 4px 34px; max-width: 84%; }
+.mydata-list { border: 1px solid #E5E9F0; border-radius: 8px; overflow: hidden; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.05); }
+.mydata-row { padding: 8px 12px; border-bottom: 1px solid #F0F0F5; background: #FAFBFC; }
+.mydata-row:last-child { border-bottom: none; }
+.mydata-name { font-size: 12.5px; font-weight: 700; color: #1A1A2E; }
+.mydata-meta { font-size: 11.5px; color: #6B7280; margin-top: 2px; }
+
+/* ===== 모바일 실기기 목업 (08_ai-preview.html과 동일 컴포넌트 재사용) ===== */
+.phone-mockup-wrap { display: flex; justify-content: center; padding: 20px 0 8px; }
+.phone-frame { width: 100%; max-width: 380px; background: #111; border-radius: 42px; padding: 12px; box-shadow: 0 16px 50px rgba(0,0,0,.28); }
+.phone-screen { background: #F0F2F5; border-radius: 30px; overflow: hidden; }
+.phone-statusbar { background: #F0F2F5; padding: 10px 22px 2px; display: flex; justify-content: space-between; font-size: 11px; font-weight: 700; color: #1A1A2E; }
+.app-topbar { background: #1A2B5F; color: #fff; padding: 12px 16px 14px; display: flex; align-items: center; gap: 10px; }
+.app-topbar .back-arrow { font-size: 18px; color: rgba(255,255,255,.85); }
+.app-topbar .app-avatar-top { width: 30px; height: 30px; border-radius: 50%; background: #1A4A9A; display: flex; align-items: center; justify-content: center; font-size: 15px; }
+.app-topbar .app-title-group { line-height: 1.3; }
+.app-topbar .app-title { font-size: 14px; font-weight: 700; }
+.app-topbar .app-sub { font-size: 10.5px; color: rgba(255,255,255,.55); }
+.app-chat-area { padding: 16px 12px 20px; display: flex; flex-direction: column; gap: 4px; min-height: 120px; }
+.app-msg-user-row { display: flex; justify-content: flex-end; margin-top: 10px; }
+.app-msg-user { background: #1A2B5F; color: #fff; padding: 10px 14px; border-radius: 16px 4px 16px 16px; font-size: 13.5px; max-width: 78%; line-height: 1.55; }
+.app-msg-user-time { font-size: 10px; color: #9CA3AF; text-align: right; margin: 3px 4px 0 0; }
+.app-msg-clark-row { display: flex; gap: 8px; align-items: flex-end; margin-top: 10px; }
+.app-avatar { width: 26px; height: 26px; border-radius: 50%; background: #1A4A9A; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; }
+.app-msg-clark { background: #fff; padding: 12px 14px; border-radius: 4px 16px 16px 16px; font-size: 13.5px; line-height: 1.7; color: #1A1A2E; max-width: 84%; box-shadow: 0 1px 2px rgba(0,0,0,.06); }
+.app-msg-clark p { margin-bottom: 8px; }
+.app-msg-clark p:last-of-type { margin-bottom: 0; }
+.app-msg-clark .disclaimer { font-size: 10.5px; color: #9CA3AF; margin-top: 10px; padding-top: 8px; border-top: 1px solid #F0F0F5; line-height: 1.5; }
+.app-msg-clark-time { font-size: 10px; color: #9CA3AF; margin: 3px 0 0 34px; }
+.app-cta-row { margin: 8px 0 4px 34px; }
+.app-cta-chip { display: inline-flex; align-items: center; gap: 6px; background: #fff; border: 1.5px solid #0F6E56; color: #0F6E56; font-size: 12.5px; font-weight: 700; padding: 9px 16px; border-radius: 20px; }
+.app-input-bar { background: #fff; border-top: 1px solid #E5E9F0; padding: 10px 14px; display: flex; align-items: center; gap: 8px; }
+.app-input-fake { flex: 1; background: #F0F2F5; border-radius: 20px; padding: 9px 14px; font-size: 12.5px; color: #9CA3AF; }
+.app-send-btn { width: 30px; height: 30px; border-radius: 50%; background: #E5E9F0; display: flex; align-items: center; justify-content: center; font-size: 13px; color: #9CA3AF; }
+.proto-note { max-width: 380px; margin: 10px auto 0; font-size: 12px; color: #9CA3AF; text-align: center; line-height: 1.6; }
+</style>
+</head>
+<body>
+<header>
+  <h1>조회형 답변 미리보기</h1>
+  <p>Case 0(데이터 조회형) Clark AI 채팅 상담 시나리오 · QM-01~05 · 2026-07-14 08_ai-preview.html에서 분리 · 마이데이터 가상 응답 기반</p>
+</header>
+<main>
+
+<div class="section-label">Case 0 — 데이터 조회형 (5종 전체 예시, QM-01~04 구현됨 · QM-05 개발 반영 대기)</div>
+<div class="info-banner" style="background:#EEF4FF;border-color:#A8C4F0;color:#1A3A6B;">
+  "위험을 진단해달라"가 아니라 "내가 가진 데이터를 그대로 보여달라"는 발화는 Concept 매칭을 타지 않고 마이데이터를 직접 조회해 고정 템플릿으로 답합니다(LLM 재구성 없음). 가입된 보험을 언급할 때는 <strong>보험명·월납입액·가입일</strong>처럼 사용자가 실제로 인지할 수 있는 정보를 표로 보여줍니다. <strong>Playbook 매칭은 이 게이트와 무관하게 항상 별도로 병행 실행</strong>되므로, 조회 발화가 Playbook 키워드와 겹치면 CTA가 그대로 가산됩니다 — 아래 예시로 "발화 키워드 기반 CTA"·"조회 결과값 기반 CTA"·"CTA 없음" 세 가지 패턴을 비교하세요. 콘텐츠 스펙(정의·응답 템플릿·예시 발화 전체)은 <code style="background:#DCEAFB;padding:1px 5px;border-radius:3px;font-size:12px">11_query-messages.html</code>, 정책 상세는 <code style="background:#DCEAFB;padding:1px 5px;border-radius:3px;font-size:12px">context/answer-logic.md</code> "Case 0 — 데이터 조회형" 참조. KC 체인(Concept→Risk-type 매칭 기반) 진단형 답변 예시는 <code style="background:#DCEAFB;padding:1px 5px;border-radius:3px;font-size:12px">08_ai-preview.html</code>에 별도로 있습니다.
+</div>
+<div class="acc-wrap">
+
+  <!-- Case 0 예시 1 — 특정 상품 가입 여부, Playbook 키워드 매칭 CTA -->
+  <div class="acc-item">
+    <button class="acc-header">
+      <span class="t-badge" style="background:#1A3A6B;">CASE 0</span>
+      <span class="acc-title">특정 상품 가입 여부 — Playbook 키워드 매칭 시 CTA 가산</span>
+      <span class="domain-tag">가입여부 조회</span>
+      <span class="new-tag">CTA 있음</span>
+      <span class="acc-arrow">⌄</span>
+    </button>
+    <div class="acc-body">
+      <div class="acc-inner">
+        <div class="acc-block trigger-block">
+          <div class="acc-block-label">발화 예시 — Case 0 감지 + Playbook 병행 매칭</div>
+          <div class="utterance"><span>"나 운전자보험 가입되어 있어?"</span></div>
+          <div class="chain-path">Case 0 조회형 감지(Concept 매칭 스킵) → 마이데이터 직접 조회 &nbsp;∥&nbsp; Playbook 벡터 검색(항상 병행) → PB08(운전자보험 상담 전환) 키워드 유사도 매칭 → CTA 가산</div>
+        </div>
+        <div class="acc-block" style="background:transparent;padding:0;">
+          <div class="acc-block-label" style="padding-left:2px;">Clark 모바일 웹 실제 화면</div>
+          <div class="phone-mockup-wrap">
+            <div class="phone-frame">
+              <div class="phone-screen">
+                <div class="phone-statusbar"><span>9:41</span><span>●●● 5G 100%</span></div>
+                <div class="app-topbar">
+                  <span class="back-arrow">‹</span>
+                  <span class="app-avatar-top">🤖</span>
+                  <div class="app-title-group">
+                    <div class="app-title">Clark</div>
+                    <div class="app-sub">보험 진단 · 상담 도우미</div>
+                  </div>
+                </div>
+                <div class="app-chat-area">
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">나 운전자보험 가입되어 있어?</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 2:14</div>
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>네, 운전자보험에 가입되어 있으시네요.</p>
+                      <div class="disclaimer">이 답변은 진단·추천이 아니라 마이데이터에 연동된 가입 현황을 그대로 조회한 결과예요.</div>
+                    </div>
+                  </div>
+                  <div class="mydata-list-outer">
+                    <div class="mydata-list">
+                      <div class="mydata-row"><div class="mydata-name">운전자보험</div><div class="mydata-meta">월 18,500원 · 2022.11.20 가입</div></div>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:14</div>
+                  <div class="app-cta-row">
+                    <span class="app-cta-chip">📋 보닥 플래너와 운전자보험 점검하기</span>
+                  </div>
+                </div>
+                <div class="app-input-bar">
+                  <div class="app-input-fake">메시지 입력...</div>
+                  <div class="app-send-btn">➤</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="proto-note">※ CTA는 Case 0 조회 로직이 아니라 Playbook(PB08)의 발화 키워드 매칭 결과가 가산된 것 — 위험 진단 없이도 CTA는 독립적으로 붙습니다.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Case 0 예시 2 — 전체 보유 목록, Playbook 미매칭 -->
+  <div class="acc-item">
+    <button class="acc-header">
+      <span class="t-badge" style="background:#1A3A6B;">CASE 0</span>
+      <span class="acc-title">전체 보유 목록 조회 — Playbook 미매칭 시 CTA 없음</span>
+      <span class="domain-tag">전체목록 조회</span>
+      <span class="acc-arrow">⌄</span>
+    </button>
+    <div class="acc-body">
+      <div class="acc-inner">
+        <div class="acc-block trigger-block">
+          <div class="acc-block-label">발화 예시 — Case 0 감지, Playbook 미매칭</div>
+          <div class="utterance"><span>"내가 가진 보험 리스트 알려줘"</span></div>
+          <div class="chain-path">Case 0 조회형 감지(Concept 매칭 스킵) → 마이데이터 직접 조회 &nbsp;∥&nbsp; Playbook 벡터 검색(항상 병행) → 기준값 미만 → CTA 없음</div>
+        </div>
+        <div class="acc-block" style="background:transparent;padding:0;">
+          <div class="acc-block-label" style="padding-left:2px;">Clark 모바일 웹 실제 화면</div>
+          <div class="phone-mockup-wrap">
+            <div class="phone-frame">
+              <div class="phone-screen">
+                <div class="phone-statusbar"><span>9:41</span><span>●●● 5G 100%</span></div>
+                <div class="app-topbar">
+                  <span class="back-arrow">‹</span>
+                  <span class="app-avatar-top">🤖</span>
+                  <div class="app-title-group">
+                    <div class="app-title">Clark</div>
+                    <div class="app-sub">보험 진단 · 상담 도우미</div>
+                  </div>
+                </div>
+                <div class="app-chat-area">
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">내가 가진 보험 리스트 알려줘</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 2:20</div>
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>현재 마이데이터에 연동된 보험은 총 3건이에요.</p>
+                      <div class="disclaimer">이 답변은 진단·추천이 아니라 마이데이터에 연동된 가입 현황을 그대로 조회한 결과예요.</div>
+                    </div>
+                  </div>
+                  <div class="mydata-list-outer">
+                    <div class="mydata-list">
+                      <div class="mydata-row"><div class="mydata-name">실손의료보험</div><div class="mydata-meta">월 32,000원 · 2019.03.15 가입</div></div>
+                      <div class="mydata-row"><div class="mydata-name">암보험</div><div class="mydata-meta">월 45,800원 · 2021.07.02 가입</div></div>
+                      <div class="mydata-row"><div class="mydata-name">운전자보험</div><div class="mydata-meta">월 18,500원 · 2022.11.20 가입</div></div>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:20</div>
+                </div>
+                <div class="app-input-bar">
+                  <div class="app-input-fake">메시지 입력...</div>
+                  <div class="app-send-btn">➤</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="proto-note">※ CTA가 없는 이유는 Case 0이라서가 아니라, 이 발화가 우연히 어떤 Playbook 키워드와도 유사도 기준값을 못 넘었기 때문 — Case 0과 CTA 유무는 서로 무관한 별개 판정입니다.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Case 0 예시 3 — 갱신 예정 조회, 조회 결과값 기반 조건부 CTA -->
+  <div class="acc-item">
+    <button class="acc-header">
+      <span class="t-badge" style="background:#1A3A6B;">CASE 0</span>
+      <span class="acc-title">갱신 예정 조회 — 결과값 기반 조건부 CTA (Playbook 키워드 매칭과 다른 경로)</span>
+      <span class="domain-tag">갱신 조회</span>
+      <span class="new-tag">CTA 있음</span>
+      <span class="acc-arrow">⌄</span>
+    </button>
+    <div class="acc-body">
+      <div class="acc-inner">
+        <div class="acc-block trigger-block">
+          <div class="acc-block-label">발화 예시 — Case 0 감지, Playbook 미매칭이지만 결과값 기반 CTA 부착</div>
+          <div class="utterance"><span>"나 보험 갱신되는 거 있어?"</span></div>
+          <div class="chain-path">Case 0 조회형 감지(Concept 매칭 스킵) → 마이데이터 직접 조회(갱신일 필드) &nbsp;∥&nbsp; Playbook 벡터 검색(항상 병행) → 발화에 특정 상품명 없어 기준값 미만 → 대신 <strong>조회 결과(갱신 임박 1건)</strong>에 근거한 Case 0 자체 조건부 CTA 부착(`context/answer-logic.md` "CTA 결합 — 두 가지 별개 경로" ②)</div>
+        </div>
+        <div class="acc-block" style="background:transparent;padding:0;">
+          <div class="acc-block-label" style="padding-left:2px;">Clark 모바일 웹 실제 화면</div>
+          <div class="phone-mockup-wrap">
+            <div class="phone-frame">
+              <div class="phone-screen">
+                <div class="phone-statusbar"><span>9:41</span><span>●●● 5G 100%</span></div>
+                <div class="app-topbar">
+                  <span class="back-arrow">‹</span>
+                  <span class="app-avatar-top">🤖</span>
+                  <div class="app-title-group">
+                    <div class="app-title">Clark</div>
+                    <div class="app-sub">보험 진단 · 상담 도우미</div>
+                  </div>
+                </div>
+                <div class="app-chat-area">
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">나 보험 갱신되는 거 있어?</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 2:24</div>
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>3개월 내 갱신 예정인 보험이 1건 있어요.</p>
+                      <div class="disclaimer">이 답변은 진단·추천이 아니라 마이데이터에 연동된 가입 현황을 그대로 조회한 결과예요.</div>
+                    </div>
+                  </div>
+                  <div class="mydata-list-outer">
+                    <div class="mydata-list">
+                      <div class="mydata-row"><div class="mydata-name">운전자보험</div><div class="mydata-meta">갱신 예정일 2026.11.20 · 현재 월 18,500원</div></div>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:24</div>
+                  <div class="app-cta-row">
+                    <span class="app-cta-chip">📋 보닥 플래너와 갱신 조건 검토하기</span>
+                  </div>
+                </div>
+                <div class="app-input-bar">
+                  <div class="app-input-fake">메시지 입력...</div>
+                  <div class="app-send-btn">➤</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="proto-note">※ 이 CTA는 Playbook 키워드 매칭이 아니라 <strong>조회 결과값(갱신 임박)</strong>에 따라 Case 0 로직 자체가 붙인 것 — 예시 1의 CTA(Playbook 매칭 기반)와 발생 경로가 다릅니다.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Case 0 예시 4 — 만료 건수 조회, CTA 없음 -->
+  <div class="acc-item">
+    <button class="acc-header">
+      <span class="t-badge" style="background:#1A3A6B;">CASE 0</span>
+      <span class="acc-title">만료 건수 조회 — CTA 없음</span>
+      <span class="domain-tag">만료 조회</span>
+      <span class="acc-arrow">⌄</span>
+    </button>
+    <div class="acc-body">
+      <div class="acc-inner">
+        <div class="acc-block trigger-block">
+          <div class="acc-block-label">발화 예시 — Case 0 감지, Playbook 미매칭 + 결과값도 CTA 조건 미충족</div>
+          <div class="utterance"><span>"나 만료된 보험 몇 개야?"</span></div>
+          <div class="chain-path">Case 0 조회형 감지(Concept 매칭 스킵) → 마이데이터 직접 조회(만료일 필드) &nbsp;∥&nbsp; Playbook 벡터 검색(항상 병행) → 기준값 미만 → CTA 없음</div>
+        </div>
+        <div class="acc-block" style="background:transparent;padding:0;">
+          <div class="acc-block-label" style="padding-left:2px;">Clark 모바일 웹 실제 화면</div>
+          <div class="phone-mockup-wrap">
+            <div class="phone-frame">
+              <div class="phone-screen">
+                <div class="phone-statusbar"><span>9:41</span><span>●●● 5G 100%</span></div>
+                <div class="app-topbar">
+                  <span class="back-arrow">‹</span>
+                  <span class="app-avatar-top">🤖</span>
+                  <div class="app-title-group">
+                    <div class="app-title">Clark</div>
+                    <div class="app-sub">보험 진단 · 상담 도우미</div>
+                  </div>
+                </div>
+                <div class="app-chat-area">
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">나 만료된 보험 몇 개야?</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 2:26</div>
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>현재 만료된 보험은 1건이에요.</p>
+                      <div class="disclaimer">이 답변은 진단·추천이 아니라 마이데이터에 연동된 가입 현황을 그대로 조회한 결과예요.</div>
+                    </div>
+                  </div>
+                  <div class="mydata-list-outer">
+                    <div class="mydata-list">
+                      <div class="mydata-row"><div class="mydata-name">여행자보험</div><div class="mydata-meta">2024.08.01 가입 · 2024.08.15 만료</div></div>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:26</div>
+                </div>
+                <div class="app-input-bar">
+                  <div class="app-input-fake">메시지 입력...</div>
+                  <div class="app-send-btn">➤</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="proto-note">※ 이미 종료된 단기 상품(여행자보험)이라 갱신·리드 전환 여지가 없어 CTA 조건 자체가 성립하지 않는 케이스입니다.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Case 0 예시 5 — 계약대출 가능 여부 조회 (QM-05, 개발 반영 대기) -->
+  <div class="acc-item">
+    <button class="acc-header">
+      <span class="t-badge" style="background:#1A3A6B;">CASE 0</span>
+      <span class="acc-title">계약대출 가능 여부 조회 (QM-05)</span>
+      <span class="domain-tag">계약대출 조회</span>
+      <span class="placeholder-badge">개발 반영 대기</span>
+      <span class="acc-arrow">⌄</span>
+    </button>
+    <div class="acc-body">
+      <div class="acc-inner">
+        <div class="acc-block trigger-block">
+          <div class="acc-block-label">발화 예시 — Case 0 감지, Playbook 미매칭</div>
+          <div class="utterance"><span>"나 보험으로 대출받을 수 있어?"</span></div>
+          <div class="chain-path">Case 0 조회형 감지(Concept 매칭 스킵) → 마이데이터 직접 조회("대출상품" 카테고리) &nbsp;∥&nbsp; Playbook 벡터 검색(항상 병행) → 기준값 미만 → CTA 없음 — ※ 응답 로직 자체는 개발 반영 대기, 아래는 참고용 목업</div>
+        </div>
+        <div class="acc-block" style="background:transparent;padding:0;">
+          <div class="acc-block-label" style="padding-left:2px;">Clark 모바일 웹 실제 화면 (목업 — 실제 서비스 값 아님)</div>
+          <div class="phone-mockup-wrap">
+            <div class="phone-frame">
+              <div class="phone-screen">
+                <div class="phone-statusbar"><span>9:41</span><span>●●● 5G 100%</span></div>
+                <div class="app-topbar">
+                  <span class="back-arrow">‹</span>
+                  <span class="app-avatar-top">🤖</span>
+                  <div class="app-title-group">
+                    <div class="app-title">Clark</div>
+                    <div class="app-sub">보험 진단 · 상담 도우미</div>
+                  </div>
+                </div>
+                <div class="app-chat-area">
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">나 보험으로 대출받을 수 있어?</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 2:30</div>
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>무배당종신보험에서 계약대출이 가능하시네요. 대출 가능액은 약 320만원이에요.</p>
+                      <div class="disclaimer">이 답변은 진단·추천이 아니라 마이데이터에 연동된 가입 현황을 그대로 조회한 결과예요. 실제 대출 신청은 보험사 앱·고객센터에서 진행하실 수 있어요.</div>
+                    </div>
+                  </div>
+                  <div class="mydata-list-outer">
+                    <div class="mydata-list">
+                      <div class="mydata-row"><div class="mydata-name">무배당종신보험</div><div class="mydata-meta">대출 가능액 약 320만원 (해지환급금의 80%) · 2020.04.10 가입</div></div>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 2:30</div>
+                </div>
+                <div class="app-input-bar">
+                  <div class="app-input-fake">메시지 입력...</div>
+                  <div class="app-send-btn">➤</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="proto-note">※ QM-05는 2026-07-14 신규 등록된 조회 유형으로 아직 개발 반영 대기 상태입니다 — 위 화면은 실제 서비스 값이 아니라 개발팀이 참고할 응답 형태 목업입니다. 마이데이터 "대출상품" 카테고리 필드(developers.mydatakorea.org 규격 확인됨)를 실제 조회해 대출 가능액을 계산하는 로직 구현이 필요합니다.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</main>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('.acc-header').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var item = btn.closest('.acc-item');
+      var body = item.querySelector('.acc-body');
+      var isOpen = btn.classList.contains('open');
+      document.querySelectorAll('.acc-header.open').forEach(function (h) {
+        h.classList.remove('open');
+        h.closest('.acc-item').querySelector('.acc-body').classList.remove('open');
+      });
+      if (!isOpen) { btn.classList.add('open'); body.classList.add('open'); }
+    });
+  });
+});
+</script>
+<script src="sidebar.js"></script>
+</body>
+</html>

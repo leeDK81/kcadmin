@@ -140,7 +140,7 @@ contents/
 | 04 | `contents/agents/04_content-po.md` | 연결 정합성 검토 + 체인 완성 승인 | 전체 연결 구조 |
 | 05 | `contents/agents/05_html-publisher.md` | 확정 콘텐츠를 `contents/html/`에 실제 반영 (2026-07-03 신규) | contents/html/*.html |
 
-### contents/html/ 파일 목록 (13개 + sidebar.js)
+### contents/html/ 파일 목록 (14개 + sidebar.js)
 
 | 파일 | 설명 |
 |---|---|
@@ -152,11 +152,12 @@ contents/
 | 05_policy.html | Policy 카드 편집기 |
 | 06_playbook.html | Playbook 카드 편집기 (CTA 버튼 포함) |
 | 07_chain-report.html | 체인 검토 보고서 |
-| 08_ai-preview.html | Clark AI 채팅 답변 시뮬레이션 |
+| 08_ai-preview.html | Clark AI 채팅 답변 시뮬레이션(KC 체인 진단형 전용, 2026-07-14 Case 0 섹션을 13_query-ai-preview.html로 분리) |
 | 09_faq-rag.html | FAQ RAG 콘텐츠 미리보기 (2026-07-05 신규) |
 | 10_faq-ai-preview.html | FAQ RAG Clark AI 채팅 답변 시뮬레이션 (2026-07-06 신규, 2026-07-14 카테고리 A 35건 전체 반영) |
 | 11_query-messages.html | Case 0(조회형 게이트) 예시 발화 미리보기 (2026-07-07 신규) |
 | 12_synonym-management.html | 상품유형 유사어 관리 콘텐츠 (2026-07-07 신규, 2026-07-08 5차 갱신) |
+| 13_query-ai-preview.html | Case 0(조회형 게이트) Clark AI 채팅 답변 시뮬레이션 (2026-07-14 신규, 08_ai-preview.html에서 분리, QM-01~05 5종 전체) |
 | sidebar.js | 좌측 공통 사이드바 JS 인젝션 |
 
 ### Clark AI 채팅 답변 표준 구조 (`guides/customer-messaging.md` 진실원 — 2026-07-05 갱신)
