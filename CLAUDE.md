@@ -154,7 +154,7 @@ contents/
 | 07_chain-report.html | 체인 검토 보고서 |
 | 08_ai-preview.html | Clark AI 채팅 답변 시뮬레이션 |
 | 09_faq-rag.html | FAQ RAG 콘텐츠 미리보기 (2026-07-05 신규) |
-| 10_faq-ai-preview.html | FAQ RAG Clark AI 채팅 답변 시뮬레이션 (2026-07-06 신규, 2026-07-14 카테고리 A 26건 전체 반영) |
+| 10_faq-ai-preview.html | FAQ RAG Clark AI 채팅 답변 시뮬레이션 (2026-07-06 신규, 2026-07-14 카테고리 A 35건 전체 반영) |
 | 11_query-messages.html | Case 0(조회형 게이트) 예시 발화 미리보기 (2026-07-07 신규) |
 | 12_synonym-management.html | 상품유형 유사어 관리 콘텐츠 (2026-07-07 신규, 2026-07-08 5차 갱신) |
 | sidebar.js | 좌측 공통 사이드바 JS 인젝션 |

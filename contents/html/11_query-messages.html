@@ -31,6 +31,7 @@ main { max-width: 960px; margin: 36px auto; padding: 0 24px 60px; }
 .q-tag { font-size: 12px; background: #EFF6FF; color: #1A4A9A; border-radius: 20px; padding: 4px 12px; }
 .answer-text { font-size: 13px; color: #374151; background: #F8FAFC; border: 1px solid #E5E9F0; border-radius: 6px; padding: 12px 16px; line-height: 1.8; }
 .count-badge { margin-left: auto; font-size: 11px; font-weight: 600; background: #EEF2FF; color: #4338CA; border-radius: 4px; padding: 2px 8px; }
+.pending-badge { margin-left: 8px; font-size: 11px; font-weight: 600; background: #FEF3C7; color: #92400E; border-radius: 4px; padding: 2px 8px; }
 .note-box { font-size: 12px; color: #374151; background: #F8FAFC; border: 1px solid #E5E9F0; border-radius: 8px; padding: 14px 18px; line-height: 1.7; margin-top: 24px; }
 </style>
 </head>
@@ -38,16 +39,17 @@ main { max-width: 960px; margin: 36px auto; padding: 0 24px 60px; }
 <header>
   <div class="nav"><a href="00_index.html">← 인덱스로 돌아가기</a></div>
   <h1>조회형 메시지 콘텐츠 입력 가이드</h1>
-  <p>STEP 10 · Case 0(조회형 게이트) 감지용 예시 발화 · 총 57건 · 4개 유형 · Concept 인덱스와 완전히 분리</p>
+  <p>STEP 10 · Case 0(조회형 게이트) 감지용 예시 발화 · 총 65건 · 5개 유형(4개 구현됨 + 1개 개발 반영 대기) · Concept 인덱스와 완전히 분리</p>
 </header>
 <main>
 
 <div class="stats">
-  <span class="chip">🔍 총 57건</span>
+  <span class="chip">🔍 총 65건</span>
   <span class="chip">전체 보유 목록 17건</span>
   <span class="chip">특정 상품 가입 여부 16건</span>
   <span class="chip">갱신 예정 조회 13건</span>
   <span class="chip">만료 건수 조회 11건</span>
+  <span class="chip">계약대출 조회 8건 (개발 반영 대기)</span>
 </div>
 
 <div class="info-box">
@@ -197,8 +199,41 @@ main { max-width: 960px; margin: 36px auto; padding: 0 24px 60px; }
   </div>
 </div>
 
+<div class="section-label">QM-05 · 계약대출 가능 여부/현황 조회 · 8건 · 개발 반영 대기</div>
+
+<div class="card">
+  <div class="card-head"><span class="qm-id">QM-05</span><span class="card-name">계약대출 가능 여부/현황 조회</span><span class="count-badge">8건</span><span class="pending-badge">개발 반영 대기</span></div>
+  <div class="card-body">
+    <div class="field-row">
+      <div class="field-label">정의</div>
+      <div class="field-value">본인이 가입한 보험 중 계약대출(약관대출)이 가능한 상품이 있는지, 또는 현재 실행 중인 계약대출 현황(대출원금·이자)이 있는지 확인하는 요청.</div>
+    </div>
+    <div class="field-row">
+      <div class="field-label">등록 근거 (2026-07-14)</div>
+      <div class="field-value">마이데이터 보험 업권 정보제공 API 규격(developers.mydatakorea.org)에 "대출상품" 카테고리가 실제로 존재함을 확인 — 기존 4종과 동일하게 마이데이터 직접 조회로 구현 가능성이 높다고 판단해 등록. 같은 논의에서 검토한 중도해지환급금·숨은보험금 조회는 마이데이터 API에 없어 대신 <code>08_faq/faq-rag.md</code>(FAQ-036·037)로 처리했다.</div>
+    </div>
+    <div class="field-row">
+      <div class="field-label">응답 템플릿(안)</div>
+      <div class="answer-text">"OO보험에서 계약대출이 가능하시네요(대출 가능액 약 N원)" 또는 "현재 실행 중인 계약대출이 N건 있어요" + 상품별 상세(보험명 / 대출 가능액 또는 대출원금·이자)</div>
+    </div>
+    <div class="field-row">
+      <div class="field-label">예시 발화 (Q)</div>
+      <div class="q-tags">
+        <span class="q-tag">나 보험으로 대출받을 수 있어?</span>
+        <span class="q-tag">약관대출 가능한 보험 있나?</span>
+        <span class="q-tag">내 보험 중에 계약대출 되는 거 있어?</span>
+        <span class="q-tag">지금 대출받고 있는 보험 있나?</span>
+        <span class="q-tag">보험계약대출 얼마까지 가능해?</span>
+        <span class="q-tag">보험 담보로 얼마 빌릴 수 있어?</span>
+        <span class="q-tag">내가 받은 약관대출 현황 알려줘</span>
+        <span class="q-tag">보험대출 이자 얼마나 붙었는지 궁금해</span>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="note-box">
-  <b>확장 원칙:</b> 위 4종은 1차 지원 세트이며 전부가 아니다. 실사용 로그에서 새로운 조회 유형이 발견되면 운영자가 <code>mockups_v2/20_query-messages.html</code>에서 신규 유형을 등록할 수 있다. 신규 유형은 개발팀이 응답 로직을 구현하기 전까지 "개발 반영 대기" 상태다.
+  <b>확장 원칙:</b> QM-01~04는 1차 지원 세트, QM-05는 2026-07-14 추가된 신규 등록 유형이며 이 역시 전부가 아니다. 실사용 로그에서 새로운 조회 유형이 발견되면 운영자가 <code>mockups_v2/20_query-messages.html</code>에서 신규 유형을 등록할 수 있다. 신규 유형은 개발팀이 응답 로직을 구현하기 전까지 "개발 반영 대기" 상태다.
 </div>
 
 </main>
