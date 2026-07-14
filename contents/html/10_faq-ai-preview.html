@@ -79,7 +79,7 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
 <main>
 <div class="section-label">FAQ RAG 답변 흐름</div>
 <div class="info-banner">
-  Concept이 감지되지 않거나(또는 KC 체인의 Rule 조건을 통과하지 못해) KC 구조화 답변으로 이어지지 못한 질문 중, <strong>계약 내용과 무관하게 답할 수 있는 일반 판단 노하우</strong>는 FAQ RAG로 처리됩니다. Risk-type 진단이나 담보 현황 표처럼 KC 체인 특유의 구조는 없고, <code style="background:#DCEAFB;padding:1px 5px;border-radius:3px;font-size:12px">contents/08_faq/faq-rag.md</code>에 등록된 답변(A) 텍스트 자체가 최종 답변의 근거가 되는 <strong>종단(leaf) 구조</strong>입니다 — 후속 체인·CTA 없이 그 자리에서 답변이 끝납니다. 아래는 카테고리 A(판단 노하우) 39건 전체를 실제 Clark 채팅 화면으로 시뮬레이션한 예시입니다.
+  Concept이 감지되지 않거나(또는 KC 체인의 Rule 조건을 통과하지 못해) KC 구조화 답변으로 이어지지 못한 질문 중, <strong>계약 내용과 무관하게 답할 수 있는 일반 판단 노하우</strong>는 FAQ RAG로 처리됩니다. Risk-type 진단이나 담보 현황 표처럼 KC 체인 특유의 구조는 없고, <code style="background:#DCEAFB;padding:1px 5px;border-radius:3px;font-size:12px">contents/08_faq/faq-rag.md</code>에 등록된 답변(A) 텍스트 자체가 최종 답변의 근거가 되는 <strong>종단(leaf) 구조</strong>입니다 — 후속 체인·CTA 없이 그 자리에서 답변이 끝납니다. 아래는 카테고리 A(판단 노하우) 43건 전체를 실제 Clark 채팅 화면으로 시뮬레이션한 예시입니다.
 </div>
 <div class="warn-banner">
   ⚠️ 카테고리 B(서비스 이용 안내, FAQ-008~010)는 아직 실제 서비스 정책 문구가 확정되지 않은 플레이스홀더 상태라 이 미리보기에서 제외했습니다. 실제 문구 확정 후 추가 예정.
@@ -2260,6 +2260,230 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
                     </div>
                   </div>
                   <div class="app-msg-clark-time">오후 4:15</div>
+                </div>
+                <div class="app-input-bar">
+                  <div class="app-input-fake">메시지 입력...</div>
+                  <div class="app-send-btn">➤</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAQ-044 자살면책기간 -->
+  <div class="acc-item">
+    <button class="acc-header">
+      <span class="t-badge">FAQ-044</span>
+      <span class="acc-title">사망보험금은 자살인 경우에도 지급되나요?</span>
+      <span class="domain-tag">판단 노하우 · 가입 초기 조건</span>
+      <span class="acc-arrow">⌄</span>
+    </button>
+    <div class="acc-body">
+      <div class="acc-inner">
+        <div class="acc-block trigger-block">
+          <div class="acc-block-label">발화 예시 — Concept 미매칭 → FAQ RAG 매칭</div>
+          <div class="utterance"><span>"자살하면 사망보험금 안 나오나요?"</span><span>"자살 면책기간이 뭐예요?"</span></div>
+          <div class="chain-path">Concept 미매칭 → 약관 RAG 결과 없음(또는 상태①②로 스킵) → FAQ RAG 매칭(FAQ-044) → 등록된 답변(A) 그대로 반환</div>
+        </div>
+        <div class="acc-block" style="background:transparent;padding:0;">
+          <div class="acc-block-label" style="padding-left:2px;">Clark 모바일 웹 실제 화면</div>
+          <div class="phone-mockup-wrap">
+            <div class="phone-frame">
+              <div class="phone-screen">
+                <div class="phone-statusbar"><span>9:41</span><span>●●● 5G 100%</span></div>
+                <div class="app-topbar">
+                  <span class="back-arrow">‹</span>
+                  <span class="app-avatar-top">🤖</span>
+                  <div class="app-title-group">
+                    <div class="app-title">Clark</div>
+                    <div class="app-sub">보험 진단 · 상담 도우미</div>
+                  </div>
+                </div>
+                <div class="app-chat-area">
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">자살하면 사망보험금 안 나오나요?</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 4:20</div>
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>원칙적으로는 계약일(또는 부활일)로부터 2년 이내에 자살하면 사망보험금이 지급되지 않아요. 이걸 "자살 면책기간"이라고 해요.</p>
+                      <p>2년이 지난 후라면 일반사망보험금이 나오고, 재해사망특약이 있으면 재해사망보험금도 같이 받을 수 있어요. 다만 심신상실 등으로 자유로운 의사결정이 불가능한 상태였다면 2년 기준과 상관없이 예외적으로 지급되는 경우도 있어요.</p>
+                      <div class="disclaimer">이 조항은 개별 계약·특약 구성에 따라 세부 내용이 다를 수 있는 법적 쟁점이 얽힌 사안이에요. 정확한 적용 여부는 가입한 보험사나 보닥 플래너에게 확인해보세요.</div>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 4:20</div>
+                </div>
+                <div class="app-input-bar">
+                  <div class="app-input-fake">메시지 입력...</div>
+                  <div class="app-send-btn">➤</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAQ-045 납입유예기간 -->
+  <div class="acc-item">
+    <button class="acc-header">
+      <span class="t-badge">FAQ-045</span>
+      <span class="acc-title">보험료를 못 내면 바로 보험이 없어지나요?</span>
+      <span class="domain-tag">판단 노하우 · 가입 초기 조건</span>
+      <span class="acc-arrow">⌄</span>
+    </button>
+    <div class="acc-body">
+      <div class="acc-inner">
+        <div class="acc-block trigger-block">
+          <div class="acc-block-label">발화 예시 — Concept 미매칭 → FAQ RAG 매칭</div>
+          <div class="utterance"><span>"보험료 밀리면 바로 실효되나요?"</span><span>"납입최고기간이 뭐예요?"</span></div>
+          <div class="chain-path">Concept 미매칭 → 약관 RAG 결과 없음(또는 상태①②로 스킵) → FAQ RAG 매칭(FAQ-045) → 등록된 답변(A) 그대로 반환</div>
+        </div>
+        <div class="acc-block" style="background:transparent;padding:0;">
+          <div class="acc-block-label" style="padding-left:2px;">Clark 모바일 웹 실제 화면</div>
+          <div class="phone-mockup-wrap">
+            <div class="phone-frame">
+              <div class="phone-screen">
+                <div class="phone-statusbar"><span>9:41</span><span>●●● 5G 100%</span></div>
+                <div class="app-topbar">
+                  <span class="back-arrow">‹</span>
+                  <span class="app-avatar-top">🤖</span>
+                  <div class="app-title-group">
+                    <div class="app-title">Clark</div>
+                    <div class="app-sub">보험 진단 · 상담 도우미</div>
+                  </div>
+                </div>
+                <div class="app-chat-area">
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">보험료 밀리면 바로 실효되나요?</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 4:24</div>
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>바로 없어지진 않아요. 보험료를 못 내면 보험사가 "납입최고(독촉)기간"을 두는데, 가입 기간이 1년 이상이면 14일, 1년 미만이면 7일 이상 유예기간을 서면·전화·전자문서 등으로 안내해줘요.</p>
+                      <p>이 기간 안에도 밀린 보험료를 안 내면, 최고기간이 끝난 다음 날 계약이 해지(실효)돼요. 실효된 달 안에 밀린 보험료 + 그달 보험료를 같이 내면 별도 절차 없이 되살아나는 경우가 많지만, 시간이 더 지나면 건강 상태를 다시 심사받는 정식 부활 절차를 거쳐야 해요.</p>
+                      <div class="disclaimer">정확한 유예기간·부활 조건은 상품·보험사마다 조금씩 달라요. 자동이체 계좌 잔고나 카드 상태를 미리 확인해두시고, 밀렸다면 빨리 가입한 보험사에 확인해보세요.</div>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 4:24</div>
+                </div>
+                <div class="app-input-bar">
+                  <div class="app-input-fake">메시지 입력...</div>
+                  <div class="app-send-btn">➤</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAQ-046 본인부담상한제 -->
+  <div class="acc-item">
+    <button class="acc-header">
+      <span class="t-badge">FAQ-046</span>
+      <span class="acc-title">실손보험이 있어도 본인부담상한제 환급금을 따로 받을 수 있나요?</span>
+      <span class="domain-tag">판단 노하우 · 가입 초기 조건</span>
+      <span class="acc-arrow">⌄</span>
+    </button>
+    <div class="acc-body">
+      <div class="acc-inner">
+        <div class="acc-block trigger-block">
+          <div class="acc-block-label">발화 예시 — Concept 미매칭 → FAQ RAG 매칭</div>
+          <div class="utterance"><span>"본인부담상한제가 뭐예요?"</span><span>"실손보험 있으면 본인부담상한제 못 받나요?"</span></div>
+          <div class="chain-path">Concept 미매칭 → 약관 RAG 결과 없음(또는 상태①②로 스킵) → FAQ RAG 매칭(FAQ-046) → 등록된 답변(A) 그대로 반환</div>
+        </div>
+        <div class="acc-block" style="background:transparent;padding:0;">
+          <div class="acc-block-label" style="padding-left:2px;">Clark 모바일 웹 실제 화면</div>
+          <div class="phone-mockup-wrap">
+            <div class="phone-frame">
+              <div class="phone-screen">
+                <div class="phone-statusbar"><span>9:41</span><span>●●● 5G 100%</span></div>
+                <div class="app-topbar">
+                  <span class="back-arrow">‹</span>
+                  <span class="app-avatar-top">🤖</span>
+                  <div class="app-title-group">
+                    <div class="app-title">Clark</div>
+                    <div class="app-sub">보험 진단 · 상담 도우미</div>
+                  </div>
+                </div>
+                <div class="app-chat-area">
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">실손보험 있으면 본인부담상한제 못 받나요?</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 4:28</div>
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>본인부담상한제는 국민건강보험공단이 운영하는 별도 제도예요. 1년간 건강보험 급여 본인부담금이 개인별 상한액(소득 구간별로 다름)을 넘으면 초과분을 공단이 돌려줘요 — 실손보험 가입 여부와 상관없이 받을 수 있어요.</p>
+                      <p>다만 실손보험 표준약관은 "국민건강보험공단으로부터 환급 가능한 금액"을 애초에 보상 대상에서 빼놓고 있어서, 같은 의료비를 실손보험과 본인부담상한제 양쪽에서 이중으로 받으면 안 돼요. 실제로 2019~2022년 사이 약 94만 명이 8,580억원 규모를 이중 수령한 게 밝혀져 이슈가 됐고, 대법원도 본인부담상한초과금은 실손보험 보상 대상이 아니라고 판단했어요.</p>
+                      <div class="disclaimer">이중 수령분은 추후 환수 대상이 될 수 있어요. 고액 의료비가 발생했다면 실손보험금 청구와 별개로 국민건강보험공단의 본인부담상한제 환급 대상인지도 확인해보시는 게 좋아요.</div>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 4:28</div>
+                </div>
+                <div class="app-input-bar">
+                  <div class="app-input-fake">메시지 입력...</div>
+                  <div class="app-send-btn">➤</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAQ-047 연금저축 중도해지 -->
+  <div class="acc-item">
+    <button class="acc-header">
+      <span class="t-badge">FAQ-047</span>
+      <span class="acc-title">연금저축을 중간에 해지하면 손해인가요?</span>
+      <span class="domain-tag">판단 노하우 · 가입 초기 조건</span>
+      <span class="acc-arrow">⌄</span>
+    </button>
+    <div class="acc-body">
+      <div class="acc-inner">
+        <div class="acc-block trigger-block">
+          <div class="acc-block-label">발화 예시 — Concept 미매칭 → FAQ RAG 매칭</div>
+          <div class="utterance"><span>"연금저축 중도해지하면 세금 얼마나 내요?"</span><span>"연금저축 깨면 손해예요?"</span></div>
+          <div class="chain-path">Concept 미매칭 → 약관 RAG 결과 없음(또는 상태①②로 스킵) → FAQ RAG 매칭(FAQ-047) → 등록된 답변(A) 그대로 반환</div>
+        </div>
+        <div class="acc-block" style="background:transparent;padding:0;">
+          <div class="acc-block-label" style="padding-left:2px;">Clark 모바일 웹 실제 화면</div>
+          <div class="phone-mockup-wrap">
+            <div class="phone-frame">
+              <div class="phone-screen">
+                <div class="phone-statusbar"><span>9:41</span><span>●●● 5G 100%</span></div>
+                <div class="app-topbar">
+                  <span class="back-arrow">‹</span>
+                  <span class="app-avatar-top">🤖</span>
+                  <div class="app-title-group">
+                    <div class="app-title">Clark</div>
+                    <div class="app-sub">보험 진단 · 상담 도우미</div>
+                  </div>
+                </div>
+                <div class="app-chat-area">
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">연금저축 중도해지하면 세금 얼마나 내요?</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 4:32</div>
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>네, 손해가 커요. 연금저축을 중도 해지하면 그동안 세액공제받은 원금과 운용 수익 전체에 대해 소득 수준과 상관없이 "기타소득세" 16.5%(지방소득세 포함)가 원천징수돼요. 세액공제받았던 혜택을 사실상 다시 토해내는 셈이에요.</p>
+                      <p>세액공제를 안 받은 원금이 있거나 다른 연금저축으로 옮겨서 계속 세액공제를 받는 경우엔 원천징수된 세금 일부를 돌려받을 수 있어요. 또 천재지변·해외이주·본인 사망·3개월 이상 요양 등 "부득이한 사유"로 인정되면 16.5%가 아니라 훨씬 낮은 연금소득세(3.3~5.5%)만 부과돼요.</p>
+                      <div class="disclaimer">부득이한 사유 인정 여부·정확한 세율 적용은 개인 상황마다 달라요. 해지 전 국세청 홈택스나 가입한 금융회사, 보닥 플래너에게 정확한 세금을 먼저 확인해보시길 권장해요.</div>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 4:32</div>
                 </div>
                 <div class="app-input-bar">
                   <div class="app-input-fake">메시지 입력...</div>
