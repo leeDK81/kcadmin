@@ -79,7 +79,7 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
 <main>
 <div class="section-label">FAQ RAG 답변 흐름</div>
 <div class="info-banner">
-  Concept이 감지되지 않거나(또는 KC 체인의 Rule 조건을 통과하지 못해) KC 구조화 답변으로 이어지지 못한 질문 중, <strong>계약 내용과 무관하게 답할 수 있는 일반 판단 노하우</strong>는 FAQ RAG로 처리됩니다. Risk-type 진단이나 담보 현황 표처럼 KC 체인 특유의 구조는 없고, <code style="background:#DCEAFB;padding:1px 5px;border-radius:3px;font-size:12px">contents/08_faq/faq-rag.md</code>에 등록된 답변(A) 텍스트 자체가 최종 답변의 근거가 되는 <strong>종단(leaf) 구조</strong>입니다 — 후속 체인·CTA 없이 그 자리에서 답변이 끝납니다. 아래는 카테고리 A(판단 노하우) 35건 전체를 실제 Clark 채팅 화면으로 시뮬레이션한 예시입니다.
+  Concept이 감지되지 않거나(또는 KC 체인의 Rule 조건을 통과하지 못해) KC 구조화 답변으로 이어지지 못한 질문 중, <strong>계약 내용과 무관하게 답할 수 있는 일반 판단 노하우</strong>는 FAQ RAG로 처리됩니다. Risk-type 진단이나 담보 현황 표처럼 KC 체인 특유의 구조는 없고, <code style="background:#DCEAFB;padding:1px 5px;border-radius:3px;font-size:12px">contents/08_faq/faq-rag.md</code>에 등록된 답변(A) 텍스트 자체가 최종 답변의 근거가 되는 <strong>종단(leaf) 구조</strong>입니다 — 후속 체인·CTA 없이 그 자리에서 답변이 끝납니다. 아래는 카테고리 A(판단 노하우) 39건 전체를 실제 Clark 채팅 화면으로 시뮬레이션한 예시입니다.
 </div>
 <div class="warn-banner">
   ⚠️ 카테고리 B(서비스 이용 안내, FAQ-008~010)는 아직 실제 서비스 정책 문구가 확정되지 않은 플레이스홀더 상태라 이 미리보기에서 제외했습니다. 실제 문구 확정 후 추가 예정.
@@ -1936,62 +1936,6 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
     </div>
   </div>
 
-  <!-- FAQ-037 숨은보험금 -->
-  <div class="acc-item">
-    <button class="acc-header">
-      <span class="t-badge">FAQ-037</span>
-      <span class="acc-title">숨은보험금이 뭔가요? 어떻게 찾나요?</span>
-      <span class="domain-tag">판단 노하우 · 계약 관리</span>
-      <span class="acc-arrow">⌄</span>
-    </button>
-    <div class="acc-body">
-      <div class="acc-inner">
-        <div class="acc-block trigger-block">
-          <div class="acc-block-label">발화 예시 — Concept 미매칭 → FAQ RAG 매칭</div>
-          <div class="utterance"><span>"숨은보험금이 뭐예요?"</span><span>"미청구보험금 조회 방법 알려줘"</span></div>
-          <div class="chain-path">Concept 미매칭 → 약관 RAG 결과 없음(또는 상태①②로 스킵) → FAQ RAG 매칭(FAQ-037) → 등록된 답변(A) 그대로 반환</div>
-        </div>
-        <div class="acc-block" style="background:transparent;padding:0;">
-          <div class="acc-block-label" style="padding-left:2px;">Clark 모바일 웹 실제 화면</div>
-          <div class="phone-mockup-wrap">
-            <div class="phone-frame">
-              <div class="phone-screen">
-                <div class="phone-statusbar"><span>9:41</span><span>●●● 5G 100%</span></div>
-                <div class="app-topbar">
-                  <span class="back-arrow">‹</span>
-                  <span class="app-avatar-top">🤖</span>
-                  <div class="app-title-group">
-                    <div class="app-title">Clark</div>
-                    <div class="app-sub">보험 진단 · 상담 도우미</div>
-                  </div>
-                </div>
-                <div class="app-chat-area">
-                  <div class="app-msg-user-row">
-                    <div class="app-msg-user">숨은보험금이 뭐예요?</div>
-                  </div>
-                  <div class="app-msg-user-time">오후 3:57</div>
-                  <div class="app-msg-clark-row">
-                    <div class="app-avatar">🤖</div>
-                    <div class="app-msg-clark">
-                      <p>지급 사유는 확정됐는데 청구를 안 해서 못 받고 있는 보험금을 말해요. 이사나 연락처가 바뀌어서 안내를 못 받았거나, 만기 후 이자율이 크게 낮아진다는 걸 몰라서 방치하는 경우가 많아요. 금융위원회에 따르면 이런 숨은보험금이 지금 12조원 넘게 쌓여 있대요.</p>
-                      <p>생명보험협회·손해보험협회가 같이 운영하는 "내보험찾아줌"(cont.insure.or.kr)에서 본인인증만 하면 지금 유지 중인 계약은 물론 예전에 끝난 계약까지 다 나오고, 미청구보험금·휴면보험금도 따로 보여줘요.</p>
-                      <div class="disclaimer">"미청구보험금 찾아준다"며 개인정보 요구하는 사설 업체는 조심하시고, 꼭 공식 서비스(내보험찾아줌)를 이용하세요. 이건 마이데이터로 직접 조회는 안 되는 정보라 Clark이 대신 봐드리진 못해요.</div>
-                    </div>
-                  </div>
-                  <div class="app-msg-clark-time">오후 3:57</div>
-                </div>
-                <div class="app-input-bar">
-                  <div class="app-input-fake">메시지 입력...</div>
-                  <div class="app-send-btn">➤</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <!-- FAQ-038 명의/수익자변경 -->
   <div class="acc-item">
     <button class="acc-header">
@@ -2035,6 +1979,287 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
                     </div>
                   </div>
                   <div class="app-msg-clark-time">오후 4:00</div>
+                </div>
+                <div class="app-input-bar">
+                  <div class="app-input-fake">메시지 입력...</div>
+                  <div class="app-send-btn">➤</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAQ-039 면책기간 -->
+  <div class="acc-item">
+    <button class="acc-header">
+      <span class="t-badge">FAQ-039</span>
+      <span class="acc-title">보험 가입한 지 얼마 안 됐는데 지금 진단받으면 보험금 못 받나요?</span>
+      <span class="domain-tag">판단 노하우 · 가입 초기 조건</span>
+      <span class="acc-arrow">⌄</span>
+    </button>
+    <div class="acc-body">
+      <div class="acc-inner">
+        <div class="acc-block trigger-block">
+          <div class="acc-block-label">발화 예시 — Concept 미매칭 → FAQ RAG 매칭</div>
+          <div class="utterance"><span>"가입하자마자 진단받으면 보험금 나오나요?"</span><span>"면책기간이 뭐예요?"</span></div>
+          <div class="chain-path">Concept 미매칭 → 약관 RAG 결과 없음(또는 상태①②로 스킵) → FAQ RAG 매칭(FAQ-039) → 등록된 답변(A) 그대로 반환</div>
+        </div>
+        <div class="acc-block" style="background:transparent;padding:0;">
+          <div class="acc-block-label" style="padding-left:2px;">Clark 모바일 웹 실제 화면</div>
+          <div class="phone-mockup-wrap">
+            <div class="phone-frame">
+              <div class="phone-screen">
+                <div class="phone-statusbar"><span>9:41</span><span>●●● 5G 100%</span></div>
+                <div class="app-topbar">
+                  <span class="back-arrow">‹</span>
+                  <span class="app-avatar-top">🤖</span>
+                  <div class="app-title-group">
+                    <div class="app-title">Clark</div>
+                    <div class="app-sub">보험 진단 · 상담 도우미</div>
+                  </div>
+                </div>
+                <div class="app-chat-area">
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">가입하자마자 진단받으면 보험금 나오나요?</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 4:03</div>
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>암보험 같은 경우는 가입일로부터 90일 이내에 진단받으면 보험금이 아예 안 나와요(91일째부터 보장 시작). 그 이후에도 1~2년간은 진단금의 50%만 주는 "감액지급기간"이 이어지는 경우가 많고요. 이미 아픈 걸 알고 급하게 가입하는 걸 막기 위한 장치예요.</p>
+                      <p>다만 갑상선암 같은 소액암이나 51세 미만 가입자는 이 기간이 없는 상품도 많고, 사고로 인한 보장(상해)은 보통 바로 시작돼요. 갱신할 때는 이 기간이 다시 초기화되지 않아요.</p>
+                      <div class="disclaimer">면책기간·감액지급기간 적용 여부와 정확한 기간은 상품마다 달라요. 본인 계약의 정확한 조건은 가입한 보험사나 보닥 플래너에게 확인해보세요.</div>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 4:03</div>
+                </div>
+                <div class="app-input-bar">
+                  <div class="app-input-fake">메시지 입력...</div>
+                  <div class="app-send-btn">➤</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="proto-note">※ FAQ-039~043(2026-07-14 3차 신규)은 "가입 초기·계약 조건 관련 오해" 유형입니다. 사용자가 "가입한 지 얼마 안 됐으면 청구 못하는 경우도 있지 않냐"고 지적한 걸 계기로 조사·저작했습니다.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAQ-040 고지의무 -->
+  <div class="acc-item">
+    <button class="acc-header">
+      <span class="t-badge">FAQ-040</span>
+      <span class="acc-title">건강 상태를 제대로 알리지 않고 가입하면 어떻게 되나요?</span>
+      <span class="domain-tag">판단 노하우 · 가입 초기 조건</span>
+      <span class="acc-arrow">⌄</span>
+    </button>
+    <div class="acc-body">
+      <div class="acc-inner">
+        <div class="acc-block trigger-block">
+          <div class="acc-block-label">발화 예시 — Concept 미매칭 → FAQ RAG 매칭</div>
+          <div class="utterance"><span>"병력 숨기고 가입하면 어떻게 되나요?"</span><span>"고지의무가 뭐예요?"</span></div>
+          <div class="chain-path">Concept 미매칭 → 약관 RAG 결과 없음(또는 상태①②로 스킵) → FAQ RAG 매칭(FAQ-040) → 등록된 답변(A) 그대로 반환</div>
+        </div>
+        <div class="acc-block" style="background:transparent;padding:0;">
+          <div class="acc-block-label" style="padding-left:2px;">Clark 모바일 웹 실제 화면</div>
+          <div class="phone-mockup-wrap">
+            <div class="phone-frame">
+              <div class="phone-screen">
+                <div class="phone-statusbar"><span>9:41</span><span>●●● 5G 100%</span></div>
+                <div class="app-topbar">
+                  <span class="back-arrow">‹</span>
+                  <span class="app-avatar-top">🤖</span>
+                  <div class="app-title-group">
+                    <div class="app-title">Clark</div>
+                    <div class="app-sub">보험 진단 · 상담 도우미</div>
+                  </div>
+                </div>
+                <div class="app-chat-area">
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">병력 숨기고 가입하면 어떻게 되나요?</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 4:06</div>
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>보험 가입할 때 직업·병력처럼 중요한 사항은 사실대로 알려야 하는 "고지의무"가 있어요. 이걸 어기면 보험사가 그 사실을 안 날로부터 1개월 안에 계약을 해지할 수 있고, 이미 받은 보험금도 돌려줘야 할 수 있어요. 계약이 해지되면 낸 돈보다 훨씬 적은 해약환급금만 받게 되고요.</p>
+                      <p>다만 고지 안 한 부분이랑 실제 사고가 서로 관련이 없으면 보험금은 받을 수 있어요 — 고혈압 약 먹는 걸 안 알렸어도, 교통사고로 골절됐다면 그걸로 지급을 거절할 순 없거든요.</p>
+                      <div class="disclaimer">고지 대상 여부·인과관계 판단은 사안마다 다툼의 여지가 있는 법적 쟁점이에요. 애매하면 가입 시점에 명확히 알리고 서면으로 남겨두시는 게 안전하고, 정확한 판단은 보닥 플래너와 상담해보세요.</div>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 4:06</div>
+                </div>
+                <div class="app-input-bar">
+                  <div class="app-input-fake">메시지 입력...</div>
+                  <div class="app-send-btn">➤</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAQ-041 보험나이 -->
+  <div class="acc-item">
+    <button class="acc-header">
+      <span class="t-badge">FAQ-041</span>
+      <span class="acc-title">보험 나이는 왜 실제 나이랑 다른가요?</span>
+      <span class="domain-tag">판단 노하우 · 가입 초기 조건</span>
+      <span class="acc-arrow">⌄</span>
+    </button>
+    <div class="acc-body">
+      <div class="acc-inner">
+        <div class="acc-block trigger-block">
+          <div class="acc-block-label">발화 예시 — Concept 미매칭 → FAQ RAG 매칭</div>
+          <div class="utterance"><span>"보험나이가 뭐예요?"</span><span>"왜 생일 안 지났는데 보험료가 올라요?"</span></div>
+          <div class="chain-path">Concept 미매칭 → 약관 RAG 결과 없음(또는 상태①②로 스킵) → FAQ RAG 매칭(FAQ-041) → 등록된 답변(A) 그대로 반환</div>
+        </div>
+        <div class="acc-block" style="background:transparent;padding:0;">
+          <div class="acc-block-label" style="padding-left:2px;">Clark 모바일 웹 실제 화면</div>
+          <div class="phone-mockup-wrap">
+            <div class="phone-frame">
+              <div class="phone-screen">
+                <div class="phone-statusbar"><span>9:41</span><span>●●● 5G 100%</span></div>
+                <div class="app-topbar">
+                  <span class="back-arrow">‹</span>
+                  <span class="app-avatar-top">🤖</span>
+                  <div class="app-title-group">
+                    <div class="app-title">Clark</div>
+                    <div class="app-sub">보험 진단 · 상담 도우미</div>
+                  </div>
+                </div>
+                <div class="app-chat-area">
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">보험나이가 뭐예요?</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 4:09</div>
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>보험나이는 계약일 기준 실제 만 나이에서, 6개월 미만 끝수는 버리고 6개월 이상이면 1살을 올려서 계산해요. 예를 들어 만 39세 7개월이면 보험나이는 40세가 되는 거예요. 이 나이가 바뀌는 기준일을 "상령일"이라고 하는데, 생일보다 6개월 앞선 날짜라서 실제 생일 전인데도 보험료가 오를 수 있어요.</p>
+                      <p>이런 방식을 쓰는 건 실제 나이(만 나이)를 그대로 쓰면 보험사나 가입자 중 한쪽이 계속 손해 보는 구간이 생기기 때문에, 표준약관으로 절충한 계산법이에요.</p>
+                      <div class="disclaimer">상령일이 임박했다면 가입 시점을 며칠만 당겨도 보험료 차이가 클 수 있어요. 정확한 본인의 상령일과 보험나이는 가입 예정 보험사나 보닥 플래너에게 확인해보세요.</div>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 4:09</div>
+                </div>
+                <div class="app-input-bar">
+                  <div class="app-input-fake">메시지 입력...</div>
+                  <div class="app-send-btn">➤</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAQ-042 직업변경 통지의무 -->
+  <div class="acc-item">
+    <button class="acc-header">
+      <span class="t-badge">FAQ-042</span>
+      <span class="acc-title">이직하거나 직업이 바뀌면 보험사에 알려야 하나요?</span>
+      <span class="domain-tag">판단 노하우 · 가입 초기 조건</span>
+      <span class="acc-arrow">⌄</span>
+    </button>
+    <div class="acc-body">
+      <div class="acc-inner">
+        <div class="acc-block trigger-block">
+          <div class="acc-block-label">발화 예시 — Concept 미매칭 → FAQ RAG 매칭</div>
+          <div class="utterance"><span>"직업 바뀌면 보험사에 알려야 하나요?"</span><span>"이직했는데 보험 어떻게 되나요?"</span></div>
+          <div class="chain-path">Concept 미매칭 → 약관 RAG 결과 없음(또는 상태①②로 스킵) → FAQ RAG 매칭(FAQ-042) → 등록된 답변(A) 그대로 반환</div>
+        </div>
+        <div class="acc-block" style="background:transparent;padding:0;">
+          <div class="acc-block-label" style="padding-left:2px;">Clark 모바일 웹 실제 화면</div>
+          <div class="phone-mockup-wrap">
+            <div class="phone-frame">
+              <div class="phone-screen">
+                <div class="phone-statusbar"><span>9:41</span><span>●●● 5G 100%</span></div>
+                <div class="app-topbar">
+                  <span class="back-arrow">‹</span>
+                  <span class="app-avatar-top">🤖</span>
+                  <div class="app-title-group">
+                    <div class="app-title">Clark</div>
+                    <div class="app-sub">보험 진단 · 상담 도우미</div>
+                  </div>
+                </div>
+                <div class="app-chat-area">
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">직업 바뀌면 보험사에 알려야 하나요?</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 4:12</div>
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>네, 알려야 해요. 직업·직무가 바뀌어서 사고 위험이 커진 경우엔 보험사에 지체 없이 알려야 하는 통지의무가 있어요. 사무직에서 건설현장처럼 위험한 직종으로 옮겼는데 안 알리면, 보험사가 그 사실을 안 날로부터 1개월 안에 계약을 해지할 수 있고, 계약을 유지하더라도 사고 시 새 직업 기준으로 보험금이 비례해서 깎여서 나올 수 있어요.</p>
+                      <p>반대로 더 안전한 직업으로 바뀌었다면 알리는 게 오히려 유리해요 — 보험료가 낮아질 수 있거든요.</p>
+                      <div class="disclaimer">어떤 직업 변경이 "위험 증가"에 해당하는지는 상품·직업군마다 판단이 다를 수 있어요. 직업이 바뀌셨다면 먼저 가입한 보험사나 보닥 플래너에게 알리고 확인하시는 게 안전해요.</div>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 4:12</div>
+                </div>
+                <div class="app-input-bar">
+                  <div class="app-input-fake">메시지 입력...</div>
+                  <div class="app-send-btn">➤</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAQ-043 실손 중복가입 비례보상 -->
+  <div class="acc-item">
+    <button class="acc-header">
+      <span class="t-badge">FAQ-043</span>
+      <span class="acc-title">실손보험 두 개 가입하면 두 배로 받을 수 있나요?</span>
+      <span class="domain-tag">판단 노하우 · 가입 초기 조건</span>
+      <span class="acc-arrow">⌄</span>
+    </button>
+    <div class="acc-body">
+      <div class="acc-inner">
+        <div class="acc-block trigger-block">
+          <div class="acc-block-label">발화 예시 — Concept 미매칭 → FAQ RAG 매칭</div>
+          <div class="utterance"><span>"실손보험 두 개면 보험금도 두 번 받나요?"</span><span>"실손 중복가입해도 되나요?"</span></div>
+          <div class="chain-path">Concept 미매칭 → 약관 RAG 결과 없음(또는 상태①②로 스킵) → FAQ RAG 매칭(FAQ-043) → 등록된 답변(A) 그대로 반환</div>
+        </div>
+        <div class="acc-block" style="background:transparent;padding:0;">
+          <div class="acc-block-label" style="padding-left:2px;">Clark 모바일 웹 실제 화면</div>
+          <div class="phone-mockup-wrap">
+            <div class="phone-frame">
+              <div class="phone-screen">
+                <div class="phone-statusbar"><span>9:41</span><span>●●● 5G 100%</span></div>
+                <div class="app-topbar">
+                  <span class="back-arrow">‹</span>
+                  <span class="app-avatar-top">🤖</span>
+                  <div class="app-title-group">
+                    <div class="app-title">Clark</div>
+                    <div class="app-sub">보험 진단 · 상담 도우미</div>
+                  </div>
+                </div>
+                <div class="app-chat-area">
+                  <div class="app-msg-user-row">
+                    <div class="app-msg-user">실손보험 두 개면 보험금도 두 번 받나요?</div>
+                  </div>
+                  <div class="app-msg-user-time">오후 4:15</div>
+                  <div class="app-msg-clark-row">
+                    <div class="app-avatar">🤖</div>
+                    <div class="app-msg-clark">
+                      <p>아니요, 두 배로는 못 받아요. 실손보험은 실제로 쓴 의료비만큼만 보장하는 "실손보상" 원칙이라, 여러 개 가입해도 총 지급액이 실제 의료비를 넘지 않아요. 의료비 100만원이 나왔으면 두 보험사가 정해진 비율대로 나눠서 합쳐 100만원을 "비례보상"으로 지급해요.</p>
+                      <p>완전히 손해인 건 아니에요 — 통원의료비처럼 보장 한도가 있는 항목은 중복 가입하면 한도 자체가 늘어나거든요(예: 통원 한도 25만원짜리 2개면 합쳐서 50만원까지). 다만 보험료는 이중으로 나가니까, 보통은 실손보험 하나만 유지하고 나머지는 해지하는 걸 권장해요.</p>
+                      <div class="disclaimer">본인이 실손보험에 중복 가입돼 있는지, 해지가 유리한지는 가입 시기·보장 내용에 따라 달라요. 보닥 플래너와 상담하시거나 "내보험찾아줌"에서 가입 현황을 조회해보세요.</div>
+                    </div>
+                  </div>
+                  <div class="app-msg-clark-time">오후 4:15</div>
                 </div>
                 <div class="app-input-bar">
                   <div class="app-input-fake">메시지 입력...</div>
