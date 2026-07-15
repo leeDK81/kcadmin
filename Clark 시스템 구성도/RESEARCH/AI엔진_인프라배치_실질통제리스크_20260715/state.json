@@ -1,0 +1,45 @@
+{
+  "session_id": "AI엔진_인프라배치_실질통제리스크_20260715",
+  "topic": "마이데이터 사업자-GA사 분리구조에서 RAG DB/Admin 인프라 배치 변경(NCP 이전)이 기존 법적판정(실질통제)의 전제를 흔드는지",
+  "created_at": "2026-07-15",
+  "status": "PHASE_3_QUERYING",
+  "current_phase": 3,
+  "requirements": {
+    "focus": [
+      "위탁관계에서 실질수행 판단기준(인프라 소재 고려여부)",
+      "보험업법상 보험모집/설계행위 실질수행주체 판단기준",
+      "전자금융감독규정 제14조의2 국내설치의무 정확한 요건",
+      "개인정보보호법 제26조 재위탁 공개의무 및 위탁자/수탁자 역전 법리",
+      "금융보안원 마이데이터보안가이드라인/망분리 co-location 기준",
+      "생성형AI 망분리 예외 최신 동향"
+    ],
+    "output_format": "comprehensive_report_for_legal_security_review",
+    "audience": "법무·보안 담당자 (사전 지식 없음 전제)",
+    "sources": {"required_types": ["법령원문", "정부기관 가이드라인/보도자료", "유권해석 사례"], "min_quality": "B"},
+    "special_requirements": [
+      "기존 사내 문서(Clark_컴플라이언스_분석서, Clark_시스템구성도) 미인용, 완전 재작성",
+      "모든 핵심 주장 출처 URL/발행일 명시"
+    ]
+  },
+  "plan": {
+    "subtopics": [
+      "A. 업무위탁 실질수행 판단기준(신용정보법/개인정보보호법)",
+      "B. 보험업법 보험모집·설계행위 실질수행주체 판단기준",
+      "C. 전자금융감독규정 제14조의2 국내설치의무",
+      "D. 개인정보보호법 제26조 재위탁 공개의무 + 위탁자/수탁자 역전 법리",
+      "E. 금융보안원 망분리·co-location 기준 + 생성형AI 망분리 예외 최신동향"
+    ]
+  },
+  "progress": {
+    "phase_1": "skipped_sufficient_detail",
+    "phase_2": "completed",
+    "phase_3": "in_progress",
+    "phase_4": "pending",
+    "phase_5": "pending",
+    "phase_6": "pending",
+    "phase_7": "pending"
+  },
+  "sources_count": 0,
+  "artifacts": {},
+  "errors": []
+}

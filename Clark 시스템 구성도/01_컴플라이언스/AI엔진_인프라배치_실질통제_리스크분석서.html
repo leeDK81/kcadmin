@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI엔진 인프라 배치 변경 — 실질통제 리스크 분석서</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', 'Malgun Gothic', sans-serif; background: #f0f2f5; color: #1a1a2e; line-height: 1.6; }
+
+  .header { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); color: #fff; padding: 40px; text-align: center; }
+  .header h1 { font-size: 2.0em; font-weight: 700; margin-bottom: 8px; }
+  .header p { font-size: 1em; opacity: 0.75; }
+  .badges { display: flex; justify-content: center; gap: 12px; margin-top: 16px; flex-wrap: wrap; }
+  .badge { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); border-radius: 20px; padding: 4px 16px; font-size: 0.82em; }
+  .badge.red { background: rgba(197,48,48,0.35); border-color: rgba(197,48,48,0.6); }
+
+  .toc { background: #fff; border-radius: 16px; padding: 28px 32px; margin-bottom: 28px; box-shadow: 0 2px 16px rgba(0,0,0,0.07); }
+  .toc-title { font-size: 1.1em; font-weight: 700; margin-bottom: 16px; color: #2b6cb0; display: flex; align-items: center; gap: 8px; }
+  .toc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 8px; }
+  .toc-item { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 8px; background: #f7fafc; text-decoration: none; color: #2d3748; font-size: 0.9em; transition: background 0.15s; }
+  .toc-item:hover { background: #ebf8ff; color: #2b6cb0; }
+  .toc-num { background: #2b6cb0; color: #fff; border-radius: 50%; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; font-size: 0.75em; font-weight: 700; flex-shrink: 0; }
+
+  .container { max-width: 1200px; margin: 0 auto; padding: 32px 20px; }
+
+  .section { background: #fff; border-radius: 16px; padding: 32px; margin-bottom: 28px; box-shadow: 0 2px 16px rgba(0,0,0,0.07); }
+  .section-title { font-size: 1.4em; font-weight: 700; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid #e8eaf0; display: flex; align-items: center; gap: 10px; }
+
+  .verdict-banner { background: linear-gradient(135deg, #fff5f5, #fed7d7); border: 2px solid #c53030; border-radius: 16px; padding: 28px 32px; margin-bottom: 28px; text-align: center; }
+  .verdict-banner h2 { font-size: 1.5em; font-weight: 700; color: #822727; margin-bottom: 8px; }
+  .verdict-banner p { font-size: 0.95em; color: #822727; }
+  .verdict-banner .check { font-size: 2.2em; margin-bottom: 8px; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 0.9em; margin-bottom: 8px; }
+  th { background: #f7fafc; color: #2d3748; font-weight: 700; padding: 10px 14px; text-align: left; border-bottom: 2px solid #e2e8f0; }
+  td { padding: 10px 14px; border-bottom: 1px solid #edf2f7; color: #2d3748; vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #f7fafc; }
+
+  .risk { display: inline-block; padding: 2px 10px; border-radius: 10px; font-size: 0.8em; font-weight: 700; white-space: nowrap; }
+  .risk-high { background: #fed7d7; color: #c53030; }
+  .risk-mid { background: #fef3c7; color: #92400e; }
+  .risk-low { background: #c6f6d5; color: #276749; }
+
+  .conf { display: inline-block; padding: 1px 8px; border-radius: 8px; font-size: 0.72em; font-weight: 700; white-space: nowrap; }
+  .conf-ok { background: #c6f6d5; color: #276749; }
+  .conf-part { background: #fef3c7; color: #92400e; }
+  .conf-unk { background: #e2e8f0; color: #4a5568; }
+
+  .flow-block { background: #f7fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 20px; margin: 16px 0; font-family: 'Malgun Gothic', monospace; font-size: 0.88em; line-height: 1.8; color: #2d3748; white-space: pre-wrap; word-break: break-word; }
+  .flow-block.danger { background: #fff5f5; border-color: #fed7d7; }
+  .flow-block.safe { background: #f0fff4; border-color: #c6f6d5; }
+
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin: 16px 0; }
+  .info-card { border-radius: 12px; padding: 20px; border-left: 5px solid; }
+  .info-card.danger { background: #fff5f5; border-color: #e53e3e; }
+  .info-card.warning { background: #fffbeb; border-color: #d69e2e; }
+  .info-card.safe { background: #f0fff4; border-color: #38a169; }
+  .info-card.info { background: #ebf8ff; border-color: #3182ce; }
+  .info-card h3 { font-size: 1em; font-weight: 700; margin-bottom: 8px; }
+  .info-card p, .info-card li { font-size: 0.88em; color: #4a5568; line-height: 1.7; }
+  .info-card ul { padding-left: 16px; }
+  .info-card.danger h3 { color: #c53030; }
+  .info-card.warning h3 { color: #92400e; }
+  .info-card.safe h3 { color: #276749; }
+  .info-card.info h3 { color: #2b6cb0; }
+
+  .sub-title { font-size: 1.05em; font-weight: 700; color: #2b6cb0; margin: 24px 0 12px; padding-left: 10px; border-left: 4px solid #2b6cb0; }
+
+  .issue-card { border: 1px solid #e2e8f0; border-radius: 12px; padding: 22px 24px; margin-bottom: 18px; }
+  .issue-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; flex-wrap: wrap; }
+  .issue-title { font-size: 1.02em; font-weight: 700; color: #1a1a2e; }
+  .issue-body p { font-size: 0.9em; color: #2d3748; margin-bottom: 8px; }
+  .issue-body p strong { color: #1a1a2e; }
+  .issue-body blockquote { background: #f7fafc; border-left: 3px solid #a0aec0; padding: 10px 16px; margin: 10px 0; font-size: 0.87em; color: #4a5568; font-style: italic; }
+  .issue-src { font-size: 0.82em; color: #718096; margin-top: 8px; padding-top: 8px; border-top: 1px dashed #e2e8f0; }
+  .issue-src a { color: #2b6cb0; text-decoration: none; }
+  .issue-src a:hover { text-decoration: underline; }
+
+  .action-list { display: flex; flex-direction: column; gap: 10px; margin: 16px 0; }
+  .action-item { display: flex; align-items: flex-start; gap: 14px; background: #fffbeb; border: 1px solid #fef3c7; border-radius: 10px; padding: 14px 18px; }
+  .action-num { background: #d69e2e; color: #fff; border-radius: 50%; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; font-size: 0.82em; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+  .action-body { flex: 1; }
+  .action-body strong { font-size: 0.95em; color: #2d3748; display: block; margin-bottom: 2px; }
+  .action-body span { font-size: 0.83em; color: #718096; }
+
+  .unresolved-list { list-style: none; }
+  .unresolved-list li { padding: 10px 0 10px 28px; position: relative; font-size: 0.89em; color: #2d3748; border-bottom: 1px solid #edf2f7; }
+  .unresolved-list li:last-child { border-bottom: none; }
+  .unresolved-list li::before { content: "?"; position: absolute; left: 0; top: 8px; background: #a0aec0; color: #fff; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.7em; font-weight: 700; }
+
+  .ref-list { list-style: none; counter-reset: ref; }
+  .ref-list li { counter-increment: ref; padding: 10px 0 10px 34px; position: relative; font-size: 0.87em; color: #2d3748; border-bottom: 1px solid #edf2f7; }
+  .ref-list li:last-child { border-bottom: none; }
+  .ref-list li::before { content: counter(ref); position: absolute; left: 0; top: 10px; background: #2b6cb0; color: #fff; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.72em; font-weight: 700; }
+  .ref-list a { color: #2b6cb0; word-break: break-all; }
+
+  .disclaimer { background: #f7fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px 20px; margin-top: 8px; font-size: 0.83em; color: #718096; text-align: center; }
+
+  @media(max-width: 768px) {
+    .header h1 { font-size: 1.4em; }
+    .section { padding: 20px; }
+    .issue-head { flex-direction: column; align-items: flex-start; }
+  }
+  @media print {
+    body { background: #fff; }
+    .section { box-shadow: none; border: 1px solid #e2e8f0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>⚖️ AI엔진 인프라 배치 변경이 초래하는 법적 실질통제 리스크 분석</h1>
+  <p>RAG DB·KC Admin을 아이지넷(NCP)으로, AWS(더파트너스)는 중계 agent만 두는 구현안 — 2026-05-14 법적판정 전제 훼손 여부 검토</p>
+  <div class="badges">
+    <span class="badge">📅 2026-07-15</span>
+    <span class="badge">🏢 아이지넷 + 더파트너스</span>
+    <span class="badge red">⚠️ 종합 리스크: 높음</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="verdict-banner">
+    <div class="check">⚠️</div>
+    <h2>이 인프라 변경은 기존 법적 판정의 전제를 훼손할 가능성이 높습니다</h2>
+    <p>단, 그 이유는 애초에 우려했던 "국내설치의무·망분리·재위탁공개" 같은 개별조문이 아니라 — "위탁은 수탁자가 실질적으로 수행해야 유효하다"는 대법원 판례 법리 때문입니다</p>
+  </div>
+
+  <div class="toc">
+    <div class="toc-title">📋 목차</div>
+    <div class="toc-grid">
+      <a class="toc-item" href="#s0"><span class="toc-num">0</span> 이 문서가 다루는 문제</a>
+      <a class="toc-item" href="#s1"><span class="toc-num">1</span> 쟁점1 — 위탁의 실질성 (핵심)</a>
+      <a class="toc-item" href="#s2"><span class="toc-num">2</span> 쟁점2 — 보험업법 실질수행주체</a>
+      <a class="toc-item" href="#s3"><span class="toc-num">3</span> 쟁점3 — 국내설치의무</a>
+      <a class="toc-item" href="#s4"><span class="toc-num">4</span> 쟁점4 — 재위탁 공개의무</a>
+      <a class="toc-item" href="#s5"><span class="toc-num">5</span> 쟁점5 — 망분리·co-location</a>
+      <a class="toc-item" href="#s6"><span class="toc-num">6</span> 종합판단</a>
+      <a class="toc-item" href="#s7"><span class="toc-num">7</span> 권고 — 대안구조</a>
+      <a class="toc-item" href="#s8"><span class="toc-num">8</span> 확인 필요·미확정 사항</a>
+      <a class="toc-item" href="#s9"><span class="toc-num">9</span> 주요 출처</a>
+    </div>
+  </div>
+
+  <!-- 0. 문제 요약 -->
+  <div class="section" id="s0">
+    <div class="section-title">🏗️ 0. 이 문서가 다루는 문제</div>
+    <p style="font-size:0.92em; color:#2d3748; margin-bottom:14px;">두 회사가 아래와 같이 역할을 나눠 보험 마이데이터 기반 AI 서비스(가칭 Clark)를 운영하려고 한다.</p>
+    <table>
+      <tr><th>구분</th><th>회사</th><th>성격</th><th>인프라</th></tr>
+      <tr><td>모회사</td><td>아이지넷</td><td>마이데이터 사업자(본인신용정보관리업 허가). 보험모집 자격 없음</td><td>NCP</td></tr>
+      <tr><td>자회사</td><td>더파트너스</td><td>GA사(법인보험대리점, 보험모집 자격 보유)</td><td>AWS 서울리전</td></tr>
+    </table>
+
+    <div class="sub-title">기존 합의된 설계</div>
+    <div class="flow-block safe">1. Clark App·Clark Admin → 아이지넷의 NCP
+2. KC AI엔진(RAG 기반 보장분석 엔진)·KC Admin(콘텐츠 저작·승인 도구) → 더파트너스의 AWS
+3. AI 모델(AWS Bedrock or Azure) → 국내 리전에만 배치</div>
+    <p style="font-size:0.9em; color:#2d3748; margin:10px 0;">이 설계 위에서 "더파트너스(GA사)가 보험분석 업무를 실질적으로 수행·통제하므로, 아이지넷이 직접 보험분석을 하는 게 아니다"라는 법적 판정(2026-05-14)이 이미 내려져 있음.</p>
+
+    <div class="sub-title">개발팀 제안 — 실제 구현안</div>
+    <div class="flow-block danger">RAG DB(KC카드 벡터DB)·KC Admin → 아이지넷의 NCP로 이동
+AWS(더파트너스) → Clark에서 넘어온 데이터를 AI 모델에 전달만 하는 경량 중계 agent만 배치</div>
+
+    <div class="card-grid" style="margin-top:20px;">
+      <div class="info-card danger">
+        <h3>🚨 핵심 우려</h3>
+        <p>분석 로직의 실체(RAG 검색·콘텐츠)가 GA사가 아닌 마이데이터 사업자 인프라로 이동 → "더파트너스가 실질적으로 수행한다"는 판정의 사실적 기초가 흔들릴 수 있음</p>
+      </div>
+      <div class="info-card info">
+        <h3>📎 방법론</h3>
+        <p>insane-research 리서치 스킬로 5개 독립 에이전트가 법령원문·판례·최근 제재사례를 각각 조사 후 교차검증. 신뢰도는 <span class="conf conf-ok">확정</span><span class="conf conf-part">미확정</span><span class="conf conf-unk">확인안됨</span> 3단계로 표기</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1. 쟁점1 -->
+  <div class="section" id="s1">
+    <div class="section-title">1️⃣ 쟁점 1 — 업무위탁의 실질성 <span class="risk risk-high" style="margin-left:auto;">리스크: 높음</span></div>
+
+    <div class="issue-card">
+      <div class="issue-head"><span class="issue-title">1.1 관련 법령 원문</span><span class="conf conf-ok">확정</span></div>
+      <div class="issue-body">
+        <p><strong>개인정보보호법 제26조(업무위탁)</strong> — 제1항 문서화의무 · 제2항 위탁내용·수탁자 공개의무(재위탁자도 포함) · 제4항 위탁자의 수탁자 교육·감독의무 · 제5항 수탁자 목적외이용 금지 · <strong>제6항(2023.3.14 개정, 2023.9.15 시행)</strong> 재위탁시 원위탁자 동의 필요</p>
+        <p><strong>신용정보법 제17조(처리위탁)</strong> — 개인정보보호법 제26조 준용, 재위탁 원칙 금지</p>
+        <p>→ 어느 조문에도 "수탁자가 실질적으로 수행해야 한다"는 문구 자체는 없음. <strong>이 요건은 법조문이 아니라 대법원 판례가 만든 해석기준.</strong></p>
+      </div>
+      <div class="issue-src">출처: <a href="https://www.law.go.kr/LSW//lsLawLinkInfo.do?lsJoLnkSeq=900079061&lsId=011357&chrClsCd=010202&print=print" target="_blank">국가법령정보센터 개인정보보호법 제26조</a></div>
+    </div>
+
+    <div class="issue-card">
+      <div class="issue-head"><span class="issue-title">1.2 핵심 판례 — 대법원 2017.4.7. 선고 2016도13263 (홈플러스 경품응모권 사건)</span><span class="conf conf-ok">확정</span></div>
+      <div class="issue-body">
+        <blockquote>"개인정보의 취득 목적과 방법, 대가 수수 여부, 수탁자에 대한 <strong>실질적인 관리·감독 여부</strong>, 정보주체 보호 필요성에 미치는 영향 및 이러한 개인정보를 이용할 필요가 있는 자가 <strong>실질적으로 누구인지</strong> 등을 종합하여 판단"</blockquote>
+        <p>이번 사안과 직결되는 두 요소: <strong>① 수탁자에 대한 실질적 관리·감독 여부, ② 실질적 이용주체가 누구인지</strong></p>
+      </div>
+      <div class="issue-src">출처: <a href="https://casenote.kr/대법원/2016도13263" target="_blank">casenote.kr 판례</a>, 국가법령정보센터 판례코너</div>
+    </div>
+
+    <div class="issue-card">
+      <div class="issue-head"><span class="issue-title">1.3 PIPC 유권해석 — 클라우드 사업자 판단기준</span><span class="conf conf-part">미확정</span></div>
+      <div class="issue-body">
+        <blockquote>클라우드 사업자가 전송지원·저장공간 제공만 하고 저장된 정보에 접근하지 않으며 위탁자가 배타적 점유·보호의무를 전담하면 수탁자로 보기 어려움. 반대로 실제 처리(가공·분석)가 일어나고 위탁자 지시·감독 하에 있으면 위·수탁 관계.</blockquote>
+        <p>핵심: <strong>"누가 실제로 데이터를 처리하는가"</strong>가 위탁자/수탁자 지위를 가르는 결정적 요소.</p>
+      </div>
+      <div class="issue-src">원출처(PIPC 안내서) PDF 직접대조 실패 — nepla.ai·tovdata 정리 인용, 취지는 다수 실무자료에서 일관 확인</div>
+    </div>
+
+    <div class="issue-card">
+      <div class="issue-head"><span class="issue-title">1.4 이번 사안 대입</span></div>
+      <div class="issue-body">
+        <p>RAG 검색·콘텐츠 승인이 아이지넷 NCP에서, AI모델 중계만 더파트너스 AWS에서 이뤄지면 → <strong>"실질적 이용주체"가 아이지넷으로 판단될 소지</strong> → 두 방향의 재성격화 리스크:</p>
+        <p>① 아이지넷→더파트너스 데이터이동이 "위탁"이 아니라 실질 없는 형식적 위탁으로 재성격화<br>② 이 경우 2026-05-14 판정의 대전제("더파트너스가 실질적으로 보험분석 수행") 자체가 붕괴 → 쟁점2(보험업법)까지 연쇄적으로 흔들림</p>
+        <p style="color:#718096; font-size:0.85em;">※ 정확히 같은 사실관계(위탁자가 핵심시스템 소유, 수탁자는 중계만)를 다룬 판례·유권해석은 확인 안 됨 — 이하는 기존 법리의 유추적용에 근거한 리스크 평가</p>
+      </div>
+    </div>
+
+    <div class="issue-card">
+      <div class="issue-head"><span class="issue-title">1.5 최근 규제·판례 동향 — 실질 기준 강화 추세</span><span class="conf conf-ok">확정</span></div>
+      <div class="issue-body">
+        <p><strong>카카오페이-알리페이-애플 사건</strong> (PIPC처분 2025.1, 서울행정법원 1심 2026.6.11 확정): 계약서 명칭과 무관하게 "실질적 이익귀속·통제주체" 기준으로 "위탁"이 아닌 "제3자 제공"으로 판단, 과징금 약 59.6억원. 법원 "이용자정보 활용이익은 애플 귀속" → PIPC 승소.</p>
+        <p><strong>보람상조 사건</strong> (2026.5 제재): 계약상 적법한 위탁 구조였음에도 위탁자가 감독의무를 실질적으로 이행하지 않아 과징금 5억 4,250만원 + 과태료 1,140만원.</p>
+        <p>→ 2025~2026년 규제당국·법원이 <strong>계약서 문언보다 실질 운영실태를 근거로 판단</strong>하는 경향이 뚜렷함.</p>
+      </div>
+      <div class="issue-src">출처: <a href="https://www.etnews.com/20250523000056" target="_blank">전자신문</a>, <a href="https://v.daum.net/v/20260611142403744" target="_blank">다음뉴스 2026.6.11</a> / <a href="http://www.newstomato.com/ReadNews.aspx?no=1300892" target="_blank">뉴스토마토</a>, <a href="https://www.fnnews.com/news/202605141050240574" target="_blank">fnnews</a></div>
+    </div>
+
+    <div class="info-card danger">
+      <h3>리스크 판정: 높음</h3>
+      <p>명문 조항 직접 위반은 아니지만(그런 조항 자체가 없으므로), 대법원 판례 법리 + 최근 규제실무 경향에 비추어 "위탁의 실질성"을 흔드는 사실관계를 만듦. 2026-05-14 판정 전체가 의지하는 전제를 정면으로 훼손할 수 있음.</p>
+    </div>
+  </div>
+
+  <!-- 2. 쟁점2 -->
+  <div class="section" id="s2">
+    <div class="section-title">2️⃣ 쟁점 2 — 보험업법상 실질수행주체 <span class="risk risk-high" style="margin-left:auto;">리스크: 높음</span></div>
+
+    <div class="issue-card">
+      <div class="issue-head"><span class="issue-title">2.1 관련 법령</span><span class="conf conf-ok">확정</span></div>
+      <div class="issue-body">
+        <p>보험업법 제2조 12호(모집=중개·대리) · 제83조(모집자격자 제한열거) · <strong>제97조 8호(경유계약 금지 — "다른 모집종사자 명의를 이용한 모집" 금지, 위반시 1천만원 이하 과태료)</strong> · 제99조(무자격자 모집위탁 금지)</p>
+      </div>
+      <div class="issue-src">출처: <a href="https://casenote.kr/법령/보험업법/제2조" target="_blank">casenote.kr 보험업법</a>, 전자신문 2024.7.16</div>
+    </div>
+
+    <div class="issue-card">
+      <div class="issue-head"><span class="issue-title">2.2 실질판단 원칙</span><span class="conf conf-part">미확정</span></div>
+      <div class="issue-body">
+        <blockquote>"보험계약 체결 실적에 비례한 대가 지급"을 절대적 기준으로 삼기보다 "행위의 실질"에 따라 모집 해당 여부를 판단한다.</blockquote>
+        <p style="color:#718096; font-size:0.85em;">이 원칙을 "AI 시스템 인프라 소재지"에 직접 적용한 선례는 확인 안 됨</p>
+      </div>
+      <div class="issue-src">출처: 한국보험연구원(KIRI), "보험 모집 행위의 의미 및 범위에 대한 검토"(2018.10)</div>
+    </div>
+
+    <div class="issue-card">
+      <div class="issue-head"><span class="issue-title">2.3 최근 유사 사례 — 명의·실질 불일치에 대한 실제 조치</span><span class="conf conf-ok">확정</span></div>
+      <div class="issue-body">
+        <p><strong>"보험점검센터" 소비자경보</strong>(2026.7.1): SNS·이벤트로 개인정보 수집해 GA에 전달하면서 공공기관 유사 명칭을 사용한 사업자에 금감원이 소비자경보 발령. 명칭과 무관하게 실질이 "GA를 위한 보험모집 관련 영업"이면 그렇게 규율한 최근 사례.</p>
+      </div>
+      <div class="issue-src">출처: <a href="https://www.edaily.co.kr/News/Read?newsId=04034406645510256" target="_blank">이데일리</a>, 다자비(dazabi.com) 교차확인</div>
+    </div>
+
+    <div class="info-card danger">
+      <h3>리스크 판정: 높음</h3>
+      <p>모회사(무자격)가 GA 자회사 명의로 서비스하되 핵심시스템은 모회사가 통제하는 구조를 직접 판단한 선례는 없으나(확인 안 됨), 실질판단 원칙 + 최근 감독실무 경향에 비추어 보험업법 판정의 근거가 약화될 리스크는 낮지 않음.</p>
+    </div>
+  </div>
+
+  <!-- 3. 쟁점3 -->
+  <div class="section" id="s3">
+    <div class="section-title">3️⃣ 쟁점 3 — 전자금융감독규정 국내설치의무 <span class="risk risk-low" style="margin-left:auto;">리스크: 낮음</span></div>
+
+    <div class="issue-card">
+      <div class="issue-head"><span class="issue-title">3.1 정확한 조문 (조번호 정정)</span><span class="conf conf-part">미확정 — law.go.kr 원문 재대조 권고</span></div>
+      <div class="issue-body">
+        <p><strong>정정: "제14조의2 제8항"으로 알려졌으나, 2025-4호(최신) 기준 국내설치 문구는 제7항</strong></p>
+        <blockquote>"...금융회사 또는 전자금융업자(...)가 고유식별정보 또는 개인신용정보를 클라우드컴퓨팅서비스를 통하여 처리하는 경우에는 제11조제2호를 적용하고, 해당 정보처리시스템을 국내에 설치하여야 한다."</blockquote>
+      </div>
+      <div class="issue-src">출처: <a href="https://ko.wikisource.org/wiki/전자금융감독규정_(제2025-4호)" target="_blank">위키문헌(전자금융감독규정 제2025-4호)</a></div>
+    </div>
+
+    <div class="issue-card">
+      <div class="issue-head"><span class="issue-title">3.2 적용대상 — 마이데이터 전용사업자는 제외 가능성</span><span class="conf conf-ok">확정(일반원칙)</span></div>
+      <div class="issue-body">
+        <blockquote>"전자금융업무를 하지 않는 여신전문금융회사 등은 제14조의2가 적용되지 않는다" — 판단기준은 라이선스 종류가 아니라 실제 전자금융업무 수행 여부</blockquote>
+        <p><strong>★ 아이지넷이 본인신용정보관리업만 영위하고 전자금융업을 겸영하지 않는다면, 이 조항(국내설치의무 포함) 자체가 적용되지 않을 가능성 높음.</strong> 아이지넷의 전자금융업 겸영 여부 확인 필요.</p>
+      </div>
+      <div class="issue-src">출처: <a href="https://casenote.kr/금융위원회·금융감독원/8126777587" target="_blank">금융위·금감원 법령해석</a></div>
+    </div>
+
+    <div class="issue-card">
+      <div class="issue-head"><span class="issue-title">3.3 "국내"의 의미</span></div>
+      <div class="issue-body">
+        <p>사업자 국적 무관, 물리적으로 대한민국 영토 내면 충족. NCP·AWS 서울리전 모두 국내 소재 — 이번 배치변경과 무관.</p>
+      </div>
+    </div>
+
+    <div class="info-card safe">
+      <h3>리스크 판정: 낮음</h3>
+      <p>이 조항이 아이지넷(마이데이터 전용사업자)에게 애초 적용 안 될 가능성이 높고, 적용되더라도 NCP·AWS 서울리전 모두 국내이므로 이번 배치변경과 무관. <strong>이번 사안의 핵심 리스크는 이 조항이 아니라 쟁점1·2다.</strong></p>
+    </div>
+  </div>
+
+  <!-- 4. 쟁점4 -->
+  <div class="section" id="s4">
+    <div class="section-title">4️⃣ 쟁점 4 — 재위탁 공개의무 <span class="risk risk-low" style="margin-left:auto;">리스크: 낮음(단, 근본문제로 흡수)</span></div>
+
+    <div class="issue-card">
+      <div class="issue-head"><span class="issue-title">4.1 "재위탁"의 법적정의와 이번 사안의 성격</span><span class="conf conf-part">미확정</span></div>
+      <div class="issue-body">
+        <p>재위탁 = "수탁자가 위탁받은 업무를 다시 제3자에게 위탁하는 것"(제26조6항). 이번 사안은 방향이 반대 — <strong>위탁자(아이지넷)가 자신의 인프라를 수탁자(더파트너스)가 이용하도록 제공</strong>하는 구조. <strong>따라서 조문상 "재위탁"에 해당하지 않음.</strong></p>
+        <p>다만 이는 쟁점1의 "위탁의 실질성" 문제로 그대로 연결됨 — "위탁자가 처리도구 자체를 소유·운영하면서 수탁자는 형식적 지위만 갖는 것 아닌가"라는 근본 문제.</p>
+      </div>
+    </div>
+
+    <div class="info-card safe">
+      <h3>리스크 판정: 낮음 (재위탁 조항 자체는 미적용)</h3>
+      <p>단, 쟁점1의 "위탁 실질성" 리스크가 이 문제를 실질적으로 흡수한다는 점에 유의.</p>
+    </div>
+  </div>
+
+  <!-- 5. 쟁점5 -->
+  <div class="section" id="s5">
+    <div class="section-title">5️⃣ 쟁점 5 — 망분리·물리적 분리(co-location) <span class="risk risk-mid" style="margin-left:auto;">리스크: 낮음~중간</span></div>
+
+    <div class="issue-card">
+      <div class="issue-head"><span class="issue-title">5.1 "망분리"의 정확한 의미 — 오해 정정</span><span class="conf conf-ok">확정</span></div>
+      <div class="issue-body">
+        <p>전자금융감독규정 제15조·신용정보업감독규정의 "망분리"는 <strong>모두 "내부업무망 ↔ 외부 인터넷망" 분리를 의미</strong>하며, "같은 회사/계열사 안에서 마이데이터DB와 AI서버를 물리적으로 떼어놔야 한다"는 취지가 아님. RAG DB를 NCP로 옮기는 것 자체는 이 좁은 의미 망분리 위반이 아님.</p>
+      </div>
+    </div>
+
+    <div class="issue-card">
+      <div class="issue-head"><span class="issue-title">5.2 별도 존재하는 "위탁·제휴시스템 분리설치" 요건</span><span class="conf conf-ok">확정</span></div>
+      <div class="issue-body">
+        <blockquote>신용정보업감독규정 별표3(Ⅱ-1-⑦): "제휴, 위탁 또는 외부주문에 의한 개인신용정보처리시스템은 내부 업무용과 분리하여 설치·운영한다"</blockquote>
+        <p>RAG DB가 NCP에 위치하면, 이 시스템(더파트너스를 위한 위탁·제휴 처리시스템)과 아이지넷 자신의 내부업무용 시스템이 <strong>같은 클라우드 계정 안에서 논리적으로 명확히 분리되는지</strong> 반드시 확인 필요.</p>
+      </div>
+    </div>
+
+    <div class="issue-card">
+      <div class="issue-head"><span class="issue-title">5.3 2026.4.20 생성형AI 망분리예외 — 이번 사안과 무관</span><span class="conf conf-ok">확정</span></div>
+      <div class="issue-body">
+        <blockquote>"이용자의 고유식별정보 또는 개인신용정보를 처리하는 경우에는 망분리 예외를 허용하지 않는다"</blockquote>
+        <p>Clark의 AI분석은 정확히 보험/건강정보 등 개인신용정보를 처리하므로 이 예외 대상 아님. 생성형AI 자체는 2026년 7월 현재까지 개별심사(혁신금융서비스 샌드박스·비조치의견서) 단계, 일반규정화 안 됨.</p>
+      </div>
+      <div class="issue-src">출처: <a href="https://www.fsc.go.kr/no010101/86745" target="_blank">금융위 2026.4.17 보도자료</a>, <a href="https://fsc.go.kr/no010101/86972" target="_blank">금융위 2026.5.22 보도자료</a></div>
+    </div>
+
+    <div class="issue-card">
+      <div class="issue-head"><span class="issue-title">5.4 ISMS-P 인증 — 물리적 분리 강제 아님</span></div>
+      <div class="issue-body">
+        <p>ISMS-P 2.10.2는 "물리적 또는 논리적 분리"를 요구 — 논리적 분리(VPC·계정분리·접근통제)로도 충족 가능. 동일 클라우드/리전이라는 사실 자체가 자동 지적사항은 아님.</p>
+      </div>
+    </div>
+
+    <div class="info-card warning">
+      <h3>리스크 판정: 낮음~중간</h3>
+      <p>좁은 의미 "망분리" 위반은 아니나, "위탁·제휴처리시스템의 내부업무용과의 분리설치" 요건을 실제로 충족하는 논리적 분리 설계(별도 VPC/계정, 엄격한 접근통제)가 갖춰지는지가 관건.</p>
+    </div>
+  </div>
+
+  <!-- 6. 종합판단 -->
+  <div class="section" id="s6">
+    <div class="section-title">🧭 6. 종합판단 — 기존 법적 판정의 전제를 훼손하는가</div>
+    <p style="font-size:0.95em; margin-bottom:16px;"><strong>결론: 그렇다.</strong> 다만 그 메커니즘은 애초 우려했던 개별조문이 아니라 "업무위탁의 실질성"이라는 더 근본적인 판례 법리를 통해서다.</p>
+    <table>
+      <tr><th>쟁점</th><th>리스크</th><th>핵심 근거</th></tr>
+      <tr><td>1. 위탁의 실질성</td><td><span class="risk risk-high">높음</span></td><td>대법원 2016도13263 + 카카오페이·보람상조 최근 사례</td></tr>
+      <tr><td>2. 보험업법 실질수행주체</td><td><span class="risk risk-high">높음</span></td><td>"GA사가 실질수행"이라는 2026-05-14 판정의 사실적 기초 흔들림</td></tr>
+      <tr><td>3. 국내설치의무</td><td><span class="risk risk-low">낮음</span></td><td>마이데이터 전용사업자엔 미적용 가능성, NCP·AWS 모두 국내</td></tr>
+      <tr><td>4. 재위탁 공개의무</td><td><span class="risk risk-low">낮음</span></td><td>방향이 반대라 "재위탁" 자체가 아님(문제는 쟁점1로 흡수)</td></tr>
+      <tr><td>5. 망분리·co-location</td><td><span class="risk risk-mid">낮음~중간</span></td><td>좁은 의미 위반 아니나 별도 분리설치 요건은 설계에 달림</td></tr>
+    </table>
+    <p style="font-size:0.9em; margin-top:16px; color:#718096;">이 판단은 확정된 법률자문이 아니라 공개 법령·판례·최근사례 기반 리스크 평가다. 최종 결정 전 외부 법무법인 검토를 권고한다.</p>
+  </div>
+
+  <!-- 7. 권고 -->
+  <div class="section" id="s7">
+    <div class="section-title">💡 7. 권고 — 리스크를 낮추는 대안 구조</div>
+    <div class="action-list">
+      <div class="action-item">
+        <div class="action-num">1</div>
+        <div class="action-body"><strong>RAG DB만이라도 AWS(더파트너스) 유지 — 가장 확실한 대안</strong><span>2026-07-14 확정 원칙 재확인. 콘텐츠 저작(KC Admin)은 NCP여도 되지만, 실제 검색·질의 처리 로직은 더파트너스가 물리적으로 운영해야 "실질적 수행주체=더파트너스" 근거 유지</span></div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">2</div>
+        <div class="action-body"><strong>불가피시 AWS쪽이 실질적 처리행위 수행하도록 설계</strong><span>프롬프트구성·판단로직(리스크타입 매칭 등)을 더파트너스 AWS가 수행하고 접근로그·감사기록으로 증빙 — "저장은 NCP, 처리는 더파트너스" 구조를 시스템적으로 증명</span></div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">3</div>
+        <div class="action-body"><strong>논리적 분리 강화</strong><span>RAG DB·KC Admin이 NCP에 있어도 아이지넷 마이데이터 내부시스템과 별도 VPC/계정으로 완전분리, 더파트너스 인력만 접근권한 부여</span></div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">4</div>
+        <div class="action-body"><strong>사전 유권해석 확보</strong><span>직접 판례·유권해석이 없는 법령 공백지대 — PIPC 유권해석 신청 또는 금감원 비조치의견서 요청으로 사전 확인 권고</span></div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">5</div>
+        <div class="action-body"><strong>아이지넷의 전자금융업 겸영 여부 확인</strong><span>전자금융감독규정 제14조의2(국내설치의무) 적용여부를 가르는 결정적 사실관계 — 사내에서 확인 가능</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8. 미확정 -->
+  <div class="section" id="s8">
+    <div class="section-title">❓ 8. 확인 필요 · 미확정 사항 목록</div>
+    <ul class="unresolved-list">
+      <li>아이지넷의 전자금융업 겸영 여부 (★ 사내 확인 가능)</li>
+      <li>「금융회사의 정보처리 및 전산설비 위탁에 관한 규정」의 2023~2026년 추가 개정 여부</li>
+      <li>PIPC "개인정보 처리 통합 안내서(안)"(2024.12.31 공개)의 최종 확정본 발간 여부 및 신규 지침 추가 여부</li>
+      <li>신용정보업감독규정상 GA사 전산설비 자체보유 의무의 정확한 조문번호</li>
+      <li>금융위·금감원 법령해석포털(better.fsc.go.kr)의 비조치의견서 개별 사례 — 검색엔진 미색인, 직접 조회 필요</li>
+      <li>전자금융감독규정 해설서(2025.8.6 개정판)의 RAG/생성형AI 관련 세부 서술 원문 대조</li>
+      <li>신용정보법 전면개편(2026년 진행중, 법률자문단회의 단계) 최신 동향 — AI개발 위한 새 적법처리근거 도입 검토중, 이번 사안에 유리하게 작용할 가능성</li>
+    </ul>
+  </div>
+
+  <!-- 9. 출처 -->
+  <div class="section" id="s9">
+    <div class="section-title">📚 9. 주요 출처</div>
+    <ul class="ref-list">
+      <li>개인정보보호법 제26조 — <a href="https://www.law.go.kr/LSW//lsLawLinkInfo.do?lsJoLnkSeq=900079061&lsId=011357&chrClsCd=010202&print=print" target="_blank">law.go.kr</a></li>
+      <li>대법원 2017.4.7. 선고 2016도13263 판결 — <a href="https://casenote.kr/대법원/2016도13263" target="_blank">casenote.kr</a></li>
+      <li>보험업법 제2조·제83조·제97조 — <a href="https://casenote.kr/법령/보험업법/" target="_blank">casenote.kr</a></li>
+      <li>전자금융감독규정 제14조의2(제2025-4호) — <a href="https://ko.wikisource.org/wiki/전자금융감독규정_(제2025-4호)" target="_blank">위키문헌</a></li>
+      <li>전자금융감독규정 제15조 — <a href="https://itwiki.kr/w/전자금융감독규정_제15조" target="_blank">itwiki.kr</a></li>
+      <li>신용정보업감독규정 별표3 — <a href="https://itwiki.kr/w/신용정보업감독규정_별표_3" target="_blank">itwiki.kr</a></li>
+      <li>금융위원회 2026.4.17 보도자료(SaaS 망분리예외) — <a href="https://www.fsc.go.kr/no010101/86745" target="_blank">fsc.go.kr</a></li>
+      <li>금융위원회 2026.5.22 보도자료(금융권 AI전환) — <a href="https://fsc.go.kr/no010101/86972" target="_blank">fsc.go.kr</a></li>
+      <li>카카오페이-알리페이-애플 사건 — <a href="https://www.etnews.com/20250523000056" target="_blank">전자신문</a>, <a href="https://v.daum.net/v/20260611142403744" target="_blank">다음뉴스</a></li>
+      <li>보람상조 제재 사건(2026.5) — <a href="http://www.newstomato.com/ReadNews.aspx?no=1300892" target="_blank">뉴스토마토</a>, <a href="https://www.fnnews.com/news/202605141050240574" target="_blank">fnnews</a></li>
+      <li>"보험점검센터" 소비자경보(2026.7.1) — <a href="https://www.edaily.co.kr/News/Read?newsId=04034406645510256" target="_blank">이데일리</a></li>
+      <li>금융위·금감원 법령해석(전자금융업무 미수행 여전사 제14조의2 미적용) — <a href="https://casenote.kr/금융위원회·금융감독원/8126777587" target="_blank">casenote.kr</a></li>
+      <li>한국보험연구원, "보험 모집 행위의 의미 및 범위에 대한 검토"(2018.10) — <a href="https://www.kiri.or.kr/pdf/전문자료/KIRI_20181030_111040.pdf" target="_blank">kiri.or.kr</a></li>
+    </ul>
+    <div class="disclaimer">본 문서는 공개 법령·판례·언론보도 기반 리스크 평가이며 법률자문을 대체하지 않습니다. 최종 결정 전 외부 법무법인 검토를 권고합니다.<br>리서치 원본(에이전트별 상세 조사결과): <code>RESEARCH/AI엔진_인프라배치_실질통제리스크_20260715/artifacts/agent_results/</code></div>
+  </div>
+
+</div>
+</body>
+</html>
