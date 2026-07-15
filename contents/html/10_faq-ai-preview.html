@@ -79,7 +79,7 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
 <main>
 <div class="section-label">FAQ RAG 답변 흐름</div>
 <div class="info-banner">
-  Concept이 감지되지 않거나(또는 KC 체인의 Rule 조건을 통과하지 못해) KC 구조화 답변으로 이어지지 못한 질문 중, <strong>계약 내용과 무관하게 답할 수 있는 일반 판단 노하우</strong>는 FAQ RAG로 처리됩니다. Risk-type 진단이나 담보 현황 표처럼 KC 체인 특유의 구조는 없고, <code style="background:#DCEAFB;padding:1px 5px;border-radius:3px;font-size:12px">contents/08_faq/faq-rag.md</code>에 등록된 답변(A) 텍스트 자체가 최종 답변의 근거가 되는 <strong>종단(leaf) 구조</strong>입니다 — 후속 체인·CTA 없이 그 자리에서 답변이 끝납니다. 아래는 카테고리 A(판단 노하우) 48건 전체를 실제 Clark 채팅 화면으로 시뮬레이션한 예시입니다.
+  Concept이 감지되지 않거나(또는 KC 체인의 Rule 조건을 통과하지 못해) KC 구조화 답변으로 이어지지 못한 질문 중, <strong>계약 내용과 무관하게 답할 수 있는 일반 판단 노하우</strong>는 FAQ RAG로 처리됩니다. Risk-type 진단이나 담보 현황 표처럼 KC 체인 특유의 구조는 없고, <code style="background:#DCEAFB;padding:1px 5px;border-radius:3px;font-size:12px">contents/08_faq/faq-rag.md</code>에 등록된 답변(A) 텍스트 자체가 최종 답변의 근거가 되는 <strong>종단(leaf) 구조</strong>입니다 — 후속 체인·CTA 없이 그 자리에서 답변이 끝납니다. 아래는 카테고리 A(판단 노하우) 70건 전체를 실제 Clark 채팅 화면으로 시뮬레이션한 예시입니다.
 </div>
 <div class="warn-banner">
   ⚠️ 카테고리 B(서비스 이용 안내, FAQ-008~010)는 아직 실제 서비스 정책 문구가 확정되지 않은 플레이스홀더 상태라 이 미리보기에서 제외했습니다. 실제 문구 확정 후 추가 예정.
@@ -2775,6 +2775,672 @@ main { max-width: 1040px; margin: 36px auto; padding: 0 24px 60px; }
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- FAQ-056~074: 보닥 가이드 소스 (2026-07-15 2차) -->
+  <!-- FAQ-056 뇌암 C71 -->
+  <div class="acc-item">
+    <button class="acc-header">
+      <span class="t-badge">FAQ-056</span>
+      <span class="acc-title">질병코드 C71(뇌암) 진단받으면 어떤 보험금을 확인해야 하나요?</span>
+      <span class="domain-tag">판단 노하우 · 질병코드 청구가이드</span>
+      <span class="acc-arrow">⌄</span>
+    </button>
+    <div class="acc-body"><div class="acc-inner">
+      <div class="acc-block trigger-block">
+        <div class="acc-block-label">발화 예시 — Concept 미매칭 → FAQ RAG 매칭</div>
+        <div class="utterance"><span>"뇌암 진단받았는데 어떤 보험금 나오나요?"</span><span>"뇌암도 암보험 진단비로 청구되나요?"</span></div>
+        <div class="chain-path">Concept 미매칭 → 약관 RAG 결과 없음(또는 상태①②로 스킵) → FAQ RAG 매칭(FAQ-056) → 등록된 답변(A) 그대로 반환</div>
+      </div>
+      <div class="acc-block" style="background:transparent;padding:0;">
+        <div class="acc-block-label" style="padding-left:2px;">Clark 모바일 웹 실제 화면</div>
+        <div class="phone-mockup-wrap"><div class="phone-frame"><div class="phone-screen">
+          <div class="phone-statusbar"><span>9:41</span><span>●●● 5G 100%</span></div>
+          <div class="app-topbar"><span class="back-arrow">‹</span><span class="app-avatar-top">🤖</span><div class="app-title-group"><div class="app-title">Clark</div><div class="app-sub">보험 진단 · 상담 도우미</div></div></div>
+          <div class="app-chat-area">
+            <div class="app-msg-user-row"><div class="app-msg-user">뇌암 진단받았는데 어떤 보험금 나오나요?</div></div>
+            <div class="app-msg-user-time">오전 10:12</div>
+            <div class="app-msg-clark-row"><div class="app-avatar">🤖</div><div class="app-msg-clark">
+              <p>통계청 KCD 기준 C71은 "뇌의 악성 신생물"이 맞아요. 암보험 표준약관상 대상 부위라 C71 진단은 원칙적으로 일반암 진단비·암수술비·항암방사선약물치료비·입원일당 등 '암' 계열 특약 지급 대상이에요. 뇌 조직검사가 어려운 경우 임상적 진단만으로 암 확정을 인정한 하급심 판례도 있어요.</p>
+              <p>한 가지 주의할 점은 "고액암" 분류예요. 뇌암을 골수암·백혈병과 3종만 묶는 상품도 있고 식도암·췌장암까지 더해 5종, 담낭·담도·기관지 등까지 확대해 7~10종으로 정하는 상품도 있어 항목 수 자체가 다 달라요. 또 뇌암(종양성 질환)은 뇌졸중·뇌혈관질환(순환계통 질환)과 완전히 다른 특약군이에요.</p>
+              <div class="disclaimer">고액암 포함 여부·항목 수, 뇌졸중·뇌혈관질환 특약과의 구분은 상품마다 달라요. 정확한 보장 내용은 보닥 플래너와 확인하세요.</div>
+            </div></div>
+            <div class="app-msg-clark-time">오전 10:12</div>
+          </div>
+          <div class="app-input-bar"><div class="app-input-fake">메시지 입력...</div><div class="app-send-btn">➤</div></div>
+        </div></div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- FAQ-057 녹내장 H40 -->
+  <div class="acc-item">
+    <button class="acc-header">
+      <span class="t-badge">FAQ-057</span>
+      <span class="acc-title">질병코드 H40(녹내장) 진단받으면 어떤 보험금을 확인해야 하나요?</span>
+      <span class="domain-tag">판단 노하우 · 질병코드 청구가이드</span>
+      <span class="acc-arrow">⌄</span>
+    </button>
+    <div class="acc-body"><div class="acc-inner">
+      <div class="acc-block trigger-block">
+        <div class="acc-block-label">발화 예시 — Concept 미매칭 → FAQ RAG 매칭</div>
+        <div class="utterance"><span>"녹내장 진단받았는데 보험금 나오나요?"</span><span>"녹내장 수술비 실비 청구 되나요?"</span></div>
+        <div class="chain-path">Concept 미매칭 → 약관 RAG 결과 없음(또는 상태①②로 스킵) → FAQ RAG 매칭(FAQ-057) → 등록된 답변(A) 그대로 반환</div>
+      </div>
+      <div class="acc-block" style="background:transparent;padding:0;">
+        <div class="acc-block-label" style="padding-left:2px;">Clark 모바일 웹 실제 화면</div>
+        <div class="phone-mockup-wrap"><div class="phone-frame"><div class="phone-screen">
+          <div class="phone-statusbar"><span>9:41</span><span>●●● 5G 100%</span></div>
+          <div class="app-topbar"><span class="back-arrow">‹</span><span class="app-avatar-top">🤖</span><div class="app-title-group"><div class="app-title">Clark</div><div class="app-sub">보험 진단 · 상담 도우미</div></div></div>
+          <div class="app-chat-area">
+            <div class="app-msg-user-row"><div class="app-msg-user">녹내장 진단받았는데 보험금 나오나요?</div></div>
+            <div class="app-msg-user-time">오후 1:30</div>
+            <div class="app-msg-clark-row"><div class="app-avatar">🤖</div><div class="app-msg-clark">
+              <p>통계청 KCD 기준 H40은 "녹내장"이 맞아요. 다만 백내장이나 암과 달리 녹내장은 표준약관에 별도로 정의된 "진단비" 담보 자체가 없어요. 대부분 상품엔 "녹내장진단비"라는 항목이 없고, 일부 보험사가 안과질환 특약 안에 포함시켜 판매하는 경우가 있을 뿐이에요.</p>
+              <p>가장 확실한 청구 통로는 실손의료보험이에요 — 시야검사·OCT 등 검사비, 안약 약제비, 여과수술 시 본인부담금을 실비로 보상해요. 여과수술은 2021년 1월부터 건강보험 급여가 적용돼 부담이 크게 줄었어요. 실제 수술을 받았다면 질병수술비 특약 대상이 될 수도 있어요.</p>
+              <div class="disclaimer">H40 진단비 담보의 존재 여부·명칭은 상품마다 전혀 달라요. 실제 청구 가능 여부는 본인 약관이나 보닥 플래너를 통해 확인하세요.</div>
+            </div></div>
+            <div class="app-msg-clark-time">오후 1:30</div>
+          </div>
+          <div class="app-input-bar"><div class="app-input-fake">메시지 입력...</div><div class="app-send-btn">➤</div></div>
+        </div></div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- FAQ-058 당뇨병 E11 -->
+  <div class="acc-item">
+    <button class="acc-header">
+      <span class="t-badge">FAQ-058</span>
+      <span class="acc-title">질병코드 E11(당뇨병) 진단받으면 어떤 보험금을 확인해야 하나요?</span>
+      <span class="domain-tag">판단 노하우 · 질병코드 청구가이드</span>
+      <span class="acc-arrow">⌄</span>
+    </button>
+    <div class="acc-body"><div class="acc-inner">
+      <div class="acc-block trigger-block">
+        <div class="acc-block-label">발화 예시 — Concept 미매칭 → FAQ RAG 매칭</div>
+        <div class="utterance"><span>"당뇨병 진단받았는데 보험금 받을 수 있어요?"</span><span>"당뇨 합병증 생기면 수술비 나오나요?"</span></div>
+        <div class="chain-path">Concept 미매칭 → 약관 RAG 결과 없음(또는 상태①②로 스킵) → FAQ RAG 매칭(FAQ-058) → 등록된 답변(A) 그대로 반환</div>
+      </div>
+      <div class="acc-block" style="background:transparent;padding:0;">
+        <div class="acc-block-label" style="padding-left:2px;">Clark 모바일 웹 실제 화면</div>
+        <div class="phone-mockup-wrap"><div class="phone-frame"><div class="phone-screen">
+          <div class="phone-statusbar"><span>9:41</span><span>●●● 5G 100%</span></div>
+          <div class="app-topbar"><span class="back-arrow">‹</span><span class="app-avatar-top">🤖</span><div class="app-title-group"><div class="app-title">Clark</div><div class="app-sub">보험 진단 · 상담 도우미</div></div></div>
+          <div class="app-chat-area">
+            <div class="app-msg-user-row"><div class="app-msg-user">당뇨병 진단받았는데 보험금 받을 수 있어요?</div></div>
+            <div class="app-msg-user-time">오후 4:05</div>
+            <div class="app-msg-clark-row"><div class="app-avatar">🤖</div><div class="app-msg-clark">
+              <p>통계청 KCD 기준 E11은 "제2형 당뇨병"이 맞아요. 먼저 확인할 건 "성인병진단비"·"특정질병진단비" 같은 특약에 당뇨병이 포함돼 있는지예요. 다만 진단 확정 기준이 상품마다 달라서, 의사 진단만으로 인정하는 상품도 있고 당화혈색소 수치 기준(예: 6.5% 이상)을 요구하는 상품도 있어요.</p>
+              <p>진단비 특약이 없어도 실손보험으로 외래 진료비·처방약·입원치료비는 청구할 수 있고, 혈당측정지 등은 국민건강보험 요양비로 지원받을 수 있어요. 망막병증·신증 같은 합병증이 생기면 수술비·후유장해 특약도 추가로 검토해볼 수 있어요.</p>
+              <div class="disclaimer">진단비 특약의 존재 여부·진단 확정 기준은 상품마다 달라요. 정확한 보장 내용과 합병증별 특약 매칭은 보닥 플래너와 확인하세요.</div>
+            </div></div>
+            <div class="app-msg-clark-time">오후 4:05</div>
+          </div>
+          <div class="app-input-bar"><div class="app-input-fake">메시지 입력...</div><div class="app-send-btn">➤</div></div>
+        </div></div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- FAQ-059 무릎장애 M23 -->
+  <div class="acc-item">
+    <button class="acc-header">
+      <span class="t-badge">FAQ-059</span>
+      <span class="acc-title">질병코드 M23(무릎 반월판·인대 손상) 진단받으면 어떤 보험금을 확인해야 하나요?</span>
+      <span class="domain-tag">판단 노하우 · 질병코드 청구가이드</span>
+      <span class="acc-arrow">⌄</span>
+    </button>
+    <div class="acc-body"><div class="acc-inner">
+      <div class="acc-block trigger-block">
+        <div class="acc-block-label">발화 예시 — Concept 미매칭 → FAQ RAG 매칭</div>
+        <div class="utterance"><span>"무릎 반월판 파열 진단받았는데 다른 보험금도 받을 수 있나요?"</span><span>"십자인대재건술 받으면 수술비 특약도 나오나요?"</span></div>
+        <div class="chain-path">Concept 미매칭 → 약관 RAG 결과 없음(또는 상태①②로 스킵) → FAQ RAG 매칭(FAQ-059) → 등록된 답변(A) 그대로 반환</div>
+      </div>
+      <div class="acc-block" style="background:transparent;padding:0;">
+        <div class="acc-block-label" style="padding-left:2px;">Clark 모바일 웹 실제 화면</div>
+        <div class="phone-mockup-wrap"><div class="phone-frame"><div class="phone-screen">
+          <div class="phone-statusbar"><span>9:41</span><span>●●● 5G 100%</span></div>
+          <div class="app-topbar"><span class="back-arrow">‹</span><span class="app-avatar-top">🤖</span><div class="app-title-group"><div class="app-title">Clark</div><div class="app-sub">보험 진단 · 상담 도우미</div></div></div>
+          <div class="app-chat-area">
+            <div class="app-msg-user-row"><div class="app-msg-user">무릎 반월판 파열 진단받았는데 다른 보험금도 받을 수 있나요?</div></div>
+            <div class="app-msg-user-time">오전 9:47</div>
+            <div class="app-msg-clark-row"><div class="app-avatar">🤖</div><div class="app-msg-clark">
+              <p>M23은 무릎 내부 구조물(반월판, 인대, 관절 내 유리체, 연골 등)에 이상이 생겼을 때 부여되는 코드예요. 어떤 보험금을 받을 수 있는지는 진단서 세부 코드와 치료 방식(보존적 치료 vs 수술)에 따라 달라져요.</p>
+              <p>일반적으로 점검할 건 세 가지예요 — 실손의료비, 질병수술비 특약(관절경 수술 등), 질병입원일당 특약이에요. 정액형 관절질환진단비는 상품마다 보장 범위가 크게 다르니 약관에서 직접 대조해야 해요.</p>
+              <div class="disclaimer">실제 지급 여부는 가입한 상품의 약관과 진단서상 세부 코드에 따라 달라져요. 반드시 약관 확인 및 보험사 문의가 필요해요.</div>
+            </div></div>
+            <div class="app-msg-clark-time">오전 9:47</div>
+          </div>
+          <div class="app-input-bar"><div class="app-input-fake">메시지 입력...</div><div class="app-send-btn">➤</div></div>
+        </div></div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- FAQ-060 뇌경색증 I63 -->
+  <div class="acc-item">
+    <button class="acc-header">
+      <span class="t-badge">FAQ-060</span>
+      <span class="acc-title">질병코드 I63(뇌경색증) 진단받으면 어떤 뇌 관련 특약으로 확인해야 하나요?</span>
+      <span class="domain-tag">판단 노하우 · 질병코드 청구가이드</span>
+      <span class="acc-arrow">⌄</span>
+    </button>
+    <div class="acc-body"><div class="acc-inner">
+      <div class="acc-block trigger-block">
+        <div class="acc-block-label">발화 예시 — Concept 미매칭 → FAQ RAG 매칭</div>
+        <div class="utterance"><span>"뇌경색 진단받았는데 뇌졸중 특약으로 보험금 받을 수 있나요?"</span><span>"뇌혈관질환진단비랑 뇌졸중진단비는 뭐가 달라요?"</span></div>
+        <div class="chain-path">Concept 미매칭 → 약관 RAG 결과 없음(또는 상태①②로 스킵) → FAQ RAG 매칭(FAQ-060) → 등록된 답변(A) 그대로 반환</div>
+      </div>
+      <div class="acc-block" style="background:transparent;padding:0;">
+        <div class="acc-block-label" style="padding-left:2px;">Clark 모바일 웹 실제 화면</div>
+        <div class="phone-mockup-wrap"><div class="phone-frame"><div class="phone-screen">
+          <div class="phone-statusbar"><span>9:41</span><span>●●● 5G 100%</span></div>
+          <div class="app-topbar"><span class="back-arrow">‹</span><span class="app-avatar-top">🤖</span><div class="app-title-group"><div class="app-title">Clark</div><div class="app-sub">보험 진단 · 상담 도우미</div></div></div>
+          <div class="app-chat-area">
+            <div class="app-msg-user-row"><div class="app-msg-user">뇌경색 진단받았는데 뇌졸중 특약으로 보험금 받을 수 있나요?</div></div>
+            <div class="app-msg-user-time">오후 2:51</div>
+            <div class="app-msg-clark-row"><div class="app-avatar">🤖</div><div class="app-msg-clark">
+              <p>I63은 뇌혈관이 막혀 뇌조직 일부가 괴사하는 "뇌경색증"이에요. 확인해야 할 특약이 세 갈래예요 — "뇌출혈진단비"는 대개 출혈성 질환 위주라 I63은 빠지는 경우가 많고, "뇌졸중진단비"는 국내에서 가장 널리 쓰이는 특약명으로 허혈성 뇌졸중(I63)도 포함하는 경우가 많아 I63 진단만으로 청구되는 사례가 흔해요. "뇌혈관질환진단비"는 범위가 가장 넓어요.</p>
+              <p>다만 회사·상품마다 예외가 많아서, 약관에 명시된 "보장 질병분류코드 범위"를 직접 대조하는 게 확실해요. 경계가 애매한 경한 사례는 지급 분쟁이 실제로 생기는 영역이라, 신경과 진단서와 MRI·CT 판독지를 함께 준비하면 유리해요.</p>
+              <div class="disclaimer">뇌졸중·뇌출혈·뇌혈관질환 진단비는 명칭이 비슷해도 보장 코드 범위가 상품마다 달라요. 약관을 직접 확인하거나 보험사에 문의하세요.</div>
+            </div></div>
+            <div class="app-msg-clark-time">오후 2:51</div>
+          </div>
+          <div class="app-input-bar"><div class="app-input-fake">메시지 입력...</div><div class="app-send-btn">➤</div></div>
+        </div></div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- FAQ-061 담석증 K80 -->
+  <div class="acc-item">
+    <button class="acc-header">
+      <span class="t-badge">FAQ-061</span>
+      <span class="acc-title">질병코드 K80(담석증) 진단받으면 어떤 보험금을 확인해야 하나요?</span>
+      <span class="domain-tag">판단 노하우 · 질병코드 청구가이드</span>
+      <span class="acc-arrow">⌄</span>
+    </button>
+    <div class="acc-body"><div class="acc-inner">
+      <div class="acc-block trigger-block">
+        <div class="acc-block-label">발화 예시 — Concept 미매칭 → FAQ RAG 매칭</div>
+        <div class="utterance"><span>"담석증으로 담낭절제술 받았는데 무슨 보험금 받을 수 있나요?"</span><span>"담낭염 수술하면 입원일당도 나오나요?"</span></div>
+        <div class="chain-path">Concept 미매칭 → 약관 RAG 결과 없음(또는 상태①②로 스킵) → FAQ RAG 매칭(FAQ-061) → 등록된 답변(A) 그대로 반환</div>
+      </div>
+      <div class="acc-block" style="background:transparent;padding:0;">
+        <div class="acc-block-label" style="padding-left:2px;">Clark 모바일 웹 실제 화면</div>
+        <div class="phone-mockup-wrap"><div class="phone-frame"><div class="phone-screen">
+          <div class="phone-statusbar"><span>9:41</span><span>●●● 5G 100%</span></div>
+          <div class="app-topbar"><span class="back-arrow">‹</span><span class="app-avatar-top">🤖</span><div class="app-title-group"><div class="app-title">Clark</div><div class="app-sub">보험 진단 · 상담 도우미</div></div></div>
+          <div class="app-chat-area">
+            <div class="app-msg-user-row"><div class="app-msg-user">담석증으로 담낭절제술 받았는데 무슨 보험금 받을 수 있나요?</div></div>
+            <div class="app-msg-user-time">오전 11:20</div>
+            <div class="app-msg-clark-row"><div class="app-avatar">🤖</div><div class="app-msg-clark">
+              <p>K80은 담낭·담관에 결석이 생기는 "담석증"이에요. 우선 실손의료비로 입원비·수술비·검사비·약제비를 청구할 수 있고, "질병수술비"(수술 1회당 정액)와 "질병입원일당"이 가입돼 있다면 함께 청구 가능해요.</p>
+              <p>정액 특약의 지급 여부·금액은 상품별 편차가 크니 약관에서 직접 확인이 필요해요. 참고로 실손보험금 청구권 소멸시효는 상법상 3년이 원칙이라, 진료일로부터 너무 늦게 청구하지 않도록 유의하세요.</p>
+              <div class="disclaimer">소액 청구 시 서류 대체 기준이나 실손 세대별 한도는 상품·시점별로 달라요. 반드시 가입 상품 약관을 확인하세요.</div>
+            </div></div>
+            <div class="app-msg-clark-time">오전 11:20</div>
+          </div>
+          <div class="app-input-bar"><div class="app-input-fake">메시지 입력...</div><div class="app-send-btn">➤</div></div>
+        </div></div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- FAQ-062 허혈성심장질환 I25 -->
+  <div class="acc-item">
+    <button class="acc-header">
+      <span class="t-badge">FAQ-062</span>
+      <span class="acc-title">질병코드 I25(허혈성심장질환) 진단받았는데 어떤 진단비 특약으로 청구되나요?</span>
+      <span class="domain-tag">판단 노하우 · 질병코드 청구가이드</span>
+      <span class="acc-arrow">⌄</span>
+    </button>
+    <div class="acc-body"><div class="acc-inner">
+      <div class="acc-block trigger-block">
+        <div class="acc-block-label">발화 예시 — Concept 미매칭 → FAQ RAG 매칭</div>
+        <div class="utterance"><span>"허혈성심장질환 진단서 나왔는데 어느 특약으로 청구해요?"</span><span>"I25 진단인데 급성심근경색진단비도 받을 수 있나요?"</span></div>
+        <div class="chain-path">Concept 미매칭 → 약관 RAG 결과 없음(또는 상태①②로 스킵) → FAQ RAG 매칭(FAQ-062) → 등록된 답변(A) 그대로 반환</div>
+      </div>
+      <div class="acc-block" style="background:transparent;padding:0;">
+        <div class="acc-block-label" style="padding-left:2px;">Clark 모바일 웹 실제 화면</div>
+        <div class="phone-mockup-wrap"><div class="phone-frame"><div class="phone-screen">
+          <div class="phone-statusbar"><span>9:41</span><span>●●● 5G 100%</span></div>
+          <div class="app-topbar"><span class="back-arrow">‹</span><span class="app-avatar-top">🤖</span><div class="app-title-group"><div class="app-title">Clark</div><div class="app-sub">보험 진단 · 상담 도우미</div></div></div>
+          <div class="app-chat-area">
+            <div class="app-msg-user-row"><div class="app-msg-user">허혈성심장질환 진단서 나왔는데 어느 특약으로 청구해요?</div></div>
+            <div class="app-msg-user-time">오후 5:18</div>
+            <div class="app-msg-clark-row"><div class="app-avatar">🤖</div><div class="app-msg-clark">
+              <p>I25는 관상동맥이 만성적으로 좁아지거나 굳어 심장근육에 혈류가 부족해지는 '만성 허혈성 심장병'이에요. 보장범위가 좁은 순서로 "급성심근경색진단비" &lt; "허혈성심장질환진단비"(I20~I25 전체) &lt; "심장질환진단비"(더 폭넓게 포함) 순이에요.</p>
+              <p>I25 진단이면 급성심근경색진단비만 가입돼 있는 경우 지급 대상이 아닐 가능성이 크고, 허혈성심장질환진단비나 심장질환진단비가 있어야 받을 수 있어요. 담보명뿐 아니라 약관의 보장 코드 범위를 직접 대조하는 게 가장 확실해요.</p>
+              <div class="disclaimer">담보명이 같아 보여도 보험사·상품마다 보장 질병분류코드 범위가 달라요. 약관을 직접 확인해야 해요.</div>
+            </div></div>
+            <div class="app-msg-clark-time">오후 5:18</div>
+          </div>
+          <div class="app-input-bar"><div class="app-input-fake">메시지 입력...</div><div class="app-send-btn">➤</div></div>
+        </div></div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- FAQ-063 방광암 C67 -->
+  <div class="acc-item">
+    <button class="acc-header">
+      <span class="t-badge">FAQ-063</span>
+      <span class="acc-title">질병코드 C67(방광암) 진단받으면 일반암 진단비를 전액 받을 수 있나요?</span>
+      <span class="domain-tag">판단 노하우 · 질병코드 청구가이드</span>
+      <span class="acc-arrow">⌄</span>
+    </button>
+    <div class="acc-body"><div class="acc-inner">
+      <div class="acc-block trigger-block">
+        <div class="acc-block-label">발화 예시 — Concept 미매칭 → FAQ RAG 매칭</div>
+        <div class="utterance"><span>"방광암 C67 코드인데 일반암 진단비 다 나와요?"</span><span>"방광암 진단비 왜 자꾸 삭감된대요?"</span></div>
+        <div class="chain-path">Concept 미매칭 → 약관 RAG 결과 없음(또는 상태①②로 스킵) → FAQ RAG 매칭(FAQ-063) → 등록된 답변(A) 그대로 반환</div>
+      </div>
+      <div class="acc-block" style="background:transparent;padding:0;">
+        <div class="acc-block-label" style="padding-left:2px;">Clark 모바일 웹 실제 화면</div>
+        <div class="phone-mockup-wrap"><div class="phone-frame"><div class="phone-screen">
+          <div class="phone-statusbar"><span>9:41</span><span>●●● 5G 100%</span></div>
+          <div class="app-topbar"><span class="back-arrow">‹</span><span class="app-avatar-top">🤖</span><div class="app-title-group"><div class="app-title">Clark</div><div class="app-sub">보험 진단 · 상담 도우미</div></div></div>
+          <div class="app-chat-area">
+            <div class="app-msg-user-row"><div class="app-msg-user">방광암 C67 코드인데 일반암 진단비 다 나와요?</div></div>
+            <div class="app-msg-user-time">오후 7:02</div>
+            <div class="app-msg-clark-row"><div class="app-avatar">🤖</div><div class="app-msg-clark">
+              <p>C67은 방광의 악성 신생물이에요. 다만 "침습이면 무조건 일반암 전액, 비침습이면 무조건 유사암"이라는 단순 이분법은 실제와 달라요. 비침습 단계에서도 비뇨의학과와 병리과 판단이 갈릴 수 있어 같은 환자라도 진단서 코드가 병원·과별로 다를 수 있어요.</p>
+              <p>이 때문에 진단서에 C67이 기재돼 있어도 보험사가 조직검사 결과를 근거로 유사암이라며 지급을 다투는 분쟁이 흔해요. 방광암은 유사암 경계선상의 대표적인 암종으로 이해하시면 돼요.</p>
+              <div class="disclaimer">진단서에 C67로 기재돼 있어도 보험사가 조직검사 결과로 유사암 재분류를 다툴 수 있어요. 병리결과지를 반드시 함께 확보해 두세요.</div>
+            </div></div>
+            <div class="app-msg-clark-time">오후 7:02</div>
+          </div>
+          <div class="app-input-bar"><div class="app-input-fake">메시지 입력...</div><div class="app-send-btn">➤</div></div>
+        </div></div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- FAQ-064 식도암 C15 -->
+  <div class="acc-item">
+    <button class="acc-header">
+      <span class="t-badge">FAQ-064</span>
+      <span class="acc-title">질병코드 C15(식도암) 진단받으면 어떤 보험금을 청구할 수 있나요?</span>
+      <span class="domain-tag">판단 노하우 · 질병코드 청구가이드</span>
+      <span class="acc-arrow">⌄</span>
+    </button>
+    <div class="acc-body"><div class="acc-inner">
+      <div class="acc-block trigger-block">
+        <div class="acc-block-label">발화 예시 — Concept 미매칭 → FAQ RAG 매칭</div>
+        <div class="utterance"><span>"식도암 진단비 얼마 받아요?"</span><span>"식도암도 유사암 해당돼요?"</span></div>
+        <div class="chain-path">Concept 미매칭 → 약관 RAG 결과 없음(또는 상태①②로 스킵) → FAQ RAG 매칭(FAQ-064) → 등록된 답변(A) 그대로 반환</div>
+      </div>
+      <div class="acc-block" style="background:transparent;padding:0;">
+        <div class="acc-block-label" style="padding-left:2px;">Clark 모바일 웹 실제 화면</div>
+        <div class="phone-mockup-wrap"><div class="phone-frame"><div class="phone-screen">
+          <div class="phone-statusbar"><span>9:41</span><span>●●● 5G 100%</span></div>
+          <div class="app-topbar"><span class="back-arrow">‹</span><span class="app-avatar-top">🤖</span><div class="app-title-group"><div class="app-title">Clark</div><div class="app-sub">보험 진단 · 상담 도우미</div></div></div>
+          <div class="app-chat-area">
+            <div class="app-msg-user-row"><div class="app-msg-user">식도암 진단비 얼마 받아요?</div></div>
+            <div class="app-msg-user-time">오전 8:34</div>
+            <div class="app-msg-clark-row"><div class="app-avatar">🤖</div><div class="app-msg-clark">
+              <p>C15는 식도의 악성 신생물이에요. 식도암은 유사암(소액암)으로 분류되는 암종 목록에 해당하지 않아서, 조직검사로 확정되면 일반적으로 일반암 진단비가 정액으로 전액 지급돼요.</p>
+              <p>다만 일부 보험사는 식도암을 췌장암 등과 함께 "고액암"이나 "10대 주요암"으로 묶어 더 높은 금액을 지급하기도 해요. 이건 상품마다 포함 여부·배율이 달라서 단정할 수 없으니 약관을 확인해야 해요.</p>
+              <div class="disclaimer">"고액암"·"10대 주요암" 해당 여부는 보험사·상품별로 달라요. 반드시 가입 약관을 확인하세요.</div>
+            </div></div>
+            <div class="app-msg-clark-time">오전 8:34</div>
+          </div>
+          <div class="app-input-bar"><div class="app-input-fake">메시지 입력...</div><div class="app-send-btn">➤</div></div>
+        </div></div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- FAQ-065 췌장암 C25 -->
+  <div class="acc-item">
+    <button class="acc-header">
+      <span class="t-badge">FAQ-065</span>
+      <span class="acc-title">질병코드 C25(췌장암) 진단받았는데, 어떤 보험특약으로 청구하나요?</span>
+      <span class="domain-tag">판단 노하우 · 질병코드 청구가이드</span>
+      <span class="acc-arrow">⌄</span>
+    </button>
+    <div class="acc-body"><div class="acc-inner">
+      <div class="acc-block trigger-block">
+        <div class="acc-block-label">발화 예시 — Concept 미매칭 → FAQ RAG 매칭</div>
+        <div class="utterance"><span>"췌장암 C25 진단서를 받았는데 어떤 특약으로 청구할 수 있나요?"</span><span>"췌장암도 고액암 진단비 대상인가요?"</span></div>
+        <div class="chain-path">Concept 미매칭 → 약관 RAG 결과 없음(또는 상태①②로 스킵) → FAQ RAG 매칭(FAQ-065) → 등록된 답변(A) 그대로 반환</div>
+      </div>
+      <div class="acc-block" style="background:transparent;padding:0;">
+        <div class="acc-block-label" style="padding-left:2px;">Clark 모바일 웹 실제 화면</div>
+        <div class="phone-mockup-wrap"><div class="phone-frame"><div class="phone-screen">
+          <div class="phone-statusbar"><span>9:41</span><span>●●● 5G 100%</span></div>
+          <div class="app-topbar"><span class="back-arrow">‹</span><span class="app-avatar-top">🤖</span><div class="app-title-group"><div class="app-title">Clark</div><div class="app-sub">보험 진단 · 상담 도우미</div></div></div>
+          <div class="app-chat-area">
+            <div class="app-msg-user-row"><div class="app-msg-user">췌장암 C25 진단서를 받았는데 어떤 특약으로 청구할 수 있나요?</div></div>
+            <div class="app-msg-user-time">오전 10:56</div>
+            <div class="app-msg-clark-row"><div class="app-avatar">🤖</div><div class="app-msg-clark">
+              <p>C25는 췌장의 악성 신생물이에요. 암보험 표준약관상 일반암 진단비 대상이고, 대부분 보험사에서 고액암으로도 분류돼요. 뇌암·골수암·백혈병을 묶은 3대 고액암에 식도암·췌장암을 더해 5대, 간암 등을 더한 10대 고액암 상품도 있어요.</p>
+              <p>고액암으로 분류되면 일반암 진단비에 고액암 추가 진단비가 더해져 중복 지급돼요. 수술비(휘플씨 수술 등)·항암치료비·실손보험도 함께 청구 가능해요.</p>
+              <div class="disclaimer">"고액암" 지정 여부와 포함 범위는 상품별 약관 사항이며, 가입 후 90일 이내 진단은 대부분 보장 대상에서 제외돼요.</div>
+            </div></div>
+            <div class="app-msg-clark-time">오전 10:56</div>
+          </div>
+          <div class="app-input-bar"><div class="app-input-fake">메시지 입력...</div><div class="app-send-btn">➤</div></div>
+        </div></div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- FAQ-066 협심증 I20 -->
+  <div class="acc-item">
+    <button class="acc-header">
+      <span class="t-badge">FAQ-066</span>
+      <span class="acc-title">질병코드 I20(협심증) 진단, 심장질환 특약으로 청구되나요?</span>
+      <span class="domain-tag">판단 노하우 · 질병코드 청구가이드</span>
+      <span class="acc-arrow">⌄</span>
+    </button>
+    <div class="acc-body"><div class="acc-inner">
+      <div class="acc-block trigger-block">
+        <div class="acc-block-label">발화 예시 — Concept 미매칭 → FAQ RAG 매칭</div>
+        <div class="utterance"><span>"협심증 I20 진단받았는데 급성심근경색 진단비로 청구되나요?"</span><span>"스텐트 삽입술 받았는데 어떤 특약으로 청구하나요?"</span></div>
+        <div class="chain-path">Concept 미매칭 → 약관 RAG 결과 없음(또는 상태①②로 스킵) → FAQ RAG 매칭(FAQ-066) → 등록된 답변(A) 그대로 반환</div>
+      </div>
+      <div class="acc-block" style="background:transparent;padding:0;">
+        <div class="acc-block-label" style="padding-left:2px;">Clark 모바일 웹 실제 화면</div>
+        <div class="phone-mockup-wrap"><div class="phone-frame"><div class="phone-screen">
+          <div class="phone-statusbar"><span>9:41</span><span>●●● 5G 100%</span></div>
+          <div class="app-topbar"><span class="back-arrow">‹</span><span class="app-avatar-top">🤖</span><div class="app-title-group"><div class="app-title">Clark</div><div class="app-sub">보험 진단 · 상담 도우미</div></div></div>
+          <div class="app-chat-area">
+            <div class="app-msg-user-row"><div class="app-msg-user">협심증 I20 진단받았는데 급성심근경색 진단비로 청구되나요?</div></div>
+            <div class="app-msg-user-time">오후 6:40</div>
+            <div class="app-msg-clark-row"><div class="app-avatar">🤖</div><div class="app-msg-clark">
+              <p>I20은 관상동맥이 좁아져 흉통이 나타나는 "협심증"이에요. 관상동맥이 완전히 막히는 심근경색과는 별개 진단이라 "급성심근경색진단비" 대상은 아니에요. 대신 만성 허혈성심장질환(I25)과 함께 "허혈성심장질환진단비"(통상 I20~I25 범위) 대상이에요.</p>
+              <p>다만 상품에 따라 이 범위를 급성심근경색 위주로 좁게 정의해 협심증을 제외하는 경우도 있으니 약관 대조가 꼭 필요해요. 스텐트 삽입술을 받았다면 수술비 특약·실손보험으로도 청구할 수 있어요.</p>
+              <div class="disclaimer">"심장질환진단비"라는 명칭이 같아도 보장 질병코드 범위는 상품별로 달라요. 약관 별표로 개별 확인이 필요해요.</div>
+            </div></div>
+            <div class="app-msg-clark-time">오후 6:40</div>
+          </div>
+          <div class="app-input-bar"><div class="app-input-fake">메시지 입력...</div><div class="app-send-btn">➤</div></div>
+        </div></div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- FAQ-067 자궁내막증 N80 -->
+  <div class="acc-item">
+    <button class="acc-header">
+      <span class="t-badge">FAQ-067</span>
+      <span class="acc-title">질병코드 N80(자궁내막증), 암 특약이 아닌데 어떻게 청구하나요?</span>
+      <span class="domain-tag">판단 노하우 · 질병코드 청구가이드</span>
+      <span class="acc-arrow">⌄</span>
+    </button>
+    <div class="acc-body"><div class="acc-inner">
+      <div class="acc-block trigger-block">
+        <div class="acc-block-label">발화 예시 — Concept 미매칭 → FAQ RAG 매칭</div>
+        <div class="utterance"><span>"자궁내막증 N80 진단받았는데 암보험으로 청구되나요?"</span><span>"복강경 수술받았는데 수술비 특약 대상인가요?"</span></div>
+        <div class="chain-path">Concept 미매칭 → 약관 RAG 결과 없음(또는 상태①②로 스킵) → FAQ RAG 매칭(FAQ-067) → 등록된 답변(A) 그대로 반환</div>
+      </div>
+      <div class="acc-block" style="background:transparent;padding:0;">
+        <div class="acc-block-label" style="padding-left:2px;">Clark 모바일 웹 실제 화면</div>
+        <div class="phone-mockup-wrap"><div class="phone-frame"><div class="phone-screen">
+          <div class="phone-statusbar"><span>9:41</span><span>●●● 5G 100%</span></div>
+          <div class="app-topbar"><span class="back-arrow">‹</span><span class="app-avatar-top">🤖</span><div class="app-title-group"><div class="app-title">Clark</div><div class="app-sub">보험 진단 · 상담 도우미</div></div></div>
+          <div class="app-chat-area">
+            <div class="app-msg-user-row"><div class="app-msg-user">자궁내막증 N80 진단받았는데 암보험으로 청구되나요?</div></div>
+            <div class="app-msg-user-time">오후 3:27</div>
+            <div class="app-msg-clark-row"><div class="app-avatar">🤖</div><div class="app-msg-clark">
+              <p>N80은 자궁내막 조직이 자궁 밖에서 자라는 양성 만성질환으로, 암(신생물) 분류가 아니라 여성생식기 질환 분류에 속해요. 그래서 암진단비 대상이 아니고, 실손보험과 여성특정질환진단비·수술비 특약으로 청구하는 구조예요.</p>
+              <p>다만 복강경 같은 최소침습 수술은 일부 약관에서 낮은 수술 등급으로 분류되거나 지급 대상에서 제외될 수 있으니, 수술 전 보험사에 확인하는 게 안전해요. 재발률이 높아 재수술 시에도 매 건별로 수술비 특약 청구가 가능해요.</p>
+              <div class="disclaimer">자궁내막증은 암이 아니므로 암진단비 대상이 아니에요. 복강경 수술의 수술비 특약 인정 여부는 약관마다 크게 달라 사전 확인이 필수예요.</div>
+            </div></div>
+            <div class="app-msg-clark-time">오후 3:27</div>
+          </div>
+          <div class="app-input-bar"><div class="app-input-fake">메시지 입력...</div><div class="app-send-btn">➤</div></div>
+        </div></div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- FAQ-068 고액암 -->
+  <div class="acc-item">
+    <button class="acc-header">
+      <span class="t-badge">FAQ-068</span>
+      <span class="acc-title">고액암이 뭔가요? 일반암·유사암과는 어떻게 다른가요?</span>
+      <span class="domain-tag">판단 노하우 · 용어 비교</span>
+      <span class="acc-arrow">⌄</span>
+    </button>
+    <div class="acc-body"><div class="acc-inner">
+      <div class="acc-block trigger-block">
+        <div class="acc-block-label">발화 예시 — Concept 미매칭 → FAQ RAG 매칭</div>
+        <div class="utterance"><span>"고액암이 뭐예요?"</span><span>"뇌암이나 백혈병은 일반암보다 진단금을 더 받나요?"</span></div>
+        <div class="chain-path">Concept 미매칭 → 약관 RAG 결과 없음(또는 상태①②로 스킵) → FAQ RAG 매칭(FAQ-068) → 등록된 답변(A) 그대로 반환</div>
+      </div>
+      <div class="acc-block" style="background:transparent;padding:0;">
+        <div class="acc-block-label" style="padding-left:2px;">Clark 모바일 웹 실제 화면</div>
+        <div class="phone-mockup-wrap"><div class="phone-frame"><div class="phone-screen">
+          <div class="phone-statusbar"><span>9:41</span><span>●●● 5G 100%</span></div>
+          <div class="app-topbar"><span class="back-arrow">‹</span><span class="app-avatar-top">🤖</span><div class="app-title-group"><div class="app-title">Clark</div><div class="app-sub">보험 진단 · 상담 도우미</div></div></div>
+          <div class="app-chat-area">
+            <div class="app-msg-user-row"><div class="app-msg-user">고액암이 뭐예요?</div></div>
+            <div class="app-msg-user-time">오전 9:10</div>
+            <div class="app-msg-clark-row"><div class="app-avatar">🤖</div><div class="app-msg-clark">
+              <p>유사암(소액암)이 일반암보다 진단금을 낮춘 분류라면, 고액암은 반대예요 — 치료 기간이 길고 예후가 나쁜 몇몇 암종을 묶어 일반암 진단금에 별도 특약금을 더 지급하는 구조예요. 보통 뇌암·뼈암·백혈병을 3대로 잡고, 식도암·췌장암을 더해 5대, 간암 등을 더해 10대까지 확장하는데 정확히 몇 종인지는 상품마다 달라요.</p>
+              <p>이런 분류가 생기는 이유는 암종별 예후 격차가 크기 때문이에요. 국립암센터 통계에 따르면 전체 암 5년 생존율은 73.7%지만 폐암 42.5%, 간암 40.4%, 췌장암은 17.0%에 그쳐요.</p>
+              <div class="disclaimer">"고액암"에 포함되는 암종 목록·개수와 추가 지급 배율은 보험사·상품마다 전혀 달라요. 가입한 상품의 약관 별표를 꼭 확인하세요.</div>
+            </div></div>
+            <div class="app-msg-clark-time">오전 9:10</div>
+          </div>
+          <div class="app-input-bar"><div class="app-input-fake">메시지 입력...</div><div class="app-send-btn">➤</div></div>
+        </div></div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- FAQ-069 건강검진 전 점검 -->
+  <div class="acc-item">
+    <button class="acc-header">
+      <span class="t-badge">FAQ-069</span>
+      <span class="acc-title">건강검진 받기 전에 보험부터 점검하는 게 왜 유리한가요?</span>
+      <span class="domain-tag">판단 노하우 · 가입 초기 조건</span>
+      <span class="acc-arrow">⌄</span>
+    </button>
+    <div class="acc-body"><div class="acc-inner">
+      <div class="acc-block trigger-block">
+        <div class="acc-block-label">발화 예시 — Concept 미매칭 → FAQ RAG 매칭</div>
+        <div class="utterance"><span>"건강검진 전에 보험 가입해야 하나요?"</span><span>"검진받으면 보험 가입이 어려워진다는 게 사실인가요?"</span></div>
+        <div class="chain-path">Concept 미매칭 → 약관 RAG 결과 없음(또는 상태①②로 스킵) → FAQ RAG 매칭(FAQ-069) → 등록된 답변(A) 그대로 반환</div>
+      </div>
+      <div class="acc-block" style="background:transparent;padding:0;">
+        <div class="acc-block-label" style="padding-left:2px;">Clark 모바일 웹 실제 화면</div>
+        <div class="phone-mockup-wrap"><div class="phone-frame"><div class="phone-screen">
+          <div class="phone-statusbar"><span>9:41</span><span>●●● 5G 100%</span></div>
+          <div class="app-topbar"><span class="back-arrow">‹</span><span class="app-avatar-top">🤖</span><div class="app-title-group"><div class="app-title">Clark</div><div class="app-sub">보험 진단 · 상담 도우미</div></div></div>
+          <div class="app-chat-area">
+            <div class="app-msg-user-row"><div class="app-msg-user">건강검진 전에 보험 가입해야 하나요?</div></div>
+            <div class="app-msg-user-time">오후 12:15</div>
+            <div class="app-msg-clark-row"><div class="app-avatar">🤖</div><div class="app-msg-clark">
+              <p>표준 청약서 질문표는 최근 3개월 진료이력, 최근 1년 재검사 권고 여부, 최근 5년 10대 질병 이력을 나눠 물어봐요. 핵심은 "1년 이내 재검사 권고"예요 — 확진이 아니어도 건강검진에서 재검사 필요 소견만 붙어도 그때부터 1년간은 새로 가입하는 모든 보험에서 고지 대상이 돼요.</p>
+              <p>그래서 검진 결과가 나오기 전에 먼저 가입을 마쳐두면, 가입 시점 알릴의무는 그 이전 병력만 기준으로 판단돼서 이후 검진 결과가 이미 성립된 계약에 영향을 주지 않아요. 검진을 미루라는 게 아니라 "가입 → 검진" 순서를 조정하라는 조언이에요.</p>
+              <div class="disclaimer">질문표의 정확한 기간·문항은 보험사·상품마다 다를 수 있어요. 예정된 건강검진을 취소·연기하라는 의미는 아니에요.</div>
+            </div></div>
+            <div class="app-msg-clark-time">오후 12:15</div>
+          </div>
+          <div class="app-input-bar"><div class="app-input-fake">메시지 입력...</div><div class="app-send-btn">➤</div></div>
+        </div></div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- FAQ-070 태아보험 22주 -->
+  <div class="acc-item">
+    <button class="acc-header">
+      <span class="t-badge">FAQ-070</span>
+      <span class="acc-title">태아보험 선천성이상 담보는 왜 임신 22주까지만 가입할 수 있나요?</span>
+      <span class="domain-tag">판단 노하우 · 생활밀착 보험</span>
+      <span class="acc-arrow">⌄</span>
+    </button>
+    <div class="acc-body"><div class="acc-inner">
+      <div class="acc-block trigger-block">
+        <div class="acc-block-label">발화 예시 — Concept 미매칭 → FAQ RAG 매칭</div>
+        <div class="utterance"><span>"태아보험 22주가 왜 중요해요?"</span><span>"정밀초음파 하고 나면 태아보험 가입 안 되나요?"</span></div>
+        <div class="chain-path">Concept 미매칭 → 약관 RAG 결과 없음(또는 상태①②로 스킵) → FAQ RAG 매칭(FAQ-070) → 등록된 답변(A) 그대로 반환</div>
+      </div>
+      <div class="acc-block" style="background:transparent;padding:0;">
+        <div class="acc-block-label" style="padding-left:2px;">Clark 모바일 웹 실제 화면</div>
+        <div class="phone-mockup-wrap"><div class="phone-frame"><div class="phone-screen">
+          <div class="phone-statusbar"><span>9:41</span><span>●●● 5G 100%</span></div>
+          <div class="app-topbar"><span class="back-arrow">‹</span><span class="app-avatar-top">🤖</span><div class="app-title-group"><div class="app-title">Clark</div><div class="app-sub">보험 진단 · 상담 도우미</div></div></div>
+          <div class="app-chat-area">
+            <div class="app-msg-user-row"><div class="app-msg-user">태아보험 22주가 왜 중요해요?</div></div>
+            <div class="app-msg-user-time">오후 4:48</div>
+            <div class="app-msg-clark-row"><div class="app-avatar">🤖</div><div class="app-msg-clark">
+              <p>선천성이상 담보는 태아 상태에서만 가입할 수 있고 출생 후엔 소급 가입이 안 돼요. 임신 20~24주 사이 태아 구조 이상을 확인하는 2차 정밀초음파가 이뤄지는데, 이 결과가 나온 뒤 가입을 받아주면 역선택 문제가 생겨서 보험사들이 정밀초음파 전인 22주 안쪽까지만 가입을 받아줘요.</p>
+              <p>이건 법으로 정해진 기준이 아니라 보험사의 자율적 언더라이팅 관행이에요. 참고로 모자보건법상 인공임신중절 허용한계는 24주라 22주와는 직접 관련이 없으니 혼동하지 않으셔도 돼요.</p>
+              <div class="disclaimer">22주 가입 마감 시점은 법적 강제 기준이 아니라 보험사가 자율적으로 정한 운영 기준이라 상품마다 달라요. 정확한 가입 가능 기한은 보닥 플래너와 상담하세요.</div>
+            </div></div>
+            <div class="app-msg-clark-time">오후 4:48</div>
+          </div>
+          <div class="app-input-bar"><div class="app-input-fake">메시지 입력...</div><div class="app-send-btn">➤</div></div>
+        </div></div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- FAQ-071 운전자보험 변호사선임비용 2026 -->
+  <div class="acc-item">
+    <button class="acc-header">
+      <span class="t-badge">FAQ-071</span>
+      <span class="acc-title">운전자보험 변호사선임비용, 2026년부터 왜 절반만 나오나요?</span>
+      <span class="domain-tag">판단 노하우 · 생활밀착 보험</span>
+      <span class="acc-arrow">⌄</span>
+    </button>
+    <div class="acc-body"><div class="acc-inner">
+      <div class="acc-block trigger-block">
+        <div class="acc-block-label">발화 예시 — Concept 미매칭 → FAQ RAG 매칭</div>
+        <div class="utterance"><span>"2026년에 운전자보험 가입하면 변호사비 절반만 받는다는 게 사실인가요?"</span><span>"자기부담금 50%가 왜 생겼어요?"</span></div>
+        <div class="chain-path">Concept 미매칭 → 약관 RAG 결과 없음(또는 상태①②로 스킵) → FAQ RAG 매칭(FAQ-071) → 등록된 답변(A) 그대로 반환</div>
+      </div>
+      <div class="acc-block" style="background:transparent;padding:0;">
+        <div class="acc-block-label" style="padding-left:2px;">Clark 모바일 웹 실제 화면</div>
+        <div class="phone-mockup-wrap"><div class="phone-frame"><div class="phone-screen">
+          <div class="phone-statusbar"><span>9:41</span><span>●●● 5G 100%</span></div>
+          <div class="app-topbar"><span class="back-arrow">‹</span><span class="app-avatar-top">🤖</span><div class="app-title-group"><div class="app-title">Clark</div><div class="app-sub">보험 진단 · 상담 도우미</div></div></div>
+          <div class="app-chat-area">
+            <div class="app-msg-user-row"><div class="app-msg-user">2026년에 운전자보험 가입하면 변호사비 절반만 받는다는 게 사실인가요?</div></div>
+            <div class="app-msg-user-time">오전 10:30</div>
+            <div class="app-msg-clark-row"><div class="app-avatar">🤖</div><div class="app-msg-clark">
+              <p>네, 2026년 1월부터 신규 가입하는 운전자보험은 변호사선임비용 특약에 자기부담금 50%가 도입돼서 실제 비용의 절반만 지급돼요. 1~3심 통합 최대 5,000만원이던 한도도 심급별 최대 500만원으로 쪼개져서, 심급당 실제 수령액은 최대 250만원 수준으로 줄었어요.</p>
+              <p>지급액이 2021년 146억원에서 2024년 613억원으로 4배 이상 늘면서 금융감독원이 손보사에 기초서류 변경을 권고한 게 배경이에요. 개편 이전 가입자는 자기부담금 없이 기존 한도를 그대로 유지해요.</p>
+              <div class="disclaimer">이 개편은 신규 가입자에게만 적용되고 기존 가입자는 영향이 없어요. 정확한 약관·한도는 보닥 플래너와 확인하세요.</div>
+            </div></div>
+            <div class="app-msg-clark-time">오전 10:30</div>
+          </div>
+          <div class="app-input-bar"><div class="app-input-fake">메시지 입력...</div><div class="app-send-btn">➤</div></div>
+        </div></div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- FAQ-072 운전자보험 담보체크 -->
+  <div class="acc-item">
+    <button class="acc-header">
+      <span class="t-badge">FAQ-072</span>
+      <span class="acc-title">교통사고 나면 운전자보험으로 뭘 청구할 수 있나요? (교통사고처리지원금·벌금 담보)</span>
+      <span class="domain-tag">판단 노하우 · 생활밀착 보험</span>
+      <span class="acc-arrow">⌄</span>
+    </button>
+    <div class="acc-body"><div class="acc-inner">
+      <div class="acc-block trigger-block">
+        <div class="acc-block-label">발화 예시 — Concept 미매칭 → FAQ RAG 매칭</div>
+        <div class="utterance"><span>"교통사고처리지원금이 뭔가요?"</span><span>"벌금 나오면 운전자보험으로 받을 수 있나요?"</span></div>
+        <div class="chain-path">Concept 미매칭 → 약관 RAG 결과 없음(또는 상태①②로 스킵) → FAQ RAG 매칭(FAQ-072) → 등록된 답변(A) 그대로 반환</div>
+      </div>
+      <div class="acc-block" style="background:transparent;padding:0;">
+        <div class="acc-block-label" style="padding-left:2px;">Clark 모바일 웹 실제 화면</div>
+        <div class="phone-mockup-wrap"><div class="phone-frame"><div class="phone-screen">
+          <div class="phone-statusbar"><span>9:41</span><span>●●● 5G 100%</span></div>
+          <div class="app-topbar"><span class="back-arrow">‹</span><span class="app-avatar-top">🤖</span><div class="app-title-group"><div class="app-title">Clark</div><div class="app-sub">보험 진단 · 상담 도우미</div></div></div>
+          <div class="app-chat-area">
+            <div class="app-msg-user-row"><div class="app-msg-user">교통사고처리지원금이 뭔가요?</div></div>
+            <div class="app-msg-user-time">오후 1:55</div>
+            <div class="app-msg-clark-row"><div class="app-avatar">🤖</div><div class="app-msg-clark">
+              <p>교통사고처리지원금은 12대 중과실 사고나 피해자 사망·중상해로 형사 절차가 진행될 때 형사합의금을 지원하는 담보예요. "형사 절차가 실제로 진행 중일 때"라는 조건이 핵심이에요. 벌금 담보는 법원에서 벌금형이 확정되고 고지서를 받았을 때 청구하는 담보고요.</p>
+              <p>여러 보험에 가입했다면 비례 보상 방식으로 나눠 지급되고, 어린이 보호구역 사고는 처벌 수위가 높아 벌금 상한이 더 높게 설계된 담보도 있어요.</p>
+              <div class="disclaimer">교통사고처리지원금은 "형사 절차 진행 중"이라는 조건이 핵심이라 지급 여부가 사안마다 갈려요. 담보별 정확한 한도는 가입 상품 약관을 확인하세요.</div>
+            </div></div>
+            <div class="app-msg-clark-time">오후 1:55</div>
+          </div>
+          <div class="app-input-bar"><div class="app-input-fake">메시지 입력...</div><div class="app-send-btn">➤</div></div>
+        </div></div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- FAQ-073 치과담보체크 -->
+  <div class="acc-item">
+    <button class="acc-header">
+      <span class="t-badge">FAQ-073</span>
+      <span class="acc-title">치과 치료, 실손보험과 치아보험 중 어디로 받나요? (임플란트·크라운·스케일링 등)</span>
+      <span class="domain-tag">판단 노하우 · 생활밀착 보험</span>
+      <span class="acc-arrow">⌄</span>
+    </button>
+    <div class="acc-body"><div class="acc-inner">
+      <div class="acc-block trigger-block">
+        <div class="acc-block-label">발화 예시 — Concept 미매칭 → FAQ RAG 매칭</div>
+        <div class="utterance"><span>"임플란트 실비 되나요?"</span><span>"크라운(보철) 치료는 어떤 보험으로 받아요?"</span></div>
+        <div class="chain-path">Concept 미매칭 → 약관 RAG 결과 없음(또는 상태①②로 스킵) → FAQ RAG 매칭(FAQ-073) → 등록된 답변(A) 그대로 반환</div>
+      </div>
+      <div class="acc-block" style="background:transparent;padding:0;">
+        <div class="acc-block-label" style="padding-left:2px;">Clark 모바일 웹 실제 화면</div>
+        <div class="phone-mockup-wrap"><div class="phone-frame"><div class="phone-screen">
+          <div class="phone-statusbar"><span>9:41</span><span>●●● 5G 100%</span></div>
+          <div class="app-topbar"><span class="back-arrow">‹</span><span class="app-avatar-top">🤖</span><div class="app-title-group"><div class="app-title">Clark</div><div class="app-sub">보험 진단 · 상담 도우미</div></div></div>
+          <div class="app-chat-area">
+            <div class="app-msg-user-row"><div class="app-msg-user">임플란트 실비 되나요?</div></div>
+            <div class="app-msg-user-time">오후 5:39</div>
+            <div class="app-msg-clark-row"><div class="app-avatar">🤖</div><div class="app-msg-clark">
+              <p>건강보험 급여 항목(사랑니 발치, 신경치료, 스케일링, 잇몸치료 등)은 실손보험이 본인부담금을 보장해요(2009.10 이전 1세대 실손 가입자는 치과치료 자체가 제외인 경우가 많아요). 반면 크라운·임플란트·치아교정 등 비급여 항목은 실손 청구가 안 되고 별도 치아보험 특약이 있어야 정액 보장받을 수 있어요.</p>
+              <p>치아보험은 보통 90일~1년 면책기간과 1~2년 감액지급기간을 둬요. 만 65세 이상은 부분 무치악이면 건강보험 급여로 임플란트를 평생 2개까지, 본인부담 30%로 받을 수 있는데 시술 전 건강보험공단 사전 등록이 꼭 필요해요.</p>
+              <div class="disclaimer">사고로 인한 치아 파절·상실은 보험사·약관마다 처리가 달라요. 치아보험 보장 한도·면책기간은 상품마다 다르니 가입 약관을 확인하세요.</div>
+            </div></div>
+            <div class="app-msg-clark-time">오후 5:39</div>
+          </div>
+          <div class="app-input-bar"><div class="app-input-fake">메시지 입력...</div><div class="app-send-btn">➤</div></div>
+        </div></div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- FAQ-074 어린이보험 성인전환 -->
+  <div class="acc-item">
+    <button class="acc-header">
+      <span class="t-badge">FAQ-074</span>
+      <span class="acc-title">어린이보험은 성인이 되면 어떻게 되나요? (계약전환 가이드)</span>
+      <span class="domain-tag">판단 노하우 · 생활밀착 보험</span>
+      <span class="acc-arrow">⌄</span>
+    </button>
+    <div class="acc-body"><div class="acc-inner">
+      <div class="acc-block trigger-block">
+        <div class="acc-block-label">발화 예시 — Concept 미매칭 → FAQ RAG 매칭</div>
+        <div class="utterance"><span>"어린이보험 성인 되면 자동으로 없어지나요?"</span><span>"전환하면 보험료 오르나요?"</span></div>
+        <div class="chain-path">Concept 미매칭 → 약관 RAG 결과 없음(또는 상태①②로 스킵) → FAQ RAG 매칭(FAQ-074) → 등록된 답변(A) 그대로 반환</div>
+      </div>
+      <div class="acc-block" style="background:transparent;padding:0;">
+        <div class="acc-block-label" style="padding-left:2px;">Clark 모바일 웹 실제 화면</div>
+        <div class="phone-mockup-wrap"><div class="phone-frame"><div class="phone-screen">
+          <div class="phone-statusbar"><span>9:41</span><span>●●● 5G 100%</span></div>
+          <div class="app-topbar"><span class="back-arrow">‹</span><span class="app-avatar-top">🤖</span><div class="app-title-group"><div class="app-title">Clark</div><div class="app-sub">보험 진단 · 상담 도우미</div></div></div>
+          <div class="app-chat-area">
+            <div class="app-msg-user-row"><div class="app-msg-user">어린이보험 성인 되면 자동으로 없어지나요?</div></div>
+            <div class="app-msg-user-time">오후 8:02</div>
+            <div class="app-msg-clark-row"><div class="app-avatar">🤖</div><div class="app-msg-clark">
+              <p>30세 만기형 어린이보험은 만기 시 계약이 종료되는 게 원칙이지만, 다수 보험사가 만기 전 신청하면 건강 심사 없이 80~100세 만기 상품으로 이어갈 수 있는 "계약전환" 제도를 운영해요. 다만 전환은 병력 심사만 생략할 뿐, 보험료는 전환 시점 나이 기준으로 재산정되는 경우가 일반적이에요.</p>
+              <p>이미 비갱신형으로 가입한 담보는 전환과 무관하게 기존 조건이 유지되는 경우가 많아요. 전환을 신청하지 않고 만기가 지나면 재신청이 안 되고, 2023년 9월 이후로는 성인이 "어린이보험"을 새로 가입할 수도 없어요(신규 가입 연령 만 15세 이하 제한).</p>
+              <div class="disclaimer">무심사 전환 여부, 전환 가능한 만기 종류, 보험료 재산정 방식과 신청 기한은 보험사·상품마다 달라요. 만기가 임박했다면 즉시 보험사에 문의하세요.</div>
+            </div></div>
+            <div class="app-msg-clark-time">오후 8:02</div>
+          </div>
+          <div class="app-input-bar"><div class="app-input-fake">메시지 입력...</div><div class="app-send-btn">➤</div></div>
+        </div></div></div>
+      </div>
+    </div></div>
   </div>
 
 </div>
