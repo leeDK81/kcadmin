@@ -156,7 +156,7 @@
     <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;line-height:1.7">
       Clark AI는 각 필드의 null 여부로 두 가지를 결정합니다:<br>
       <strong>① Rule 평가 범위</strong> — null인 데이터 소스의 조건은 평가 생략<br>
-      <strong>② Playbook 감지 조건 대조</strong> — 카드에 설정된 데이터 미보유 조건과 비교
+      <strong>② Playbook 버튼 노출 조건 대조</strong> — 매칭된 Playbook의 버튼별 노출 조건(PROFILE·마이데이터·프롬에이지 없음일 때만)과 비교(카드 감지 자체가 아니라 버튼 노출 여부만 좌우)
     </div>
 
     <table class="spec-table" style="margin-bottom:16px">
@@ -214,7 +214,7 @@
         <div style="font-size:13px;line-height:1.8;color:var(--text-primary);font-family:monospace">
           KC 체인 평가 불가 (전달 데이터 없음)<br>
           &nbsp;→ FAQ RAG → 결과 없으면 → Fallback LLM<br>
-          &nbsp;+ Playbook 병렬: "프로파일 없음" 조건 카드 감지 → <strong>회원가입 유도 CTA</strong>
+          &nbsp;+ Playbook 병렬: 키워드 매칭(상태 무관) → 매칭 시 <strong>"PROFILE 없음일 때만" 조건 버튼</strong> 함께 노출
         </div>
       </div>
       <!-- 상태 ② -->
@@ -227,7 +227,7 @@
           &nbsp;└─ PROFILE 조건만 있는 Rule → 정상 평가<br>
           &nbsp;&nbsp;&nbsp;&nbsp;├─ 통과 → KC 구조화 답변 + 마이데이터 연동 유도 문구<br>
           &nbsp;&nbsp;&nbsp;&nbsp;└─ 미통과 → FAQ RAG → 결과 없으면 → Fallback LLM<br>
-          &nbsp;+ Playbook 병렬: "마이데이터 없음" 조건 카드 감지 → <strong>마이데이터 연동 유도 CTA</strong>
+          &nbsp;+ Playbook 병렬: 키워드 매칭(상태 무관) → 매칭 시 <strong>"마이데이터 없음일 때만" 조건 버튼</strong> 함께 노출
         </div>
         <div style="font-size:12px;color:#7A5A00;background:#FFF9EC;border:1px solid #F0D880;border-radius:4px;padding:6px 10px;margin-top:8px;line-height:1.5">
           <strong>마이데이터 연동 유도 예시:</strong> "마이데이터를 연결하면 내 보험 계약 기반의 정확한 진단을 받을 수 있습니다"<br>
@@ -241,7 +241,7 @@
           KC 체인 → PROFILE + MYDATA 조건 평가 (PROMAGE 선택 조건은 스킵)<br>
           &nbsp;→ Case 1~4 매트릭스 적용 (하단 참조)<br>
           &nbsp;RAG 순서: 약관 RAG → FAQ RAG → Fallback LLM<br>
-          &nbsp;+ Playbook 병렬: "프롬에이지 없음" 조건 카드 or 일반 감지 → <strong>프롬에이지 연동 유도 or 리드 전환 CTA</strong>
+          &nbsp;+ Playbook 병렬: 키워드 매칭(상태 무관) → 매칭 시 <strong>"프롬에이지 없음일 때만" 조건 버튼</strong> 함께 노출
         </div>
       </div>
       <!-- 상태 ④ -->
@@ -251,46 +251,46 @@
           KC 체인 전체 평가 (PROFILE + MYDATA + PROMAGE)<br>
           &nbsp;→ Case 1~4 매트릭스 적용 (하단 참조)<br>
           &nbsp;RAG 순서: 약관 RAG → FAQ RAG → Fallback LLM<br>
-          &nbsp;+ Playbook 병렬: 일반 키워드 감지 → <strong>Playbook 카드에 설정된 리드 전환 CTA</strong>
+          &nbsp;+ Playbook 병렬: 키워드 매칭 → <strong>상시 노출 버튼만 노출</strong>(조건부 버튼은 전부 조건 불충족)
         </div>
       </div>
     </div>
 
-    <!-- Playbook 데이터 미보유 감지 조건 -->
-    <div class="section-sub" style="margin-top:18px">Playbook 데이터 미보유 감지 조건</div>
+    <!-- Playbook 버튼별 노출 조건 (2026-07-20 최종 — 카드 게이트 폐지) -->
+    <div class="section-sub" style="margin-top:18px">Playbook 버튼별 노출 조건</div>
     <div style="font-size:13px;color:var(--text-secondary);margin:8px 0 10px;line-height:1.6">
-      Playbook 카드 편집기에서 아래 조건을 선택적으로 설정할 수 있습니다. 체크된 조건에 해당하는 사용자에게만 이 Playbook이 감지됩니다.<br>
-      아무 조건도 체크하지 않으면 데이터 보유 여부에 관계없이 키워드 발화만으로 감지됩니다.
+      Playbook은 <strong>키워드 매칭만으로 감지</strong>됩니다(카드 전체를 좌우하는 데이터 조건 없음, 2026-07-20 폐지 — "상담신청은 마이데이터 연결을, 마이데이터 연결은 회원가입을 전제한다"는 원칙에 따라 카드 단위 사전 분기가 불필요하다고 판단).<br>
+      대신 Card②(리드 전환 레이어)의 기본 버튼은 항상 노출되고, 추가 버튼마다 아래 노출 조건 중 하나를 선택할 수 있습니다.
     </div>
     <table class="spec-table" style="margin-top:4px">
       <thead>
-        <tr><th style="width:160px">체크 조건</th><th style="width:200px">감지 대상</th><th>활용 예</th></tr>
+        <tr><th style="width:160px">노출 조건</th><th style="width:200px">감지 대상</th><th>활용 예</th></tr>
       </thead>
       <tbody>
         <tr>
-          <td><span style="font-family:monospace;font-size:13px;background:#F0D0C8;padding:1px 8px;border-radius:3px;color:#A32D2D">프로파일 없음</span></td>
-          <td>미가입/미로그인 사용자</td>
-          <td>회원가입 유도 버튼 노출</td>
-        </tr>
-        <tr>
-          <td><span style="font-family:monospace;font-size:13px;background:#F5E8A0;padding:1px 8px;border-radius:3px;color:#7A5A00">마이데이터 없음</span></td>
-          <td>마이데이터 미연동 사용자</td>
-          <td>마이데이터 연동 유도 버튼 노출</td>
-        </tr>
-        <tr>
-          <td><span style="font-family:monospace;font-size:13px;background:#E8E0F5;padding:1px 8px;border-radius:3px;color:#4A2A7A">프롬에이지 없음</span></td>
-          <td>건강정보 미연동 사용자</td>
-          <td>프롬에이지 연동 유도 버튼 노출</td>
-        </tr>
-        <tr>
-          <td><span style="color:var(--text-hint);font-size:13px">(없음)</span></td>
+          <td><span style="color:var(--text-hint);font-size:13px">상시 노출 (기본값)</span></td>
           <td>전체 사용자</td>
-          <td>일반 리드 전환 CTA (데이터 상태 무관)</td>
+          <td>일반 안내·콘텐츠 링크 등</td>
+        </tr>
+        <tr>
+          <td><span style="font-family:monospace;font-size:13px;background:#F0D0C8;padding:1px 8px;border-radius:3px;color:#A32D2D">PROFILE 없음일 때만</span></td>
+          <td>미가입/미로그인 사용자</td>
+          <td>"지금 가입하기" 버튼</td>
+        </tr>
+        <tr>
+          <td><span style="font-family:monospace;font-size:13px;background:#F5E8A0;padding:1px 8px;border-radius:3px;color:#7A5A00">마이데이터 없음일 때만</span></td>
+          <td>마이데이터 미연동 사용자</td>
+          <td>"마이데이터 연동하기" 버튼</td>
+        </tr>
+        <tr>
+          <td><span style="font-family:monospace;font-size:13px;background:#E8E0F5;padding:1px 8px;border-radius:3px;color:#4A2A7A">프롬에이지 없음일 때만</span></td>
+          <td>건강정보 미연동 사용자</td>
+          <td>"프롬에이지 연동하고 정밀 진단받기" 버튼</td>
         </tr>
       </tbody>
     </table>
     <div class="note-box" style="margin-top:10px">
-      동일 키워드에 데이터 상태별로 별도 Playbook 카드를 등록하면 각 상태에 맞는 CTA를 정확하게 노출할 수 있습니다. → <a href="16_card-editor-playbook.html" style="color:#8A5A00;font-weight:600">Playbook 편집기</a>에서 "데이터 미보유 감지 조건" 설정
+      한 카드 안에 여러 추가 버튼을 등록해 사용자 상태별 버튼 세트를 함께 구성할 수 있습니다(예: 기본 버튼 상담신청 + PROFILE없음 시 가입 버튼 + 마이데이터없음 시 연동 버튼). 각 조건이 서로 다른 필드를 보므로 카드 레벨 우선순위 조정은 불필요합니다. 실 콘텐츠 예시는 <code style="background:#DCEAFB;padding:1px 5px;border-radius:3px;font-size:12px">contents/06_playbook/playbooks.md</code> PB02~04 참조. → <a href="16_card-editor-playbook.html" style="color:#8A5A00;font-weight:600">Playbook 편집기</a>에서 "노출 조건" 설정
     </div>
 
     <div class="note-box" style="margin-top:10px">

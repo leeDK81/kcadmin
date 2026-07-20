@@ -183,9 +183,8 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
       <tbody>
         <tr><td>카드 코드</td><td><code>code</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>PB001~ 형식. 시스템 자동 부여</td><td>🔒 내부 전용</td></tr>
         <tr><td>Playbook명</td><td><code>name</code></td><td><span class="chip chip-req">필수</span></td><td>string</td><td>최대 60자(2026-07-06 "설명" 필드 삭제 — 명칭·발화 키워드·전환 액션만으로 용도 파악 충분해 중복 판단)</td><td>🔒 내부 전용</td></tr>
-        <tr><td>데이터 미보유 감지 조건</td><td><code>missingDataConditions</code></td><td><span class="chip chip-opt">선택</span></td><td>string[]</td><td>PROFILE 없음 / 마이데이터 없음 / 프롬에이지 없음 중복 선택. 체크된 데이터가 없는 사용자에게만 감지됨(2026-07-06 문서화 — `context/answer-logic.md` 사용자 상태 4종과 대응)</td><td>🔒 내부 전용(감지 조건, 발화 아님)</td></tr>
-        <tr><td>발화 키워드</td><td><code>triggerKeywords</code></td><td><span class="chip chip-req">필수</span></td><td>string[]</td><td>최소 3개. 사용자 질의에서 감지될 키워드 목록</td><td>🔍 매칭 전용</td></tr>
-        <tr><td>전환 액션(CTA)</td><td><code>ctaButtons</code></td><td><span class="chip chip-req">필수</span></td><td>CTAButton[]</td><td>기본 버튼(consult) 필수. 추가 버튼 N개 선택</td><td>🗣️ 발화(원문) — 버튼 label이 UI 요소로 그대로 노출</td></tr>
+        <tr><td>발화 키워드</td><td><code>triggerKeywords</code></td><td><span class="chip chip-req">필수</span></td><td>string[]</td><td>최소 3개. 사용자 질의에서 감지될 키워드 목록(카드 감지는 이 키워드 매칭만으로 결정 — 2026-07-20부터 데이터 보유 상태는 카드 감지에 관여하지 않음)</td><td>🔍 매칭 전용</td></tr>
+        <tr><td>전환 액션(CTA)</td><td><code>ctaButtons</code></td><td><span class="chip chip-req">필수</span></td><td>CTAButton[]</td><td>기본 버튼(consult) 필수, 노출 조건 없이 항상 노출. 추가 버튼 N개 선택, 버튼마다 노출 조건 지정 가능(2026-07-20 — 옛 카드 레벨 <code>missingDataConditions</code> 필드 폐지, 버튼 단위 <code>exposureCondition</code>으로 대체)</td><td>🗣️ 발화(원문) — 버튼 label이 UI 요소로 그대로 노출</td></tr>
         <tr><td>Standalone 답변 가이드</td><td><code>standaloneGuide</code></td><td><span class="chip chip-opt">선택</span></td><td>string</td><td>(선택사항) 비워두면 Clark 기본 안내 문구 사용. KC 미매칭 시 LLM이 참조할 답변 방향 가이드</td><td>🗣️ 발화(원문에 가까움) — Case 4 답변 방향으로 사용</td></tr>
         <tr><td>리드 스코어링</td><td><code>leadScoring</code></td><td>미사용</td><td>object</td><td>Phase 1.5 이후 활성화</td><td>— 미사용</td></tr>
         <tr><td>배정 최적화</td><td><code>assignOptimization</code></td><td>미사용</td><td>object</td><td>Phase 2 이후 활성화</td><td>— 미사용</td></tr>
@@ -194,7 +193,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
     </table>
     <div class="notice" style="margin-top:12px">
       <i class="fa-solid fa-circle-info fa-fw"></i>
-      <span><strong>CTAButton 구조:</strong> <code>{ type: "consult"|"deeplink"|"external", label: string, url?: string }</code>. type "consult"가 기본 버튼(필수, 1개).</span>
+      <span><strong>CTAButton 구조:</strong> <code>{ type: "consult"|"deeplink"|"external", label: string, url?: string, exposureCondition?: "always"|"no_profile"|"no_mydata"|"no_promage" }</code>. type "consult"가 기본 버튼(필수, 1개, exposureCondition 없음=항상 노출). 추가 버튼의 exposureCondition 기본값은 "always"(2026-07-20 신규 필드).</span>
     </div>
   </div>
 

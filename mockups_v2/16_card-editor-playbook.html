@@ -124,58 +124,6 @@
           <p class="field-hint">Playbook 카드는 현재 다른 카드와 직접 연결되지 않습니다. (Phase 1.5+ 검토 중 — 리드 스코어링 스펙 확정 시 결정)</p>
         </div>
 
-        <!-- 카드: 데이터 미보유 감지 조건 -->
-        <div class="card">
-          <div class="section-title">
-            <i class="fa-solid fa-database fa-fw" style="color:var(--card-playbook);font-size:15px"></i>
-            데이터 미보유 감지 조건
-            <span style="font-size:12px;font-weight:400;color:var(--text-hint);margin-left:4px">— 선택</span>
-          </div>
-
-          <div class="banner banner-info" style="margin-bottom:14px">
-            <i class="fa-solid fa-circle-info" style="margin-right:6px"></i>
-            선택한 데이터가 <strong>없는</strong> 사용자에게만 이 Playbook이 감지됩니다. 아무것도 선택하지 않으면 데이터 보유 여부에 관계없이 키워드 발화만으로 감지됩니다. 여러 조건 Playbook이 동시에 매칭되면 PROFILE없음 &gt; 마이데이터없음 &gt; 프롬에이지없음 순으로 하나만 노출됩니다.
-          </div>
-
-          <div class="form-group" style="margin-bottom:0">
-            <label>데이터 미보유 조건 <span class="field-hint">카드당 1개만 선택 가능(기본값: 상관없음) — 동일 키워드에 상태별로 별도 Playbook을 등록하면 각 사용자에게 맞는 CTA를 노출할 수 있습니다</span></label>
-
-            <div style="display:flex;flex-direction:column;gap:8px;margin-top:10px">
-              <label style="display:flex;align-items:flex-start;gap:12px;cursor:pointer;padding:12px 14px;background:#F4F4F2;border:1.5px solid var(--border);border-radius:6px;font-weight:400">
-                <input type="radio" name="dataCondition" checked style="width:16px;height:16px;margin-top:2px;accent-color:var(--card-playbook);flex-shrink:0">
-                <div>
-                  <div style="font-size:14px;font-weight:600;color:var(--text-secondary);margin-bottom:2px">상관없음 (전체 사용자)</div>
-                  <div style="font-size:13px;color:var(--text-hint)">데이터 보유 여부와 무관하게 키워드 발화만으로 감지 — 일반 리드 전환 CTA에 적합</div>
-                </div>
-              </label>
-
-              <label style="display:flex;align-items:flex-start;gap:12px;cursor:pointer;padding:12px 14px;background:#FFF4F2;border:1.5px solid #F0C0B0;border-radius:6px;font-weight:400">
-                <input type="radio" name="dataCondition" style="width:16px;height:16px;margin-top:2px;accent-color:var(--card-playbook);flex-shrink:0">
-                <div>
-                  <div style="font-size:14px;font-weight:600;color:#A32D2D;margin-bottom:2px">PROFILE 없음</div>
-                  <div style="font-size:13px;color:var(--text-hint)">미가입 또는 미로그인 사용자 — 회원가입 유도 CTA에 적합</div>
-                </div>
-              </label>
-
-              <label style="display:flex;align-items:flex-start;gap:12px;cursor:pointer;padding:12px 14px;background:#FFFBEE;border:1.5px solid #F0D880;border-radius:6px;font-weight:400">
-                <input type="radio" name="dataCondition" style="width:16px;height:16px;margin-top:2px;accent-color:var(--card-playbook);flex-shrink:0">
-                <div>
-                  <div style="font-size:14px;font-weight:600;color:#BA7517;margin-bottom:2px">마이데이터 없음</div>
-                  <div style="font-size:13px;color:var(--text-hint)">마이데이터 미연동 사용자 — 마이데이터 연동 유도 CTA에 적합</div>
-                </div>
-              </label>
-
-              <label style="display:flex;align-items:flex-start;gap:12px;cursor:pointer;padding:12px 14px;background:#F4F0FA;border:1.5px solid #C8B0E8;border-radius:6px;font-weight:400">
-                <input type="radio" name="dataCondition" style="width:16px;height:16px;margin-top:2px;accent-color:var(--card-playbook);flex-shrink:0">
-                <div>
-                  <div style="font-size:14px;font-weight:600;color:#6B4A9A;margin-bottom:2px">프롬에이지 없음</div>
-                  <div style="font-size:13px;color:var(--text-hint)">건강정보 미연동 사용자 — 프롬에이지 연동 유도 CTA에 적합</div>
-                </div>
-              </label>
-            </div>
-          </div>
-        </div>
-
         <!-- 카드 ②: 리드 전환 레이어 -->
         <div class="card">
           <div class="section-title">
@@ -203,7 +151,7 @@
           <!-- 전환 액션 설정 -->
           <div class="form-group" style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border)">
             <label>전환 액션 설정 <span style="color:var(--card-playbook)">*</span>
-              <span class="field-hint">키워드 감지 시 앱에 표시할 버튼의 이름·유형·딥링크를 지정하세요</span>
+              <span class="field-hint">키워드 감지 시 앱에 표시할 버튼의 이름·유형·딥링크를 지정하세요. 기본 버튼은 항상 노출됩니다. 추가 버튼은 버튼별로 노출 조건(PROFILE·마이데이터·프롬에이지 미보유 시)을 걸 수 있어, 카드 하나에서 사용자 상태별 버튼을 함께 구성할 수 있습니다(2026-07-20 — 카드 전체를 좌우하던 별도 감지 조건은 폐지하고 이 버튼별 조건 하나로 통합)</span>
             </label>
 
             <!-- 기본 액션 -->
@@ -447,12 +395,14 @@ document.getElementById('kwInput').addEventListener('keydown', function(e) {
 
 const TYPE_ICON = {consult:'💬', deeplink:'🔗', external:'🌐'};
 const TYPE_OPTS = `<option value="consult">💬 상담 연결</option><option value="deeplink" selected>🔗 앱 내 이동</option><option value="external">🌐 외부 링크</option>`;
-let extraActions = []; // {id, type, label, link}
+const EXPOSURE_OPTS = `<option value="always">상시 노출</option><option value="no_profile">PROFILE 없음일 때만</option><option value="no_mydata">마이데이터 없음일 때만</option><option value="no_promage">프롬에이지 없음일 때만</option>`;
+const EXPOSURE_LABEL = {always:'', no_profile:'(미가입·미로그인 시 노출)', no_mydata:'(마이데이터 미연동 시 노출)', no_promage:'(프롬에이지 미연동 시 노출)'};
+let extraActions = []; // {id, type, label, link, exposure}
 let extraSeq = 0;
 
 function addExtraAction() {
   const id = ++extraSeq;
-  extraActions.push({id, type:'deeplink', label:'', link:''});
+  extraActions.push({id, type:'deeplink', label:'', link:'', exposure:'always'});
   renderExtraActions();
 }
 
@@ -477,11 +427,15 @@ function renderExtraActions() {
         </div>
         <div class="action-field" style="flex:1">
           <div class="action-field-label">버튼명</div>
-          <input class="form-control" type="text" value="${a.label}" placeholder="예: 암보험 가이드 보기" oninput="updateExtraField(${a.id},'label',this.value)">
+          <input class="form-control" type="text" value="${a.label}" placeholder="예: 프롬에이지를 연동하고 내 위험도로 진단받기" oninput="updateExtraField(${a.id},'label',this.value)">
         </div>
         <div class="action-field" style="flex:1.4">
           <div class="action-field-label">딥링크 / URL</div>
-          <input class="form-control" type="text" value="${a.link}" placeholder="예: clark://content/cancer" oninput="updateExtraField(${a.id},'link',this.value)">
+          <input class="form-control" type="text" value="${a.link}" placeholder="예: clark://promage/connect" oninput="updateExtraField(${a.id},'link',this.value)">
+        </div>
+        <div class="action-field" style="width:180px">
+          <div class="action-field-label">노출 조건</div>
+          <select class="form-control" onchange="updateExtraField(${a.id},'exposure',this.value)">${EXPOSURE_OPTS.replace(`value="${a.exposure}"`, `value="${a.exposure}" selected`)}</select>
         </div>
       </div>
     </div>`).join('');
@@ -501,7 +455,8 @@ function updatePreview() {
   let html = `<span class="preview-btn preview-btn-primary">${TYPE_ICON[t1]} ${l1}</span>`;
   extraActions.forEach(a => {
     const lbl = a.label || '버튼명 입력';
-    html += `<span class="preview-btn preview-btn-secondary">${TYPE_ICON[a.type] || '🔗'} ${lbl}</span>`;
+    const note = EXPOSURE_LABEL[a.exposure] ? ` <span style="font-size:11px;color:var(--text-hint);font-weight:400">${EXPOSURE_LABEL[a.exposure]}</span>` : '';
+    html += `<span class="preview-btn preview-btn-secondary">${TYPE_ICON[a.type] || '🔗'} ${lbl}</span>${note}`;
   });
   wrap.innerHTML = html;
   const sumAct = document.getElementById('sumAct');
