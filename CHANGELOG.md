@@ -5,6 +5,18 @@
 
 ---
 
+## 2026-07-20(2차) — Playbook 편집기 후속 수정 — "상관없음" 라디오 옵션 명시화 + 발화 키워드를 Concept 동의어 칩 패턴과 통일
+
+바로 아래 항목(라디오 전환 + 우선순위 규칙) 배포 직후 사용자가 두 가지를 지적했다.
+
+**① "상관없음" 라디오 옵션 누락(회귀 결함)**: 체크박스일 때는 "전체 사용자(조건 무관)"가 셋 다 안 건드리는 암묵적 상태였다. 라디오 버튼으로 바꾸면서 이 상태를 명시적 옵션으로 옮기지 않았는데, HTML 라디오 버튼은 브라우저 기본 동작상 한 번 선택하면 같은 그룹 안에서 클릭으로 재해제가 안 된다 — 그래서 운영자가 "조건 없음"을 명시적으로 고르거나 이미 고른 조건을 되돌릴 방법이 없어졌다. 4번째 라디오 옵션 "상관없음 (전체 사용자)"를 목록 맨 앞에 기본 선택값으로 추가해 해결.
+
+**② 발화 키워드 UI를 Concept 동의어 칩 패턴과 통일**: 사용자가 "리드 전환 레이어 키워드 입력을 Concept 카드 동의어 UI와 동일하게 맞추기로 했다"고 지적. `context/decisions.md`·`CHANGELOG.md`를 확인했으나 그런 결정 이력은 없었음(2026-07-14 FAQ RAG Q필드를 칩 패턴으로 전환할 때 Playbook 키워드는 대상에 없었음) — 구두로만 정하고 실제 반영이 안 됐거나 이번에 신규로 정하는 것으로 보고 진행. 기존엔 별도 입력창+"추가" 버튼(`.kw-input-row`) 다음에 세로 리스트(`.kw-list`)로 쌓이는 구조였는데, `06_card-editor-concept.html`의 `.chip-area`(테두리 박스 안에 칩이 인라인으로 줄바꿈되며 쌓이고 박스 클릭 시 입력창 포커스) 구조로 교체. `renderKeywords()`를 칩 렌더링으로, `addKeyword()`를 Enter 키 `keydown` 리스너로 전환(Concept의 `synonymInput` 리스너 패턴과 동일), `removeKeyword()`는 그대로 유지. 더 이상 쓰이지 않는 `.kw-input-row`·`.kw-list`·`.kw-item`·`.kw-item-text`·`.kw-icon` CSS 규칙 제거.
+
+**수정 파일:** `mockups_v2/16_card-editor-playbook.html`, `context/answer-logic.md`, `context/card-types.md`, `context/matching-policy.md`, `context/decisions.md`
+
+---
+
 ## 2026-07-20 — Playbook "데이터 미보유 감지 조건" 상호배타 처리 확정 — 체크박스→라디오 + 우선순위 규칙
 
 사용자가 "PROFILE·마이데이터·프롬에이지가 null일 때 CTA를 노출하는데, 이 조건들이 동시에 걸리면 목적성 없이 다 노출될 것 같다"고 지적. 확인 결과 `context/answer-logic.md`의 사용자 상태 4종(①~④)은 깔때기 구조라 하위 필드가 null이면 상위 필드도 함께 null이다 — 예를 들어 상태①(미가입, PROFILE null)은 마이데이터·프롬에이지도 당연히 null이라, "PROFILE없음"·"마이데이터없음"·"프롬에이지없음" 세 조건의 Playbook이 전부 동시에 매칭 후보가 될 수 있었다. `context/matching-policy.md`의 기존 Playbook 동점 규칙("유사도 최고점 1개만 노출")은 순수 임베딩 유사도로만 승자를 가리므로, 회원가입도 안 한 사용자에게 우연한 키워드 겹침으로 "프롬에이지 연동하기" CTA가 뜰 수 있는 구조적 결함이었다.

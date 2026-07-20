@@ -34,13 +34,12 @@
 .card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border)}
 .card-header-left{display:flex;align-items:center;gap:10px}
 .card-header-title{font-size:16px;font-weight:700}
-/* 키워드 입력 UI */
-.kw-input-row{display:flex;gap:8px;margin-bottom:12px}
-.kw-input-row .form-control{flex:1}
-.kw-list{display:flex;flex-direction:column;gap:6px}
-.kw-item{display:flex;align-items:center;gap:8px;padding:8px 12px;background:#F8F6FC;border:1px solid #DDD0F0;border-radius:6px}
-.kw-item-text{flex:1;font-size:14px;color:var(--text-primary)}
-.kw-icon{width:28px;height:28px;border-radius:50%;background:rgba(107,74,154,.1);display:flex;align-items:center;justify-content:center;color:var(--card-playbook);font-size:12px;flex-shrink:0}
+/* 키워드 입력 UI — 06_card-editor-concept.html 동의어 칩 패턴과 통일(2026-07-20) */
+.chip-area{display:flex;flex-wrap:wrap;align-items:center;gap:4px;padding:8px 10px;border:1px solid var(--border);border-radius:6px;background:#fff;min-height:40px;cursor:text}
+.chip-area:focus-within{border-color:var(--step-active);box-shadow:0 0 0 2px rgba(26,58,107,.12)}
+.chip-input{border:none;outline:none;font-size:13px;font-family:inherit;min-width:80px;background:transparent;color:var(--text-primary)}
+.chip-remove{background:none;border:none;color:var(--text-hint);cursor:pointer;padding:0;font-size:12px;line-height:1;display:flex;align-items:center}
+.chip-remove:hover{color:var(--status-rejected)}
 /* 전환 액션 설정 */
 .action-card{background:#FAFAF8;border:1px solid var(--border);border-radius:6px;padding:12px 14px;margin-bottom:8px}
 .action-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
@@ -139,9 +138,17 @@
           </div>
 
           <div class="form-group" style="margin-bottom:0">
-            <label>데이터 미보유 조건 <span class="field-hint">카드당 1개만 선택 가능 — 동일 키워드에 상태별로 별도 Playbook을 등록하면 각 사용자에게 맞는 CTA를 노출할 수 있습니다</span></label>
+            <label>데이터 미보유 조건 <span class="field-hint">카드당 1개만 선택 가능(기본값: 상관없음) — 동일 키워드에 상태별로 별도 Playbook을 등록하면 각 사용자에게 맞는 CTA를 노출할 수 있습니다</span></label>
 
             <div style="display:flex;flex-direction:column;gap:8px;margin-top:10px">
+              <label style="display:flex;align-items:flex-start;gap:12px;cursor:pointer;padding:12px 14px;background:#F4F4F2;border:1.5px solid var(--border);border-radius:6px;font-weight:400">
+                <input type="radio" name="dataCondition" checked style="width:16px;height:16px;margin-top:2px;accent-color:var(--card-playbook);flex-shrink:0">
+                <div>
+                  <div style="font-size:14px;font-weight:600;color:var(--text-secondary);margin-bottom:2px">상관없음 (전체 사용자)</div>
+                  <div style="font-size:13px;color:var(--text-hint)">데이터 보유 여부와 무관하게 키워드 발화만으로 감지 — 일반 리드 전환 CTA에 적합</div>
+                </div>
+              </label>
+
               <label style="display:flex;align-items:flex-start;gap:12px;cursor:pointer;padding:12px 14px;background:#FFF4F2;border:1.5px solid #F0C0B0;border-radius:6px;font-weight:400">
                 <input type="radio" name="dataCondition" style="width:16px;height:16px;margin-top:2px;accent-color:var(--card-playbook);flex-shrink:0">
                 <div>
@@ -186,11 +193,11 @@
             <label>전환 발화 키워드 <span style="color:var(--card-playbook)">*</span>
               <span class="field-hint">최소 3개 이상 필수입니다. 구체적인 표현일수록 오감지가 줄어듭니다</span>
             </label>
-            <div class="kw-input-row">
-              <input class="form-control" id="kwInput" type="text" placeholder="예: 보험 가입하고 싶어요" onkeydown="if(event.key==='Enter')addKeyword()">
-              <button class="btn btn-secondary btn-sm" onclick="addKeyword()"><i class="fa-solid fa-plus"></i> 추가</button>
+            <div class="chip-area" id="kwChipArea" onclick="document.getElementById('kwInput').focus()">
+              <div id="kwChipsContainer"></div>
+              <input class="chip-input" id="kwInput" type="text" placeholder="예: 보험 가입하고 싶어요">
             </div>
-            <div class="kw-list" id="kwList"></div>
+            <span class="field-hint" style="margin-top:4px;display:block">Enter 키로 추가</span>
           </div>
 
           <!-- 전환 액션 설정 -->
@@ -410,30 +417,32 @@ let keywords = [
 
 
 function renderKeywords() {
-  const list = document.getElementById('kwList');
-  list.innerHTML = keywords.map((kw, i) => `
-    <div class="kw-item" id="kw-${i}">
-      <div class="kw-icon"><i class="fa-solid fa-comment-dots"></i></div>
-      <span class="kw-item-text">"${kw}"</span>
-      <button class="btn-danger-sm" onclick="removeKeyword(${i})"><i class="fa-solid fa-xmark"></i> 삭제</button>
-    </div>`).join('');
+  const container = document.getElementById('kwChipsContainer');
+  container.innerHTML = keywords.map((kw, i) => `
+    <span class="chip">
+      ${kw}
+      <button class="chip-remove" onclick="removeKeyword(${i})" title="삭제"><i class="fa-solid fa-xmark"></i></button>
+    </span>
+  `).join('');
   document.getElementById('sumKw').textContent = keywords.length + '개';
-}
-
-function addKeyword() {
-  const inp = document.getElementById('kwInput');
-  const val = inp.value.trim();
-  if (!val) return;
-  if (keywords.includes(val)) { showToast('이미 등록된 키워드입니다'); return; }
-  keywords.push(val);
-  inp.value = '';
-  renderKeywords();
 }
 
 function removeKeyword(i) {
   keywords.splice(i, 1);
   renderKeywords();
 }
+
+document.getElementById('kwInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    const val = this.value.trim();
+    if (!val) return;
+    if (keywords.includes(val)) { showToast('이미 등록된 키워드입니다'); return; }
+    keywords.push(val);
+    this.value = '';
+    renderKeywords();
+  }
+});
 
 
 const TYPE_ICON = {consult:'💬', deeplink:'🔗', external:'🌐'};
