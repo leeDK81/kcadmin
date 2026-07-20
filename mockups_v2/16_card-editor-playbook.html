@@ -135,15 +135,15 @@
 
           <div class="banner banner-info" style="margin-bottom:14px">
             <i class="fa-solid fa-circle-info" style="margin-right:6px"></i>
-            체크된 데이터가 <strong>없는</strong> 사용자에게만 이 Playbook이 감지됩니다. 아무것도 체크하지 않으면 데이터 보유 여부에 관계없이 키워드 발화만으로 감지됩니다.
+            선택한 데이터가 <strong>없는</strong> 사용자에게만 이 Playbook이 감지됩니다. 아무것도 선택하지 않으면 데이터 보유 여부에 관계없이 키워드 발화만으로 감지됩니다. 여러 조건 Playbook이 동시에 매칭되면 PROFILE없음 &gt; 마이데이터없음 &gt; 프롬에이지없음 순으로 하나만 노출됩니다.
           </div>
 
           <div class="form-group" style="margin-bottom:0">
-            <label>데이터 미보유 조건 <span class="field-hint">중복 선택 가능 — 동일 키워드에 상태별로 별도 Playbook을 등록하면 각 사용자에게 맞는 CTA를 노출할 수 있습니다</span></label>
+            <label>데이터 미보유 조건 <span class="field-hint">카드당 1개만 선택 가능 — 동일 키워드에 상태별로 별도 Playbook을 등록하면 각 사용자에게 맞는 CTA를 노출할 수 있습니다</span></label>
 
             <div style="display:flex;flex-direction:column;gap:8px;margin-top:10px">
               <label style="display:flex;align-items:flex-start;gap:12px;cursor:pointer;padding:12px 14px;background:#FFF4F2;border:1.5px solid #F0C0B0;border-radius:6px;font-weight:400">
-                <input type="checkbox" style="width:16px;height:16px;margin-top:2px;accent-color:var(--card-playbook);flex-shrink:0">
+                <input type="radio" name="dataCondition" style="width:16px;height:16px;margin-top:2px;accent-color:var(--card-playbook);flex-shrink:0">
                 <div>
                   <div style="font-size:14px;font-weight:600;color:#A32D2D;margin-bottom:2px">PROFILE 없음</div>
                   <div style="font-size:13px;color:var(--text-hint)">미가입 또는 미로그인 사용자 — 회원가입 유도 CTA에 적합</div>
@@ -151,7 +151,7 @@
               </label>
 
               <label style="display:flex;align-items:flex-start;gap:12px;cursor:pointer;padding:12px 14px;background:#FFFBEE;border:1.5px solid #F0D880;border-radius:6px;font-weight:400">
-                <input type="checkbox" style="width:16px;height:16px;margin-top:2px;accent-color:var(--card-playbook);flex-shrink:0">
+                <input type="radio" name="dataCondition" style="width:16px;height:16px;margin-top:2px;accent-color:var(--card-playbook);flex-shrink:0">
                 <div>
                   <div style="font-size:14px;font-weight:600;color:#BA7517;margin-bottom:2px">마이데이터 없음</div>
                   <div style="font-size:13px;color:var(--text-hint)">마이데이터 미연동 사용자 — 마이데이터 연동 유도 CTA에 적합</div>
@@ -159,7 +159,7 @@
               </label>
 
               <label style="display:flex;align-items:flex-start;gap:12px;cursor:pointer;padding:12px 14px;background:#F4F0FA;border:1.5px solid #C8B0E8;border-radius:6px;font-weight:400">
-                <input type="checkbox" style="width:16px;height:16px;margin-top:2px;accent-color:var(--card-playbook);flex-shrink:0">
+                <input type="radio" name="dataCondition" style="width:16px;height:16px;margin-top:2px;accent-color:var(--card-playbook);flex-shrink:0">
                 <div>
                   <div style="font-size:14px;font-weight:600;color:#6B4A9A;margin-bottom:2px">프롬에이지 없음</div>
                   <div style="font-size:13px;color:var(--text-hint)">건강정보 미연동 사용자 — 프롬에이지 연동 유도 CTA에 적합</div>
