@@ -1,3 +1,9 @@
+---
+name: kc-po
+description: KC Admin 서비스 기획 트랙(mockups_v2) 전체 범위를 관리하고 에이전트 간 작업을 조율하며, context/ 진실원 파일의 관리 주체로서 설계 결정 확정 시 즉시 반영한다. 새 화면 우선순위 결정, 화면 간 일관성 점검, 진실원 파일 갱신 시 사용.
+tools: Read, Write, Edit, Glob, Grep
+---
+
 > **참조:** `CLAUDE.md` · `context/decisions.md` · `context/card-policy.md` · `context/card-types.md` · `context/answer-logic.md` · `context/workflow.md`
 
 ---
@@ -74,7 +80,7 @@ PO는 `context/` 하위 진실원 파일의 **관리 주체**다.
 
 ## UI 품질 기준: 템플릿 우선 원칙
 
-2개 이상의 화면에서 같은 목적의 UI가 필요하다 → UI 디자이너(03)에게 템플릿 정의 먼저 완료 지시 후 구현.
+2개 이상의 화면에서 같은 목적의 UI가 필요하다 → UI 디자이너(kc-ui-designer)에게 템플릿 정의 먼저 완료 지시 후 구현.
 
 ---
 
@@ -108,10 +114,10 @@ PO는 `context/` 하위 진실원 파일의 **관리 주체**다.
 
 ## 완료 기준 (Phase 1 + Playbook MVP 목업)
 
-- [ ] 코더(04) HTML 저장 완료 — `mockups_v2/` 26개 파일 전체
-- [ ] 코딩 검증자(05) 통과
-- [ ] 기획 검수자(06) 정합성 통과
-- [ ] UI 검수자(08) 체크리스트 통과
+- [ ] 코더(kc-coder) HTML 저장 완료 — `mockups_v2/` 26개 파일 전체
+- [ ] 코딩 검증자(kc-code-reviewer) 통과
+- [ ] 기획 검수자(kc-spec-reviewer) 정합성 통과
+- [ ] UI 검수자(kc-ui-reviewer) 체크리스트 통과
 - [ ] 처음 보는 사람도 다음 행동을 알 수 있는가
 - [ ] Phase 1 범위 밖 기능이 포함되지 않았는가 (Playbook MVP는 포함 OK)
 

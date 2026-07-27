@@ -232,7 +232,7 @@ KC 매칭 × Playbook 감지 2×2 매트릭스로 모든 답변 경로를 정의
 
 이 셋은 사용자 의도는 다르지만 **답변 처리 메커니즘은 완전히 동일**하다 — "매칭된 Risk-type이 N개일 때 카드로 보여주고 탭하면 심층 답변"이라는 하나의 로직이며, 차이는 N의 규모뿐이다. 별도 엔진이나 새 카드 타입을 만들지 않는다. "종합진단"도 예외적인 신규 카드 타입이 아니라, 동일한 N:N 메커니즘을 규모만 크게(23개) 적용한 것뿐이다.
 
-- **2026-07-05 실제 저작 완료:** `contents/04_concept/concepts.md`·`contents/07_connections/chain-map.json`에 5개 그룹 Concept 등록 완료 — `CN-T02A`(암보험, 기존 확장, T02·T18·T25·T29), `CN-HOSPALL`(입원비보험, 신규, T19·T24·T26·T30·T32), `CN-INJURYALL`(상해보험 종합, 신규, T20·T22·T23), `CN-CAREALL`(간병보험 종합, 신규, T05·T27), `CN-ALL`(종합진단, 신규, risk_type_refs=활성 23개 전체). Concept 총 24→28개. T코드 변경 시 이 5개 카드도 함께 갱신 필요(`contents/agents/04_content-po.md` 체인 정합성 검토 항목에 추가됨).
+- **2026-07-05 실제 저작 완료:** `contents/04_concept/concepts.md`·`contents/07_connections/chain-map.json`에 5개 그룹 Concept 등록 완료 — `CN-T02A`(암보험, 기존 확장, T02·T18·T25·T29), `CN-HOSPALL`(입원비보험, 신규, T19·T24·T26·T30·T32), `CN-INJURYALL`(상해보험 종합, 신규, T20·T22·T23), `CN-CAREALL`(간병보험 종합, 신규, T05·T27), `CN-ALL`(종합진단, 신규, risk_type_refs=활성 23개 전체). Concept 총 24→28개. T코드 변경 시 이 5개 카드도 함께 갱신 필요(`kc-content-po` 체인 정합성 검토 항목에 추가됨).
 
 ### UI 구현 방식 — 채팅 버블 안 텍스트 나열이 아니라 탭 가능한 결과 카드
 

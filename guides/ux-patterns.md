@@ -409,7 +409,7 @@ function reqRadioHtml(id, isRequired) {
 
 ## Policy 편집기 확정 필드
 
-**필드 목록(2개만)·삭제된 필드 목록은 `context/card-types.md`가 단일 진실원**이다(2026-07-07 정리 — 삭제 필드 목록이 `agents/03_ui-designer.md`에도 각각 복사돼 있었음). 아래는 그 스펙을 반영한 HTML 패턴이다.
+**필드 목록(2개만)·삭제된 필드 목록은 `context/card-types.md`가 단일 진실원**이다(2026-07-07 정리 — 삭제 필드 목록이 `kc-ui-designer`에도 각각 복사돼 있었음). 아래는 그 스펙을 반영한 HTML 패턴이다.
 
 ```html
 <!-- Policy 편집기 폼 — 2개 필드만 -->

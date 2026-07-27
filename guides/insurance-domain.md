@@ -1,6 +1,6 @@
 # KC Admin 보험 도메인 레퍼런스
 
-> 보험 도메인 지식 단일 출처. agents/07_insurance-expert.md와 함께 참조.
+> 보험 도메인 지식 단일 출처. `kc-insurance-expert`와 함께 참조.
 
 ## Risk-type 타입코드 (T01~T32, 총 23개 — 2026-07-04 최신)
 

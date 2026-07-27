@@ -516,4 +516,4 @@
 - 보장 전체 분석해줘
 - 내 보험 종합 진단
 - 가입한 보험 전부 점검해줘
-**risk_type_refs(N:N, 2026-07-05):** 활성 Risk-type 23개 전체 — T코드가 신규/폐지될 때마다 이 카드의 risk_type_refs도 함께 갱신 필요(`contents/agents/04_content-po.md` 체인 정합성 검토 항목).
+**risk_type_refs(N:N, 2026-07-05):** 활성 Risk-type 23개 전체 — T코드가 신규/폐지될 때마다 이 카드의 risk_type_refs도 함께 갱신 필요(`kc-content-po` 체인 정합성 검토 항목).

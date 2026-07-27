@@ -28,8 +28,8 @@
 
 | 영향 파일 | 변경 위치 |
 |---|---|
-| `agents/06_spec-reviewer.md` | 체크리스트 D섹션 단계 수 |
-| `agents/08_ui-reviewer.md` | 체크리스트 B섹션 wf-tracker 항목 |
+| `kc-spec-reviewer` | 체크리스트 D섹션 단계 수 |
+| `kc-ui-reviewer` | 체크리스트 B섹션 wf-tracker 항목 |
 | `policy/04_lifecycle.html` | 단계 흐름도 |
 | `mockups_v2/04_card-editor-risk-type.html` | `.wf-tracker` UI 단계 수 |
 | `mockups_v2/05_card-editor-evidence.html` | `.wf-tracker` UI 단계 수 |
@@ -47,8 +47,8 @@
 | 영향 파일 | 변경 위치 |
 |---|---|
 | `mockups_v2/shared.css` | `--status-*` CSS 변수 추가/삭제, `.badge-*` 규칙 |
-| `agents/06_spec-reviewer.md` | 체크리스트 D섹션 상태 목록 |
-| `agents/08_ui-reviewer.md` | 뱃지 색상 매핑 표 |
+| `kc-spec-reviewer` | 체크리스트 D섹션 상태 목록 |
+| `kc-ui-reviewer` | 뱃지 색상 매핑 표 |
 | 목록 6개 (04~08·16 list) | `STATUS_LABEL` 객체 / `FILTER_OPTIONS` 배열 |
 | 편집기 6개 (04~08·16 editor, 2026-07-06 정정 — "16b" 파일 없음) | 상태 select `<option>` 목록 |
 
@@ -61,7 +61,7 @@
 | 영향 파일 | 변경 위치 |
 |---|---|
 | `mockups_v2/` 전수 | 금지어가 사용된 레이블·placeholder·토스트 텍스트 직접 탐색 |
-| *(agents/ 수정 불필요)* | 에이전트들은 copywriting.md를 참조만 함 |
+| *(.claude/agents/ 수정 불필요)* | 에이전트들은 copywriting.md를 참조만 함 |
 
 ---
 
@@ -71,11 +71,11 @@
 
 | 영향 파일 | 변경 위치 |
 |---|---|
-| `agents/03_ui-designer.md` | 연결 규칙 설명 |
-| `agents/04_coder.md` | 유효성 검사 로직 설명 |
-| `agents/05_code-reviewer.md` | 체크리스트 연결 규칙 항목 |
-| `agents/06_spec-reviewer.md` | 체크리스트 C섹션 |
-| `agents/08_ui-reviewer.md` | 연결 UI 검수 항목 |
+| `kc-ui-designer` | 연결 규칙 설명 |
+| `kc-coder` | 유효성 검사 로직 설명 |
+| `kc-code-reviewer` | 체크리스트 연결 규칙 항목 |
+| `kc-spec-reviewer` | 체크리스트 C섹션 |
+| `kc-ui-reviewer` | 연결 UI 검수 항목 |
 | `mockups_v2/00_canvas-main.html` | `CONNECT_RULES` 객체, 연결 유효성 함수 `validateConnection()` |
 | `mockups_v2/06_card-editor-concept.html` | "연결 가능 카드" 안내 텍스트 |
 | `mockups_v2/07_card-editor-rule.html` | Evidence 연결 필수 안내 |
@@ -89,10 +89,10 @@
 
 | 영향 파일 | 변경 위치 |
 |---|---|
-| `agents/01_ai-rag-architect.md` | Case 분기 설명 |
-| `agents/03_ui-designer.md` | Case 레이아웃 설명 |
-| `agents/04_coder.md` | Case 분기 로직 기술 |
-| `agents/06_spec-reviewer.md` | 체크리스트 A-1 섹션 |
+| `kc-ai-rag-architect` | Case 분기 설명 |
+| `kc-ui-designer` | Case 레이아웃 설명 |
+| `kc-coder` | Case 분기 로직 기술 |
+| `kc-spec-reviewer` | 체크리스트 A-1 섹션 |
 | `mockups_v2/13_answer-logic.html` | "답변 케이스 결정" 섹션 표·note-box |
 | `policy/02_card-purpose.html` | "답변 케이스 결정 매트릭스" 카드 (2026-07-06 추가 — 기존에 이 파일이 누락돼 있었음을 발견해 반영) |
 | `context/matching-policy.md` | 실행 구조 다이어그램, 결과 처리 섹션 |
@@ -105,10 +105,10 @@
 
 | 영향 파일 | 변경 위치 |
 |---|---|
-| `agents/03_ui-designer.md` | PROFILE 필드 목록 기술 |
-| `agents/04_coder.md` | `customProfile.profile` 초기값 참조 |
-| `agents/06_spec-reviewer.md` | 체크리스트 PROFILE 항목 |
-| `agents/08_ui-reviewer.md` | PROFILE UI 검수 항목 |
+| `kc-ui-designer` | PROFILE 필드 목록 기술 |
+| `kc-coder` | `customProfile.profile` 초기값 참조 |
+| `kc-spec-reviewer` | 체크리스트 PROFILE 항목 |
+| `kc-ui-reviewer` | PROFILE UI 검수 항목 |
 
 | `mockups_v2/00_canvas-main.html` | `testProfile.profile` 초기값 객체, `buildProfileInputHTML()` 함수 (5개 필드 고정 표시), `.test-profile-row` CSS |
 | `mockups_v2/07_card-editor-rule.html` | Rule 조건 입력 필드 (나이·성별 등) |
@@ -122,7 +122,7 @@
 
 | 영향 파일 | 변경 위치 |
 |---|---|
-| `agents/03·04·06·08` | 담보코드 관련 기술 |
+| `kc-ui-designer·kc-coder·kc-spec-reviewer·kc-ui-reviewer` | 담보코드 관련 기술 |
 | `mockups_v2/07_card-editor-rule.html` | `COVERAGE_CODES` 배열, 조건 빌더 UI |
 
 | `mockups_v2/12_coverage-code-table.html` | 담보코드 전체 표 |
@@ -136,7 +136,7 @@
 
 | 영향 파일 | 변경 위치 |
 |---|---|
-| `agents/03·04·06·08` | PROMAGE 관련 기술 |
+| `kc-ui-designer·kc-coder·kc-spec-reviewer·kc-ui-reviewer` | PROMAGE 관련 기술 |
 
 | `mockups_v2/17_system-data-guide.html` | PROMAGE 필드 설명 표 |
 
@@ -161,7 +161,7 @@
 
 | 영향 파일 | 변경 위치 |
 |---|---|
-| `agents/03·04·05·06·08` | Policy 필드 관련 기술 |
+| `kc-ui-designer·kc-coder·kc-code-reviewer·kc-spec-reviewer·kc-ui-reviewer` | Policy 필드 관련 기술 |
 | `mockups_v2/08_card-editor-policy.html` | `POLICY_FIELDS` 배열, 폼 렌더링 함수 |
 
 ---
@@ -172,10 +172,10 @@
 
 | 영향 파일 | 변경 위치 |
 |---|---|
-| `agents/01_ai-rag-architect.md` | RAG 흐름 기술 |
-| `agents/03_ui-designer.md` | RAG 결과 표시 UI 기술 |
-| `agents/04_coder.md` | RAG 분기 로직 기술 |
-| `agents/06_spec-reviewer.md` | 체크리스트 RAG 항목 |
+| `kc-ai-rag-architect` | RAG 흐름 기술 |
+| `kc-ui-designer` | RAG 결과 표시 UI 기술 |
+| `kc-coder` | RAG 분기 로직 기술 |
+| `kc-spec-reviewer` | 체크리스트 RAG 항목 |
 | `mockups_v2/00_canvas-main.html` | `buildRagPresetHTML()` 함수, `ragMockState` 직접 갱신, `renderAnswerChain()` 함수 |
 | `mockups_v2/13_answer-logic.html` | RAG 흐름도, `renderFlowChart()` 함수 |
 | `mockups_v2/19_faq-rag.html` | FAQ RAG 관리 UI |
@@ -188,7 +188,7 @@
 
 | 영향 파일 | 변경 위치 |
 |---|---|
-| `agents/01·03·04·06` | 우선순위 기술 |
+| `kc-ai-rag-architect·kc-ui-designer·kc-coder·kc-spec-reviewer` | 우선순위 기술 |
 | `mockups_v2/04_card-editor-risk-type.html` | 중요도 select 옵션, 우선순위 설명 텍스트 |
 | `mockups_v2/13_answer-logic.html` | Risk-type 감지 단계 설명 |
 
@@ -248,10 +248,10 @@
 
 | 영향 파일 | 변경 위치 |
 |---|---|
-| `agents/02_po.md` | 화면 목록·우선순위 표 |
-| `agents/04_coder.md` | 파일 수 기재 |
-| `agents/05_code-reviewer.md` | 검수 범위 기재 |
-| `agents/06_spec-reviewer.md` | 검수 범위 기재 |
+| `kc-po` | 화면 목록·우선순위 표 |
+| `kc-coder` | 파일 수 기재 |
+| `kc-code-reviewer` | 검수 범위 기재 |
+| `kc-spec-reviewer` | 검수 범위 기재 |
 | `CLAUDE.md` | 파일 맵 설명 |
 | `mockups_v2/shared.js` | `SIDEBAR_ITEMS` 배열에 새 항목 추가 |
 
@@ -263,11 +263,11 @@
 
 | 영향 파일 | 변경 위치 |
 |---|---|
-| `agents/04_coder.md` | Playbook 로직 기술 |
-| `agents/04b_coder-playbook.md` | Playbook 전체 스펙 |
-| `agents/05_code-reviewer.md` | 체크리스트 Playbook 항목 |
-| `agents/06_spec-reviewer.md` | 체크리스트 Playbook 항목 |
-| `agents/08_ui-reviewer.md` | Playbook UI 검수 항목 |
+| `kc-coder` | Playbook 로직 기술 |
+| `kc-coder-playbook` | Playbook 전체 스펙 |
+| `kc-code-reviewer` | 체크리스트 Playbook 항목 |
+| `kc-spec-reviewer` | 체크리스트 Playbook 항목 |
+| `kc-ui-reviewer` | Playbook UI 검수 항목 |
 | `mockups_v2/16_playbook-list.html` | `PLAYBOOKS` 배열, 목록 렌더링 |
 | `mockups_v2/16_card-editor-playbook.html` | `PLAYBOOK_FIELDS` 배열, 폼 렌더링 |
 
@@ -279,8 +279,8 @@
 
 | 영향 파일 | 변경 위치 |
 |---|---|
-| `agents/06_spec-reviewer.md` | 체크리스트 승인 항목 |
-| `agents/08_ui-reviewer.md` | 승인 흐름 UI 검수 항목 |
+| `kc-spec-reviewer` | 체크리스트 승인 항목 |
+| `kc-ui-reviewer` | 승인 흐름 UI 검수 항목 |
 | `mockups_v2/08_card-editor-policy.html` | 승인 버튼·상태 UI |
 | `mockups_v2/09_review-workflow.html` | `WORKFLOW_STEPS` 배열, 흐름도 렌더링 |
 
@@ -292,7 +292,7 @@
 
 | 영향 파일 | 변경 위치 |
 |---|---|
-| `agents/03·04·06` | FAQ RAG 기술 |
+| `kc-ui-designer·kc-coder·kc-spec-reviewer` | FAQ RAG 기술 |
 | `mockups_v2/19_faq-rag.html` | FAQ 등록 규칙 텍스트, 등록 금지 카테고리 UI |
 
 ---
@@ -315,11 +315,11 @@
 
 | 영향 파일 | 변경 위치 |
 |---|---|
-| `contents/agents/01~05` | 각 담당 Step 스펙 |
-| `guides/customer-messaging.md` | 고객향 메시지 워싱 원칙 (소유자: `contents/agents/03_copywriter.md`) |
+| `kc-content-researcher·kc-content-insurance-domain·kc-content-copywriter·kc-content-po·kc-content-html-publisher` | 각 담당 Step 스펙 |
+| `guides/customer-messaging.md` | 고객향 메시지 워싱 원칙 (소유자: `kc-content-copywriter`) |
 | `CLAUDE.md` | 컨텐츠 트랙 인덱스 섹션 |
 | `mockups_v2/12_coverage-code-table.html` | Step 0.5 게이트 판단 기준(담보코드 표) 자체 — 서비스 트랙 파일이므로 변경 시 양 트랙 모두 확인 |
-| `contents/00_taxonomy/source-corpus.md` | Step 0·2 데이터 비축 대상·갱신 주기 (관리: `contents/agents/01_researcher.md`) |
+| `contents/00_taxonomy/source-corpus.md` | Step 0·2 데이터 비축 대상·갱신 주기 (관리: `kc-content-researcher`) |
 
 ---
 
@@ -340,7 +340,7 @@
 
 1. `context/project.md` — 파일 목록·파일 수 업데이트
 2. `context/decisions.md` — 변경 이력 한 줄 추가
-3. `agents/02_po.md` — 화면 우선순위 표에 추가
+3. `kc-po` — 화면 우선순위 표에 추가
 4. `mockups_v2/shared.js` — **`SIDEBAR_ITEMS` 배열에 새 항목 추가** (24개 일괄 반영)
 5. `guides/ux-patterns.md` — 사이드바 HTML 패턴 예시 업데이트 (필요 시)
 6. 신규 HTML 파일 — `<link href="shared.css">` + `<script src="shared.js">` + `renderSidebar('파일명.html')` 추가 (같은 폴더이므로 `../` 없음)
@@ -350,7 +350,7 @@
 
 ## 신규 에이전트 추가 시 체크리스트
 
-1. `agents/` — 새 파일 생성 (역할 + 읽어야 할 파일 목록 + 판단 기준 + 체크리스트)
+1. `.claude/agents/kc-역할명.md` — 새 파일 생성 (frontmatter `name`·`description`·`tools` + 역할 + 읽어야 할 파일 목록 + 판단 기준 + 체크리스트)
 2. `CLAUDE.md` — 에이전트 구성 표에 한 줄 추가
 3. `context/rules.md` — 체크리스트 수정 허용 조건에 번호 추가
 
@@ -365,4 +365,4 @@
 5. `guides/ux-patterns.md` — 배지 CSS 클래스 설명, 사이드바 메뉴 예시 업데이트
 6. `mockups_v2/` — 목록·편집기 신규 HTML 생성 (shared.css/js 참조 포함)
 7. `mockups_v2/shared.js` — `SIDEBAR_ITEMS`에 새 목록 링크 추가
-8. `agents/03·04·05·06·08` — 체크리스트에 새 카드 타입 항목 추가
+8. `kc-ui-designer·kc-coder·kc-code-reviewer·kc-spec-reviewer·kc-ui-reviewer` — 체크리스트에 새 카드 타입 항목 추가

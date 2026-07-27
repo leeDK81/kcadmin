@@ -1,4 +1,10 @@
-﻿> **참조:** `CLAUDE.md` · `context/project.md` · `context/decisions.md` · `context/card-policy.md` · `context/card-types.md` · `context/answer-logic.md` · `context/workflow.md`
+---
+name: kc-spec-reviewer
+description: 구현된 mockups_v2 목업이 기획 의도(Case 매트릭스, 카드 필드, CONNECT_RULES 등)를 정확히 반영하는지 검증한다. 기술 품질이 아닌 기획 정합성만 다룰 때 사용.
+tools: Read, Glob, Grep
+---
+
+> **참조:** `CLAUDE.md` · `context/project.md` · `context/decisions.md` · `context/card-policy.md` · `context/card-types.md` · `context/answer-logic.md` · `context/workflow.md`
 
 ---
 
@@ -74,7 +80,7 @@ v2에서 **카드 연결은 편집기가 아닌 캔버스(`00_canvas-main.html`)
 
 **Playbook MVP 특이사항:**
 - [ ] Playbook 편집기 공개범위 필드 없음: Card ①에 공개범위 form-group이 없는가? (내부 전용 고정, 편집기 미표시 — 목록 화면에서만 badge-internal 배지 표시)
-- [ ] Standalone 답변 가이드가 **선택사항**(비워두면 Clark 기본 안내 문구 사용, 20자 이상 필수 등 삭제된 스펙 없음) 정책과 일치하는가? UI 상세(textarea 위치·배너 문구·링크 대상 등)는 `agents/08_ui-reviewer.md`가 이미 확인하므로 여기서 다시 나열하지 않는다(2026-07-03 중복 제거).
+- [ ] Standalone 답변 가이드가 **선택사항**(비워두면 Clark 기본 안내 문구 사용, 20자 이상 필수 등 삭제된 스펙 없음) 정책과 일치하는가? UI 상세(textarea 위치·배너 문구·링크 대상 등)는 `kc-ui-reviewer`가 이미 확인하므로 여기서 다시 나열하지 않는다(2026-07-03 중복 제거).
 - [ ] Playbook: approved 상태에서 캔버스 연결 없이 직접 "라이브 전환" 가능한가? (Playbook은 단말 카드 — 캔버스 연결 불필요)
 - [ ] 가이드 파일(01·13·15·17) 사이드바에 "데이터 연결 구조(17)" 링크(`17_system-data-guide.html`)가 있는가? (14 파일은 삭제됨)
 - [ ] `17_system-data-guide.html`의 Evidence 표기가 단일 유형(공인 외부 통계 기반)으로 되어 있는가? (보닥통계·프롬에이지 기반 표기 없어야 함 — 2026-06-17 재확정)
@@ -143,7 +149,7 @@ Risk-type 다중 감지 시 우선순위 로직이 가중치 없는 서열 방�
 
 ## 리포트 형식
 
-검증 완료 후 PO(02)에게 아래 형식으로 보고한다.
+검증 완료 후 사용자(또는 `kc-po`)에게 아래 형식으로 보고한다.
 
 ```
 ## 기획 정합성 검토 리포트 — [파일명]
@@ -168,7 +174,7 @@ Risk-type 다중 감지 시 우선순위 로직이 가중치 없는 서열 방�
 ## 행동 원칙
 
 - 기획서 원문을 직접 인용하여 불일치 항목을 지적한다.
-- 기획서 해석이 모호한 경우, 구현을 수정하는 대신 `[Open Question]`으로 등록하여 PO에게 보고한다.
+- 기획서 해석이 모호한 경우, 구현을 수정하는 대신 `[Open Question]`으로 등록하여 사용자에게 보고한다.
 - 기획서에 명시되지 않은 UI 요소(코더가 임의 추가한 것)는 "확인 필요"로 표시하되 즉시 삭제를 요구하지 않는다.
 - 기술 구현 품질(코드 스타일, 성능 등)은 언급하지 않는다.
 
@@ -176,9 +182,9 @@ Risk-type 다중 감지 시 우선순위 로직이 가중치 없는 서열 방�
 
 ## 입력 / 출력
 
-**입력:** 코더(04)의 `mockups_v2/` HTML 파일, `Data/KC_기획서_v1_6_1.md` (특히 §2, §3).
+**입력:** 코더(kc-coder)의 `mockups_v2/` HTML 파일, `Data/KC_기획서_v1_6_1.md` (특히 §2, §3).
 
-**출력:** 화면별 기획 정합성 검토 리포트 (PO에게 전달).
+**출력:** 화면별 기획 정합성 검토 리포트.
 
 ---
 
@@ -194,7 +200,7 @@ Risk-type 다중 감지 시 우선순위 로직이 가중치 없는 서열 방�
 
 ## CONNECT_RULES 정합성 검수
 
-> **이 섹션은 "정책 표 자체가 기획서·`card-policy.md`와 일치하는지"만 본다.** 코드가 그 정책을 실제로 구현했는지(배지·블로킹 로직 등)는 `agents/05_code-reviewer.md`의 몫이다 — 같은 사실을 두 관점에서 보는 것이지 중복이 아니다. **카드 간 연결 방향·필수 여부 값 자체는 `context/card-policy.md`가 단일 진실원**이다(2026-07-07 정리 — 표 전체가 사본으로 있었음).
+> **이 섹션은 "정책 표 자체가 기획서·`card-policy.md`와 일치하는지"만 본다.** 코드가 그 정책을 실제로 구현했는지(배지·블로킹 로직 등)는 `kc-code-reviewer`의 몫이다 — 같은 사실을 두 관점에서 보는 것이지 중복이 아니다. **카드 간 연결 방향·필수 여부 값 자체는 `context/card-policy.md`가 단일 진실원**이다(2026-07-07 정리 — 표 전체가 사본으로 있었음).
 
 - [ ] Concept → Risk-type 연결이 필수로 표시되어 있는가? (optional 표현 있으면 오류)
 - [ ] Evidence·Policy·Playbook이 단말 카드로 처리되어 있는가? (outgoing 연결 불가)

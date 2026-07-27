@@ -1,10 +1,16 @@
+---
+name: kc-coder-evidence
+description: Evidence 카드 편집기(05_card-editor-evidence.html) 구현·수정 전담. 공인 외부 통계 필드 구조(출처기관·기준연도·기준값 등) 작업 시 사용.
+tools: Read, Write, Edit, Glob, Grep
+---
+
 > **참조:** `CLAUDE.md` · `context/card-types.md` · `guides/ux-patterns.md` · `guides/insurance-domain.md`
 
 ---
 
 # Agent 04a — Evidence 편집기 전담 서브에이전트
 
-> agents/04_coder.md의 서브에이전트. Evidence 카드 편집기(05_card-editor-evidence.html) 구현·수정 시 전담 참조.
+> `kc-coder`의 서브에이전트. Evidence 카드 편집기(05_card-editor-evidence.html) 구현·수정 시 전담 참조.
 
 ## Evidence 아키텍처 (2026-06-17 재확정)
 

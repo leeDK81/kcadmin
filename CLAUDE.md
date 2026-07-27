@@ -10,7 +10,7 @@
 | | ① 서비스 기획 트랙 | ② 컨텐츠 기획 트랙 |
 |---|---|---|
 | **산출물** | `mockups_v2/` — KC Admin 어드민 UI 목업(26개 HTML) | `contents/` — Clark AI가 실제로 쓰는 카드 콘텐츠(Evidence·Risk-type·Rule·Concept·Policy·Playbook 실 데이터) |
-| **에이전트** | `agents/01~08`(+04a·04b) | `contents/agents/01~05` |
+| **에이전트** | `.claude/agents/kc-*.md`(10개) | `.claude/agents/kc-content-*.md`(5개) |
 | **진입점** | 이 파일 → `context/rules.md` → 아래 "① 서비스 기획 트랙" 섹션 | 이 파일 → `contents/agents/00_workflow.md` |
 | **결정·미결 이력** | `context/decisions.md` | `contents/decisions.md` |
 | **변경 이력** | `CHANGELOG.md` | `contents/CHANGELOG.md` |
@@ -44,20 +44,22 @@
 
 ### 에이전트 구성
 
-| 번호 | 파일 | 역할 | 계층 2 참조 |
-|---|---|---|---|
-| 01 | `agents/01_ai-rag-architect.md` | AI/RAG 아키텍트 | card-policy + card-types + answer-logic + insurance-domain |
-| 02 | `agents/02_po.md` | PO — 범위·조율 | decisions + card-policy + card-types + answer-logic + workflow |
-| 03 | `agents/03_ui-designer.md` | UI 디자이너 | card-policy + card-types + answer-logic + workflow + design-system |
-| 04 | `agents/04_coder.md` | 코더 | card-policy + card-types + answer-logic + workflow + design-system + ux-patterns |
-| 04a | `agents/04a_coder-evidence.md` | Evidence 편집기 전담 | card-types + ux-patterns + insurance-domain |
-| 04b | `agents/04b_coder-playbook.md` | Playbook 편집기 전담 | card-types + answer-logic + ux-patterns + design-system |
-| 05 | `agents/05_code-reviewer.md` | 코딩 검수자 | card-policy + card-types + design-system |
-| 06 | `agents/06_spec-reviewer.md` | 기획 검수자 | project + decisions + card-policy + card-types + answer-logic + workflow |
-| 07 | `agents/07_insurance-expert.md` | 보험 도메인 전문가 (검수 전용) | project + insurance-domain |
-| 08 | `agents/08_ui-reviewer.md` | UI 검수자 | card-policy + card-types + design-system + ux-patterns + copywriting |
+> **2026-07-27: 실제 Claude Code 서브에이전트로 등록, 같은 날 단일 소스로 통합.** `.claude/agents/kc-*.md`가 역할 정의의 유일한 진실원이다 — `Agent` 도구에서 `subagent_type`으로 지정하면 이 파일 자체가 시스템 프롬프트로 스폰된다. 원래는 `agents/0X_역할명.md` 문서를 원본으로, `.claude/agents/kc-*.md`를 실행형 사본으로 이원화했으나, 그날 안에 사본에만 개선 사항(예: `kc-ui-reviewer`의 "Playwright 실측 필수" 추가)이 반영되고 원본에는 반영되지 않는 드리프트가 실제로 발생한 것을 확인해 원본 문서 10개를 삭제하고 이 파일로 일원화했다. 역할을 고칠 때는 `.claude/agents/kc-*.md`만 수정하면 된다.
 
-> **07·08 참고 (2026-07-03):** 한때 07에 저작 권한을, 08에 컨텐츠 카피 검수를 추가했었으나, 그 역할은 이미 `contents/agents/02_insurance-domain.md`·`03_copywriter.md`가 전담하고 있었음이 밝혀져 원복했다. 07은 mockups_v2 검수 전용, 08의 contents/html 관련 범위는 순수 UI 표시 오류만(Section J).
+| 서브에이전트 | 역할 | 계층 2 참조 |
+|---|---|---|
+| `kc-ai-rag-architect` | AI/RAG 아키텍트 | card-policy + card-types + answer-logic + insurance-domain |
+| `kc-po` | PO — 범위·조율 | decisions + card-policy + card-types + answer-logic + workflow |
+| `kc-ui-designer` | UI 디자이너 | card-policy + card-types + answer-logic + workflow + design-system |
+| `kc-coder` | 코더 | card-policy + card-types + answer-logic + workflow + design-system + ux-patterns |
+| `kc-coder-evidence` | Evidence 편집기 전담 | card-types + ux-patterns + insurance-domain |
+| `kc-coder-playbook` | Playbook 편집기 전담 | card-types + answer-logic + ux-patterns + design-system |
+| `kc-code-reviewer` | 코딩 검수자 | card-policy + card-types + design-system |
+| `kc-spec-reviewer` | 기획 검수자 | project + decisions + card-policy + card-types + answer-logic + workflow |
+| `kc-insurance-expert` | 보험 도메인 전문가 (검수 전용) | project + insurance-domain |
+| `kc-ui-reviewer` | UI 검수자 (Playwright 브라우저 실측 가능) | card-policy + card-types + design-system + ux-patterns + copywriting |
+
+> **kc-insurance-expert·kc-ui-reviewer 참고 (2026-07-03):** 한때 kc-insurance-expert에 저작 권한을, kc-ui-reviewer에 컨텐츠 카피 검수를 추가했었으나, 그 역할은 이미 `kc-content-insurance-domain`·`kc-content-copywriter`가 전담하고 있었음이 밝혀져 원복했다. kc-insurance-expert는 mockups_v2 검수 전용, kc-ui-reviewer의 contents/html 관련 범위는 순수 UI 표시 오류만(Section J).
 
 ### 파일 맵
 
@@ -74,10 +76,9 @@ guides/
   design-system.md    ← Pretendard 폰트, :root CSS 변수 전체, 컴포넌트 CSS
   ux-patterns.md       ← 사이드바·편집기·테이블 HTML 패턴
   copywriting.md       ← 금지/대체 표현 단일 원본 — KC Admin 운영자 화면 UI 텍스트 전용
-  customer-messaging.md ← 고객향 Clark AI 채팅 메시지 워싱 원칙 (소유자: contents/agents/03_copywriter.md — 서비스 트랙은 미사용)
+  customer-messaging.md ← 고객향 Clark AI 채팅 메시지 워싱 원칙 (소유자: `kc-content-copywriter` — 서비스 트랙은 미사용)
   insurance-domain.md ← 공유 계약 (위 섹션 참조)
 
-agents/           ← 역할별 전담 파일 (위 에이전트 구성 표 참조)
 CHANGELOG.md      ← 서비스 기획 트랙 변경 이력
 mockups_v2/       ← 현행 작업 폴더. 26개 HTML (캔버스 UX 기준)
 policy/           ← 설계 정책 문서 10개 HTML (00_index~09_matching-policy)
@@ -113,7 +114,7 @@ Clark AI 채팅에서 실제로 쓰이는 카드 콘텐츠(공인 통계·위험
 
 ```
 contents/
-  agents/           ← 컨텐츠 트랙 에이전트 (01~05, 아래 표)
+  agents/           ← 00_workflow.md(전체 프로세스 가이드)만 유지 — 개별 역할 정의는 `.claude/agents/kc-content-*.md`(위 표 참조)
   00_taxonomy/      ← 시장 리서치(market-research.md) + 통계 근거 코퍼스(source-corpus.md)
   01_evidence/      ← Evidence 카드 (도메인별 통합 .md)
   02_risk-type/     ← Risk-type 카드 (risk-types.md)
@@ -125,22 +126,24 @@ contents/
   08_faq/           ← FAQ RAG 콘텐츠 (faq-rag.md, 2026-07-04 신규 — 계약 무관 보험 판단 노하우 + 서비스 이용 안내 Q&A)
   09_query-messages/← Case 0(조회형 게이트) 감지용 예시 발화 (query-messages.md, 2026-07-07 신규)
   10_synonym/       ← 상품유형 유사어 결정론적 연결 (synonyms.md, 2026-07-07 신규 — AI 유사도 매칭 아님)
-  html/             ← 브라우저에서 직접 여는 콘텐츠 어드민 + Clark AI 채팅 시뮬레이션 (13개 HTML, mockups_v2와 별개·서버 불필요)
+  html/             ← 브라우저에서 직접 여는 콘텐츠 어드민 + Clark AI 채팅 시뮬레이션 (16개 HTML + sidebar.js, mockups_v2와 별개·서버 불필요)
   decisions.md      ← 컨텐츠 트랙 미결 항목·결정 이력 인덱스
   CHANGELOG.md      ← 컨텐츠 트랙 변경 이력 (카드 데이터 변경 상세 포함)
 ```
 
 ### 에이전트 구성
 
-| 번호 | 파일 | 역할 | 담당 카드 |
-|---|---|---|---|
-| 01 | `contents/agents/01_researcher.md` | 공인 통계 수집·검증, `source-corpus.md` 관리 | Evidence |
-| 02 | `contents/agents/02_insurance-domain.md` | 위험 유형 정의 + Rule 조건 설계 (+ 담보코드 적합성 게이트) | Risk-type, Rule |
-| 03 | `contents/agents/03_copywriter.md` | 사용자 언어 작성 + 고객향 채팅 메시지 워싱 | Concept, Policy, Playbook |
-| 04 | `contents/agents/04_content-po.md` | 연결 정합성 검토 + 체인 완성 승인 | 전체 연결 구조 |
-| 05 | `contents/agents/05_html-publisher.md` | 확정 콘텐츠를 `contents/html/`에 실제 반영 (2026-07-03 신규) | contents/html/*.html |
+> **2026-07-27: 실제 Claude Code 서브에이전트로 등록, 같은 날 단일 소스로 통합.** 서비스 트랙과 동일한 이유(사본에만 개선 사항이 반영되고 원본은 갱신되지 않는 드리프트 실제 발생 확인)로 `contents/agents/01~05_*.md` 개별 역할 문서는 삭제했다 — `.claude/agents/kc-content-*.md`가 유일한 진실원이다. `00_workflow.md`는 개별 역할이 아니라 전체 프로세스 가이드라 그대로 유지하며, 각 kc-content-* 서브에이전트가 계속 이 파일을 참조한다.
 
-### contents/html/ 파일 목록 (14개 + sidebar.js)
+| 서브에이전트 | 역할 | 담당 카드 |
+|---|---|---|
+| `kc-content-researcher` | 공인 통계 수집·검증, `source-corpus.md` 관리 | Evidence |
+| `kc-content-insurance-domain` | 위험 유형 정의 + Rule 조건 설계 (+ 담보코드 적합성 게이트) | Risk-type, Rule |
+| `kc-content-copywriter` | 사용자 언어 작성 + 고객향 채팅 메시지 워싱 | Concept, Policy, Playbook |
+| `kc-content-po` | 연결 정합성 검토 + 체인 완성 승인 | 전체 연결 구조 |
+| `kc-content-html-publisher` | 확정 콘텐츠를 `contents/html/`에 실제 반영 (Playwright 브라우저 실측 가능) | contents/html/*.html |
+
+### contents/html/ 파일 목록 (16개 + sidebar.js)
 
 | 파일 | 설명 |
 |---|---|
@@ -158,6 +161,8 @@ contents/
 | 11_query-messages.html | Case 0(조회형 게이트) 예시 발화 미리보기 (2026-07-07 신규) |
 | 12_synonym-management.html | 상품유형 유사어 관리 콘텐츠 (2026-07-07 신규, 2026-07-08 5차 갱신) |
 | 13_query-ai-preview.html | Case 0(조회형 게이트) Clark AI 채팅 답변 시뮬레이션 (2026-07-14 신규, 08_ai-preview.html에서 분리, QM-01~05 5종 전체) |
+| 14_card-hook-sample.html | 결과 카드 경각심 강화 Before/After 샘플 (2026-07-20 신규, 제안·검토중 — 실 콘텐츠 미반영) |
+| 15_coverage-amount-reference.html | 담보코드별 참고 기준액 조회 (2026-07-27 신규, 152개 코드 전체 리서치 결과 — `contents/00_taxonomy/coverage-amount-research.md` 원본) |
 | sidebar.js | 좌측 공통 사이드바 JS 인젝션 |
 
 ### Clark AI 채팅 답변 표준 구조 (`guides/customer-messaging.md` 진실원 — 2026-07-05 갱신)
@@ -174,7 +179,7 @@ contents/
 
 ### 미결 작업
 
-상세는 `contents/decisions.md` 참조(2026-07-14 갱신 기준: FAQ 서비스 이용 안내 3건(FAQ-008~010) 플레이스홀더만 남음). T01 AND 조건 사각지대(실손 없음+사망보장 있음 미감지)는 2026-07-14 RU-T01 필수→선택 조건 재배치로 해소 완료(신규 카드 없이 처리 — T01·T11이 실손 유무로 이미 배타 분리돼 있던 구조 활용). T01 나이 상한 65→85세 확장, EV038(T29 근거) 원문 재확인, 어린이보험 "아동보험"·"키즈보험" 유사어 6차 재검증, PASONA 후킹 설계 브리프 전체 카피 개정(23개 Risk-type·30개 Evidence·12개 Playbook) 항목은 2026-07-09 완료. 준법감시인(컴플라이언스) 검토 항목은 2026-07-09 삭제 — 오프라인 별도 프로세스로 처리돼 미결 추적 대상 아님(PO 판단). mockups_v2 서비스 트랙 미결 5건(PROFILE 입력·Playbook 연결·FAQ 기준값·결과카드 실장·Case 0 세부)은 2026-07-14 목업 동결 방침에 따라 `context/decisions.md`에서 정리(개발팀 참고사항은 각 진실원 파일에 유지). 이 노트는 매번 `contents/decisions.md`의 실제 미결 항목과 대조해 갱신할 것.
+상세는 `contents/decisions.md` 참조(2026-07-27 갱신 기준: FAQ 서비스 이용 안내 3건(FAQ-008~010) 플레이스홀더, 결과 카드 경각심 강화 방향(샘플 검토 대기) 2건 남음). 담보코드별 참고금액 항목(2026-07-24 등록)은 2026-07-27 `contents/html/15_coverage-amount-reference.html` 신규 페이지 반영 + RU-T05·RU-T17·RU-T27 Rule 3개 부족형 전환까지 완료돼 해소됨. T01 AND 조건 사각지대(실손 없음+사망보장 있음 미감지)는 2026-07-14 RU-T01 필수→선택 조건 재배치로 해소 완료(신규 카드 없이 처리 — T01·T11이 실손 유무로 이미 배타 분리돼 있던 구조 활용). T01 나이 상한 65→85세 확장, EV038(T29 근거) 원문 재확인, 어린이보험 "아동보험"·"키즈보험" 유사어 6차 재검증, PASONA 후킹 설계 브리프 전체 카피 개정(23개 Risk-type·30개 Evidence·12개 Playbook) 항목은 2026-07-09 완료. 준법감시인(컴플라이언스) 검토 항목은 2026-07-09 삭제 — 오프라인 별도 프로세스로 처리돼 미결 추적 대상 아님(PO 판단). mockups_v2 서비스 트랙 미결 5건(PROFILE 입력·Playbook 연결·FAQ 기준값·결과카드 실장·Case 0 세부)은 2026-07-14 목업 동결 방침에 따라 `context/decisions.md`에서 정리(개발팀 참고사항은 각 진실원 파일에 유지). 이 노트는 매번 `contents/decisions.md`의 실제 미결 항목과 대조해 갱신할 것.
 
 ---
 

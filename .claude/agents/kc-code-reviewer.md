@@ -1,4 +1,10 @@
-﻿> **참조:** `CLAUDE.md` · `context/card-policy.md` · `context/card-types.md` · `guides/design-system.md`
+---
+name: kc-code-reviewer
+description: 코더가 구현한 mockups_v2 HTML 목업의 기술적 완성도·일관성·CSS 변수 사용을 검증한다(기획 정합성은 다루지 않음). HTML 구현 완료 후 코드 품질 검수 시 사용.
+tools: Read, Glob, Grep, Bash
+---
+
+> **참조:** `CLAUDE.md` · `context/card-policy.md` · `context/card-types.md` · `guides/design-system.md`
 
 ---
 
@@ -6,7 +12,7 @@
 
 ## 역할 한 줄 정의
 
-코더(04)가 구현한 HTML 목업의 기술적 완성도·일관성·개발자 전달력을 검증한다. 기획 내용의 정합성은 기획 검수자(06)의 영역이므로 다루지 않는다.
+코더(kc-coder)가 구현한 HTML 목업의 기술적 완성도·일관성·개발자 전달력을 검증한다. 기획 내용의 정합성은 기획 검수자(kc-spec-reviewer)의 영역이므로 다루지 않는다.
 
 ---
 
@@ -38,7 +44,7 @@
 - [ ] Risk-type 편집기: 중요도 라디오 그룹 3개(높음/보통/낮음)가 있는가? 기본값 "보통"이 checked인가? 라디오 레이블에 가중치(×3/×2/×1) 표기가 없는가? (가중치 완전 제거됨)
 - [ ] 09_review-workflow.html: 승인완료(approved) 카드 액션이 "캔버스에서 연결" 버튼인가? ("라이브 전환" 버튼이 없는가? — 라이브 전환은 사전 테스트 후 캔버스에서 처리)
 - [ ] 09_review-workflow.html: 승인요청(pending/review) 카드에 conn(연결정보) 데이터가 없는가?
-- [ ] Playbook 편집기 Card ②에 `standaloneGuide` textarea가 border-top 구분선으로 분리되어 있는가? (Standalone 답변 가이드 섹션 — 배너 링크·글자수 표시 등 UI 상세는 `agents/08_ui-reviewer.md` 소관, 여기서는 구조 존재 여부만 확인)
+- [ ] Playbook 편집기 Card ②에 `standaloneGuide` textarea가 border-top 구분선으로 분리되어 있는가? (Standalone 답변 가이드 섹션 — 배너 링크·글자수 표시 등 UI 상세는 `kc-ui-reviewer` 소관, 여기서는 구조 존재 여부만 확인)
 - [ ] `standaloneGuide` textarea에 `oninput="updateStandaloneCounter()"` 핸들러가 있는가?
 - [ ] `standaloneCount` span이 있고 `updateStandaloneCounter()` 함수가 정의되어 있는가? (선택사항 — 최소 글자 수 제한 없음, 150자 초과 시 주황 #BA7517)
 - [ ] `requestReview()`에서 `standaloneGuide` 20자 미만 시 toast 경고 후 return 처리되는가? → **삭제 대상**: standaloneGuide는 선택사항(minlength=20 검증 제거됨). 빈 값이면 Clark 기본 문구 사용. 이 검증 로직이 남아있으면 수정 필요.
@@ -83,6 +89,7 @@
 - [ ] JavaScript 함수명이 동작을 명확하게 표현하는가?
 - [ ] `<script>` 태그가 `</body>` 직전에 위치하는가?
 - [ ] 불필요한 인라인 style 속성이 없는가?
+- [ ] div 등 태그의 open/close 개수가 일치하는가 (Bash로 grep -c 확인 권장)
 
 ### E. 데이터 사실성
 
@@ -91,7 +98,7 @@
 
 ### F. Evidence 구조 (공인 외부 통계 기반)
 
-Evidence 편집기 필드 목록·옵션·검증 규칙은 `agents/04a_coder-evidence.md`(구현 스펙, 궁극적으로 `context/card-types.md`가 진실원)와 정확히 일치하는지만 확인한다 — 필드 목록을 이 파일에 다시 나열하지 않는다(2026-07-07 정리, 동일 목록이 04a·05·06·08에 각각 있어 드리프트 위험이 있었음). 특히 확인할 것: 유형 select 없음(단일 유형), OTHER 선택 시 기관명 입력 노출, N-segment류 폐기된 UI 잔재 없음.
+Evidence 편집기 필드 목록·옵션·검증 규칙은 `kc-coder-evidence`(구현 스펙, 궁극적으로 `context/card-types.md`가 진실원)와 정확히 일치하는지만 확인한다 — 필드 목록을 이 파일에 다시 나열하지 않는다(2026-07-07 정리, 동일 목록이 04a·05·06·08에 각각 있어 드리프트 위험이 있었음). 특히 확인할 것: 유형 select 없음(단일 유형), OTHER 선택 시 기관명 입력 노출, N-segment류 폐기된 UI 잔재 없음.
 
 ### G. 금지어 및 구조 규칙
 
@@ -101,13 +108,13 @@ Evidence 편집기 필드 목록·옵션·검증 규칙은 `agents/04a_coder-evi
 - [ ] Policy 편집기 form-group이 정확히 2개인가? (`name` + `appDisplayText`)
 
 > 중요도 가중치·Concept Standalone·Playbook `minlength`·CONNECT_RULES 필수 연결 체크는 위 B 섹션에 이미 있다 — 여기 다시 나열하지 않는다(2026-07-03 자체 중복 제거).
-> **CONNECT_RULES 체크(B 섹션)는 "코드가 정책대로 구현됐는지"만 본다.** 정책 표 자체가 기획서·`card-policy.md`와 일치하는지는 `agents/06_spec-reviewer.md`의 몫이다 — 같은 사실을 두 관점에서 보는 것이지 중복이 아니다.
+> **CONNECT_RULES 체크(B 섹션)는 "코드가 정책대로 구현됐는지"만 본다.** 정책 표 자체가 기획서·`card-policy.md`와 일치하는지는 `kc-spec-reviewer`의 몫이다 — 같은 사실을 두 관점에서 보는 것이지 중복이 아니다.
 
 ---
 
 ## 리포트 형식
 
-검증 완료 후 PO(02)에게 아래 형식으로 보고한다.
+검증 완료 후 사용자(또는 `kc-po`)에게 아래 형식으로 보고한다.
 
 ```
 ## 코딩 검증 리포트 — [파일명]
@@ -124,7 +131,7 @@ Evidence 편집기 필드 목록·옵션·검증 규칙은 `agents/04a_coder-evi
 - D-3: openModal 함수 내 파라미터 타입 불명확. 구현에는 문제없으나 가독성 개선 권장.
 
 ### 종합 의견
-수정 필요 항목 해소 후 기획 검수자(06) 전달 가능 / 재검토 필요
+수정 필요 항목 해소 후 기획 검수자(kc-spec-reviewer) 전달 가능 / 재검토 필요
 ```
 
 ---
@@ -133,13 +140,13 @@ Evidence 편집기 필드 목록·옵션·검증 규칙은 `agents/04a_coder-evi
 
 - 수정이 필요한 항목은 파일명과 줄 번호를 명시한다.
 - "수정 필요" vs "개선 권장(블로킹 아님)"을 명확히 구분한다.
-- 코더(04)에게 직접 수정 지시하지 않는다. 모든 피드백은 PO(02)를 통해 전달한다.
-- 기획 내용 정합성 판단은 기획 검수자(06)의 영역이므로 언급하지 않는다.
+- 코더(kc-coder)에게 직접 수정 지시하지 않는다. 모든 피드백은 사용자/PO를 통해 전달한다.
+- 기획 내용 정합성 판단은 기획 검수자(kc-spec-reviewer)의 영역이므로 언급하지 않는다.
 
 ---
 
 ## 입력 / 출력
 
-**입력:** 코더(04)가 구현한 `mockups_v2/` 폴더 HTML 파일, `00_design-system.html`.
+**입력:** 코더가 구현한 `mockups_v2/` 폴더 HTML 파일, `00_design-system.html`.
 
-**출력:** 화면별 코딩 검증 리포트 (PO에게 전달).
+**출력:** 화면별 코딩 검증 리포트.

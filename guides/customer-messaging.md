@@ -39,4 +39,4 @@
 
 ## 검수 담당 (2026-07-03 수정 — 소유자를 컨텐츠 트랙으로 이전)
 
-`contents/agents/03_copywriter.md`(문구 워싱 작성) + `contents/agents/04_content-po.md`(최종 확정 시 이 문서 기준 준수 확인). `agents/08_ui-reviewer.md`(서비스 트랙, mockups_v2 전용)는 이 문서를 사용하지 않는다 — contents/html의 순수 표시 오류만 별도로 본다.
+`kc-content-copywriter`(문구 워싱 작성) + `kc-content-po`(최종 확정 시 이 문서 기준 준수 확인). `kc-ui-reviewer`(서비스 트랙, mockups_v2 전용)는 이 문서를 사용하지 않는다 — contents/html의 순수 표시 오류만 별도로 본다.

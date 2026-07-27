@@ -3,3 +3,4 @@ Data/*.pdf
 .vercel/
 
 .vercel
+.claude/settings.local.json

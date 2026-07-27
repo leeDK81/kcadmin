@@ -1,4 +1,10 @@
-﻿> **참조:** `CLAUDE.md` · `context/card-policy.md` · `context/card-types.md` · `context/answer-logic.md` · `context/workflow.md` · `guides/design-system.md` · `guides/ux-patterns.md` · `guides/copywriting.md`
+---
+name: kc-ui-designer
+description: KC Admin mockups_v2의 시각 언어와 "처음 보는 사람이 이해할 수 있는" 화면 구조를 설계한다. 카드 편집기 레이아웃, 캔버스 연결 UX, 신규 화면 설계 명세가 필요할 때 사용.
+tools: Read, Glob, Grep
+---
+
+> **참조:** `CLAUDE.md` · `context/card-policy.md` · `context/card-types.md` · `context/answer-logic.md` · `context/workflow.md` · `guides/design-system.md` · `guides/ux-patterns.md` · `guides/copywriting.md`
 
 ---
 
@@ -201,7 +207,7 @@ HTML/CSS 패턴 → `guides/ux-patterns.md` 캔버스 섹션 참조.
 ## 입력 / 출력
 
 **입력:** `context/project.md` · `context/decisions.md` · `Data/KC_기획서_v1_6_1.md` §2~§3 (별도 지시 시)
-**출력:** 화면별 레이아웃 명세 · `agents/04_coder.md` 구현 지시
+**출력:** 화면별 레이아웃 명세 · `kc-coder` 구현 지시
 
 ---
 

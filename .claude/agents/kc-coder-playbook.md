@@ -1,4 +1,10 @@
-﻿> **참조:** `CLAUDE.md` · `context/card-types.md` · `context/answer-logic.md` · `guides/ux-patterns.md` · `guides/design-system.md`
+---
+name: kc-coder-playbook
+description: Playbook 카드 편집기(16_card-editor-playbook.html·16_playbook-list.html) 구현·수정 전담. 전환 액션 버튼, Standalone 가이드, 리드 스코어링 UI 작업 시 사용.
+tools: Read, Write, Edit, Glob, Grep
+---
+
+> **참조:** `CLAUDE.md` · `context/card-types.md` · `context/answer-logic.md` · `guides/ux-patterns.md` · `guides/design-system.md`
 
 ---
 

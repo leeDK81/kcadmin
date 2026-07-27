@@ -1,6 +1,6 @@
 # KC Admin — 트랙 간 교차 영향 매핑
 
-> **서비스 기획 트랙**(`mockups_v2/`, `agents/01~08`)과 **컨텐츠 기획 트랙**(`contents/`, `contents/agents/01~05`)이 공통으로 의존하는 "공유 계약" 파일이 바뀔 때, 두 트랙 중 어느 쪽을 확인해야 하는지 매핑한다.
+> **서비스 기획 트랙**(`mockups_v2/`, `.claude/agents/kc-*.md`)과 **컨텐츠 기획 트랙**(`contents/`, `.claude/agents/kc-content-*.md`)이 공통으로 의존하는 "공유 계약" 파일이 바뀔 때, 두 트랙 중 어느 쪽을 확인해야 하는지 매핑한다.
 > 트랙별 내부 영향 파일(예: mockups_v2 HTML 여러 개, contents 카드 파일 여러 개)은 각각 `context/impact-map.md`(서비스)와 `contents/agents/00_workflow.md`(컨텐츠)에 있다 — 이 파일은 **트랙 경계를 넘는** 영향만 다룬다.
 
 ---
@@ -15,13 +15,13 @@
 
 | 공유 계약 파일 | 바뀌면 서비스 트랙에서 확인할 것 | 바뀌면 컨텐츠 트랙에서 확인할 것 |
 |---|---|---|
-| `context/card-types.md` (카드 필드 스펙) | 해당 카드 편집기 HTML(`mockups_v2/0X_card-editor-*.html`)의 입력 필드 | `contents/agents/02_insurance-domain.md`·`03_copywriter.md`의 필드 스키마, 기존 카드 파일(`contents/01~06_*/`)이 새 필드 규칙을 따르는지 |
-| `context/card-policy.md` (CONNECT_RULES, 카드 상태, 카디널리티) | `00_canvas-main.html`의 `CONNECT_RULES` 객체·연결 UI | `contents/agents/04_content-po.md`의 검토 항목·`chain-map.json` 스키마 |
+| `context/card-types.md` (카드 필드 스펙) | 해당 카드 편집기 HTML(`mockups_v2/0X_card-editor-*.html`)의 입력 필드 | `kc-content-insurance-domain`·`kc-content-copywriter`의 필드 스키마, 기존 카드 파일(`contents/01~06_*/`)이 새 필드 규칙을 따르는지 |
+| `context/card-policy.md` (CONNECT_RULES, 카드 상태, 카디널리티) | `00_canvas-main.html`의 `CONNECT_RULES` 객체·연결 UI | `kc-content-po`의 검토 항목·`chain-map.json` 스키마 |
 | `guides/insurance-domain.md` (T코드·담보코드) | 편집기 select 옵션, `12_coverage-code-table.html` | `contents/02_risk-type/risk-types.md`·`03_rule/*.md`의 T코드·담보코드 값 전체 |
-| `context/answer-logic.md` (Case 매트릭스, RAG 정책) | `13_answer-logic.html` 시각화(2026-07-05: 출력 형식 원칙 4가지 note-box, PROMAGE 선택조건 반영 원칙 포함), `19_faq-rag.html`의 등록 가능 범위 안내 카피(2026-07-04: "계약 특정적 vs 일반 판단 노하우" 구분 반영), FAQ RAG 매칭 방식(2026-07-05: `matching-policy.md` 엔진 재사용 명시) | `contents/html/08_ai-preview.html` 채팅 시뮬레이션 흐름(2026-07-05: 진단 선언·운영자 식별자 비노출·Evidence 출처+연도 인용·PROMAGE 선택조건 매칭 시 경각심 반영 원칙 적용, T01~T32 전체 모바일 폰 목업 전환·17개 체인 2-variant), `contents/agents/03_copywriter.md`의 답변 구조, FAQ RAG 콘텐츠 저작 시 등록 기준 |
+| `context/answer-logic.md` (Case 매트릭스, RAG 정책) | `13_answer-logic.html` 시각화(2026-07-05: 출력 형식 원칙 4가지 note-box, PROMAGE 선택조건 반영 원칙 포함), `19_faq-rag.html`의 등록 가능 범위 안내 카피(2026-07-04: "계약 특정적 vs 일반 판단 노하우" 구분 반영), FAQ RAG 매칭 방식(2026-07-05: `matching-policy.md` 엔진 재사용 명시) | `contents/html/08_ai-preview.html` 채팅 시뮬레이션 흐름(2026-07-05: 진단 선언·운영자 식별자 비노출·Evidence 출처+연도 인용·PROMAGE 선택조건 매칭 시 경각심 반영 원칙 적용, T01~T32 전체 모바일 폰 목업 전환·17개 체인 2-variant), `kc-content-copywriter`의 답변 구조, FAQ RAG 콘텐츠 저작 시 등록 기준 |
 | `context/matching-policy.md` (Concept·Playbook 매칭) | `policy/09_matching-policy.html` | `contents/04_concept/concepts.md`·`06_playbook/playbooks.md` 작성 시 동의어·키워드 작성 기준 |
-| `guides/customer-messaging.md` (고객향 메시지 워싱) | 해당 없음 (서비스 트랙은 운영자 UI 텍스트만 다룸 — `guides/copywriting.md`) | `contents/agents/03_copywriter.md`·`04_content-po.md`·`05_html-publisher.md` |
-| `context/rules.md` (협업 규칙, 리서치 도구 정책 등) | 전체 `agents/01~08` | 전체 `contents/agents/01~05` |
+| `guides/customer-messaging.md` (고객향 메시지 워싱) | 해당 없음 (서비스 트랙은 운영자 UI 텍스트만 다룸 — `guides/copywriting.md`) | `kc-content-copywriter`·`kc-content-po`·`kc-content-html-publisher` |
+| `context/rules.md` (협업 규칙, 리서치 도구 정책 등) | 전체 `.claude/agents/kc-*.md` | 전체 `.claude/agents/kc-content-*.md` |
 
 ---
 
