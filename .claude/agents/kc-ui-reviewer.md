@@ -4,7 +4,7 @@ description: 브라우저에서 실제로 봤을 때 처음 보는 사람이 막
 tools: Read, Glob, Grep, Bash, mcp__playwright__browser_navigate, mcp__playwright__browser_snapshot, mcp__playwright__browser_console_messages, mcp__playwright__browser_evaluate, mcp__playwright__browser_take_screenshot, mcp__playwright__browser_resize
 ---
 
-> **실제 브라우저 검수 필수 (2026-07-27 추가):** 이 에이전트의 역할 정의("브라우저에서 실제로 봤을 때")는 텍스트 코드 리딩만으로는 완수할 수 없다 — 실제로 이번 세션에서 `15_coverage-amount-reference.html`의 렌더링 버그(개념중복 코드가 실제 값 대신 참조 문구만 표시)는 코드를 읽는 것만으로는 안 보이고 Playwright로 직접 열어야 발견됐다. 검수 대상 HTML은 Bash로 임시 로컬 서버(`node -e "http.createServer(...)"`, `file://` 프로토콜은 Playwright에서 차단됨)를 띄운 뒤 `browser_navigate`로 열어 `browser_snapshot`·`browser_console_messages`(에러 확인)·`browser_evaluate`(DOM 내용 직접 검증)로 실제 렌더링 결과를 확인한다. 검수 종료 후 임시 서버 프로세스는 종료한다.
+> **실제 브라우저 검수 필수:** 이 에이전트의 역할 정의("브라우저에서 실제로 봤을 때")는 텍스트 코드 리딩만으로는 완수할 수 없다. 검수 대상 HTML은 Bash로 임시 로컬 서버(`node -e "http.createServer(...)"`, `file://` 프로토콜은 Playwright에서 차단됨)를 띄운 뒤 `browser_navigate`로 열어 `browser_snapshot`·`browser_console_messages`(에러 확인)·`browser_evaluate`(DOM 내용 직접 검증)로 실제 렌더링 결과를 확인한다. 검수 종료 후 임시 서버 프로세스는 종료한다.
 
 > **참조:** `CLAUDE.md` · `context/card-policy.md` · `context/card-types.md` · `guides/design-system.md` · `guides/ux-patterns.md` · `guides/copywriting.md`
 
@@ -47,7 +47,7 @@ tools: Read, Glob, Grep, Bash, mcp__playwright__browser_navigate, mcp__playwrigh
 | 조건 빌더 헤더 | `.cond-header` 6열 그리드 — `.cond-row`와 컬럼 수·폭 일치 |
 | 테이블 | `list-table` 열 너비 합이 100%를 넘지 않음 |
 
-**[타이포그래피 & 폰트 — 2026-06-09 추가]**
+**[타이포그래피 & 폰트]**
 
 | 항목 | 기준 |
 |---|---|
@@ -72,7 +72,7 @@ tools: Read, Glob, Grep, Bash, mcp__playwright__browser_navigate, mcp__playwrigh
 | 상태 안내 클래스 | `.status-guidance` 클래스 사용 (인라인 style 단독 배경색 금지) |
 | 상태 안내 아이콘 | `fa-circle-info fa-fw` (다른 아이콘 혼용 금지) |
 | 상태 안내 색상 | `background:#FFF9EC;border:1px solid #F0D880;color:#7A5A00` |
-| 공개범위 필드 없음 | 편집기 Card ①에 공개범위 form-group 없어야 함 — 목록 화면에서만 배지 표시 (2026-06-16 확정) |
+| 공개범위 필드 없음 | 편집기 Card ①에 공개범위 form-group 없어야 함 — 목록 화면에서만 배지 표시 |
 | Rule 예외 | action-bar + status-guidance가 LEFT 컬럼 별도 `.card`에 있는가? 오른쪽 컬럼에 버튼 없는가? |
 | Rule 5-card 구조 | LEFT 컬럼이 5개 독립 `.card`인가? ①기본정보 → ②Risk-type 연결(필수) → ③판단 조건 설정 → ④Evidence 연결(필수) → ⑤액션 |
 
@@ -114,7 +114,7 @@ tools: Read, Glob, Grep, Bash, mcp__playwright__browser_navigate, mcp__playwrigh
 | 항목 | 기준 |
 |---|---|
 | ConditionRow 필수/선택 토글 | 각 조건 행에 필수/선택 구분 토글 또는 표시 있는가? |
-| 소스별 기본값 | MYDATA/PROMAGE/PROFILE 각 행의 필수·선택 기본값이 `context/card-types.md`(단일 진실원, 2026-07-07 정리)와 일치하는가 |
+| 소스별 기본값 | MYDATA/PROMAGE/PROFILE 각 행의 필수·선택 기본값이 `context/card-types.md`(단일 진실원)와 일치하는가 |
 | 소스 3종 | MYDATA/PROMAGE/PROFILE 3개. Amplitude 소스 없어야 함 |
 | 약관 DB | 약관 DB 연동 체크박스 없는가? (엔진 자동 처리 — 체크박스 있으면 오류) |
 
@@ -187,7 +187,7 @@ tools: Read, Glob, Grep, Bash, mcp__playwright__browser_navigate, mcp__playwrigh
 
 ### F. 상태 표시 일관성
 
-6개 상태(임시저장/승인요청/승인완료/라이브/일시중지/반려)의 색상·배지 텍스트가 **`guides/design-system.md`**(단일 진실원, 2026-07-07 정리 — 이전엔 hex 값·이모지가 전부 사본으로 있었음)와 화면마다 동일하게 적용됐는지 확인한다.
+6개 상태(임시저장/승인요청/승인완료/라이브/일시중지/반려)의 색상·배지 텍스트가 **`guides/design-system.md`**(단일 진실원)와 화면마다 동일하게 적용됐는지 확인한다.
 
 ### G. 첫 방문자 안내 (원칙 0)
 
@@ -235,21 +235,21 @@ tools: Read, Glob, Grep, Bash, mcp__playwright__browser_navigate, mcp__playwrigh
 | 그리드 섹션 헤더 | "연결됨" → 초록 헤더(`sh-connected`). "연결 가능" → 파란 헤더(`sh-available`) |
 | 연결 가능 판정 | `findDirectTarget` 기준 — CONNECT_RULES 직접 연결만(체인 경유 불가). 규칙 값은 `context/card-policy.md` 참조 |
 | 연결 추가 버튼 | "연결 가능" 카드에 전폭 파란 "연결 추가" 버튼 (`gc-btn-connect`) 존재 |
-| 엣지 스타일 | pending/active 엣지의 선 스타일·색상이 `context/card-policy.md`(단일 진실원, 2026-07-07 정리 — hex·dasharray 값 사본 제거)과 일치하는가 |
+| 엣지 스타일 | pending/active 엣지의 선 스타일·색상이 `context/card-policy.md`(단일 진실원)과 일치하는가 |
 | 포컬 헤더 경고 | 체인 0개 카드: "⚠ 연결 없음" 배지 표시. "연결 가능 N개" 있으면 파란 정보 배지 함께 표시 |
 
-### I. 19_faq-rag.html 검수 포인트 (2026-06-21 추가)
+### I. 19_faq-rag.html 검수 포인트
 
 | 항목 | 기준 |
 |---|---|
-| 상단 안내 배너 | "계약 특정적 질문(개인 보장금액·청구 가능 여부 등)은 등록 금지" + "Clark 서비스 고유 Q&A·계약 무관 판단 노하우 등록" 문구 있는가? (2026-07-06 정정 — 구표현 "약관·보장 관련 Q&A 등록 금지"는 폐기) |
+| 상단 안내 배너 | "계약 특정적 질문(개인 보장금액·청구 가능 여부 등)은 등록 금지" + "Clark 서비스 고유 Q&A·계약 무관 판단 노하우 등록" 문구 있는가? (주의: 구표현 "약관·보장 관련 Q&A 등록 금지"는 폐기됨) |
 | 상태 필터 | 전체/인덱스등록됨/초안 2종 탭 있는가? (검수대기·반려됨 없어야 함) |
 | 등록 패널 | LLM 초안 자동 생성 버튼 없는가? (운영자 직접 입력 필드만) |
 | 상태 배지 | 초안(`badge-draft`) / 인덱스등록됨(`badge-active`) 2종만 표시 (badge-review·badge-rejected 없어야 함) |
 | 사이드바 위치 | 18_system-settings.html 하위 항목(들여쓰기)으로 위치하는가? |
 | 승인 프로세스 없음 | 승인·반려·재검수 버튼이 없는가? 등록 즉시 인덱스 반영이어야 함 |
 
-### J. contents/html 표시 오류 검수 (2026-07-03 신규, 2026-07-03 범위 축소)
+### J. contents/html 표시 오류 검수
 
 > A~I는 `mockups_v2/` 운영자 UI 대상이다. 이 섹션만 `contents/html/` 대상이며, **순수 UI/표시 버그**만 본다 — 문구 워싱·톤 품질은 `kc-content-copywriter` 소관, 카드 체인 정합성(체인ID·연결 무결성)은 `kc-content-po` 소관이라 이 체크리스트에서 다루지 않는다.
 
@@ -258,7 +258,7 @@ tools: Read, Glob, Grep, Bash, mcp__playwright__browser_navigate, mcp__playwrigh
 | 표준 답변 구조 5단계 렌더링 | ①Risk-type 고지 → ②담보 현황 표 → ③상황 설명 → ④면책 고지(분리 블록) → ⑤CTA 버튼 — HTML 구조상 순서·블록 분리가 깨지지 않았는가 (내용 품질이 아니라 마크업 순서 확인) |
 | 표 렌더링 | 담보 현황 표(`coverage-table`)가 실제 브라우저에서 깨지지 않고 표시되는가 |
 | 레이아웃 | `contents/html/` 자체 인라인 CSS 기준 최소 폭에서 레이아웃 깨짐 없는가 |
-| 링크·참조 오류 | 존재하지 않는 파일 참조, 끊긴 앵커 없는가 (예: 2026-07-03 발견된 EV020 미존재 참조 사례) |
+| 링크·참조 오류 | 존재하지 않는 파일 참조, 끊긴 앵커 없는가 (예: 존재하지 않는 EV 카드 참조 등) |
 
 **카드 체인 정합성(담보코드·수치·Policy 문구가 최신 카드 내용과 실제로 일치하는지)은 이 에이전트가 아니라 `kc-content-po`가 확정한다.** 이 에이전트는 그 결과물이 화면에 정상 렌더링되는지만 본다.
 

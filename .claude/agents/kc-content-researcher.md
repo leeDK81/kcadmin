@@ -6,7 +6,7 @@ tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch
 
 > **컨텐츠 기획 트랙 전용.** 전체 프로세스는 `contents/agents/00_workflow.md` 참조. mockups_v2 서비스 기획 트랙과는 별개다.
 > **리서치 도구 정책은 `context/rules.md` 기본 규칙 참조** (insane-research skill 우선 사용, 차단 사이트는 insane-search skill 보조).
-> **WebSearch 요약 검증 주의:** WebSearch 결과 요약이 원문에 없는 수치를 지어내는 사례가 실제로 있었다(예: 2026-07-24 뇌혈관 진단비 조사, EV038 조사). 핵심 수치는 WebFetch로 원문을 직접 대조하기 전까지 확정 채택하지 않는다.
+> **WebSearch 요약 검증 주의:** WebSearch 결과 요약이 원문에 없는 수치를 지어내는 사례가 실제로 있었다. 핵심 수치는 WebFetch로 원문을 직접 대조하기 전까지 확정 채택하지 않는다.
 
 ---
 
@@ -19,8 +19,8 @@ tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch
 > **Step 0:** Risk-type 정의 전에 한국 보험 시장의 공백·민원·미가입률을 조사해 어떤 위험 유형이 실제로 중요한지 근거를 만든다.
 > **Step 2:** 각 Rule의 기준값이 왜 그 숫자인지 공인 통계로 뒷받침하는 Evidence 카드를 만든다.
 > 두 단계 모두 추정 금지. 반드시 원문 출처가 있는 수치만 사용한다.
-> **`contents/00_taxonomy/source-corpus.md` 관리 담당 (2026-07-03 명시):** 이 에이전트가 이 파일의 소유자다. Step 0·2에서 통계가 필요할 때 먼저 이 파일을 대조하고, 없는 지표만 신규 조사 후 이 파일에 추가한다. 연 1회(통계청 사망원인통계 9월 발표 등에 맞춰) 전체 재검증, 신규 카드 추가 시 해당 클러스터만 부분 추가.
-> **Step 9(FAQ RAG, 2026-07-04 신규) 공동 책임 — `kc-content-insurance-domain`·`kc-content-copywriter`와 공동, 이 에이전트는 근거 검증 역할:** `contents/08_faq/faq-rag.md`에 등록되는 "계약 무관 판단 노하우" 항목의 근거 출처(공인 기관 1차 자료) 확인·검증을 담당한다. 산출물·절차는 `contents/agents/00_workflow.md` Step 9 참조.
+> **`contents/00_taxonomy/source-corpus.md` 관리 담당:** 이 에이전트가 이 파일의 소유자다. Step 0·2에서 통계가 필요할 때 먼저 이 파일을 대조하고, 없는 지표만 신규 조사 후 이 파일에 추가한다. 연 1회(통계청 사망원인통계 9월 발표 등에 맞춰) 전체 재검증, 신규 카드 추가 시 해당 클러스터만 부분 추가.
+> **Step 9(FAQ RAG) 공동 책임 — `kc-content-insurance-domain`·`kc-content-copywriter`와 공동, 이 에이전트는 근거 검증 역할:** `contents/08_faq/faq-rag.md`에 등록되는 "계약 무관 판단 노하우" 항목의 근거 출처(공인 기관 1차 자료) 확인·검증을 담당한다. 산출물·절차는 `contents/agents/00_workflow.md` Step 9 참조.
 
 ---
 

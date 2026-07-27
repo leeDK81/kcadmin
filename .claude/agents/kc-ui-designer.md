@@ -174,7 +174,7 @@ HTML/CSS 패턴 → `guides/ux-patterns.md` 캔버스 섹션 참조.
 
 ## Rule 편집기 판단 조건 설정 — UI 구조
 
-3개 소스(MYDATA/Promage/프로파일) 행을 6개 열(①소스 ②대상 ③확인항목 ④조건 ⑤기준값 ⑥구분)로 구성된 테이블 UI로 배치한다. **각 열의 실제 선택지·항목 수·등급명 등 구체값은 `context/card-types.md`가 단일 진실원**이다(2026-07-07 정리 — 담보코드 종수·위험도 항목 수·등급명 5단계 등이 이 파일에 그대로 복사돼 있었음).
+3개 소스(MYDATA/Promage/프로파일) 행을 6개 열(①소스 ②대상 ③확인항목 ④조건 ⑤기준값 ⑥구분)로 구성된 테이블 UI로 배치한다. **각 열의 실제 선택지·항목 수·등급명 등 구체값은 `context/card-types.md`가 단일 진실원**이다.
 
 **⑥ 구분 라디오 UI 동작:**
 - **필수:** 빨간 "필수" 텍스트. 미충족 시 Rule 미발동 (AND 조건)
@@ -188,7 +188,7 @@ HTML/CSS 패턴 → `guides/ux-patterns.md` 캔버스 섹션 참조.
 
 ## Policy 편집기 확정 필드
 
-**필드 스펙(2개만 — name·appDisplayText, 삭제된 필드 목록)은 `context/card-types.md`가 단일 진실원**(2026-07-07 정리 — 필드 목록·삭제 필드 목록이 이 파일과 `guides/ux-patterns.md`에 각각 중복 서술돼 있었음).
+**필드 스펙(2개만 — name·appDisplayText, 삭제된 필드 목록)은 `context/card-types.md`가 단일 진실원**이다.
 
 **UI 특이사항:** 승인 2단계(도메인 검수자 → 준법감시인)는 Policy 카드만 해당 — 편집기 검수 요청 버튼 흐름에 반영할 것.
 
@@ -198,7 +198,7 @@ HTML/CSS 패턴 → `guides/ux-patterns.md` 캔버스 섹션 참조.
 
 **참조 파일:** `13_answer-logic.html`
 
-**필드 스펙(키워드 최소 개수·CTA 필수 여부·Standalone 선택 여부 등)은 `context/card-types.md`가 단일 진실원**(2026-07-07 정리).
+**필드 스펙(키워드 최소 개수·CTA 필수 여부·Standalone 선택 여부 등)은 `context/card-types.md`가 단일 진실원**이다.
 
 **UI 특이사항:** Playbook approved 상태에서 캔버스 연결 없이 직접 "라이브 전환" 가능 — 다른 카드 타입과 다른 예외 흐름이므로 편집기 버튼 노출 조건에 반영할 것.
 
@@ -238,7 +238,7 @@ HTML/CSS 패턴 → `guides/ux-patterns.md` 캔버스 섹션 참조.
 - 상단 안내 배너: "이 화면은 약관·보장 관련 Q&A가 아닌 Clark 서비스 고유 안내(앱 사용·보닥 플래너 연결·서비스 정책 등)를 등록하는 곳입니다."
 → **스펙 상세:** `context/answer-logic.md`
 - 목록 테이블: 상태 필터(전체/인덱스등록됨/초안) + 검색 + Q 미리보기
-- 등록 패널: 인라인 펼침 패널 (Q textarea + A textarea + 출처 input(선택) + ⚠️ 유의사항 textarea(선택) + "인덱스에 등록" / "초안으로 저장" 버튼, 2026-07-06 Q·A 2필드→4필드 확장 — `contents/08_faq/faq-rag.md` 실 콘텐츠 구조(Q/A/출처/⚠️)와 편집기가 안 맞던 것을 맞춤)
+- 등록 패널: 인라인 펼침 패널 (Q textarea + A textarea + 출처 input(선택) + ⚠️ 유의사항 textarea(선택) + "인덱스에 등록" / "초안으로 저장" 버튼 — `contents/08_faq/faq-rag.md` 실 콘텐츠 구조(Q/A/출처/⚠️)와 4필드 일치)
 - 상세 모달: Q·A·⚠️유의사항 전문 + 출처·등록자·등록일 + 상태 배지 + 인덱스 등록/삭제 액션. ⚠️ 유의사항은 "LLM 재구성 없이 원문 그대로 답변 끝에 고정 부착"임을 라벨에 명시(Policy와 동일 원칙, `context/answer-logic.md` "FAQ 필드 구조" 참조)
 - **상태 2종:** 초안(`badge-draft`) / 인덱스 등록됨(`badge-active`) — 검수대기·반려됨 없음
 - **승인 프로세스 없음** — 직접 등록 → 즉시 인덱스 반영

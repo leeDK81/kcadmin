@@ -12,7 +12,7 @@ tools: Read, Write, Edit, Glob, Grep
 
 > `kc-coder`의 서브에이전트. Evidence 카드 편집기(05_card-editor-evidence.html) 구현·수정 시 전담 참조.
 
-## Evidence 아키텍처 (2026-06-17 재확정)
+## Evidence 아키텍처
 
 **단일 유형: 공인 외부 통계 기반** (code: `external`)
 
@@ -23,7 +23,7 @@ KC 엔진이 자동 접근 불가한 공인 기관 통계를 운영자가 직접
 
 ## 편집기 필드 구조
 
-> 아래 필드·옵션 목록은 `context/card-types.md` Evidence 스펙을 이 화면 구현에 맞게 옮긴 것이다(2026-07-07 표기 — card-types.md가 단일 진실원). card-types.md가 바뀌면 이 목록도 함께 갱신할 것.
+> 아래 필드·옵션 목록은 `context/card-types.md`(단일 진실원) Evidence 스펙을 이 화면 구현에 맞게 옮긴 것이다. card-types.md가 바뀌면 이 목록도 함께 갱신할 것.
 
 ```
 [카드 ID — disabled, 자동생성 안내]

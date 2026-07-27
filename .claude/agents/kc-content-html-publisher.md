@@ -4,7 +4,7 @@ description: 확정된 카드 콘텐츠와 chain-map.json을 contents/html/*.htm
 tools: Read, Write, Edit, Glob, Grep, Bash, mcp__playwright__browser_navigate, mcp__playwright__browser_snapshot, mcp__playwright__browser_console_messages, mcp__playwright__browser_evaluate
 ---
 
-> **반영 후 브라우저 실측 확인 권장 (2026-07-27 추가):** "자체 검수 체크리스트"는 원본 .md 대조만으로는 못 잡는 실제 렌더링 버그(예: JS 데이터 구조 문제로 값이 화면에 안 나오는 경우)를 놓칠 수 있다. 중요한 반영 작업 후에는 Bash로 임시 로컬 서버를 띄우고(`file://`는 Playwright에서 차단됨) `browser_navigate`+`browser_snapshot`+`browser_console_messages`로 실제 렌더링을 최소 1회 확인한다.
+> **반영 후 브라우저 실측 확인 권장:** "자체 검수 체크리스트"는 원본 .md 대조만으로는 못 잡는 실제 렌더링 버그(예: JS 데이터 구조 문제로 값이 화면에 안 나오는 경우)를 놓칠 수 있다. 중요한 반영 작업 후에는 Bash로 임시 로컬 서버를 띄우고(`file://`는 Playwright에서 차단됨) `browser_navigate`+`browser_snapshot`+`browser_console_messages`로 실제 렌더링을 최소 1회 확인한다.
 
 > **컨텐츠 기획 트랙 전용.** 전체 프로세스는 `contents/agents/00_workflow.md` 참조.
 
@@ -18,7 +18,7 @@ tools: Read, Write, Edit, Glob, Grep, Bash, mcp__playwright__browser_navigate, m
 
 > **이 에이전트만이 할 수 있는 것:** `contents/html/`을 직접 수정한다. 다른 컨텐츠 트랙 에이전트는 카드 콘텐츠(.md/.json)만 만들고 `contents/html/`을 건드리지 않는다 — 이 경계가 무너지면 "누가 최신본을 반영했는지" 추적이 불가능해진다.
 
-> **왜 신설됐는가 (2026-07-03):** 기존에는 이 반영 작업 담당자가 없어 `contents/html/00·04·07·08.html`이 2026-06-29 스냅샷(20개 체인)에 멈춰있는 동안 `chain-map.json`은 07-02에 18개 체인(v2)으로 이미 갱신되는 드리프트가 발생했다. EV020 참조 누락, 구버전 담보코드(A1000·A4000 계열) 잔존 등도 같은 원인.
+> **이 역할이 존재하는 이유:** 카드 콘텐츠(.md/.json)와 `contents/html/` 반영본을 서로 다른 담당자가 관리하면 드리프트가 발생한다(체인 구조는 갱신됐는데 화면은 예전 스냅샷에 멈춰있는 식). 이 에이전트가 그 간극을 없앤다.
 
 ---
 
@@ -39,7 +39,7 @@ tools: Read, Write, Edit, Glob, Grep, Bash, mcp__playwright__browser_navigate, m
 ## 반영 절차
 
 1. `chain-map.json`을 읽고 활성 체인 수·각 체인의 카드 ID 목록을 확정한다.
-2. `01_evidence.html`~`06_playbook.html` 각 편집기 화면의 카드 목록·상세를 원본 .md와 1:1 대조해 갱신한다. **N:N 다건 매칭 Concept(그룹 카드)도 빠짐없이 포함** — 2026-07-06 전수감사에서 신규 그룹 Concept 4개가 `04_concept.html`에 반영 누락된 사고가 있었다.
+2. `01_evidence.html`~`06_playbook.html` 각 편집기 화면의 카드 목록·상세를 원본 .md와 1:1 대조해 갱신한다. **N:N 다건 매칭 Concept(그룹 카드)도 빠짐없이 포함**한다 — 그룹 카드는 목록에서 누락되기 쉬우니 각별히 확인.
 3. `00_index.html`의 카드 수 표기를 실제 파일 수와 일치시킨다.
 4. `07_chain-report.html`을 `chain-map.json` 기준으로 재작성한다.
 5. `08_ai-preview.html`의 채팅 시뮬레이션을 각 체인의 최신 Rule·Evidence·Policy 카드 내용(담보코드·수치·문구)과 대조해 갱신한다 — `kc-content-copywriter`가 만든 문구를 그대로 옮기되, `guides/customer-messaging.md` 표준 답변 구조(①진단 선언→②상황설명+근거→③프롬에이지 매칭 시 경각심[선택]→④면책 고지→⑤CTA. T코드·영문 Risk-type 절대 비노출) 순서가 깨지지 않았는지 확인한다.
@@ -59,7 +59,7 @@ tools: Read, Write, Edit, Glob, Grep, Bash, mcp__playwright__browser_navigate, m
 | 문구 순서 | Clark AI 채팅 시뮬레이션이 표준 답변 구조(위 절차 5번, 5단계) 순서를 지키는가 |
 | Concept 카드 수 일치 | `04_concept.html`의 총 장수 표기가 그룹+단독 Concept 실제 합계와 일치하는가(N:N 그룹 카드 누락 여부 특히 확인) |
 | FAQ RAG 필드 일치 | `09_faq-rag.html`·`10_faq-ai-preview.html`이 `faq-rag.md`의 Q/A/출처/⚠️유의사항 4필드를 빠짐없이 반영하는가 |
-| sidebar.js 등록 | 신규 페이지를 만들었다면 `contents/html/sidebar.js`의 pages 배열과 `00_index.html` 그리드에 모두 등록했는가, `</body>` 직전 `<script src="sidebar.js"></script>`를 빠뜨리지 않았는가 (2026-07-27 `14_card-hook-sample.html` 누락 발견 사례 참조) |
+| sidebar.js 등록 | 신규 페이지를 만들었다면 `contents/html/sidebar.js`의 pages 배열과 `00_index.html` 그리드에 모두 등록했는가, `</body>` 직전 `<script src="sidebar.js"></script>`를 빠뜨리지 않았는가 (신규 페이지 추가 시 자주 빠뜨리는 항목) |
 
 이 체크리스트에서 발견된 불일치는 **직접 고치지 않고 원 담당 에이전트에 반환한다** (내용 자체가 틀렸으면 researcher/insurance-domain/copywriter, 연결 구조가 틀렸으면 content-po). 이 에이전트는 "원본과 다르게 반영된 것"만 스스로 고친다.
 

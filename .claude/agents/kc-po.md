@@ -105,10 +105,10 @@ PO는 `context/` 하위 진실원 파일의 **관리 주체**다.
 | P1 | 16_playbook-list.html | ⑥ Playbook 목록 (MVP) |
 | P1 | 16_card-editor-playbook.html | ⑥ Playbook 편집기 (MVP) |
 | P1 | 17_system-data-guide.html | Clark AI 데이터 연결 구조 |
-| P1 | 18_system-settings.html | LLM 응답 가이드 (구 "시스템 설정", 2026-07-07 메뉴명 변경) |
-| P1 | 19_faq-rag.html | FAQ RAG 관리 (구 "FAQ Q&A", 2026-07-07 메뉴명 변경 + 연결·테스트·배포 하단 최상위로 이동, 승인 프로세스 없음) |
-| P1 | 20_query-messages.html | 조회형 메시지 관리 — Case 0(조회형 게이트) 감지용 예시 발화 (2026-07-07 신규, 승인 프로세스 없음) |
-| P1 | 21_synonym-management.html | 유사어 관리 — 표준 상품유형(운영자 입력)별 유사어 칩 연결(결정론적) (2026-07-07 신규, 2026-07-07 칩 구조 개선, 승인 프로세스 없음) |
+| P1 | 18_system-settings.html | LLM 응답 가이드 (구 "시스템 설정") |
+| P1 | 19_faq-rag.html | FAQ RAG 관리 (구 "FAQ Q&A", 연결·테스트·배포 하단 최상위로 이동, 승인 프로세스 없음) |
+| P1 | 20_query-messages.html | 조회형 메시지 관리 — Case 0(조회형 게이트) 감지용 예시 발화 (승인 프로세스 없음) |
+| P1 | 21_synonym-management.html | 유사어 관리 — 표준 상품유형(운영자 입력)별 유사어 칩 연결(결정론적) (승인 프로세스 없음) |
 
 ---
 

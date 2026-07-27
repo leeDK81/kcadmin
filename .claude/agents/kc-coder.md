@@ -96,7 +96,7 @@ HTML 패턴 → `guides/ux-patterns.md` 참조.
 | 07_rule | 조건 추가/삭제(3-source). 게이트: 내용 필드 충족 시 검수 요청 활성 |
 | 09_review | 카드 내용 통합 목록. 필터(전체/검수대기/처리완료). 승인→완료. 반려→사유 입력 모달. 승인완료 상태 액션: "상세 보기" + "캔버스에서 연결" 버튼 (라이브 전환 버튼 없음 — 라이브 전환은 사전 테스트 후 캔버스에서 처리). 승인요청 상태 카드: 연결정보(conn) 없음 |
 | 18_system-settings | LLM Fallback 설정 폼. KC 미매칭(Case 3) 시 적용되는 제한 규칙. 저장 즉시 반영. KC 체인과 독립적으로 동작 |
-| 19_faq-rag | Clark 서비스 전용 FAQ Q&A 목록(상태 필터·검색) + 인라인 등록 패널(Q·A 필수 + 출처·⚠️유의사항 선택 입력, 2026-07-06 4필드 확장) + 상세 모달(수정·삭제·인덱스 등록, ⚠️유의사항은 "LLM 재구성 없이 원문 그대로 고정 부착" 안내 문구 포함). 상태 2종: 초안/인덱스등록됨. 승인 프로세스 없음. 약관·보장 관련 Q&A 등록 금지 문구 상단 안내 필수 |
+| 19_faq-rag | Clark 서비스 전용 FAQ Q&A 목록(상태 필터·검색) + 인라인 등록 패널(Q·A 필수 + 출처·⚠️유의사항 선택 입력, 4필드) + 상세 모달(수정·삭제·인덱스 등록, ⚠️유의사항은 "LLM 재구성 없이 원문 그대로 고정 부착" 안내 문구 포함). 상태 2종: 초안/인덱스등록됨. 승인 프로세스 없음. 약관·보장 관련 Q&A 등록 금지 문구 상단 안내 필수 |
 | 16_playbook-list | 상태 필터 탭. 상태별 액션 버튼 → `kc-coder-playbook` |
 | 16_card-editor-playbook | 키워드 Enter 추가/× 제거 (최소 3개 필수). updatePreview() 실시간. Card ③ standaloneGuide: 선택사항 textarea (chip-opt), minlength 검증 없음 — 비워두면 Clark 기본 안내 문구 사용. consult CTA 버튼 필수. approved 상태에서 캔버스 연결 없이 직접 "라이브 전환" 가능. 상세 → `kc-coder-playbook` |
 
@@ -129,7 +129,7 @@ HTML 패턴 → `guides/ux-patterns.md` 참조.
 - [ ] `confirmAction`: edgeStatus = approved 포함 시 'pending', 모두 active면 'active'
 - [ ] "연결 추가" 버튼: `gc-btn-connect` 클래스, 전폭(width:100%), 파란 배경
 - [ ] `findDirectTarget` 사용: CONNECT_RULES 직접 연결만 (체인 경유 금지)
-- [ ] CONNECT_RULES 코드 값이 `context/card-policy.md`의 CONNECT_RULES와 정확히 일치하는지 확인(2026-07-07 정리 — 이전엔 이 줄에 실제 값이 그대로 복사돼 있어 위 "여기 재서술하지 않음" 원칙과 자기모순이었음)
+- [ ] CONNECT_RULES 코드 값이 `context/card-policy.md`(단일 진실원)의 CONNECT_RULES와 정확히 일치하는지 확인
 
 **오른쪽 컬럼**
 - [ ] wf-tracker 4단계만. rel-box 없음.
@@ -151,7 +151,7 @@ HTML 패턴 → `guides/ux-patterns.md` 참조.
 **Rule 편집기**
 - [ ] LEFT 컬럼 5개 독립 `.card` (①기본정보→②Risk-type→③판단조건→④Evidence→⑤액션)
 - [ ] 게이트 카드: Risk-type ☑ + 판단조건 ☑ + Evidence ☑ 충족 시 버튼 활성
-- [ ] MYDATA/Promage/프로파일 3개 행의 열 구성·선택지·기본 required 값이 `context/card-types.md`(단일 진실원, 2026-07-07 정리 — 항목 수·등급명 등 구체값 중복 제거)와 일치하는지 확인. 화면 표기는 각각 "마이데이터"/"프롬에이지"/"프로파일". Promage 행 힌트 문구: "선택 조건 권장 — 필수 설정 시 미연동 사용자 Rule 미발동"
+- [ ] MYDATA/Promage/프로파일 3개 행의 열 구성·선택지·기본 required 값이 `context/card-types.md`(단일 진실원)와 일치하는지 확인. 화면 표기는 각각 "마이데이터"/"프롬에이지"/"프로파일". Promage 행 힌트 문구: "선택 조건 권장 — 필수 설정 시 미연동 사용자 Rule 미발동"
 - [ ] ConditionRow 데이터 구조에 required:boolean 속성 포함 (소스별 기본값 다름)
 - [ ] 구분 라디오: 필수(빨간 텍스트) / 선택(회색 텍스트). `name="req-${id}"` 패턴
 - [ ] AMPLITUDE 행 없음
@@ -178,7 +178,7 @@ HTML 패턴 → `guides/ux-patterns.md` 참조.
 - [ ] appDisplayText 비어있으면 "검수 요청" 버튼 비활성 처리
 - [ ] 승인 2단계 안내 표시: 도메인 검수자 → 준법감시인
 
-**Case 0~4 분기 (Case 0 선행 게이트 + KC매칭 × Playbook감지 매트릭스, 2026-07-06 Case 0 추가)**
+**Case 0~4 분기 (Case 0 선행 게이트 + KC매칭 × Playbook감지 매트릭스)**
 - Case 0: 데이터 조회형 발화 감지 → **Concept 매칭만** 건너뛰고 마이데이터 직접 조회 응답. **Playbook 매칭은 Case 0 여부와 무관하게 항상 별도 실행** — 감지되면 조회 응답에 CTA 가산(`context/answer-logic.md` "Case 0 — 데이터 조회형" 참조)
 - Case 0 미감지 시에만 아래 4케이스 매트릭스 적용:
 - Case 1: KC Concept 매칭O + Playbook 미감지 → KC 구조화 답변

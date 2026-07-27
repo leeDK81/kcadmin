@@ -59,14 +59,14 @@ tools: Read, Glob, Grep, Bash
 - [ ] `00_design-system.html`에서 정의한 CSS 변수(`:root`)를 사용하고 있는가?
 - [ ] 하드코딩된 색상값이 없는가? (예: `color: #1A3A6B` 대신 `color: var(--card-concept)`)
 - [ ] 상태 뱃지(임시저장/승인요청/승인완료/라이브/일시중지)가 모든 화면에서 동일한 스타일인가?
-- [ ] 공개범위 배지(고객 공개/공통 기준/내부 전용)가 **카드 목록에만** 읽기 전용 배지로 표시되어 있는가? 편집기(card-editor-*.html)에 공개범위 form-group 없는가? (select 요소 사용 시 오류, 편집기 미표시 원칙 2026-06-16 확정)
+- [ ] 공개범위 배지(고객 공개/공통 기준/내부 전용)가 **카드 목록에만** 읽기 전용 배지로 표시되어 있는가? 편집기(card-editor-*.html)에 공개범위 form-group 없는가? (select 요소 사용 시 오류)
 - [ ] 카드 유형 색상이 7종 모두 일관되게 적용되어 있는가?
 - [ ] 버튼 계층(Primary/Secondary/Danger)이 일관되게 사용되었는가?
 
-**[폰트 & Montage 토큰 — 2026-06-09 추가]**
+**[폰트 & Montage 토큰]**
 - [ ] `<link>` 태그: Pretendard CDN 사용 (`pretendard-dynamic-subset.min.css`). Google Fonts(Noto Sans KR) 사용 절대 금지.
 - [ ] `body` font-family: `'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif` 형식인가?
-- [ ] `:root` Montage 베이스 토큰(`--bg-page`·`--text-primary`·`--text-secondary`·`--text-hint`·`--border`·`--shadow` 등)이 `guides/design-system.md`의 값과 정확히 일치하는가(2026-07-07 정리 — 이전엔 hex 값이 여기 그대로 하드코딩돼 있어 design-system.md 갱신 시 이 파일이 따라가지 못할 위험이 있었음)
+- [ ] `:root` Montage 베이스 토큰(`--bg-page`·`--text-primary`·`--text-secondary`·`--text-hint`·`--border`·`--shadow` 등)이 `guides/design-system.md`(단일 진실원)의 값과 정확히 일치하는가
 - [ ] 폰트 크기가 타이포그래피 스케일(24/20/17/16/15/14/13/12/11px) 외 임의 크기를 사용하지 않는가? 8px·9px·10px 등 극소형 금지.
 
 ### C-추가. CSS 변수 완전성 체크 (실제 발생한 버그 기준)
@@ -98,7 +98,7 @@ tools: Read, Glob, Grep, Bash
 
 ### F. Evidence 구조 (공인 외부 통계 기반)
 
-Evidence 편집기 필드 목록·옵션·검증 규칙은 `kc-coder-evidence`(구현 스펙, 궁극적으로 `context/card-types.md`가 진실원)와 정확히 일치하는지만 확인한다 — 필드 목록을 이 파일에 다시 나열하지 않는다(2026-07-07 정리, 동일 목록이 04a·05·06·08에 각각 있어 드리프트 위험이 있었음). 특히 확인할 것: 유형 select 없음(단일 유형), OTHER 선택 시 기관명 입력 노출, N-segment류 폐기된 UI 잔재 없음.
+Evidence 편집기 필드 목록·옵션·검증 규칙은 `kc-coder-evidence`(구현 스펙, 궁극적으로 `context/card-types.md`가 진실원)와 정확히 일치하는지만 확인한다 — 필드 목록을 이 파일에 다시 나열하지 않는다. 특히 확인할 것: 유형 select 없음(단일 유형), OTHER 선택 시 기관명 입력 노출, N-segment류 폐기된 UI 잔재 없음.
 
 ### G. 금지어 및 구조 규칙
 
@@ -107,7 +107,7 @@ Evidence 편집기 필드 목록·옵션·검증 규칙은 `kc-coder-evidence`(�
 **카드 구조 규칙:**
 - [ ] Policy 편집기 form-group이 정확히 2개인가? (`name` + `appDisplayText`)
 
-> 중요도 가중치·Concept Standalone·Playbook `minlength`·CONNECT_RULES 필수 연결 체크는 위 B 섹션에 이미 있다 — 여기 다시 나열하지 않는다(2026-07-03 자체 중복 제거).
+> 중요도 가중치·Concept Standalone·Playbook `minlength`·CONNECT_RULES 필수 연결 체크는 위 B 섹션에 이미 있다 — 여기 다시 나열하지 않는다.
 > **CONNECT_RULES 체크(B 섹션)는 "코드가 정책대로 구현됐는지"만 본다.** 정책 표 자체가 기획서·`card-policy.md`와 일치하는지는 `kc-spec-reviewer`의 몫이다 — 같은 사실을 두 관점에서 보는 것이지 중복이 아니다.
 
 ---
