@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>담보코드별 참고 기준액 — KC Admin</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #F5F7FA; color: #1A1A2E; min-height: 100vh; }
+header { background: #1A2B5F; color: #fff; padding: 24px 40px; }
+header .nav { font-size: 12px; color: rgba(255,255,255,0.6); margin-bottom: 8px; }
+header .nav a { color: rgba(255,255,255,0.8); text-decoration: none; }
+header h1 { font-size: 20px; font-weight: 700; }
+header p { font-size: 13px; color: rgba(255,255,255,0.65); margin-top: 5px; }
+main { max-width: 1160px; margin: 36px auto; padding: 0 24px 60px; }
+.stats { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
+.chip { background: #fff; border: 1px solid #E5E9F0; border-radius: 20px; padding: 5px 14px; font-size: 13px; font-weight: 600; color: #374151; }
+.info-box { background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 10px; padding: 14px 18px; margin-bottom: 20px; font-size: 13px; color: #1E40AF; line-height: 1.7; }
+.info-box b { color: #1E3A8A; }
+.warn-box { background: #FFFBEB; border: 1px solid #FCD34D; border-radius: 10px; padding: 14px 18px; margin-bottom: 24px; font-size: 13px; color: #92400E; line-height: 1.7; }
+
+.toolbar { display: flex; gap: 10px; align-items: center; margin-bottom: 20px; flex-wrap: wrap; position: sticky; top: 0; background: #F5F7FA; padding: 10px 0; z-index: 5; }
+.search-input { flex: 1; min-width: 220px; padding: 9px 14px; border: 1px solid #D1D5DB; border-radius: 8px; font-size: 13px; font-family: inherit; }
+.legend { display: flex; gap: 8px; flex-wrap: wrap; font-size: 12px; }
+.legend-item { display: flex; align-items: center; gap: 5px; color: #6B7280; }
+
+.jump-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 28px; }
+.jump-link { font-size: 12px; font-weight: 600; color: #1A4A9A; background: #fff; border: 1px solid #E5E9F0; border-radius: 20px; padding: 5px 12px; text-decoration: none; }
+.jump-link:hover { background: #EFF6FF; }
+
+.cat-section { margin-bottom: 36px; }
+.cat-title { font-size: 15px; font-weight: 700; color: #1A1A2E; margin-bottom: 6px; padding-top: 8px; }
+.cat-note { font-size: 12.5px; color: #6B7280; line-height: 1.7; background: #F8FAFC; border: 1px solid #E5E9F0; border-radius: 8px; padding: 10px 14px; margin-bottom: 12px; }
+
+table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid #E5E9F0; border-radius: 10px; overflow: hidden; }
+thead th { text-align: left; font-size: 11px; font-weight: 700; color: #6B7280; text-transform: uppercase; letter-spacing: 0.4px; background: #F8FAFC; padding: 10px 12px; border-bottom: 1px solid #E5E9F0; white-space: nowrap; }
+tbody td { padding: 10px 12px; font-size: 13px; color: #374151; border-bottom: 1px solid #F0F2F5; vertical-align: top; }
+tbody tr:last-child td { border-bottom: none; }
+tbody tr.row-hidden { display: none; }
+.code-cell { font-family: 'SFMono-Regular', Consolas, monospace; font-weight: 700; color: #1A4A9A; white-space: nowrap; }
+.desc-cell { white-space: nowrap; color: #1A1A2E; font-weight: 600; }
+.status-badge { display: inline-block; font-size: 11px; font-weight: 700; border-radius: 10px; padding: 2px 9px; white-space: nowrap; }
+.status-ok { background: #DCFCE7; color: #0F6E56; }
+.status-method { background: #DBEAFE; color: #1E40AF; }
+.status-none { background: #F3F4F6; color: #6B7280; }
+.status-na { background: transparent; color: #C4C9D4; border: 1px dashed #D1D5DB; }
+.value-cell { max-width: 380px; line-height: 1.6; }
+.headline-text { font-weight: 700; color: #1A1A2E; line-height: 1.5; }
+.toggle-btn { display: inline-block; margin-top: 4px; background: none; border: none; padding: 0; font-size: 11.5px; font-weight: 600; color: #1A4A9A; cursor: pointer; font-family: inherit; }
+.toggle-btn:hover { text-decoration: underline; }
+.toggle-btn[aria-expanded="true"] { color: #6B7280; }
+.detail-box { margin-top: 6px; padding: 8px 10px; background: #F8FAFC; border-left: 3px solid #D8E2F0; border-radius: 4px; font-size: 12px; color: #6B7280; line-height: 1.7; }
+.detail-box[hidden] { display: none; }
+.source-cell { max-width: 220px; font-size: 12px; color: #6B7280; line-height: 1.6; }
+.memo-cell { max-width: 220px; font-size: 12px; color: #9CA3AF; line-height: 1.6; }
+
+.footer-note { font-size: 12px; color: #374151; background: #F8FAFC; border: 1px solid #E5E9F0; border-radius: 8px; padding: 14px 18px; line-height: 1.8; margin-top: 8px; }
+.no-result { text-align: center; padding: 30px; color: #9CA3AF; font-size: 13px; display: none; }
+</style>
+</head>
+<body>
+<header>
+  <div class="nav"><a href="00_index.html">← 인덱스로 돌아가기</a></div>
+  <h1>담보코드별 참고 기준액</h1>
+  <p>마이데이터 담보코드 152개 전체 대상 — Rule 카드 담보금액 기준값 설정 시 참고할 "권장 가입금액 / 업계 통상 기준액" 리서치 결과. 2026-07-24 최초조사 · 2026-07-28 확장조사(연령대별 참고금액 7개 코드 재조사, 2건 신규 확인) · 2026-07-28 3차조사(공식기관 통계 전용, KIDI·KLIA·KNIA·KIRI 확인 — 담보코드 단위 공식통계 부재를 구조적으로 재확인) 반영. 원본 리서치 근거는 <code>contents/00_taxonomy/coverage-amount-research.md</code> 참조.</p>
+</header>
+<main>
+
+<div class="stats" id="statsRow"></div>
+
+<div class="info-box">
+  <b>읽는 법:</b> 대부분의 코드는 원인·등급별 파생 담보라 개별 권장액이 따로 있는 게 아니라, 같은 개념 그룹의 대표 코드 값을 함께 공유합니다(예: 질병사망·상해사망·교통상해사망 등 13개 사망 담보 코드는 전부 "총 사망보장 규모" 하나의 개념).<br>
+  <b>등급 표기:</b> 녹색(확인완료)이라도 정부·협회 공식 고시는 <b>암진단금(A4200)·소액암진단(A4210) 단 2건</b>뿐이고, 나머지는 보험 설계사·손해사정사 등 업계 통상 수준(C~D등급)입니다 — Rule 세팅의 절대 기준이 아니라 참고치로만 사용하세요.
+</div>
+
+<div class="warn-box">
+  ⚠️ 리서치 과정에서 웹 검색 요약이 원문에 없는 수치를 지어낸 사례가 2건 발견돼 원문 대조 후 폐기했습니다(뇌혈관 진단비 수치, 수술비 종별 방향성). 이 페이지에 남은 수치는 전부 원문 대조를 거쳤거나, 프로젝트 내 기존 확정값(암진단금 등)입니다.
+</div>
+
+<div class="info-box">
+  <b>2026-07-28 3차조사 핵심 발견:</b> KIDI INCOS(incos.kidi.or.kr)에 「가입금액별/연령별 보험계약실적」 통계 자체는 실존하지만, 분류축이 이 페이지가 찾는 <b>급부유형(진단/수술/통원 등)이 아니라 사고원인·질병군</b> 축 하나뿐입니다. 그래서 뇌혈관질환진단·골절·화상·질병수술·인공관절수술·질병통원·치과통원 7개 코드 모두 "전체질병"·"기타상해" 같은 잔여 카테고리에 흡수돼 개별 분리가 <b>구조적으로 불가능</b>합니다. KLIA·KNIA·KIRI에도 담보코드 단위 가입금액 통계는 없습니다 — 공식통계가 "아직 못 찾은 것"이 아니라 "애초에 이 단위로 공표되지 않는다"는 사실을 이번에 직접 확인했습니다.
+</div>
+
+<div class="toolbar">
+  <input type="text" id="searchInput" class="search-input" placeholder="담보코드 또는 명칭으로 검색 (예: A4200, 암진단, 입원일당)">
+  <div class="legend">
+    <span class="legend-item"><span class="status-badge status-ok">확인완료</span></span>
+    <span class="legend-item"><span class="status-badge status-method">방법론만</span></span>
+    <span class="legend-item"><span class="status-badge status-none">확인안됨</span></span>
+    <span class="legend-item"><span class="status-badge status-na">해당없음</span></span>
+  </div>
+</div>
+
+<div class="jump-row" id="jumpRow"></div>
+
+<div id="catContainer"></div>
+<div class="no-result" id="noResult">검색 결과가 없습니다.</div>
+
+<div class="footer-note">
+  <b>최종 소견:</b> 152개 코드 중 실제로 참고할 만한 금액·범위가 확인된 대표 개념은 약 11개 그룹이며(2026-07-28 확장조사로 인공관절수술 A5508 1건이 새로 확인완료 그룹에 추가됨), 그중 정부·협회 공식 고시 수준은 기존에 이미 있던 암진단금 2건(A4200·A4210)뿐입니다. 34개 니치 정액특약(위로금·골프·자동차 부수담보 등)은 애초에 "권장 가입금액" 개념이 성립하지 않습니다. 2026-07-28 3차조사(공식기관 통계 전용)로 나머지 미확인 코드들의 공식통계 부재가 구조적으로 재확인됐습니다 — status 값 자체의 변경은 없습니다. 상세 근거·조사 과정은 <code>contents/00_taxonomy/coverage-amount-research.md</code>를 참조하세요.
+</div>
+
+</main>
+<script>
+const CATEGORIES = [
+{
+  title: '1. 사망 담보 (A1xxx) — 13개',
+  note: '국내 감독기관이 고시한 사망보장 법정 산출 공식은 없음(FAQ-024 리서치 재확인). 니즈분석법(유족생활비+교육비+부채-기존자산) 또는 소득배수법(연소득×배수)이 업계에서 통용되나 구체 배수의 공식 출처는 미확인. 사망 원인과 무관하게 "총 사망보장 규모" 하나의 개념을 13개 코드가 공유.',
+  rows: [
+    {code:'A1100', desc:'질병사망', status:'method', value:'니즈분석법(유족생활비+교육비+부채-기존자산) 또는 소득배수법(연소득×배수, 배수 공식 출처 없음)', headline:'산출방법론만 확인(금액 미정)', source:'contents/08_faq/faq-rag.md FAQ-024', memo:'대표 코드'},
+    {code:'A1101', desc:'유병자질병사망', ref:'A1100', memo:'인수기준 완화형'},
+    {code:'A1199', desc:'특정질병사망', ref:'A1100'},
+    {code:'A1200', desc:'암사망', ref:'A1100', memo:'사망 원인만 다름'},
+    {code:'A1299', desc:'특정암사망', ref:'A1100'},
+    {code:'A1300', desc:'상해사망', ref:'A1100'},
+    {code:'A1301', desc:'유병자상해사망', ref:'A1100'},
+    {code:'A1399', desc:'특정상해사망', ref:'A1100'},
+    {code:'A1400', desc:'교통상해사망', ref:'A1100'},
+    {code:'A1401', desc:'휴일교통상해사망', ref:'A1100'},
+    {code:'A1403', desc:'대중교통상해사망', ref:'A1100'},
+    {code:'A1404', desc:'휴일대중교통상해사망', ref:'A1100'},
+    {code:'A1499', desc:'특정교통상해사망', ref:'A1100'},
+  ]
+},
+{
+  title: '2. 후유장해 담보 (A3xxx) — 17개',
+  note: '후유장해는 "가입금액 × 장해분류표상 지급률(%)" 구조. 지급률(%)은 법정 장해분류표(law.go.kr)로 표준화돼 있으나, 기준이 되는 가입금액 자체엔 사망보장 같은 참고 방법론조차 확인되지 않음.',
+  rows: [
+    {code:'A3100', desc:'질병후유장해', status:'method', value:'가입금액 권장 기준 없음. 지급률(%)만 법정 장해분류표 적용', headline:'가입금액 기준 없음(지급률만 법정)', source:'law.go.kr 후유장해 지급률표 별표', memo:'대표 코드(질병)'},
+    {code:'A3101', desc:'질병80%이상후유장해', ref:'A3100', memo:'지급률 구간만 다름'},
+    {code:'A3103', desc:'질병50%이상후유장해', ref:'A3100'},
+    {code:'A3199', desc:'특정질병후유장해', ref:'A3100'},
+    {code:'A3300', desc:'상해후유장해', status:'method', value:'가입금액 권장 기준 없음(원인만 상해). 지급률(%)만 법정 장해분류표 적용', headline:'가입금액 기준 없음(지급률만 법정, 상해)', source:'law.go.kr 동일 별표', memo:'대표 코드(상해)'},
+    {code:'A3301', desc:'상해80%이상후유장해', ref:'A3300'},
+    {code:'A3303', desc:'상해50%이상후유장해', ref:'A3300'},
+    {code:'A3399', desc:'특정상해후유장해', ref:'A3300'},
+    {code:'A3400', desc:'교통상해후유장해', ref:'A3300'},
+    {code:'A3401', desc:'교통상해80%이상후유장해', ref:'A3300'},
+    {code:'A3403', desc:'교통상해50%이상후유장해', ref:'A3300'},
+    {code:'A3404', desc:'휴일교통상해후유장해', ref:'A3300'},
+    {code:'A3412', desc:'대중교통상해후유장해', ref:'A3300'},
+    {code:'A3413', desc:'대중교통상해80%이상후유장해', ref:'A3300'},
+    {code:'A3415', desc:'대중교통상해50%이상후유장해', ref:'A3300'},
+    {code:'A3416', desc:'휴일대중교통상해후유장애', ref:'A3300'},
+    {code:'A3499', desc:'특정교통상해후유장해', ref:'A3300'},
+  ]
+},
+{
+  title: '3. 진단 담보 (A4xxx) — 28개',
+  note: '암진단(A4200)·소액암진단(A4210)은 기존 확정값(정부·협회 공식 등급). 치매·장기요양·고액암은 업계 통상 수준(C~D등급)으로 새로 확인. 뇌혈관·심장·골절·화상 진단비는 확인 안 됨. 산정특례 코드는 보험금 담보가 아닌 정부 제도 자격 플래그라 권장액 개념 자체가 성립 안 함.',
+  rows: [
+    {code:'A4101', desc:'뇌혈관질환진단', status:'none', value:'권장 가입금액 자료 확인 안 됨(웹검색 요약 수치는 원문대조 결과 오류로 폐기) — 2026-07-28 재조사로 m.cancerok.com에서 연령대별 표(20대 1,000~2,000만·30대 2,000~3,000만·40대 3,000~5,000만·50대 이상 3,000~7,000만원)를 확인했으나 단일출처라 교차확인 요건 미충족으로 미채택 (2026-07-28 3차, 공식통계 전용) KIDI·KLIA·KNIA·KIRI 4개 기관 직접 확인 — KIDI INCOS 통계는 분류축이 사고원인·질병군뿐이라 "뇌혈관질환진단" 단위 분리 불가, 나머지 기관도 담보코드 단위 통계 없음. 공식통계 부재를 구조적으로 재확인', headline:'20대 1,000~2,000만 · 30대 2,000~3,000만 · 40대 3,000~5,000만 · 50대+ 3,000~7,000만 (⚠단일출처,미채택)', source:'m.cancerok.com(2026-07-28, 단일출처, 미채택) / KIDI INCOS·KLIA·KNIA·KIRI(Playwright·WebFetch 직접확인, 2026-07-28 3차)', memo:'2026-07-28 재조사에도 확인안됨 유지 (2026-07-28 3차조사: 공식통계 부재 재확인)'},
+    {code:'A4102', desc:'뇌출혈진단', ref:'A4101'},
+    {code:'A4103', desc:'뇌졸중진단', ref:'A4101'},
+    {code:'A4104', desc:'급성심근경색진단', ref:'A4101'},
+    {code:'A4105', desc:'허혈성심장질환진단', ref:'A4101'},
+    {code:'A4109', desc:'치매진단', status:'ok', value:'1,734만원 이하 = 부족 (치매환자 1인당 연간 관리비용, 지역사회 거주 기준)', headline:'1,734만원 이하=부족', source:'보건복지부·중앙치매센터 「2023년 치매역학조사」 (공식, Grade A)', memo:'2026-07-27 RU-T17에 반영'},
+    {code:'A4110', desc:'치매진단(경증)', ref:'A4109'},
+    {code:'A4199', desc:'특정질병진단', ref:'A4101'},
+    {code:'A4200', desc:'암진단', status:'ok', value:'5,000만원 이하 = 부족 판정 (여성 특화 3,000만원 = T10)', headline:'5,000만원 이하=부족(여성 3,000만원)', source:'EV034, rules-건강보험.md RU-T02 (기존 확정값)', memo:'공식 등급'},
+    {code:'A4201', desc:'유병자암진단', ref:'A4200'},
+    {code:'A4209', desc:'고액암진단', status:'ok', value:'연 생활비의 약 3배 권장 (20~30대 1인가구 9천만원 · 40~50대 가장 1억~1.5억 · 60대+ 7천만~1억)', headline:'연 생활비 3배(9천만~1.5억원)', source:'뱅크샐러드 「암보험 진단금 1억?」(C~D등급)', memo:'"국민연금연구원 근거" 부가설명은 원문대조 안 돼 미채택'},
+    {code:'A4210', desc:'소액암진단', status:'ok', value:'1,000만원 이하 = 부족 판정', headline:'1,000만원 이하=부족', source:'EV034 (2022 금감원 행정지도, 기존 확정값)', memo:'공식 등급'},
+    {code:'A4299', desc:'특정암진단', ref:'A4200'},
+    {code:'A4301', desc:'골절진단', status:'none', value:'권장 가입금액 자료 확인 안 됨(중복보상 가능한 소액 정액특약이라 개인별 편차 추정) — 2026-07-28 재조사로 the-fin.co.kr "60세 기준 설계 예시"(골절진단비 30만원·5대골절진단비 50만원·통합상해진단비 500만원)를 확인했으나 연령대별 통계가 아닌 단일연령 예시+단일출처라 미채택 (2026-07-28 3차, 공식통계 전용) A4101과 동일 4개 기관 조사 — KIDI 분류축(상해측 6분류)에 "골절"이라는 상해유형 자체가 없어 기타상해에 흡수. 공식통계 부재 재확인', headline:'60세 예시: 골절 30만·5대골절 50만·통합상해 500만 (⚠단일출처,미채택)', source:'the-fin.co.kr(2026-07-28, 단일출처, 미채택) / KIDI INCOS·KLIA·KNIA·KIRI(Playwright·WebFetch 직접확인, 2026-07-28 3차)', memo:'2026-07-28 재조사에도 확인안됨 유지 (2026-07-28 3차조사: 공식통계 부재 재확인)'},
+    {code:'A4302', desc:'화상진단', status:'none', value:'A4301과 동일 결론(2026-07-24) — 2026-07-28 재조사로 시그널플래너 블로그에서 "화상 진단 1회당 30만원~최대 100만원 정액 지급"을 확인했으나 이는 특약의 일반 지급구조 설명이지 권장 가입금액·연령대별 통계가 아니며 단일출처라 미채택 (2026-07-28 3차, 공식통계 전용) 동일 4개 기관 조사 — "화상"도 KIDI 분류축에 별도 항목 없음(기타상해 흡수). 공식통계 부재 재확인', headline:'1회 30만~100만원 정액 (⚠단일출처,미채택)', source:'blog.signalplanner.co.kr(2026-07-28, 단일출처, 미채택) / KIDI INCOS·KLIA·KNIA·KIRI(Playwright·WebFetch 직접확인, 2026-07-28 3차)', memo:'2026-07-28 재조사에도 확인안됨 유지 (2026-07-28 3차조사: 공식통계 부재 재확인)'},
+    {code:'A4303', desc:'중대골절진단', ref:'A4301'},
+    {code:'A4304', desc:'중대화상진단', ref:'A4301'},
+    {code:'A4399', desc:'특정상해진단', ref:'A4301'},
+    {code:'A4501', desc:'장기간병요양진단(1급)', status:'ok', value:'1,734만원 이하 = 부족 (A4109와 동일 근거)', headline:'1,734만원 이하=부족(치매와 동일근거)', source:'보건복지부·중앙치매센터 「2023년 치매역학조사」 (공식, Grade A)', memo:'대표 코드. 2026-07-27 RU-T05에 반영'},
+    {code:'A4502', desc:'장기간병요양진단(1,2급)', ref:'A4501'},
+    {code:'A4503', desc:'장기간병요양진단(1,2,3급)', ref:'A4501', memo:'RU-T05 사용 코드'},
+    {code:'A4504', desc:'장기간병요양진단(1,2,3,4급)', ref:'A4501'},
+    {code:'A4505', desc:'장기간병요양진단(1,2,3,4,5급)', ref:'A4501'},
+    {code:'A4601', desc:'중증질환(뇌혈관) 산정특례대상', status:'na', value:'건강보험 본인부담률 경감 자격 플래그 — 보험금 지급형 담보가 아니라 권장 가입금액 개념 미성립', headline:'권장액 개념 미성립(제도 자격 플래그)', source:'', memo:''},
+    {code:'A4602', desc:'중증질환(심장) 산정특례대상', ref:'A4601'},
+    {code:'A4603', desc:'중증질환(암) 산정특례대상', ref:'A4601'},
+    {code:'A4604', desc:'중증질환(치매) 산정특례대상', ref:'A4601'},
+    {code:'A4699', desc:'특정중증질환 산정특례대상', ref:'A4601'},
+  ]
+},
+{
+  title: '4. 수술 담보 (A5xxx) — 16개',
+  note: '1~5종 수술비 특약의 종별 보장금액 "구간 자체"는 확인되나(10만원대~수백만원대), 종 번호와 금액 크기의 방향성이 출처마다 상충해 방향성은 확정하지 않음.',
+  rows: [
+    {code:'A5100', desc:'질병수술', status:'ok', value:'수술 난이도(1~5종)에 따라 10만원대~수백만원대 정액 구간 존재 — 2026-07-28 재조사로 "고종(4~5종)=고액" 방향 확정(기존 방향성 미확정 결론 정정), 4~5종 기준 500만~1,000만원(출처마다 편차) (2026-07-28 3차, 공식통계 전용) KIDI INCOS 확인 결과 "수술"이라는 급부유형 차원 자체가 분류축에 없어 특약 단위 분리 불가. 기존 C~D등급 값(4~5종 500만~1,000만원)은 유지 — 이를 대체할 공식 1차 통계는 확인 안 됨', headline:'4~5종 500만~1,000만원', source:'the-fin.co.kr + a-ha.io(보험설계사 4인, 2026-07-28 독립 교차확인) — ezinsure.co.kr(2026-07-24, 반대방향)은 소수의견으로 병기 / KIDI INCOS·KLIA·KNIA·KIRI(Playwright·WebFetch 직접확인, 2026-07-28 3차)', memo:'대표 코드. 종수술비 개념은 A5109(질병종수술)와 사실상 동일. 연령대별 구분 자료는 없음(a-ha.io 답변자 1인의 "30대 초반" 언급만 존재) (2026-07-28 3차조사: 대체할 공식통계 없음 확인)'},
+    {code:'A5101', desc:'유병자질병수술', ref:'A5100'},
+    {code:'A5104', desc:'뇌혈관질환수술', ref:'A5100'},
+    {code:'A5107', desc:'허혈성심장질환수술', ref:'A5100'},
+    {code:'A5109', desc:'질병종수술', ref:'A5100', memo:'"종수술비"로 A5100과 사실상 동일'},
+    {code:'A5199', desc:'특정질병수술', ref:'A5100'},
+    {code:'A5200', desc:'암수술', ref:'A5100'},
+    {code:'A5299', desc:'특정암수술', ref:'A5100'},
+    {code:'A5300', desc:'상해수술', ref:'A5100', memo:'원인만 상해'},
+    {code:'A5301', desc:'골절수술', ref:'A5100'},
+    {code:'A5302', desc:'화상수술', ref:'A5100'},
+    {code:'A5309', desc:'상해종수술', ref:'A5100'},
+    {code:'A5310', desc:'유병자상해수술', ref:'A5100'},
+    {code:'A5399', desc:'특정상해수술', ref:'A5100'},
+    {code:'A5508', desc:'인공관절수술', status:'ok', value:'"권장 가입금액"이 아닌 "실제 수술비용" 기준 — 편측(부분치환) 평균 460만원(343만~843만원) / 양측(전치환) 평균 1,088만원(756만~1,247만원) (2026-07-28 3차, 공식통계 전용) KIDI INCOS에 "수술" 급부유형 차원이 없어 인공관절수술 분리 불가. 기존 C등급 실제비용 참고치는 유지 — 대체할 공식 통계는 확인 안 됨', headline:'편측 460만/양측 1,088만원', source:'modoodoc.com(HIRA 2021.11 2차인용) + hkn24.com(병원 직접취재) + thefirst.co.kr — 3곳 교차확인(C등급) / KIDI INCOS·KLIA·KNIA·KIRI(Playwright·WebFetch 직접확인, 2026-07-28 3차)', memo:'2026-07-28 신규 확인. RU-T28이 이미 이 코드를 이진(LTE 0원) 판정에 사용 중 — 부족형 전환 또는 편측/양측 세분화 여부는 contents/decisions.md 제안 항목 참조. 연령대별 구분 자료는 없음 (2026-07-28 3차조사: 대체할 공식통계 없음 확인)'},
+    {code:'A5999', desc:'기타수술', status:'na', value:'포괄 잔여 카테고리 — 개별 권장액 개념 미성립', headline:'권장액 개념 미성립(잔여 카테고리)', source:'', memo:''},
+  ]
+},
+{
+  title: '5. 입원 담보 (A6xxx) — 27개',
+  note: '"입원일당"은 원인·입원 장소와 무관하게 "하루 얼마"라는 동일 산정 개념을 공유. 보험전문가·손해사정사 2인 독립 답변(원문대조)이 "하루 3~5만원"으로 일치. 중환자실·장기입원비는 별도 구조라 별도 취급.',
+  rows: [
+    {code:'A6100', desc:'질병입원일당', status:'ok', value:'하루 3~5만원 (최소 5만원 이상 권장)', headline:'하루 3~5만원(5만원 이상 권장)', source:'a-ha.io Q&A, 보험전문가·손해사정사 2인 독립 답변(C~D등급)', memo:'카테고리 대표 코드'},
+    {code:'A6101', desc:'유병자질병입원일당', ref:'A6100'},
+    {code:'A6103', desc:'간질환입원일당', ref:'A6100'},
+    {code:'A6105', desc:'여성/부인과질환입원일당', ref:'A6100'},
+    {code:'A6107', desc:'뇌혈관질환입원일당', ref:'A6100'},
+    {code:'A6109', desc:'허혈성심장질환입원일당', ref:'A6100'},
+    {code:'A6112', desc:'질병중환자실입원일당', status:'none', value:'일반 입원일당보다 높게 설정하는 경향은 있으나 구체 권장액 확인 안 됨', headline:'일반보다 높게 설정 경향(액수 미확인)', source:'', memo:''},
+    {code:'A6113', desc:'환경성질환입원일당', ref:'A6100'},
+    {code:'A6114', desc:'어린이다발성질병입원일당', ref:'A6100'},
+    {code:'A6115', desc:'VDT증후군입원일당', ref:'A6100'},
+    {code:'A6116', desc:'개호유발특정질병입원일당', ref:'A6100'},
+    {code:'A6117', desc:'생활질환입원일당', ref:'A6100'},
+    {code:'A6118', desc:'피부질환입원일당', ref:'A6100'},
+    {code:'A6119', desc:'희귀난치성질환입원일당', ref:'A6100'},
+    {code:'A6120', desc:'간병인지원질병입원일당', status:'ok', value:'11만원 이하 = 부족 (사적 간병인 1일 비용 112,197원)', headline:'11만원 이하=부족', source:'보건복지부 「국민 간병비 부담 경감방안」 보도자료(2023) (공식, Grade A)', memo:'2026-07-27 RU-T27에 반영 — A6100 일반값과 별개 전용 통계'},
+    {code:'A6150', desc:'특정질병입원일당', ref:'A6100'},
+    {code:'A6200', desc:'암입원일당', ref:'A6100'},
+    {code:'A6201', desc:'암요양병원입원일당', ref:'A6100'},
+    {code:'A6300', desc:'상해입원일당', ref:'A6100'},
+    {code:'A6301', desc:'유병자상해입원일당', ref:'A6100'},
+    {code:'A6302', desc:'상해중환자실입원일당', ref:'A6112'},
+    {code:'A6303', desc:'간병인지원상해입원일당', ref:'A6120'},
+    {code:'A6350', desc:'특정상해입원일당', ref:'A6100'},
+    {code:'A6400', desc:'교통상해입원일당', ref:'A6100'},
+    {code:'A6510', desc:'질병장기입원비', status:'none', value:'180일 등 한도 초과 후 추가 보장 구조 — 별도 권장액 자료 확인 안 됨', headline:'자료 없음(180일 초과분 별도구조)', source:'', memo:'RU-T32 사용 코드'},
+    {code:'A6550', desc:'상해장기입원비', ref:'A6510'},
+    {code:'A6999', desc:'기타입원일당', status:'na', value:'포괄 잔여 카테고리 — 개별 권장액 개념 미성립', headline:'권장액 개념 미성립(잔여 카테고리)', source:'', memo:''},
+  ]
+},
+{
+  title: '6. 통원 담보 (A7xxx) — 9개',
+  note: '통원 특약의 권장 가입금액은 검색·재검색 모두에서 확인 안 됨. 참고로 2015년 이후 도덕적 해이 우려로 일반 통원특약 판매가 중지돼, 현재는 암·뇌혈관질환·허혈성심장질환 등 중증질환 한정 통원특약만 신규 판매 중(권장액과 무관한 배경지식).',
+  rows: [
+    {code:'A7100', desc:'질병통원', status:'none', value:'권장 가입금액 자료 없음 — 2026-07-28 시그널플래너·뱅크샐러드 블로그 및 KIRI·FSS 통계까지 재조사했으나 통원비 권장/평균 가입금액을 다룬 자료 자체를 찾지 못함 (2026-07-28 3차, 공식통계 전용) KIDI 분류축에 "통원"이라는 급부유형 차원 자체가 없음. KLIA·KNIA·KIRI도 없음 — 공식통계 부재 재확인', headline:'자료 없음', source:'KIDI INCOS·KLIA·KNIA·KIRI(Playwright·WebFetch 직접확인, 2026-07-28 3차)', memo:'2015년 이후 중증질환 한정 통원특약만 신규 판매(2026-07-28 보험매일 기사로 재확인) (2026-07-28 3차조사: 공식통계 부재 재확인)'},
+    {code:'A7101', desc:'유병자질병통원', ref:'A7100'},
+    {code:'A7199', desc:'특정질병통원', ref:'A7100'},
+    {code:'A7200', desc:'암통원', ref:'A7100', memo:'현재 신규 판매 중인 중증질환 통원특약 중 하나'},
+    {code:'A7300', desc:'상해통원', ref:'A7100'},
+    {code:'A7301', desc:'유병자상해통원', ref:'A7100'},
+    {code:'A7399', desc:'특정상해통원', ref:'A7100'},
+    {code:'A7500', desc:'치과통원', status:'none', value:'별도 조사했으나 권장액 자료 없음 — 2026-07-28 재조사도 동일 결론 (2026-07-28 3차, 공식통계 전용) A7100과 동일 구조적 이유로 공식통계 없음', headline:'자료 없음(보철 한도는 별개 개념)', source:'KIDI INCOS·KLIA·KNIA·KIRI(Playwright·WebFetch 직접확인, 2026-07-28 3차)', memo:'치과 "보철치료" 가입한도(생보사 기준 50만~150만원)는 확인되나 이는 A9500/A9509(치과치료) 개념이라 A7500(통원 정액)과 구조가 달라 별도 유지, A7500 자체 자료는 여전히 미발견 (2026-07-28 3차조사: 공식통계 부재 재확인)'},
+    {code:'A7999', desc:'기타통원', status:'na', value:'포괄 잔여 카테고리 — 개별 권장액 개념 미성립', headline:'권장액 개념 미성립(잔여 카테고리)', source:'', memo:''},
+  ]
+},
+{
+  title: '7. 기타 담보 (A8~A9xxx) — 42개',
+  note: '대부분 실손·실비 보전형 소액 특약(위로금·긴급출동·골프·자동차 부수담보 등)이라 권장 가입금액 개념 자체가 성립하지 않음. 치과·항암치료비 2건은 프로젝트 내 기존 확보 데이터(RU-T21·source-corpus.md)를 재사용.',
+  rows: [
+    {code:'A8000', desc:'간병', status:'none', value:'간병인 일당 관련 수치가 검색에 나왔으나 원문 미대조라 미채택', headline:'자료 없음(원문 미대조)', source:'', memo:''},
+    {code:'A9001', desc:'질병한방치료', status:'na', value:'실비 보전형 소액 특약', headline:'권장액 개념 미성립(실비 소액특약)', source:'', memo:''},
+    {code:'A9021', desc:'암한방치료', status:'na', value:'실비 보전형 소액 특약', headline:'권장액 개념 미성립(실비 소액특약)', source:'', memo:''},
+    {code:'A9041', desc:'상해한방치료', status:'na', value:'실비 보전형 소액 특약', headline:'권장액 개념 미성립(실비 소액특약)', source:'', memo:''},
+    {code:'A9100', desc:'소득보상금(질병사망)', ref:'A1100', memo:'소득 대체 목적, 사망 담보와 동일 개념'},
+    {code:'A9101', desc:'소득보상금(상해사망)', ref:'A1100', memo:'소득 대체 목적, 사망 담보와 동일 개념'},
+    {code:'A9400', desc:'면허정지위로금', status:'na', value:'실비 보전형 소액 특약, 자동차보험 부수 담보', headline:'권장액 개념 미성립(자동차보험 부수담보)', source:'', memo:''},
+    {code:'A9401', desc:'면허취소위로금', status:'na', value:'실비 보전형 소액 특약', headline:'권장액 개념 미성립(실비 소액특약)', source:'', memo:''},
+    {code:'A9402', desc:'차량손해위로금', status:'na', value:'실비 보전형 소액 특약', headline:'권장액 개념 미성립(실비 소액특약)', source:'', memo:''},
+    {code:'A9403', desc:'강도손해위로금', status:'na', value:'실비 보전형 소액 특약', headline:'권장액 개념 미성립(실비 소액특약)', source:'', memo:''},
+    {code:'A9404', desc:'선천성이상수술위로금', status:'na', value:'실비 보전형 소액 특약', headline:'권장액 개념 미성립(실비 소액특약)', source:'', memo:''},
+    {code:'A9405', desc:'유괴납치위로금', status:'na', value:'실비 보전형 소액 특약', headline:'권장액 개념 미성립(실비 소액특약)', source:'', memo:''},
+    {code:'A9406', desc:'학원폭력위로금', status:'na', value:'실비 보전형 소액 특약', headline:'권장액 개념 미성립(실비 소액특약)', source:'', memo:''},
+    {code:'A9407', desc:'질병상해입원위로금', status:'na', value:'실비 보전형 소액 특약', headline:'권장액 개념 미성립(실비 소액특약)', source:'', memo:''},
+    {code:'A9408', desc:'자동차사고부상위로금', status:'na', value:'실비 보전형 소액 특약', headline:'권장액 개념 미성립(실비 소액특약)', source:'', memo:''},
+    {code:'A9409', desc:'화재손해위로금', status:'na', value:'실비 보전형 소액 특약', headline:'권장액 개념 미성립(실비 소액특약)', source:'', memo:''},
+    {code:'A9499', desc:'기타위로금', status:'na', value:'실비 보전형 소액 특약', headline:'권장액 개념 미성립(잔여 카테고리)', source:'', memo:''},
+    {code:'A9500', desc:'치과치료(보존치료)', status:'ok', value:'임플란트 개당 100~150만원 (참고 비용) — 건강보험은 65세 이상만 평생 2개 30% 급여, 65세 미만은 전액 비급여', headline:'임플란트 개당 100만~150만원', source:'rules-생명보험-노후-특종.md RU-T21 domain_notes(국민건강보험공단, 기존 확보 데이터)', memo:'대표 코드'},
+    {code:'A9509', desc:'치과치료(보철치료)', ref:'A9500'},
+    {code:'A9599', desc:'기타치과담보', ref:'A9500'},
+    {code:'A9600', desc:'응급치료', status:'na', value:'실비 보전형 소액 특약', headline:'권장액 개념 미성립(실비 소액특약)', source:'', memo:''},
+    {code:'A9601', desc:'깁스치료', status:'na', value:'실비 보전형 소액 특약', headline:'권장액 개념 미성립(실비 소액특약)', source:'', memo:''},
+    {code:'A9602', desc:'질병상해구직급여지원금', status:'na', value:'실비 보전형 소액 특약', headline:'권장액 개념 미성립(실비 소액특약)', source:'', memo:''},
+    {code:'A9603', desc:'구직급여지원금', status:'na', value:'실비 보전형 소액 특약', headline:'권장액 개념 미성립(실비 소액특약)', source:'', memo:''},
+    {code:'A9604', desc:'벌금비용', status:'na', value:'운전자보험 특약, 실손 실비 성격', headline:'권장액 개념 미성립(운전자보험 실비)', source:'', memo:'RU-T14에서 미보유 여부(0원)로만 사용 중'},
+    {code:'A9605', desc:'변호사선임비용', status:'na', value:'운전자보험 특약, 실손 실비 성격', headline:'권장액 개념 미성립(운전자보험 실비)', source:'', memo:''},
+    {code:'A9606', desc:'방어비용', status:'na', value:'운전자보험 특약, 실손 실비 성격', headline:'권장액 개념 미성립(운전자보험 실비)', source:'', memo:''},
+    {code:'A9607', desc:'형사합의지원금', status:'na', value:'운전자보험 특약, 실손 실비 성격', headline:'권장액 개념 미성립(운전자보험 실비)', source:'', memo:'RU-T14 사용 코드'},
+    {code:'A9608', desc:'자동차보험료할증지원금', status:'na', value:'실비 보전형 소액 특약', headline:'권장액 개념 미성립(실비 소액특약)', source:'', memo:''},
+    {code:'A9609', desc:'긴급출동및견인비용', status:'na', value:'실비 보전형 소액 특약', headline:'권장액 개념 미성립(실비 소액특약)', source:'', memo:''},
+    {code:'A9610', desc:'렌트비용', status:'na', value:'실비 보전형 소액 특약', headline:'권장액 개념 미성립(실비 소액특약)', source:'', memo:''},
+    {code:'A9611', desc:'자동차부상치료비(경상제외)', status:'na', value:'자동차보험 부수 담보', headline:'권장액 개념 미성립(자동차보험 부수담보)', source:'', memo:''},
+    {code:'A9612', desc:'홀인원비용', status:'na', value:'골프보험 특약, 정액 소액', headline:'권장액 개념 미성립(골프보험 정액)', source:'', memo:''},
+    {code:'A9613', desc:'알바트로스비용', status:'na', value:'골프보험 특약, 정액 소액', headline:'권장액 개념 미성립(골프보험 정액)', source:'', memo:''},
+    {code:'A9614', desc:'골프용품손해비용', status:'na', value:'골프보험 특약, 정액 소액', headline:'권장액 개념 미성립(골프보험 정액)', source:'', memo:''},
+    {code:'A9615', desc:'보이스메신저피싱손해비용', status:'na', value:'실손 보상형', headline:'권장액 개념 미성립(실손 보상형)', source:'', memo:''},
+    {code:'A9616', desc:'정신피해치료비', status:'na', value:'가입률이 매우 낮아 특정 불가(RU-T31이 이 코드 기반으로 폐지된 전례)', headline:'특정 불가(가입률 매우 낮음)', source:'', memo:'contents/decisions.md 참조'},
+    {code:'A9617', desc:'항암방사선약물치료비', status:'ok', value:'비급여 시 연간 약 7,140만원 (키트루다 기준) / 급여(산정특례 5%) 시 연간 약 350만~365만원', headline:'비급여 연 7,140만/급여 연 350만~365만원', source:'source-corpus.md 1절(뉴스타파 HIRA 약가 재계산, 기존 확보 데이터)', memo:'RU-T18 사용 코드'},
+    {code:'A9619', desc:'고액항암치료비', ref:'A9617', memo:'RU-T18 선택 조건 사용 코드'},
+    {code:'A9620', desc:'교통사고피해부상치료비', status:'na', value:'자동차보험 부수 담보', headline:'권장액 개념 미성립(자동차보험 부수담보)', source:'', memo:''},
+    {code:'A9621', desc:'자동차부상치료비(경상)', status:'na', value:'자동차보험 부수 담보', headline:'권장액 개념 미성립(자동차보험 부수담보)', source:'', memo:''},
+    {code:'A9999', desc:'기타 인보험(정액)담보', status:'na', value:'포괄 잔여 카테고리 — 개별 권장액 개념 미성립', headline:'권장액 개념 미성립(잔여 카테고리)', source:'', memo:''},
+  ]
+},
+];
+
+const STATUS_LABEL = { ok: '확인완료', method: '방법론만', none: '확인안됨', na: '해당없음' };
+
+// 전체 코드 조회 맵 구성 — ref로 참조된 행은 대표 행의 실제 값을 그대로 끌어와 표시한다.
+const ALL_ROWS = {};
+CATEGORIES.forEach(cat => cat.rows.forEach(r => { ALL_ROWS[r.code] = r; }));
+
+function resolve(row) {
+  if (!row.ref) return row;
+  const target = resolve(ALL_ROWS[row.ref]);
+  return {
+    code: row.code,
+    desc: row.desc,
+    status: target.status,
+    value: target.value,
+    headline: target.headline,
+    source: target.source,
+    memo: row.memo ? row.memo + ` (${row.ref}와 동일 그룹)` : `${row.ref}와 동일 그룹`,
+  };
+}
+
+function slug(title) { return title.split('.')[0].trim(); }
+
+function renderStats() {
+  let total = 0, counts = { ok: 0, method: 0, none: 0, na: 0 };
+  CATEGORIES.forEach(cat => cat.rows.forEach(r => { total++; counts[resolve(r).status]++; }));
+  document.getElementById('statsRow').innerHTML = `
+    <span class="chip">총 ${total}개 코드</span>
+    <span class="chip">확인완료 ${counts.ok}개</span>
+    <span class="chip">방법론만 ${counts.method}개</span>
+    <span class="chip">확인안됨 ${counts.none}개</span>
+    <span class="chip">해당없음(니치) ${counts.na}개</span>
+  `;
+}
+
+function renderJumpLinks() {
+  document.getElementById('jumpRow').innerHTML = CATEGORIES.map(cat =>
+    `<a class="jump-link" href="#${slug(cat.title)}">${cat.title.split('—')[0].trim()}</a>`
+  ).join('');
+}
+
+function escAttr(s) {
+  return String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function renderCategories() {
+  const html = CATEGORIES.map(cat => {
+    const rows = cat.rows.map(raw => {
+      const r = resolve(raw);
+      const detailId = `detail-${r.code}`;
+      const searchText = escAttr((r.code + ' ' + r.desc + ' ' + r.headline + ' ' + r.value + ' ' + STATUS_LABEL[r.status]).toLowerCase());
+      return `
+      <tr data-search="${searchText}">
+        <td class="code-cell">${r.code}</td>
+        <td class="desc-cell">${r.desc}</td>
+        <td><span class="status-badge status-${r.status}">${STATUS_LABEL[r.status]}</span></td>
+        <td class="value-cell">
+          <div class="headline-text">${r.headline}</div>
+          <button type="button" class="toggle-btn" data-target="${detailId}" aria-expanded="false">근거·조사과정 ▸</button>
+          <div class="detail-box" id="${detailId}" hidden>${r.value}</div>
+        </td>
+        <td class="source-cell">${r.source || '—'}</td>
+        <td class="memo-cell">${r.memo || '—'}</td>
+      </tr>`;
+    }).join('');
+    return `
+      <div class="cat-section" id="${slug(cat.title)}">
+        <div class="cat-title">${cat.title}</div>
+        <div class="cat-note">${cat.note}</div>
+        <table>
+          <thead><tr>
+            <th>코드</th><th>설명</th><th>상태</th><th>참고 기준액</th><th>출처</th><th>비고</th>
+          </tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>`;
+  }).join('');
+  document.getElementById('catContainer').innerHTML = html;
+}
+
+function setupSearch() {
+  const input = document.getElementById('searchInput');
+  input.addEventListener('input', () => {
+    const q = input.value.trim().toLowerCase();
+    let anyVisible = false;
+    document.querySelectorAll('tbody tr').forEach(tr => {
+      const match = !q || tr.dataset.search.includes(q);
+      tr.classList.toggle('row-hidden', !match);
+      if (match) anyVisible = true;
+    });
+    document.querySelectorAll('.cat-section').forEach(sec => {
+      const visibleRows = sec.querySelectorAll('tbody tr:not(.row-hidden)').length;
+      sec.style.display = visibleRows === 0 ? 'none' : '';
+    });
+    document.getElementById('noResult').style.display = anyVisible ? 'none' : 'block';
+  });
+}
+
+function setupToggle() {
+  document.getElementById('catContainer').addEventListener('click', (e) => {
+    const btn = e.target.closest('.toggle-btn');
+    if (!btn) return;
+    const box = document.getElementById(btn.dataset.target);
+    if (!box) return;
+    const willExpand = box.hasAttribute('hidden');
+    if (willExpand) {
+      box.removeAttribute('hidden');
+    } else {
+      box.setAttribute('hidden', '');
+    }
+    btn.textContent = willExpand ? '근거·조사과정 ▾' : '근거·조사과정 ▸';
+    btn.setAttribute('aria-expanded', String(willExpand));
+  });
+}
+
+renderStats();
+renderJumpLinks();
+renderCategories();
+setupSearch();
+setupToggle();
+</script>
+<script src="sidebar.js"></script>
+</body>
+</html>

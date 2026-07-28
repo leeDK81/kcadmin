@@ -60,6 +60,10 @@ table.cond tr.opt td { background: #FFFDF5; color: #6B7280; }
   <strong>2026-07-04 도메인 전문가 검수 반영 (25→24장):</strong> <strong>RU-T09 폐지</strong> — A4503 LTE0·45~85세를 항상 포함하는 RU-T05의 순수 부분집합이라 중복 발화 확인, T05로 흡수. RU-T25(나이 30~70세 필수 조건 누락 수정), RU-T19(나이 상한 59→85세 원복, T24·T30·T32와의 co-fire 명시적 정당화), RU-T28(domain_notes 오류 정정 — T19와 실제로 겹침), RU-T32(근거 과장 표현 완화), RU-T24(T19 co-fire 언급 추가) 반영.
 </div>
 
+<div class="change-box" style="background:#EFF6FF;border-color:#BFDBFE;color:#1E3A8A;">
+  <strong>2026-07-27 이진→부족형 전환 (RU-T05·RU-T17·RU-T27):</strong> "있냐 없냐"만 보던 3개 Rule을 "가입은 했지만 액수가 부족한가"까지 보도록 업그레이드. RU-T05·RU-T17: A4503·A4109 "0원 이하" → "1,734만원 이하"(치매환자 1인당 연간 관리비용, 지역사회 거주 기준, 보건복지부·중앙치매센터 2023). RU-T27: A6120·A6303 "0원 이하" → "11만원 이하"(사적 간병인 1일 비용 112,197원, 보건복지부 2023). 근거는 전부 <code>contents/00_taxonomy/coverage-amount-research.md</code>·<code>source-corpus.md</code> 참조. 나이·성별 세분화 통계는 조사했으나 유의미한 격차가 없어(치매 유병률은 갈리지만 관리비용 자체는 세분화 자료 없음) 단일 대표값으로 처리, Risk-type 분할은 하지 않음. 나머지 후보(T24·T29·T30·T32)는 "총액" 통계라 일당형 코드로 억지 환산하면 왜곡 위험이 있어 이번엔 보류(설명 문구 근거로만 활용).
+</div>
+
 <div class="info-box">
   <strong>입력 순서:</strong> Rule 이름 → 판단 조건(Row별 입력: 소스 → 항목 → 조건 → 기준값 → 필수/선택)<br>
   Risk-type 연결·Evidence 연결은 캔버스에서 별도 처리합니다. 조건 Row는 표의 행 순서대로 입력하세요.
@@ -153,14 +157,14 @@ table.cond tr.opt td { background: #FFFDF5; color: #6B7280; }
     <div class="cond-label">판단 조건</div>
     <table class="cond">
       <tr><th>소스</th><th>항목</th><th>조건</th><th>기준값</th><th>구분</th></tr>
-      <tr class="req"><td>마이데이터</td><td>A4503 (장기간병요양진단 1,2,3급)</td><td>이하(LTE)</td><td>0원</td><td><span class="badge-req">필수</span></td></tr>
+      <tr class="req"><td>마이데이터</td><td>A4503 (장기간병요양진단 1,2,3급)</td><td>이하(LTE)</td><td>17,340,000원</td><td><span class="badge-req">필수</span></td></tr>
       <tr class="req"><td>프로파일</td><td>나이</td><td>사이(BETWEEN)</td><td>45세 ~ 85세</td><td><span class="badge-req">필수</span></td></tr>
       <tr class="opt"><td>마이데이터</td><td>A8000 (간병)</td><td>이하(LTE)</td><td>0원</td><td><span class="badge-opt">선택</span></td></tr>
       <tr class="opt"><td>프롬에이지</td><td>질병위험도 &gt; 치매</td><td>같음(EQ)</td><td>위험</td><td><span class="badge-opt">선택</span></td></tr>
       <tr class="opt"><td>프롬에이지</td><td>질병위험도 &gt; 당뇨병</td><td>같음(EQ)</td><td>위험</td><td><span class="badge-opt">선택</span></td></tr>
     </table>
   </div>
-  <div class="note">※ 기존 A4300(간병인지원)은 마이데이터 담보코드 테이블에 존재하지 않아 A4503(장기간병요양진단 1,2,3급)으로 전면 교체. <strong>(2026-07-04)</strong> 구 T09(건강보험 편중 노후전환 미비형)는 "A4200 GTE 1원 + 50~70세"만 추가한 본 Rule의 순수 부분집합이라 항상 동반 발화하는 중복 진단 문제가 검수에서 확인돼 폐지·흡수했다. 단기납 종신보험 만기 도래(2025~2026년) 시점의 상담 우선순위는 risk-types.md 설명에 흡수.</div>
+  <div class="note">※ 기존 A4300(간병인지원)은 마이데이터 담보코드 테이블에 존재하지 않아 A4503(장기간병요양진단 1,2,3급)으로 전면 교체. <strong>(2026-07-04)</strong> 구 T09(건강보험 편중 노후전환 미비형)는 "A4200 GTE 1원 + 50~70세"만 추가한 본 Rule의 순수 부분집합이라 항상 동반 발화하는 중복 진단 문제가 검수에서 확인돼 폐지·흡수했다. 단기납 종신보험 만기 도래(2025~2026년) 시점의 상담 우선순위는 risk-types.md 설명에 흡수. <strong>(2026-07-27 이진→부족형 전환)</strong> "0원 이하(미보유)"를 "1,734만원 이하(부족)"로 전환 — 치매환자 1인당 연간 관리비용(지역사회 거주 기준, 보건복지부·중앙치매센터 2023년 치매역학조사)을 근거로 가입은 했지만 실제 간병비를 못 감당하는 소액 가입까지 감지.</div>
 </div>
 
 <div class="card">
@@ -169,13 +173,13 @@ table.cond tr.opt td { background: #FFFDF5; color: #6B7280; }
     <div class="cond-label">판단 조건</div>
     <table class="cond">
       <tr><th>소스</th><th>항목</th><th>조건</th><th>기준값</th><th>구분</th></tr>
-      <tr class="req"><td>마이데이터</td><td>A6120 (간병인지원질병입원일당)</td><td>이하(LTE)</td><td>0원</td><td><span class="badge-req">필수</span></td></tr>
-      <tr class="req"><td>마이데이터</td><td>A6303 (간병인지원상해입원일당)</td><td>이하(LTE)</td><td>0원</td><td><span class="badge-req">필수</span></td></tr>
+      <tr class="req"><td>마이데이터</td><td>A6120 (간병인지원질병입원일당)</td><td>이하(LTE)</td><td>110,000원</td><td><span class="badge-req">필수</span></td></tr>
+      <tr class="req"><td>마이데이터</td><td>A6303 (간병인지원상해입원일당)</td><td>이하(LTE)</td><td>110,000원</td><td><span class="badge-req">필수</span></td></tr>
       <tr class="req"><td>프로파일</td><td>나이</td><td>사이(BETWEEN)</td><td>40세 ~ 85세</td><td><span class="badge-req">필수</span></td></tr>
       <tr class="opt"><td>마이데이터</td><td>A6100 (질병입원일당)</td><td>이하(LTE)</td><td>0원</td><td><span class="badge-opt">선택</span></td></tr>
     </table>
   </div>
-  <div class="note">※ A6120·A6303 둘 다 LTE 0원 = 입원 중 간병인지원 담보 완전 공백. T05(노후돌봄보장 공백형, A4503 진단금형 장기요양)와는 보장 메커니즘이 다름(진단금 vs 입원일당형 간병 지원) — 두 Risk-type이 동시 발화해도 중복이 아니라 서로 다른 공백을 알리는 것이므로 배타 조건을 두지 않는다. A6100(질병입원일당) 선택 조건은 입원 중 소득공백까지 겹치는 신호로 활용.</div>
+  <div class="note">※ T05(노후돌봄보장 공백형, A4503 진단금형 장기요양)와는 보장 메커니즘이 다름(진단금 vs 입원일당형 간병 지원) — 두 Risk-type이 동시 발화해도 중복이 아니라 서로 다른 공백을 알리는 것이므로 배타 조건을 두지 않는다. A6100(질병입원일당) 선택 조건은 입원 중 소득공백까지 겹치는 신호로 활용. <strong>(2026-07-27 이진→부족형 전환)</strong> A6120·A6303 둘 다 "0원 이하(미보유)"에서 "11만원 이하(부족)"로 전환 — 사적 간병인 1일 비용 112,197원(보건복지부 「국민 간병비 부담 경감방안」, 2023)을 근거로, 일당형 코드라 단위가 정확히 일치해 별도 환산 없이 그대로 사용.</div>
 </div>
 
 <div class="card">
@@ -214,14 +218,14 @@ table.cond tr.opt td { background: #FFFDF5; color: #6B7280; }
     <div class="cond-label">판단 조건</div>
     <table class="cond">
       <tr><th>소스</th><th>항목</th><th>조건</th><th>기준값</th><th>구분</th></tr>
-      <tr class="req"><td>마이데이터</td><td>A4109 (치매진단)</td><td>이하(LTE)</td><td>0원</td><td><span class="badge-req">필수</span></td></tr>
+      <tr class="req"><td>마이데이터</td><td>A4109 (치매진단)</td><td>이하(LTE)</td><td>17,340,000원</td><td><span class="badge-req">필수</span></td></tr>
       <tr class="req"><td>프로파일</td><td>나이</td><td>사이(BETWEEN)</td><td>50세 ~ 85세</td><td><span class="badge-req">필수</span></td></tr>
       <tr class="opt"><td>마이데이터</td><td>A4110 (치매진단-경증)</td><td>이하(LTE)</td><td>0원</td><td><span class="badge-opt">선택</span></td></tr>
       <tr class="opt"><td>프롬에이지</td><td>질병위험도 &gt; 치매</td><td>같음(EQ)</td><td>위험</td><td><span class="badge-opt">선택</span></td></tr>
       <tr class="opt"><td>프롬에이지</td><td>질병위험도 &gt; 당뇨병</td><td>같음(EQ)</td><td>위험</td><td><span class="badge-opt">선택</span></td></tr>
     </table>
   </div>
-  <div class="note">※ T05(노후돌봄보장 공백형)는 간병요양 진단금(A4503) 미가입 감지. T17은 치매 진단 시 지급되는 진단금(A4109) 미가입을 별도 감지. 나이 하한 50세: 경도인지장애(MCI) → 치매 연간 전환율 4.9~9.6%(국제 메타분석, Mitchell & Shiri-Feshki 2009)로 사전 확보 필요. 나이 상한 85세: 85세 이상 치매 유병률 21.18%까지 포괄(보건복지부·중앙치매센터 2023년 치매역학조사).</div>
+  <div class="note">※ T05(노후돌봄보장 공백형)는 간병요양 진단금(A4503) 부족 감지. T17은 치매 진단 시 지급되는 진단금(A4109) 부족을 별도 감지. 나이 하한 50세: 경도인지장애(MCI) → 치매 연간 전환율 4.9~9.6%(국제 메타분석, Mitchell & Shiri-Feshki 2009)로 사전 확보 필요. 나이 상한 85세: 85세 이상 치매 유병률 21.18%까지 포괄(보건복지부·중앙치매센터 2023년 치매역학조사). <strong>(2026-07-27 이진→부족형 전환)</strong> RU-T05와 동일 근거(치매환자 1인당 연간 관리비용, 지역사회 거주 기준 1,734만원, 보건복지부·중앙치매센터 2023)로 "0원 이하"를 "1,734만원 이하"로 전환. A4110(선택 조건)은 "경증 진단금조차 없음"이라는 완전 미보유 신호 그대로 유지.</div>
 </div>
 
 <div class="card">

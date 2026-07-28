@@ -15,6 +15,7 @@
     { file: '12_synonym-management.html', icon: '🏷️', label: '유사어 관리', group: 'Case 0' },
     { file: '13_query-ai-preview.html', icon: '📲', label: '조회형 답변 미리보기', group: 'Case 0' },
     { file: '14_card-hook-sample.html', icon: '🔥', label: '결과 카드 경각심 샘플', group: '제안(검토중)' },
+    { file: '15_coverage-amount-reference.html', icon: '💰', label: '담보코드별 참고 기준액', group: '참고자료' },
   ];
 
   var current = window.location.pathname.split('/').pop() || '00_index.html';
