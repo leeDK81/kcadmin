@@ -6,6 +6,22 @@
 
 ---
 
+## 2026-07-29(8차) — Risk-type 제목 3건 개명 (T03·T04 협소형→반쪽형, T11 미비형→공백형)
+
+사용자가 "Risk-type 제목이 사용자에게 어렵지 않냐, 경각심도 있어야 상담신청까지 이어질 것 같다"고 문제 제기. 23개 제목 전수 점검 결과 20개는 "부족형·공백형·미보장형" 등 일상어인데 3개(T03·T04 "협소형", T11 "미비형")만 관공서 문체 수준의 어려운 단어였음을 확인.
+
+**결정 — 23개 전체 재작성은 하지 않음:** 경각심은 이미 본문(PASONA agitation 단계)과 2026-07-29(4차)에 추가한 "기준 대비 OOO원 부족" 격차 문장이 담당하고 있어 제목까지 자극적으로 바꾸면 "고객님은 OOO에 해당하는 상태예요" 진단 선언문의 톤이 낚시성으로 느껴질 위험— 이 프로젝트가 지켜온 "정직한 진단" 원칙과 배치됨. 대신 어려운 단어 3개만 이미 본문에 쓰던 표현으로 수렴:
+- T03·T04 "협소형" → **"반쪽형"**(본문에 이미 있던 "보장이 반쪽만 작동하는 상태" 표현 재사용)
+- T11 "미비형" → **"공백형"**(이미 8개 다른 Risk-type이 쓰는 주류 표현에 합류)
+
+**반영 범위:** 카드 이름이 등장하는 모든 라이브 표면 — Risk-type 원본·발행본(02_risk-type.html), Rule/Policy의 rt-tag 포인터(03_rule.html·05_policy.html), 08_ai-preview.html(acc-title·chain-path·result-card·채팅 본문), Evidence 원본·발행본(T04·T11 인용부), 07_chain-report.html 메인 테이블(히스토리 서술 부분은 과거 시점 기록이라 제외), guides/insurance-domain.md, chain-map.json(risk_type_name 필드), synonyms.md·12_synonym-management.html(T11 인용부).
+
+**의도적으로 제외한 것:** `contents/00_taxonomy/market-research.md`·`source-corpus.md`·`CHANGELOG.md`·`07_chain-report.html`의 날짜 있는 히스토리 서술(과거 시점 기록, 소급 수정 안 함 원칙). `mockups_v2/`(서비스 트랙, 07_rule-list.html 등 7개 파일에 예시 데이터로 옛 이름이 남아있음 — 별도 요청 시 반영). `.claude/agents/kc-content-researcher.md`(에이전트 내부 예시, 콘텐츠 아님).
+
+**수정 파일:** `contents/02_risk-type/risk-types.md`, `contents/html/02_risk-type.html`, `contents/html/03_rule.html`, `contents/html/05_policy.html`, `contents/html/07_chain-report.html`, `contents/html/08_ai-preview.html`, `contents/01_evidence/evidence-건강보험.md`, `contents/01_evidence/evidence-생명보험-노후.md`, `contents/html/01_evidence.html`, `guides/insurance-domain.md`, `contents/07_connections/chain-map.json`, `contents/10_synonym/synonyms.md`, `contents/html/12_synonym-management.html`
+
+---
+
 ## 2026-07-29(7차) — 02_risk-type.html·01_evidence.html 발행 동기화 누락 전수 정정
 
 사용자가 "contents/html 전체를 전수 검사해서 업데이트 필요한 부분이 있는지" 요청 — 확인 결과 이번 세션 내내 `risk-types.md`·`evidence-건강보험.md`(원본 .md) 만 고치고 그 발행본인 `contents/html/02_risk-type.html`·`01_evidence.html`은 단 한 번도 동기화하지 않았던 것을 발견(오늘 초반 T19·T24의 03_rule.html 동기화 누락과 동일한 패턴이 두 파일 전체에 걸쳐 반복돼 있었음).

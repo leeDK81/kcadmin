@@ -63,7 +63,7 @@
       "chain_id": "CHAIN-003",
       "domain": "건강보험",
       "risk_type_id": "T03",
-      "risk_type_name": "심혈관질환보장 협소형",
+      "risk_type_name": "심혈관질환보장 반쪽형",
       "concept_ids": [
         "CN-T03",
         "CN-ALL"
@@ -82,7 +82,7 @@
       "chain_id": "CHAIN-004",
       "domain": "건강보험",
       "risk_type_id": "T04",
-      "risk_type_name": "뇌혈관질환보장 협소형",
+      "risk_type_name": "뇌혈관질환보장 반쪽형",
       "concept_ids": [
         "CN-T04",
         "CN-ALL"
@@ -144,7 +144,7 @@
       "chain_id": "CHAIN-008",
       "domain": "생명보험",
       "risk_type_id": "T11",
-      "risk_type_name": "사망보장 미비형",
+      "risk_type_name": "사망보장 공백형",
       "concept_ids": [
         "CN-T11",
         "CN-ALL"
