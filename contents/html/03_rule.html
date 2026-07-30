@@ -251,14 +251,14 @@ table.cond tr.opt td { background: #FFFDF5; color: #6B7280; }
     <div class="cond-label">판단 조건</div>
     <table class="cond">
       <tr><th>소스</th><th>항목</th><th>조건</th><th>기준값</th><th>구분</th></tr>
-      <tr class="req"><td>마이데이터</td><td>A5100 (질병수술)</td><td>이하(LTE)</td><td>0원</td><td><span class="badge-req">필수</span></td></tr>
+      <tr class="req"><td>마이데이터</td><td>A5100 (질병수술)</td><td>이하(LTE)</td><td>1,500,000원</td><td><span class="badge-req">필수</span></td></tr>
       <tr class="req"><td>프로파일</td><td>나이</td><td>사이(BETWEEN)</td><td>30세 ~ 85세</td><td><span class="badge-req">필수</span></td></tr>
       <tr class="opt"><td>마이데이터</td><td>A6100 (질병입원일당)</td><td>이하(LTE)</td><td>50,000원</td><td><span class="badge-opt">선택</span></td></tr>
       <tr class="opt"><td>프롬에이지</td><td>질병위험도 &gt; 허혈성심장질환</td><td>같음(EQ)</td><td>위험</td><td><span class="badge-opt">선택</span></td></tr>
       <tr class="opt"><td>프롬에이지</td><td>암위험도 &gt; canr_ca (암 종합)</td><td>같음(EQ)</td><td>위험</td><td><span class="badge-opt">선택</span></td></tr>
     </table>
   </div>
-  <div class="note">※ A5100(질병수술) LTE 0원 = 수술 정액비 미보장(필수). A6100(질병입원일당) LTE 5만원은 선택 — 이 조건까지 충족 시 "수술비 없음 + 입원일당도 부족(완전 미보유 포함)"으로 우선순위 상승(구 T12 케이스). 실손보험은 급여 실비 지급이나 비급여 수술비·정액 수술비는 별도 수술비 담보 없이 전액 자부담. 기존 A3201(후유장해 계열 오코드)은 A6100(질병입원일당)으로 전면 교체. <strong>(2026-07-04 원복)</strong> 2026-07-03에 나이 상한을 70→59세로 좁혀 T24(60~85세)와의 중복 발화를 막으려 했으나, 그 결과 "60~85세이면서 A5100 없음 + A6100 있음"인 사람이 T19·T24 어느 쪽에도 걸리지 않는 사각지대가 검수에서 발견됐다. 나이 상한을 85세로 원복해 사각지대를 없앤다. T24(A6100 필수 LTE 5만원)·T30(A6100 필수 GTE1)·T32(A6100 필수 GTE1)와 60~85세 구간에서 동시 발화할 수 있으나, 각각 수술 정액비·일반 입원일당 자체·중환자실 일당·장기입원비라는 서로 다른 담보 공백을 알리는 것이라 중복이 아니다(T27·T29·T28과 동일 원칙 — 배타 조건 불필요). <strong>(2026-07-28 A6100 선택 조건 이진→부족형 전환)</strong> T24와 동일 근거(`coverage-amount-research.md` 입원 카테고리, 전문가·손해사정사 2인 독립 답변 "하루 3~5만원, 최소 5만원 이상 권장")로 "0원 이하(미보유)"→"5만원 이하(부족)"로 전환. 같은 세션에서 A5100(위 필수 조건)도 전환을 검토했으나, 신규 근거가 종수술비 최고위 구간(4~5종)에 한정된 값이라 미전환 유지. <strong>(2026-07-29 필드 스펙 확인)</strong> 마이데이터 공식 스펙 대조 결과 A5100은 애초에 종별 구분이 없는 단일 정액 코드이고, 종별 차등 지급은 별도 코드 A5109(질병종수술)의 영역임이 확정됨 — 확보한 근거는 A5109용이라 A5100에 못 씀. A5100 자체 근거 새로 확보 전까지 이진 유지(상세: `contents/decisions.md`).</div>
+  <div class="note">※ A5100(질병수술) LTE 150만원 = 수술 정액비 없거나 부족(필수). A6100(질병입원일당) LTE 5만원은 선택 — 이 조건까지 충족 시 "수술비 부족 + 입원일당도 부족(완전 미보유 포함)"으로 우선순위 상승(구 T12 케이스). 실손보험은 급여 실비 지급이나 비급여 수술비·정액 수술비는 별도 수술비 담보 없이 전액 자부담. 기존 A3201(후유장해 계열 오코드)은 A6100(질병입원일당)으로 전면 교체. <strong>(2026-07-04 원복)</strong> 2026-07-03에 나이 상한을 70→59세로 좁혀 T24(60~85세)와의 중복 발화를 막으려 했으나, 그 결과 "60~85세이면서 A5100 없음 + A6100 있음"인 사람이 T19·T24 어느 쪽에도 걸리지 않는 사각지대가 검수에서 발견됐다. 나이 상한을 85세로 원복해 사각지대를 없앤다. T24(A6100 필수 LTE 5만원)·T30(A6100 필수 GTE1)·T32(A6100 필수 GTE1)와 60~85세 구간에서 동시 발화할 수 있으나, 각각 수술 정액비·일반 입원일당 자체·중환자실 일당·장기입원비라는 서로 다른 담보 공백을 알리는 것이라 중복이 아니다(T27·T29·T28과 동일 원칙 — 배타 조건 불필요). <strong>(2026-07-28 A6100 선택 조건 이진→부족형 전환)</strong> T24와 동일 근거(`coverage-amount-research.md` 입원 카테고리, 전문가·손해사정사 2인 독립 답변 "하루 3~5만원, 최소 5만원 이상 권장")로 "0원 이하(미보유)"→"5만원 이하(부족)"로 전환. 같은 세션에서 A5100(위 필수 조건)도 전환을 검토했으나, 당시 신규 근거가 종수술비 최고위 구간(4~5종)에 한정된 값이라 미전환 유지. <strong>(2026-07-29 필드 스펙 확인)</strong> 마이데이터 공식 스펙 대조 결과 A5100은 애초에 종별 구분이 없는 단일 정액 코드이고, 종별 차등 지급은 별도 코드 A5109(질병종수술)의 영역임이 확정됨 — 당시 확보한 근거는 A5109용이라 A5100에 못 썼다. <strong>(2026-07-30 1차, 이진→부족형 전환)</strong> 내부 판정기준 엑셀(v1.2, 근거등급 C)이 A5100 고유 개념의 최초 후보값(내부최소 100만원)을 제시해 하한을 "부족" 임계값으로 채택. <strong>(2026-07-30 2차, 100만원→150만원 개정)</strong> 후속 엑셀(v2.1, 출처 URL 포함·통계청 자료 대조 확인됨)이 A5100을 "일반 수술비"(수술 종류 미상 시 범용기준) 공식으로 재산정해 150만원 제시 — A5100이 "종별 구분 없는 단일 정액 코드"라는 확정 정의와 더 부합한다고 판단해 재개정(상세: `contents/decisions.md`).</div>
 </div>
 
 <div class="card">
@@ -314,14 +314,14 @@ table.cond tr.opt td { background: #FFFDF5; color: #6B7280; }
     <table class="cond">
       <tr><th>소스</th><th>항목</th><th>조건</th><th>기준값</th><th>구분</th></tr>
       <tr class="req"><td>마이데이터</td><td>A6100 (질병입원일당)</td><td>이상(GTE)</td><td>1원</td><td><span class="badge-req">필수</span></td></tr>
-      <tr class="req"><td>마이데이터</td><td>A6112 (질병중환자실입원일당)</td><td>이하(LTE)</td><td>0원</td><td><span class="badge-req">필수</span></td></tr>
-      <tr class="req"><td>마이데이터</td><td>A6302 (상해중환자실입원일당)</td><td>이하(LTE)</td><td>0원</td><td><span class="badge-req">필수</span></td></tr>
+      <tr class="req"><td>마이데이터</td><td>A6112 (질병중환자실입원일당)</td><td>이하(LTE)</td><td>100,000원</td><td><span class="badge-req">필수</span></td></tr>
+      <tr class="req"><td>마이데이터</td><td>A6302 (상해중환자실입원일당)</td><td>이하(LTE)</td><td>100,000원</td><td><span class="badge-req">필수</span></td></tr>
       <tr class="req"><td>프로파일</td><td>나이</td><td>사이(BETWEEN)</td><td>30세 ~ 80세</td><td><span class="badge-req">필수</span></td></tr>
       <tr class="opt"><td>프롬에이지</td><td>질병위험도 &gt; 허혈성심장질환</td><td>같음(EQ)</td><td>위험</td><td><span class="badge-opt">선택</span></td></tr>
       <tr class="opt"><td>프롬에이지</td><td>질병위험도 &gt; 뇌혈관질환</td><td>같음(EQ)</td><td>위험</td><td><span class="badge-opt">선택</span></td></tr>
     </table>
   </div>
-  <div class="note">※ A6100(질병입원일당) GTE 1원 = 일반 입원일당은 있음 확인 — 이 조건으로 T24(폐렴, A6100 LTE 0 필수)·T27(간병지원, A6100 선택)과 배타적으로 구분. A6112·A6302 둘 다 LTE 0원 = 중환자실 전용 일당 완전 공백. 재난적의료비 지원 건당 평균 312만원(2024, 보건복지부)으로 중환자실급 고액 비급여 부담이 실재. 심혈관·뇌혈관 위험도는 중환자실 입원으로 이어지기 쉬운 대표 질환이라 선택 조건 활용.</div>
+  <div class="note">※ A6100(질병입원일당) GTE 1원 = 일반 입원일당은 있음 확인 — 이 조건으로 T24(폐렴, A6100 LTE 0 필수)·T27(간병지원, A6100 선택)과 배타적으로 구분. A6112·A6302 둘 다 LTE 10만원 = 중환자실 전용 일당 없거나 부족. 재난적의료비 지원 건당 평균 312만원(2024, 보건복지부)으로 중환자실급 고액 비급여 부담이 실재. 심혈관·뇌혈관 위험도는 중환자실 입원으로 이어지기 쉬운 대표 질환이라 선택 조건 활용. <strong>(2026-07-30 이진→부족형 전환)</strong> 독립된 두 엑셀 자료(v0.1 독립조사·v1.2 내부판정기준)가 10~20만원/일로 수렴 — 하한 10만원을 "부족" 임계값으로 채택(상세: `contents/decisions.md`).</div>
 </div>
 
 <div class="card">
@@ -331,13 +331,13 @@ table.cond tr.opt td { background: #FFFDF5; color: #6B7280; }
     <table class="cond">
       <tr><th>소스</th><th>항목</th><th>조건</th><th>기준값</th><th>구분</th></tr>
       <tr class="req"><td>마이데이터</td><td>A6100 (질병입원일당)</td><td>이상(GTE)</td><td>1원</td><td><span class="badge-req">필수</span></td></tr>
-      <tr class="req"><td>마이데이터</td><td>A6510 (질병장기입원비)</td><td>이하(LTE)</td><td>0원</td><td><span class="badge-req">필수</span></td></tr>
-      <tr class="req"><td>마이데이터</td><td>A6550 (상해장기입원비)</td><td>이하(LTE)</td><td>0원</td><td><span class="badge-req">필수</span></td></tr>
+      <tr class="req"><td>마이데이터</td><td>A6510 (질병장기입원비)</td><td>이하(LTE)</td><td>2,000,000원</td><td><span class="badge-req">필수</span></td></tr>
+      <tr class="req"><td>마이데이터</td><td>A6550 (상해장기입원비)</td><td>이하(LTE)</td><td>2,000,000원</td><td><span class="badge-req">필수</span></td></tr>
       <tr class="req"><td>프로파일</td><td>나이</td><td>사이(BETWEEN)</td><td>40세 ~ 85세</td><td><span class="badge-req">필수</span></td></tr>
       <tr class="opt"><td>프롬에이지</td><td>질병위험도 &gt; 치매</td><td>같음(EQ)</td><td>위험</td><td><span class="badge-opt">선택</span></td></tr>
     </table>
   </div>
-  <div class="note">※ A6100(질병입원일당) GTE 1원 = 일반 입원일당은 있음(T30과 동일하게 "있음"을 필수 조건으로 둬 일반 입원일당조차 없는 T01·T19 케이스와 구분). A6510·A6550 둘 다 LTE 0원 = 통상 지급 한도를 넘는 장기 입원 시 추가 보장 없음. <strong>(2026-07-04 수정)</strong> "업계 관행 180일 전후"라는 표현은 애초 삼성화재 상품 1건의 개별 사례를 업계 전체 표준처럼 과장한 것이었다. <strong>(2026-07-04 2차 갱신)</strong> 재조사 결과 현대해상·DB손해보험·메리츠화재·한화손해보험·KB손해보험·하나생명·AIG손해보험 등 6개사 이상에서 동일하게 180일 한도가 확인돼 개별 사례가 아니라 업계 전반의 공통 관행으로 재확인됐다(단, 법정 표준약관에 규정된 수치는 아니고 각사 독립 설계의 자율적 수렴 — source-corpus.md 17절). 정신질환·요양병원 장기 재원 통계(EV041)가 장기 입원 국면의 실재를 뒷받침. 치매 위험도는 장기 요양 전환 가능성이 높은 대표 신호라 선택 조건 활용. T05(노후돌봄보장 공백형, 진단금형 LTC)·T27(간병지원, 간병인 고용비)과는 보장 메커니즘이 달라(장기 재원 일당 vs 진단금/간병인비) 배타 조건 없음.</div>
+  <div class="note">※ A6100(질병입원일당) GTE 1원 = 일반 입원일당은 있음(T30과 동일하게 "있음"을 필수 조건으로 둬 일반 입원일당조차 없는 T01·T19 케이스와 구분). A6510·A6550 둘 다 LTE 200만원 = 통상 지급 한도를 넘는 장기 입원 시 추가 보장 없거나 부족. <strong>(2026-07-04 수정)</strong> "업계 관행 180일 전후"라는 표현은 애초 삼성화재 상품 1건의 개별 사례를 업계 전체 표준처럼 과장한 것이었다. <strong>(2026-07-04 2차 갱신)</strong> 재조사 결과 현대해상·DB손해보험·메리츠화재·한화손해보험·KB손해보험·하나생명·AIG손해보험 등 6개사 이상에서 동일하게 180일 한도가 확인돼 개별 사례가 아니라 업계 전반의 공통 관행으로 재확인됐다(단, 법정 표준약관에 규정된 수치는 아니고 각사 독립 설계의 자율적 수렴 — source-corpus.md 17절). 정신질환·요양병원 장기 재원 통계(EV041)가 장기 입원 국면의 실재를 뒷받침. 치매 위험도는 장기 요양 전환 가능성이 높은 대표 신호라 선택 조건 활용. T05(노후돌봄보장 공백형, 진단금형 LTC)·T27(간병지원, 간병인 고용비)과는 보장 메커니즘이 달라(장기 재원 일당 vs 진단금/간병인비) 배타 조건 없음. <strong>(2026-07-30 이진→부족형 전환)</strong> 독립된 두 엑셀 자료가 200~400/500만원/월로 수렴 — 하한 200만원을 "부족" 임계값으로 채택(상세: `contents/decisions.md`).</div>
 </div>
 
 <div class="section-label">사망·노후 영역 (1개)</div>
@@ -359,7 +359,7 @@ table.cond tr.opt td { background: #FFFDF5; color: #6B7280; }
   <div class="note">※ <strong>T01↔T11 중복 발화 방지:</strong> 실손담보 유효계약 GTE 1건 필수 조건 추가 — 실손이 없으면 T01(이중 무보장형)이 우선 감지되고 T11은 발화 안 함. T11은 "실손은 있으나 사망보장만 없는" 케이스 전용. 기존 A1001·A1002(없는 코드)를 A1100(질병사망)+A1300(상해사망)으로 전면 교체. 나이 55세→60세 상향: 구 T13(35~60세) 케이스 흡수. 선택 조건 충족 시 우선순위 상승.</div>
 </div>
 
-<div class="section-label">특종·상해 영역 (6개)</div>
+<div class="section-label">특종·상해 영역 (5개)</div>
 
 <div class="card">
   <div class="card-head"><span class="ru-id">RU-T20</span><span class="card-name">후유장해 보장 공백 판정</span><span class="rt-tag">→ T20 후유장해보장 공백형</span></div>
@@ -415,13 +415,13 @@ table.cond tr.opt td { background: #FFFDF5; color: #6B7280; }
     <table class="cond">
       <tr><th>소스</th><th>항목</th><th>조건</th><th>기준값</th><th>구분</th></tr>
       <tr class="req"><td>마이데이터</td><td>A5100 (질병수술)</td><td>이상(GTE)</td><td>1원</td><td><span class="badge-req">필수</span></td></tr>
-      <tr class="req"><td>마이데이터</td><td>A5300 (상해수술)</td><td>이하(LTE)</td><td>0원</td><td><span class="badge-req">필수</span></td></tr>
+      <tr class="req"><td>마이데이터</td><td>A5300 (상해수술)</td><td>이하(LTE)</td><td>1,500,000원</td><td><span class="badge-req">필수</span></td></tr>
       <tr class="req"><td>마이데이터</td><td>A6300 (상해입원일당)</td><td>이하(LTE)</td><td>50,000원</td><td><span class="badge-req">필수</span></td></tr>
       <tr class="req"><td>프로파일</td><td>나이</td><td>사이(BETWEEN)</td><td>20세 ~ 65세</td><td><span class="badge-req">필수</span></td></tr>
       <tr class="opt"><td>프롬에이지</td><td>질병위험도 &gt; 골절</td><td>같음(EQ)</td><td>주의</td><td><span class="badge-opt">선택</span></td></tr>
     </table>
   </div>
-  <div class="note">※ A5100 GTE 1원 조건으로 T19(수술·입원 정액비 미보장형)와 구분 — T22는 질병 보장은 있으나 상해 전용 담보(A5300·A6300)가 없거나 부족한 케이스. 상해 입원환자 연 123만명, 비급여 1일 28.5만원. <strong>(2026-07-29 A6300만 이진→부족형 전환)</strong> A6100 카테고리 대표값(하루 3~5만원)을 A6300에 적용. A5300은 A5100과 같은 이유(종별 차등은 별도 코드 A5309 영역, 마이데이터 스펙 2026-07-29 확인)로 미전환.</div>
+  <div class="note">※ A5100 GTE 1원 조건으로 T19(수술·입원 정액비 미보장형)와 구분 — T22는 질병 보장은 있으나 상해 전용 담보(A5300·A6300)가 없거나 부족한 케이스. 상해 입원환자 연 123만명, 비급여 1일 28.5만원. <strong>(2026-07-29 A6300만 이진→부족형 전환)</strong> A6100 카테고리 대표값(하루 3~5만원)을 A6300에 적용. A5300은 당시 A5100과 같은 이유(종별 차등은 별도 코드 A5309 영역, 마이데이터 스펙 2026-07-29 확인)로 미전환. <strong>(2026-07-30 1차, 이진→부족형 전환)</strong> A5100과 동일한 근거(내부 판정기준 엑셀 v1.2, 근거등급 C)로 A5300도 100만원을 "부족" 임계값으로 채택. <strong>(2026-07-30 2차, 100만원→150만원 개정)</strong> A5100과 동일한 사유(v2.1 엑셀의 "일반 수술비" 범용기준이 A5300의 정의와 더 부합)로 150만원으로 재개정(상세: `contents/decisions.md`).</div>
 </div>
 
 <div class="card">
